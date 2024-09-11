@@ -187,11 +187,9 @@ function validateSaveString(compressed) {
     return decompressedJson !== null;
 }
 
-
 async function initialiseLoadedGame(gameState) {    
     await restoreGameStatus(gameState);
 }
-
 
 export function checkForLanguageChange() {
     if (getLanguageChangedFlag()) {
