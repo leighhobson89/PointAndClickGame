@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getInitialSpeedMovingEnemy, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisiblePaused, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
+import { setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisiblePaused, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
 
 let playerObject = getPlayerObject();
 let movingEnemy = {};
@@ -25,20 +25,6 @@ function initializeEnemySquares() {
 
     if (attempts >= getMaxAttemptsToDrawEnemies()) {
         console.warn(`Could not place all ${getNumberOfEnemySquares()} squares. Only ${enemySquares.length} squares were placed due to overlap constraints.`);
-    }
-}
-
-function initializeMovingEnemy() {
-    let attempts = 0;
-
-    do {
-        movingEnemy = generateRandomCircle();
-        attempts++;
-    } while ((checkCollision(movingEnemy, playerObject) || enemySquares.some(square => checkCollision(movingEnemy, square))) &&
-             attempts < getMaxAttemptsToDrawEnemies());
-
-    if (attempts >= getMaxAttemptsToDrawEnemies()) {
-        console.warn('Could not place the moving enemy without overlapping the player or any enemy squares.');
     }
 }
 
@@ -89,7 +75,6 @@ export function startGame() {
     window.addEventListener('resize', updateCanvasSize);
 
     initializeEnemySquares();
-    initializeMovingEnemy();
 
     gameLoop();
 }
@@ -104,8 +89,6 @@ export function gameLoop() {
 
         if (gameState === getGameVisibleActive()) {
             moveCircle(playerObject);
-
-            moveCircle(movingEnemy);
 
             checkAllCollisions();
         }
@@ -140,17 +123,6 @@ function checkAllCollisions() {
             handleCollisionBetweenEnemySquares(playerObject, square);
         }
     });
-
-    enemySquares.forEach(square => {
-        if (checkCollision(movingEnemy, square)) {
-            handleCollisionBetweenEnemySquares(movingEnemy, square);
-        }
-    });
-
-    if (checkCollision(playerObject, movingEnemy)) {
-        handleCollisionBetweenEnemySquares(playerObject, movingEnemy);
-        handleCollisionBetweenEnemySquares(movingEnemy, playerObject);
-    }
 }
 
 function generateRandomSquare() {
@@ -158,16 +130,6 @@ function generateRandomSquare() {
     const x = Math.random() * (getElements().canvas.width - size);
     const y = Math.random() * (getElements().canvas.height - size);
     return { x, y, width: size, height: size };
-}
-
-function generateRandomCircle() {
-    const size = 50;
-    const x = Math.random() * (getElements().canvas.width - size);
-    const y = Math.random() * (getElements().canvas.height - size);
-    const speed = getInitialSpeedMovingEnemy();
-    const dx = (Math.random() < 0.5 ? -1 : 1) * speed;
-    const dy = (Math.random() < 0.5 ? -1 : 1) * speed;
-    return { x, y, width: size, height: size, dx, dy };
 }
 
 function drawMovingObject(ctx, x, y, width, height, color) {
@@ -221,6 +183,8 @@ function handleCollisionBetweenEnemySquares(rectangle, square) {
         }
     }
 }
+
+//-------------------------------------------------------------------------------------------------------------
 
 export function setGameState(newState) {
     console.log("Setting game state to " + newState);

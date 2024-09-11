@@ -229,7 +229,10 @@ canvas {
 }
 
 .inventory .inventory-item {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .border-red {
@@ -244,10 +247,11 @@ canvas {
     display: flex;
     background-color: #333;
     z-index: 1000;
-    padding-left: 20px; /* Optional: Add padding if needed */
-    padding-right: 20px; /* Optional: Add padding if needed */
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #bottomContainer .col-6 {
     flex: 1;
 }
+
