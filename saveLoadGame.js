@@ -1,5 +1,5 @@
-import {captureGameStatusForSaving, restoreGameStatus, getElements, getLanguage, setLanguageChangedFlag, getLanguageChangedFlag} from './constantsAndGlobalVars.js';
-import {localize} from './localization.js';
+import { captureGameStatusForSaving, restoreGameStatus, getElements, getLanguage, setLanguageChangedFlag, getLanguageChangedFlag} from './constantsAndGlobalVars.js';
+import { localize } from './localization.js';
 import { handleLanguageChange } from './ui.js';
 
 export function saveGame(isManualSave) {

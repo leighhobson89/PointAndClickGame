@@ -29,6 +29,8 @@ export const playerObject = {
 };
 
 //GLOBAL VARIABLES
+let targetX = null;
+let targetY = null;
 
 //FLAGS
 let audioMuted;
@@ -207,5 +209,21 @@ export function getGameInProgress() {
 
 export function setGameInProgress(value) {
     gameInProgress = value;
+}
+
+export function setTargetX(value) {
+    targetX = value;
+}
+
+export function setTargetY(value) {
+    targetY = value;
+}
+
+export function getTargetX() {
+   return targetX;
+}
+
+export function getTargetY() {
+    return targetY;
 }
 

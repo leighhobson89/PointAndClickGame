@@ -1,12 +1,78 @@
 import { localize } from './localization.js';
-import { setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisiblePaused, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
+import { setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisiblePaused, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
 
 let playerObject = getPlayerObject();
-let movingEnemy = {};
-
-const enemySquares = [];
+export const enemySquares = [];
 
 //--------------------------------------------------------------------------------------------------------
+
+export function startGame() {
+    initializeCanvas();
+    initializeEnemySquares();
+
+    gameLoop();
+}
+
+export function gameLoop() {
+    if (getBeginGameStatus()) {
+        playerObject = getPlayerObject();
+    }
+    const ctx = getElements().canvas.getContext('2d');
+    if (gameState === getGameVisibleActive() || gameState === getGameVisiblePaused()) {
+        ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
+
+        if (gameState === getGameVisibleActive()) {
+            movePlayerTowardsTarget();
+            checkAllCollisions();
+        }
+
+        drawMovingObject(ctx, playerObject.x, playerObject.y, playerObject.width, playerObject.height, 'green');
+
+        enemySquares.forEach(square => {
+            drawEnemySquare(ctx, square.x, square.y, square.width, square.height);
+        });
+
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+export function initializeCanvas() {
+    const canvas = getElements().canvas;
+    const ctx = canvas.getContext('2d');
+    const container = getElements().canvasContainer;
+
+    function updateCanvasSize() {
+        const bottomContainer = document.getElementById('bottomContainer');
+    
+        const viewportHeight = window.innerHeight;
+        console.log(`Viewport Height: ${viewportHeight}px`);
+    
+        const bottomContainerHeight = bottomContainer ? bottomContainer.offsetHeight : 0;
+    
+        const canvasHeight = viewportHeight - bottomContainerHeight;
+        const canvasWidth = container.clientWidth * 0.95;
+    
+        container.style.position = 'fixed';
+        container.style.top = '0';
+        container.style.left = '0';
+        container.style.width = '100%';
+        container.style.height = `${canvasHeight}px`;
+        container.style.overflow = 'hidden';
+    
+        canvas.style.width = `${canvasWidth}px`;
+        canvas.style.height = `${canvasHeight}px`;
+        
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+    
+        ctx.scale(1, 1);
+    }
+
+    window.addEventListener('load', updateCanvasSize);
+    window.addEventListener('resize', updateCanvasSize);
+
+    updateCanvasSize();
+}
 
 function initializeEnemySquares() {
     enemySquares.length = 0;
@@ -28,96 +94,72 @@ function initializeEnemySquares() {
     }
 }
 
-export function startGame() {
-    const ctx = getElements().canvas.getContext('2d');
-    const container = getElements().canvasContainer;
+export function updateCursor(event) {
+    const canvas = getElements().canvas;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    let isHoveringOverEnemy = false;
 
-    function updateCanvasSize() {
-        const container = document.getElementById('canvasContainer');
-        const bottomContainer = document.getElementById('bottomContainer');
-    
-        const viewportHeight = window.innerHeight;
-        console.log(`Viewport Height: ${viewportHeight}px`);
-    
-        const bottomContainerHeight = bottomContainer ? bottomContainer.offsetHeight : 0;
-    
-        const canvasHeight = viewportHeight - bottomContainerHeight;
-        const canvasWidth = container.clientWidth * 0.95;
-    
-        container.style.position = 'fixed';
-        container.style.top = '0';
-        container.style.left = '0';
-        container.style.width = '100%';
-        container.style.height = `${canvasHeight}px`;
-        container.style.overflow = 'hidden';
-    
-        const canvas = getElements().canvas;
-        canvas.style.width = `${canvasWidth}px`;
-        canvas.style.height = `${canvasHeight}px`;
-        
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-    
-        const ctx = canvas.getContext('2d');
-        ctx.scale(1, 1);
+    for (const square of enemySquares) {
+        if (mouseX >= square.x && mouseX <= square.x + square.width &&
+            mouseY >= square.y && mouseY <= square.y + square.height) {
+            isHoveringOverEnemy = true;
+            break;
+        }
     }
-    
-    window.addEventListener('load', updateCanvasSize);
-    window.addEventListener('resize', updateCanvasSize);
-    
-    window.addEventListener('load', updateCanvasSize);
-    window.addEventListener('resize', updateCanvasSize);
-    
-    window.addEventListener('load', updateCanvasSize);
-    window.addEventListener('resize', updateCanvasSize);
-    
-    updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
 
-    initializeEnemySquares();
-
-    gameLoop();
+    if (isHoveringOverEnemy) {
+        canvas.style.cursor = 'default';
+    } else {
+        canvas.style.cursor = 'pointer';
+    }
 }
 
-export function gameLoop() {
-    if (getBeginGameStatus()) {
-        playerObject = getPlayerObject();
-    }
-    const ctx = getElements().canvas.getContext('2d');
-    if (gameState === getGameVisibleActive() || gameState === getGameVisiblePaused()) {
-        ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
+function movePlayerTowardsTarget() {
+    if (getTargetX() === null || getTargetY() === null) return;
 
-        if (gameState === getGameVisibleActive()) {
-            moveCircle(playerObject);
+    const speed = getInitialSpeedPlayer();
+    const dx = getTargetX() - (playerObject.x + playerObject.width / 2);
+    const dy = getTargetY() - (playerObject.y + playerObject.height / 2);
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-            checkAllCollisions();
+    if (distance < speed) {
+        playerObject.x = getTargetX() - playerObject.width / 2;
+        playerObject.y = getTargetY() - playerObject.height / 2;
+        setTargetX(null);
+        setTargetY(null);
+    } else {
+        const directionX = dx / distance;
+        const directionY = dy / distance;
+        const initialX = playerObject.x + directionX * speed;
+        const initialY = playerObject.y + directionY * speed;
+
+        const wouldCollide = enemySquares.some(square => 
+            checkCollision({ ...playerObject, x: initialX, y: initialY }, square)
+        );
+
+        if (wouldCollide) {
+            setTargetX(null);
+            setTargetY(null);
+            return;
         }
 
-        drawMovingObject(ctx, playerObject.x, playerObject.y, playerObject.width, playerObject.height, 'green');
-        drawMovingObject(ctx, movingEnemy.x, movingEnemy.y, movingEnemy.width, movingEnemy.height, 'red');
+        playerObject.x += directionX * speed;
+        playerObject.y += directionY * speed;
 
-        enemySquares.forEach(square => {
-            drawEnemySquare(ctx, square.x, square.y, square.width, square.height);
-        });
-
-        requestAnimationFrame(gameLoop);
-    }
-}
-
-function moveCircle(circle) {
-    circle.x += circle.dx;
-    circle.y += circle.dy;
-
-    if (circle.x < 0 || circle.x + circle.width > getElements().canvas.width) {
-        circle.dx = -circle.dx;
-    }
-    if (circle.y < 0 || circle.y + circle.height > getElements().canvas.height) {
-        circle.dy = -circle.dy;
+        for (const square of enemySquares) {
+            if (checkCollision(playerObject, square)) {
+                setTargetX(null);
+                setTargetY(null);
+                break;
+            }
+        }
     }
 }
 
 function checkAllCollisions() {
-
     enemySquares.forEach(square => {
         if (checkCollision(playerObject, square)) {
             handleCollisionBetweenEnemySquares(playerObject, square);
@@ -164,22 +206,20 @@ function handleCollisionBetweenEnemySquares(rectangle, square) {
     const squareCenterX = square.x + square.width / 2;
     const squareCenterY = square.y + square.height / 2;
 
-    const dx = Math.abs(rectCenterX - squareCenterX);
-    const dy = Math.abs(rectCenterY - squareCenterY);
-    const overlapX = rectangle.width / 2 + square.width / 2 - dx;
-    const overlapY = rectangle.height / 2 + square.height / 2 - dy;
+    const dx = rectCenterX - squareCenterX;
+    const dy = rectCenterY - squareCenterY;
 
-    if (overlapX >= overlapY) {
-        if (rectCenterY < squareCenterY) {
-            rectangle.dy = -Math.abs(rectangle.dy);
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+            rectangle.x = square.x + square.width;
         } else {
-            rectangle.dy = Math.abs(rectangle.dy);
+            rectangle.x = square.x - rectangle.width;
         }
     } else {
-        if (rectCenterX < squareCenterX) {
-            rectangle.dx = -Math.abs(rectangle.dx);
+        if (dy > 0) {
+            rectangle.y = square.y + square.height;
         } else {
-            rectangle.dx = Math.abs(rectangle.dx);
+            rectangle.y = square.y - rectangle.height;
         }
     }
 }

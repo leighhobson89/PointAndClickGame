@@ -1,11 +1,11 @@
-import { gameState, getLanguageChangedFlag, setLanguageChangedFlag, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisiblePaused, getBeginGameStatus, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage } from './constantsAndGlobalVars.js';
-import { setGameState, startGame, gameLoop } from './game.js';
+import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisiblePaused, getBeginGameStatus, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage } from './constantsAndGlobalVars.js';
+import { setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
-
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
+    
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
@@ -96,9 +96,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Error loading game:', error);
             });
     });
+
+    initializeCanvasEventListener();
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
 });
+
+export function initializeCanvasEventListener() {
+    const canvas = getElements().canvas;
+
+    canvas.addEventListener('click', (event) => {
+        if (gameState !== getGameVisiblePaused()) {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+
+            let isClickOnEnemy = false;
+            for (const square of enemySquares) {
+                if (clickX >= square.x && clickX <= square.x + square.width &&
+                    clickY >= square.y && clickY <= square.y + square.height) {
+                    isClickOnEnemy = true;
+                    break;
+                }
+            }
+
+            if (isClickOnEnemy) {
+                console.log('Click ignored, hovering over enemy square.');
+                return;
+            }
+
+            setTargetX(clickX);
+            setTargetY(clickY);
+            console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
+        }
+    });
+
+    canvas.addEventListener('mousemove', updateCursor);
+}
 
 async function setElementsLanguageText() {
     // Localization text
