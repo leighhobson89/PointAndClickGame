@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setElements();
                 getElements().saveLoadPopup.classList.add('d-none');
                 document.getElementById('overlay').classList.add('d-none');
+                setGameState(getMenuState());
             })
             .catch((error) => {
                 console.error('Error loading game:', error);
@@ -314,7 +315,6 @@ function handleFileSelectAndInitialiseLoadedGame(event, stringLoad, string) {
 function validateSaveString(compressed) {
     let decompressedJson = LZString.decompressFromEncodedURIComponent(compressed);
     JSON.parse(decompressedJson);
-    console.log(decompressedJson);
     return decompressedJson !== null;
 }
 

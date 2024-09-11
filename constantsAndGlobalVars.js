@@ -6,7 +6,7 @@ export let stateLoading = false;
 //ELEMENTS
 let elements;
 let localization = {};
-let language;
+let language = 'en';
 let languageSelected = 'en';
 let oldLanguage = 'en';
 

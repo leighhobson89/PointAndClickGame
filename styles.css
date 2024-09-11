@@ -12,12 +12,91 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    width: 100vw; /* Ensure the menu takes full width */
+    width: 100vw;
     background-color: #333;
     color: #fff;
     text-align: center;
     top: 0;
     left: 0;
+}
+
+button {
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.btn-primary:active {
+    background-color: #004494;
+    transform: translateY(2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+.btn-success {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.btn-success:active {
+    background-color: #19692c;
+    transform: translateY(2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+.btn-danger {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.btn-danger:active {
+    background-color: #bd2130;
+    transform: translateY(2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+.btn-secondary {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.btn-secondary:active {
+    background-color: #4e555b;
+    transform: translateY(2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+button.disabled {
+    background-color: #6c757d;
+    color: #ccc;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+.btn-primary:focus,
+.btn-success:focus,
+.btn-danger:focus,
+.btn-secondary:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9) !important;
+    outline: none !important;
 }
 
 #menu button {
@@ -36,7 +115,6 @@ body {
     display: none;
     width: 100vw;
     height: 100vh;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -51,8 +129,8 @@ body {
 }
 
 #buttonRow button {
-    width: 200px; /* Fixed width for buttons */
-    height: 50px; /* Fixed height for buttons */
+    width: 200px;
+    height: 50px;
     margin: 0 10px;
     text-align: center;
     display: flex;
@@ -61,8 +139,8 @@ body {
 }
 
 canvas {
-    width: 80%; /* 80% of the container's width */
-    height: auto; /* Maintain aspect ratio */
+    width: 80%;
+    height: auto;
     border: 1px solid white;
 }
 

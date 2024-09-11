@@ -197,6 +197,7 @@ function handleCollisionBetweenEnemySquares(rectangle, square) {
 }
 
 export function setGameState(newState) {
+    console.log("Setting game state to " + newState);
     setGameStateVariable(newState);
 
     switch (newState) {
@@ -211,6 +212,37 @@ export function setGameState(newState) {
             getElements().returnToMenuButton.classList.add('d-none');
             getElements().pauseResumeGameButton.classList.remove('d-flex');
             getElements().pauseResumeGameButton.classList.add('d-none');
+            
+            const languageButtons = [getElements().btnEnglish, getElements().btnSpanish, getElements().btnGerman, getElements().btnItalian, getElements().btnFrench];
+            languageButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            const currentLanguage = getLanguage();
+            console.log("Language is " + getLanguage());
+            switch (currentLanguage) {
+                case 'en':
+                    console.log("Setting Active state on English");
+                    getElements().btnEnglish.classList.add('active');
+                    break;
+                case 'es':
+                    console.log("Setting Active state on Spanish");
+                    getElements().btnSpanish.classList.add('active');
+                    break;
+                case 'de':
+                    console.log("Setting Active state on German");
+                    getElements().btnGerman.classList.add('active');
+                    break;
+                case 'it':
+                    console.log("Setting Active state on Italian");
+                    getElements().btnItalian.classList.add('active');
+                    break;
+                case 'fr':
+                    console.log("Setting Active state on French");
+                    getElements().btnFrench.classList.add('active');
+                    break;
+            }
+
             if (getGameInProgress()) {
                 getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage())}`;
                 getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage())}`;
