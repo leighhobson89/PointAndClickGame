@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw; /* Ensure the menu takes full width */
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    top: 0;
+    left: 0;
+}
+
+#menu button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#canvasContainer {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
+
+#buttonRow {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#buttonRow button {
+    width: 200px; /* Fixed width for buttons */
+    height: 50px; /* Fixed height for buttons */
+    margin: 0 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    width: 80%; /* 80% of the container's width */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid white;
+}
+
+.disabled {
+    background-color: #6c757d;
+    color: #ccc;
+    pointer-events: none;
+}
+
+.save-load-popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 750px;
+    background-color: #1e1e1e;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+}
+
+.save-load-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.save-load-header {
+    color: white;
+    width: 60%;
+}
+
+.save-load-buttons-container {
+    display: flex;
+    width: 80%;
+    align-items: center;
+}
+
+.save-load-buttons {
+    border-radius: 10px !important;
+}
+
+.save-load-input-container {
+    flex: 1;
+    display: flex;
+}
+
+.save-load-input-field {
+    width: 100%;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+}
+
