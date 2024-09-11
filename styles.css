@@ -111,26 +111,22 @@ button.disabled {
     justify-content: center;
 }
 
-#canvasContainer {
-    display: none;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: black;
-}
-
 #buttonRow {
-    width: 80%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    background-color: rgba(51, 51, 51, 0.5);
+    z-index: 1000;
+    padding: 10px;
 }
 
 #buttonRow button {
     width: 200px;
-    height: 50px;
+    height: 20px;
     margin: 0 10px;
     text-align: center;
     display: flex;
@@ -138,9 +134,21 @@ button.disabled {
     justify-content: center;
 }
 
+#canvasContainer {
+    display: none;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 canvas {
-    width: 80%;
-    height: auto;
     border: 1px solid white;
 }
 
@@ -210,3 +218,36 @@ canvas {
     z-index: 998;
 }
 
+.verbs, .inventory {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.verbs .row, .inventory .row {
+    flex: 1;
+}
+
+.inventory .inventory-item {
+    text-align: center;
+}
+
+.border-red {
+    border: 1px solid red;
+}
+
+#bottomContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    background-color: #333;
+    z-index: 1000;
+    padding-left: 20px; /* Optional: Add padding if needed */
+    padding-right: 20px; /* Optional: Add padding if needed */
+}
+
+#bottomContainer .col-6 {
+    flex: 1;
+}

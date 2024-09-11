@@ -47,18 +47,44 @@ export function startGame() {
     const container = getElements().canvasContainer;
 
     function updateCanvasSize() {
-        const canvasWidth = container.clientWidth * 0.8;
-        const canvasHeight = container.clientHeight * 0.8;
-
-        getElements().canvas.style.width = `${canvasWidth}px`;
-        getElements().canvas.style.height = `${canvasHeight}px`;
-
-        getElements().canvas.width = canvasWidth;
-        getElements().canvas.height = canvasHeight;
+        const container = document.getElementById('canvasContainer');
+        const bottomContainer = document.getElementById('bottomContainer');
+    
+        const viewportHeight = window.innerHeight;
+        console.log(`Viewport Height: ${viewportHeight}px`);
+    
+        const bottomContainerHeight = bottomContainer ? bottomContainer.offsetHeight : 0;
+    
+        const canvasHeight = viewportHeight - bottomContainerHeight;
+        const canvasWidth = container.clientWidth * 0.95;
+    
+        container.style.position = 'fixed';
+        container.style.top = '0';
+        container.style.left = '0';
+        container.style.width = '100%';
+        container.style.height = `${canvasHeight}px`;
+        container.style.overflow = 'hidden';
+    
+        const canvas = getElements().canvas;
+        canvas.style.width = `${canvasWidth}px`;
+        canvas.style.height = `${canvasHeight}px`;
         
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+    
+        const ctx = canvas.getContext('2d');
         ctx.scale(1, 1);
     }
-
+    
+    window.addEventListener('load', updateCanvasSize);
+    window.addEventListener('resize', updateCanvasSize);
+    
+    window.addEventListener('load', updateCanvasSize);
+    window.addEventListener('resize', updateCanvasSize);
+    
+    window.addEventListener('load', updateCanvasSize);
+    window.addEventListener('resize', updateCanvasSize);
+    
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
 
