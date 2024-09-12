@@ -19,10 +19,8 @@ export const INITIAL_SPEED_PLAYER = 4;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 
 export const playerObject = {
-    x: 100,
-    y: 100,
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 160,
     dx: getInitialSpeedPlayer(),
     dy: getInitialSpeedPlayer()
 };

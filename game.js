@@ -8,6 +8,7 @@ export const enemySquares = [];
 
 export function startGame() {
     initializeCanvas();
+    initializePlayerPosition();
     initializeEnemySquares();
 
     gameLoop();
@@ -21,7 +22,7 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
         movePlayerTowardsTarget();
-        checkAllCollisions();
+        checkPlayerEnemyCollisions();
 
         drawMovingObject(ctx, playerObject.x, playerObject.y, playerObject.width, playerObject.height, 'green');
 
@@ -69,6 +70,13 @@ export function initializeCanvas() {
     window.addEventListener('resize', updateCanvasSize);
 
     updateCanvasSize();
+}
+
+function initializePlayerPosition() {
+    const canvas = getElements().canvas;
+
+    playerObject.x = canvas.width * 0.05;
+    playerObject.y = canvas.height * 0.95 - playerObject.height;
 }
 
 function initializeEnemySquares() {
@@ -130,9 +138,10 @@ function movePlayerTowardsTarget() {
     } else {
         const directionX = dx / distance;
         const directionY = dy / distance;
-        const initialX = playerObject.x + directionX * speed;
-        const initialY = playerObject.y + directionY * speed;
+        let initialX = playerObject.x + directionX * speed;
+        let initialY = playerObject.y + directionY * speed;
 
+        // Check for collisions with enemy squares
         const wouldCollide = enemySquares.some(square => 
             checkCollision({ ...playerObject, x: initialX, y: initialY }, square)
         );
@@ -143,25 +152,30 @@ function movePlayerTowardsTarget() {
             return;
         }
 
-        playerObject.x += directionX * speed;
-        playerObject.y += directionY * speed;
-
-        for (const square of enemySquares) {
-            if (checkCollision(playerObject, square)) {
-                setTargetX(null);
-                setTargetY(null);
-                break;
-            }
+        // Check for collisions with canvas edges
+        const canvas = getElements().canvas;
+        
+        // Check left and right canvas boundaries
+        if (initialX < 0) {
+            initialX = 0;
+            setTargetX(null);
+        } else if (initialX + playerObject.width > canvas.width) {
+            initialX = canvas.width - playerObject.width;
+            setTargetX(null);
         }
+
+        // Check top and bottom canvas boundaries
+        if (initialY < 0) {
+            initialY = 0;
+            setTargetY(null);
+        } else if (initialY + playerObject.height > canvas.height) {
+            initialY = canvas.height - playerObject.height;
+            setTargetY(null);
+        }
+
+        playerObject.x = initialX;
+        playerObject.y = initialY;
     }
-}
-
-function checkAllCollisions() {
-    enemySquares.forEach(square => {
-        if (checkCollision(playerObject, square)) {
-            handleCollisionBetweenEnemySquares(playerObject, square);
-        }
-    });
 }
 
 function generateRandomSquare() {
@@ -173,16 +187,7 @@ function generateRandomSquare() {
 
 function drawMovingObject(ctx, x, y, width, height, color) {
     ctx.fillStyle = color;
-    ctx.beginPath(); 
-    ctx.arc(
-        x + width / 2, 
-        y + height / 2, 
-        width / 2,     
-        0,          
-        Math.PI * 2     
-    );
-    ctx.closePath();   
-    ctx.fill();       
+    ctx.fillRect(x, y, width, height);
 }
 
 function drawEnemySquare(ctx, x, y, width, height) {
@@ -197,7 +202,15 @@ function checkCollision(rect1, rect2) {
              rect1.y > rect2.y + rect2.height);
 }
 
-function handleCollisionBetweenEnemySquares(rectangle, square) {
+function checkPlayerEnemyCollisions() {
+    enemySquares.forEach(square => {
+        if (checkCollision(playerObject, square)) {
+            resolveCollision(playerObject, square);
+        }
+    });
+}
+
+function resolveCollision(rectangle, square) {
     const rectCenterX = rectangle.x + rectangle.width / 2;
     const rectCenterY = rectangle.y + rectangle.height / 2;
     const squareCenterX = square.x + square.width / 2;
