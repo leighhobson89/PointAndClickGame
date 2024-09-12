@@ -1,5 +1,5 @@
-import { loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId } from './constantsAndGlobalVars.js';
-import { setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
+import { getCurrentScreenId, getPathsData, loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId } from './constantsAndGlobalVars.js';
+import { getNearestPointOnPath, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
@@ -100,6 +100,7 @@ export function initializeCanvasEventListener() {
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
 
+        // Check if click is on an enemy square
         let isClickOnEnemy = false;
         for (const square of enemySquares) {
             if (clickX >= square.x && clickX <= square.x + square.width &&
@@ -114,9 +115,40 @@ export function initializeCanvasEventListener() {
             return;
         }
 
-        setTargetX(clickX);
-        setTargetY(clickY);
-        console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
+        // Get path data
+        const data = getPathsData();
+        if (!data) {
+            console.error('Path data not available');
+            return;
+        }
+
+        // Find the current screen
+        const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
+        if (!screen) {
+            console.error('Screen not found:', getCurrentScreenId());
+            return;
+        }
+
+        // Find the path
+        const path = screen.paths.find(p => p.pathId === 'path1'); // or implement logic to choose path
+        if (!path) {
+            console.error('Path not found');
+            return;
+        }
+
+        // Calculate the nearest point on the path
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const normalizedClickX = clickX;
+        const normalizedClickY = clickY;
+
+        const closestPoint = getNearestPointOnPath(path, normalizedClickX, normalizedClickY);
+
+        if (closestPoint) {
+            setTargetX(closestPoint.x); // Convert to normalized percentage
+            setTargetY(closestPoint.y); // Convert to normalized percentage
+            console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
+        }
     });
 
     canvas.addEventListener('mousemove', updateCursor);

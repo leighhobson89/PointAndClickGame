@@ -75,11 +75,114 @@ export function initializeCanvas() {
     updateCanvasSize();
 }
 
+function getPathPoint(path, percentage) {
+    const totalLength = calculatePathLength(path);
+    const distance = (percentage / 100) * totalLength;
+
+    let accumulatedLength = 0;
+    let previousPoint = path.segments[0];
+
+    for (let i = 1; i < path.segments.length; i++) {
+        const currentPoint = path.segments[i];
+        const segmentLength = Math.sqrt(
+            Math.pow(currentPoint.x - previousPoint.x, 2) +
+            Math.pow(currentPoint.y - previousPoint.y, 2)
+        );
+
+        if (distance <= accumulatedLength + segmentLength) {
+            const segmentFraction = (distance - accumulatedLength) / segmentLength;
+
+            return {
+                x: previousPoint.x + segmentFraction * (currentPoint.x - previousPoint.x),
+                y: previousPoint.y + segmentFraction * (currentPoint.y - previousPoint.y)
+            };
+        }
+
+        accumulatedLength += segmentLength;
+        previousPoint = currentPoint;
+    }
+
+    return path.segments[path.segments.length - 1];
+}
+
+function calculatePathLength(path) {
+    let totalLength = 0;
+    for (let i = 1; i < path.segments.length; i++) {
+        const prevPoint = path.segments[i - 1];
+        const currPoint = path.segments[i];
+        totalLength += Math.sqrt(
+            Math.pow(currPoint.x - prevPoint.x, 2) +
+            Math.pow(currPoint.y - prevPoint.y, 2)
+        );
+    }
+    return totalLength;
+}
+
+export function getNearestPointOnPath(path, clickX, clickY) {
+    const canvas = getElements().canvas;
+    const pathPoints = path.segments.map(segment => ({
+        x: segment.x / 100 * canvas.width,
+        y: segment.y / 100 * canvas.height
+    }));
+
+    const sampledPoints = [];
+    const numSamples = 200; // Number of points to sample along the path
+
+    for (let i = 0; i < pathPoints.length - 1; i++) {
+        const p1 = pathPoints[i];
+        const p2 = pathPoints[i + 1];
+        
+        for (let j = 0; j <= numSamples; j++) {
+            const t = j / numSamples;
+            const x = p1.x + t * (p2.x - p1.x);
+            const y = p1.y + t * (p2.y - p1.y);
+            sampledPoints.push({ x, y });
+        }
+    }
+
+    let minDistance = Infinity;
+    let closestPoint = null;
+
+    for (const point of sampledPoints) {
+        const distance = Math.sqrt((clickX - point.x) ** 2 + (clickY - point.y) ** 2);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestPoint = point;
+        }
+    }
+
+    return closestPoint;
+}
+
 function initializePlayerPosition() {
     const canvas = getElements().canvas;
+    const data = getPathsData();
 
-    playerObject.x = canvas.width * 0.05;
-    playerObject.y = canvas.height * 0.95 - playerObject.height;
+    if (!data) {
+        console.error('Path data not available');
+        return;
+    }
+
+    const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
+
+    if (!screen) {
+        console.error('Screen not found:', getCurrentScreenId());
+        return;
+    }
+
+    const path = screen.paths.find(p => p.pathId === 'path1');
+
+    if (!path) {
+        console.error('Path not found');
+        return;
+    }
+
+    const snapPercentage = 10;
+    const snapPoint = getPathPoint(path, snapPercentage);
+
+    playerObject.x = snapPoint.x / 100 * canvas.width - playerObject.width / 2;
+    playerObject.y = snapPoint.y / 100 * canvas.height - playerObject.height;
 }
 
 function initializeEnemySquares() {
@@ -126,58 +229,62 @@ export function updateCursor(event) {
 }
 
 function movePlayerTowardsTarget() {
-    if (getTargetX() === null || getTargetY() === null) return;
+    const targetX = getTargetX();
+    const targetY = getTargetY();
+    
+    if (targetX === null || targetY === null) return;
 
     const speed = getInitialSpeedPlayer();
-    const dx = getTargetX() - (playerObject.x + playerObject.width / 2);
-    const dy = getTargetY() - (playerObject.y + playerObject.height / 2);
+    const playerCenterX = playerObject.x + playerObject.width / 2;
+    const playerCenterY = playerObject.y + playerObject.height / 2;
+    const dx = targetX - playerCenterX;
+    const dy = targetY - playerCenterY;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < speed) {
-        playerObject.x = getTargetX() - playerObject.width / 2;
-        playerObject.y = getTargetY() - playerObject.height / 2;
+        // Snap to target and clear target
+        playerObject.x = targetX - playerObject.width / 2;
+        playerObject.y = targetY - playerObject.height / 2;
         setTargetX(null);
         setTargetY(null);
     } else {
+        // Move towards target
         const directionX = dx / distance;
         const directionY = dy / distance;
-        let initialX = playerObject.x + directionX * speed;
-        let initialY = playerObject.y + directionY * speed;
+        const nextX = playerObject.x + directionX * speed;
+        const nextY = playerObject.y + directionY * speed;
 
-        // Check for collisions with enemy squares
+        // Collision checks
         const wouldCollide = enemySquares.some(square => 
-            checkCollision({ ...playerObject, x: initialX, y: initialY }, square)
+            checkCollision({ ...playerObject, x: nextX, y: nextY }, square)
         );
 
         if (wouldCollide) {
+            // Prevent movement if collision detected
             setTargetX(null);
             setTargetY(null);
             return;
         }
 
-        // Check for collisions with canvas edges
+        // Check canvas boundaries
         const canvas = getElements().canvas;
-        
-        // Check left and right canvas boundaries
-        if (initialX < 0) {
-            initialX = 0;
-            setTargetX(null);
-        } else if (initialX + playerObject.width > canvas.width) {
-            initialX = canvas.width - playerObject.width;
-            setTargetX(null);
+
+        // Adjust position if hitting boundaries
+        if (nextX < 0) {
+            playerObject.x = 0;
+        } else if (nextX + playerObject.width > canvas.width) {
+            playerObject.x = canvas.width - playerObject.width;
+        } else {
+            playerObject.x = nextX;
         }
 
-        // Check top and bottom canvas boundaries
-        if (initialY < 0) {
-            initialY = 0;
-            setTargetY(null);
-        } else if (initialY + playerObject.height > canvas.height) {
-            initialY = canvas.height - playerObject.height;
-            setTargetY(null);
+        if (nextY < 0) {
+            playerObject.y = 0;
+        } else if (nextY + playerObject.height > canvas.height) {
+            playerObject.y = canvas.height - playerObject.height;
+        } else {
+            playerObject.y = nextY;
         }
-
-        playerObject.x = initialX;
-        playerObject.y = initialY;
     }
 }
 
