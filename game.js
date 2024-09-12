@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
+import { getCurrentScreenId, getPathsData, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId } from './constantsAndGlobalVars.js';
 
 let playerObject = getPlayerObject();
 export const enemySquares = [];
@@ -21,6 +21,9 @@ export function gameLoop() {
     const ctx = getElements().canvas.getContext('2d');
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
+
+        drawPathsForCurrentScreen(); //debug paths
+
         movePlayerTowardsTarget();
         checkPlayerEnemyCollisions();
 
@@ -236,6 +239,54 @@ function resolveCollision(rectangle, square) {
 
 //-------------------------------------------------------------------------------------------------------------
 
+function drawPathsForCurrentScreen() {
+    const canvas = getElements().canvas;
+    const ctx = canvas.getContext('2d');
+    
+    const data = getPathsData();
+    if (!data) {
+        console.error('Path data not available');
+        return;
+    }
+
+    const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
+
+    if (!screen) {
+        console.error('Screen not found:', getCurrentScreenId());
+        return;
+    }
+
+    screen.paths.forEach(path => {
+        ctx.strokeStyle = path.pathId === 'path1' ? 'red' : 'yellow';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        path.segments.forEach((segment, index) => {
+            const x = segment.x / 100 * canvas.width;
+            const y = segment.y / 100 * canvas.height;
+
+            if (index === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        });
+        ctx.stroke();
+
+        // Draw junctions
+        path.junctions.forEach(junction => {
+            const x = junction.x / 100 * canvas.width;
+            const y = junction.y / 100 * canvas.height;
+
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    });
+}
+
+
+//-------------------------------------------------------------------------------------------------------------
 export function setGameState(newState) {
     console.log("Setting game state to " + newState);
     setGameStateVariable(newState);

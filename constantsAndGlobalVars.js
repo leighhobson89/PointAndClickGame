@@ -17,6 +17,7 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const INITIAL_SPEED_PLAYER = 4;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
+export const INITIAL_SCREEN_ID = 'screen1';
 
 export const playerObject = {
     width: 40,
@@ -28,6 +29,8 @@ export const playerObject = {
 //GLOBAL VARIABLES
 let targetX = null;
 let targetY = null;
+let pathsData = null;
+let currentScreenId = INITIAL_SCREEN_ID;
 
 //FLAGS
 let audioMuted;
@@ -74,6 +77,22 @@ export function setElements() {
         btnTalkTo: document.getElementById('btnTalkTo'),
         btnGive: document.getElementById('btnGive')
     };
+}
+
+export function getCurrentScreenId() {
+    return currentScreenId;
+}
+
+export function setCurrentScreenId(value) {
+    currentScreenId = value;
+}
+
+export function getPathsData() {
+    return pathsData;
+}
+
+export function getInitialScreenId() {
+    return INITIAL_SCREEN_ID;
 }
 
 export function getPlayerObject() {
@@ -135,6 +154,19 @@ export function restoreGameStatus(gameState) {
             reject(error);
         }
     });
+}
+
+export async function loadPathsData() {
+    try {
+        const response = await fetch('screens.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        pathsData = await response.json();
+        console.log('Paths data loaded successfully');
+    } catch (error) {
+        console.error('Failed to load JSON data:', error);
+    }
 }
 
 export function setLocalization(value) {

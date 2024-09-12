@@ -1,0 +1,40 @@
+{
+    "screens": [
+      {
+        "screenId": "screen1",
+        "paths": [
+          {
+            "pathId": "path1",
+            "segments": [
+              {"x": 5, "y": 95},
+              {"x": 50, "y": 50},
+              {"x": 95, "y": 95}
+            ],
+            "junctions": [
+              {
+                "x": 50,
+                "y": 50,
+                "leadsTo": ["path2"]
+              }
+            ]
+          },
+          {
+            "pathId": "path2",
+            "segments": [
+              {"x": 50, "y": 95},
+              {"x": 50, "y": 50},
+              {"x": 50, "y": 5}
+            ],
+            "junctions": [
+              {
+                "x": 50,
+                "y": 50,
+                "leadsTo": ["path1"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -1,10 +1,11 @@
-import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage } from './constantsAndGlobalVars.js';
+import { loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId } from './constantsAndGlobalVars.js';
 import { setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
+    loadPathsData();
 
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', () => {
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
         disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
         setGameState(getGameVisibleActive());
-        startGame();
+        startGame(getInitialScreenId());
     });
 
     getElements().resumeGameMenuButton.addEventListener('click', () => {
