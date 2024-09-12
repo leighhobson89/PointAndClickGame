@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisiblePaused, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
+import { setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState } from './constantsAndGlobalVars.js';
 
 let playerObject = getPlayerObject();
 export const enemySquares = [];
@@ -18,13 +18,10 @@ export function gameLoop() {
         playerObject = getPlayerObject();
     }
     const ctx = getElements().canvas.getContext('2d');
-    if (gameState === getGameVisibleActive() || gameState === getGameVisiblePaused()) {
+    if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
-
-        if (gameState === getGameVisibleActive()) {
-            movePlayerTowardsTarget();
-            checkAllCollisions();
-        }
+        movePlayerTowardsTarget();
+        checkAllCollisions();
 
         drawMovingObject(ctx, playerObject.x, playerObject.y, playerObject.width, playerObject.height, 'green');
 
@@ -240,35 +237,29 @@ export function setGameState(newState) {
             getElements().canvasContainer.classList.add('d-none');
             getElements().returnToMenuButton.classList.remove('d-flex');
             getElements().returnToMenuButton.classList.add('d-none');
-            getElements().pauseResumeGameButton.classList.remove('d-flex');
-            getElements().pauseResumeGameButton.classList.add('d-none');
-            
+
+            // Handle language buttons and localization
             const languageButtons = [getElements().btnEnglish, getElements().btnSpanish, getElements().btnGerman, getElements().btnItalian, getElements().btnFrench];
             languageButtons.forEach(button => {
                 button.classList.remove('active');
             });
 
             const currentLanguage = getLanguage();
-            console.log("Language is " + getLanguage());
+            console.log("Language is " + currentLanguage);
             switch (currentLanguage) {
                 case 'en':
-                    console.log("Setting Active state on English");
                     getElements().btnEnglish.classList.add('active');
                     break;
                 case 'es':
-                    console.log("Setting Active state on Spanish");
                     getElements().btnSpanish.classList.add('active');
                     break;
                 case 'de':
-                    console.log("Setting Active state on German");
                     getElements().btnGerman.classList.add('active');
                     break;
                 case 'it':
-                    console.log("Setting Active state on Italian");
                     getElements().btnItalian.classList.add('active');
                     break;
                 case 'fr':
-                    console.log("Setting Active state on French");
                     getElements().btnFrench.classList.add('active');
                     break;
             }
@@ -278,25 +269,7 @@ export function setGameState(newState) {
                 getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage())}`;
             }
             break;
-        case getGameVisiblePaused():
-            getElements().menu.classList.remove('d-flex');
-            getElements().menu.classList.add('d-none');
-            getElements().buttonRow.classList.remove('d-none');
-            getElements().buttonRow.classList.add('d-flex');
-            getElements().canvasContainer.classList.remove('d-none');
-            getElements().canvasContainer.classList.add('d-flex');
-            getElements().returnToMenuButton.classList.remove('d-none');
-            getElements().returnToMenuButton.classList.add('d-flex');
-            getElements().pauseResumeGameButton.classList.remove('d-none');
-            getElements().pauseResumeGameButton.classList.add('d-flex');
-            if (getBeginGameStatus()) {
-                getElements().pauseResumeGameButton.innerHTML = `${localize('begin', getLanguage())}`;
-            } else {
-                getElements().pauseResumeGameButton.innerHTML = `${localize('resumeGame', getLanguage())}`;
-            }
-            
-            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage())}`;
-            break;
+
         case getGameVisibleActive():
             getElements().menu.classList.remove('d-flex');
             getElements().menu.classList.add('d-none');
@@ -306,10 +279,24 @@ export function setGameState(newState) {
             getElements().canvasContainer.classList.add('d-flex');
             getElements().returnToMenuButton.classList.remove('d-none');
             getElements().returnToMenuButton.classList.add('d-flex');
-            getElements().pauseResumeGameButton.classList.remove('d-none');
-            getElements().pauseResumeGameButton.classList.add('d-flex');
-            getElements().pauseResumeGameButton.innerHTML = `${localize('pause', getLanguage())}`;
+
+            // Remove the pause/resume button
+            // getElements().pauseResumeGameButton.classList.remove('d-flex');
+            // getElements().pauseResumeGameButton.classList.add('d-none');
+
+            // Set button labels based on game state
             getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage())}`;
+
+            // Set verb buttons
+            getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage())}`;
+            getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage())}`;
+            getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage())}`;
+            getElements().btnOpen.innerHTML = `${localize('verbOpen', getLanguage())}`;
+            getElements().btnClose.innerHTML = `${localize('verbClose', getLanguage())}`;
+            getElements().btnPush.innerHTML = `${localize('verbPush', getLanguage())}`;
+            getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage())}`;
+            getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage())}`;
+            getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage())}`;
             break;
     }
 }

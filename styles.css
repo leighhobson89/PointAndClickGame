@@ -109,7 +109,6 @@ button.disabled {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 #buttonRow {
@@ -118,7 +117,6 @@ button.disabled {
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: center;
     margin-bottom: 0;
     background-color: rgba(51, 51, 51, 0.5);
     z-index: 1000;
@@ -126,7 +124,7 @@ button.disabled {
 }
 
 #buttonRow button {
-    width: 200px;
+    width: 75px;
     height: 20px;
     margin: 0 10px;
     text-align: center;

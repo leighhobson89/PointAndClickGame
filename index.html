@@ -52,9 +52,8 @@
     <!-- Canvas Container -->
     <div id="canvasContainer" class="d-none">
         <!-- Button Row -->
-        <div id="buttonRow" class="d-flex justify-content-center mb-3">
+        <div id="buttonRow" class="d-flex ml-2">
             <button id="returnToMenu" class="btn btn-secondary mr-2">Return to Menu</button>
-            <button id="resumeGame" class="btn btn-primary">Pause</button>
         </div>
         <div class="canvas-wrapper">
             <canvas id="canvas"></canvas>
@@ -63,23 +62,38 @@
             <div class="col-6 p-2">
                 <div class="verbs">
                     <div class="row mb-2">
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb1</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb2</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb3</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb4</button></div>
+                        <div class="col-3 mb-2">
+                            <button id="btnLookAt" class="btn btn-primary w-100">PH_LookAt</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnPickUp" class="btn btn-primary w-100">PH_PickUp</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnUse" class="btn btn-primary w-100">PH_Use</button>
+                        </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb1</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb2</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb3</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb4</button></div>
+                        <div class="col-3 mb-2">
+                            <button id="btnOpen" class="btn btn-primary w-100">PH_Open</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnClose" class="btn btn-primary w-100">PH_Close</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnPush" class="btn btn-primary w-100">PH_Push</button>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb1</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb2</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb3</button></div>
-                        <div class="col-3 mb-2"><button class="btn btn-primary w-100">Verb4</button></div>
-                    </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnPull" class="btn btn-primary w-100">PH_Pull</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnTalkTo" class="btn btn-primary w-100">PH_TalkTo</button>
+                        </div>
+                        <div class="col-3 mb-2">
+                            <button id="btnGive" class="btn btn-primary w-100">PH_Give</button>
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <div class="col-6 p-2">

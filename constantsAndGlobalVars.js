@@ -13,7 +13,6 @@ let oldLanguage = 'en';
 //CONSTANTS
 export let gameState;
 export const MENU_STATE = 'menuState';
-export const GAME_VISIBLE_PAUSED = 'gameVisiblePaused';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const INITIAL_SPEED_PLAYER = 4;
@@ -66,7 +65,16 @@ export function setElements() {
         btnItalian: document.getElementById('btnItalian'),
         copyButtonSavePopup: document.getElementById('copyButtonSavePopup'),
         closeButtonSavePopup: document.getElementById('closeButtonSavePopup'),
-        overlay: document.getElementById('overlay')
+        overlay: document.getElementById('overlay'),
+        btnLookAt: document.getElementById('btnLookAt'),
+        btnPickUp: document.getElementById('btnPickUp'),
+        btnUse: document.getElementById('btnUse'),
+        btnOpen: document.getElementById('btnOpen'),
+        btnClose: document.getElementById('btnClose'),
+        btnPush: document.getElementById('btnPush'),
+        btnPull: document.getElementById('btnPull'),
+        btnTalkTo: document.getElementById('btnTalkTo'),
+        btnGive: document.getElementById('btnGive')
     };
 }
 
@@ -165,10 +173,6 @@ export function getAudioMuted() {
 
 export function getMenuState() {
     return MENU_STATE;
-}
-
-export function getGameVisiblePaused() {
-    return GAME_VISIBLE_PAUSED;
 }
 
 export function getGameVisibleActive() {

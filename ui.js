@@ -1,11 +1,11 @@
-import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisiblePaused, getBeginGameStatus, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage } from './constantsAndGlobalVars.js';
+import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage } from './constantsAndGlobalVars.js';
 import { setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
-    
+
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
@@ -14,24 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
         disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
-        setGameState(getGameVisiblePaused());
+        setGameState(getGameVisibleActive());
         startGame();
-    });
-
-    getElements().pauseResumeGameButton.addEventListener('click', () => {
-        if (gameState === getGameVisiblePaused()) {
-            if (getBeginGameStatus()) {
-                setBeginGameStatus(false);
-            }
-            setGameState(getGameVisibleActive());
-        } else if (gameState === getGameVisibleActive()) {
-            setGameState(getGameVisiblePaused());
-        }
     });
 
     getElements().resumeGameMenuButton.addEventListener('click', () => {
         if (gameState === getMenuState()) {
-            setGameState(getGameVisiblePaused());
+            setGameState(getGameVisibleActive());
         }
         gameLoop();
     });
@@ -106,29 +95,27 @@ export function initializeCanvasEventListener() {
     const canvas = getElements().canvas;
 
     canvas.addEventListener('click', (event) => {
-        if (gameState !== getGameVisiblePaused()) {
-            const rect = canvas.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const clickY = event.clientY - rect.top;
+        const rect = canvas.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
 
-            let isClickOnEnemy = false;
-            for (const square of enemySquares) {
-                if (clickX >= square.x && clickX <= square.x + square.width &&
-                    clickY >= square.y && clickY <= square.y + square.height) {
-                    isClickOnEnemy = true;
-                    break;
-                }
+        let isClickOnEnemy = false;
+        for (const square of enemySquares) {
+            if (clickX >= square.x && clickX <= square.x + square.width &&
+                clickY >= square.y && clickY <= square.y + square.height) {
+                isClickOnEnemy = true;
+                break;
             }
-
-            if (isClickOnEnemy) {
-                console.log('Click ignored, hovering over enemy square.');
-                return;
-            }
-
-            setTargetX(clickX);
-            setTargetY(clickY);
-            console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
         }
+
+        if (isClickOnEnemy) {
+            console.log('Click ignored, hovering over enemy square.');
+            return;
+        }
+
+        setTargetX(clickX);
+        setTargetY(clickY);
+        console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
     });
 
     canvas.addEventListener('mousemove', updateCursor);
