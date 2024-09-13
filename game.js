@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getCurrentScreenId, getPathsData, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId } from './constantsAndGlobalVars.js';
+import { setCurrentPath, getCurrentScreenId, getPathsData, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath } from './constantsAndGlobalVars.js';
 
 let playerObject = getPlayerObject();
 export const enemySquares = [];
@@ -9,7 +9,7 @@ export const enemySquares = [];
 export function startGame() {
     initializeCanvas();
     initializePlayerPosition();
-    initializeEnemySquares();
+    //initializeEnemySquares();
 
     gameLoop();
 }
@@ -118,6 +118,30 @@ function calculatePathLength(path) {
     return totalLength;
 }
 
+export function calculateDistance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}
+
+export function moveToClosestPointThenFinal(closestPathPoint, finalMovePoint) {
+    // Move to the closestPathPoint first
+    setTargetX(closestPathPoint.x);
+    setTargetY(closestPathPoint.y);
+    console.log(`Moving to closestPathPoint: (${getTargetX()}, ${getTargetY()})`);
+
+    // Listen for the player's arrival at closestPathPoint
+    let intervalId = setInterval(() => {
+        const player = getPlayerObject();
+        const distanceToClosest = calculateDistance(player.x, player.y, closestPathPoint.x, closestPathPoint.y);
+
+        if (distanceToClosest < 1) { // Player has reached the closestPathPoint
+            clearInterval(intervalId);
+            setTargetX(finalMovePoint.x);
+            setTargetY(finalMovePoint.y);
+            console.log(`Reached closestPathPoint, now moving to finalMovePoint: (${getTargetX()}, ${getTargetY()})`);
+        }
+    }, 100); // Check every 100ms
+}
+
 export function getNearestPointOnPath(path, clickX, clickY) {
     const canvas = getElements().canvas;
     const pathPoints = path.segments.map(segment => ({
@@ -171,14 +195,14 @@ function initializePlayerPosition() {
         return;
     }
 
-    const path = screen.paths.find(p => p.pathId === 'path1');
+    const path = screen.paths.find(p => p.pathId === getCurrentPath());
 
     if (!path) {
         console.error('Path not found');
         return;
     }
 
-    const snapPercentage = 10;
+    const snapPercentage = 5;
     const snapPoint = getPathPoint(path, snapPercentage);
 
     playerObject.x = snapPoint.x / 100 * canvas.width - playerObject.width / 2;

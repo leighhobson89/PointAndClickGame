@@ -18,6 +18,7 @@ export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const INITIAL_SPEED_PLAYER = 4;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
+export const INITIAL_PATH = 'path1';
 
 export const playerObject = {
     width: 40,
@@ -31,6 +32,7 @@ let targetX = null;
 let targetY = null;
 let pathsData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
+let currentPath = INITIAL_PATH;
 
 //FLAGS
 let audioMuted;
@@ -38,8 +40,8 @@ let languageChangedFlag;
 let beginGameState = true;
 let gameInProgress = false;
 
-let autoSaveOn = false;
-export let pauseAutoSaveCountdown = true;
+//let autoSaveOn = false;
+//export let pauseAutoSaveCountdown = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -77,6 +79,14 @@ export function setElements() {
         btnTalkTo: document.getElementById('btnTalkTo'),
         btnGive: document.getElementById('btnGive')
     };
+}
+
+export function getCurrentPath() {
+    return currentPath;
+}
+
+export function setCurrentPath(value) {
+    currentPath = value;
 }
 
 export function getCurrentScreenId() {

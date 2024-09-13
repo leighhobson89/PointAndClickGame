@@ -1,5 +1,5 @@
-import { getCurrentScreenId, getPathsData, loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId } from './constantsAndGlobalVars.js';
-import { getNearestPointOnPath, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
+import { setCurrentPath, getCurrentPath, getCurrentScreenId, getPathsData, loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, getPlayerObject } from './constantsAndGlobalVars.js';
+import { calculateDistance, moveToClosestPointThenFinal, getNearestPointOnPath, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     setElements();
     loadPathsData();
 
-    // Event listeners
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
         if (!getGameInProgress()) {
@@ -100,7 +99,6 @@ export function initializeCanvasEventListener() {
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
 
-        // Check if click is on an enemy square
         let isClickOnEnemy = false;
         for (const square of enemySquares) {
             if (clickX >= square.x && clickX <= square.x + square.width &&
@@ -115,39 +113,106 @@ export function initializeCanvasEventListener() {
             return;
         }
 
-        // Get path data
         const data = getPathsData();
         if (!data) {
             console.error('Path data not available');
             return;
         }
 
-        // Find the current screen
         const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
         if (!screen) {
             console.error('Screen not found:', getCurrentScreenId());
             return;
         }
 
-        // Find the path
-        const path = screen.paths.find(p => p.pathId === 'path1'); // or implement logic to choose path
-        if (!path) {
+        const playerObject = getPlayerObject();
+        const startX = playerObject.x; // Player's current X position
+        const startY = playerObject.y; // Player's current Y position
+
+        // Find the closest point on the current path (the "finalMovePoint")
+        const currentPath = screen.paths.find(p => p.pathId === getCurrentPath());
+        if (!currentPath) {
             console.error('Path not found');
             return;
         }
 
-        // Calculate the nearest point on the path
-        const canvasWidth = canvas.width;
-        const canvasHeight = canvas.height;
-        const normalizedClickX = clickX;
-        const normalizedClickY = clickY;
+        // Get the point on the current path nearest to the click position
+        let finalMovePoint = getNearestPointOnPath(currentPath, clickX, clickY);
+        finalMovePoint.y = finalMovePoint.y - playerObject.height / 2; // Align player feet on path
 
-        const closestPoint = getNearestPointOnPath(path, normalizedClickX, normalizedClickY);
+        console.log(`Start Position: (${startX}, ${startY})`);
+        console.log(`Final Move Point: (${finalMovePoint.x}, ${finalMovePoint.y})`);
 
-        if (closestPoint) {
-            setTargetX(closestPoint.x); // Convert to normalized percentage
-            setTargetY(closestPoint.y); // Convert to normalized percentage
-            console.log(`Clicked Coordinates: (${getTargetX()}, ${getTargetY()})`);
+        // Initialize variables for finding the best path point
+        let bestPathPoint = null;
+        let minDistanceToStart = Infinity; // Track the minimum distance to start position for valid points
+
+        // Loop through all paths to find the closest valid path point
+        for (const path of screen.paths) {
+            for (const segment of path.segments) {
+                // Convert percentage coordinates to pixel coordinates
+                const segmentX = segment.x / 100 * canvas.width; 
+                const segmentY = segment.y / 100 * canvas.height;
+
+                // Calculate distance from the start position to the segment
+                const distanceToSegment = calculateDistance(startX, startY, segmentX, segmentY);
+                // Calculate distance from the segment to the final move point
+                const distanceFromSegmentToFinal = calculateDistance(segmentX, segmentY, finalMovePoint.x, finalMovePoint.y);
+                // Calculate distance from the player to the final move point
+                const distanceFromPlayerToFinal = calculateDistance(startX, startY, finalMovePoint.x, finalMovePoint.y);
+
+                console.log(`Checking Segment Position: (${segmentX}, ${segmentY})`);
+                console.log(`Distance from Start to Segment: ${distanceToSegment}`);
+                console.log(`Distance from Segment to Final Move Point: ${distanceFromSegmentToFinal}`);
+                console.log(`Distance from Player to Final Move Point: ${distanceFromPlayerToFinal}`);
+
+                // Check if this segment is closer to the finalMovePoint than the start position
+                // and closer to the start position than the finalMovePoint
+                if (distanceFromSegmentToFinal < distanceFromPlayerToFinal && distanceToSegment < distanceFromPlayerToFinal) {
+                    // If it's a valid point, check if it's the closest valid one
+                    if (distanceToSegment < minDistanceToStart) {
+                        minDistanceToStart = distanceToSegment;
+                        bestPathPoint = { x: segmentX, y: segmentY };
+                        console.log(`Valid Path Point Found: (${bestPathPoint.x}, ${bestPathPoint.y})`);
+                        console.log(`This point is valid because it is closer to the final move point than the start position and closer to the start position than the final move point.`);
+                    } else {
+                        console.log(`Point is valid but not the closest one.`);
+                    }
+                } else {
+                    console.log(`Point is not valid.`);
+                }
+            }
+        }
+
+        // Compare distances and decide where to move
+        const distanceToFinalMovePoint = calculateDistance(startX, startY, finalMovePoint.x, finalMovePoint.y);
+
+        console.log(`Distance to Final Move Point: ${distanceToFinalMovePoint}`);
+
+        if (bestPathPoint) {
+            // Move to the closest valid path point first, then to the final move point
+            setTargetX(bestPathPoint.x);
+            setTargetY(bestPathPoint.y - (getPlayerObject().height / 2));
+            console.log(`Moving to closest valid path point: (${getTargetX()}, ${getTargetY()})`);
+
+            // Listen for arrival at bestPathPoint and then move to finalMovePoint
+            let intervalId = setInterval(() => {
+                const player = getPlayerObject();
+                const distanceToBestPoint = calculateDistance(playerObject.x + playerObject.width / 2, playerObject.y + playerObject.height, bestPathPoint.x, bestPathPoint.y);
+
+
+                if (distanceToBestPoint < 1) { // Player has reached bestPathPoint
+                    clearInterval(intervalId);
+                    setTargetX(finalMovePoint.x);
+                    setTargetY(finalMovePoint.y - (getPlayerObject().height / 2));
+                    console.log(`Reached closest valid path point, now moving to finalMovePoint: (${getTargetX()}, ${getTargetY()})`);
+                }
+            }, 100); // Check every 100ms
+        } else {
+            // Move directly to the finalMovePoint
+            setTargetX(finalMovePoint.x);
+            setTargetY(finalMovePoint.y - (getPlayerObject().height / 2));
+            console.log(`No valid path points found. Moving directly to finalMovePoint: (${getTargetX()}, ${getTargetY()})`);
         }
     });
 
