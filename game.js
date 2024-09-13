@@ -142,58 +142,123 @@ export function moveToClosestPointThenFinal(closestPathPoint, finalMovePoint) {
     }, 100); // Check every 100ms
 }
 
-export function getNearestPointOnPath(path, clickX, clickY) {
+export function getNearestPointOnPath(clickX, clickY) {
     const canvas = getElements().canvas;
-    const pathPoints = path.segments.map(segment => ({
-        x: segment.x / 100 * canvas.width,
-        y: segment.y / 100 * canvas.height
-    }));
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const data = getPathsData();
 
-    const sampledPoints = [];
-    const numSamples = 200; // Number of points to sample along the path
+    console.log(`Canvas Dimensions: Width = ${canvasWidth}, Height = ${canvasHeight}`);
+    console.log(`Click Position: (${clickX}, ${clickY})`);
 
-    for (let i = 0; i < pathPoints.length - 1; i++) {
-        const p1 = pathPoints[i];
-        const p2 = pathPoints[i + 1];
-        
-        for (let j = 0; j <= numSamples; j++) {
-            const t = j / numSamples;
-            const x = p1.x + t * (p2.x - p1.x);
-            const y = p1.y + t * (p2.y - p1.y);
-            sampledPoints.push({ x, y });
-        }
+    if (!data) {
+        console.error('Path data not available');
+        return null;
+    }
+
+    const currentPathId = getCurrentPath();
+    const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
+    if (!screen) {
+        console.error('Screen not found:', getCurrentScreenId());
+        return null;
     }
 
     let minDistance = Infinity;
     let closestPoint = null;
+    let closestPathId = null;
+    let finalPoint = null;
 
-    for (const point of sampledPoints) {
-        const distance = Math.sqrt((clickX - point.x) ** 2 + (clickY - point.y) ** 2);
+    // Loop through all paths on the current screen
+    for (const path of screen.paths) {
+        console.log(`Processing Path ID: ${path.pathId}`);
 
-        if (distance < minDistance) {
-            minDistance = distance;
-            closestPoint = point;
+        const pathPoints = path.segments.map(segment => {
+            const x = segment.x / 100 * canvasWidth;
+            const y = segment.y / 100 * canvasHeight;
+            console.log(`Segment Position: (${x}, ${y})`);
+            return { x, y };
+        });
+
+        const sampledPoints = [];
+        const numSamples = 50; // Number of points to sample along the path
+
+        // Sample points along the path
+        for (let i = 0; i < pathPoints.length - 1; i++) {
+            const p1 = pathPoints[i];
+            const p2 = pathPoints[i + 1];
+            
+            for (let j = 0; j <= numSamples; j++) {
+                const t = j / numSamples;
+                const x = p1.x + t * (p2.x - p1.x);
+                const y = p1.y + t * (p2.y - p1.y);
+                sampledPoints.push({ x, y });
+            }
+        }
+
+        // Find the closest point on this path
+        for (const point of sampledPoints) {
+            // Calculate the distance from the click point to the current sampled point
+            const distance = Math.sqrt((clickX - point.x) ** 2 + (clickY - point.y) ** 2);
+            console.log(`Checking Sampled Point: (${point.x}, ${point.y})`);
+            console.log(`Distance to Click Point: ${distance}`);
+
+            if (isNaN(distance)) {
+                console.error(`NaN encountered in distance calculation for point: (${point.x}, ${point.y})`);
+            }
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestPoint = point;
+                closestPathId = path.pathId;
+                console.log(`New Closest Point on Path ${path.pathId}: (${closestPoint.x}, ${closestPoint.y})`);
+            }
         }
     }
 
-    return closestPoint;
+    if (closestPoint) {
+        console.log(`Closest Point Found: (${closestPoint.x}, ${closestPoint.y}) on Path ID: ${closestPathId}`);
+        finalPoint = closestPoint;
+
+        // If the closest point is on a different path, go through a junction
+        if (closestPathId !== currentPathId) {
+            console.log(`Closest point is on a different path (${closestPathId}) than the current path (${currentPathId}). Checking for junction...`);
+            
+            // Get the current path to find junctions
+            const currentPath = screen.paths.find(path => path.pathId === currentPathId);
+            if (currentPath && currentPath.junctions) {
+                // Look for a junction that leads to the path containing the closest point
+                const junction = currentPath.junctions.find(j => j.leadsTo.includes(closestPathId));
+                if (junction) {
+                    // Convert junction's percentage coordinates to canvas coordinates
+                    const junctionX = junction.x / 100 * canvasWidth;
+                    const junctionY = junction.y / 100 * canvasHeight;
+                    console.log(`Junction found between Path ${currentPathId} and Path ${closestPathId}. Moving to Junction at: (${junctionX}, ${junctionY})`);
+                    
+                    // Return the junction as the point to move to first
+                    return { finalPoint: finalPoint, point: { x: junctionX, y: junctionY }, newPathId: closestPathId, pathId: currentPathId, junction: true };
+                } else {
+                    console.error(`No junction found leading to Path ${closestPathId} from Path ${currentPathId}`);
+                }
+            } else {
+                console.error(`No junctions found on current path (${currentPathId})`);
+            }
+        } 
+
+        // If closest point is on the same path, return it as is
+        return { finalPoint: finalPoint, point: closestPoint, pathId: closestPathId, junction: false };
+    } else {
+        console.error('No closest point found');
+        return null;
+    }
 }
+
+
 
 function initializePlayerPosition() {
     const canvas = getElements().canvas;
     const data = getPathsData();
 
-    if (!data) {
-        console.error('Path data not available');
-        return;
-    }
-
     const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
-
-    if (!screen) {
-        console.error('Screen not found:', getCurrentScreenId());
-        return;
-    }
 
     const path = screen.paths.find(p => p.pathId === getCurrentPath());
 
