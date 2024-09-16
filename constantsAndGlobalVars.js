@@ -19,12 +19,16 @@ export const INITIAL_SPEED_PLAYER = 4;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
 export const INITIAL_PATH = 'path1';
+export const INITIAL_SNAP_POINT_ON_PATH = 5;
 
-export const playerObject = {
+export let playerObject = {
     width: 40,
     height: 160,
     dx: getInitialSpeedPlayer(),
-    dy: getInitialSpeedPlayer()
+    dy: getInitialSpeedPlayer(),
+    color: 'green',
+    xPos: '0',
+    yPos: '0'
 };
 
 //GLOBAL VARIABLES
@@ -81,6 +85,10 @@ export function setElements() {
     };
 }
 
+export function getStartPosition() {
+    return INITIAL_SNAP_POINT_ON_PATH;
+}
+
 export function getCurrentPath() {
     return currentPath;
 }
@@ -107,6 +115,10 @@ export function getInitialScreenId() {
 
 export function getPlayerObject() {
     return playerObject;
+}
+
+export function setPlayerObject(property, value) {
+    playerObject[property] = value;
 }
 
 export function setGameStateVariable(value) {
