@@ -17,19 +17,14 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        // Draw the grid for debugging (use a grid size of your choice, e.g., 10px)
-        //drawGrid(ctx, 10);
+        drawGrid(ctx, 10);
 
-        // Move player towards target (grid-based movement)
         movePlayerTowardsTarget();
 
-        // Check collisions
         checkPlayerEnemyCollisions();
 
-        // Draw player
         drawObject(ctx, getPlayerObject());
 
-        // Draw enemies
         enemySquares.forEach(square => {
             drawEnemySquare(ctx, square.x, square.y, square.width, square.height);
         });
