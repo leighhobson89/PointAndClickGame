@@ -32,6 +32,8 @@ export let playerObject = {
 };
 
 //GLOBAL VARIABLES
+let gridTargetX = null;
+let gridTargetY = null;
 let targetX = null;
 let targetY = null;
 let pathsData = null;
@@ -178,19 +180,6 @@ export function restoreGameStatus(gameState) {
     });
 }
 
-export async function loadPathsData() {
-    try {
-        const response = await fetch('screens.json');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        pathsData = await response.json();
-        console.log('Paths data loaded successfully');
-    } catch (error) {
-        console.error('Failed to load JSON data:', error);
-    }
-}
-
 export function setLocalization(value) {
     localization = value;
 }
@@ -282,4 +271,22 @@ export function getTargetX() {
 export function getTargetY() {
     return targetY;
 }
+
+export function setGridTargetX(value) {
+    gridTargetX = value;
+}
+
+export function setGridTargetY(value) {
+    gridTargetY = value;
+}
+
+export function getGridTargetX() {
+   return gridTargetX;
+}
+
+export function getGridTargetY() {
+    return gridTargetY;
+}
+
+
 

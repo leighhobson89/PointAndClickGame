@@ -1,11 +1,10 @@
-import { setCurrentPath, getCurrentPath, getCurrentScreenId, getPathsData, loadPathsData, setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, getPlayerObject } from './constantsAndGlobalVars.js';
+import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, getPlayerObject, getBeginGameStatus } from './constantsAndGlobalVars.js';
 import { processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
-    loadPathsData();
 
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
@@ -106,7 +105,9 @@ function handleCanvasClick(event) {
     
     console.log(`Click Coordinates: (${clickX}, ${clickY})`);
     
-    const clickPoint = { x: clickX / canvas.width * 100, y: clickY / canvas.height * 100 };
+    const clickPoint = { x: clickX, y: clickY};
+
+    setBeginGameStatus(false);
     
     processClickPoint(clickPoint);
 }

@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { setPlayerObject, getStartPosition, setCurrentPath, getCurrentScreenId, getPathsData, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath } from './constantsAndGlobalVars.js';
+import { getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath} from './constantsAndGlobalVars.js';
 
 export const enemySquares = [];
 
@@ -17,16 +17,98 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        //movePlayerTowardsTarget(); CALL MOVEMENT CODE HERE
+        // Draw the grid for debugging (use a grid size of your choice, e.g., 10px)
+        //drawGrid(ctx, 10);
 
+        // Move player towards target (grid-based movement)
+        movePlayerTowardsTarget();
+
+        // Check collisions
         checkPlayerEnemyCollisions();
+
+        // Draw player
         drawObject(ctx, getPlayerObject());
 
+        // Draw enemies
         enemySquares.forEach(square => {
             drawEnemySquare(ctx, square.x, square.y, square.width, square.height);
         });
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function movePlayerTowardsTarget() {
+    const player = getPlayerObject();
+    const speed = getInitialSpeedPlayer();
+    const gridSize = 10;
+
+    const targetX = getTargetX();
+    const targetY = getTargetY();
+
+    if (player.xPos < targetX) {
+        player.xPos = Math.min(player.xPos + gridSize, targetX);
+    } else if (player.xPos > targetX) {
+        player.xPos = Math.max(player.xPos - gridSize, targetX);
+    }
+
+    if (player.yPos < targetY) {
+        player.yPos = Math.min(player.yPos + gridSize, targetY);
+    } else if (player.yPos > targetY) {
+        player.yPos = Math.max(player.yPos - gridSize, targetY);
+    }
+
+    player.xPos = Math.round(player.xPos / gridSize) * gridSize;
+    player.yPos = Math.round(player.yPos / gridSize) * gridSize;
+
+    if (!getBeginGameStatus()) {
+        setPlayerObject(getPlayerObject().xPos, player.xPos);
+        setPlayerObject(getPlayerObject().yPos, player.yPos);
+    }
+}
+
+function drawGrid(ctx, gridSize) {
+    const canvas = getElements().canvas;
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Get target grid coordinates (which were set in processClickPoint)
+    const targetGridX = getGridTargetX();
+    const targetGridY = getGridTargetY();
+
+    // Default grid color
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+
+    // Loop through the canvas and draw the grid
+    for (let x = 0; x <= width; x += gridSize) {
+        for (let y = 0; y <= height; y += gridSize) {
+
+            // Check if this is the target grid square
+            if (targetGridX !== null && targetGridY !== null &&
+                Math.floor(x / gridSize) === targetGridX && 
+                Math.floor(y / gridSize) === targetGridY) {
+                
+                // Offset the square we color
+                const offsetX = Math.floor(getPlayerObject().width / (2 * gridSize));
+                const offsetY = Math.floor(getPlayerObject().height / gridSize);
+
+                // Color the adjusted target square
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Highlight the square in red
+                ctx.fillRect((targetGridX + offsetX) * gridSize, (targetGridY + offsetY) * gridSize, gridSize, gridSize);
+            }
+
+            // Draw grid lines
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+        }
     }
 }
 
@@ -79,6 +161,9 @@ export function initializePlayerPosition() {
     // Set the player's position
     player.xPos = xPos;
     player.yPos = yPos;
+
+    setTargetX(xPos);
+    setTargetY(yPos);
 
     // Update the player object with the new position
     setPlayerObject(player);
@@ -185,8 +270,32 @@ function resolveCollision(player, square) {
 
 //-------------------------------------------------------------------------------------------------------------
 
-export function processClickPoint(clickPoint) {
-  //process click
+export function processClickPoint(event) {
+    const canvas = getElements().canvas;
+    const player = getPlayerObject();
+
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.x - rect.left;
+    const clickY = event.y - rect.top;
+
+    const correctedClickX = clickX;
+    const correctedClickY = clickY - player.height;
+
+    console.log(`Corrected Click Coordinates: (${clickX}, ${correctedClickY})`);
+
+    const gridSize = 10; // Define grid size
+
+    const gridX = Math.floor(correctedClickX / gridSize);
+    const gridY = Math.floor(correctedClickY / gridSize);
+
+    setGridTargetX(gridX);
+    setGridTargetY(gridY);
+
+    setTargetX(correctedClickX);
+    setTargetY(correctedClickY);
+
+    console.log(`Grid Reference: (${gridX}, ${gridY})`);
+    console.log(`Target set to (${getTargetX()}, ${getTargetY()}) in pixels`);
 }
 
 //-------------------------------------------------------------------------------------------------------------
