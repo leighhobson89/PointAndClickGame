@@ -1,6 +1,5 @@
 import { localize } from './localization.js';
 import { setPlayerObject, getStartPosition, setCurrentPath, getCurrentScreenId, getPathsData, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath } from './constantsAndGlobalVars.js';
-import { traversePath } from './pathFinding.js';
 
 export const enemySquares = [];
 
@@ -17,8 +16,6 @@ export function gameLoop() {
     const ctx = getElements().canvas.getContext('2d');
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
-
-        drawPathsForCurrentScreen(); //debug paths
 
         //movePlayerTowardsTarget(); CALL MOVEMENT CODE HERE
 
@@ -71,67 +68,20 @@ export function initializeCanvas() {
     updateCanvasSize();
 }
 
-function getPathPoint(path, percentage) {
-    const totalLength = calculatePathLength(path);
-    const targetDistance = (percentage / 100) * totalLength;
-    let accumulatedDistance = 0;
-
-    for (let segment of path.segments) {
-        const segmentStart = segment.start;
-        const segmentEnd = segment.end;
-
-        const segmentLength = calculateDistance(segmentStart.x, segmentStart.y, segmentEnd.x, segmentEnd.y);
-
-        if (accumulatedDistance + segmentLength >= targetDistance) {
-            const remainingDistance = targetDistance - accumulatedDistance;
-            const segmentFraction = remainingDistance / segmentLength;
-
-            const pointX = segmentStart.x + segmentFraction * (segmentEnd.x - segmentStart.x);
-            const pointY = segmentStart.y + segmentFraction * (segmentEnd.y - segmentStart.y);
-
-            return { x: pointX, y: pointY };
-        }
-
-        accumulatedDistance += segmentLength;
-    }
-
-    const lastSegment = path.segments[path.segments.length - 1];
-    return { x: lastSegment.end.x, y: lastSegment.end.y };
-}
-
-function calculatePathLength(path) {
-    let totalLength = 0;
-
-    for (let segment of path.segments) {
-        const { start, end } = segment;
-        const segmentLength = calculateDistance(start.x, start.y, end.x, end.y);
-        totalLength += segmentLength;
-    }
-
-    return totalLength;
-}
-
-function initializePlayerPosition() {
+export function initializePlayerPosition() {
     const canvas = getElements().canvas;
-    const data = getPathsData();
-
-    const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
-    const path = screen.paths.find(p => p.pathId === getCurrentPath());
-
-    if (!path) {
-        console.error('Path not found');
-        return;
-    }
-
-    const snapPercentage = getStartPosition();
-    const snapPoint = getPathPoint(path, snapPercentage);
-
     const player = getPlayerObject();
-    const playerX = snapPoint.x / 100 * canvas.width - player.width / 2;
-    const playerY = snapPoint.y / 100 * canvas.height - player.height;
 
-    setPlayerObject('xPos', playerX);
-    setPlayerObject('yPos', playerY);
+    // Calculate the position 5% from the left and 95% from the bottom
+    const xPos = canvas.width * 0.05; // 5% from the left
+    const yPos = canvas.height * 0.95 - player.height; // 95% from the bottom, adjusted for player's height
+
+    // Set the player's position
+    player.xPos = xPos;
+    player.yPos = yPos;
+
+    // Update the player object with the new position
+    setPlayerObject(player);
 }
 
 function initializeEnemySquares() {
@@ -235,134 +185,8 @@ function resolveCollision(player, square) {
 
 //-------------------------------------------------------------------------------------------------------------
 
-function drawPathsForCurrentScreen() {
-    const canvas = getElements().canvas;
-    const ctx = canvas.getContext('2d');
-    
-    const data = getPathsData();
-    if (!data) {
-        console.error('Path data not available');
-        return;
-    }
-
-    const screen = data.screens.find(screen => screen.screenId === getCurrentScreenId());
-
-    if (!screen) {
-        console.error('Screen not found:', getCurrentScreenId());
-        return;
-    }
-
-    screen.paths.forEach(path => {
-        ctx.strokeStyle = path.pathId === 'path1' ? 'red' : 'yellow';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-
-        path.segments.forEach((segment) => {
-            const startX = segment.start.x / 100 * canvas.width;
-            const startY = segment.start.y / 100 * canvas.height;
-            const endX = segment.end.x / 100 * canvas.width;
-            const endY = segment.end.y / 100 * canvas.height;
-
-            ctx.moveTo(startX, startY);
-            ctx.lineTo(endX, endY);
-        });
-
-        ctx.stroke();
-
-        if (path.junctions) {
-            path.junctions.forEach(junction => {
-                const x = junction.x / 100 * canvas.width;
-                const y = junction.y / 100 * canvas.height;
-
-                ctx.fillStyle = 'white';
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, Math.PI * 2);
-                ctx.fill();
-            });
-        }
-    });
-}
-
 export function processClickPoint(clickPoint) {
-    const data = getPathsData();
-    const canvas = getElements().canvas;
-
-    let closestPoint = null;
-    let minDistance = Infinity;
-    let closestSegment = null;
-    let closestPath = null;
-
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
-    data.screens.forEach(screen => {
-        if (screen.screenId === getCurrentScreenId()) {
-            screen.paths.forEach(path => {
-                path.segments.forEach(segment => {
-                    const segmentStart = {
-                        x: segment.start.x / 100 * canvasWidth,
-                        y: segment.start.y / 100 * canvasHeight
-                    };
-                    const segmentEnd = {
-                        x: segment.end.x / 100 * canvasWidth,
-                        y: segment.end.y / 100 * canvasHeight
-                    };
-
-                    const point = findClosestPointOnSegment(clickPoint, segmentStart, segmentEnd);
-                    const distance = calculateDistance(
-                        clickPoint.x / 100 * canvasWidth,
-                        clickPoint.y / 100 * canvasHeight,
-                        point.x,
-                        point.y
-                    );
-
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestPoint = point;
-                        closestSegment = segment;
-                        closestPath = path;
-                    }
-                });
-            });
-        }
-    });
-
-    if (closestPoint) {
-        console.log(`Click Point: ${JSON.stringify(clickPoint)}`);
-        console.log(`Closest Point on Path Segment: ${JSON.stringify(closestPoint)}`);
-        console.log(`Closest Segment: ${JSON.stringify(closestSegment)}`);
-        console.log(`Closest Path: ${JSON.stringify(closestPath)}`);
-
-        // Optional: Log junctions if destination is on a different path
-        const player = getPlayerObject();
-        const route = traversePath(player, closestPath.pathId, closestPoint);
-        console.log(`Route: ${JSON.stringify(route)}`);
-    }
-}
-
-function findClosestPointOnSegment(point, segmentStart, segmentEnd) {
-    const px = point.x / 100 * getElements().canvas.width;
-    const py = point.y / 100 * getElements().canvas.height;
-    const x1 = segmentStart.x;
-    const y1 = segmentStart.y;
-    const x2 = segmentEnd.x;
-    const y2 = segmentEnd.y;
-    
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    
-    if (dx === 0 && dy === 0) {
-        return { x: x1, y: y1 }; // The segment is a point
-    }
-    
-    const t = ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy);
-    
-    const clampedT = Math.max(0, Math.min(1, t));
-    return { x: x1 + clampedT * dx, y: y1 + clampedT * dy };
-}
-
-function calculateDistance(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  //process click
 }
 
 //-------------------------------------------------------------------------------------------------------------
