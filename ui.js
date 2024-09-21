@@ -1,10 +1,11 @@
-import { setTargetX, setTargetY, getTargetX, getTargetY, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, getPlayerObject, getBeginGameStatus } from './constantsAndGlobalVars.js';
+import { getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS } from './constantsAndGlobalVars.js';
 import { processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
+    loadGridData(urlWalkableJSONS);
 
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
@@ -144,5 +145,17 @@ export function disableActivateButton(button, action, activeClass) {
             button.classList.add('disabled');
             break;
     }
+}
+
+function loadGridData(url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            setGridData(data);
+            console.log("Grid data loaded:", getGridData());
+        })
+        .catch(error => {
+            console.error("Error loading grid data:", error);
+        });
 }
 

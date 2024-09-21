@@ -11,6 +11,7 @@ let languageSelected = 'en';
 let oldLanguage = 'en';
 
 //CONSTANTS
+export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\test.json';
 export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -37,7 +38,7 @@ let gridTargetX = null;
 let gridTargetY = null;
 let targetX = null;
 let targetY = null;
-let pathsData = null;
+let gridData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
 let currentPath = INITIAL_PATH;
 
@@ -108,8 +109,12 @@ export function setCurrentScreenId(value) {
     currentScreenId = value;
 }
 
-export function getPathsData() {
-    return pathsData;
+export function getGridData() {
+    return gridData;
+}
+
+export function setGridData(value) {
+    gridData = value;
 }
 
 export function getInitialScreenId() {

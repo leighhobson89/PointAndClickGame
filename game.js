@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath} from './constantsAndGlobalVars.js';
+import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath, getGridData} from './constantsAndGlobalVars.js';
 
 export const enemySquares = [];
 let hoverCell = { x: null, y: null };
@@ -18,13 +18,14 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        // Pass hoverCell coordinates to the drawGrid function
-        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y);
+        // Redraw the grid based on current hover state
+        const cellValue = getGridData()[hoverCell.y] && getGridData()[hoverCell.y][hoverCell.x];
+        const walkable = (cellValue === 'walkable');
+
+        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y, walkable);
 
         movePlayerTowardsTarget();
-
         checkPlayerEnemyCollisions();
-
         drawObject(ctx, getPlayerObject());
 
         enemySquares.forEach(square => {
@@ -34,6 +35,7 @@ export function gameLoop() {
         requestAnimationFrame(gameLoop);
     }
 }
+
 
 function movePlayerTowardsTarget() {
     const player = getPlayerObject();
@@ -64,21 +66,26 @@ function movePlayerTowardsTarget() {
     }
 }
 
-function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY) {
-    const cols = 80; // Fixed number of columns
-    const rows = 60; // Fixed number of rows
+function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY, walkable) {
+    const cols = 80;
+    const rows = 60;
 
-    const targetX = getGridTargetX(); // Get the clicked X grid coordinate
-    const targetY = getGridTargetY(); // Get the clicked Y grid coordinate
+    const targetX = getGridTargetX();
+    const targetY = getGridTargetY();
 
     for (let x = 0; x < cols; x++) {
         for (let y = 0; y < rows; y++) {
             if (x === targetX && y === targetY) {
-                ctx.fillStyle = 'rgba(255, 165, 0, 0.5)'; // Orange color for clicked cell
+                ctx.fillStyle = 'rgba(255, 165, 0, 0.5)';
                 ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
             } else if (x === hoverX && y === hoverY) {
-                ctx.fillStyle = 'rgba(0, 255, 0, 0.5)'; // Green color for hovered cell
-                ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                if (walkable) {
+                    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+                    ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                } else {
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                }
             }
 
             ctx.strokeStyle = 'black';
@@ -132,23 +139,27 @@ function handleMouseMove(event, ctx) {
     const rect = canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
+    const gridData = getGridData();
 
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
 
-    // Calculate hovered grid cell coordinates
     const hoverX = Math.floor(mouseX / gridSizeX);
     const hoverY = Math.floor(mouseY / gridSizeY);
 
-    // Only update if the hover cell has changed to avoid unnecessary redraws
-    if (hoverCell.x !== hoverX || hoverCell.y !== hoverY) {
-        hoverCell.x = hoverX;
-        hoverCell.y = hoverY;
+    if (hoverX >= 0 && hoverX < 80 && hoverY >= 0 && hoverY < 60) {
+        const cellValue = gridData[hoverY] && gridData[hoverY][hoverX];
 
-        console.log(`Hovered Grid Position: (${hoverCell.x}, ${hoverCell.y})`);
+        const walkable = (cellValue === 'walkable');
 
-        // Redraw the grid with the new hovered cell
-        drawGrid(ctx, gridSizeX, gridSizeY, hoverX, hoverY);
+        if (hoverCell.x !== hoverX || hoverCell.y !== hoverY) {
+            hoverCell.x = hoverX;
+            hoverCell.y = hoverY;
+
+            console.log(`Hovered Grid Position: (${hoverCell.x}, ${hoverCell.y}), Walkable: ${walkable}`);
+
+            drawGrid(ctx, gridSizeX, gridSizeY, hoverX, hoverY, walkable);
+        }
     }
 }
 
@@ -273,6 +284,8 @@ function resolveCollision(player, square) {
 //-------------------------------------------------------------------------------------------------------------
 
 export function processClickPoint(event) {
+    const gridData = getGridData();
+
     const canvas = getElements().canvas;
     const player = getPlayerObject();
 
@@ -286,13 +299,20 @@ export function processClickPoint(event) {
     setGridTargetX(gridX);
     setGridTargetY(gridY);
 
+    // Check if the clicked cell is walkable based on the JSON data
+    const cellValue = gridData[gridY] && gridData[gridY][gridX];
+
+    if (cellValue === 'non_walkable') {
+        console.log(`Clicked on a non-walkable area at (${gridX}, ${gridY}).`);
+        return;
+    }
+
     setTargetX(clickX + player.width / 2);
     setTargetY(clickY - player.height);
 
     console.log(`Grid Reference: (${gridX}, ${gridY})`);
     console.log(`Target set to (${getTargetX()}, ${getTargetY()}) in pixels`);
 }
-
 
 //-------------------------------------------------------------------------------------------------------------
 
