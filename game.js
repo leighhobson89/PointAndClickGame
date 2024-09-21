@@ -12,7 +12,7 @@ let currentPathIndex = 0;
 export function startGame() {
     initializeCanvas();
     initializePlayerPosition(5,55); //update this when we have a constant and call this on every new screen later
-    //initializeEnemySquares();
+    initializeEnemySquares();
     gameLoop();
 }
 
@@ -86,8 +86,6 @@ function movePlayerTowardsTarget() {
     setPlayerObject(player);
 }
 
-
-
 export function drawGrid() {
     let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
@@ -158,11 +156,32 @@ export function initializeCanvas() {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        setCanvasCellWidth(canvasWidth / getGridSizeX());
-        setCanvasCellHeight(canvasHeight / getGridSizeY());
+        const oldCellWidth = getCanvasCellWidth();
+        const oldCellHeight = getCanvasCellHeight();
+        
+        console.log("Old width and height of cells: " + getCanvasCellWidth() + ", " + getCanvasCellHeight());
 
-        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y);
-    }
+        // Update grid size
+        const newCellWidth = canvasWidth / getGridSizeX();
+        const newCellHeight = canvasHeight / getGridSizeY();
+        setCanvasCellWidth(newCellWidth);
+        setCanvasCellHeight(newCellHeight);
+
+        console.log("New width and height of cells: " + getCanvasCellWidth() + ", " + getCanvasCellHeight());
+    
+        // Update player position based on new grid size
+        const player = getPlayerObject();
+        player.xPos = (player.xPos / oldCellWidth) * newCellWidth;
+        player.yPos = (player.yPos / oldCellHeight) * newCellHeight;
+
+        console.log("Setting player to position: " + player.xPos + ", " + player.yPos);
+    
+        // Update the player object's properties
+        setPlayerObject('xPos', player.xPos);
+        setPlayerObject('yPos', player.yPos);
+    
+        drawGrid(ctx, newCellWidth, newCellHeight, getHoverCell().x, getHoverCell().y);
+    }    
 
     window.addEventListener('load', updateCanvasSize);
     window.addEventListener('resize', updateCanvasSize);
@@ -170,6 +189,7 @@ export function initializeCanvas() {
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
     updateCanvasSize();
 }
+
 
 export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();

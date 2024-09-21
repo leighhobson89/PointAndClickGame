@@ -15,13 +15,11 @@ export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\test.json';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
-export const WALK_SPEED_PLAYER = 3;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
-export const INITIAL_PATH = 'path1';
-export const INITIAL_SNAP_POINT_ON_PATH = 5;
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
+export const WALK_SPEED_PLAYER = 3;
 
 export let playerObject = {
     width: 30,
@@ -43,7 +41,6 @@ let targetX = null;
 let targetY = null;
 let gridData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
-let currentPath = INITIAL_PATH;
 
 //FLAGS
 let audioMuted;
@@ -90,18 +87,6 @@ export function setElements() {
         btnTalkTo: document.getElementById('btnTalkTo'),
         btnGive: document.getElementById('btnGive')
     };
-}
-
-export function getStartPosition() {
-    return INITIAL_SNAP_POINT_ON_PATH;
-}
-
-export function getCurrentPath() {
-    return currentPath;
-}
-
-export function setCurrentPath(value) {
-    currentPath = value;
 }
 
 export function getCurrentScreenId() {
