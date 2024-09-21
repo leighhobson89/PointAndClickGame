@@ -280,7 +280,6 @@ export function processClickPoint(event) {
     const clickX = event.x - rect.left;
     const clickY = event.y - rect.top;
 
-    // Calculate grid cell coordinates for highlighting without any offsets
     const gridX = hoverCell.x;
     const gridY = hoverCell.y;
 
@@ -290,7 +289,6 @@ export function processClickPoint(event) {
     setTargetX(clickX + player.width / 2);
     setTargetY(clickY - player.height);
 
-    // Log the grid reference and the target position for movement
     console.log(`Grid Reference: (${gridX}, ${gridY})`);
     console.log(`Target set to (${getTargetX()}, ${getTargetY()}) in pixels`);
 }
