@@ -100,8 +100,10 @@ export function setCurrentScreenId(value) {
 }
 
 export function getGridData() {
-    return gridData;
+    const currentScreenId = getCurrentScreenId(); // Get the current screen ID
+    return gridData[currentScreenId]; // Return the grid data for the current screen
 }
+
 
 export function setGridData(value) {
     gridData = value;

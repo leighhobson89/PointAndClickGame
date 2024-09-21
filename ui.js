@@ -1,4 +1,4 @@
-import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus } from './constantsAndGlobalVars.js';
+import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId } from './constantsAndGlobalVars.js';
 import { drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';

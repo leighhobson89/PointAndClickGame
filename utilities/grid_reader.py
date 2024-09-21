@@ -1,5 +1,6 @@
 from PIL import Image
 import json
+import argparse
 
 # Define the color mappings
 COLOR_MAP = {
@@ -33,14 +34,19 @@ def process_image(image_path):
 
     return grid
 
-def save_to_json(grid, output_path):
+def save_to_json(screen_name, grid, output_path):
+    data = {screen_name: grid}
     with open(output_path, 'w') as json_file:
-        json.dump(grid, json_file, indent=4)
+        json.dump(data, json_file, indent=4)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process a grid image and convert it to JSON.')
+    parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
+    args = parser.parse_args()
+
     image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\test.png'
     output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\test.json'
 
     grid = process_image(image_path)
-    save_to_json(grid, output_path)
+    save_to_json(args.screen_name, grid, output_path)
     print("Grid saved to JSON.")
