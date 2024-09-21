@@ -11,7 +11,7 @@ let languageSelected = 'en';
 let oldLanguage = 'en';
 
 //CONSTANTS
-export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\test.json';
+export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
