@@ -4,8 +4,8 @@ import argparse
 
 # Define the color mappings
 COLOR_MAP = {
-    (0, 255, 0): 'walkable',  # Green
-    (255, 0, 0): 'non_walkable'  # Red
+    (0, 255, 0): 'w',  # Green
+    (255, 0, 0): 'n'  # Red
 }
 
 def process_image(image_path):

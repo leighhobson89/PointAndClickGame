@@ -23,7 +23,7 @@ export function gameLoop() {
 
         // Redraw the grid based on current hover state
         const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
-        const walkable = (cellValue === 'walkable');
+        const walkable = (cellValue === 'w');
 
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
 
@@ -139,7 +139,7 @@ export function drawGrid() {
     if (hoverCell) {
         const cellValue = gridData[hoverCell.y][hoverCell.x];
         
-        if (cellValue === 'walkable') {
+        if (cellValue === 'w') {
             context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
         } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';  // Semi-transparent red for non-walkable cell
@@ -239,7 +239,7 @@ function generateRandomGridSquare() {
         gridY = Math.floor(Math.random() * getGridSizeY());
         cellWidth = getCanvasCellWidth();
         cellHeight = getCanvasCellHeight();
-    } while (getGridData()[gridY] && getGridData()[gridY][gridX] !== 'walkable');
+    } while (getGridData()[gridY] && getGridData()[gridY][gridX] !== 'w');
 
     return {
         xPos: gridX * cellWidth,
@@ -277,7 +277,7 @@ function initializeEnemySquares() {
 function setGridRefAsNonWalkable(gridX, gridY) {
     const gridData = getGridData();
     if (gridX >= 0 && gridY >= 0 && gridY < gridData.length && gridX < gridData[gridY].length) {
-        gridData[gridY][gridX] = 'non_walkable';
+        gridData[gridY][gridX] = 'n';
         console.log("grid ref set to non walkable: " + gridData[gridY][gridX]);
     }
 }

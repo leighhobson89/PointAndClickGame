@@ -82,7 +82,7 @@ export function aStarPathfinding(start, target, gridData) {
             }            
 
             // Check if walkable or already in closed list
-            if (gridData[neighborY][neighborX] !== 'walkable' || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if (gridData[neighborY][neighborX] !== 'w' || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 //console.log(gridData);
                 //console.log(`Neighbor (${neighborX}, ${neighborY}) - Value in grid: ${gridData[neighborY][neighborX]}`);
                 continue;
