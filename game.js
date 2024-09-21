@@ -1,8 +1,9 @@
 import { localize } from './localization.js';
-import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath, getGridData} from './constantsAndGlobalVars.js';
+import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath, getGridData, getHoverCell} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
+import { handleMouseMove } from './ui.js';
+
 export const enemySquares = [];
-let hoverCell = { x: null, y: null };
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -19,10 +20,10 @@ export function gameLoop() {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
         // Redraw the grid based on current hover state
-        const cellValue = getGridData()[hoverCell.y] && getGridData()[hoverCell.y][hoverCell.x];
+        const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
         const walkable = (cellValue === 'walkable');
 
-        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y, walkable);
+        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
 
         movePlayerTowardsTarget();
         checkPlayerEnemyCollisions();
@@ -66,7 +67,7 @@ function movePlayerTowardsTarget() {
     }
 }
 
-function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY, walkable) {
+export function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY, walkable) {
     const cols = 80;
     const rows = 60;
 
@@ -124,7 +125,7 @@ export function initializeCanvas() {
         setCanvasCellWidth(canvasWidth / cols);
         setCanvasCellHeight(canvasHeight / rows);
 
-        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y);
+        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y);
     }
 
     window.addEventListener('load', updateCanvasSize);
@@ -132,35 +133,6 @@ export function initializeCanvas() {
 
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
     updateCanvasSize();
-}
-
-function handleMouseMove(event, ctx) {
-    const canvas = getElements().canvas;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    const gridData = getGridData();
-
-    const gridSizeX = getCanvasCellWidth();
-    const gridSizeY = getCanvasCellHeight();
-
-    const hoverX = Math.floor(mouseX / gridSizeX);
-    const hoverY = Math.floor(mouseY / gridSizeY);
-
-    if (hoverX >= 0 && hoverX < 80 && hoverY >= 0 && hoverY < 60) {
-        const cellValue = gridData[hoverY] && gridData[hoverY][hoverX];
-
-        const walkable = (cellValue === 'walkable');
-
-        if (hoverCell.x !== hoverX || hoverCell.y !== hoverY) {
-            hoverCell.x = hoverX;
-            hoverCell.y = hoverY;
-
-            console.log(`Hovered Grid Position: (${hoverCell.x}, ${hoverCell.y}), Walkable: ${walkable}`);
-
-            drawGrid(ctx, gridSizeX, gridSizeY, hoverX, hoverY, walkable);
-        }
-    }
 }
 
 export function initializePlayerPosition() {
@@ -291,8 +263,8 @@ export function processClickPoint(event) {
     const clickX = event.x - rect.left;
     const clickY = event.y - rect.top;
 
-    const gridX = hoverCell.x;
-    const gridY = hoverCell.y;
+    const gridX = getHoverCell().x;
+    const gridY = getHoverCell().y;
 
     setGridTargetX(gridX);
     setGridTargetY(gridY);

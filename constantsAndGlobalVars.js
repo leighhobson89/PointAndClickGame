@@ -32,6 +32,7 @@ export let playerObject = {
 };
 
 //GLOBAL VARIABLES
+let hoverCell = { x: null, y: null };
 let canvasCellWidth = null;
 let canvasCellHeight = null;
 let gridTargetX = null;
@@ -310,6 +311,13 @@ export function getCanvasCellHeight() {
     return canvasCellHeight;
 }
 
+export function setHoverCell(valueX, valueY) {
+    hoverCell = { x: valueX, y: valueY };
+}
+
+export function getHoverCell() {
+   return hoverCell;
+}
 
 
 
