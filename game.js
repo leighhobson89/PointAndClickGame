@@ -1,15 +1,16 @@
 import { localize } from './localization.js';
-import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath, getGridData, getHoverCell} from './constantsAndGlobalVars.js';
+import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
+let currentPath = [];
 
 //--------------------------------------------------------------------------------------------------------
 
 export function startGame() {
     initializeCanvas();
-    initializePlayerPosition();
+    initializePlayerPosition(5,55); //update this when we have a constant and call this on every new screen later
     //initializeEnemySquares();
     gameLoop();
 }
@@ -25,7 +26,10 @@ export function gameLoop() {
 
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
 
-        movePlayerTowardsTarget();
+        if (!getBeginGameStatus()) {
+            movePlayerTowardsTarget();
+        }
+
         checkPlayerEnemyCollisions();
         drawObject(ctx, getPlayerObject());
 
@@ -37,14 +41,13 @@ export function gameLoop() {
     }
 }
 
-
 function movePlayerTowardsTarget() {
     const player = getPlayerObject();
     const speed = player.speed;
     const gridSize = getCanvasCellWidth();
 
     const targetX = getTargetX();
-    const targetY = getTargetY();
+    const targetY = getTargetY() - player.height;
 
     if (player.xPos < targetX) {
         player.xPos = Math.min(player.xPos + speed, targetX);
@@ -67,31 +70,46 @@ function movePlayerTowardsTarget() {
     }
 }
 
-export function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY, walkable) {
-    const cols = 80;
-    const rows = 60;
+export function drawGrid() {
+    const canvas = getElements().canvas;
+    const context = canvas.getContext('2d');
+    const gridSizeX = getGridSizeX();
+    const gridSizeY = getGridSizeY();
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
 
-    const targetX = getGridTargetX();
-    const targetY = getGridTargetY();
+    // Clear the canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let x = 0; x < cols; x++) {
-        for (let y = 0; y < rows; y++) {
-            if (x === targetX && y === targetY) {
-                ctx.fillStyle = 'rgba(255, 165, 0, 0.5)';
-                ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-            } else if (x === hoverX && y === hoverY) {
-                if (walkable) {
-                    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
-                    ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                } else {
-                    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-                    ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                }
-            }
+    // Draw the grid
+    for (let x = 0; x < gridSizeX; x++) {
+        for (let y = 0; y < gridSizeY; y++) {
+            context.strokeStyle = '#000';
+            context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+        }
+    }
 
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+    // Draw the hover cell
+    const hoverCell = getHoverCell(); // Assuming getHoverCell() returns {x, y}
+    const gridData = getGridData();
+    if (hoverCell) {
+        const cellValue = gridData[hoverCell.y][hoverCell.x];
+        
+        if (cellValue === 'walkable') {
+            context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
+        } else {
+            context.fillStyle = 'rgba(255, 0, 0, 0.5)';  // Semi-transparent red for non-walkable cell
+        }
+        
+        context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
+    }
+
+    // Draw the path as filled rectangles instead of lines
+    if (currentPath.length > 0) {
+        context.fillStyle = 'rgba(0, 0, 255, 0.5)';  // Semi-transparent blue for path
+
+        for (const step of currentPath) {
+            context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
         }
     }
 }
@@ -119,11 +137,8 @@ export function initializeCanvas() {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        const cols = 80;
-        const rows = 60;
-
-        setCanvasCellWidth(canvasWidth / cols);
-        setCanvasCellHeight(canvasHeight / rows);
+        setCanvasCellWidth(canvasWidth / getGridSizeX());
+        setCanvasCellHeight(canvasHeight / getGridSizeY());
 
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y);
     }
@@ -135,23 +150,29 @@ export function initializeCanvas() {
     updateCanvasSize();
 }
 
-export function initializePlayerPosition() {
-    const canvas = getElements().canvas;
+export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();
+    
+    // Get the cell dimensions (width and height of each grid cell)
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
 
-    // Calculate the position 5% from the left and 95% from the bottom
-    const xPos = canvas.width * 0.05; // 5% from the left
-    const yPos = canvas.height * 0.95 - player.height; // 95% from the bottom, adjusted for player's height
+    // Calculate the pixel positions based on the grid coordinates
+    const xPos = gridX * cellWidth; // X position based on the grid column
+    const yPos = gridY * cellHeight - player.height; // Y position based on the grid row, adjusting for the player's height
 
-    // Set the player's position
+    // Set the player's position in pixels
     player.xPos = xPos;
     player.yPos = yPos;
 
+    // Set target X and Y (for possible movement or reference)
     setTargetX(xPos);
     setTargetY(yPos);
 
     // Update the player object with the new position
     setPlayerObject(player);
+
+    console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
 }
 
 function initializeEnemySquares() {
@@ -271,6 +292,9 @@ export function processClickPoint(event) {
 
     // Get path using A* algorithm
     const path = aStarPathfinding({ x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) }, { x: gridX, y: gridY }, getGridData());
+
+    // Store the path in the global currentPath variable
+    currentPath = path;
 
     // Set the path for the player to follow
     if (path.length > 0) {

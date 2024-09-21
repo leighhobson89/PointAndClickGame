@@ -1,4 +1,4 @@
-import { getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus } from './constantsAndGlobalVars.js';
 import { drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -105,29 +105,30 @@ export function handleMouseMove(event, ctx) {
     const mouseY = event.clientY - rect.top;
     const gridData = getGridData();
 
-    const gridSizeX = getCanvasCellWidth();
-    const gridSizeY = getCanvasCellHeight();
+    const hoverX = Math.floor(mouseX / getCanvasCellWidth());
+    const hoverY = Math.floor(mouseY / getCanvasCellHeight());
 
-    const hoverX = Math.floor(mouseX / gridSizeX);
-    const hoverY = Math.floor(mouseY / gridSizeY);
-
-    if (hoverX >= 0 && hoverX < 80 && hoverY >= 0 && hoverY < 60) {
+    if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
         const cellValue = gridData[hoverY] && gridData[hoverY][hoverX];
 
         const walkable = (cellValue === 'walkable');
 
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
-            getHoverCell().x = hoverX;
-            getHoverCell().y = hoverY;
+            setHoverCell(hoverX, hoverY);
 
             console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`);
 
-            drawGrid(ctx, gridSizeX, gridSizeY, hoverX, hoverY, walkable);
+            drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
         }
     }
 }
 
 function handleCanvasClick(event) {
+    
+    if (getBeginGameStatus) {
+        setBeginGameStatus(false);
+    }
+
     const canvas = getElements().canvas;
     const rect = canvas.getBoundingClientRect();
     const clickX = event.clientX - rect.left;

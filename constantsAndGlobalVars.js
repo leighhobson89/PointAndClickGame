@@ -12,7 +12,6 @@ let oldLanguage = 'en';
 
 //CONSTANTS
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\test.json';
-export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
@@ -21,6 +20,8 @@ export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
 export const INITIAL_PATH = 'path1';
 export const INITIAL_SNAP_POINT_ON_PATH = 5;
+export const GRID_SIZE_X = 80;
+export const GRID_SIZE_Y = 60;
 
 export let playerObject = {
     width: 40,
@@ -32,7 +33,8 @@ export let playerObject = {
 };
 
 //GLOBAL VARIABLES
-let hoverCell = { x: null, y: null };
+export let gameState;
+let hoverCell = { x: 0, y: 0 };
 let canvasCellWidth = null;
 let canvasCellHeight = null;
 let gridTargetX = null;
@@ -317,6 +319,14 @@ export function setHoverCell(valueX, valueY) {
 
 export function getHoverCell() {
    return hoverCell;
+}
+
+export function getGridSizeX() {
+    return GRID_SIZE_X;
+}
+
+export function getGridSizeY() {
+    return GRID_SIZE_Y;
 }
 
 
