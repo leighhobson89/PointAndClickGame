@@ -15,7 +15,7 @@ export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
-export const INITIAL_SPEED_PLAYER = 4;
+export const WALK_SPEED_PLAYER = 8;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
 export const INITIAL_PATH = 'path1';
@@ -24,14 +24,15 @@ export const INITIAL_SNAP_POINT_ON_PATH = 5;
 export let playerObject = {
     width: 40,
     height: 160,
-    dx: getInitialSpeedPlayer(),
-    dy: getInitialSpeedPlayer(),
+    speed: getWalkSpeedPlayer(),
     color: 'green',
     xPos: '0',
     yPos: '0'
 };
 
 //GLOBAL VARIABLES
+let canvasCellWidth = null;
+let canvasCellHeight = null;
 let gridTargetX = null;
 let gridTargetY = null;
 let targetX = null;
@@ -224,8 +225,8 @@ export function getNumberOfEnemySquares() {
     return NUMBER_OF_ENEMY_SQUARES;
 }
 
-export function getInitialSpeedPlayer() {
-    return INITIAL_SPEED_PLAYER;
+export function getWalkSpeedPlayer() {
+    return WALK_SPEED_PLAYER;
 }
 
 export function getMaxAttemptsToDrawEnemies() {
@@ -287,6 +288,23 @@ export function getGridTargetX() {
 export function getGridTargetY() {
     return gridTargetY;
 }
+
+export function setCanvasCellWidth(value) {
+    canvasCellWidth = value;
+}
+
+export function setCanvasCellHeight(value) {
+    canvasCellHeight = value;
+}
+
+export function getCanvasCellWidth() {
+   return canvasCellWidth;
+}
+
+export function getCanvasCellHeight() {
+    return canvasCellHeight;
+}
+
 
 
 

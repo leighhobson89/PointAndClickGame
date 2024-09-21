@@ -1,7 +1,8 @@
 import { localize } from './localization.js';
-import { getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getInitialSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath} from './constantsAndGlobalVars.js';
+import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath} from './constantsAndGlobalVars.js';
 
 export const enemySquares = [];
+let hoverCell = { x: null, y: null };
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -17,7 +18,8 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        drawGrid(ctx, 10);
+        // Pass hoverCell coordinates to the drawGrid function
+        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y);
 
         movePlayerTowardsTarget();
 
@@ -35,22 +37,22 @@ export function gameLoop() {
 
 function movePlayerTowardsTarget() {
     const player = getPlayerObject();
-    const speed = getInitialSpeedPlayer();
-    const gridSize = 10;
+    const speed = player.speed;
+    const gridSize = getCanvasCellWidth();
 
     const targetX = getTargetX();
     const targetY = getTargetY();
 
     if (player.xPos < targetX) {
-        player.xPos = Math.min(player.xPos + gridSize, targetX);
+        player.xPos = Math.min(player.xPos + speed, targetX);
     } else if (player.xPos > targetX) {
-        player.xPos = Math.max(player.xPos - gridSize, targetX);
+        player.xPos = Math.max(player.xPos - speed, targetX);
     }
 
     if (player.yPos < targetY) {
-        player.yPos = Math.min(player.yPos + gridSize, targetY);
+        player.yPos = Math.min(player.yPos + speed, targetY);
     } else if (player.yPos > targetY) {
-        player.yPos = Math.max(player.yPos - gridSize, targetY);
+        player.yPos = Math.max(player.yPos - speed, targetY);
     }
 
     player.xPos = Math.round(player.xPos / gridSize) * gridSize;
@@ -62,47 +64,26 @@ function movePlayerTowardsTarget() {
     }
 }
 
-function drawGrid(ctx, gridSize) {
-    const canvas = getElements().canvas;
-    const width = canvas.width;
-    const height = canvas.height;
+function drawGrid(ctx, cellWidth, cellHeight, hoverX, hoverY) {
+    const cols = 80; // Fixed number of columns
+    const rows = 60; // Fixed number of rows
 
-    // Get target grid coordinates (which were set in processClickPoint)
-    const targetGridX = getGridTargetX();
-    const targetGridY = getGridTargetY();
+    const targetX = getGridTargetX(); // Get the clicked X grid coordinate
+    const targetY = getGridTargetY(); // Get the clicked Y grid coordinate
 
-    // Default grid color
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 1;
-
-    // Loop through the canvas and draw the grid
-    for (let x = 0; x <= width; x += gridSize) {
-        for (let y = 0; y <= height; y += gridSize) {
-
-            // Check if this is the target grid square
-            if (targetGridX !== null && targetGridY !== null &&
-                Math.floor(x / gridSize) === targetGridX && 
-                Math.floor(y / gridSize) === targetGridY) {
-                
-                // Offset the square we color
-                const offsetX = Math.floor(getPlayerObject().width / (2 * gridSize));
-                const offsetY = Math.floor(getPlayerObject().height / gridSize);
-
-                // Color the adjusted target square
-                ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Highlight the square in red
-                ctx.fillRect((targetGridX + offsetX) * gridSize, (targetGridY + offsetY) * gridSize, gridSize, gridSize);
+    for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+            if (x === targetX && y === targetY) {
+                ctx.fillStyle = 'rgba(255, 165, 0, 0.5)'; // Orange color for clicked cell
+                ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+            } else if (x === hoverX && y === hoverY) {
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.5)'; // Green color for hovered cell
+                ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
             }
 
-            // Draw grid lines
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(width, y);
-            ctx.stroke();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
         }
     }
 }
@@ -113,36 +94,62 @@ export function initializeCanvas() {
     const container = getElements().canvasContainer;
 
     function updateCanvasSize() {
-        const bottomContainer = document.getElementById('bottomContainer');
+        const canvas = getElements().canvas;
+        const ctx = canvas.getContext('2d');
+        const container = getElements().canvasContainer;
     
+        // Calculate canvas dimensions
         const viewportHeight = window.innerHeight;
-        console.log(`Viewport Height: ${viewportHeight}px`);
-    
-        const bottomContainerHeight = bottomContainer ? bottomContainer.offsetHeight : 0;
-    
+        const bottomContainerHeight = document.getElementById('bottomContainer')?.offsetHeight || 0;
         const canvasHeight = viewportHeight - bottomContainerHeight;
         const canvasWidth = container.clientWidth * 0.95;
     
-        container.style.position = 'fixed';
-        container.style.top = '0';
-        container.style.left = '0';
+        // Apply canvas sizing
         container.style.width = '100%';
         container.style.height = `${canvasHeight}px`;
-        container.style.overflow = 'hidden';
     
-        canvas.style.width = `${canvasWidth}px`;
-        canvas.style.height = `${canvasHeight}px`;
-        
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-    
-        ctx.scale(1, 1);
+
+        const cols = 80;
+        const rows = 60;
+
+        setCanvasCellWidth(canvasWidth / cols);
+        setCanvasCellHeight(canvasHeight / rows);
+
+        drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), hoverCell.x, hoverCell.y);
     }
 
     window.addEventListener('load', updateCanvasSize);
     window.addEventListener('resize', updateCanvasSize);
 
+    canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
     updateCanvasSize();
+}
+
+function handleMouseMove(event, ctx) {
+    const canvas = getElements().canvas;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const gridSizeX = getCanvasCellWidth();
+    const gridSizeY = getCanvasCellHeight();
+
+    // Calculate hovered grid cell coordinates
+    const hoverX = Math.floor(mouseX / gridSizeX);
+    const hoverY = Math.floor(mouseY / gridSizeY);
+
+    // Only update if the hover cell has changed to avoid unnecessary redraws
+    if (hoverCell.x !== hoverX || hoverCell.y !== hoverY) {
+        hoverCell.x = hoverX;
+        hoverCell.y = hoverY;
+
+        console.log(`Hovered Grid Position: (${hoverCell.x}, ${hoverCell.y})`);
+
+        // Redraw the grid with the new hovered cell
+        drawGrid(ctx, gridSizeX, gridSizeY, hoverX, hoverY);
+    }
 }
 
 export function initializePlayerPosition() {
@@ -273,25 +280,21 @@ export function processClickPoint(event) {
     const clickX = event.x - rect.left;
     const clickY = event.y - rect.top;
 
-    const correctedClickX = clickX;
-    const correctedClickY = clickY - player.height;
-
-    console.log(`Corrected Click Coordinates: (${clickX}, ${correctedClickY})`);
-
-    const gridSize = 10; // Define grid size
-
-    const gridX = Math.floor(correctedClickX / gridSize);
-    const gridY = Math.floor(correctedClickY / gridSize);
+    // Calculate grid cell coordinates for highlighting without any offsets
+    const gridX = hoverCell.x;
+    const gridY = hoverCell.y;
 
     setGridTargetX(gridX);
     setGridTargetY(gridY);
 
-    setTargetX(correctedClickX);
-    setTargetY(correctedClickY);
+    setTargetX(clickX + player.width / 2);
+    setTargetY(clickY - player.height);
 
+    // Log the grid reference and the target position for movement
     console.log(`Grid Reference: (${gridX}, ${gridY})`);
     console.log(`Target set to (${getTargetX()}, ${getTargetY()}) in pixels`);
 }
+
 
 //-------------------------------------------------------------------------------------------------------------
 
