@@ -15,7 +15,7 @@ export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\test.json';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
-export const WALK_SPEED_PLAYER = 8;
+export const WALK_SPEED_PLAYER = 3;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'screen1';
 export const INITIAL_PATH = 'path1';
@@ -24,8 +24,8 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 
 export let playerObject = {
-    width: 40,
-    height: 160,
+    width: 30,
+    height: 120,
     speed: getWalkSpeedPlayer(),
     color: 'green',
     xPos: '0',

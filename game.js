@@ -1,10 +1,11 @@
 import { localize } from './localization.js';
-import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY} from './constantsAndGlobalVars.js';
+import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, getWalkSpeedPlayer} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
+let currentPathIndex = 0;
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -42,36 +43,55 @@ export function gameLoop() {
 }
 
 function movePlayerTowardsTarget() {
+    const speed = getPlayerObject().speed;
     const player = getPlayerObject();
-    const speed = player.speed;
-    const gridSize = getCanvasCellWidth();
+    const gridSizeX = getCanvasCellWidth();
+    const gridSizeY = getCanvasCellHeight();
 
-    const targetX = getTargetX();
-    const targetY = getTargetY() - player.height;
+    let targetX, targetY;
 
-    if (player.xPos < targetX) {
-        player.xPos = Math.min(player.xPos + speed, targetX);
-    } else if (player.xPos > targetX) {
-        player.xPos = Math.max(player.xPos - speed, targetX);
+    // Check if there's a valid target in the path
+    if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
+        targetX = currentPath[currentPathIndex].x * gridSizeX;
+        targetY = currentPath[currentPathIndex].y * gridSizeY - player.height; // Adjust for height
+    } else {
+        return; // No valid path
     }
 
-    if (player.yPos < targetY) {
-        player.yPos = Math.min(player.yPos + speed, targetY);
-    } else if (player.yPos > targetY) {
-        player.yPos = Math.max(player.yPos - speed, targetY);
+    if (Math.abs(player.xPos - targetX) > speed) {
+        player.xPos += (player.xPos < targetX) ? speed : -speed;
+    } else {
+        player.xPos = targetX;
     }
 
-    player.xPos = Math.round(player.xPos / gridSize) * gridSize;
-    player.yPos = Math.round(player.yPos / gridSize) * gridSize;
-
-    if (!getBeginGameStatus()) {
-        setPlayerObject(getPlayerObject().xPos, player.xPos);
-        setPlayerObject(getPlayerObject().yPos, player.yPos);
+    if (Math.abs(player.yPos - targetY) > speed) {
+        player.yPos += (player.yPos < targetY) ? speed : -speed;
+    } else {
+        player.yPos = targetY;
     }
+
+    // Check if reached the current target
+    if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
+        currentPathIndex++; // Move to the next target in the path
+
+        // If we reach the end of the path, stop moving or reset the path
+        if (currentPathIndex < currentPath.length) {
+            const nextStep = currentPath[currentPathIndex];
+            setTargetX(nextStep.x * gridSizeX);
+            setTargetY(nextStep.y * gridSizeY - player.height); // Adjust for height
+        }
+    }
+
+    // Update player object with new position
+    setPlayerObject(player);
 }
 
+
+
 export function drawGrid() {
-    const canvas = getElements().canvas;
+    let showGrid = false; //DEBUG: false to hide grid
+    if (showGrid) {
+        const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
@@ -111,6 +131,7 @@ export function drawGrid() {
         for (const step of currentPath) {
             context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
         }
+    }
     }
 }
 
@@ -290,23 +311,26 @@ export function processClickPoint(event) {
     setGridTargetX(gridX);
     setGridTargetY(gridY);
 
-    // Get path using A* algorithm
-    const path = aStarPathfinding({ x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) }, { x: gridX, y: gridY }, getGridData());
+    // Calculate the path using A* algorithm
+    const path = aStarPathfinding(
+        { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
+        { x: gridX, y: gridY },
+        getGridData()
+    );
 
-    // Store the path in the global currentPath variable
+    // Update the path and reset the index
     currentPath = path;
+    currentPathIndex = 0; // Reset index for new path
 
-    // Set the path for the player to follow
-    if (path.length > 0) {
-        // Set the first target in the path
-        const nextStep = path[0];
+    // Immediately set the first target if the path is valid
+    if (currentPath.length > 0) {
+        const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
-        setTargetY(nextStep.y * getCanvasCellHeight());
+        setTargetY(nextStep.y * getCanvasCellHeight() + player.height); // Adjust for height
     }
 
     console.log(`Path: ${JSON.stringify(path)}`);
 }
-
 
 //-------------------------------------------------------------------------------------------------------------
 
