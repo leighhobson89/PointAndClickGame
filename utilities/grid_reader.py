@@ -44,8 +44,8 @@ if __name__ == '__main__':
     parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
     args = parser.parse_args()
 
-    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\test.png'
-    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\test.json'
+    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\libraryDesk.png'
+    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\libraryDesk.json'
 
     grid = process_image(image_path)
     save_to_json(args.screen_name, grid, output_path)

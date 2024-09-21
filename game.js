@@ -64,14 +64,12 @@ function movePlayerTowardsTarget() {
     } else if (currentRow >= maxRow - 6) {
         scaleFactor = 1; // Original size
     } else {
-        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.7; // Scale proportionally
+        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.5; // Scale proportionally
     }
 
     // Update player dimensions
     const newWidth = originalWidth * scaleFactor;
     const newHeight = originalHeight * scaleFactor;
-
-    console.log("New Width: " + newWidth + " New Height: " + newHeight);
 
     // Update player object properties using setPlayerObject
     setPlayerObject('width', newWidth);
@@ -115,7 +113,7 @@ function movePlayerTowardsTarget() {
 }
 
 export function drawGrid() {
-    let showGrid = true; //DEBUG: false to hide grid
+    let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');

@@ -16,16 +16,16 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
-export const INITIAL_SCREEN_ID = 'screen1';
+export const INITIAL_SCREEN_ID = 'libraryDesk';
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 
 export let playerObject = {
-    originalWidth: 30,
-    originalHeight: 120,
-    width: 30,
-    height: 120,
+    originalWidth: 60,
+    originalHeight: 240,
+    width: 60,
+    height: 240,
     speed: getWalkSpeedPlayer(),
     color: 'green',
     xPos: '0',
