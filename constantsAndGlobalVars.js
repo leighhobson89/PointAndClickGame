@@ -33,8 +33,8 @@ export let playerObject = {
 //GLOBAL VARIABLES
 export let gameState;
 let hoverCell = { x: 0, y: 0 };
-let canvasCellWidth = null;
-let canvasCellHeight = null;
+let canvasCellWidth = 15;
+let canvasCellHeight = 10;
 let gridTargetX = null;
 let gridTargetY = null;
 let targetX = null;

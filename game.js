@@ -35,7 +35,7 @@ export function gameLoop() {
         drawObject(ctx, getPlayerObject());
 
         enemySquares.forEach(square => {
-            drawEnemySquare(ctx, square.x, square.y, square.width, square.height);
+            drawEnemySquare(ctx, square.xPos, square.yPos, square.width, square.height);
         });
 
         requestAnimationFrame(gameLoop);
@@ -159,22 +159,16 @@ export function initializeCanvas() {
         const oldCellWidth = getCanvasCellWidth();
         const oldCellHeight = getCanvasCellHeight();
         
-        console.log("Old width and height of cells: " + getCanvasCellWidth() + ", " + getCanvasCellHeight());
-
         // Update grid size
         const newCellWidth = canvasWidth / getGridSizeX();
         const newCellHeight = canvasHeight / getGridSizeY();
         setCanvasCellWidth(newCellWidth);
         setCanvasCellHeight(newCellHeight);
 
-        console.log("New width and height of cells: " + getCanvasCellWidth() + ", " + getCanvasCellHeight());
-    
         // Update player position based on new grid size
         const player = getPlayerObject();
         player.xPos = (player.xPos / oldCellWidth) * newCellWidth;
         player.yPos = (player.yPos / oldCellHeight) * newCellHeight;
-
-        console.log("Setting player to position: " + player.xPos + ", " + player.yPos);
     
         // Update the player object's properties
         setPlayerObject('xPos', player.xPos);
@@ -194,26 +188,39 @@ export function initializeCanvas() {
 export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();
     
-    // Get the cell dimensions (width and height of each grid cell)
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    // Calculate the pixel positions based on the grid coordinates
-    const xPos = gridX * cellWidth; // X position based on the grid column
-    const yPos = gridY * cellHeight - player.height; // Y position based on the grid row, adjusting for the player's height
+    const xPos = gridX * cellWidth;
+    const yPos = gridY * cellHeight - player.height;
 
-    // Set the player's position in pixels
     player.xPos = xPos;
     player.yPos = yPos;
 
-    // Set target X and Y (for possible movement or reference)
     setTargetX(xPos);
     setTargetY(yPos);
 
-    // Update the player object with the new position
     setPlayerObject(player);
 
     console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
+}
+
+function generateRandomGridSquare() {
+    let gridX, gridY, cellWidth, cellHeight;
+
+    do {
+        gridX = Math.floor(Math.random() * getGridSizeX());
+        gridY = Math.floor(Math.random() * getGridSizeY());
+        cellWidth = getCanvasCellWidth();
+        cellHeight = getCanvasCellHeight();
+    } while (getGridData()[gridY] && getGridData()[gridY][gridX] !== 'walkable');
+
+    return {
+        xPos: gridX * cellWidth,
+        yPos: gridY * cellHeight,
+        width: cellWidth,
+        height: cellHeight
+    };
 }
 
 function initializeEnemySquares() {
@@ -221,11 +228,16 @@ function initializeEnemySquares() {
     let attempts = 0;
 
     while (enemySquares.length < getNumberOfEnemySquares() && attempts < getMaxAttemptsToDrawEnemies()) {
-        const newSquare = generateRandomSquare();
+        const newSquare = generateRandomGridSquare();
 
         if (!enemySquares.some(square => checkCollision(newSquare, square)) &&
             !checkCollision(newSquare, getPlayerObject())) {
             enemySquares.push(newSquare);
+
+            const gridX = Math.floor(newSquare.xPos / getCanvasCellWidth());
+            const gridY = Math.floor(newSquare.yPos / getCanvasCellHeight());
+
+            setGridRefAsNonWalkable(gridX, gridY);
         }
 
         attempts++;
@@ -235,6 +247,15 @@ function initializeEnemySquares() {
         console.warn(`Could not place all ${getNumberOfEnemySquares()} squares. Only ${enemySquares.length} squares were placed due to overlap constraints.`);
     }
 }
+
+function setGridRefAsNonWalkable(gridX, gridY) {
+    const gridData = getGridData();
+    if (gridX >= 0 && gridY >= 0 && gridY < gridData.length && gridX < gridData[gridY].length) {
+        gridData[gridY][gridX] = 'non_walkable';
+        console.log("grid ref set to non walkable: " + gridData[gridY][gridX]);
+    }
+}
+
 
 export function updateCursor(event) {
     const canvas = getElements().canvas;
@@ -277,10 +298,11 @@ function drawEnemySquare(ctx, x, y, width, height) {
 }
 
 function checkCollision(rect1, rect2) {
-    return !(rect1.x + rect1.width < rect2.x ||
-             rect1.x > rect2.x + rect2.width ||
-             rect1.y + rect1.height < rect2.y ||
-             rect1.y > rect2.y + rect2.height);
+    const isCollision = !(rect1.xPos + rect1.width < rect2.xPos ||
+                          rect1.xPos > rect2.xPos + rect2.width ||
+                          rect1.yPos + rect1.height < rect2.yPos ||
+                          rect1.yPos > rect2.yPos + rect2.height);
+    return isCollision;
 }
 
 function checkPlayerEnemyCollisions() {
