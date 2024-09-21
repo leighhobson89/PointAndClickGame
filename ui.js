@@ -116,7 +116,7 @@ export function handleMouseMove(event, ctx) {
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`);
+            //console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`);
 
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
         }
@@ -124,7 +124,7 @@ export function handleMouseMove(event, ctx) {
 }
 
 function handleCanvasClick(event) {
-    
+
     if (getBeginGameStatus) {
         setBeginGameStatus(false);
     }

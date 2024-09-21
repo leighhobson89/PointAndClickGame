@@ -11,8 +11,8 @@ let currentPathIndex = 0;
 
 export function startGame() {
     initializeCanvas();
-    initializePlayerPosition(5,55); //update this when we have a constant and call this on every new screen later
-    initializeEnemySquares();
+    initializePlayerPosition(5,59); //update this when we have a constant and call this on every new screen later
+    //initializeEnemySquares();
     gameLoop();
 }
 
@@ -47,8 +47,35 @@ function movePlayerTowardsTarget() {
     const player = getPlayerObject();
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
+    const originalWidth = player.originalWidth;
+    const originalHeight = player.originalHeight;
+    const currentRow = Math.floor(player.yPos / getCanvasCellHeight());
 
     let targetX, targetY;
+
+    // Calculate scale factor based on the current row
+    const maxRow = 59; // Define the maximum row
+    const minRow = 6; // Define the minimum row
+    let scaleFactor = 1;
+
+     // Calculate scale factor proportionally between maxRow and minRow
+     if (currentRow === minRow) {
+        scaleFactor = 0.4; // 60% reduction
+    } else if (currentRow >= maxRow - 6) {
+        scaleFactor = 1; // Original size
+    } else {
+        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.7; // Scale proportionally
+    }
+
+    // Update player dimensions
+    const newWidth = originalWidth * scaleFactor;
+    const newHeight = originalHeight * scaleFactor;
+
+    console.log("New Width: " + newWidth + " New Height: " + newHeight);
+
+    // Update player object properties using setPlayerObject
+    setPlayerObject('width', newWidth);
+    setPlayerObject('height', newHeight);
 
     // Check if there's a valid target in the path
     if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
@@ -83,11 +110,12 @@ function movePlayerTowardsTarget() {
     }
 
     // Update player object with new position
-    setPlayerObject(player);
+    setPlayerObject('xPos', player.xPos);
+    setPlayerObject('yPos', player.yPos);
 }
 
 export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+    let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
