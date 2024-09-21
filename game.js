@@ -1,6 +1,6 @@
 import { localize } from './localization.js';
 import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, getGridTargetX, getGridTargetY, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, getWalkSpeedPlayer, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getInitialScreenId, getCurrentPath, getGridData} from './constantsAndGlobalVars.js';
-
+import { aStarPathfinding } from './pathFinding.js';
 export const enemySquares = [];
 let hoverCell = { x: null, y: null };
 
@@ -284,8 +284,6 @@ function resolveCollision(player, square) {
 //-------------------------------------------------------------------------------------------------------------
 
 export function processClickPoint(event) {
-    const gridData = getGridData();
-
     const canvas = getElements().canvas;
     const player = getPlayerObject();
 
@@ -299,20 +297,20 @@ export function processClickPoint(event) {
     setGridTargetX(gridX);
     setGridTargetY(gridY);
 
-    // Check if the clicked cell is walkable based on the JSON data
-    const cellValue = gridData[gridY] && gridData[gridY][gridX];
+    // Get path using A* algorithm
+    const path = aStarPathfinding({ x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) }, { x: gridX, y: gridY }, getGridData());
 
-    if (cellValue === 'non_walkable') {
-        console.log(`Clicked on a non-walkable area at (${gridX}, ${gridY}).`);
-        return;
+    // Set the path for the player to follow
+    if (path.length > 0) {
+        // Set the first target in the path
+        const nextStep = path[0];
+        setTargetX(nextStep.x * getCanvasCellWidth());
+        setTargetY(nextStep.y * getCanvasCellHeight());
     }
 
-    setTargetX(clickX + player.width / 2);
-    setTargetY(clickY - player.height);
-
-    console.log(`Grid Reference: (${gridX}, ${gridY})`);
-    console.log(`Target set to (${getTargetX()}, ${getTargetY()}) in pixels`);
+    console.log(`Path: ${JSON.stringify(path)}`);
 }
+
 
 //-------------------------------------------------------------------------------------------------------------
 
