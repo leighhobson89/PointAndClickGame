@@ -222,6 +222,33 @@ canvas {
     z-index: 998;
 }
 
+#overlayCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    opacity: 0;
+    transition: opacity 1s;
+    display: none;
+    pointer-events: none;
+}
+
+#overlayCanvas.visible {
+    display: block; /* Show the overlay */
+    opacity: 1; /* Fade in */
+    pointer-events: auto; /* Enable clicks */
+}
+
+#overlayCanvas.hidden {
+    opacity: 0; /* Fade out */
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+
+
+
 .verbs, .inventory {
     height: 100%;
     display: flex;

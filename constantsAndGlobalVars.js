@@ -49,6 +49,8 @@ let audioMuted;
 let languageChangedFlag;
 let beginGameState = true;
 let gameInProgress = false;
+let transitioningToAnotherScreen = false;
+let transitioningNow = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -318,5 +320,18 @@ export function getGridSizeY() {
     return GRID_SIZE_Y;
 }
 
+export function getTransitioningToAnotherScreen() {
+    return transitioningToAnotherScreen;
+}
 
+export function setTransitioningToAnotherScreen(value) {
+    transitioningToAnotherScreen = value;
+}
 
+export function getTransitioningNow() {
+    return transitioningNow;
+}
+
+export function setTransitioningNow(value) {
+    transitioningNow = value;
+}

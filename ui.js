@@ -1,4 +1,4 @@
-import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId } from './constantsAndGlobalVars.js';
+import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow } from './constantsAndGlobalVars.js';
 import { drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -177,12 +177,46 @@ export function disableActivateButton(button, action, activeClass) {
     }
 }
 
+export function fadeToBlackInTransition() {
+    const overlay = document.getElementById('overlayCanvas');
+    overlay.style.display = 'block';
+
+    requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+        overlay.classList.remove('hidden');
+        setTransitioningNow(true);
+    });
+
+    overlay.addEventListener('transitionend', () => {
+        console.log("Changing background");
+        fadeBackToGameInTransition();
+    }, { once: true });
+}
+
+export function fadeBackToGameInTransition() {
+    const overlay = document.getElementById('overlayCanvas');
+    overlay.classList.add('hidden');
+    overlay.classList.remove('visible');
+
+    requestAnimationFrame(() => {
+        overlay.classList.remove('visible');
+        overlay.classList.add('hidden');
+        setTransitioningNow(true);
+    });
+
+    overlay.addEventListener('transitionend', () => {
+        overlay.classList.add('hidden');
+        overlay.style.display = 'none';
+        console.log("transition complete!");
+    }, { once: true });
+}
+
 function loadGridData(url) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
             setGridData(data);
-            console.log("Grid data loaded:", getGridData());
+            //console.log("Grid data loaded:", getGridData());
         })
         .catch(error => {
             console.error("Error loading grid data:", error);

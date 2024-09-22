@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, getWalkSpeedPlayer} from './constantsAndGlobalVars.js';
+import { getTransitioningNow, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, getWalkSpeedPlayer, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { handleMouseMove } from './ui.js';
+import { fadeBackToGameInTransition, fadeToBlackInTransition, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -18,17 +18,20 @@ export function startGame() {
 
 export function gameLoop() {
     const ctx = getElements().canvas.getContext('2d');
+
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        // Redraw the grid based on current hover state
         const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
         const walkable = (cellValue === 'e' || cellValue === 'w');
 
+        // DEBUG
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
+        //
 
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
+            checkAndChangeScreen();
         }
 
         checkPlayerEnemyCollisions();
@@ -51,52 +54,37 @@ function movePlayerTowardsTarget() {
     const originalHeight = player.originalHeight;
     const currentRow = Math.floor(player.yPos / getCanvasCellHeight());
 
-    const canvas = getElements().canvas;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
     let targetX, targetY;
 
-    // Calculate scale factor based on the current row
-    const maxRow = 59; // Define the maximum row
-    const minRow = 6; // Define the minimum row
+    const maxRow = 59;
+    const minRow = 6;
     let scaleFactor = 1;
 
-    // Calculate scale factor proportionally between maxRow and minRow
     if (currentRow === minRow) {
-        scaleFactor = 0.4; // 60% reduction
+        scaleFactor = 0.4;
     } else if (currentRow >= maxRow - 6) {
-        scaleFactor = 1; // Original size
+        scaleFactor = 1;
     } else {
-        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.5; // Scale proportionally
+        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.5;
     }
 
-    // Update player dimensions
     const newWidth = originalWidth * scaleFactor;
     const newHeight = originalHeight * scaleFactor;
 
-    // Update player object properties using setPlayerObject
     setPlayerObject('width', newWidth);
     setPlayerObject('height', newHeight);
 
-    // Check if there's a valid target in the path
     if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
         targetX = currentPath[currentPathIndex].x * gridSizeX;
-        targetY = currentPath[currentPathIndex].y * gridSizeY - player.height; // Adjust for height
+        targetY = currentPath[currentPathIndex].y * gridSizeY - player.height;
     } else {
-        return; // No valid path
+        return;
     }
 
-    // Check if the player will go out of the canvas bounds
-    const newXPos = player.xPos + ((player.xPos < targetX) ? speed : -speed);
-    const newYPos = player.yPos + ((player.yPos < targetY) ? speed : -speed);
+    let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
 
-    // Check for canvas edge collisions and stop if necessary
-    if (newXPos <= 0 || newXPos + player.width >= canvasWidth || newYPos <= 0 || newYPos + player.height >= canvasHeight) {
-        return; // Collision detected, stop movement
-    }
+    if (collisionEdgeCanvas) return;
 
-    // Move the player towards the target
     if (Math.abs(player.xPos - targetX) > speed) {
         player.xPos += (player.xPos < targetX) ? speed : -speed;
     } else {
@@ -109,23 +97,19 @@ function movePlayerTowardsTarget() {
         player.yPos = targetY;
     }
 
-    // Check if reached the current target
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
-        currentPathIndex++; // Move to the next target in the path
+        currentPathIndex++;
 
-        // If we reach the end of the path, stop moving or reset the path
         if (currentPathIndex < currentPath.length) {
             const nextStep = currentPath[currentPathIndex];
             setTargetX(nextStep.x * gridSizeX);
-            setTargetY(nextStep.y * gridSizeY - player.height); // Adjust for height
+            setTargetY(nextStep.y * gridSizeY - player.height);
         }
     }
 
-    // Update player object with new position
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
 }
-
 
 export function drawGrid() {
     let showGrid = false; //DEBUG: false to hide grid
@@ -339,6 +323,25 @@ function drawEnemySquare(ctx, x, y, width, height) {
     ctx.fillRect(x, y, width, height);
 }
 
+function checkEdgeCollision(player, targetX) {
+    const newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : - player.speed);
+    let collisionOccurred = false;
+
+    if (newXPos + player.width >= canvas.width) {
+        player.xPos = canvas.width - player.width - getCanvasCellWidth();
+        collisionOccurred = true;
+    }
+
+    if (collisionOccurred) {
+        setTargetX(player.xPos);
+        setTargetY(player.yPos);
+        currentPath = [];
+        currentPathIndex = 0;
+        return true;
+    }
+    return false;
+}
+
 function checkCollision(rect1, rect2) {
     const isCollision = !(rect1.xPos + rect1.width < rect2.xPos ||
                           rect1.xPos > rect2.xPos + rect2.width ||
@@ -382,13 +385,7 @@ function resolveCollision(player, square) {
 //-------------------------------------------------------------------------------------------------------------
 
 export function processClickPoint(event) {
-    const canvas = getElements().canvas;
     const player = getPlayerObject();
-
-    const rect = canvas.getBoundingClientRect();
-    const clickX = event.x - rect.left;
-    const clickY = event.y - rect.top;
-
     const gridX = getHoverCell().x;
     const gridY = getHoverCell().y;
 
@@ -405,12 +402,45 @@ export function processClickPoint(event) {
     currentPathIndex = 0;
 
     if (currentPath.length > 0) {
+        if (getGridData()[gridY] && getGridData()[gridY][gridX] === 'e') { //set flag if on way to another screen
+            setTransitioningToAnotherScreen(true);
+        }
         const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
         setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
     }
 
     console.log(`Path: ${JSON.stringify(path)}`);
+}
+
+export function checkAndChangeScreen() {
+    const canvas = getElements().canvas;
+    const player = getPlayerObject();
+    const gridData = getGridData();
+
+    if (!getTransitioningToAnotherScreen()) {
+        return;
+    }
+
+    const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
+    const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
+
+    for (let dx = -2; dx <= 2; dx++) {
+        for (let dy = -2; dy <= 2; dy++) {
+            const checkX = playerGridX + dx;
+            const checkY = playerGridY + dy;
+
+            if (gridData[checkY] && gridData[checkY][checkX] === 'e') {
+                console.log("Player is moving to another screen");
+                canvas.style.pointerEvents = 'none';
+                fadeToBlackInTransition();
+                setTransitioningToAnotherScreen(false);
+                canvas.style.pointerEvents = 'auto';
+                return;
+            }
+        }
+    }
+    return; 
 }
 
 //-------------------------------------------------------------------------------------------------------------
