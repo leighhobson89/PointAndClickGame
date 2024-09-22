@@ -2,47 +2,184 @@
     "libraryDesk": {
         "exits": {
             "e1": {
-                "connectsTo": "libraryFoyer"
+                "connectsTo": "libraryFoyer",
+                "status": "open"
             },
             "e2": {
-                "connectsTo": "libraryFoyer"
+                "connectsTo": "libraryFoyer",
+                "status": "open"
             }
         }
     },
     "libraryFoyer": {
         "exits": {
             "e1": {
-                "connectsTo": "marketStreet"
+                "connectsTo": "marketStreet",
+                "status": "open"
             },
             "e2": {
-                "connectsTo": "researchRoom"
+                "connectsTo": "researchRoom",
+                "status": "locked"
             },
             "e3": {
-                "connectsTo": "libraryDesk"
-            }
-        }
-    },
-    "researchRoom": {
-        "exits": {
-            "e1": {
-                "connectsTo": "libraryFoyer"
+                "connectsTo": "libraryDesk",
+                "status": "open"
             }
         }
     },
     "marketStreet": {
         "exits": {
             "e1": {
-                "connectsTo": "alleySeedyGuy"
+                "connectsTo": "seedyGuyAlley",
+                "status": "open"
             },
             "e2": {
-                "connectsTo": "libraryFoyer"
+                "connectsTo": "libraryFoyer",
+                "status": "open"
+            },
+            "e3": {
+                "connectsTo": "stables",
+                "status": "open"
+            },
+            "e4": {
+                "connectsTo": "roadIntoTown",
+                "status": "open"
             }
         }
     },
-    "alleySeedyGuy": {
+    "researchRoom": {
         "exits": {
             "e1": {
-                "connectsTo": "marketStreet"
+                "connectsTo": "libraryFoyer",
+                "status": "open"
+            }
+        }
+    },
+    "seedyGuyAlley": {
+        "exits": {
+            "e1": {
+                "connectsTo": "den",
+                "status": "locked"
+            },
+            "e2": {
+                "connectsTo": "marketStreet",
+                "status": "open"
+            }
+        }
+    },
+    "den": {
+        "exits": {
+            "e1": {
+                "connectsTo": "seedyGuyAlley",
+                "status": "open"
+            }
+        }
+    },
+    "house": {
+        "exits": {
+            "e1": {
+                "connectsTo": "stables",
+                "status": "open"
+            }
+        }
+    },
+    "stables": {
+        "exits": {
+            "e1": {
+                "connectsTo": "barn",
+                "status": "open"
+            },
+            "e2": {
+                "connectsTo": "largeTree",
+                "status": "open"
+            },
+            "e3": {
+                "connectsTo": "marketStreet",
+                "status": "open"
+            },
+            "e4": {
+                "connectsTo": "house",
+                "status": "locked"
+            }
+        }
+    },
+    "barn": {
+        "exits": {
+            "e1": {
+                "connectsTo": "stables",
+                "status": "open"
+            }
+        }
+    },
+    "largeTree": {
+        "exits": {
+            "e1": {
+                "connectsTo": "stables",
+                "status": "open"
+            },
+            "e2": {
+                "connectsTo": "roadIntoTown",
+                "status": "open"
+            }
+        }
+    },
+    "roadIntoTown": {
+        "exits": {
+            "e1": {
+                "connectsTo": "largeTree",
+                "status": "open"
+            },
+            "e2": {
+                "connectsTo": "riverCrossing",
+                "status": "open"
+            },
+            "e3": {
+                "connectsTo": "stinkingDump",
+                "status": "open"
+            },
+            "e4": {
+                "connectsTo": "marketStreet",
+                "status": "open"
+            }
+        }
+    },
+    "stinkingDump": {
+        "exits": {
+            "e1": {
+                "connectsTo": "roadIntoTown",
+                "status": "open"
+            },
+            "e2": {
+                "connectsTo": "largePileOfPoo",
+                "status": "open"
+            }
+        }
+    },
+    "largePileOfPoo": {
+        "exits": {
+            "e1": {
+                "connectsTo": "stinkingDump",
+                "status": "open"
+            }
+        }
+    },
+    "riverCrossing": {
+        "exits": {
+            "e1": {
+                "connectsTo": "roadIntoTown",
+                "status": "open"
+            },
+            "e2": {
+                "connectsTo": "map",
+                "status": "locked"
+            }
+        }
+    },
+    "map": {
+        "exits": {
+            "e1": {
+                "connectsTo": "riverCrossing",
+                "status": "open"
             }
         }
     }
