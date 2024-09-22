@@ -81,7 +81,7 @@ export function aStarPathfinding(start, target, gridData) {
                 continue;
             }            
 
-            if ((gridData[neighborY][neighborX] !== 'w' && gridData[neighborY][neighborX] !== 'e') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if ((gridData[neighborY][neighborX] !== 'w' && !gridData[neighborY][neighborX].includes('e')) || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }            
 

@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { getTransitioningNow, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, getWalkSpeedPlayer, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
+import { setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { fadeBackToGameInTransition, fadeToBlackInTransition, handleMouseMove } from './ui.js';
+import { fadeToBlackInTransition as animateTransitionBetweenScreens, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -23,7 +23,7 @@ export function gameLoop() {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
         const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
-        const walkable = (cellValue === 'e' || cellValue === 'w');
+        const walkable = (cellValue.includes('e') || cellValue === 'w');
 
         // DEBUG
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
@@ -112,7 +112,7 @@ function movePlayerTowardsTarget() {
 }
 
 export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+    let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -140,7 +140,7 @@ export function drawGrid() {
         
         if (cellValue === 'w') {
             context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
-        } else if (cellValue === 'e') {
+        } else if (cellValue.includes('e')) {
             context.fillStyle = 'rgba(255, 255, 0, 0.5)';  // Semi-transparent yellow for 'e' cells
         } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';  // Semi-transparent red for non-walkable cell
@@ -402,8 +402,15 @@ export function processClickPoint(event) {
     currentPathIndex = 0;
 
     if (currentPath.length > 0) {
-        if (getGridData()[gridY] && getGridData()[gridY][gridX] === 'e') { //set flag if on way to another screen
-            setTransitioningToAnotherScreen(true);
+        const cellValue = getGridData()[gridY] && getGridData()[gridY][gridX];
+        if (cellValue && cellValue.startsWith('e')) { 
+            const exitNumberMatch = cellValue.match(/e(\d+)/);
+            if (exitNumberMatch) {
+                const exitNumber = exitNumberMatch[1];
+                console.log("Exit number:", exitNumber);
+                setTransitioningToAnotherScreen(true);
+                setExitNumberToTransitionTo(exitNumber);
+            }
         }
         const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
@@ -430,10 +437,13 @@ export function checkAndChangeScreen() {
             const checkX = playerGridX + dx;
             const checkY = playerGridY + dy;
 
-            if (gridData[checkY] && gridData[checkY][checkX] === 'e') {
+            if (gridData[checkY] && gridData[checkY][checkX].includes('e')) {
                 console.log("Player is moving to another screen");
                 canvas.style.pointerEvents = 'none';
-                fadeToBlackInTransition();
+
+                animateTransitionBetweenScreens();
+                //setUpOfNewScreen()
+
                 setTransitioningToAnotherScreen(false);
                 canvas.style.pointerEvents = 'auto';
                 return;

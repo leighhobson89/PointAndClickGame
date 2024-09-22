@@ -43,6 +43,7 @@ let targetX = null;
 let targetY = null;
 let gridData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
+let exitNumberToTransitionTo = null;
 
 //FLAGS
 let audioMuted;
@@ -334,4 +335,12 @@ export function getTransitioningNow() {
 
 export function setTransitioningNow(value) {
     transitioningNow = value;
+}
+
+export function getExitNumberToTransitionTo() {
+    return exitNumberToTransitionTo;
+}
+
+export function setExitNumberToTransitionTo(value) {
+    exitNumberToTransitionTo = value;
 }

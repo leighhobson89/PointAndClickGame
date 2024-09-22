@@ -111,7 +111,7 @@ export function handleMouseMove(event, ctx) {
     if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
         const cellValue = gridData[hoverY] && gridData[hoverY][hoverX];
 
-        const walkable = (cellValue === 'e' || cellValue === 'w');
+        const walkable = (cellValue.includes('e') || cellValue === 'w');
 
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
