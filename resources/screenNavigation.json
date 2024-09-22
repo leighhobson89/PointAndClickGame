@@ -1,0 +1,49 @@
+{
+    "libraryDesk": {
+        "exits": {
+            "e1": {
+                "connectsTo": "libraryFoyer"
+            },
+            "e2": {
+                "connectsTo": "libraryFoyer"
+            }
+        }
+    },
+    "libraryFoyer": {
+        "exits": {
+            "e1": {
+                "connectsTo": "marketStreet"
+            },
+            "e2": {
+                "connectsTo": "researchRoom"
+            },
+            "e3": {
+                "connectsTo": "libraryDesk"
+            }
+        }
+    },
+    "researchRoom": {
+        "exits": {
+            "e1": {
+                "connectsTo": "libraryFoyer"
+            }
+        }
+    },
+    "marketStreet": {
+        "exits": {
+            "e1": {
+                "connectsTo": "alleySeedyGuy"
+            },
+            "e2": {
+                "connectsTo": "libraryFoyer"
+            }
+        }
+    },
+    "alleySeedyGuy": {
+        "exits": {
+            "e1": {
+                "connectsTo": "marketStreet"
+            }
+        }
+    }
+}

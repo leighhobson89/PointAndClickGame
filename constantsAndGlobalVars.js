@@ -12,6 +12,7 @@ let oldLanguage = 'en';
 
 //CONSTANTS
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
+export const urlNavigationData = '.\\resources\\screenNavigation.json';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
@@ -42,6 +43,7 @@ let gridTargetY = null;
 let targetX = null;
 let targetY = null;
 let gridData = null;
+let navigationData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 
@@ -110,6 +112,14 @@ export function getGridData() {
 
 export function setGridData(value) {
     gridData = value;
+}
+
+export function getNavigationData() {
+    return navigationData;
+}
+
+export function setNavigationData(value) {
+    navigationData = value;
 }
 
 export function getInitialScreenId() {

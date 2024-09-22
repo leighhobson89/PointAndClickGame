@@ -1,11 +1,11 @@
-import { setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow } from './constantsAndGlobalVars.js';
+import { setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow } from './constantsAndGlobalVars.js';
 import { drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
-    loadGridData(urlWalkableJSONS);
+    loadGameData(urlWalkableJSONS, urlNavigationData);
 
     getElements().newGameMenuButton.addEventListener('click', () => {
         setBeginGameStatus(true);
@@ -211,15 +211,27 @@ export function fadeBackToGameInTransition() {
     }, { once: true });
 }
 
-function loadGridData(url) {
-    fetch(url)
+export function loadGameData(gridUrl, screenNavUrl) {
+    // Load grid data
+    fetch(gridUrl)
         .then(response => response.json())
-        .then(data => {
-            setGridData(data);
-            //console.log("Grid data loaded:", getGridData());
+        .then(gridData => {
+            setGridData(gridData);
+            console.log("Grid data loaded:", getGridData());
         })
         .catch(error => {
             console.error("Error loading grid data:", error);
+        });
+
+    // Load navigation data
+    fetch(screenNavUrl)
+        .then(response => response.json())
+        .then(navData => {
+            setNavigationData(navData);
+            console.log("Navigation data loaded:", getNavigationData());
+        })
+        .catch(error => {
+            console.error("Error loading navigation data:", error);
         });
 }
 
