@@ -5,7 +5,8 @@ import argparse
 # Define the color mappings
 COLOR_MAP = {
     (0, 255, 0): 'w',  # Green
-    (255, 0, 0): 'n'  # Red
+    (255, 0, 0): 'n',  # Red
+    (255, 255, 0): 'e'  # Yellow
 }
 
 def process_image(image_path):

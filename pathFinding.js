@@ -81,12 +81,9 @@ export function aStarPathfinding(start, target, gridData) {
                 continue;
             }            
 
-            // Check if walkable or already in closed list
-            if (gridData[neighborY][neighborX] !== 'w' || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
-                //console.log(gridData);
-                //console.log(`Neighbor (${neighborX}, ${neighborY}) - Value in grid: ${gridData[neighborY][neighborX]}`);
+            if ((gridData[neighborY][neighborX] !== 'w' && gridData[neighborY][neighborX] !== 'e') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
-            }
+            }            
 
             const gScore = currentNode.g + dir.cost; // Update cost based on direction
             const hScore = heuristic({ x: neighborX, y: neighborY }, target);

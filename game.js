@@ -23,7 +23,7 @@ export function gameLoop() {
 
         // Redraw the grid based on current hover state
         const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
-        const walkable = (cellValue === 'w');
+        const walkable = (cellValue === 'e' || cellValue === 'w');
 
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
 
@@ -51,6 +51,10 @@ function movePlayerTowardsTarget() {
     const originalHeight = player.originalHeight;
     const currentRow = Math.floor(player.yPos / getCanvasCellHeight());
 
+    const canvas = getElements().canvas;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
     let targetX, targetY;
 
     // Calculate scale factor based on the current row
@@ -58,8 +62,8 @@ function movePlayerTowardsTarget() {
     const minRow = 6; // Define the minimum row
     let scaleFactor = 1;
 
-     // Calculate scale factor proportionally between maxRow and minRow
-     if (currentRow === minRow) {
+    // Calculate scale factor proportionally between maxRow and minRow
+    if (currentRow === minRow) {
         scaleFactor = 0.4; // 60% reduction
     } else if (currentRow >= maxRow - 6) {
         scaleFactor = 1; // Original size
@@ -83,6 +87,16 @@ function movePlayerTowardsTarget() {
         return; // No valid path
     }
 
+    // Check if the player will go out of the canvas bounds
+    const newXPos = player.xPos + ((player.xPos < targetX) ? speed : -speed);
+    const newYPos = player.yPos + ((player.yPos < targetY) ? speed : -speed);
+
+    // Check for canvas edge collisions and stop if necessary
+    if (newXPos <= 0 || newXPos + player.width >= canvasWidth || newYPos <= 0 || newYPos + player.height >= canvasHeight) {
+        return; // Collision detected, stop movement
+    }
+
+    // Move the player towards the target
     if (Math.abs(player.xPos - targetX) > speed) {
         player.xPos += (player.xPos < targetX) ? speed : -speed;
     } else {
@@ -111,6 +125,7 @@ function movePlayerTowardsTarget() {
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
 }
+
 
 export function drawGrid() {
     let showGrid = false; //DEBUG: false to hide grid
@@ -141,16 +156,17 @@ export function drawGrid() {
         
         if (cellValue === 'w') {
             context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
+        } else if (cellValue === 'e') {
+            context.fillStyle = 'rgba(255, 255, 0, 0.5)';  // Semi-transparent yellow for 'e' cells
         } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';  // Semi-transparent red for non-walkable cell
-        }
+        }        
         
         context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
     }
 
-    // Draw the path as filled rectangles instead of lines
     if (currentPath.length > 0) {
-        context.fillStyle = 'rgba(0, 0, 255, 0.5)';  // Semi-transparent blue for path
+        context.fillStyle = 'rgba(0, 0, 255, 0.5)';
 
         for (const step of currentPath) {
             context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
@@ -274,8 +290,8 @@ function initializeEnemySquares() {
     }
 }
 
-function setGridRefAsNonWalkable(gridX, gridY) {
-    const gridData = getGridData();
+function setGridRefAsNonWalkable(gridX, gridY) { //for adding dynamic obstacles in game after loading for pathfinding to avoid
+    const gridData = getGridData(); 
     if (gridX >= 0 && gridY >= 0 && gridY < gridData.length && gridX < gridData[gridY].length) {
         gridData[gridY][gridX] = 'n';
         console.log("grid ref set to non walkable: " + gridData[gridY][gridX]);
@@ -379,22 +395,19 @@ export function processClickPoint(event) {
     setGridTargetX(gridX);
     setGridTargetY(gridY);
 
-    // Calculate the path using A* algorithm
     const path = aStarPathfinding(
         { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
         { x: gridX, y: gridY },
         getGridData()
     );
 
-    // Update the path and reset the index
     currentPath = path;
-    currentPathIndex = 0; // Reset index for new path
+    currentPathIndex = 0;
 
-    // Immediately set the first target if the path is valid
     if (currentPath.length > 0) {
         const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
-        setTargetY(nextStep.y * getCanvasCellHeight() + player.height); // Adjust for height
+        setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
     }
 
     console.log(`Path: ${JSON.stringify(path)}`);
