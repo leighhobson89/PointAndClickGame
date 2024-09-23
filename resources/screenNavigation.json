@@ -1,5 +1,6 @@
 {
     "libraryDesk": {
+        "bgUrl": "./resources/backgrounds/libraryDesk.png",
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
@@ -12,6 +13,7 @@
         }
     },
     "libraryFoyer": {
+        "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "exits": {
             "e1": {
                 "connectsTo": "marketStreet",
@@ -28,6 +30,7 @@
         }
     },
     "marketStreet": {
+        "bgUrl": "./resources/backgrounds/marketStreet.png",
         "exits": {
             "e1": {
                 "connectsTo": "seedyGuyAlley",
@@ -48,6 +51,7 @@
         }
     },
     "researchRoom": {
+        "bgUrl": "./resources/backgrounds/researchRoom.png",
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
@@ -56,6 +60,7 @@
         }
     },
     "seedyGuyAlley": {
+        "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
         "exits": {
             "e1": {
                 "connectsTo": "den",
@@ -68,6 +73,7 @@
         }
     },
     "den": {
+        "bgUrl": "./resources/backgrounds/den.png",
         "exits": {
             "e1": {
                 "connectsTo": "seedyGuyAlley",
@@ -76,6 +82,7 @@
         }
     },
     "house": {
+        "bgUrl": "./resources/backgrounds/house.png",
         "exits": {
             "e1": {
                 "connectsTo": "stables",
@@ -84,6 +91,7 @@
         }
     },
     "stables": {
+        "bgUrl": "./resources/backgrounds/stables.png",
         "exits": {
             "e1": {
                 "connectsTo": "barn",
@@ -104,6 +112,7 @@
         }
     },
     "barn": {
+        "bgUrl": "./resources/backgrounds/barn.png",
         "exits": {
             "e1": {
                 "connectsTo": "stables",
@@ -112,6 +121,7 @@
         }
     },
     "largeTree": {
+        "bgUrl": "./resources/backgrounds/largeTree.png",
         "exits": {
             "e1": {
                 "connectsTo": "stables",
@@ -124,6 +134,7 @@
         }
     },
     "roadIntoTown": {
+        "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "exits": {
             "e1": {
                 "connectsTo": "largeTree",
@@ -144,6 +155,7 @@
         }
     },
     "stinkingDump": {
+        "bgUrl": "./resources/backgrounds/stinkingDump.png",
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
@@ -156,6 +168,7 @@
         }
     },
     "largePileOfPoo": {
+        "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
         "exits": {
             "e1": {
                 "connectsTo": "stinkingDump",
@@ -164,6 +177,7 @@
         }
     },
     "riverCrossing": {
+        "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
@@ -176,6 +190,7 @@
         }
     },
     "map": {
+        "bgUrl": "./resources/backgrounds/map.png",
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",

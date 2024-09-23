@@ -1,5 +1,5 @@
 import { setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow } from './constantsAndGlobalVars.js';
-import { drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
+import { handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
@@ -177,7 +177,7 @@ export function disableActivateButton(button, action, activeClass) {
     }
 }
 
-export function fadeToBlackInTransition() {
+export function animateTransitionAndChangeBackground() {
     const overlay = document.getElementById('overlayCanvas');
     overlay.style.display = 'block';
 
@@ -188,7 +188,7 @@ export function fadeToBlackInTransition() {
     });
 
     overlay.addEventListener('transitionend', () => {
-        console.log("Changing background");
+        handleRoomTransition();
         fadeBackToGameInTransition();
     }, { once: true });
 }

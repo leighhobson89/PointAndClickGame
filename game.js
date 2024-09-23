@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
+import { getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { fadeToBlackInTransition as animateTransitionBetweenScreens, handleMouseMove } from './ui.js';
+import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -441,8 +441,7 @@ export function checkAndChangeScreen() {
                 console.log("Player is moving to another screen");
                 canvas.style.pointerEvents = 'none';
 
-                animateTransitionBetweenScreens();
-                //setUpOfNewScreen()
+                changeBackground();
 
                 setTransitioningToAnotherScreen(false);
                 canvas.style.pointerEvents = 'auto';
@@ -452,6 +451,41 @@ export function checkAndChangeScreen() {
     }
     return; 
 }
+
+export function handleRoomTransition() {
+    const navigationData = getNavigationData();
+    const currentScreenId = getCurrentScreenId();
+
+    const exitNumber = 'e' + getExitNumberToTransitionTo();
+    const screenData = navigationData[currentScreenId];
+
+    if (screenData && screenData.exits && screenData.exits[exitNumber]) {
+        const newScreenId = screenData.exits[exitNumber].connectsTo;
+        setCurrentScreenId(newScreenId);
+        swapBackgroundOnRoomTransition(newScreenId);
+    } else {
+        console.error("Exit not found for current screen and exit number:", currentScreenId, exitNumber);
+    }
+}
+
+function swapBackgroundOnRoomTransition(newScreenId) {
+    console.log("Loading background for " + newScreenId);
+    const navigationData = getNavigationData();
+
+    if (navigationData[newScreenId] && navigationData[newScreenId].bgUrl) {
+        const bgUrl = navigationData[newScreenId].bgUrl;
+
+        const canvas = document.querySelector("canvas");
+        if (canvas) {
+            canvas.style.backgroundImage = `url('${bgUrl}')`;
+        } else {
+            console.error("Canvas element not found!");
+        }
+    } else {
+        console.error("Screen ID or bgUrl not found in navigation data!");
+    }
+}
+
 
 //-------------------------------------------------------------------------------------------------------------
 
