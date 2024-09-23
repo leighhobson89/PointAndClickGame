@@ -1,4 +1,4 @@
-import { setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow } from './constantsAndGlobalVars.js';
+import { getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
 import { handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -109,7 +109,7 @@ export function handleMouseMove(event, ctx) {
     const hoverY = Math.floor(mouseY / getCanvasCellHeight());
 
     if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
-        const cellValue = gridData[hoverY] && gridData[hoverY][hoverX];
+        const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
 
         const walkable = (cellValue.includes('e') || cellValue === 'w');
 
@@ -184,7 +184,6 @@ export function animateTransitionAndChangeBackground() {
     requestAnimationFrame(() => {
         overlay.classList.add('visible');
         overlay.classList.remove('hidden');
-        setTransitioningNow(true);
     });
 
     overlay.addEventListener('transitionend', () => {
@@ -197,11 +196,14 @@ export function animateTransitionAndChangeBackground() {
 
         initializePlayerPosition(startX, startY);
         fadeBackToGameInTransition();
-        
+
+        //problem is need to set a nextScreenId when user clicks and call it in the function below this line in the part for transitioing or add it
+        setTransitioningNow(true);
         processClickPoint({
             x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.x,
             y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.y
         }, false);
+        setPreviousScreenId(getCurrentScreenId());
         setCurrentScreenId(newScreenId);
     }, { once: true });
 }
@@ -214,7 +216,6 @@ export function fadeBackToGameInTransition() {
     requestAnimationFrame(() => {
         overlay.classList.remove('visible');
         overlay.classList.add('hidden');
-        setTransitioningNow(true);
     });
 
     overlay.addEventListener('transitionend', () => {

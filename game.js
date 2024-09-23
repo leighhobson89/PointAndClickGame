@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
+import { getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -22,7 +22,7 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-        const cellValue = getGridData()[getHoverCell().y] && getGridData()[getHoverCell().y][getHoverCell().x];
+        const cellValue = getGridData().gridData[getHoverCell().y] && getGridData().gridData[getHoverCell().y][getHoverCell().x];
         const walkable = (cellValue.includes('e') || cellValue === 'w');
 
         // DEBUG
@@ -51,9 +51,41 @@ function movePlayerTowardsTarget() {
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
 
+    const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
+    const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
+
+    const playerOffsetX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
+    const playerOffsetY = Math.floor(playerGridY + getPlayerObject().height / getCanvasCellHeight());
+
     let targetX, targetY;
 
     resizePlayerObject(player);
+
+    if (getTransitioningNow()) {
+        const exit = 'e' + getExitNumberToTransitionTo();
+        const previousScreenId = getPreviousScreenId();
+        const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;
+        
+        /*console.log("CurrentScreenId: " + getCurrentScreenId() + 
+                    ", PreviousScreenId: " + previousScreenId + 
+                    ", playerOffsetX: " + playerOffsetX + 
+                    ", playerOffsetY: " + playerOffsetY + 
+                    ", finalPositionX: " + finalPosition.x + 
+                    ", finalPositionY: " + finalPosition.y + 
+                    ", Offset Difference X: " + (finalPosition.x - playerOffsetX) + 
+                    ", Offset Difference Y: " + (finalPosition.y - playerOffsetY));
+                    */
+        
+        const tolerance = 3;
+
+    if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
+        Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
+        currentPath = [];
+        currentPathIndex = 0;
+        setTransitioningNow(false);
+        console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
+        }
+    }
 
     if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
         targetX = currentPath[currentPathIndex].x * gridSizeX;
@@ -91,7 +123,7 @@ function movePlayerTowardsTarget() {
     setPlayerObject('yPos', player.yPos);
 }
 
-function resizePlayerObject(player) {
+export function resizePlayerObject(player) {
     const originalWidth = player.originalWidth;
     const originalHeight = player.originalHeight;
 
@@ -153,7 +185,7 @@ export function drawGrid() {
     const hoverCell = getHoverCell(); // Assuming getHoverCell() returns {x, y}
     const gridData = getGridData();
     if (hoverCell) {
-        const cellValue = gridData[hoverCell.y][hoverCell.x];
+        const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
         
         if (cellValue === 'w') {
             context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
@@ -232,6 +264,8 @@ export function initializePlayerPosition(gridX, gridY) {
     
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
+
+    //resizePlayerObject(player);
 
     const xPos = gridX * cellWidth;
     const yPos = gridY * cellHeight - player.height;
@@ -423,14 +457,17 @@ export function processClickPoint(event, mouseClick) {
     currentPathIndex = 0;
 
     if (currentPath.length > 0) {
-        const cellValue = getGridData()[getGridTargetY()] && getGridData()[getGridTargetY()][getGridTargetX()];
+        const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
         if (cellValue && cellValue.startsWith('e')) { 
             const exitNumberMatch = cellValue.match(/e(\d+)/);
             if (exitNumberMatch) {
                 const exitNumber = exitNumberMatch[1];
+                const exitData = getNavigationData()[getCurrentScreenId()].exits[`e${exitNumber}`];
                 console.log("Exit number:", exitNumber);
                 setTransitioningToAnotherScreen(true);
                 setExitNumberToTransitionTo(exitNumber);
+                setNextScreenId(exitData.connectsTo);
+                console.log("on way to " + getNextScreenId());
             }
         }
         const nextStep = currentPath[0];
@@ -461,7 +498,7 @@ export function checkAndChangeScreen() {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
 
-            if (gridData[checkY] && gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+            if (gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
                 canvas.style.pointerEvents = 'none';
 

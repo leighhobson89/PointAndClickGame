@@ -1,17 +1,28 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getGridSizeX, getGridSizeY, getPlayerObject } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, gridData) {
+    
+    console.log("transitioning now: " + getTransitioningNow());
+
+    if (gridData.idType === "next") {
+        console.log("Finding a path based on " +  gridData.idType + " screen id = " + getNextScreenId());
+    } else if (gridData.idType === "current") {
+        console.log("Finding a path based on " +  gridData.idType + " screen id = " + getCurrentScreenId());
+    }
 
     const player = getPlayerObject();
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
     // add offset to measure from bottom center of player object
-    start.x = Math.floor(start.x + (player.width / 2) / getCanvasCellWidth());
-    start.y = Math.floor(start.y + (player.height) / getCanvasCellHeight());
+    start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
+    start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
 
-    //target.x = Math.floor(target.x + (player.width / 2) / getCanvasCellWidth());
-    //target.y = Math.floor(target.y + (player.height) / getCanvasCellHeight());
+    const cellValue = gridData.gridData[start.y][start.x];
+    const isWalkable = cellValue !== 'n';
+    
+    console.log(`Start value is (${start.x}, ${start.y}) and this is ${isWalkable ? 'walkable' : 'not walkable'} (${cellValue})`);
+    
 
     const openList = [];
     const closedList = [];
@@ -81,7 +92,7 @@ export function aStarPathfinding(start, target, gridData) {
                 continue;
             }            
 
-            if ((gridData[neighborY][neighborX] !== 'w' && !gridData[neighborY][neighborX].includes('e')) || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if ((gridData.gridData[neighborY][neighborX] !== 'w' && !gridData.gridData[neighborY][neighborX].includes('e')) || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }            
 

@@ -45,6 +45,8 @@ let targetY = null;
 let gridData = null;
 let navigationData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
+let previousScreenId = INITIAL_SCREEN_ID;
+let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 
 //FLAGS
@@ -104,9 +106,33 @@ export function setCurrentScreenId(value) {
     currentScreenId = value;
 }
 
+export function getPreviousScreenId() {
+    return previousScreenId;
+}
+
+export function setPreviousScreenId(value) {
+    previousScreenId = value;
+}
+
+export function getNextScreenId() {
+    return nextScreenId;
+}
+
+export function setNextScreenId(value) {
+    nextScreenId = value;
+}
+
 export function getGridData() {
-    const currentScreenId = getCurrentScreenId(); // Get the current screen ID
-    return gridData[currentScreenId]; // Return the grid data for the current screen
+    let screenId;
+    let idType;
+    if (getTransitioningNow()) {
+        screenId = getNextScreenId(); // If transitioning use next screen id
+        idType = 'next';
+    } else {
+        screenId = getCurrentScreenId(); // Normally use current screen id
+        idType = 'current';
+    }
+    return { gridData: gridData[screenId], idType: idType }; // Returns both values as an object
 }
 
 
