@@ -63,8 +63,8 @@
             "e4": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 73, "y": 58 },
-                "finalPosition": { "x": 63, "y": 52 }
+                "startPosition": { "x": 2, "y": 57 },
+                "finalPosition": { "x": 11, "y": 53 }
             }
         }
     },
@@ -111,10 +111,16 @@
         "bgUrl": "./resources/backgrounds/house.png",
         "exits": {
             "e1": {
-                "connectsTo": "stables",
+                "connectsTo": "insideHouse",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 }
+            },
+            "e2": {
+                "connectsTo": "stables",
+                "status": "open",
+                "startPosition": { "x": 62, "y": 48 },
+                "finalPosition": { "x": 57, "y": 50 }
             }
         }
     },
@@ -128,10 +134,10 @@
                 "finalPosition": { "x": 0, "y": 0 }
             },
             "e2": {
-                "connectsTo": "largeTree",
+                "connectsTo": "house",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 70, "y": 58 },
+                "finalPosition": { "x": 66, "y": 55 }
             },
             "e3": {
                 "connectsTo": "marketStreet",
@@ -140,10 +146,10 @@
                 "finalPosition": { "x": 15, "y": 52 }
             },
             "e4": {
-                "connectsTo": "house",
-                "status": "locked",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "connectsTo": "bigTree",
+                "status": "open",
+                "startPosition": { "x": 3, "y": 53 },
+                "finalPosition": { "x": 13, "y": 54 }
             }
         }
     },
@@ -158,11 +164,11 @@
             }
         }
     },
-    "largeTree": {
-        "bgUrl": "./resources/backgrounds/largeTree.png",
+    "bigTree": {
+        "bgUrl": "./resources/backgrounds/bigTree.png",
         "exits": {
             "e1": {
-                "connectsTo": "stables",
+                "connectsTo": "enterTree",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 }
@@ -170,8 +176,14 @@
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 66, "y": 39 },
+                "finalPosition": { "x": 61, "y": 42 }
+            },
+            "e3": {
+                "connectsTo": "stables",
+                "status": "open",
+                "startPosition": { "x": 72, "y": 54 },
+                "finalPosition": { "x": 63, "y": 54 }
             }
         }
     },
@@ -185,10 +197,10 @@
                 "finalPosition": { "x": 64, "y": 49 }
             },
             "e2": {
-                "connectsTo": "largeTree",
+                "connectsTo": "bigTree",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 70, "y": 49 },
+                "finalPosition": { "x": 63, "y": 50 }
             },
             "e3": {
                 "connectsTo": "stinkingDump",
