@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
+import { getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -50,29 +50,10 @@ function movePlayerTowardsTarget() {
     const player = getPlayerObject();
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
-    const originalWidth = player.originalWidth;
-    const originalHeight = player.originalHeight;
-    const currentRow = Math.floor(player.yPos / getCanvasCellHeight());
 
     let targetX, targetY;
 
-    const maxRow = 59;
-    const minRow = 6;
-    let scaleFactor = 1;
-
-    if (currentRow === minRow) {
-        scaleFactor = 0.4;
-    } else if (currentRow >= maxRow - 6) {
-        scaleFactor = 1;
-    } else {
-        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.5;
-    }
-
-    const newWidth = originalWidth * scaleFactor;
-    const newHeight = originalHeight * scaleFactor;
-
-    setPlayerObject('width', newWidth);
-    setPlayerObject('height', newHeight);
+    resizePlayerObject(player);
 
     if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
         targetX = currentPath[currentPathIndex].x * gridSizeX;
@@ -82,7 +63,6 @@ function movePlayerTowardsTarget() {
     }
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
-
     if (collisionEdgeCanvas) return;
 
     if (Math.abs(player.xPos - targetX) > speed) {
@@ -111,6 +91,33 @@ function movePlayerTowardsTarget() {
     setPlayerObject('yPos', player.yPos);
 }
 
+function resizePlayerObject(player) {
+    const originalWidth = player.originalWidth;
+    const originalHeight = player.originalHeight;
+
+    const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
+    const currentRow = playerGridY + player.height / getCanvasCellHeight();
+
+    //console.log("currentrow = " + currentRow);
+    const maxRow = 59;
+    const minRow = 6;
+    let scaleFactor = 1;
+
+    if (currentRow === minRow) {
+        scaleFactor = 0.4;
+    } else if (currentRow >= maxRow - 6) {
+        scaleFactor = 1;
+    } else {
+        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.6;
+    }
+
+    const newWidth = originalWidth * scaleFactor;
+    const newHeight = originalHeight * scaleFactor;
+
+    setPlayerObject('width', newWidth);
+    setPlayerObject('height', newHeight);
+}
+
 export function drawGrid() {
     let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
@@ -131,6 +138,16 @@ export function drawGrid() {
             context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
         }
     }
+
+    // Draw Player position grid square
+    //const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
+    //const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
+
+    //const playerOffsetX = playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth());
+    //const playerOffsetY = playerGridY + getPlayerObject().height / getCanvasCellHeight();
+
+    //context.fillStyle = 'rgba(255, 0, 255, 0.5)';  // Semi-transparent purple for walkable cell
+    //context.fillRect(playerOffsetX * cellWidth, playerOffsetY * cellHeight, cellWidth, cellHeight);
 
     // Draw the hover cell
     const hoverCell = getHoverCell(); // Assuming getHoverCell() returns {x, y}
@@ -209,7 +226,6 @@ export function initializeCanvas() {
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
     updateCanvasSize();
 }
-
 
 export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();
@@ -384,17 +400,22 @@ function resolveCollision(player, square) {
 
 //-------------------------------------------------------------------------------------------------------------
 
-export function processClickPoint(event) {
+export function processClickPoint(event, mouseClick) {
     const player = getPlayerObject();
     const gridX = getHoverCell().x;
     const gridY = getHoverCell().y;
 
-    setGridTargetX(gridX);
-    setGridTargetY(gridY);
+    if (mouseClick) {    
+        setGridTargetX(gridX);
+        setGridTargetY(gridY);
+    } else {
+        setGridTargetX(event.x);
+        setGridTargetY(event.y);
+    }
 
     const path = aStarPathfinding(
         { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
-        { x: gridX, y: gridY },
+        { x: getGridTargetX(), y: getGridTargetY() },
         getGridData()
     );
 
@@ -402,7 +423,7 @@ export function processClickPoint(event) {
     currentPathIndex = 0;
 
     if (currentPath.length > 0) {
-        const cellValue = getGridData()[gridY] && getGridData()[gridY][gridX];
+        const cellValue = getGridData()[getGridTargetY()] && getGridData()[getGridTargetY()][getGridTargetX()];
         if (cellValue && cellValue.startsWith('e')) { 
             const exitNumberMatch = cellValue.match(/e(\d+)/);
             if (exitNumberMatch) {
@@ -421,23 +442,26 @@ export function processClickPoint(event) {
 }
 
 export function checkAndChangeScreen() {
-    const canvas = getElements().canvas;
-    const player = getPlayerObject();
-    const gridData = getGridData();
-
     if (!getTransitioningToAnotherScreen()) {
         return;
     }
 
+    const canvas = getElements().canvas;
+    const player = getPlayerObject();
+    const gridData = getGridData();
+
     const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
     const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
 
+    const playerOffsetGridX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
+    const playerOffsetGridY = Math.floor(playerGridY + (getPlayerObject().height / getCanvasCellHeight()));
+
     for (let dx = -2; dx <= 2; dx++) {
         for (let dy = -2; dy <= 2; dy++) {
-            const checkX = playerGridX + dx;
-            const checkY = playerGridY + dy;
+            const checkX = playerOffsetGridX + dx;
+            const checkY = playerOffsetGridY + dy;
 
-            if (gridData[checkY] && gridData[checkY][checkX].includes('e')) {
+            if (gridData[checkY] && gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
                 canvas.style.pointerEvents = 'none';
 
@@ -461,8 +485,11 @@ export function handleRoomTransition() {
 
     if (screenData && screenData.exits && screenData.exits[exitNumber]) {
         const newScreenId = screenData.exits[exitNumber].connectsTo;
-        setCurrentScreenId(newScreenId);
+        currentPath = [];
+        currentPathIndex = 0;
+
         swapBackgroundOnRoomTransition(newScreenId);
+        return newScreenId;
     } else {
         console.error("Exit not found for current screen and exit number:", currentScreenId, exitNumber);
     }

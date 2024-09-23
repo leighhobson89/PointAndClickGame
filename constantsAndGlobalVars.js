@@ -17,7 +17,7 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
-export const INITIAL_SCREEN_ID = 'marketStreet'; //libraryFoyer is the start point change for debug
+export const INITIAL_SCREEN_ID = 'libraryFoyer'; //libraryFoyer is the start point change for debug
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
@@ -28,7 +28,7 @@ export let playerObject = {
     width: 60,
     height: 240,
     speed: getWalkSpeedPlayer(),
-    color: 'green',
+    color: 'rgba(0, 100, 0, 1)',
     xPos: '0',
     yPos: '0'
 };
