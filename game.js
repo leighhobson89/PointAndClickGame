@@ -59,7 +59,7 @@ function movePlayerTowardsTarget() {
 
     let targetX, targetY;
 
-    resizePlayerObject(player);
+    
 
     if (getTransitioningNow()) {
         const exit = 'e' + getExitNumberToTransitionTo();
@@ -118,6 +118,8 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         }
     }
+
+    resizePlayerObject(player);
 
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);

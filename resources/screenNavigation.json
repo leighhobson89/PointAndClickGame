@@ -28,8 +28,8 @@
             "e2": {
                 "connectsTo": "libraryDesk",
                 "status": "open",
-                "startPosition": { "x": 39, "y": 56 }, 
-                "finalPosition": { "x": 39, "y": 54 }
+                "startPosition": { "x": 39, "y": 59 }, 
+                "finalPosition": { "x": 39, "y": 57 }
             },
             "e3": {
                 "connectsTo": "marketStreet",
