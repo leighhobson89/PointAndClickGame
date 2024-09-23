@@ -153,7 +153,7 @@ export function resizePlayerObject(player) {
 }
 
 export function drawGrid() {
-    let showGrid = true; //DEBUG: false to hide grid
+    let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');

@@ -51,20 +51,20 @@
             "e2": {
                 "connectsTo": "seedyGuyAlley",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 45, "y": 58 },
+                "finalPosition": { "x": 40, "y": 54 }
             },
             "e3": {
-                "connectsTo": "stables",
-                "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
-            },
-            "e4": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 73, "y": 58 },
+                "finalPosition": { "x": 63, "y": 52 }
+            },
+            "e4": {
+                "connectsTo": "stables",
+                "status": "open",
+                "startPosition": { "x": 73, "y": 58 },
+                "finalPosition": { "x": 63, "y": 52 }
             }
         }
     },
@@ -85,14 +85,14 @@
             "e1": {
                 "connectsTo": "den",
                 "status": "locked",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 21, "y": 50 },
+                "finalPosition": { "x": 27, "y": 50 }
             },
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 48, "y": 32 },
+                "finalPosition": { "x": 45, "y": 35 }
             }
         }
     },
@@ -102,8 +102,8 @@
             "e1": {
                 "connectsTo": "seedyGuyAlley",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 34, "y": 47 },
+                "finalPosition": { "x": 34, "y": 53 }
             }
         }
     },
@@ -136,8 +136,8 @@
             "e3": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 4, "y": 54 },
+                "finalPosition": { "x": 15, "y": 52 }
             },
             "e4": {
                 "connectsTo": "house",
@@ -179,13 +179,13 @@
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "exits": {
             "e1": {
-                "connectsTo": "largeTree",
+                "connectsTo": "riverCrossing",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 73, "y": 49 },
+                "finalPosition": { "x": 64, "y": 49 }
             },
             "e2": {
-                "connectsTo": "riverCrossing",
+                "connectsTo": "largeTree",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 }
@@ -199,8 +199,8 @@
             "e4": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "startPosition": { "x": 71, "y": 48 },
+                "finalPosition": { "x": 65, "y": 47 }
             }
         }
     },
@@ -236,16 +236,16 @@
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "exits": {
             "e1": {
-                "connectsTo": "roadIntoTown",
-                "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
-            },
-            "e2": {
                 "connectsTo": "map",
                 "status": "locked",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 }
+            },
+            "e2": {
+                "connectsTo": "roadIntoTown",
+                "status": "open",
+                "startPosition": { "x": 26, "y": 35 },
+                "finalPosition": { "x": 31, "y": 38 }
             }
         }
     },
