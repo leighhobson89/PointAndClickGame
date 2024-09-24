@@ -199,6 +199,7 @@ export function animateTransitionAndChangeBackground() {
 
         //problem is need to set a nextScreenId when user clicks and call it in the function below this line in the part for transitioing or add it
         setTransitioningNow(true);
+        canvas.style.pointerEvents = 'none';
         processClickPoint({
             x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.x,
             y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.y

@@ -62,8 +62,6 @@ function movePlayerTowardsTarget() {
 
     let targetX, targetY;
 
-    
-
     if (getTransitioningNow()) {
         const exit = 'e' + getExitNumberToTransitionTo();
         const previousScreenId = getPreviousScreenId();
@@ -86,6 +84,7 @@ function movePlayerTowardsTarget() {
         currentPath = [];
         currentPathIndex = 0;
         setTransitioningNow(false);
+        canvas.style.pointerEvents = 'auto';
         console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
         }
     }
@@ -165,10 +164,8 @@ export function drawGrid() {
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    // Clear the canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the grid
     for (let x = 0; x < gridSizeX; x++) {
         for (let y = 0; y < gridSizeY; y++) {
             context.strokeStyle = '#000';
@@ -186,19 +183,18 @@ export function drawGrid() {
     //context.fillStyle = 'rgba(255, 0, 255, 0.5)';  // Semi-transparent purple for walkable cell
     //context.fillRect(playerOffsetX * cellWidth, playerOffsetY * cellHeight, cellWidth, cellHeight);
 
-    // Draw the hover cell
-    const hoverCell = getHoverCell(); // Assuming getHoverCell() returns {x, y}
+    const hoverCell = getHoverCell();
     const gridData = getGridData();
     if (hoverCell) {
         const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
         
         if (cellValue.includes('w')) {
             setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
-            context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`;  // Semi-transparent green for walkable cell
+            context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`; 
         } else if (cellValue.includes('e')) {
-            context.fillStyle = 'rgba(255, 255, 0, 0.5)';  // Semi-transparent yellow for 'e' cells
+            context.fillStyle = 'rgba(255, 255, 0, 0.5)';
         } else {
-            context.fillStyle = 'rgba(255, 0, 0, 0.5)';  // Semi-transparent red for non-walkable cell
+            context.fillStyle = 'rgba(255, 0, 0, 0.5)';
         }        
         
         context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
@@ -295,7 +291,7 @@ function generateRandomGridSquare() {
         gridY = Math.floor(Math.random() * getGridSizeY());
         cellWidth = getCanvasCellWidth();
         cellHeight = getCanvasCellHeight();
-    } while (getGridData()[gridY] && getGridData()[gridY][gridX] !== 'w');
+    } while (!getGridData()[gridY] && getGridData()[gridY][gridX].includes('w'));
 
     return {
         xPos: gridX * cellWidth,
@@ -504,14 +500,12 @@ export function checkAndChangeScreen() {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
 
-            if (gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+            if (gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
-                canvas.style.pointerEvents = 'none';
 
                 changeBackground();
 
                 setTransitioningToAnotherScreen(false);
-                canvas.style.pointerEvents = 'auto';
                 return;
             }
         }
@@ -558,7 +552,7 @@ function swapBackgroundOnRoomTransition(newScreenId) {
 
 export function extractWValue(value) {
 
-    if (typeof value === 'string' && value.startsWith('w')) {
+    if (typeof value === 'string' && value.includes('w')) {
         const matches = value.match(/w(\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];
