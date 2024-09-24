@@ -1,7 +1,6 @@
 import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, gridData) {
-    
     console.log("transitioning now: " + getTransitioningNow());
 
     if (gridData.idType === "next") {
@@ -14,7 +13,7 @@ export function aStarPathfinding(start, target, gridData) {
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
-    // add offset to measure from bottom center of player object
+    // Add offset to measure from bottom center of player object
     start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
     start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
 
@@ -22,7 +21,6 @@ export function aStarPathfinding(start, target, gridData) {
     const isWalkable = cellValue !== 'n';
     
     console.log(`Start value is (${start.x}, ${start.y}) and this is ${isWalkable ? 'walkable' : 'not walkable'} (${cellValue})`);
-    
 
     const openList = [];
     const closedList = [];
@@ -49,13 +47,9 @@ export function aStarPathfinding(start, target, gridData) {
     const startNode = new Node(start.x, start.y, 0, heuristic(start, target), null);
     openList.push(startNode);
 
-    //console.log("Initial openList:", openList);
-
     while (openList.length > 0) {
         openList.sort((a, b) => a.f - b.f); // Sort by f-value (lowest first)
         const currentNode = openList.shift();
-
-        //console.log("Processing node:", currentNode);
 
         if (currentNode.x === target.x && currentNode.y === target.y) {
             let temp = currentNode;
@@ -63,12 +57,10 @@ export function aStarPathfinding(start, target, gridData) {
                 path.push({ x: temp.x, y: temp.y });
                 temp = temp.parent;
             }
-            //console.log("Path found:", path.reverse());
             return path.reverse(); // Return reversed path
         }
 
         closedList.push(currentNode);
-        //console.log("Closed list updated:", closedList);
 
         // Directions for neighbors (4 cardinal + 4 diagonal)
         const directions = [
@@ -88,15 +80,24 @@ export function aStarPathfinding(start, target, gridData) {
 
             // Check bounds
             if (neighborX < 0 || neighborX >= gridSizeX || neighborY < 0 || neighborY >= gridSizeY) {
-                //console.log(`Skipping neighbor (${neighborX}, ${neighborY}) - Out of bounds`);
                 continue;
             }            
 
-            if ((!gridData.gridData[neighborY][neighborX].includes('w') && !gridData.gridData[neighborY][neighborX].includes('e')) || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            const cellType = gridData.gridData[neighborY][neighborX];
+            if (cellType === 'n' || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
-            }            
+            }
 
-            const gScore = currentNode.g + dir.cost; // Update cost based on direction
+            // Add different costs based on cell type
+            let cellCost = dir.cost; // Default cost based on movement direction
+
+            if (cellType.includes('w')) {
+                cellCost *= 1; // Normal cost for walkable
+            } else if (cellType.includes('e')) {
+                cellCost *= 5; // Double the cost for exit squares
+            }
+
+            const gScore = currentNode.g + cellCost; // Update cost based on direction and cell type
             const hScore = heuristic({ x: neighborX, y: neighborY }, target);
             const neighborNode = new Node(neighborX, neighborY, gScore, hScore, currentNode);
 
@@ -104,17 +105,13 @@ export function aStarPathfinding(start, target, gridData) {
             if (!openNode || gScore < openNode.g) {
                 if (!openNode) {
                     openList.push(neighborNode);
-                    //console.log("Added new neighbor to openList:", neighborNode);
                 } else {
                     openNode.g = gScore;
                     openNode.f = gScore + openNode.h;
                     openNode.parent = currentNode; // Update parent
-                    //console.log("Updated existing node in openList:", openNode);
                 }
             }
         }
-
-        //console.log("End of iteration, openList:", openList);
     }
 
     console.log("No path found");

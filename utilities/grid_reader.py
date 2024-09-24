@@ -102,8 +102,8 @@ if __name__ == '__main__':
     parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
     args = parser.parse_args()
 
-    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\den.png'
-    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\den.json'
+    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\marketStreet.png'
+    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\marketStreet.json'
 
     grid = process_image(image_path)
     

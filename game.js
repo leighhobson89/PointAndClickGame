@@ -135,7 +135,7 @@ export function resizePlayerObject() {
     const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / getCanvasCellWidth()));
     const playerOffsetY = Math.floor(playerGridY + player.height / getCanvasCellHeight());
 
-    const cellValue = gridData.gridData[playerOffsetY][playerOffsetX];
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
 
     if (!cellValue.includes('w')) {
         return;
