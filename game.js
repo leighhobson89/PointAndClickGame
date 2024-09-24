@@ -259,6 +259,8 @@ export function initializeCanvas() {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
+        canvas.style.backgroundSize = `${canvasWidth}px ${canvasHeight}px`;
+
         const oldCellWidth = getCanvasCellWidth();
         const oldCellHeight = getCanvasCellHeight();
         
