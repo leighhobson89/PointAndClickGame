@@ -18,6 +18,7 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'libraryFoyer'; //libraryFoyer is the start point change for debug
+export const INITIAL_PLAYER_GRID_REF = {x: 5,y: 59}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
@@ -155,6 +156,10 @@ export function setNavigationData(value) {
 
 export function getInitialScreenId() {
     return INITIAL_SCREEN_ID;
+}
+
+export function getInitialStartGridReference() {
+    return INITIAL_PLAYER_GRID_REF;
 }
 
 export function getPlayerObject() {

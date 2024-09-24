@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
+import { getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
 import { teleportToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -11,7 +11,7 @@ let currentPathIndex = 0;
 
 export function startGame() {
     initializeCanvas();
-    initializePlayerPosition(5,59); //update this when we have a constant and call this on every new screen later
+    initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
     //initializeEnemySquares();
     gameLoop();
 }
@@ -122,7 +122,7 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             setCurrentlyMoving(false);
-            updateInteractionInfo("Walk To", false);
+            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         }
     }
 
@@ -465,7 +465,7 @@ export function processClickPoint(event, mouseClick) {
     if (currentPath.length > 0) {
         setCurrentlyMoving(true);
         if (!getTransitioningNow()) {
-            updateInteractionInfo("Walking", true);
+            updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
         }
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
         if (cellValue && cellValue.startsWith('e')) {
@@ -477,8 +477,7 @@ export function processClickPoint(event, mouseClick) {
                 setTransitioningToAnotherScreen(true);
                 setExitNumberToTransitionTo(exitNumber);
                 setNextScreenId(exitData.connectsTo);
-                const interactionString = "Walking To " + getLocationName(getNextScreenId());
-                updateInteractionInfo(interactionString, true);
+                updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
             }
         }
         const nextStep = currentPath[0];
@@ -575,7 +574,7 @@ function getLocationName(id) {
     const navigationData = getNavigationData();
 
     if (navigationData.hasOwnProperty(id)) {
-        return navigationData[id].name;
+        return navigationData[id][getLanguage()];
     } else {
         return null;
     }
@@ -625,8 +624,8 @@ export function setGameState(newState) {
             }
 
             if (getGameInProgress()) {
-                getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage())}`;
-                getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage())}`;
+                getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage(), 'ui')}`;
+                getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage(), 'ui')}`;
             }
             break;
 

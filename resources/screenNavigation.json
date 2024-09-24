@@ -1,6 +1,10 @@
 {
     "libraryDesk": {
-        "name": "Library Desk",
+        "en": "Library Desk",
+        "es": "Mesa de la Biblioteca",
+        "de": "Bibliotheks Schreibtisch",
+        "it": "Scrivania della Biblioteca",
+        "fr": "Bureau de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryDesk.png",
         "exits": {
             "e1": {
@@ -18,7 +22,11 @@
         }
     },
     "libraryFoyer": {
-        "name": "Library Foyer",
+        "en": "Library Foyer",
+        "es": "Vestíbulo de la Biblioteca",
+        "de": "Bibliotheksfoyer",
+        "it": "Foyer della Biblioteca",
+        "fr": "Foyer de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "exits": {
             "e1": {
@@ -42,7 +50,11 @@
         }
     },
     "marketStreet": {
-        "name": "Market Street",
+        "en": "Market Street",
+        "es": "Calle del Mercado",
+        "de": "Marktstraße",
+        "it": "Via del Mercato",
+        "fr": "Rue du Marché",
         "bgUrl": "./resources/backgrounds/marketStreet.png",
         "exits": {
             "e1": {
@@ -72,7 +84,11 @@
         }
     },
     "researchRoom": {
-        "name": "Research Room",
+        "en": "Research Room",
+        "es": "Sala de Investigación",
+        "de": "Forschungsraum",
+        "it": "Sala di Ricerca",
+        "fr": "Salle de Recherche",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
         "exits": {
             "e1": {
@@ -84,7 +100,11 @@
         }
     },
     "seedyGuyAlley": {
-        "name": "Seedy Guy Alley",
+        "en": "Seedy Guy Alley",
+        "es": "Calle del Tipo Sórdido",
+        "de": "Gasse des schäbigen Mannes",
+        "it": "Vicolo del Tizio Squallido",
+        "fr": "Allée du Type Louche",
         "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
         "exits": {
             "e1": {
@@ -102,7 +122,11 @@
         }
     },
     "den": {
-        "name": "Den",
+        "en": "Den",
+        "es": "Guarida",
+        "de": "Höhle",
+        "it": "Tana",
+        "fr": "Cachette",
         "bgUrl": "./resources/backgrounds/den.png",
         "exits": {
             "e1": {
@@ -114,7 +138,11 @@
         }
     },
     "house": {
-        "name": "House",
+        "en": "House",
+        "es": "Casa",
+        "de": "Haus",
+        "it": "Casa",
+        "fr": "Maison",
         "bgUrl": "./resources/backgrounds/house.png",
         "exits": {
             "e1": {
@@ -132,7 +160,11 @@
         }
     },
     "stables": {
-        "name": "Stables",
+        "en": "Stables",
+        "es": "Establo",
+        "de": "Stall",
+        "it": "Stalla",
+        "fr": "Écurie",
         "bgUrl": "./resources/backgrounds/stables.png",
         "exits": {
             "e1": {
@@ -162,7 +194,11 @@
         }
     },
     "barn": {
-        "name": "Barn",
+        "en": "Barn",
+        "es": "Establo",
+        "de": "Scheune",
+        "it": "Fienile",
+        "fr": "Grange",
         "bgUrl": "./resources/backgrounds/barn.png",
         "exits": {
             "e1": {
@@ -174,7 +210,11 @@
         }
     },
     "bigTree": {
-        "name": "Big Tree",
+        "en": "Big Tree",
+        "es": "Gran Árbol",
+        "de": "Großer Baum",
+        "it": "Grande Albero",
+        "fr": "Grand Arbre",
         "bgUrl": "./resources/backgrounds/bigTree.png",
         "exits": {
             "e1": {
@@ -198,7 +238,11 @@
         }
     },
     "roadIntoTown": {
-        "name": "Road Into Town",
+        "en": "Road Into Town",
+        "es": "Camino a la Ciudad",
+        "de": "Weg in die Stadt",
+        "it": "Strada verso la Città",
+        "fr": "Route vers la Ville",
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "exits": {
             "e1": {
@@ -228,7 +272,11 @@
         }
     },
     "stinkingDump": {
-        "name": "Stinking Dump",
+        "en": "Stinking Dump",
+        "es": "Vertedero Apestoso",
+        "de": "Stinkende Müllhalde",
+        "it": "Discarica Puzzolente",
+        "fr": "Décharge Malodorante",
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
         "exits": {
             "e1": {
@@ -246,7 +294,11 @@
         }
     },
     "largePileOfPoo": {
-        "name": "Large Pile of Poo",
+        "en": "Large Pile of Poo",
+        "es": "Gran Montón de Excremento",
+        "de": "Großer Haufen Kot",
+        "it": "Grande Pila di Feci",
+        "fr": "Grande Tas de Crottes",
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
         "exits": {
             "e1": {
@@ -258,7 +310,11 @@
         }
     },
     "riverCrossing": {
-        "name": "River Crossing",
+        "en": "River Crossing",
+        "es": "Cruce de Río",
+        "de": "Flussüberquerung",
+        "it": "Attraversamento del Fiume",
+        "fr": "Traversée de la Rivière",
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "exits": {
             "e1": {
@@ -276,7 +332,11 @@
         }
     },
     "map": {
-        "name": "Map",
+        "en": "Map",
+        "es": "Mapa",
+        "de": "Karte",
+        "it": "Mappa",
+        "fr": "Carte",
         "bgUrl": "./resources/backgrounds/map.png",
         "exits": {
             "e1": {

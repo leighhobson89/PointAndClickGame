@@ -23,7 +23,7 @@ export async function initLocalization(language) {
     setLanguage(getLanguage());
 }
 
-function localize(key, language, section = 'ui') {
+function localize(key, language, section) {
     const localizedString = getLocalization()[language][section][key];
     if (!localizedString) return key;
 

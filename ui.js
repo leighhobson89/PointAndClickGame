@@ -16,14 +16,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!getGameInProgress()) {
             setGameInProgress(true);
         }
+        updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
         disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
         setGameState(getGameVisibleActive());
         startGame(getInitialScreenId());
     });
 
-    getElements().resumeGameMenuButton.addEventListener('click', () => {
+    getElements().resumeGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+        updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         if (gameState === getMenuState()) {
             setGameState(getGameVisibleActive());
         }
