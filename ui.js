@@ -1,4 +1,4 @@
-import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
+import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving } from './constantsAndGlobalVars.js';
 import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -138,9 +138,10 @@ export function handleMouseMove(event, ctx) {
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
-
+            //console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
+            //DEBUG
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
+            //
         }
     }
 }
@@ -247,10 +248,17 @@ export function fadeBackToGameInTransition() {
     }, { once: true });
 }
 
-export function updateInteractionInfo(text) {
+export function updateInteractionInfo(text, action) {
     const interactionInfo = getElements().interactionInfo;
     if (interactionInfo) {
         interactionInfo.textContent = text;
+        if (action) {
+            interactionInfo.style.color = 'rgb(255, 255, 0)';
+            interactionInfo.style.fontWeight = 'bold';
+        } else {
+            interactionInfo.style.color = 'rgb(255, 255, 255)';
+            interactionInfo.style.fontWeight = 'normal';
+        }
     } else {
         console.error('Interaction info element not found');
     }

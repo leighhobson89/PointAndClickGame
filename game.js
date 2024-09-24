@@ -122,7 +122,7 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             setCurrentlyMoving(false);
-            console.log("Stopped moving!");
+            updateInteractionInfo("Walk To", false);
         }
     }
 
@@ -464,10 +464,11 @@ export function processClickPoint(event, mouseClick) {
 
     if (currentPath.length > 0) {
         setCurrentlyMoving(true);
-        console.log("Started Moving...");
-        updateInteractionInfo("Walking");
+        if (!getTransitioningNow()) {
+            updateInteractionInfo("Walking", true);
+        }
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
-        if (cellValue && cellValue.startsWith('e')) { 
+        if (cellValue && cellValue.startsWith('e')) {
             const exitNumberMatch = cellValue.match(/e(\d+)/);
             if (exitNumberMatch) {
                 const exitNumber = exitNumberMatch[1];
@@ -476,7 +477,8 @@ export function processClickPoint(event, mouseClick) {
                 setTransitioningToAnotherScreen(true);
                 setExitNumberToTransitionTo(exitNumber);
                 setNextScreenId(exitData.connectsTo);
-                console.log("on way to " + getNextScreenId());
+                const interactionString = "Walking To " + getLocationName(getNextScreenId());
+                updateInteractionInfo(interactionString, true);
             }
         }
         const nextStep = currentPath[0];
@@ -567,6 +569,16 @@ export function extractWValue(value) {
     }
 
     return null;
+}
+
+function getLocationName(id) {
+    const navigationData = getNavigationData();
+
+    if (navigationData.hasOwnProperty(id)) {
+        return navigationData[id].name;
+    } else {
+        return null;
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------

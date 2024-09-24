@@ -1,5 +1,6 @@
 {
     "libraryDesk": {
+        "name": "Library Desk",
         "bgUrl": "./resources/backgrounds/libraryDesk.png",
         "exits": {
             "e1": {
@@ -17,6 +18,7 @@
         }
     },
     "libraryFoyer": {
+        "name": "Library Foyer",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "exits": {
             "e1": {
@@ -40,6 +42,7 @@
         }
     },
     "marketStreet": {
+        "name": "Market Street",
         "bgUrl": "./resources/backgrounds/marketStreet.png",
         "exits": {
             "e1": {
@@ -69,6 +72,7 @@
         }
     },
     "researchRoom": {
+        "name": "Research Room",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
         "exits": {
             "e1": {
@@ -80,6 +84,7 @@
         }
     },
     "seedyGuyAlley": {
+        "name": "Seedy Guy Alley",
         "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
         "exits": {
             "e1": {
@@ -97,6 +102,7 @@
         }
     },
     "den": {
+        "name": "Den",
         "bgUrl": "./resources/backgrounds/den.png",
         "exits": {
             "e1": {
@@ -108,6 +114,7 @@
         }
     },
     "house": {
+        "name": "House",
         "bgUrl": "./resources/backgrounds/house.png",
         "exits": {
             "e1": {
@@ -125,6 +132,7 @@
         }
     },
     "stables": {
+        "name": "Stables",
         "bgUrl": "./resources/backgrounds/stables.png",
         "exits": {
             "e1": {
@@ -154,6 +162,7 @@
         }
     },
     "barn": {
+        "name": "Barn",
         "bgUrl": "./resources/backgrounds/barn.png",
         "exits": {
             "e1": {
@@ -165,6 +174,7 @@
         }
     },
     "bigTree": {
+        "name": "Big Tree",
         "bgUrl": "./resources/backgrounds/bigTree.png",
         "exits": {
             "e1": {
@@ -188,6 +198,7 @@
         }
     },
     "roadIntoTown": {
+        "name": "Road Into Town",
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "exits": {
             "e1": {
@@ -217,6 +228,7 @@
         }
     },
     "stinkingDump": {
+        "name": "Stinking Dump",
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
         "exits": {
             "e1": {
@@ -234,6 +246,7 @@
         }
     },
     "largePileOfPoo": {
+        "name": "Large Pile of Poo",
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
         "exits": {
             "e1": {
@@ -245,6 +258,7 @@
         }
     },
     "riverCrossing": {
+        "name": "River Crossing",
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "exits": {
             "e1": {
@@ -262,6 +276,7 @@
         }
     },
     "map": {
+        "name": "Map",
         "bgUrl": "./resources/backgrounds/map.png",
         "exits": {
             "e1": {
