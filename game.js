@@ -1,6 +1,6 @@
 import { localize } from './localization.js';
-import { getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
-import { aStarPathfinding } from './pathFinding.js';
+import { getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
+import { teleportToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
@@ -22,13 +22,16 @@ export function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
+        // DEBUG
         const cellValue = getGridData().gridData[getHoverCell().y] && getGridData().gridData[getHoverCell().y][getHoverCell().x];
         const walkable = (cellValue.includes('e') || cellValue.includes('w'));
-
-        // DEBUG
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
         //
-        
+
+        if (!getCurrentlyMoving()) {
+            teleportToNearestWalkable({ x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) });
+        }
+
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
@@ -116,6 +119,9 @@ function movePlayerTowardsTarget() {
             const nextStep = currentPath[currentPathIndex];
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
+        } else {
+            setCurrentlyMoving(false);
+            console.log("Stopped moving!");
         }
     }
 
@@ -166,17 +172,12 @@ export function resizePlayerObject() {
     setPlayerObject('xPos', player.xPos - widthDifference);
     setPlayerObject('yPos', player.yPos - heightDifference);
 
-    console.log("Moving Player: xPos: " + player.xPos + ", yPos: " + player.yPos);
+    //console.log("Moving Player: xPos: " + player.xPos + ", yPos: " + player.yPos);
 
     // Set new dimensions for the player object
     setPlayerObject('width', newWidth);
     setPlayerObject('height', newHeight);
-    
-    console.log("New Width: " + newWidth);
-    console.log("New Height: " + newHeight);
 }
-
-
 
 export function drawGrid() {
     let showGrid = true; //DEBUG: false to hide grid
@@ -483,6 +484,8 @@ export function processClickPoint(event, mouseClick) {
     currentPathIndex = 0;
 
     if (currentPath.length > 0) {
+        setCurrentlyMoving(true);
+        console.log("Started Moving...");
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
         if (cellValue && cellValue.startsWith('e')) { 
             const exitNumberMatch = cellValue.match(/e(\d+)/);
@@ -524,7 +527,7 @@ export function checkAndChangeScreen() {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
 
-            if (gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+            if (getGridTargetX() === checkX && getGridTargetY() === checkY && gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
 
                 changeBackground();

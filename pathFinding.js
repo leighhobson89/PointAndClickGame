@@ -1,4 +1,4 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, gridData) {
     console.log("transitioning now: " + getTransitioningNow());
@@ -116,4 +116,79 @@ export function aStarPathfinding(start, target, gridData) {
 
     console.log("No path found");
     return []; // No path found
+}
+
+export function teleportToNearestWalkable(start) {
+    const gridData = getGridData();
+    const player = getPlayerObject();
+    const gridSizeX = getGridSizeX();
+    const gridSizeY = getGridSizeY();
+
+    // Add offset to measure from bottom center of player object
+    let startX = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
+    let startY = Math.floor(start.y + (player.height / getCanvasCellHeight()));
+
+    // Get the player's current cell type
+    let currentCellType = gridData.gridData[startY][startX];
+
+    // Check if the player is on a non-walkable square ("n")
+    if (currentCellType === 'n') {
+        console.log(`Player is on a non-walkable square at (${startX}, ${startY})`);
+
+        // Perform BFS to find the nearest walkable square ("w")
+        const directions = [
+            { x: 0, y: -1 },  // Up
+            { x: 1, y: 0 },   // Right
+            { x: 0, y: 1 },   // Down
+            { x: -1, y: 0 }   // Left
+        ];
+
+        const visited = new Set();
+        const queue = [{ x: startX, y: startY }];
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            const { x, y } = current;
+
+            // Mark the current cell as visited
+            visited.add(`${x},${y}`);
+
+            // Check bounds
+            if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) {
+                continue;
+            }
+
+            // Get the cell type of the current position
+            const cellType = gridData.gridData[y][x];
+
+            // If we find a walkable square, teleport the player there
+            if (cellType.includes('w')) {
+                const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
+                const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
+                //console.log(`Nearest walkable square found at (${x}, ${y})`);
+
+                // Teleport the player to this location (update player position)
+                setPlayerObject('xPos', newPosX);
+                setPlayerObject('yPos', newPosY);
+
+                console.log(`Player teleported to (${Math.floor(newPosX / getCanvasCellWidth())}, ${Math.floor(newPosY / getCanvasCellHeight())})`);
+                return;
+            }
+
+            // Add neighbors to the queue
+            for (const dir of directions) {
+                const neighborX = x + dir.x;
+                const neighborY = y + dir.y;
+                const key = `${neighborX},${neighborY}`;
+
+                if (!visited.has(key)) {
+                    queue.push({ x: neighborX, y: neighborY });
+                }
+            }
+        }
+
+        //console.log("No walkable square found, unable to teleport.");
+    } else {
+        //console.log(`Player is already on a walkable square at (${startX}, ${startY})`);
+    }
 }

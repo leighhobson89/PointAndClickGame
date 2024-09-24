@@ -197,7 +197,6 @@ export function animateTransitionAndChangeBackground() {
         initializePlayerPosition(startX, startY);
         fadeBackToGameInTransition();
         
-        //problem is need to set a nextScreenId when user clicks and call it in the function below this line in the part for transitioing or add it
         setTransitioningNow(true);
         canvas.style.pointerEvents = 'none';
         processClickPoint({

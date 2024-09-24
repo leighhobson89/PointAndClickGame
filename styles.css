@@ -148,7 +148,7 @@ button.disabled {
 }
 
 canvas {
-    background-image: url('resources\\backgrounds\\libraryFoyer.png'); /*libraryFoyer is the start, change for debug*/
+    background-image: url('resources\\backgrounds\\bigTree.png'); /*libraryFoyer is the start, change for debug*/
     background-size: 1216px 429px;
     background-position: center;
     background-repeat: no-repeat;

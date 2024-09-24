@@ -17,7 +17,7 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
-export const INITIAL_SCREEN_ID = 'libraryFoyer'; //libraryFoyer is the start point change for debug
+export const INITIAL_SCREEN_ID = 'bigTree'; //libraryFoyer is the start point change for debug
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
@@ -57,6 +57,7 @@ let beginGameState = true;
 let gameInProgress = false;
 let transitioningToAnotherScreen = false;
 let transitioningNow = false;
+let currentlyMoving = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -388,4 +389,12 @@ export function getExitNumberToTransitionTo() {
 
 export function setExitNumberToTransitionTo(value) {
     exitNumberToTransitionTo = value;
+}
+
+export function setCurrentlyMoving(value) {
+    currentlyMoving = value;
+}
+
+export function getCurrentlyMoving() {
+    return currentlyMoving;
 }
