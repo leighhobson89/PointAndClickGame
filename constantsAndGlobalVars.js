@@ -23,10 +23,10 @@ export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 
 export let playerObject = {
-    originalWidth: 60,
-    originalHeight: 240,
-    width: 60,
-    height: 240,
+    originalWidth: 45,
+    originalHeight: 180,
+    width: 45,
+    height: 180,
     speed: getWalkSpeedPlayer(),
     color: 'rgba(0, 100, 0, 1)',
     xPos: '0',

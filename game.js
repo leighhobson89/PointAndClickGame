@@ -17,9 +17,6 @@ export function startGame() {
 }
 
 export function gameLoop() {
-    //const cellColor = extractWValueAt(getHoverCell().x, getHoverCell().y);
-    //console.log("cell colour is:" + "rgb(0, " + cellColor + ", 0)");
-
     const ctx = getElements().canvas.getContext('2d');
 
     if (gameState === getGameVisibleActive()) {
@@ -31,7 +28,7 @@ export function gameLoop() {
         // DEBUG
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
         //
-
+        
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
@@ -84,6 +81,7 @@ function movePlayerTowardsTarget() {
         currentPath = [];
         currentPathIndex = 0;
         setTransitioningNow(false);
+        resizePlayerObject();
         canvas.style.pointerEvents = 'auto';
         console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
         }
@@ -127,32 +125,58 @@ function movePlayerTowardsTarget() {
     setPlayerObject('yPos', player.yPos);
 }
 
-export function resizePlayerObject(player) {
+export function resizePlayerObject() {
+    const player = getPlayerObject(); 
+    const gridData = getGridData();
+
+    const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
+    const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
+
+    const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / getCanvasCellWidth()));
+    const playerOffsetY = Math.floor(playerGridY + player.height / getCanvasCellHeight());
+
+    const cellValue = gridData.gridData[playerOffsetY][playerOffsetX];
+
+    if (!cellValue.includes('w')) {
+        return;
+    }
+    
+    const zPosString = extractWValue(cellValue);
+    const zPos = parseInt(zPosString, 10);
+
+    // Define size limits
+    const furthestZPos = 100;
+    const nearestZPos = 255;
     const originalWidth = player.originalWidth;
     const originalHeight = player.originalHeight;
 
-    const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
-    const currentRow = playerGridY + player.height / getCanvasCellHeight();
+    // Calculate scale factor based on zPos
+    const scaleFactor = (zPos - furthestZPos) / (nearestZPos - furthestZPos);
+    const clampedScaleFactor = Math.min(Math.max(scaleFactor, 0), 1);
 
-    //console.log("currentrow = " + currentRow);
-    const maxRow = 59;
-    const minRow = 6;
-    let scaleFactor = 1;
+    // Calculate new width and height
+    const newWidth = originalWidth * (0.1 + clampedScaleFactor * 0.9); // Scale from 10% to 100%
+    const newHeight = originalHeight * (0.1 + clampedScaleFactor * 0.9); // Same scaling for height
 
-    if (currentRow === minRow) {
-        scaleFactor = 0.4;
-    } else if (currentRow >= maxRow - 6) {
-        scaleFactor = 1;
-    } else {
-        scaleFactor = 1 - ((maxRow - currentRow) / (maxRow - minRow)) * 0.6;
-    }
+    // Calculate size difference
+    const widthDifference = newWidth - player.width;
+    const heightDifference = newHeight - player.height;
 
-    const newWidth = originalWidth * scaleFactor;
-    const newHeight = originalHeight * scaleFactor;
+    // Move the player to accommodate the new size
+    setPlayerObject('xPos', player.xPos - widthDifference);
+    setPlayerObject('yPos', player.yPos - heightDifference);
 
+    console.log("Moving Player: xPos: " + player.xPos + ", yPos: " + player.yPos);
+
+    // Set new dimensions for the player object
     setPlayerObject('width', newWidth);
     setPlayerObject('height', newHeight);
+    
+    console.log("New Width: " + newWidth);
+    console.log("New Height: " + newHeight);
 }
+
+
 
 export function drawGrid() {
     let showGrid = true; //DEBUG: false to hide grid

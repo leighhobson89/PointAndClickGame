@@ -22,7 +22,7 @@
             "e1": {
                 "connectsTo": "researchRoom",
                 "status": "locked",
-                "startPosition": { "x": 33, "y": 58 },
+                "startPosition": { "x": 33, "y": 51 },
                 "finalPosition": { "x": 33, "y": 51 }
             },
             "e2": {
@@ -34,8 +34,8 @@
             "e3": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 37, "y": 34 },
-                "finalPosition": { "x": 38, "y": 39 }
+                "startPosition": { "x": 38, "y": 38 },
+                "finalPosition": { "x": 38, "y": 43 }
             }
         }
     },
@@ -45,7 +45,7 @@
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
-                "startPosition": { "x": 73, "y": 58 },
+                "startPosition": { "x": 74, "y": 56 },
                 "finalPosition": { "x": 67, "y": 54 }
             },
             "e2": {
@@ -63,8 +63,8 @@
             "e4": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 2, "y": 57 },
-                "finalPosition": { "x": 11, "y": 53 }
+                "startPosition": { "x": 9, "y": 52 },
+                "finalPosition": { "x": 15, "y": 53 }
             }
         }
     },
@@ -91,8 +91,8 @@
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 48, "y": 32 },
-                "finalPosition": { "x": 45, "y": 35 }
+                "startPosition": { "x": 45, "y": 34 },
+                "finalPosition": { "x": 45, "y": 34 }
             }
         }
     },
@@ -136,8 +136,8 @@
             "e2": {
                 "connectsTo": "house",
                 "status": "open",
-                "startPosition": { "x": 70, "y": 58 },
-                "finalPosition": { "x": 66, "y": 55 }
+                "startPosition": { "x": 63, "y": 55 },
+                "finalPosition": { "x": 60, "y": 53 }
             },
             "e3": {
                 "connectsTo": "marketStreet",
@@ -199,8 +199,8 @@
             "e2": {
                 "connectsTo": "bigTree",
                 "status": "open",
-                "startPosition": { "x": 70, "y": 49 },
-                "finalPosition": { "x": 63, "y": 50 }
+                "startPosition": { "x": 65, "y": 51 },
+                "finalPosition": { "x": 60, "y": 52 }
             },
             "e3": {
                 "connectsTo": "stinkingDump",
@@ -256,8 +256,8 @@
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 26, "y": 35 },
-                "finalPosition": { "x": 31, "y": 38 }
+                "startPosition": { "x": 28, "y": 39 },
+                "finalPosition": { "x": 32, "y": 41 }
             }
         }
     },

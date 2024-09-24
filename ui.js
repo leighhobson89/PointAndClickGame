@@ -1,5 +1,5 @@
 import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
-import { handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares, initializePlayerPosition } from './game.js';
+import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
@@ -196,7 +196,7 @@ export function animateTransitionAndChangeBackground() {
 
         initializePlayerPosition(startX, startY);
         fadeBackToGameInTransition();
-
+        
         //problem is need to set a nextScreenId when user clicks and call it in the function below this line in the part for transitioing or add it
         setTransitioningNow(true);
         canvas.style.pointerEvents = 'none';
@@ -222,7 +222,7 @@ export function fadeBackToGameInTransition() {
     overlay.addEventListener('transitionend', () => {
         overlay.classList.add('hidden');
         overlay.style.display = 'none';
-        console.log("transition complete!");
+        console.log("fade transition complete!");
     }, { once: true });
 }
 
