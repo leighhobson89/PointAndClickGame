@@ -1,4 +1,4 @@
-import { getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
+import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
 import { handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -111,12 +111,12 @@ export function handleMouseMove(event, ctx) {
     if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
         const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
 
-        const walkable = (cellValue.includes('e') || cellValue === 'w');
+        const walkable = (cellValue.includes('e') || cellValue.includes('w'));
 
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`);
+            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
 
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
         }

@@ -2,12 +2,20 @@ from PIL import Image
 import json
 import argparse
 
-# Define the color mappings
+# Define the base color mappings
 COLOR_MAP = {
-    (0, 255, 0): 'w',  # Green (walkable)
     (255, 0, 0): 'n',  # Red (non-walkable)
     (255, 255, 0): 'e'  # Yellow (exit)
 }
+
+# Function to convert green color to zPos (0,100,0 -> 0,255,0)
+def green_to_zPos(color):
+    # Extract the green component
+    r, g, b = color
+    if r == 0 and b == 0 and 100 <= g <= 255:
+        # Map the green channel to zPos (from 100 to 255 to zPos 100 to 255)
+        return f'w{g}'
+    return None
 
 def process_image(image_path):
     image = Image.open(image_path)
@@ -29,7 +37,18 @@ def process_image(image_path):
             
             # Get the pixel color at the calculated position
             pixel = image.getpixel((pixel_x, pixel_y))
-            cell_value = COLOR_MAP.get(pixel, 'unknown')  # Default to 'unknown' if color not found
+            
+            # First check if it's a standard mapped color (red or yellow)
+            cell_value = COLOR_MAP.get(pixel, None)
+            
+            # If it's not a standard color, check if it's green (walkable)
+            if cell_value is None:
+                cell_value = green_to_zPos(pixel)
+            
+            # If it's still unknown, mark it as 'unknown'
+            if cell_value is None:
+                cell_value = 'unknown'
+            
             row.append(cell_value)
         grid.append(row)
 
@@ -83,8 +102,8 @@ if __name__ == '__main__':
     parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
     args = parser.parse_args()
 
-    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\bigTree.png'
-    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\bigTree.json'
+    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\den.png'
+    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\den.json'
 
     grid = process_image(image_path)
     

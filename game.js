@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId} from './constantsAndGlobalVars.js';
+import { getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -17,13 +17,16 @@ export function startGame() {
 }
 
 export function gameLoop() {
+    //const cellColor = extractWValueAt(getHoverCell().x, getHoverCell().y);
+    //console.log("cell colour is:" + "rgb(0, " + cellColor + ", 0)");
+
     const ctx = getElements().canvas.getContext('2d');
 
     if (gameState === getGameVisibleActive()) {
         ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
         const cellValue = getGridData().gridData[getHoverCell().y] && getGridData().gridData[getHoverCell().y][getHoverCell().x];
-        const walkable = (cellValue.includes('e') || cellValue === 'w');
+        const walkable = (cellValue.includes('e') || cellValue.includes('w'));
 
         // DEBUG
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
@@ -189,8 +192,9 @@ export function drawGrid() {
     if (hoverCell) {
         const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
         
-        if (cellValue === 'w') {
-            context.fillStyle = 'rgba(0, 255, 0, 0.5)';  // Semi-transparent green for walkable cell
+        if (cellValue.includes('w')) {
+            setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
+            context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`;  // Semi-transparent green for walkable cell
         } else if (cellValue.includes('e')) {
             context.fillStyle = 'rgba(255, 255, 0, 0.5)';  // Semi-transparent yellow for 'e' cells
         } else {
@@ -552,6 +556,17 @@ function swapBackgroundOnRoomTransition(newScreenId) {
     }
 }
 
+export function extractWValue(value) {
+
+    if (typeof value === 'string' && value.startsWith('w')) {
+        const matches = value.match(/w(\d{1,3})/);
+        if (matches && matches[1]) {
+            return matches[1];
+        }
+    }
+
+    return null;
+}
 
 //-------------------------------------------------------------------------------------------------------------
 

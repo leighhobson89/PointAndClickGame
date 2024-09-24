@@ -48,6 +48,7 @@ let currentScreenId = INITIAL_SCREEN_ID;
 let previousScreenId = INITIAL_SCREEN_ID;
 let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
+let zPosHover = null;
 
 //FLAGS
 let audioMuted;
@@ -347,6 +348,14 @@ export function setHoverCell(valueX, valueY) {
 
 export function getHoverCell() {
    return hoverCell;
+}
+
+export function getZPosHover() {
+    return zPosHover;
+ }
+
+ export function setZPosHover(value) {
+    zPosHover = value;
 }
 
 export function getGridSizeX() {
