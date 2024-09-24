@@ -645,18 +645,18 @@ export function setGameState(newState) {
             // getElements().pauseResumeGameButton.classList.add('d-none');
 
             // Set button labels based on game state
-            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage())}`;
+            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
 
             // Set verb buttons
-            getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage())}`;
-            getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage())}`;
-            getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage())}`;
-            getElements().btnOpen.innerHTML = `${localize('verbOpen', getLanguage())}`;
-            getElements().btnClose.innerHTML = `${localize('verbClose', getLanguage())}`;
-            getElements().btnPush.innerHTML = `${localize('verbPush', getLanguage())}`;
-            getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage())}`;
-            getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage())}`;
-            getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage())}`;
+            getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnOpen.innerHTML = `${localize('verbOpen', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnClose.innerHTML = `${localize('verbClose', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPush.innerHTML = `${localize('verbPush', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
             break;
     }
 }

@@ -12,7 +12,7 @@ export function saveGame(isManualSave) {
     const url = URL.createObjectURL(blob);
 
     if (isManualSave) {
-        document.querySelector('.save-load-header').innerHTML = `${localize('headerStringSave', getLanguage())}`;
+        document.querySelector('.save-load-header').innerHTML = `${localize('headerStringSave', getLanguage(), 'ui')}`;
         document.getElementById('copyButtonSavePopup').classList.remove('d-none');
         document.getElementById('loadStringButton').classList.add('d-none');
         getElements().saveLoadPopup.classList.remove('d-none');
@@ -73,13 +73,13 @@ export function copySaveStringToClipBoard() {
 
 export function loadGameOption() {
     getElements().loadSaveGameStringTextArea.readOnly = false;
-    document.querySelector('.save-load-header').innerHTML = `${localize('headerStringLoad', getLanguage())}`;
+    document.querySelector('.save-load-header').innerHTML = `${localize('headerStringLoad', getLanguage(), 'ui')}`;
     document.getElementById('loadStringButton').classList.remove('d-none');
     document.getElementById('copyButtonSavePopup').classList.add('d-none');
     getElements().saveLoadPopup.classList.remove('d-none');
     document.getElementById('overlay').classList.remove('d-none');
     getElements().loadSaveGameStringTextArea.value = "";
-    getElements().loadSaveGameStringTextArea.placeholder = `${localize('textAreaLabel', getLanguage())}`;
+    getElements().loadSaveGameStringTextArea.placeholder = `${localize('textAreaLabel', getLanguage(), 'ui')}`;
 }
 
 export function loadGame(string) {

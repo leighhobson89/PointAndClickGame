@@ -1,4 +1,4 @@
-import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving } from './constantsAndGlobalVars.js';
+import { resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving } from './constantsAndGlobalVars.js';
 import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -169,12 +169,12 @@ function handleCanvasClick(event) {
 
 async function setElementsLanguageText() {
     // Localization text
-    getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage())}</h2>`;
-    getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage())}`;
-    getElements().resumeGameMenuButton.innerHTML = `${localize('resumeGame', getLanguage())}`;
-    getElements().loadGameButton.innerHTML = `${localize('loadGame', getLanguage())}`;
-    getElements().saveGameButton.innerHTML = `${localize('saveGame', getLanguage())}`;
-    getElements().loadStringButton.innerHTML = `${localize('loadButton', getLanguage())}`;
+    getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage(), 'ui')}</h2>`;
+    getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage(), 'ui')}`;
+    getElements().resumeGameMenuButton.innerHTML = `${localize('resumeGame', getLanguage(), 'ui')}`;
+    getElements().loadGameButton.innerHTML = `${localize('loadGame', getLanguage(), 'ui')}`;
+    getElements().saveGameButton.innerHTML = `${localize('saveGame', getLanguage(), 'ui')}`;
+    getElements().loadStringButton.innerHTML = `${localize('loadButton', getLanguage(), 'ui')}`;
 }
 
 export async function handleLanguageChange(languageCode) {
