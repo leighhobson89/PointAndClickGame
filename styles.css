@@ -4,6 +4,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: black;
     color: white;
+    overflow: hidden;
 }
 
 #menu {
@@ -153,7 +154,17 @@ canvas {
     background-position: center;
     background-repeat: no-repeat;
     border: 1px solid white;
-    cursor: pointer;
+}
+
+.custom-mouse {
+    position: absolute;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.custom-mouse-image {
+    width: 25%;
+    transform: translate(-50%, -50%);
 }
 
 .disabled {
@@ -233,6 +244,7 @@ canvas {
     transition: opacity 1s;
     display: none;
     pointer-events: none;
+    cursor: none;
 }
 
 #overlayCanvas.visible {
@@ -245,9 +257,6 @@ canvas {
     opacity: 0; /* Fade out */
     pointer-events: none; /* Allow clicks to pass through */
 }
-
-
-
 
 .verbs, .inventory {
     height: 100%;

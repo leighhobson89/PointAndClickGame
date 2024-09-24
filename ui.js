@@ -1,13 +1,16 @@
 import { getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId } from './constantsAndGlobalVars.js';
-import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, updateCursor, enemySquares, initializePlayerPosition } from './game.js';
+import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
+    getElements().customCursor.classList.add('d-none');
+    getElements().customCursor.style.transform = 'translate(-50%, -50%)';
     loadGameData(urlWalkableJSONS, urlNavigationData);
 
-    getElements().newGameMenuButton.addEventListener('click', () => {
+    getElements().newGameMenuButton.addEventListener('click', (event) => {
+        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
         setBeginGameStatus(true);
         if (!getGameInProgress()) {
             setGameInProgress(true);
@@ -19,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().resumeGameMenuButton.addEventListener('click', () => {
+        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
         if (gameState === getMenuState()) {
             setGameState(getGameVisibleActive());
         }
@@ -95,7 +99,25 @@ export function initializeCanvasEventListener() {
     const canvas = getElements().canvas;
 
     canvas.addEventListener('click', handleCanvasClick);
-    canvas.addEventListener('mousemove', updateCursor);
+    canvas.addEventListener('mouseenter', enableCustomCursor);
+    canvas.addEventListener('mouseleave', disableCustomCursor);
+    canvas.addEventListener('mousemove', trackCursor);
+}
+
+function trackCursor(event) {
+    getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+}
+
+function enableCustomCursor() {
+    const canvas = getElements().canvas;
+    canvas.style.cursor = 'none';
+    getElements().customCursor.classList.remove('d-none');
+}
+
+function disableCustomCursor() {
+    const canvas = getElements().canvas;
+    canvas.style.cursor = 'pointer';
+    getElements().customCursor.classList.add('d-none');
 }
 
 export function handleMouseMove(event, ctx) {
@@ -179,14 +201,15 @@ export function disableActivateButton(button, action, activeClass) {
 
 export function animateTransitionAndChangeBackground() {
     const overlay = document.getElementById('overlayCanvas');
-    overlay.style.display = 'block';
+    getElements().overlayCanvas.style.display = 'block';
+    getElements().customCursor.classList.add('d-none');
 
     requestAnimationFrame(() => {
-        overlay.classList.add('visible');
-        overlay.classList.remove('hidden');
+        getElements().overlayCanvas.classList.add('visible');
+        getElements().overlayCanvas.classList.remove('hidden');
     });
 
-    overlay.addEventListener('transitionend', () => {
+    getElements().overlayCanvas.addEventListener('transitionend', () => {
         const newScreenId = handleRoomTransition();
         const exit = 'e' + getExitNumberToTransitionTo();
 
@@ -209,18 +232,17 @@ export function animateTransitionAndChangeBackground() {
 }
 
 export function fadeBackToGameInTransition() {
-    const overlay = document.getElementById('overlayCanvas');
-    overlay.classList.add('hidden');
-    overlay.classList.remove('visible');
+    getElements().overlayCanvas.classList.add('hidden');
+    getElements().overlayCanvas.classList.remove('visible');
 
     requestAnimationFrame(() => {
-        overlay.classList.remove('visible');
-        overlay.classList.add('hidden');
+        getElements().overlayCanvas.classList.remove('visible');
+        getElements().overlayCanvas.classList.add('hidden');
     });
 
-    overlay.addEventListener('transitionend', () => {
-        overlay.classList.add('hidden');
-        overlay.style.display = 'none';
+    getElements().overlayCanvas.addEventListener('transitionend', () => {
+        getElements().overlayCanvas.classList.add('hidden');
+        getElements().overlayCanvas.style.display = 'none';
         console.log("fade transition complete!");
     }, { once: true });
 }

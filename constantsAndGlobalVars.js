@@ -65,6 +65,8 @@ let currentlyMoving = false;
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
+        customCursor: document.querySelector('.custom-mouse'),
+        overlayCanvas: document.querySelector('.overlay-canvas'),
         menu: document.getElementById('menu'),
         menuTitle: document.getElementById('menuTitle'),
         newGameMenuButton:  document.getElementById('newGame'),

@@ -85,6 +85,7 @@ function movePlayerTowardsTarget() {
         currentPathIndex = 0;
         setTransitioningNow(false);
         resizePlayerObject();
+        getElements().customCursor.classList.remove('d-none');
         canvas.style.pointerEvents = 'auto';
         console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
         }
@@ -180,7 +181,7 @@ export function resizePlayerObject() {
 }
 
 export function drawGrid() {
-    let showGrid = true; //DEBUG: false to hide grid
+    let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -356,30 +357,6 @@ function setGridRefAsNonWalkable(gridX, gridY) { //for adding dynamic obstacles 
     if (gridX >= 0 && gridY >= 0 && gridY < gridData.length && gridX < gridData[gridY].length) {
         gridData[gridY][gridX] = 'n';
         console.log("grid ref set to non walkable: " + gridData[gridY][gridX]);
-    }
-}
-
-
-export function updateCursor(event) {
-    const canvas = getElements().canvas;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    
-    let isHoveringOverEnemy = false;
-
-    for (const square of enemySquares) {
-        if (mouseX >= square.x && mouseX <= square.x + square.width &&
-            mouseY >= square.y && mouseY <= square.y + square.height) {
-            isHoveringOverEnemy = true;
-            break;
-        }
-    }
-
-    if (isHoveringOverEnemy) {
-        canvas.style.cursor = 'default';
-    } else {
-        canvas.style.cursor = 'pointer';
     }
 }
 
