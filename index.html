@@ -62,61 +62,66 @@
             <div id="overlayCanvas" class="overlay-canvas"></div>
             <canvas id="canvas"></canvas>
         </div>
-        <div id="bottomContainer" class="d-flex">
-            <div class="col-6 p-2">
-                <div class="verbs">
-                    <div class="row mb-2">
-                        <div class="col-3 mb-2">
-                            <button id="btnLookAt" class="btn btn-primary w-100">PH_LookAt</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnPickUp" class="btn btn-primary w-100">PH_PickUp</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnUse" class="btn btn-primary w-100">PH_Use</button>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-3 mb-2">
-                            <button id="btnOpen" class="btn btn-primary w-100">PH_Open</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnClose" class="btn btn-primary w-100">PH_Close</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnPush" class="btn btn-primary w-100">PH_Push</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3 mb-2">
-                            <button id="btnPull" class="btn btn-primary w-100">PH_Pull</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnTalkTo" class="btn btn-primary w-100">PH_TalkTo</button>
-                        </div>
-                        <div class="col-3 mb-2">
-                            <button id="btnGive" class="btn btn-primary w-100">PH_Give</button>
-                        </div>
-                    </div>                    
-                </div>
+        <div id="bottomContainer" class="d-flex flex-column ml-2">
+            <div id="infoRow" class="d-flex justify-content-start" style="height: 20px;">
+                <div id="interactionInfo">Return to Menu</div>
             </div>
-            <div class="col-6 p-2">
-                <div class="inventory">
-                    <div class="row mb-2">
-                        <div class="col-3"><div class="inventory-item">Image1</div></div>
-                        <div class="col-3"><div class="inventory-item">Image2</div></div>
-                        <div class="col-3"><div class="inventory-item">Image3</div></div>
-                        <div class="col-3"><div class="inventory-item">Image4</div></div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-3"><div class="inventory-item">Image5</div></div>
-                        <div class="col-3"><div class="inventory-item">Image6</div></div>
-                        <div class="col-3"><div class="inventory-item">Image7</div></div>
-                        <div class="col-3"><div class="inventory-item">Image8</div></div>
+            <div class="d-flex flex-grow-1">
+                <div class="col-6 p-2">
+                    <div class="verbs">
+                        <div class="row mb-2">
+                            <div class="col-3 mb-2">
+                                <button id="btnLookAt" class="btn btn-primary w-100">PH_LookAt</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnPickUp" class="btn btn-primary w-100">PH_PickUp</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnUse" class="btn btn-primary w-100">PH_Use</button>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-3 mb-2">
+                                <button id="btnOpen" class="btn btn-primary w-100">PH_Open</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnClose" class="btn btn-primary w-100">PH_Close</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnPush" class="btn btn-primary w-100">PH_Push</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mb-2">
+                                <button id="btnPull" class="btn btn-primary w-100">PH_Pull</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnTalkTo" class="btn btn-primary w-100">PH_TalkTo</button>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <button id="btnGive" class="btn btn-primary w-100">PH_Give</button>
+                            </div>
+                        </div>                    
                     </div>
                 </div>
+                <div class="col-6 p-2">
+                    <div class="inventory">
+                        <div class="row mb-2">
+                            <div class="col-3"><div class="inventory-item">Image1</div></div>
+                            <div class="col-3"><div class="inventory-item">Image2</div></div>
+                            <div class="col-3"><div class="inventory-item">Image3</div></div>
+                            <div class="col-3"><div class="inventory-item">Image4</div></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-3"><div class="inventory-item">Image5</div></div>
+                            <div class="col-3"><div class="inventory-item">Image6</div></div>
+                            <div class="col-3"><div class="inventory-item">Image7</div></div>
+                            <div class="col-3"><div class="inventory-item">Image8</div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </div>        
     </div>
 
     <!-- Overlay -->

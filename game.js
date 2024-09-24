@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
 import { getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover} from './constantsAndGlobalVars.js';
 import { teleportToNearestWalkable, aStarPathfinding } from './pathFinding.js';
-import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
+import { updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -465,6 +465,7 @@ export function processClickPoint(event, mouseClick) {
     if (currentPath.length > 0) {
         setCurrentlyMoving(true);
         console.log("Started Moving...");
+        updateInteractionInfo("Walking");
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
         if (cellValue && cellValue.startsWith('e')) { 
             const exitNumberMatch = cellValue.match(/e(\d+)/);

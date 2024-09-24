@@ -247,6 +247,15 @@ export function fadeBackToGameInTransition() {
     }, { once: true });
 }
 
+export function updateInteractionInfo(text) {
+    const interactionInfo = getElements().interactionInfo;
+    if (interactionInfo) {
+        interactionInfo.textContent = text;
+    } else {
+        console.error('Interaction info element not found');
+    }
+}
+
 export function loadGameData(gridUrl, screenNavUrl) {
     // Load grid data
     fetch(gridUrl)
