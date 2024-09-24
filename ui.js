@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     getElements().newGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+        resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
         setBeginGameStatus(true);
         if (!getGameInProgress()) {
             setGameInProgress(true);
