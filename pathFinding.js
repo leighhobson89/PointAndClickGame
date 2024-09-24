@@ -13,7 +13,6 @@ export function aStarPathfinding(start, target, gridData) {
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
-    // Add offset to measure from bottom center of player object
     start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
     start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
 
@@ -48,7 +47,7 @@ export function aStarPathfinding(start, target, gridData) {
     openList.push(startNode);
 
     while (openList.length > 0) {
-        openList.sort((a, b) => a.f - b.f); // Sort by f-value (lowest first)
+        openList.sort((a, b) => a.f - b.f);
         const currentNode = openList.shift();
 
         if (currentNode.x === target.x && currentNode.y === target.y) {
@@ -57,12 +56,11 @@ export function aStarPathfinding(start, target, gridData) {
                 path.push({ x: temp.x, y: temp.y });
                 temp = temp.parent;
             }
-            return path.reverse(); // Return reversed path
+            return path.reverse();
         }
 
         closedList.push(currentNode);
 
-        // Directions for neighbors (4 cardinal + 4 diagonal)
         const directions = [
             { x: 0, y: -1, cost: 1 },   // Up
             { x: 1, y: 0, cost: 1 },    // Right
@@ -89,15 +87,15 @@ export function aStarPathfinding(start, target, gridData) {
             }
 
             // Add different costs based on cell type
-            let cellCost = dir.cost; // Default cost based on movement direction
+            let cellCost = dir.cost;
 
             if (cellType.includes('w')) {
-                cellCost *= 1; // Normal cost for walkable
+                cellCost *= 1;
             } else if (cellType.includes('e')) {
-                cellCost *= 5; // Double the cost for exit squares
+                cellCost *= 5;
             }
 
-            const gScore = currentNode.g + cellCost; // Update cost based on direction and cell type
+            const gScore = currentNode.g + cellCost;
             const hScore = heuristic({ x: neighborX, y: neighborY }, target);
             const neighborNode = new Node(neighborX, neighborY, gScore, hScore, currentNode);
 
@@ -129,7 +127,7 @@ export function teleportToNearestWalkable(start) {
     let startY = Math.floor(start.y + (player.height / getCanvasCellHeight()));
 
     // Get the player's current cell type
-    let currentCellType = gridData.gridData[startY][startX];
+    let currentCellType = gridData.gridData[startY + 1][startX];
 
     // Check if the player is on a non-walkable square ("n")
     if (currentCellType === 'n') {
