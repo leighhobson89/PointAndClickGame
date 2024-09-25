@@ -111,7 +111,7 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             const commandToPerform = parseCommand(getUpcomingAction());
-            console.log(commandToPerform);
+            performCommand(commandToPerform);
             setUpcomingAction(null);
 
             setCurrentlyMovingToAction(false);
@@ -697,6 +697,15 @@ export function setUpObjects() {
 
     // Log the updated grid data for all rooms
     console.log(getAllGridData());
+}
+
+export function performCommand(command) {
+    console.log(command);
+    if (command !== null) {
+        const verbKey = command.verbKey;
+        const objectId = command.objectId;
+    }
+    return;
 }
 
 //-------------------------------------------------------------------------------------------------------------

@@ -378,10 +378,11 @@ export function parseCommand(userCommand) {
     const objectData = getObjectData().objects;  // Retrieve all objects
     const language = getLanguage();              // Get the current language
     const localization = getLocalization()[language]['verbsActionsInteraction'];  // Get localized verbs/actions
+    const navigationData = getNavigationData();  // Get navigation data (for room names)
 
     // Step 1: Extract the object name by going from the last word backwards
     let commandParts = userCommand.split(' ');  // Split the command string into parts
-    let objectMatch = null;                     // To store the matched objectId
+    let objectMatch = null;                     // To store the matched objectId or roomId
     let objectName = '';                        // To store the object name found
     let verbPart = '';                          // To store the verb part of the command
 
@@ -400,13 +401,31 @@ export function parseCommand(userCommand) {
         if (objectMatch) break;  // If object match found, stop further searching
     }
 
-    // If no object match found, return an error or null
+    // Step 3: If no object match is found, check room names in navigationData
     if (!objectMatch) {
-        console.warn('No object match found for the command:', userCommand);
+        for (const roomId in navigationData) {
+            const roomName = navigationData[roomId][language]; // Room name in the current language
+
+            // Try to match room name using the same backward search strategy
+            for (let i = commandParts.length - 1; i >= 0; i--) {
+                const roomCommandName = commandParts.slice(i).join(' ');  // Reverse slice for room name
+                if (roomCommandName === roomName) {
+                    objectMatch = roomId;  // The room ID is now treated as the objectId
+                    verbPart = commandParts.slice(0, i).join(' ');  // Remaining part is the verb
+                    break;
+                }
+            }
+            if (objectMatch) break;  // If a room match is found, stop further searching
+        }
+    }
+
+    // Step 4: If no object or room match is found, return an error or null
+    if (!objectMatch) {
+        console.warn('No object or room match found for the command:', userCommand);
         return null;
     }
 
-    // Step 3: Match the remaining verb part with localization verbs/actions
+    // Step 5: Match the remaining verb part with localization verbs/actions
     let verbKey = null;
     for (const key in localization) {
         if (localization[key] === verbPart) {
@@ -421,9 +440,9 @@ export function parseCommand(userCommand) {
         return null;
     }
 
-    // Step 4: Return the matched object and verb as an object
+    // Step 6: Return the matched object (or room) and verb as an object
     return {
-        objectId: objectMatch,
+        objectId: objectMatch,  // Can be either the objectId or roomId
         verbKey: verbKey
     };
 }
