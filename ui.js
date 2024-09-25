@@ -1,4 +1,4 @@
-import { getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
+import { setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
 import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -141,25 +141,32 @@ export function handleMouseMove(event, ctx) {
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            //console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
+            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
             //DEBUG
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
             //
         }
 
         // Check for navigation transition possibility and get screen name it would lead to
-        const screenName = getHoveredExitScreenName(cellValue);
-        console.log(screenName);
-        if (!getCurrentlyMovingToAction()) {
-            if (screenName !== null) {
-                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
-            } else {
+        setHoveringInterestingObjectOrExit(cellValue.includes('e'));
+        if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction()) {
+            const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
+            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
+        } else {
+            if(!getCurrentlyMovingToAction()) {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
             }
-        } }
+        }
+
+        if (getHoveringInterestingObjectOrExit()) {
+            setCustomMouseCursor(getCustomMouseCursor('hoveringInteresting'));
+        } else {
+            setCustomMouseCursor(getCustomMouseCursor('normal'));
+        }
+    }
 }
 
-function getHoveredExitScreenName(cellValue) {
+function returnHoveredInterestingObjectOrExitName(cellValue) {
 
     if (cellValue && cellValue.includes('e')) {
         const currentScreenId = getCurrentScreenId();

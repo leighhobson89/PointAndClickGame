@@ -1,6 +1,6 @@
 import { localize } from './localization.js';
-import { getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction} from './constantsAndGlobalVars.js';
-import { teleportToNearestWalkable, aStarPathfinding } from './pathFinding.js';
+import { getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor} from './constantsAndGlobalVars.js';
+import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
@@ -28,8 +28,8 @@ export function gameLoop() {
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
         //
 
-        if (!getCurrentlyMoving()) {
-            teleportToNearestWalkable({ x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) });
+        if (!getCurrentlyMoving() && getBeginGameStatus()) {
+            findAndMoveToNearestWalkable({ x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, { x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, true);
         }
 
         if (!getBeginGameStatus()) {
@@ -464,6 +464,8 @@ export function processClickPoint(event, mouseClick) {
     currentPath = path;
     currentPathIndex = 0;
 
+    setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
+
     if (currentPath.length > 0) {
         setCurrentlyMoving(true);
         if (!getTransitioningNow()) {
@@ -485,6 +487,8 @@ export function processClickPoint(event, mouseClick) {
         const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
         setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
+    } else {
+        setCustomMouseCursor(getCustomMouseCursor('error'));
     }
 
     console.log(`Path: ${JSON.stringify(path)}`);

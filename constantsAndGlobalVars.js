@@ -13,6 +13,10 @@ let oldLanguage = 'en';
 //CONSTANTS
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
+export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
+export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
+export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
+export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
@@ -60,6 +64,8 @@ let transitioningToAnotherScreen = false;
 let transitioningNow = false;
 let currentlyMoving = false;
 let currentlyMovingToAction = false;
+let hoveringInterestingObjectOrExit = false;
+let lookingForAlternativePathToNearestWalkable = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -69,6 +75,7 @@ export function setElements() {
     elements = {
         interactionInfo: document.getElementById('interactionInfo'),
         customCursor: document.querySelector('.custom-mouse'),
+        customCursorImage: document.querySelector('.custom-mouse-image'),
         overlayCanvas: document.querySelector('.overlay-canvas'),
         menu: document.getElementById('menu'),
         menuTitle: document.getElementById('menuTitle'),
@@ -414,4 +421,39 @@ export function setCurrentlyMovingToAction(value) {
 
 export function getCurrentlyMovingToAction() {
     return currentlyMovingToAction;
+}
+
+export function setHoveringInterestingObjectOrExit(value) {
+    hoveringInterestingObjectOrExit = value;
+}
+
+export function getHoveringInterestingObjectOrExit() {
+    return hoveringInterestingObjectOrExit;
+}
+
+export function setLookingForAlternativePathToNearestWalkable(value) {
+    lookingForAlternativePathToNearestWalkable = value;
+}
+
+export function getLookingForAlternativePathToNearestWalkable() {
+    return lookingForAlternativePathToNearestWalkable;
+}
+
+setLookingForAlternativePathToNearestWalkable
+
+export function setCustomMouseCursor(value) {
+    getElements().customCursorImage.src = value;
+}
+
+export function getCustomMouseCursor(value) {
+    switch (value) {
+        case 'normal':
+            return urlCustomMouseCursorNormal;
+        case 'hoveringInteresting':
+            return urlCustomMouseCursorHoverInteresting;
+        case 'clickInteresting':
+            return urlCustomMouseCursorClickInteresting;
+        default:
+            return urlCustomMouseCursorError;
+    }
 }

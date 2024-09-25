@@ -1,4 +1,4 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { setLookingForAlternativePathToNearestWalkable, getLookingForAlternativePathToNearestWalkable, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, gridData) {
     console.log("transitioning now: " + getTransitioningNow());
@@ -112,81 +112,115 @@ export function aStarPathfinding(start, target, gridData) {
         }
     }
 
-    console.log("No path found");
-    return []; // No path found
+    setLookingForAlternativePathToNearestWalkable(true);
+    const nearestWalkableCell = findAndMoveToNearestWalkable({ x: start.x, y: start.y }, { x: target.x, y: target.y }, false);
+    if (!nearestWalkableCell || gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x] === 'n') {
+        console.log(gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x]);
+    } else {
+        console.log ("found walkable cell nearby, so will go there...");
+    }
+    if (getLookingForAlternativePathToNearestWalkable()) {
+        const nearestPath = aStarPathfinding({ x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
+        { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
+         gridData);
+        console.log("No path found so walking to " + nearestWalkableCell);
+        setLookingForAlternativePathToNearestWalkable(false);
+        return nearestPath;
+    }
+
 }
 
-export function teleportToNearestWalkable(start) {
+export function findAndMoveToNearestWalkable(start, target, teleport) {
     const gridData = getGridData();
     const player = getPlayerObject();
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
+    let targetX = Math.floor(target.x);
+    let targetY = Math.floor(target.y);
+
     // Add offset to measure from bottom center of player object
-    let startX = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
-    let startY = Math.floor(start.y + (player.height / getCanvasCellHeight()));
+    if (teleport) {
+        targetX = Math.floor(target.x + ((player.width / 2) / getCanvasCellWidth()));
+        targetY = Math.floor(target.y + (player.height / getCanvasCellHeight()));
+    }
 
-    // Get the player's current cell type
-    let currentCellType = gridData.gridData[startY + 1][startX];
+    // Get direction from target to player
+    const directionX = Math.sign(start.x - target.x); // -1 for left, 1 for right
+    const directionY = Math.sign(start.y - target.y); // -1 for up, 1 for down
 
-    // Check if the player is on a non-walkable square ("n")
-    if (currentCellType === 'n') {
-        console.log(`Player is on a non-walkable square at (${startX}, ${startY})`);
+    // Prioritize searching in the direction from the target to the player
+    const priorityDirections = [
+        { x: directionX, y: directionY },   // Move directly towards the player
+        { x: directionX, y: 0 },            // Horizontal only
+        { x: 0, y: directionY },            // Vertical only
+    ];
 
-        // Perform BFS to find the nearest walkable square ("w")
-        const directions = [
-            { x: 0, y: -1 },  // Up
-            { x: 1, y: 0 },   // Right
-            { x: 0, y: 1 },   // Down
-            { x: -1, y: 0 }   // Left
-        ];
+    // Fallback directions for a broader search
+    const fallbackDirections = [
+        { x: -directionX, y: 0 },           // Opposite horizontal
+        { x: 0, y: -directionY },           // Opposite vertical
+        { x: -directionX, y: -directionY }, // Opposite diagonal
+    ];
 
-        const visited = new Set();
-        const queue = [{ x: startX, y: startY }];
+    // Perform BFS to find the nearest walkable square, starting from the target and moving towards the player
+    const visited = new Set();
+    const queue = [{ x: targetX, y: targetY }];
 
-        while (queue.length > 0) {
-            const current = queue.shift();
-            const { x, y } = current;
+    while (queue.length > 0) {
+        const current = queue.shift();
+        const { x, y } = current;
 
-            // Mark the current cell as visited
-            visited.add(`${x},${y}`);
+        // Mark the current cell as visited
+        visited.add(`${x},${y}`);
 
-            // Check bounds
-            if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) {
-                continue;
-            }
+        // Check bounds
+        if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) {
+            continue;
+        }
 
-            // Get the cell type of the current position
-            const cellType = gridData.gridData[y][x];
+        // Get the cell type of the current position
+        const cellType = gridData.gridData[y][x];
 
-            // If we find a walkable square, teleport the player there
-            if (cellType.includes('w')) {
-                const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
-                const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
-                //console.log(`Nearest walkable square found at (${x}, ${y})`);
+        // If the cell is walkable, return it
+        if (cellType.includes('w')) {
+            const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
+            const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
 
-                // Teleport the player to this location (update player position)
+            if (teleport) {
                 setPlayerObject('xPos', newPosX);
                 setPlayerObject('yPos', newPosY);
-
                 console.log(`Player teleported to (${Math.floor(newPosX / getCanvasCellWidth())}, ${Math.floor(newPosY / getCanvasCellHeight())})`);
                 return;
             }
 
-            // Add neighbors to the queue
-            for (const dir of directions) {
-                const neighborX = x + dir.x;
-                const neighborY = y + dir.y;
-                const key = `${neighborX},${neighborY}`;
+            return { x: x, y: y };
+        }
 
-                if (!visited.has(key)) {
-                    queue.push({ x: neighborX, y: neighborY });
-                }
+        // Add neighbors in priority directions
+        for (const dir of priorityDirections) {
+            const neighborX = x + dir.x;
+            const neighborY = y + dir.y;
+            const key = `${neighborX},${neighborY}`;
+
+            if (!visited.has(key)) {
+                queue.push({ x: neighborX, y: neighborY });
             }
         }
 
-        //console.log("No walkable square found, unable to teleport.");
-    } else {
-        //console.log(`Player is already on a walkable square at (${startX}, ${startY})`);
+        // Add neighbors in fallback directions if priority directions don't work
+        for (const dir of fallbackDirections) {
+            const neighborX = x + dir.x;
+            const neighborY = y + dir.y;
+            const key = `${neighborX},${neighborY}`;
+
+            if (!visited.has(key)) {
+                queue.push({ x: neighborX, y: neighborY });
+            }
+        }
     }
+
+    //console.error("No walkable square found");
+    return null; // If no walkable square is found, return null
 }
+
