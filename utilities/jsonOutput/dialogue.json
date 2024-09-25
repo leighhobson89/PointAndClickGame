@@ -1,0 +1,134 @@
+{
+    "dialogue": {
+        "objectInteractions": {
+            "use": {
+                "eatenBanana": {
+                    "en": "You eat the banana. It tastes sweet and satisfying.",
+                    "es": "Te comes el plátano. Sabe dulce y satisfactorio.",
+                    "de": "Du isst die Banane. Sie schmeckt süß und befriedigend.",
+                    "it": "Mangi la banana. Ha un sapore dolce e soddisfacente.",
+                    "fr": "Vous mangez la banane. Elle a un goût sucré et satisfaisant."
+                },
+                "useKey": {
+                    "en": "You use the key to unlock the door. You hear a faint click.",
+                    "es": "Usas la llave para abrir la puerta. Escuchas un leve clic.",
+                    "de": "Du benutzt den Schlüssel, um die Tür zu öffnen. Du hörst ein leises Klicken.",
+                    "it": "Usi la chiave per aprire la porta. Senti un leggero clic.",
+                    "fr": "Vous utilisez la clé pour déverrouiller la porte. Vous entendez un léger clic."
+                },
+                "useBattery": {
+                    "en": "You insert the battery into the machine. It hums to life.",
+                    "es": "Insertas la batería en la máquina. Empieza a zumbar.",
+                    "de": "Du setzt die Batterie in die Maschine ein. Sie beginnt zu summen.",
+                    "it": "Inserisci la batteria nella macchina. Inizia a ronzare.",
+                    "fr": "Vous insérez la batterie dans la machine. Elle se met à bourdonner."
+                }
+            },
+            "inspect": {
+                "inspectKey": {
+                    "en": "A small, brass key with an ornate pattern.",
+                    "es": "Una pequeña llave de latón con un patrón ornamentado.",
+                    "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
+                    "it": "Una piccola chiave di ottone con un motivo ornato.",
+                    "fr": "Une petite clé en laiton avec un motif orné."
+                },
+                "inspectBattery": {
+                    "en": "A small battery, still charged and ready to use.",
+                    "es": "Una pequeña batería, aún cargada y lista para usar.",
+                    "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
+                    "it": "Una piccola batteria, ancora carica e pronta all'uso.",
+                    "fr": "Une petite batterie, encore chargée et prête à l'emploi."
+                },
+                "inspectMachine": {
+                    "en": "The machine looks old and complex. It has a slot for a battery.",
+                    "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
+                    "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
+                    "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
+                    "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
+                },
+                "inspectBanana": {
+                    "en": "A perfectly ripe banana. Ready to eat.",
+                    "es": "Un plátano perfectamente maduro. Listo para comer.",
+                    "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
+                    "it": "Una banana perfettamente matura. Pronta da mangiare.",
+                    "fr": "Une banane parfaitement mûre. Prête à être mangée."
+                }
+            },
+            "pickUp": {
+                "pickUpKey": {
+                    "en": "You pick up the brass key. It feels warm to the touch.",
+                    "es": "Recoges la llave de latón. Se siente cálida al tacto.",
+                    "de": "Du hebst den Messingschlüssel auf. Er fühlt sich warm an.",
+                    "it": "Raccogli la chiave di ottone. Sembra calda al tatto.",
+                    "fr": "Vous ramassez la clé en laiton. Elle est chaude au toucher."
+                },
+                "pickUpBattery": {
+                    "en": "You pick up the battery. It seems fully charged.",
+                    "es": "Recoges la batería. Parece completamente cargada.",
+                    "de": "Du hebst die Batterie auf. Sie scheint vollständig geladen zu sein.",
+                    "it": "Raccogli la batteria. Sembra completamente carica.",
+                    "fr": "Vous ramassez la batterie. Elle semble complètement chargée."
+                },
+                "pickUpBanana": {
+                    "en": "You pick up the banana. It's firm but ripe.",
+                    "es": "Recoges el plátano. Está firme pero maduro.",
+                    "de": "Du hebst die Banane auf. Sie ist fest, aber reif.",
+                    "it": "Raccogli la banana. È soda ma matura.",
+                    "fr": "Vous ramassez la banane. Elle est ferme mais mûre."
+                }
+            }
+        },
+        "npcInteractions": {
+            "talkTo": {
+                "goblin": {
+                    "en": "The Goblin looks at you with curiosity. 'What do you need?'",
+                    "es": "El Duende te mira con curiosidad. '¿Qué necesitas?'",
+                    "de": "Der Goblin schaut dich neugierig an. 'Was brauchst du?'",
+                    "it": "Il Goblin ti guarda con curiosità. 'Di cosa hai bisogno?'",
+                    "fr": "Le Gobelin te regarde avec curiosité. 'De quoi as-tu besoin ?'"
+                }
+            },
+            "giveItem": {
+                "goblinGiveBanana": {
+                    "en": "Here, take this banana. It's my favorite!",
+                    "es": "¡Aquí, toma este plátano! Es mi favorito.",
+                    "de": "Hier, nimm diese Banane. Es ist mein Favorit!",
+                    "it": "Ecco, prendi questa banana. È la mia preferita!",
+                    "fr": "Tiens, prends cette banane. C'est ma préférée !"
+                },
+                "goblinGiveBattery": {
+                    "en": "You'll need this battery for the machine. Trust me.",
+                    "es": "Necesitarás esta batería para la máquina. Confía en mí.",
+                    "de": "Du wirst diese Batterie für die Maschine brauchen. Vertrau mir.",
+                    "it": "Ti servirà questa batteria per la macchina. Fidati di me.",
+                    "fr": "Tu auras besoin de cette batterie pour la machine. Fais-moi confiance."
+                }
+            },
+            "receiveItem": {
+                "goblinReceiveKey": {
+                    "en": "The Goblin grins. 'A key, huh? Don't lose it!'",
+                    "es": "El Duende sonríe. '¿Una llave, eh? ¡No la pierdas!'",
+                    "de": "Der Goblin grinst. 'Ein Schlüssel, hm? Verlier ihn nicht!'",
+                    "it": "Il Goblin sorride. 'Una chiave, eh? Non perderla!'",
+                    "fr": "Le Gobelin sourit. 'Une clé, hein ? Ne la perds pas !'"
+                }
+            }
+        },
+        "globalMessages": {
+            "inventoryFull": {
+                "en": "Your inventory is full.",
+                "es": "Tu inventario está lleno.",
+                "de": "Dein Inventar ist voll.",
+                "it": "Il tuo inventario è pieno.",
+                "fr": "Votre inventaire est plein."
+            },
+            "itemCannotBeUsed": {
+                "en": "This item can't be used here.",
+                "es": "Este objeto no se puede usar aquí.",
+                "de": "Dieser Gegenstand kann hier nicht verwendet werden.",
+                "it": "Questo oggetto non può essere utilizzato qui.",
+                "fr": "Cet objet ne peut pas être utilisé ici."
+            }
+        }
+    }
+}

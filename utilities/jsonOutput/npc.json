@@ -1,0 +1,22 @@
+{
+    "npcs": {
+        "goblin": {
+            "name": {
+                "en": "Goblin",
+                "es": "Duende",
+                "de": "Goblin",
+                "it": "Goblin",
+                "fr": "Gobelin"
+            },
+            "dialogue": {
+                "en": "Take this banana, it's my favorite!",
+                "es": "¡Toma este plátano, es mi favorito!",
+                "de": "Nimm diese Banane, sie ist meine Lieblingsspeise!",
+                "it": "Prendi questa banana, è la mia preferita!",
+                "fr": "Prends cette banane, c'est ma préférée !"
+            },
+            "gives": "banana",
+            "location": "debugRoom"
+        }
+    }
+}

@@ -1,0 +1,146 @@
+{
+    "objects": {
+        "key": {
+            "name": {
+                "en": "Key",
+                "es": "Llave",
+                "de": "Schlüssel",
+                "it": "Chiave",
+                "fr": "Clé"
+            },
+            "description": {
+                "en": "A small brass key that unlocks the exit door.",
+                "es": "Una pequeña llave de latón que abre la puerta de salida.",
+                "de": "Ein kleiner Messingschlüssel, der die Ausgangstür öffnet.",
+                "it": "Una piccola chiave di ottone che apre la porta d'uscita.",
+                "fr": "Une petite clé en laiton qui déverrouille la porte de sortie."
+            },
+            "interactable": {
+                "canPickUp": true,
+                "canUse": true,
+                "useResult": "retainItem"
+            },
+            "activeStatus": true,
+            "usedOn": {
+                "object": "navigation/exits/e1",
+                "action": "unlock"
+            },
+            "location": "debugRoom",
+            "spriteUrl": "https://example.com/sprites/key.png",
+            "inventoryUrl": "https://example.com/inventory/key.png",
+            "gridPosition": {
+                "x": 10,
+                "y": 15
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 50
+            }
+        },
+        "battery": {
+            "name": {
+                "en": "Battery",
+                "es": "Batería",
+                "de": "Batterie",
+                "it": "Batteria",
+                "fr": "Batterie"
+            },
+            "description": {
+                "en": "A small battery that powers devices.",
+                "es": "Una pequeña batería que alimenta dispositivos.",
+                "de": "Eine kleine Batterie, die Geräte mit Strom versorgt.",
+                "it": "Una piccola batteria che alimenta i dispositivi.",
+                "fr": "Une petite batterie qui alimente les appareils."
+            },
+            "interactable": {
+                "canPickUp": true,
+                "canUse": true,
+                "useResult": "discardItem"
+            },
+            "activeStatus": true,
+            "usedOn": {
+                "object": "objects/machine",
+                "action": "activate"
+            },
+            "location": "debugRoom",
+            "spriteUrl": "https://example.com/sprites/battery.png",
+            "inventoryUrl": "https://example.com/inventory/battery.png",
+            "gridPosition": {
+                "x": 20,
+                "y": 25
+            },
+            "dimensions": {
+                "width": 60,
+                "height": 60
+            }
+        },
+        "machine": {
+            "name": {
+                "en": "Machine",
+                "es": "Máquina",
+                "de": "Maschine",
+                "it": "Macchina",
+                "fr": "Machine"
+            },
+            "description": {
+                "en": "A complex machine that requires a battery to function.",
+                "es": "Una máquina compleja que requiere una batería para funcionar.",
+                "de": "Eine komplexe Maschine, die eine Batterie benötigt, um zu funktionieren.",
+                "it": "Una macchina complessa che richiede una batteria per funzionare.",
+                "fr": "Une machine complexe qui nécessite une batterie pour fonctionner."
+            },
+            "interactable": {
+                "canPickUp": false,
+                "canUse": true,
+                "useResult": "machineDebugUsed"
+            },
+            "activeStatus": false,
+            "usedOn": "",
+            "location": "debugRoom",
+            "spriteUrl": "https://example.com/sprites/machine.png",
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 30,
+                "y": 40
+            },
+            "dimensions": {
+                "width": 100,
+                "height": 100
+            }
+        },
+        "banana": {
+            "name": {
+                "en": "Banana",
+                "es": "Plátano",
+                "de": "Banane",
+                "it": "Banana",
+                "fr": "Banane"
+            },
+            "description": {
+                "en": "A ripe banana, perfect for snacking.",
+                "es": "Un plátano maduro, perfecto para picar.",
+                "de": "Eine reife Banane, perfekt zum Snacken.",
+                "it": "Una banana matura, perfetta per uno spuntino.",
+                "fr": "Une banane mûre, parfaite pour grignoter."
+            },
+            "interactable": {
+                "canPickUp": true,
+                "canUse": false,
+                "useResult": "dialogue/eatenBanana"
+            },
+            "activeStatus": false,
+            "usedOn": "",
+            "location": "debugRoom",
+            "spriteUrl": "https://example.com/sprites/banana.png",
+            "inventoryUrl": "https://example.com/inventory/banana.png",
+            "gridPosition": {
+                "x": 40,
+                "y": 35
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 70
+            }
+        }
+    }
+}
