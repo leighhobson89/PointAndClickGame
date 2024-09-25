@@ -156,12 +156,7 @@ export function handleMouseMove(event, ctx) {
             } else {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
             }
-        } else {
-            if (screenName !== null) {
-                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
-            }
-        }
-    }
+        } }
 }
 
 function getHoveredExitScreenName(cellValue) {

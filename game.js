@@ -122,6 +122,7 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             setCurrentlyMovingToAction(false);
+            console.log("moving to action set to false");
             setCurrentlyMoving(false);
             updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         }
