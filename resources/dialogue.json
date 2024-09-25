@@ -1,22 +1,22 @@
 {
     "dialogue": {
         "objectInteractions": {
-            "use": {
-                "eatenBanana": {
+            "verbUse": {
+                "bananaDEBUG": {
                     "en": "You eat the banana. It tastes sweet and satisfying.",
                     "es": "Te comes el plátano. Sabe dulce y satisfactorio.",
                     "de": "Du isst die Banane. Sie schmeckt süß und befriedigend.",
                     "it": "Mangi la banana. Ha un sapore dolce e soddisfacente.",
                     "fr": "Vous mangez la banane. Elle a un goût sucré et satisfaisant."
                 },
-                "useKey": {
+                "keyDEBUG": {
                     "en": "You use the key to unlock the door. You hear a faint click.",
                     "es": "Usas la llave para abrir la puerta. Escuchas un leve clic.",
                     "de": "Du benutzt den Schlüssel, um die Tür zu öffnen. Du hörst ein leises Klicken.",
                     "it": "Usi la chiave per aprire la porta. Senti un leggero clic.",
                     "fr": "Vous utilisez la clé pour déverrouiller la porte. Vous entendez un léger clic."
                 },
-                "useBattery": {
+                "batteryDEBUG": {
                     "en": "You insert the battery into the machine. It hums to life.",
                     "es": "Insertas la batería en la máquina. Empieza a zumbar.",
                     "de": "Du setzt die Batterie in die Maschine ein. Sie beginnt zu summen.",
@@ -24,29 +24,29 @@
                     "fr": "Vous insérez la batterie dans la machine. Elle se met à bourdonner."
                 }
             },
-            "inspect": {
-                "inspectKey": {
+            "verbLookAt": {
+                "keyDEBUG": {
                     "en": "A small, brass key with an ornate pattern.",
                     "es": "Una pequeña llave de latón con un patrón ornamentado.",
                     "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
                     "it": "Una piccola chiave di ottone con un motivo ornato.",
                     "fr": "Une petite clé en laiton avec un motif orné."
                 },
-                "inspectBattery": {
+                "batteryDEBUG": {
                     "en": "A small battery, still charged and ready to use.",
                     "es": "Una pequeña batería, aún cargada y lista para usar.",
                     "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
                     "it": "Una piccola batteria, ancora carica e pronta all'uso.",
                     "fr": "Une petite batterie, encore chargée et prête à l'emploi."
                 },
-                "inspectMachine": {
+                "machineDEBUG": {
                     "en": "The machine looks old and complex. It has a slot for a battery.",
                     "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
                     "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
                     "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
                     "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
                 },
-                "inspectBanana": {
+                "bananaDEBUG": {
                     "en": "A perfectly ripe banana. Ready to eat.",
                     "es": "Un plátano perfectamente maduro. Listo para comer.",
                     "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
@@ -55,21 +55,21 @@
                 }
             },
             "pickUp": {
-                "pickUpKey": {
+                "keyDEBUG": {
                     "en": "You pick up the brass key. It feels warm to the touch.",
                     "es": "Recoges la llave de latón. Se siente cálida al tacto.",
                     "de": "Du hebst den Messingschlüssel auf. Er fühlt sich warm an.",
                     "it": "Raccogli la chiave di ottone. Sembra calda al tatto.",
                     "fr": "Vous ramassez la clé en laiton. Elle est chaude au toucher."
                 },
-                "pickUpBattery": {
+                "batteryDEBUG": {
                     "en": "You pick up the battery. It seems fully charged.",
                     "es": "Recoges la batería. Parece completamente cargada.",
                     "de": "Du hebst die Batterie auf. Sie scheint vollständig geladen zu sein.",
                     "it": "Raccogli la batteria. Sembra completamente carica.",
                     "fr": "Vous ramassez la batterie. Elle semble complètement chargée."
                 },
-                "pickUpBanana": {
+                "bananaDEBUG": {
                     "en": "You pick up the banana. It's firm but ripe.",
                     "es": "Recoges el plátano. Está firme pero maduro.",
                     "de": "Du hebst die Banane auf. Sie ist fest, aber reif.",

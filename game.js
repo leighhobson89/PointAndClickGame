@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData} from './constantsAndGlobalVars.js';
+import { getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -707,31 +707,31 @@ export function performCommand(command) {
 
         switch (verbKey) {
             case 'verbLookAt':
-                handleLookAt(subjectToApplyCommand);
+                handleLookAt(verbKey, subjectToApplyCommand);
                 break;
             case 'verbPickUp':
-                handlePickUp(subjectToApplyCommand);
+                handlePickUp(verbKey, subjectToApplyCommand);
                 break;
             case 'verbUse':
-                handleUse(subjectToApplyCommand);
+                handleUse(verbKey, subjectToApplyCommand);
                 break;
             case 'verbOpen':
-                handleOpen(subjectToApplyCommand);
+                handleOpen(verbKey, subjectToApplyCommand);
                 break;
             case 'verbClose':
-                handleClose(subjectToApplyCommand);
+                handleClose(verbKey, subjectToApplyCommand);
                 break;
             case 'verbPush':
-                handlePush(subjectToApplyCommand);
+                handlePush(verbKey, subjectToApplyCommand);
                 break;
             case 'verbPull':
-                handlePull(subjectToApplyCommand);
+                handlePull(verbKey, subjectToApplyCommand);
                 break;
             case 'verbTalkTo':
-                handleTalkTo(subjectToApplyCommand);
+                handleTalkTo(verbKey, subjectToApplyCommand);
                 break;
             case 'verbGive':
-                handleGive(subjectToApplyCommand);
+                handleGive(verbKey, subjectToApplyCommand);
                 break;
             default:
                 console.warn(`Unhandled verbKey: ${verbKey}`);
@@ -743,55 +743,62 @@ export function performCommand(command) {
 }
 
 // Handle "Look At" action
-export function handleLookAt(objectId) {
-    console.log(`Looking at object: ${objectId}`);
-    // Add your implementation here
+export function handleLookAt(verb, objectId) {
+    const dialogueData = getDialogueData();   
+    const language = getLanguage();
+    const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
+
+    if (dialogueString) {
+        console.log(dialogueString);
+    } else {
+        console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
+    }
 }
 
 // Handle "Pick Up" action
-export function handlePickUp(objectId) {
+export function handlePickUp(verb, objectId) {
     console.log(`Picking up object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Use" action
-export function handleUse(objectId) {
+export function handleUse(verb, objectId) {
     console.log(`Using object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Open" action
-export function handleOpen(objectId) {
+export function handleOpen(verb, objectId) {
     console.log(`Opening object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Close" action
-export function handleClose(objectId) {
+export function handleClose(verb, objectId) {
     console.log(`Closing object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Push" action
-export function handlePush(objectId) {
+export function handlePush(verb, objectId) {
     console.log(`Pushing object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Pull" action
-export function handlePull(objectId) {
+export function handlePull(verb, objectId) {
     console.log(`Pulling object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Talk To" action
-export function handleTalkTo(objectId) {
+export function handleTalkTo(verb, objectId) {
     console.log(`Talking to object: ${objectId}`);
     // Add your implementation here
 }
 
 // Handle "Give" action
-export function handleGive(objectId) {
+export function handleGive(verb, objectId) {
     console.log(`Giving object: ${objectId}`);
     // Add your implementation here
 }

@@ -1,4 +1,4 @@
-import { getLocalization, getAllGridData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
+import { setDialogueData, getDialogueData, getLocalization, getAllGridData, urlDialogueData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
 import { setUpObjects, resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setElements();
     getElements().customCursor.classList.add('d-none');
     getElements().customCursor.style.transform = 'translate(-50%, -50%)';
-    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData);
+    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData, urlDialogueData);
 
 
     getElements().newGameMenuButton.addEventListener('click', (event) => {
@@ -447,7 +447,7 @@ export function parseCommand(userCommand) {
     };
 }
 
-export function loadGameData(gridUrl, screenNavUrl, objectsUrl) {
+export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {
     // Load grid data
     fetch(gridUrl)
         .then(response => response.json())
@@ -479,5 +479,16 @@ export function loadGameData(gridUrl, screenNavUrl, objectsUrl) {
         })
         .catch(error => {
             console.error("Error loading object data:", error);
+        });
+
+    // Load dialogue data
+    fetch(dialogueUrl)
+        .then(response => response.json())
+        .then(dialogueData => {
+            setDialogueData(dialogueData);
+            console.log("Dialogue data loaded:", getDialogueData());
+        })
+        .catch(error => {
+            console.error("Error loading dialogue data:", error);
         });
 }

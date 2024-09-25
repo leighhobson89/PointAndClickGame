@@ -1,6 +1,6 @@
 {
     "objects": {
-        "key": {
+        "keyDEBUG": {
             "name": {
                 "en": "Key",
                 "es": "Llave",
@@ -38,7 +38,7 @@
                 "height": 50
             }
         },
-        "battery": {
+        "batteryDEBUG": {
             "name": {
                 "en": "Battery",
                 "es": "Batería",
@@ -76,7 +76,7 @@
                 "height": 60
             }
         },
-        "machine": {
+        "machineDEBUG": {
             "name": {
                 "en": "Machine",
                 "es": "Máquina",
@@ -111,7 +111,7 @@
                 "height": 100
             }
         },
-        "banana": {
+        "bananaDEBUG": {
             "name": {
                 "en": "Banana",
                 "es": "Plátano",

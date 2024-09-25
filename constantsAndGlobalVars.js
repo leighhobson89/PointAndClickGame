@@ -14,6 +14,7 @@ let oldLanguage = 'en';
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
 export const urlObjectsData = '.\\resources\\objects.json';
+export const urlDialogueData = '.\\resources\\dialogue.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
@@ -51,6 +52,7 @@ let targetY = null;
 let gridData = null;
 let navigationData = null;
 let objectData = null;
+let dialogueData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
 let previousScreenId = INITIAL_SCREEN_ID;
 let nextScreenId = INITIAL_SCREEN_ID;
@@ -175,6 +177,14 @@ export function getObjectData() {
 
 export function setObjectData(value) {
     objectData = value;
+}
+
+export function setDialogueData(value) {
+    dialogueData = value;
+}
+
+export function getDialogueData() {
+    return dialogueData;
 }
 
 export function getInitialScreenId() {
