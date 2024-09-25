@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     getElements().resumeGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-        updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         if (gameState === getMenuState()) {
             setGameState(getGameVisibleActive());
         }
