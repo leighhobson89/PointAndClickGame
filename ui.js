@@ -197,12 +197,12 @@ export function handleMouseMove(event, ctx) {
             //
         }
 
-        setHoveringInterestingObjectOrExit(cellValue.startsWith('e'));
+        setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o'));
         // console.log("are we hovering anything interesting? " + getHoveringInterestingObjectOrExit());
         // console.log("verb construction status: " + getVerbButtonConstructionStatus());
         if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-            const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
-            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
+            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
+            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
         } else {
             if (!getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
@@ -211,8 +211,8 @@ export function handleMouseMove(event, ctx) {
                 updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
             }
             if (!getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
-                const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
-                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
+                const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
+                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
             }
         }
 
@@ -225,21 +225,30 @@ export function handleMouseMove(event, ctx) {
 }
 
 export function returnHoveredInterestingObjectOrExitName(cellValue) {
-
-    if (cellValue && cellValue.startsWith('e')) {
+    if (cellValue && (cellValue.startsWith('e') || cellValue.startsWith('o'))) {
         const currentScreenId = getCurrentScreenId();
         const navigationData = getNavigationData();
+        const objectData = getObjectData();
         const language = getLanguage();
 
-        if (navigationData[currentScreenId]) {
+        // If it is an exit
+        if (navigationData[currentScreenId] && cellValue.startsWith('e')) {
             const exitId = navigationData[currentScreenId].exits[cellValue].connectsTo;
 
             if (navigationData[exitId]) {
                 return navigationData[exitId][language];
             }
         }
+
+        // If it is an object
+        if (navigationData[currentScreenId] && cellValue.startsWith('o')) {
+            const objectId = cellValue.substring(1);
+            const objectName = objectData.objects[objectId]?.name[language];
+
+            return objectName || "Unknown Object";
+        }
     }
-    
+
     return null;
 }
 
