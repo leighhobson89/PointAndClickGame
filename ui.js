@@ -93,15 +93,55 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
     });
 
-    //------------------------------------------------------------------------------------------------------
-    // VERB EVENT LISTENERS
-    
-    getElements().btnLookAt.addEventListener('click', function () {
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-    });
+//------------------------------------------------------------------------------------------------------
+// VERB EVENT LISTENERS
 
-    //------------------------------------------------------------------------------------------------------
+getElements().btnLookAt.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnPickUp.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnUse.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnOpen.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnClose.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnPush.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnPull.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnTalkTo.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+getElements().btnGive.addEventListener('click', function () {
+    setVerbButtonConstructionStatus(this);
+    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+});
+
+//------------------------------------------------------------------------------------------------------
 
     initializeCanvasEventListener();
     setGameState(getMenuState());
