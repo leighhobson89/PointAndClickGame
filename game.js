@@ -703,9 +703,97 @@ export function performCommand(command) {
     console.log(command);
     if (command !== null) {
         const verbKey = command.verbKey;
-        const objectId = command.objectId;
+        const subjectToApplyCommand = command.objectId;
+
+        switch (verbKey) {
+            case 'verbLookAt':
+                handleLookAt(subjectToApplyCommand);
+                break;
+            case 'verbPickUp':
+                handlePickUp(subjectToApplyCommand);
+                break;
+            case 'verbUse':
+                handleUse(subjectToApplyCommand);
+                break;
+            case 'verbOpen':
+                handleOpen(subjectToApplyCommand);
+                break;
+            case 'verbClose':
+                handleClose(subjectToApplyCommand);
+                break;
+            case 'verbPush':
+                handlePush(subjectToApplyCommand);
+                break;
+            case 'verbPull':
+                handlePull(subjectToApplyCommand);
+                break;
+            case 'verbTalkTo':
+                handleTalkTo(subjectToApplyCommand);
+                break;
+            case 'verbGive':
+                handleGive(subjectToApplyCommand);
+                break;
+            default:
+                console.warn(`Unhandled verbKey: ${verbKey}`);
+                break;
+        }        
     }
+
     return;
+}
+
+// Handle "Look At" action
+export function handleLookAt(objectId) {
+    console.log(`Looking at object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Pick Up" action
+export function handlePickUp(objectId) {
+    console.log(`Picking up object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Use" action
+export function handleUse(objectId) {
+    console.log(`Using object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Open" action
+export function handleOpen(objectId) {
+    console.log(`Opening object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Close" action
+export function handleClose(objectId) {
+    console.log(`Closing object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Push" action
+export function handlePush(objectId) {
+    console.log(`Pushing object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Pull" action
+export function handlePull(objectId) {
+    console.log(`Pulling object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Talk To" action
+export function handleTalkTo(objectId) {
+    console.log(`Talking to object: ${objectId}`);
+    // Add your implementation here
+}
+
+// Handle "Give" action
+export function handleGive(objectId) {
+    console.log(`Giving object: ${objectId}`);
+    // Add your implementation here
 }
 
 //-------------------------------------------------------------------------------------------------------------
