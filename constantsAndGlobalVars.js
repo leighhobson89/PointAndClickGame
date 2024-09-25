@@ -13,6 +13,7 @@ let oldLanguage = 'en';
 //CONSTANTS
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
+export const urlObjectsData = '.\\resources\\objects.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
@@ -49,6 +50,7 @@ let targetX = null;
 let targetY = null;
 let gridData = null;
 let navigationData = null;
+let objectData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
 let previousScreenId = INITIAL_SCREEN_ID;
 let nextScreenId = INITIAL_SCREEN_ID;
@@ -150,6 +152,9 @@ export function getGridData() {
     return { gridData: gridData[screenId], idType: idType }; // Returns both values as an object
 }
 
+export function getAllGridData() {
+    return gridData;
+}
 
 export function setGridData(value) {
     gridData = value;
@@ -161,6 +166,14 @@ export function getNavigationData() {
 
 export function setNavigationData(value) {
     navigationData = value;
+}
+
+export function getObjectData() {
+    return objectData;
+}
+
+export function setObjectData(value) {
+    objectData = value;
 }
 
 export function getInitialScreenId() {

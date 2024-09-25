@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor} from './constantsAndGlobalVars.js';
+import { getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -11,6 +11,7 @@ let currentPathIndex = 0;
 
 export function startGame() {
     initializeCanvas();
+    setUpObjects();
     initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
     //initializeEnemySquares();
     gameLoop();
@@ -600,6 +601,67 @@ function getLocationName(id) {
     } else {
         return null;
     }
+}
+
+export function setUpObjects() { 
+    // Retrieve data
+    const objectsData = getObjectData();
+    const gridData = getAllGridData(); // Gets all room grids
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+
+    // Iterate through each object in the objectsData
+    for (const objectId in objectsData.objects) {
+        const object = objectsData.objects[objectId];
+
+        // Determine which room the object belongs to
+        const roomName = object.location;  // Use the 'location' property of the object
+        
+        // Get the specific grid data for the room
+        const roomGridData = gridData[roomName];
+        if (!roomGridData) {
+            console.warn(`No grid found for room: ${roomName}`);
+            continue; // Skip if room grid is not found
+        }
+
+        // Calculate grid cell dimensions
+        const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
+        const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
+
+        // Get the object's grid position
+        const startX = object.gridPosition.x;
+        const startY = object.gridPosition.y;
+
+        // Check if the object can be placed
+        let canPlace = true;
+
+        // Check if all the cells are valid (i.e., have 'w' or 'n' as values)
+        for (let x = startX; x < startX + widthInCells; x++) {
+            for (let y = startY; y < startY + heightInCells; y++) {
+                if (!roomGridData[y][x].includes('w') && roomGridData[y][x] !== 'n') {
+                    canPlace = false;  // Cell is not valid for placement
+                    break;
+                }
+            }
+            if (!canPlace) break; // No need to check further if already invalid
+        }
+
+        // Place the object if valid
+        if (canPlace) {
+            for (let x = startX; x < startX + widthInCells; x++) {
+                for (let y = startY; y < startY + heightInCells; y++) {
+                    roomGridData[y][x] = `o${objectId}`; // Place the object in the correct room's grid
+                }
+            }
+            // Log successful placement
+            console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}).`);
+        } else {
+            console.warn(`Could not place object ${objectId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
+        }
+    }
+
+    // Log the updated grid data for all rooms
+    console.log(getAllGridData());
 }
 
 //-------------------------------------------------------------------------------------------------------------

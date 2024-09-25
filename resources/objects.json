@@ -26,8 +26,8 @@
                 "action": "unlock"
             },
             "location": "debugRoom",
-            "spriteUrl": "https://example.com/sprites/key.png",
-            "inventoryUrl": "https://example.com/inventory/key.png",
+            "spriteUrl": "./resources/objects/goldKey.png",
+            "inventoryUrl": "./resources/objects/goldKey.png",
             "gridPosition": {
                 "x": 10,
                 "y": 15
@@ -63,8 +63,8 @@
                 "action": "activate"
             },
             "location": "debugRoom",
-            "spriteUrl": "https://example.com/sprites/battery.png",
-            "inventoryUrl": "https://example.com/inventory/battery.png",
+            "spriteUrl": "./resources/objects/battery.png",
+            "inventoryUrl": "./resources/objects/battery.png",
             "gridPosition": {
                 "x": 20,
                 "y": 25
@@ -97,7 +97,7 @@
             "activeStatus": false,
             "usedOn": "",
             "location": "debugRoom",
-            "spriteUrl": "https://example.com/sprites/machine.png",
+            "spriteUrl": "./resources/objects/machine.png",
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 30,
@@ -131,8 +131,8 @@
             "activeStatus": false,
             "usedOn": "",
             "location": "debugRoom",
-            "spriteUrl": "https://example.com/sprites/banana.png",
-            "inventoryUrl": "https://example.com/inventory/banana.png",
+            "spriteUrl": "./resources/objects/banana.png",
+            "inventoryUrl": "./resources/objects/banana.png",
             "gridPosition": {
                 "x": 40,
                 "y": 35

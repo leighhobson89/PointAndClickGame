@@ -1,5 +1,5 @@
-import { setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
-import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
+import { getAllGridData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
+import { setUpObjects, resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
 
@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     setElements();
     getElements().customCursor.classList.add('d-none');
     getElements().customCursor.style.transform = 'translate(-50%, -50%)';
-    loadGameData(urlWalkableJSONS, urlNavigationData);
+    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData);
+
 
     getElements().newGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
@@ -363,7 +364,7 @@ export function updateInteractionInfo(text, action) {
     }
 }
 
-export function loadGameData(gridUrl, screenNavUrl) {
+export function loadGameData(gridUrl, screenNavUrl, objectsUrl) {
     // Load grid data
     fetch(gridUrl)
         .then(response => response.json())
@@ -385,5 +386,15 @@ export function loadGameData(gridUrl, screenNavUrl) {
         .catch(error => {
             console.error("Error loading navigation data:", error);
         });
-}
 
+    // Load object data
+    fetch(objectsUrl)
+        .then(response => response.json())
+        .then(objectsData => {
+            setObjectData(objectsData);
+            console.log("Object data loaded:", getObjectData());
+        })
+        .catch(error => {
+            console.error("Error loading object data:", error);
+        });
+}
