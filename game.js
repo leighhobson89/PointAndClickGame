@@ -39,13 +39,11 @@ export function gameLoop() {
         }
 
         // checkPlayerEnemyCollisions();
-        drawObject(ctx, getPlayerObject());
+        drawPlayerAndObjects(ctx);
 
         // enemySquares.forEach(square => {
         //     drawEnemySquare(ctx, square.xPos, square.yPos, square.width, square.height);
         // });
-
-        drawObjects(ctx);
 
         requestAnimationFrame(gameLoop);
     }
@@ -244,13 +242,15 @@ export function drawGrid() {
     }
 }
 
-export function drawObjects(ctx) {
+export function drawPlayerAndObjects(ctx) {
+    const player = getPlayerObject();
     const gridData = getGridData().gridData;
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
     const objectsData = getObjectData().objects;
     const drawnObjects = new Set();
 
+    //Objects
     for (let y = 0; y < gridData.length; y++) {
         for (let x = 0; x < gridData[y].length; x++) {
             const cellValue = gridData[y][x];
@@ -283,6 +283,10 @@ export function drawObjects(ctx) {
             }
         }
     }
+
+    //Player
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.xPos, player.yPos, player.width, player.height);
 }
 
 export function initializeCanvas() {
@@ -416,11 +420,6 @@ function generateRandomSquare() {
     const x = Math.random() * (getElements().canvas.width - size);
     const y = Math.random() * (getElements().canvas.height - size);
     return { x, y, width: size, height: size };
-}
-
-function drawObject(ctx, object) {
-    ctx.fillStyle = object.color;
-    ctx.fillRect(object.xPos, object.yPos, object.width, object.height);
 }
 
 function drawEnemySquare(ctx, x, y, width, height) {
