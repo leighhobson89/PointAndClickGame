@@ -1,4 +1,4 @@
-import { getAllGridData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
+import { getLocalization, getAllGridData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
 import { setUpObjects, resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -362,6 +362,7 @@ export function updateInteractionInfo(text, action) {
     if (interactionInfo) {
         interactionInfo.textContent = text;
         if (action) {
+            setUpcomingAction(interactionInfo.textContent);
             interactionInfo.style.color = 'rgb(255, 255, 0)';
             interactionInfo.style.fontWeight = 'bold';
         } else {
@@ -371,6 +372,60 @@ export function updateInteractionInfo(text, action) {
     } else {
         console.error('Interaction info element not found');
     }
+}
+
+export function parseCommand(userCommand) {
+    const objectData = getObjectData().objects;  // Retrieve all objects
+    const language = getLanguage();              // Get the current language
+    const localization = getLocalization()[language]['verbsActionsInteraction'];  // Get localized verbs/actions
+
+    // Step 1: Extract the object name by going from the last word backwards
+    let commandParts = userCommand.split(' ');  // Split the command string into parts
+    let objectMatch = null;                     // To store the matched objectId
+    let objectName = '';                        // To store the object name found
+    let verbPart = '';                          // To store the verb part of the command
+
+    // Step 2: Try to match object name from the last word, working backwards
+    for (let i = commandParts.length - 1; i >= 0; i--) {
+        objectName = commandParts.slice(i).join(' ');  // Extract from current word onwards (reverse slice)
+
+        // Compare with each object name in the current language
+        for (const objectId in objectData) {
+            if (objectData[objectId].name[language] === objectName) {
+                objectMatch = objectId;  // Found the objectId
+                verbPart = commandParts.slice(0, i).join(' ');  // Remaining part is the verb
+                break;
+            }
+        }
+        if (objectMatch) break;  // If object match found, stop further searching
+    }
+
+    // If no object match found, return an error or null
+    if (!objectMatch) {
+        console.warn('No object match found for the command:', userCommand);
+        return null;
+    }
+
+    // Step 3: Match the remaining verb part with localization verbs/actions
+    let verbKey = null;
+    for (const key in localization) {
+        if (localization[key] === verbPart) {
+            verbKey = key;  // Found the matching verb key
+            break;
+        }
+    }
+
+    // If no verb match found, return an error or null
+    if (!verbKey) {
+        console.warn('No verb match found for the command:', verbPart);
+        return null;
+    }
+
+    // Step 4: Return the matched object and verb as an object
+    return {
+        objectId: objectMatch,
+        verbKey: verbKey
+    };
 }
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl) {

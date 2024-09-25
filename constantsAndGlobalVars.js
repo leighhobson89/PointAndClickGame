@@ -56,6 +56,7 @@ let previousScreenId = INITIAL_SCREEN_ID;
 let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 let zPosHover = null;
+let upcomingAction = null;
 
 //FLAGS
 let audioMuted;
@@ -499,4 +500,12 @@ export function getVerbButtonConstructionStatus() {
         case btnGive:
             return 'interactionGive';
     }
+}
+
+export function setUpcomingAction(value) {
+    upcomingAction = value;
+}
+
+export function getUpcomingAction() {
+    return upcomingAction;
 }

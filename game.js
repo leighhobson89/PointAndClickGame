@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData} from './constantsAndGlobalVars.js';
+import { getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
-import { returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
+import { parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -65,19 +65,7 @@ function movePlayerTowardsTarget() {
 
     if (getTransitioningNow()) {
         const exit = 'e' + getExitNumberToTransitionTo();
-        const previousScreenId = getPreviousScreenId();
-        const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;
-        
-        /*console.log("CurrentScreenId: " + getCurrentScreenId() + 
-                    ", PreviousScreenId: " + previousScreenId + 
-                    ", playerOffsetX: " + playerOffsetX + 
-                    ", playerOffsetY: " + playerOffsetY + 
-                    ", finalPositionX: " + finalPosition.x + 
-                    ", finalPositionY: " + finalPosition.y + 
-                    ", Offset Difference X: " + (finalPosition.x - playerOffsetX) + 
-                    ", Offset Difference Y: " + (finalPosition.y - playerOffsetY));
-                    */
-        
+        const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
         const tolerance = 3;
 
     if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
@@ -122,6 +110,10 @@ function movePlayerTowardsTarget() {
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
+            const commandToPerform = parseCommand(getUpcomingAction());
+            console.log(commandToPerform);
+            setUpcomingAction(null);
+
             setCurrentlyMovingToAction(false);
             setCurrentlyMoving(false);
             if (getVerbButtonConstructionStatus() === 'interactionWalkTo') {
@@ -549,7 +541,6 @@ export function processClickPoint(event, mouseClick) {
     } else {
         setCustomMouseCursor(getCustomMouseCursor('error'));
     }
-
     setVerbButtonConstructionStatus(null);
 
     //console.log(`Path: ${JSON.stringify(path)}`);
