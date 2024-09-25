@@ -1,4 +1,4 @@
-import { resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving } from './constantsAndGlobalVars.js';
+import { getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
 import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -146,7 +146,41 @@ export function handleMouseMove(event, ctx) {
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
             //
         }
+
+        // Check for navigation transition possibility and get screen name it would lead to
+        const screenName = getHoveredExitScreenName(cellValue);
+        console.log(screenName);
+        if (!getCurrentlyMovingToAction()) {
+            if (screenName !== null) {
+                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
+            } else {
+                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+            }
+        } else {
+            if (screenName !== null) {
+                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
+            }
+        }
     }
+}
+
+function getHoveredExitScreenName(cellValue) {
+
+    if (cellValue && cellValue.includes('e')) {
+        const currentScreenId = getCurrentScreenId();
+        const navigationData = getNavigationData();
+        const language = getLanguage();
+
+        if (navigationData[currentScreenId]) {
+            const exitId = navigationData[currentScreenId].exits[cellValue].connectsTo;
+
+            if (navigationData[exitId]) {
+                return navigationData[exitId][language];
+            }
+        }
+    }
+    
+    return null;
 }
 
 function handleCanvasClick(event) {
@@ -252,6 +286,9 @@ export function fadeBackToGameInTransition() {
 }
 
 export function updateInteractionInfo(text, action) {
+    if (action) {
+        setCurrentlyMovingToAction(true);
+    }
     const interactionInfo = getElements().interactionInfo;
     if (interactionInfo) {
         interactionInfo.textContent = text;

@@ -59,6 +59,7 @@ let gameInProgress = false;
 let transitioningToAnotherScreen = false;
 let transitioningNow = false;
 let currentlyMoving = false;
+let currentlyMovingToAction = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -405,4 +406,12 @@ export function setCurrentlyMoving(value) {
 
 export function getCurrentlyMoving() {
     return currentlyMoving;
+}
+
+export function setCurrentlyMovingToAction(value) {
+    currentlyMovingToAction = value;
+}
+
+export function getCurrentlyMovingToAction() {
+    return currentlyMovingToAction;
 }
