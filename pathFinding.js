@@ -114,11 +114,12 @@ export function aStarPathfinding(start, target, gridData) {
 
     setLookingForAlternativePathToNearestWalkable(true);
     const nearestWalkableCell = findAndMoveToNearestWalkable({ x: start.x, y: start.y }, { x: target.x, y: target.y }, false);
-    if (!nearestWalkableCell || gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x] === 'n') {
-        console.log(gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x]);
+    if (nearestWalkableCell === null || gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x] === 'n') {
+        setLookingForAlternativePathToNearestWalkable(false);
     } else {
         console.log ("found walkable cell nearby, so will go there...");
     }
+
     if (getLookingForAlternativePathToNearestWalkable()) {
         const nearestPath = aStarPathfinding({ x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
         { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
@@ -127,7 +128,7 @@ export function aStarPathfinding(start, target, gridData) {
         setLookingForAlternativePathToNearestWalkable(false);
         return nearestPath;
     }
-
+    return [];
 }
 
 export function findAndMoveToNearestWalkable(start, target, teleport) {
@@ -166,10 +167,22 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
     // Perform BFS to find the nearest walkable square, starting from the target and moving towards the player
     const visited = new Set();
     const queue = [{ x: targetX, y: targetY }];
+    
+    let iterations = 0; // Counter to track iterations
+    const maxIterations = 1000; // Set maximum allowed iterations
 
     while (queue.length > 0) {
+        // Check for timeout
+        if (iterations >= maxIterations) {
+            console.error("Search timed out after checking 1000 cells.");
+            return null; // No path found within the iteration limit
+        }
+        
         const current = queue.shift();
         const { x, y } = current;
+
+        // Increment iteration count
+        iterations++;
 
         // Mark the current cell as visited
         visited.add(`${x},${y}`);
@@ -220,7 +233,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
         }
     }
 
-    //console.error("No walkable square found");
+    console.error("No walkable square found");
     return null; // If no walkable square is found, return null
 }
 
