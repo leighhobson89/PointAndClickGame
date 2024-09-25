@@ -1,4 +1,54 @@
 {
+    "libraryFoyerDebug": {
+        "en": "Library Foyer DEBUG",
+        "es": "Vestíbulo de la Biblioteca DEBUG",
+        "de": "Bibliotheksfoyer DEBUG",
+        "it": "Foyer della Biblioteca DEBUG",
+        "fr": "Foyer de la Bibliothèque DEBUG",
+        "bgUrl": "./resources/backgrounds/libraryFoyerDebug.png",
+        "exits": {
+            "e1": {
+                "connectsTo": "researchRoom",
+                "status": "locked",
+                "startPosition": { "x": 33, "y": 51 },
+                "finalPosition": { "x": 33, "y": 51 }
+            },
+            "e2": {
+                "connectsTo": "libraryDesk",
+                "status": "open",
+                "startPosition": { "x": 39, "y": 59 }, 
+                "finalPosition": { "x": 39, "y": 57 }
+            },
+            "e3": {
+                "connectsTo": "marketStreet",
+                "status": "open",
+                "startPosition": { "x": 38, "y": 38 },
+                "finalPosition": { "x": 38, "y": 43 }
+            },
+            "e4": {
+                "connectsTo": "debugRoom",
+                "status": "open",
+                "startPosition": { "x": 39, "y": 59 }, 
+                "finalPosition": { "x": 39, "y": 57 }
+            }
+        }
+    },
+    "debugRoom": {
+        "en": "DEBUG",
+        "es": "DEBUG",
+        "de": "DEBUG",
+        "it": "DEBUG",
+        "fr": "DEBUG",
+        "bgUrl": "./resources/backgrounds/debugRoom.png",
+        "exits": {
+            "e1": {
+                "connectsTo": "libraryFoyerDebug",
+                "status": "locked",
+                "startPosition": { "x": 33, "y": 51 },
+                "finalPosition": { "x": 33, "y": 51 }
+            }
+        }
+    },
     "libraryDesk": {
         "en": "Library Desk",
         "es": "Mesa de la Biblioteca",
