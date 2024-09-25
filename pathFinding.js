@@ -89,9 +89,9 @@ export function aStarPathfinding(start, target, gridData) {
             // Add different costs based on cell type
             let cellCost = dir.cost;
 
-            if (cellType.includes('w')) {
+            if (cellType.startsWith('w')) {
                 cellCost *= 1;
-            } else if (cellType.includes('e')) {
+            } else if (cellType.startsWith('e')) {
                 cellCost *= 5;
             }
 
@@ -196,7 +196,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
         const cellType = gridData.gridData[y][x];
 
         // If the cell is walkable, return it
-        if (cellType.includes('w')) {
+        if (cellType.startsWith('w')) {
             const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
             const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
 

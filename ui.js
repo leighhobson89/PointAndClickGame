@@ -186,7 +186,7 @@ export function handleMouseMove(event, ctx) {
     if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
         const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
 
-        const walkable = (cellValue.includes('e') || cellValue.includes('w'));
+        const walkable = (cellValue.startsWith('e') || cellValue.startsWith('w'));
 
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
@@ -197,7 +197,7 @@ export function handleMouseMove(event, ctx) {
             //
         }
 
-        setHoveringInterestingObjectOrExit(cellValue.includes('e'));
+        setHoveringInterestingObjectOrExit(cellValue.startsWith('e'));
         // console.log("are we hovering anything interesting? " + getHoveringInterestingObjectOrExit());
         // console.log("verb construction status: " + getVerbButtonConstructionStatus());
         if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
@@ -226,7 +226,7 @@ export function handleMouseMove(event, ctx) {
 
 export function returnHoveredInterestingObjectOrExitName(cellValue) {
 
-    if (cellValue && cellValue.includes('e')) {
+    if (cellValue && cellValue.startsWith('e')) {
         const currentScreenId = getCurrentScreenId();
         const navigationData = getNavigationData();
         const language = getLanguage();

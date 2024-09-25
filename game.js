@@ -25,7 +25,7 @@ export function gameLoop() {
 
         // DEBUG
         const cellValue = getGridData().gridData[getHoverCell().y] && getGridData().gridData[getHoverCell().y][getHoverCell().x];
-        const walkable = (cellValue.includes('e') || cellValue.includes('w'));
+        const walkable = (cellValue.startsWith('e') || cellValue.startsWith('w'));
         drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
         //
 
@@ -38,12 +38,14 @@ export function gameLoop() {
             checkAndChangeScreen();
         }
 
-        checkPlayerEnemyCollisions();
+        // checkPlayerEnemyCollisions();
         drawObject(ctx, getPlayerObject());
 
-        enemySquares.forEach(square => {
-            drawEnemySquare(ctx, square.xPos, square.yPos, square.width, square.height);
-        });
+        // enemySquares.forEach(square => {
+        //     drawEnemySquare(ctx, square.xPos, square.yPos, square.width, square.height);
+        // });
+
+        drawObjects(ctx);
 
         requestAnimationFrame(gameLoop);
     }
@@ -148,7 +150,7 @@ export function resizePlayerObject() {
 
     const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
 
-    if (!cellValue.includes('w')) {
+    if (!cellValue.startsWith('w')) {
         return;
     }
     
@@ -185,7 +187,7 @@ export function resizePlayerObject() {
 }
 
 export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+    let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -218,12 +220,14 @@ export function drawGrid() {
     if (hoverCell) {
         const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
         
-        if (cellValue.includes('w')) {
+        if (cellValue.startsWith('w')) {
             setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
             context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`; 
-        } else if (cellValue.includes('e')) {
+        } else if (cellValue.startsWith('e')) {
             context.fillStyle = 'rgba(255, 255, 0, 0.5)';
-        } else {
+        } else if (cellValue.startsWith('o')) {
+            context.fillStyle = 'rgba(255, 0, 255, 0.5)';
+        }else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';
         }        
         
@@ -237,6 +241,47 @@ export function drawGrid() {
             context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
         }
     }
+    }
+}
+
+export function drawObjects(ctx) {
+    const gridData = getGridData().gridData;
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+    const objectsData = getObjectData().objects;
+    const drawnObjects = new Set();
+
+    for (let y = 0; y < gridData.length; y++) {
+        for (let x = 0; x < gridData[y].length; x++) {
+            const cellValue = gridData[y][x];
+
+            if (cellValue.startsWith('o')) {
+                const objectId = cellValue.substring(1);
+
+                if (drawnObjects.has(objectId)) {
+                    continue;
+                }
+
+                const object = objectsData[objectId];
+
+                if (object) {
+                    
+                    const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
+                    const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
+
+                    const drawX = x * cellWidth;
+                    const drawY = y * cellHeight;
+                    const drawWidth = widthInCells * cellWidth;
+                    const drawHeight = heightInCells * cellHeight;
+
+                    const img = new Image();
+                    img.src = object.spriteUrl;
+
+                    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    drawnObjects.add(objectId);
+                }
+            }
+        }
     }
 }
 
@@ -323,7 +368,7 @@ function generateRandomGridSquare() {
         gridY = Math.floor(Math.random() * getGridSizeY());
         cellWidth = getCanvasCellWidth();
         cellHeight = getCanvasCellHeight();
-    } while (!getGridData()[gridY] && getGridData()[gridY][gridX].includes('w'));
+    } while (!getGridData()[gridY] && getGridData()[gridY][gridX].startsWith('w'));
 
     return {
         xPos: gridX * cellWidth,
@@ -531,7 +576,7 @@ export function checkAndChangeScreen() {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
 
-            if (getGridTargetX() === checkX && getGridTargetY() === checkY && gridData.gridData[checkY] && gridData.gridData[checkY][checkX].includes('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+            if (getGridTargetX() === checkX && getGridTargetY() === checkY && gridData.gridData[checkY] && gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
 
                 changeBackground();
@@ -583,7 +628,7 @@ function swapBackgroundOnRoomTransition(newScreenId) {
 
 export function extractWValue(value) {
 
-    if (typeof value === 'string' && value.includes('w')) {
+    if (typeof value === 'string' && value.startsWith('w')) {
         const matches = value.match(/w(\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];
@@ -638,7 +683,7 @@ export function setUpObjects() {
         // Check if all the cells are valid (i.e., have 'w' or 'n' as values)
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
-                if (!roomGridData[y][x].includes('w') && roomGridData[y][x] !== 'n') {
+                if (!roomGridData[y][x].startsWith('w') && roomGridData[y][x] !== 'n') {
                     canPlace = false;  // Cell is not valid for placement
                     break;
                 }

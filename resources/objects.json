@@ -67,7 +67,7 @@
             "inventoryUrl": "./resources/objects/battery.png",
             "gridPosition": {
                 "x": 20,
-                "y": 25
+                "y": 15
             },
             "dimensions": {
                 "width": 60,
@@ -101,7 +101,7 @@
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 30,
-                "y": 40
+                "y": 15
             },
             "dimensions": {
                 "width": 100,
@@ -135,7 +135,7 @@
             "inventoryUrl": "./resources/objects/banana.png",
             "gridPosition": {
                 "x": 40,
-                "y": 35
+                "y": 15
             },
             "dimensions": {
                 "width": 50,
