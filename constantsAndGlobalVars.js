@@ -66,6 +66,7 @@ let currentlyMoving = false;
 let currentlyMovingToAction = false;
 let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;
+let verbConstructionActive = null;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -455,5 +456,34 @@ export function getCustomMouseCursor(value) {
             return urlCustomMouseCursorClickInteresting;
         default:
             return urlCustomMouseCursorError;
+    }
+}
+
+export function setVerbButtonConstructionStatus(value) {
+    verbConstructionActive = value;
+}
+
+export function getVerbButtonConstructionStatus() {
+    switch(verbConstructionActive) {
+        case null:
+            return 'interactionWalkTo';
+        case btnLookAt:
+            return 'interactionLookAt';
+        case btnPickUp:
+            return 'interactionPickUp';
+        case btnUse:
+            return 'interactionUse';
+        case btnOpen:
+            return 'interactionOpen';
+        case btnClose:
+            return 'interactionClose';
+        case btnPush:
+            return 'interactionPush';
+        case btnPull:
+            return 'interactionPull';
+        case btnTalkTo:
+            return 'interactionTalkTo';
+        case btnGive:
+            return 'interactionGive';
     }
 }

@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor} from './constantsAndGlobalVars.js';
+import { getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
-import { updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
+import { returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -122,9 +122,10 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             setCurrentlyMovingToAction(false);
-            console.log("moving to action set to false");
             setCurrentlyMoving(false);
-            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+            if (getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+            }
         }
     }
 
@@ -468,11 +469,11 @@ export function processClickPoint(event, mouseClick) {
 
     if (currentPath.length > 0) {
         setCurrentlyMoving(true);
-        if (!getTransitioningNow()) {
+        if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
             updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
         }
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
-        if (cellValue && cellValue.startsWith('e')) {
+        if (cellValue && cellValue.startsWith('e') && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
             const exitNumberMatch = cellValue.match(/e(\d+)/);
             if (exitNumberMatch) {
                 const exitNumber = exitNumberMatch[1];
@@ -484,6 +485,19 @@ export function processClickPoint(event, mouseClick) {
                 updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
             }
         }
+
+        console.log("verb construction: " + getVerbButtonConstructionStatus());
+
+        if (getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
+            const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
+            updateInteractionInfo(
+                localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + 
+                " " + (screenName ? screenName : ""),
+                true
+            );
+        }
+        
+
         const nextStep = currentPath[0];
         setTargetX(nextStep.x * getCanvasCellWidth());
         setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
@@ -491,7 +505,9 @@ export function processClickPoint(event, mouseClick) {
         setCustomMouseCursor(getCustomMouseCursor('error'));
     }
 
-    console.log(`Path: ${JSON.stringify(path)}`);
+    setVerbButtonConstructionStatus(null);
+
+    //console.log(`Path: ${JSON.stringify(path)}`);
 }
 
 export function checkAndChangeScreen() {

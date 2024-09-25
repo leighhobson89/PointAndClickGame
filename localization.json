@@ -19,14 +19,14 @@
       "textAreaLabel": "Paste Save String Here..."
     },
     "verbsActionsInteraction": {
-      "verbLookAt": "Look at",
-      "verbPickUp": "Pick up",
+      "verbLookAt": "Look At",
+      "verbPickUp": "Pick Up",
       "verbUse": "Use",
       "verbOpen": "Open",
       "verbClose": "Close",
       "verbPush": "Push",
       "verbPull": "Pull",
-      "verbTalkTo": "Talk to",
+      "verbTalkTo": "Talk To",
       "verbGive": "Give",
       "interactionWalkTo": "Walk To",
       "interactionWalking": "Walking",

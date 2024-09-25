@@ -233,7 +233,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
         }
     }
 
-    console.error("No walkable square found");
+    //console.error("No walkable square found");
     return null; // If no walkable square is found, return null
 }
 

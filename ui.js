@@ -1,4 +1,4 @@
-import { setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
+import { setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction } from './constantsAndGlobalVars.js';
 import { resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -93,6 +93,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
     });
 
+    //------------------------------------------------------------------------------------------------------
+    // VERB EVENT LISTENERS
+    
+    getElements().btnLookAt.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
+
+    //------------------------------------------------------------------------------------------------------
+
     initializeCanvasEventListener();
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
@@ -141,20 +151,28 @@ export function handleMouseMove(event, ctx) {
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
+            //console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
             //DEBUG
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
             //
         }
 
-        // Check for navigation transition possibility and get screen name it would lead to
         setHoveringInterestingObjectOrExit(cellValue.includes('e'));
-        if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction()) {
+        // console.log("are we hovering anything interesting? " + getHoveringInterestingObjectOrExit());
+        // console.log("verb construction status: " + getVerbButtonConstructionStatus());
+        if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
             const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
             updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
         } else {
-            if(!getCurrentlyMovingToAction()) {
+            if (!getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+            }
+            if (getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
+                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+            }
+            if (!getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
+                const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
+                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenName, false);
             }
         }
 
@@ -166,7 +184,7 @@ export function handleMouseMove(event, ctx) {
     }
 }
 
-function returnHoveredInterestingObjectOrExitName(cellValue) {
+export function returnHoveredInterestingObjectOrExitName(cellValue) {
 
     if (cellValue && cellValue.includes('e')) {
         const currentScreenId = getCurrentScreenId();
