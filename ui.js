@@ -1,7 +1,9 @@
-import { gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getPreviousScreenId, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, getZPosHover, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setObjectData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
-import { drawGrid, enemySquares, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, resizePlayerObject, setGameState, setUpObjects, startGame } from './game.js';
+import { getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setObjectData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
+
+let textTimer = null; 
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -349,6 +351,7 @@ export function animateTransitionAndChangeBackground() {
         const startY = startPosition.y;
 
         initializePlayerPosition(startX, startY);
+        setDisplayText(null); //remove text if change screen
         fadeBackToGameInTransition();
         
         setTransitioningNow(true);
@@ -427,6 +430,91 @@ export function drawInventory(startIndex) {
             div.innerHTML = `<img src="./resources/objects/blank.png" alt="empty" class="inventory-img" />`;
         }
     });
+}
+
+export function drawTextOnCanvas(text) {
+    const player = getPlayerObject(); 
+    let xPos = player.xPos; 
+    let yPos;
+
+    const canvas = getElements().canvas;
+    const ctx = canvas.getContext('2d');
+
+    ctx.font = '1.8em monospace'; 
+    ctx.fillStyle = 'white'; 
+    ctx.textAlign = 'center'; 
+    ctx.textBaseline = 'bottom'; 
+
+    const maxWidth = getMaxTexTDisplayWidth(); 
+    const lineHeight = parseFloat(ctx.font) * 1.2;
+
+    const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
+
+    const halfCanvasHeight = canvas.height / 2;
+    if (player.yPos + player.height < halfCanvasHeight) {
+        yPos = player.yPos + player.height + 165;  // Position below the player
+    } else {
+        yPos = player.yPos - 10; // Position above the player
+    }
+
+    if (yPos + 50 > canvas.height) {
+        yPos = canvas.height - 50;
+    }
+
+    if (xPos - maxWidth / 2 < 0) {
+        xPos = maxWidth / 2 + 10;
+    }
+    if (xPos + maxWidth / 2 > canvas.width) {
+        xPos = canvas.width - maxWidth / 2 - 10;
+    }
+
+    drawWrappedText(lines, ctx, xPos, yPos, lineHeight);
+}
+
+function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
+    const words = text.split(' '); 
+    const lines = [];
+    let currentLine = ''; 
+
+    words.forEach(word => {
+        const testLine = currentLine + word + ' '; 
+        const metrics = context.measureText(testLine); 
+        const testWidth = metrics.width; 
+
+        if (testWidth > maxWidth && currentLine) {
+            lines.push(currentLine.trim()); 
+            currentLine = word + ' '; 
+        } else {
+            currentLine = testLine; 
+        }
+    });
+
+    if (currentLine) {
+        lines.push(currentLine.trim());
+    }
+
+    return lines; 
+}
+
+function drawWrappedText(lines, context, x, startY, lineHeight) {
+    let adjustedY = startY - (lines.length * lineHeight);
+    lines.forEach(line => {
+        context.fillText(line, x, adjustedY);
+        context.strokeText(line, x, adjustedY);
+        adjustedY += lineHeight;
+    });
+}
+
+export function showText(text) {
+    setDisplayText(text); 
+
+    if (textTimer) {
+        clearTimeout(textTimer);
+    }
+
+    textTimer = setTimeout(() => {
+        setDisplayText(''); 
+    }, getTextDisplayDuration());
 }
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {

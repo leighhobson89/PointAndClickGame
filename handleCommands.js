@@ -1,5 +1,5 @@
 import { getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization } from "./constantsAndGlobalVars.js";
-import { drawInventory } from "./ui.js";
+import { drawInventory, drawTextOnCanvas, showText } from "./ui.js";
 
 
 export function performCommand(command) {
@@ -71,6 +71,7 @@ export function handleLookAt(verb, objectId, exitOrNot) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
 
         if (dialogueString) {
+            showText(dialogueString);
             console.log(dialogueString);
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
@@ -81,6 +82,7 @@ export function handleLookAt(verb, objectId, exitOrNot) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.exits[connectsTo][openOrLocked][language];
 
         if (dialogueString) {
+            showText(dialogueString);
             console.log(dialogueString);
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
@@ -93,7 +95,6 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object = objectData.objects[objectId];
-    const quantity = object.interactable.quantity;
 
     if (!exitOrNot && !object) {
         console.warn(`Object ${objectId} not found.`);
@@ -101,9 +102,11 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     }
 
     if (!exitOrNot) {
+        const quantity = object.interactable.quantity;
         if (object?.interactable?.canPickUp) {
             const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
             if (dialogueString) {
+                showText(dialogueString);
                 console.log(dialogueString);
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
@@ -196,6 +199,7 @@ function triggerEvent(objectId) {
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
+        showText(cannotPickUpMessage);
         console.log(cannotPickUpMessage);
     } else {
         console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);

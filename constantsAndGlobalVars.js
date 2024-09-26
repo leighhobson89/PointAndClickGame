@@ -29,6 +29,8 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
+export const TEXT_DISPLAY_DURATION = 3000;
+export const MAX_TEXT_DISPLAY_WIDTH = 1200;
 
 export let playerObject = {
     originalWidth: 45,
@@ -65,6 +67,8 @@ let zPosHover = null;
 let upcomingAction = null;
 let originalValueInCellWhereObjectPlaced = {};
 let currentStartIndexInventory = 0;
+let displayText = null;
+//let textTimer = null;
 
 //FLAGS
 let audioMuted;
@@ -561,4 +565,20 @@ export function setCurrentStartIndexInventory(value) {
 
 export function getCurrentStartIndexInventory() {
     return currentStartIndexInventory;
+}
+
+export function setDisplayText(value) {
+    displayText = value;
+}
+
+export function getDisplayText() {
+    return displayText;
+}
+
+export function getTextDisplayDuration() {
+    return TEXT_DISPLAY_DURATION;
+}
+
+export function getMaxTexTDisplayWidth() {
+    return MAX_TEXT_DISPLAY_WIDTH;
 }
