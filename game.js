@@ -116,7 +116,7 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             const commandToPerform = parseCommand(getUpcomingAction());
-            performCommand(commandToPerform);
+            performCommand(commandToPerform, false); //we presume not inventory item if player moves // CHECK IF BUGS
             setUpcomingAction(null);
 
             setCurrentlyMovingToAction(false);

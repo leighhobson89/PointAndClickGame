@@ -397,11 +397,11 @@
                 "fr": "Votre inventaire est plein."
             },
             "itemCannotBeUsed": {
-                "en": "This item can't be used here.",
-                "es": "Este objeto no se puede usar aquí.",
-                "de": "Dieser Gegenstand kann hier nicht verwendet werden.",
-                "it": "Questo oggetto non può essere utilizzato qui.",
-                "fr": "Cet objet ne peut pas être utilisé ici."
+                "en": "This item can't be used.",
+                "es": "Este objeto no se puede usar.",
+                "de": "Dieser Gegenstand kann nicht verwendet werden.",
+                "it": "Questo oggetto non può essere utilizzato.",
+                "fr": "Cet objet ne peut pas être utilisé."
             },
             "itemCannotBePickedUp": {
                 "en": "I cannot pick that up.",

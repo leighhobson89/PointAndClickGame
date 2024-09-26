@@ -26,7 +26,11 @@
             "activeStatus": true,
             "usedOn": {
                 "object": "navigation/exit/libraryFoyer",
-                "action": "events/exitUnlock/libraryFoyer"
+                "actionUse1": "events/libraryFoyer",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -65,8 +69,12 @@
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "objects/machineDEBUG",
-                "action": "objects/machineDEBUG/activate"
+                "object": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objects/machineDEBUG",
+                "actionUseWith11": "objects/machineDEBUG/activate",
+                "actionUseWith12": "events/batteryDEBUG"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/battery.png",
@@ -105,7 +113,11 @@
             "activeStatus": false,
             "usedOn": {
                 "object": "",
-                "action": "giveItem/banana"
+                "actionUse1": "giveItem/bananaDEBUG",
+                "actionUse2": "events/machineDEBUG",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/machine.png",
@@ -137,14 +149,18 @@
             "interactable": {
                 "canPickUp": true,
                 "canUse": true,
-                "canUseWith": false, 
+                "canUseWith": true, 
                 "stackable": false,
                 "quantity": 1
             },
             "activeStatus": false,
             "usedOn": {
                 "object": "",
-                "action": "dialogue/bananaDebug"
+                "actionUse1": "removeItem/bananaDEBUG",
+                "actionUse2": "",
+                "objectUseWith1": "npc/monkeyDEBUG",
+                "actionUseWith11": "removeItem/bananaDEBUG",
+                "actionUseWith12": "events/monkeyBanana"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",

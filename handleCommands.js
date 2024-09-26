@@ -2,7 +2,7 @@ import { getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, ge
 import { drawInventory, drawTextOnCanvas, showText } from "./ui.js";
 
 
-export function performCommand(command) {
+export function performCommand(command, inventoryItem) {
     console.log(command);
     if (command !== null) {
         const verbKey = command.verbKey;
@@ -17,7 +17,7 @@ export function performCommand(command) {
                 handlePickUp(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbUse':
-                handleUse(verbKey, subjectToApplyCommand, exitOrNot);
+                handleUse(verbKey, subjectToApplyCommand, exitOrNot, inventoryItem);
                 break;
             case 'verbOpen':
                 handleOpen(verbKey, subjectToApplyCommand, exitOrNot);
@@ -196,9 +196,11 @@ function addItemToInventory(objectId, quantity = 1) {
 
     setPlayerInventory(inventory);
 }
+
 function triggerEvent(objectId) {
     // Logic to check for and trigger any associated events
 }
+
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
@@ -208,10 +210,75 @@ function handleCannotPickUpMessage(language, dialogueData) {
         console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
     }
 }
-// Handle "Use" action
 
-export function handleUse(verb, objectId) {
-    // check if item can be used or not with getObjectData().objects.objectId.interactable.canUse
+// Handle "Use" action
+export function handleUse(verb, objectId, exitOrNot, inventoryItem) {
+    const objectData = getObjectData();
+    const dialogueData = getDialogueData();
+    const language = getLanguage();
+    const object = objectData.objects[objectId];
+    const inventory = getPlayerInventory();
+
+    const use = checkIfItemCanBeUsed(objectId);  // check if first (or only if not a useWith item) item can be used or not with getObjectData().objects.objectId.interactable.canUse - cannot - global message cannot use cancel parser
+    const useWith = checkIfItemCanBeUsedWith(objectId); // check if is a use or a use with item - use proceed to use it - use with continue parser "with" handleWith(verb, objectId)
+    
+    if (!use || exitOrNot) {
+        handleCannotUseMessage(language, dialogueData);
+        return;
+    }
+        //NEED TO WORK ON ACTIVATING INVENTORY ITEMS FOR CLICKING VERBS ON FIRST
+    if (inventoryItem) {
+        handleInventoryAdjustment(objectId);  // check if decrement quantity ie remove from inventory and handle this
+    }
+
+    if (useWith) {
+        handleWith(objectId); // call handleWith() to handle objects that are used with something or someone
+    } else {
+        useItem(objectId, false); //use item and pass false for not a useWith item
+    }
+}
+
+export function handleWith(verb, objectId, inventoryItem) {
+    const objectData = getObjectData();
+    const dialogueData = getDialogueData();
+    const language = getLanguage();
+    const object = objectData.objects[objectId];
+    const inventory = getPlayerInventory();
+
+    // check if second item can be used or not with getObjectData().objects.objectId.interactable.canUse - cannot - global message cannot use cancel parser
+    // check if it is an inventory item or not
+    // check if decrement quantity ie remove from inventory and handle this
+    // use item trigger actionUseWith events
+}
+
+function checkIfItemCanBeUsed(objectId) {
+    const objectData = getObjectData().objects[objectId];
+    
+    if (objectData && objectData.interactable) {
+        return objectData.interactable.canUse;
+    } else {
+        console.warn(`Object with ID ${objectId} does not exist.`);
+    }
+}
+
+function checkIfItemCanBeUsedWith(objectId) {
+    const objectData = getObjectData().objects[objectId];
+    
+    if (objectData && objectData.interactable) {
+        return objectData.interactable.canUseWith;
+    } else {
+        console.warn(`Object with ID ${objectId} does not exist.`);
+    }
+}
+
+function handleCannotUseMessage(language, dialogueData) {
+    const cannotUseMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsed?.[language];
+    if (cannotUseMessage) {
+        showText(cannotUseMessage);
+        console.log(cannotUseMessage);
+    } else {
+        console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
+    }
 }
 
 // Handle "Open" action
