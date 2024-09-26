@@ -1,4 +1,4 @@
-import { setDialogueData, getDialogueData, getLocalization, getAllGridData, urlDialogueData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
+import { getPlayerInventory, setDialogueData, getDialogueData, getLocalization, getAllGridData, urlDialogueData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
 import { setUpObjects, resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
@@ -95,58 +95,73 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 //------------------------------------------------------------------------------------------------------
 // VERB EVENT LISTENERS
+//------------------------------------------------------------------------------------------------------
 
-getElements().btnLookAt.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnLookAt.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnPickUp.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnPickUp.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnUse.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnUse.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnOpen.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnOpen.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnClose.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnClose.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnPush.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnPush.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnPull.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnPull.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnTalkTo.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnTalkTo.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
-getElements().btnGive.addEventListener('click', function () {
-    setVerbButtonConstructionStatus(this);
-    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-});
+    getElements().btnGive.addEventListener('click', function () {
+        setVerbButtonConstructionStatus(this);
+        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+    });
 
 //------------------------------------------------------------------------------------------------------
+// INVENTORY EVENT LISTENERS
+//------------------------------------------------------------------------------------------------------
+
+    getElements().inventoryUpArrow.addEventListener('click', handleUpArrowClick);
+    getElements().inventoryDownArrow.addEventListener('click', handleDownArrowClick);
+
 
     initializeCanvasEventListener();
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
 });
+
+function handleUpArrowClick() {
+    console.log("Up arrow clicked");
+}
+
+function handleDownArrowClick() {
+    console.log("Down arrow clicked");
+}
 
 export function initializeCanvasEventListener() {
     const canvas = getElements().canvas;
@@ -444,6 +459,41 @@ export function parseCommand(userCommand) {
         verbKey: verbKey,
         exitOrNot: exitOrNot
     };
+}
+
+export function drawInventory() {
+    const inventory = getPlayerInventory(); // Get the inventory object
+    const inventoryDivs = document.querySelectorAll('.inventory-item'); // Select all inventory item divs (up to 8 for now)
+
+    // Clear all inventory slots first
+    inventoryDivs.forEach(div => {
+        div.innerHTML = ''; // Clear existing content
+    });
+
+    // Loop through the first 8 inventory slots and draw the items
+    for (let i = 0; i < inventoryDivs.length; i++) {
+        const slotKey = `slot${i + 1}`; // Generate the slot key (e.g., "slot1", "slot2", etc.)
+        const inventorySlot = inventory[slotKey]; // Get the inventory slot object
+
+        if (inventorySlot) {
+            const objectId = inventorySlot.object; // Get the objectId from the slot
+            const objectData = getObjectData().objects[objectId]; // Get object data using objectId
+            const imageUrl = objectData.inventoryUrl; // Get the inventory URL for the object
+
+            // Create an img element and set its src to the imageUrl
+            const imgTag = `<img src="${imageUrl}" alt="${objectId}" class="inventory-img" />`;
+            
+            // Set the innerHTML of the corresponding inventory div
+            inventoryDivs[i].innerHTML = imgTag;
+        }
+    }
+
+    // Check for any empty inventory slots and fill them with a blank image
+    inventoryDivs.forEach(div => {
+        if (!div.innerHTML) { // Check if the div is still empty
+            div.innerHTML = `<img src="./resources/objects/blank.png" alt="empty" class="inventory-img" />`;
+        }
+    });
 }
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {

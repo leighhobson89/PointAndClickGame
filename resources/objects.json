@@ -19,7 +19,9 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": true, 
-                "useResult": "retainItem"
+                "useResult": "retainItem",
+                "stackable": false,
+                "quantity": 1
             },
             "activeStatus": true,
             "usedOn": {
@@ -57,7 +59,9 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": true, 
-                "useResult": "discardItem"
+                "useResult": "discardItem",
+                "stackable": true,
+                "quantity": 1
             },
             "activeStatus": true,
             "usedOn": {
@@ -95,7 +99,9 @@
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
-                "useResult": "machineDebugUsed"
+                "useResult": "machineDebugUsed",
+                "stackable": false,
+                "quantity": 1
             },
             "activeStatus": false,
             "usedOn": "",
@@ -130,7 +136,9 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": false, 
-                "useResult": "dialogue/eatenBanana"
+                "useResult": "dialogue/eatenBanana",
+                "stackable": false,
+                "quantity": 1
             },
             "activeStatus": false,
             "usedOn": "",

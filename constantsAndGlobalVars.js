@@ -40,6 +40,9 @@ export let playerObject = {
     yPos: '0'
 };
 
+export let playerInventory = {    
+};
+
 //GLOBAL VARIABLES
 export let gameState;
 let hoverCell = { x: 0, y: 0 };
@@ -80,6 +83,8 @@ let verbConstructionActive = null;
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
+        inventoryUpArrow: document.querySelector('.inventory-up'),
+        inventoryDownArrow: document.querySelector('.inventory-down'),
         interactionInfo: document.getElementById('interactionInfo'),
         customCursor: document.querySelector('.custom-mouse'),
         customCursorImage: document.querySelector('.custom-mouse-image'),
@@ -534,4 +539,12 @@ export function setOriginalValueInCellWhereObjectPlaced(roomId, gridX, gridY, ob
         objectId: objectId,
         originalValue: originalValue,
     };
+}
+
+export function setPlayerInventory(value) {
+    playerInventory = value;
+}
+
+export function getPlayerInventory() {
+    return playerInventory;
 }

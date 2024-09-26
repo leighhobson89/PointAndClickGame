@@ -1,7 +1,7 @@
 import { localize } from './localization.js';
-import { setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereObjectPlaced, getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
+import { setPlayerInventory, getPlayerInventory, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereObjectPlaced, getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
-import { parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
+import { drawInventory, parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -786,6 +786,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     const dialogueData = getDialogueData();   
     const language = getLanguage();
     const object = objectData.objects[objectId];
+    const quantity = object.interactable.quantity;
 
     if (!exitOrNot && !object) {
         console.warn(`Object ${objectId} not found.`);
@@ -800,7 +801,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
-            pickUpItem(objectId);
+            pickUpItem(objectId, quantity);
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
@@ -811,17 +812,13 @@ export function handlePickUp(verb, objectId, exitOrNot) {
 }
 
 // Function to handle picking up an item
-function pickUpItem(objectId) {
+function pickUpItem(objectId, quantity) {
     const objectData = getObjectData();
     
-    // Remove the object from the environment
-    removeObjectFromEnvironment(objectId);
-
-    // Add the object to the inventory
-    addItemToInventory(objectId);
-
-    // Draw the item in the appropriate inventory slot
-    drawItemInInventorySlot(objectId);
+    //removeObjectFromEnvironment(objectId);
+    addItemToInventory(objectId, quantity);
+    console.log(getPlayerInventory());
+    drawInventory(); //runs outside canvas so doesnt have to be updated every frame
 
     // Trigger any associated events
     triggerEvent(objectId);
@@ -849,16 +846,56 @@ function removeObjectFromEnvironment(objectId) {
     }
 }
 
-// Placeholder function to add the item to the inventory
-function addItemToInventory(objectId) {
-    // Logic to add the objectId to the inventory object
-}
+function addItemToInventory(objectId, quantity = 1) {
+    const objectData = getObjectData().objects[objectId]; // Retrieve object data
+    const isStackable = objectData.interactable.stackable; // Check if the item is stackable
+    const inventory = getPlayerInventory(); // Get the current inventory
 
-// Placeholder function to draw the item in the inventory slot
-function drawItemInInventorySlot(objectId) {
-    // Logic to calculate which image slot to use
-    // Check if the item is stackable and determine the correct slot
-    // Use the inventoryUrl property to draw the image
+    // Ensure slot1 exists in the inventory
+    if (!inventory.slot1) {
+        // If slot1 does not exist, create it for the first item
+        inventory.slot1 = {
+            object: objectId,
+            quantity: isStackable ? quantity : 1,
+            stackable: isStackable ? "true" : "false"
+        };
+        setPlayerInventory(inventory); // Update the inventory
+        return; // Exit after adding the first item
+    }
+
+    // Check for existing stackable item and handle accordingly
+    for (let slot in inventory) {
+        if (inventory[slot] && inventory[slot].object === objectId) {
+            if (isStackable) {
+                // Increment the quantity of the existing stackable item
+                inventory[slot].quantity += quantity; // Update quantity in the existing slot
+                setPlayerInventory(inventory); // Update the inventory
+                return; // Exit after updating the stackable item
+            }
+        }
+    }
+
+    // Shift items down to make room for the new item in slot1
+    const slots = Object.keys(inventory);
+    // Start from the last slot and move each item to the next slot
+    for (let i = slots.length - 1; i >= 0; i--) {
+        const currentSlot = slots[i];
+        const previousSlot = `slot${i + 2}`; // Shift to next slot (slot2 becomes slot1, etc.)
+
+        // Shift item from current to next slot
+        if (inventory[currentSlot]) {
+            inventory[previousSlot] = inventory[currentSlot]; // Move item to the next slot
+        }
+    }
+
+    // Set the new item in slot1
+    inventory.slot1 = {
+        object: objectId,
+        quantity: isStackable ? quantity : 1,
+        stackable: isStackable ? "true" : "false"
+    };
+    
+    setPlayerInventory(inventory); // Update the inventory
 }
 
 // Placeholder function to trigger events associated with the item
