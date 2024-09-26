@@ -639,73 +639,57 @@ function getLocationName(id) {
 }
 
 export function setUpObjects() { 
-    // Retrieve data
     const objectsData = getObjectData();
-    const gridData = getAllGridData(); // Gets all room grids
+    const gridData = getAllGridData();
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    // Iterate through each object in the objectsData
     for (const objectId in objectsData.objects) {
         const object = objectsData.objects[objectId];
-
-        // Determine which room the object belongs to
-        const roomName = object.location;  // Use the 'location' property of the object
-        
-        // Get the specific grid data for the room
+        const roomName = object.location;
         const roomGridData = gridData[roomName];
+        
         if (!roomGridData) {
             console.warn(`No grid found for room: ${roomName}`);
-            continue; // Skip if room grid is not found
+            continue;
         }
 
-        // Calculate grid cell dimensions
         const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
 
-        // Get the object's grid position
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
-        // Check if the object can be placed
         let canPlace = true;
 
-        // Check if all the cells are valid (i.e., have 'w' or 'n' as values)
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
                 if (!roomGridData[y][x].startsWith('w') && roomGridData[y][x] !== 'n') {
-                    canPlace = false;  // Cell is not valid for placement
+                    canPlace = false;
                     break;
                 }
             }
-            if (!canPlace) break; // No need to check further if already invalid
+            if (!canPlace) break;
         }
 
-        // Place the object if valid
         if (canPlace) {
             for (let x = startX; x < startX + widthInCells; x++) {
                 for (let y = startY; y < startY + heightInCells; y++) {
-                    // Store the original value before overwriting
                     const originalValue = roomGridData[y][x];
-                    // Add original value data to the object
-                    setOriginalValueInCellWhereObjectPlaced(objectId, x, y, originalValue);
-                    
-                    // Place the object in the correct room's grid
+                    setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);
                     roomGridData[y][x] = `o${objectId}`; 
                 }
             }
 
-            console.log("Original values object:");
+            console.log("Original Values Object:");
             console.log(getOriginalValueInCellWhereObjectPlaced());
-            
-            // Log successful placement
+
             console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}).`);
         } else {
             console.warn(`Could not place object ${objectId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
         }
     }
 
-    // Log the updated grid data for all rooms
     console.log(getAllGridData());
 }
 
@@ -843,10 +827,26 @@ function pickUpItem(objectId) {
     triggerEvent(objectId);
 }
 
-// Placeholder function to remove the object from the environment
 function removeObjectFromEnvironment(objectId) {
-    // Logic to find the grid references on the current screen
-    // Replace the value with the value in the objectReplacementArray[]
+    const gridData = getGridData().gridData;
+    const roomId = getCurrentScreenId();
+    const originalValues = getOriginalValueInCellWhereObjectPlaced();
+
+    if (originalValues.hasOwnProperty(roomId)) {
+        for (const [position, data] of Object.entries(originalValues[roomId])) {
+            if (data.objectId === objectId) {
+                const [y, x] = position.split(',').map(Number);
+
+                if (y >= 0 && y < gridData.length && x >= 0 && x < gridData[y].length) {
+                    gridData[x][y] = data.originalValue;
+                } else {
+                    console.error(`Position out of bounds: (${x}, ${y})`);
+                }
+            }
+        }
+    } else {
+        console.error(`No original values found for roomId: ${roomId}`);
+    }
 }
 
 // Placeholder function to add the item to the inventory

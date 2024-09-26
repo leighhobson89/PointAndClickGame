@@ -525,10 +525,13 @@ export function getOriginalValueInCellWhereObjectPlaced() {
     return originalValueInCellWhereObjectPlaced;
 }
 
-export function setOriginalValueInCellWhereObjectPlaced(objectId, gridX, gridY, originalValue) {
+export function setOriginalValueInCellWhereObjectPlaced(roomId, gridX, gridY, objectId, originalValue) {
+    if (!originalValueInCellWhereObjectPlaced[roomId]) {
+        originalValueInCellWhereObjectPlaced[roomId] = {};
+    }
     const cellKey = `${gridX},${gridY}`;
-    originalValueInCellWhereObjectPlaced[cellKey] = {
+    originalValueInCellWhereObjectPlaced[roomId][cellKey] = {
         objectId: objectId,
-        originalValue: originalValue
+        originalValue: originalValue,
     };
 }
