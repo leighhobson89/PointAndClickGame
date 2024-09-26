@@ -704,34 +704,35 @@ export function performCommand(command) {
     if (command !== null) {
         const verbKey = command.verbKey;
         const subjectToApplyCommand = command.objectId;
+        const exitOrNot = command.exitOrNot;
 
         switch (verbKey) {
             case 'verbLookAt':
-                handleLookAt(verbKey, subjectToApplyCommand);
+                handleLookAt(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbPickUp':
-                handlePickUp(verbKey, subjectToApplyCommand);
+                handlePickUp(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbUse':
-                handleUse(verbKey, subjectToApplyCommand);
+                handleUse(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbOpen':
-                handleOpen(verbKey, subjectToApplyCommand);
+                handleOpen(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbClose':
-                handleClose(verbKey, subjectToApplyCommand);
+                handleClose(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbPush':
-                handlePush(verbKey, subjectToApplyCommand);
+                handlePush(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbPull':
-                handlePull(verbKey, subjectToApplyCommand);
+                handlePull(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbTalkTo':
-                handleTalkTo(verbKey, subjectToApplyCommand);
+                handleTalkTo(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbGive':
-                handleGive(verbKey, subjectToApplyCommand);
+                handleGive(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             default:
                 console.warn(`Unhandled verbKey: ${verbKey}`);
@@ -742,8 +743,53 @@ export function performCommand(command) {
     return;
 }
 
+function findExitToRoom(roomId) {
+    const navigationData = getNavigationData();
+    const currentScreenId = getCurrentScreenId();
+    const currentRoomExits = navigationData[currentScreenId].exits;
+
+    for (const exitKey in currentRoomExits) {
+        if (currentRoomExits.hasOwnProperty(exitKey)) {
+            const exit = currentRoomExits[exitKey];
+
+            if (exit.connectsTo === roomId) {
+                return exitKey;
+            }
+        }
+    }
+
+    return null;
+}
+
+
 // Handle "Look At" action
-export function handleLookAt(verb, objectId) {
+export function handleLookAt(verb, objectId, exitOrNot) {
+    const dialogueData = getDialogueData();   
+    const language = getLanguage();
+
+    if (!exitOrNot) {
+        const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
+    
+        if (dialogueString) {
+            console.log(dialogueString);
+        } else {
+            console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
+        }
+    } else {
+        const connectsTo = getNavigationData()[getCurrentScreenId()].exits[findExitToRoom(objectId)].connectsTo;
+        const openOrLocked = getNavigationData()[getCurrentScreenId()].exits[findExitToRoom(objectId)].status;
+        const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.exits[connectsTo][openOrLocked][language];
+
+        if (dialogueString) {
+            console.log(dialogueString);
+        } else {
+            console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
+        }
+    }
+}
+
+// Handle "Pick Up" action
+export function handlePickUp(verb, objectId) {
     const dialogueData = getDialogueData();   
     const language = getLanguage();
     const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
@@ -753,12 +799,6 @@ export function handleLookAt(verb, objectId) {
     } else {
         console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
     }
-}
-
-// Handle "Pick Up" action
-export function handlePickUp(verb, objectId) {
-    console.log(`Picking up object: ${objectId}`);
-    // Add your implementation here
 }
 
 // Handle "Use" action

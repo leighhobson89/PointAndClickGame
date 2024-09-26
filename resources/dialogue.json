@@ -25,6 +25,280 @@
                 }
             },
             "verbLookAt": {
+                "exits": {
+                    "libraryFoyerDebug": {
+                        "open": {
+                            "en": "The door leads to the library's foyer (DEBUG).",
+                            "es": "La puerta conduce al vestíbulo de la biblioteca (DEBUG).",
+                            "de": "Die Tür führt ins Foyer der Bibliothek (DEBUG).",
+                            "it": "La porta conduce al foyer della biblioteca (DEBUG).",
+                            "fr": "La porte mène au foyer de la bibliothèque (DEBUG)."
+                        },
+                        "locked": {
+                            "en": "The door leads to the library's foyer (DEBUG). It needs a key.",
+                            "es": "La puerta conduce al vestíbulo de la biblioteca (DEBUG). Necesita una llave.",
+                            "de": "Die Tür führt ins Foyer der Bibliothek (DEBUG). Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce al foyer della biblioteca (DEBUG). Serve una chiave.",
+                            "fr": "La porte mène au foyer de la bibliothèque (DEBUG). Une clé est nécessaire."
+                        }
+                    },
+                    "debugRoom": {
+                        "open": {
+                            "en": "The door leads to the debug room.",
+                            "es": "La puerta conduce a la sala de depuración.",
+                            "de": "Die Tür führt in den Debug-Raum.",
+                            "it": "La porta conduce alla stanza di debug.",
+                            "fr": "La porte mène à la salle de débogage."
+                        },
+                        "locked": {
+                            "en": "The door leads to the debug room. It needs a key.",
+                            "es": "La puerta conduce a la sala de depuración. Necesita una llave.",
+                            "de": "Die Tür führt in den Debug-Raum. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla stanza di debug. Serve una chiave.",
+                            "fr": "La porte mène à la salle de débogage. Une clé est nécessaire."
+                        }
+                    },
+                    "libraryDesk": {
+                        "open": {
+                            "en": "The door leads to the library desk.",
+                            "es": "La puerta conduce a la mesa de la biblioteca.",
+                            "de": "Die Tür führt zum Schreibtisch der Bibliothek.",
+                            "it": "La porta conduce alla scrivania della biblioteca.",
+                            "fr": "La porte mène au bureau de la bibliothèque."
+                        },
+                        "locked": {
+                            "en": "The door leads to the library desk. It needs a key.",
+                            "es": "La puerta conduce a la mesa de la biblioteca. Necesita una llave.",
+                            "de": "Die Tür führt zum Schreibtisch der Bibliothek. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla scrivania della biblioteca. Serve una chiave.",
+                            "fr": "La porte mène au bureau de la bibliothèque. Une clé est nécessaire."
+                        }
+                    },
+                    "libraryFoyer": {
+                        "open": {
+                            "en": "The door leads to the library's foyer.",
+                            "es": "La puerta conduce al vestíbulo de la biblioteca.",
+                            "de": "Die Tür führt ins Foyer der Bibliothek.",
+                            "it": "La porta conduce al foyer della biblioteca.",
+                            "fr": "La porte mène au foyer de la bibliothèque."
+                        },
+                        "locked": {
+                            "en": "The door leads to the library's foyer. It needs a key.",
+                            "es": "La puerta conduce al vestíbulo de la biblioteca. Necesita una llave.",
+                            "de": "Die Tür führt ins Foyer der Bibliothek. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce al foyer della biblioteca. Serve una chiave.",
+                            "fr": "La porte mène au foyer de la bibliothèque. Une clé est nécessaire."
+                        }
+                    },
+                    "marketStreet": {
+                        "open": {
+                            "en": "The door leads to Market Street.",
+                            "es": "La puerta conduce a la Calle del Mercado.",
+                            "de": "Die Tür führt zur Marktstraße.",
+                            "it": "La porta conduce a Via del Mercato.",
+                            "fr": "La porte mène à la Rue du Marché."
+                        },
+                        "locked": {
+                            "en": "The door leads to Market Street. It needs a key.",
+                            "es": "La puerta conduce a la Calle del Mercado. Necesita una llave.",
+                            "de": "Die Tür führt zur Marktstraße. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce a Via del Mercato. Serve una chiave.",
+                            "fr": "La porte mène à la Rue du Marché. Une clé est nécessaire."
+                        }
+                    },
+                    "researchRoom": {
+                        "open": {
+                            "en": "The door leads to the library's research room.",
+                            "es": "La puerta conduce a la sala de investigación de la biblioteca.",
+                            "de": "Die Tür führt zum Forschungsraum der Bibliothek.",
+                            "it": "La porta conduce alla sala di ricerca della biblioteca.",
+                            "fr": "La porte mène à la salle de recherche de la bibliothèque."
+                        },
+                        "locked": {
+                            "en": "The door leads to the library's research room. It needs a key.",
+                            "es": "La puerta conduce a la sala de investigación de la biblioteca. Necesita una llave.",
+                            "de": "Die Tür führt zum Forschungsraum der Bibliothek. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla sala di ricerca della biblioteca. Serve una chiave.",
+                            "fr": "La porte mène à la salle de recherche de la bibliothèque. Une clé est nécessaire."
+                        }
+                    },
+                    "seedyGuyAlley": {
+                        "open": {
+                            "en": "The door leads to Seedy Guy Alley.",
+                            "es": "La puerta conduce a la Calle del Tipo Sórdido.",
+                            "de": "Die Tür führt zur Gasse des schäbigen Mannes.",
+                            "it": "La porta conduce al Vicolo del Tizio Squallido.",
+                            "fr": "La porte mène à l'Allée du Type Louche."
+                        },
+                        "locked": {
+                            "en": "The door leads to Seedy Guy Alley. It needs a key.",
+                            "es": "La puerta conduce a la Calle del Tipo Sórdido. Necesita una llave.",
+                            "de": "Die Tür führt zur Gasse des schäbigen Mannes. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce al Vicolo del Tizio Squallido. Serve una chiave.",
+                            "fr": "La porte mène à l'Allée du Type Louche. Une clé est nécessaire."
+                        }
+                    },
+                    "den": {
+                        "open": {
+                            "en": "The door leads to the den.",
+                            "es": "La puerta conduce a la guarida.",
+                            "de": "Die Tür führt zur Höhle.",
+                            "it": "La porta conduce alla tana.",
+                            "fr": "La porte mène à la cachette."
+                        },
+                        "locked": {
+                            "en": "The door leads to the den. It needs a key.",
+                            "es": "La puerta conduce a la guarida. Necesita una llave.",
+                            "de": "Die Tür führt zur Höhle. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla tana. Serve una chiave.",
+                            "fr": "La porte mène à la cachette. Une clé est nécessaire."
+                        }
+                    },
+                    "house": {
+                        "open": {
+                            "en": "The door leads to the house.",
+                            "es": "La puerta conduce a la casa.",
+                            "de": "Die Tür führt zum Haus.",
+                            "it": "La porta conduce alla casa.",
+                            "fr": "La porte mène à la maison."
+                        },
+                        "locked": {
+                            "en": "The door leads to the house. It needs a key.",
+                            "es": "La puerta conduce a la casa. Necesita una llave.",
+                            "de": "Die Tür führt zum Haus. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla casa. Serve una chiave.",
+                            "fr": "La porte mène à la maison. Une clé est nécessaire."
+                        }
+                    },
+                    "stables": {
+                        "open": {
+                            "en": "The door leads to the stables.",
+                            "es": "La puerta conduce al establo.",
+                            "de": "Die Tür führt zum Stall.",
+                            "it": "La porta conduce alla stalla.",
+                            "fr": "La porte mène à l'écurie."
+                        },
+                        "locked": {
+                            "en": "The door leads to the stables. It needs a key.",
+                            "es": "La puerta conduce al establo. Necesita una llave.",
+                            "de": "Die Tür führt zum Stall. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla stalla. Serve una chiave.",
+                            "fr": "La porte mène à l'écurie. Une clé est nécessaire."
+                        }
+                    },
+                    "barn": {
+                        "open": {
+                            "en": "The door leads to the barn.",
+                            "es": "La puerta conduce al establo.",
+                            "de": "Die Tür führt zur Scheune.",
+                            "it": "La porta conduce al fienile.",
+                            "fr": "La porte mène à la grange."
+                        },
+                        "locked": {
+                            "en": "The door leads to the barn. It needs a key.",
+                            "es": "La puerta conduce al establo. Necesita una llave.",
+                            "de": "Die Tür führt zur Scheune. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce al fienile. Serve una chiave.",
+                            "fr": "La porte mène à la grange. Une clé est nécessaire."
+                        }
+                    },
+                    "bigTree": {
+                        "open": {
+                            "en": "The door leads to the big tree.",
+                            "es": "La puerta conduce al gran árbol.",
+                            "de": "Die Tür führt zum großen Baum.",
+                            "it": "La porta conduce al grande albero.",
+                            "fr": "La porte mène au grand arbre."
+                        },
+                        "locked": {
+                            "en": "The door leads to the big tree. It needs a key.",
+                            "es": "La puerta conduce al gran árbol. Necesita una llave.",
+                            "de": "Die Tür führt zum großen Baum. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce al grande albero. Serve una chiave.",
+                            "fr": "La porte mène au grand arbre. Une clé est nécessaire."
+                        }
+                    },
+                    "roadIntoTown": {
+                        "open": {
+                            "en": "The road leads into town.",
+                            "es": "El camino lleva a la ciudad.",
+                            "de": "Der Weg führt in die Stadt.",
+                            "it": "La strada porta verso la città.",
+                            "fr": "La route mène vers la ville."
+                        },
+                        "locked": {
+                            "en": "The road leads into town. It needs a key.",
+                            "es": "El camino lleva a la ciudad. Necesita una llave.",
+                            "de": "Der Weg führt in die Stadt. Es wird ein Schlüssel benötigt.",
+                            "it": "La strada porta verso la città. Serve una chiave.",
+                            "fr": "La route mène vers la ville. Une clé est nécessaire."
+                        }
+                    },
+                    "stinkingDump": {
+                        "open": {
+                            "en": "The door leads to the stinking dump.",
+                            "es": "La puerta conduce al vertedero apestoso.",
+                            "de": "Die Tür führt zur stinkenden Müllhalde.",
+                            "it": "La porta conduce alla discarica puzzolente.",
+                            "fr": "La porte mène à la décharge malodorante."
+                        },
+                        "locked": {
+                            "en": "The door leads to the stinking dump. It needs a key.",
+                            "es": "La puerta conduce al vertedero apestoso. Necesita una llave.",
+                            "de": "Die Tür führt zur stinkenden Müllhalde. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla discarica puzzolente. Serve una chiave.",
+                            "fr": "La porte mène à la décharge malodorante. Une clé est nécessaire."
+                        }
+                    },
+                    "largePileOfPoo": {
+                        "open": {
+                            "en": "The door leads to a large pile of poo.",
+                            "es": "La puerta conduce a un gran montón de excremento.",
+                            "de": "Die Tür führt zu einem großen Haufen Kot.",
+                            "it": "La porta conduce a una grande pila di feci.",
+                            "fr": "La porte mène à un grand tas de crottes."
+                        },
+                        "locked": {
+                            "en": "The door leads to a large pile of poo. It needs a key.",
+                            "es": "La puerta conduce a un gran montón de excremento. Necesita una llave.",
+                            "de": "Die Tür führt zu einem großen Haufen Kot. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce a una grande pila di feci. Serve una chiave.",
+                            "fr": "La porte mène à un grand tas de crottes. Une clé est nécessaire."
+                        }
+                    },
+                    "riverCrossing": {
+                        "open": {
+                            "en": "The door leads to the river crossing.",
+                            "es": "La puerta conduce al cruce de río.",
+                            "de": "Die Tür führt zur Flussüberquerung.",
+                            "it": "La porta conduce all'attraversamento del fiume.",
+                            "fr": "La porte mène à la traversée de la rivière."
+                        },
+                        "locked": {
+                            "en": "The door leads to the river crossing. It needs a key.",
+                            "es": "La puerta conduce al cruce de río. Necesita una llave.",
+                            "de": "Die Tür führt zur Flussüberquerung. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce all'attraversamento del fiume. Serve una chiave.",
+                            "fr": "La porte mène à la traversée de la rivière. Une clé est nécessaire."
+                        }
+                    },
+                    "map": {
+                        "open": {
+                            "en": "The door leads to the map.",
+                            "es": "La puerta conduce al mapa.",
+                            "de": "Die Tür führt zur Karte.",
+                            "it": "La porta conduce alla mappa.",
+                            "fr": "La porte mène à la carte."
+                        },
+                        "locked": {
+                            "en": "The door leads to the map. It needs a key.",
+                            "es": "La puerta conduce al mapa. Necesita una llave.",
+                            "de": "Die Tür führt zur Karte. Es wird ein Schlüssel benötigt.",
+                            "it": "La porta conduce alla mappa. Serve una chiave.",
+                            "fr": "La porte mène à la carte. Une clé est nécessaire."
+                        }
+                    }
+                },
                 "keyDEBUG": {
                     "en": "A small, brass key with an ornate pattern.",
                     "es": "Una pequeña llave de latón con un patrón ornamentado.",
@@ -54,7 +328,7 @@
                     "fr": "Une banane parfaitement mûre. Prête à être mangée."
                 }
             },
-            "pickUp": {
+            "verbPickUp": {
                 "keyDEBUG": {
                     "en": "You pick up the brass key. It feels warm to the touch.",
                     "es": "Recoges la llave de latón. Se siente cálida al tacto.",
@@ -128,6 +402,13 @@
                 "de": "Dieser Gegenstand kann hier nicht verwendet werden.",
                 "it": "Questo oggetto non può essere utilizzato qui.",
                 "fr": "Cet objet ne peut pas être utilisé ici."
+            },
+            "itemCannotBePickedUp": {
+                "en": "This item can't be picked up.",
+                "es": "Este objeto no se puede recoger.",
+                "de": "Dieser Gegenstand kann nicht aufgehoben werden.",
+                "it": "Questo oggetto non può essere raccolto.",
+                "fr": "Cet objet ne peut pas être ramassé."
             }
         }
     }
