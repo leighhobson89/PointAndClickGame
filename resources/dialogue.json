@@ -404,11 +404,11 @@
                 "fr": "Cet objet ne peut pas être utilisé ici."
             },
             "itemCannotBePickedUp": {
-                "en": "This item can't be picked up.",
-                "es": "Este objeto no se puede recoger.",
-                "de": "Dieser Gegenstand kann nicht aufgehoben werden.",
-                "it": "Questo oggetto non può essere raccolto.",
-                "fr": "Cet objet ne peut pas être ramassé."
+                "en": "I cannot pick that up.",
+                "es": "No puedo recoger eso.",
+                "de": "Ich kann das nicht aufheben.",
+                "it": "Non posso raccoglierlo.",
+                "fr": "Je ne peux pas ramasser ça."
             }
         }
     }

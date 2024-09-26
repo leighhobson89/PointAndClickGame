@@ -761,7 +761,6 @@ function findExitToRoom(roomId) {
     return null;
 }
 
-
 // Handle "Look At" action
 export function handleLookAt(verb, objectId, exitOrNot) {
     const dialogueData = getDialogueData();   
@@ -788,16 +787,41 @@ export function handleLookAt(verb, objectId, exitOrNot) {
     }
 }
 
-// Handle "Pick Up" action
-export function handlePickUp(verb, objectId) {
+export function handlePickUp(verb, objectId, exitOrNot) {
+    const objectData = getObjectData();
     const dialogueData = getDialogueData();   
     const language = getLanguage();
-    const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
 
-    if (dialogueString) {
-        console.log(dialogueString);
+    if (!exitOrNot && !objectData.objects[objectId]) {
+        console.warn(`Object ${objectId} not found.`);
+        return;
+    }
+
+    const object = objectData.objects[objectId];
+
+    if (!exitOrNot) {
+        if (object?.interactable?.canPickUp) {
+            const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
+            if (dialogueString) {
+                console.log(dialogueString);
+            } else {
+                console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
+            }
+        } else {
+            handleCannotPickUpMessage(language, dialogueData);
+        }
+        return;
+    }
+
+    handleCannotPickUpMessage(language, dialogueData);
+}
+
+function handleCannotPickUpMessage(language, dialogueData) {
+    const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
+    if (cannotPickUpMessage) {
+        console.log(cannotPickUpMessage);
     } else {
-        console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
+        console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
     }
 }
 
