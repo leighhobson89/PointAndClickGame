@@ -120,6 +120,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
 
     handleCannotPickUpMessage(language, dialogueData);
 }
+
 function pickUpItem(objectId, quantity) {
     removeObjectFromEnvironment(objectId);
     addItemToInventory(objectId, quantity);
@@ -128,6 +129,7 @@ function pickUpItem(objectId, quantity) {
     drawInventory(0); //runs outside canvas so doesnt have to be updated every frame and we reset the position to the top if they pick up an item
     triggerEvent(objectId);
 }
+
 function removeObjectFromEnvironment(objectId) {
     const gridData = getGridData().gridData;
     const roomId = getCurrentScreenId();
@@ -149,6 +151,7 @@ function removeObjectFromEnvironment(objectId) {
         console.error(`No original values found for roomId: ${roomId}`);
     }
 }
+
 function addItemToInventory(objectId, quantity = 1) {
     const objectData = getObjectData().objects[objectId];
     const isStackable = objectData.interactable.stackable;
@@ -208,11 +211,10 @@ function handleCannotPickUpMessage(language, dialogueData) {
 // Handle "Use" action
 
 export function handleUse(verb, objectId) {
-    console.log(`Using object: ${objectId}`);
-    // Add your implementation here
+    // check if item can be used or not with getObjectData().objects.objectId.interactable.canUse
 }
-// Handle "Open" action
 
+// Handle "Open" action
 export function handleOpen(verb, objectId) {
     console.log(`Opening object: ${objectId}`);
     // Add your implementation here

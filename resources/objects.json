@@ -19,14 +19,14 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": true, 
-                "useResult": "retainItem",
                 "stackable": false,
-                "quantity": 1
+                "quantity": 1,
+                "decrementQuantityOnUse": false
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "navigation/exits/e1",
-                "action": "unlock"
+                "object": "navigation/exit/libraryFoyer",
+                "action": "events/exitUnlock/libraryFoyer"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -58,15 +58,15 @@
             "interactable": {
                 "canPickUp": true,
                 "canUse": true,
-                "canUseWith": true, 
-                "useResult": "discardItem",
-                "stackable": true,
-                "quantity": 1
+                "canUseWith": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "objects/machine",
-                "action": "activate"
+                "object": "objects/machineDEBUG",
+                "action": "objects/machineDEBUG/activate"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/battery.png",
@@ -99,12 +99,14 @@
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
-                "useResult": "machineDebugUsed",
                 "stackable": false,
                 "quantity": 1
             },
             "activeStatus": false,
-            "usedOn": "",
+            "usedOn": {
+                "object": "",
+                "action": "giveItem/banana"
+            },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/machine.png",
             "inventoryUrl": "",
@@ -136,12 +138,14 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": false, 
-                "useResult": "dialogue/eatenBanana",
                 "stackable": false,
                 "quantity": 1
             },
             "activeStatus": false,
-            "usedOn": "",
+            "usedOn": {
+                "object": "",
+                "action": "dialogue/bananaDebug"
+            },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",
             "inventoryUrl": "./resources/objects/banana.png",
