@@ -301,7 +301,7 @@ canvas {
 .inventory-arrow {
     position: relative; /* Position relative for the pseudo-element */
     width: 40px; /* Base width of the arrow */
-    height: 50px; /* Total height of the arrow */
+    height: 60px; /* Total height of the arrow */
     background-color: #3B71CA; /* Arrow color */
     margin: 20px auto; /* Center horizontally and add spacing */
     cursor: pointer; /* Change cursor to pointer on hover */
