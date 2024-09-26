@@ -59,6 +59,7 @@ let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
+let originalValueInCellWhereObjectPlaced = {};
 
 //FLAGS
 let audioMuted;
@@ -518,4 +519,16 @@ export function setUpcomingAction(value) {
 
 export function getUpcomingAction() {
     return upcomingAction;
+}
+
+export function getOriginalValueInCellWhereObjectPlaced() {
+    return originalValueInCellWhereObjectPlaced;
+}
+
+export function setOriginalValueInCellWhereObjectPlaced(objectId, gridX, gridY, originalValue) {
+    const cellKey = `${gridX},${gridY}`;
+    originalValueInCellWhereObjectPlaced[cellKey] = {
+        objectId: objectId,
+        originalValue: originalValue
+    };
 }

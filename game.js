@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
+import { setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereObjectPlaced, getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -685,9 +685,19 @@ export function setUpObjects() {
         if (canPlace) {
             for (let x = startX; x < startX + widthInCells; x++) {
                 for (let y = startY; y < startY + heightInCells; y++) {
-                    roomGridData[y][x] = `o${objectId}`; // Place the object in the correct room's grid
+                    // Store the original value before overwriting
+                    const originalValue = roomGridData[y][x];
+                    // Add original value data to the object
+                    setOriginalValueInCellWhereObjectPlaced(objectId, x, y, originalValue);
+                    
+                    // Place the object in the correct room's grid
+                    roomGridData[y][x] = `o${objectId}`; 
                 }
             }
+
+            console.log("Original values object:");
+            console.log(getOriginalValueInCellWhereObjectPlaced());
+            
             // Log successful placement
             console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}).`);
         } else {
@@ -791,13 +801,12 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();   
     const language = getLanguage();
+    const object = objectData.objects[objectId];
 
-    if (!exitOrNot && !objectData.objects[objectId]) {
+    if (!exitOrNot && !object) {
         console.warn(`Object ${objectId} not found.`);
         return;
     }
-
-    const object = objectData.objects[objectId];
 
     if (!exitOrNot) {
         if (object?.interactable?.canPickUp) {
@@ -807,6 +816,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
+            pickUpItem(objectId);
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
@@ -816,6 +826,47 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     handleCannotPickUpMessage(language, dialogueData);
 }
 
+// Function to handle picking up an item
+function pickUpItem(objectId) {
+    const objectData = getObjectData();
+    
+    // Remove the object from the environment
+    removeObjectFromEnvironment(objectId);
+
+    // Add the object to the inventory
+    addItemToInventory(objectId);
+
+    // Draw the item in the appropriate inventory slot
+    drawItemInInventorySlot(objectId);
+
+    // Trigger any associated events
+    triggerEvent(objectId);
+}
+
+// Placeholder function to remove the object from the environment
+function removeObjectFromEnvironment(objectId) {
+    // Logic to find the grid references on the current screen
+    // Replace the value with the value in the objectReplacementArray[]
+}
+
+// Placeholder function to add the item to the inventory
+function addItemToInventory(objectId) {
+    // Logic to add the objectId to the inventory object
+}
+
+// Placeholder function to draw the item in the inventory slot
+function drawItemInInventorySlot(objectId) {
+    // Logic to calculate which image slot to use
+    // Check if the item is stackable and determine the correct slot
+    // Use the inventoryUrl property to draw the image
+}
+
+// Placeholder function to trigger events associated with the item
+function triggerEvent(objectId) {
+    // Logic to check for and trigger any associated events
+}
+
+// Placeholder for handling "cannot pick up" messages
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
