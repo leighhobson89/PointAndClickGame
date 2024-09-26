@@ -28,6 +28,7 @@ export const INITIAL_PLAYER_GRID_REF = {x: 5,y: 59}; //player start location on 
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
+export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
 
 export let playerObject = {
     originalWidth: 45,
@@ -63,6 +64,7 @@ let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
 let originalValueInCellWhereObjectPlaced = {};
+let currentStartIndexInventory = 0;
 
 //FLAGS
 let audioMuted;
@@ -547,4 +549,16 @@ export function setPlayerInventory(value) {
 
 export function getPlayerInventory() {
     return playerInventory;
+}
+
+export function getSlotsPerRowInInventory() {
+    return SLOTS_PER_ROW_IN_INVENTORY;
+}
+
+export function setCurrentStartIndexInventory(value) {
+    currentStartIndexInventory = value;
+}
+
+export function getCurrentStartIndexInventory() {
+    return currentStartIndexInventory;
 }

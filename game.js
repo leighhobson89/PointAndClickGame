@@ -1,5 +1,5 @@
 import { localize } from './localization.js';
-import { setPlayerInventory, getPlayerInventory, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereObjectPlaced, getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
+import { getCurrentStartIndexInventory, setCurrentStartIndexInventory, setPlayerInventory, getPlayerInventory, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereObjectPlaced, getUpcomingAction, setUpcomingAction, getAllGridData, getVerbButtonConstructionStatus, setVerbButtonConstructionStatus, getInitialStartGridReference, getCurrentlyMoving, setCurrentlyMoving, getNextScreenId, getPreviousScreenId, setPreviousScreenId, getGridTargetX, getGridTargetY, getNavigationData, getCurrentScreenId, setCurrentScreenId, setExitNumberToTransitionTo, getExitNumberToTransitionTo, getTransitioningToAnotherScreen, getCanvasCellWidth, getCanvasCellHeight, setCanvasCellWidth, setCanvasCellHeight, setGridTargetX, setGridTargetY, setPlayerObject, setTargetX, setTargetY, getTargetX, getTargetY, setGameStateVariable, getBeginGameStatus, getMaxAttemptsToDrawEnemies, getPlayerObject, getMenuState, getGameVisibleActive, getNumberOfEnemySquares, getElements, getLanguage, getGameInProgress, gameState, getGridData, getHoverCell, getGridSizeX, getGridSizeY, setTransitioningToAnotherScreen, getTransitioningNow, setTransitioningNow, setNextScreenId, getZPosHover, setZPosHover, setCurrentlyMovingToAction, setCustomMouseCursor, getCustomMouseCursor, getObjectData, getDialogueData} from './constantsAndGlobalVars.js';
 import { findAndMoveToNearestWalkable, aStarPathfinding } from './pathFinding.js';
 import { drawInventory, parseCommand, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, animateTransitionAndChangeBackground as changeBackground, handleMouseMove } from './ui.js';
 
@@ -811,14 +811,14 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     handleCannotPickUpMessage(language, dialogueData);
 }
 
-// Function to handle picking up an item
 function pickUpItem(objectId, quantity) {
     const objectData = getObjectData();
     
     //removeObjectFromEnvironment(objectId);
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
-    drawInventory(); //runs outside canvas so doesnt have to be updated every frame
+    setCurrentStartIndexInventory(0);
+    drawInventory(0); //runs outside canvas so doesnt have to be updated every frame and we reset the position to the top if they pick up an item
 
     // Trigger any associated events
     triggerEvent(objectId);
