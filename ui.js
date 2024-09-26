@@ -1,7 +1,7 @@
-import { setCurrentStartIndexInventory, getCurrentStartIndexInventory, getSlotsPerRowInInventory, getPlayerInventory, setDialogueData, getDialogueData, getLocalization, getAllGridData, urlDialogueData, urlObjectsData, setObjectData, getObjectData, setVerbButtonConstructionStatus, getVerbButtonConstructionStatus, setCustomMouseCursor, getCustomMouseCursor, setHoveringInterestingObjectOrExit, getHoveringInterestingObjectOrExit, getCurrentlyMovingToAction, resetAllVariables, getZPosHover, setZPosHover, getPreviousScreenId, setCurrentScreenId, getExitNumberToTransitionTo, setNavigationData, getNavigationData, setHoverCell, getHoverCell, getCanvasCellWidth, getCanvasCellHeight, getGridData, setGridData, gameState, getLanguage, setElements, getElements, setBeginGameStatus, getGameInProgress, setGameInProgress, getGameVisibleActive, getMenuState, getLanguageSelected, setLanguageSelected, setLanguage, getInitialScreenId, urlWalkableJSONS, urlNavigationData, getGridSizeX, getGridSizeY, getBeginGameStatus, getCurrentScreenId, setTransitioningNow, setPreviousScreenId, getCurrentlyMoving, setCurrentlyMovingToAction, setUpcomingAction } from './constantsAndGlobalVars.js';
-import { setUpObjects, resizePlayerObject, handleRoomTransition, drawGrid, processClickPoint, setGameState, startGame, gameLoop, enemySquares, initializePlayerPosition } from './game.js';
+import { gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getPreviousScreenId, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, getZPosHover, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setObjectData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { drawGrid, enemySquares, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, resizePlayerObject, setGameState, setUpObjects, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
-import { loadGameOption, loadGame, saveGame, copySaveStringToClipBoard } from './saveLoadGame.js';
+import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -396,78 +396,6 @@ export function updateInteractionInfo(text, action) {
     } else {
         console.error('Interaction info element not found');
     }
-}
-
-export function parseCommand(userCommand) {
-    const objectData = getObjectData().objects;
-    const language = getLanguage();
-    const localization = getLocalization()[language]['verbsActionsInteraction'];
-    const navigationData = getNavigationData();
-
-    let commandParts = userCommand.split(' ');
-    let objectMatch = null;
-    let objectName = '';
-    let verbPart = '';
-    let exitOrNot = false;
-
-    for (let i = commandParts.length - 1; i >= 0; i--) {
-        objectName = commandParts.slice(i).join(' ');
-
-        for (const objectId in objectData) {
-            if (objectData[objectId].name[language] === objectName) {
-                objectMatch = objectId;
-                verbPart = commandParts.slice(0, i).join(' ');
-                break;
-            }
-        }
-        if (objectMatch) {
-            exitOrNot = false;
-            break;
-        }
-    }
-
-    if (!objectMatch) {
-        for (const roomId in navigationData) {
-            const roomName = navigationData[roomId][language];
-
-            for (let i = commandParts.length - 1; i >= 0; i--) {
-                const roomCommandName = commandParts.slice(i).join(' ');
-                if (roomCommandName === roomName) {
-                    objectMatch = roomId;
-                    verbPart = commandParts.slice(0, i).join(' ');
-                    break;
-                }
-            }
-            if (objectMatch) {
-                exitOrNot = true;
-                break;
-            }
-        }
-    }
-
-    if (!objectMatch) {
-        console.warn('No object or room match found for the command:', userCommand);
-        return null;
-    }
-
-    let verbKey = null;
-    for (const key in localization) {
-        if (localization[key] === verbPart) {
-            verbKey = key;
-            break;
-        }
-    }
-
-    if (!verbKey) {
-        console.warn('No verb match found for the command:', verbPart);
-        return null;
-    }
-
-    return {
-        objectId: objectMatch,
-        verbKey: verbKey,
-        exitOrNot: exitOrNot
-    };
 }
 
 export function drawInventory(startIndex) {

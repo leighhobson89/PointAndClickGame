@@ -1,4 +1,4 @@
-import { setLookingForAlternativePathToNearestWalkable, getLookingForAlternativePathToNearestWalkable, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getNextScreenId, getPlayerObject, getTransitioningNow, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, gridData) {
     console.log("transitioning now: " + getTransitioningNow());
