@@ -811,16 +811,12 @@ export function handlePickUp(verb, objectId, exitOrNot) {
     handleCannotPickUpMessage(language, dialogueData);
 }
 
-function pickUpItem(objectId, quantity) {
-    const objectData = getObjectData();
-    
-    //removeObjectFromEnvironment(objectId);
+function pickUpItem(objectId, quantity) {    
+    removeObjectFromEnvironment(objectId);
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0); //runs outside canvas so doesnt have to be updated every frame and we reset the position to the top if they pick up an item
-
-    // Trigger any associated events
     triggerEvent(objectId);
 }
 
@@ -847,63 +843,54 @@ function removeObjectFromEnvironment(objectId) {
 }
 
 function addItemToInventory(objectId, quantity = 1) {
-    const objectData = getObjectData().objects[objectId]; // Retrieve object data
-    const isStackable = objectData.interactable.stackable; // Check if the item is stackable
-    const inventory = getPlayerInventory(); // Get the current inventory
+    const objectData = getObjectData().objects[objectId];
+    const isStackable = objectData.interactable.stackable;
+    const inventory = getPlayerInventory();
 
-    // Ensure slot1 exists in the inventory
     if (!inventory.slot1) {
-        // If slot1 does not exist, create it for the first item
         inventory.slot1 = {
             object: objectId,
             quantity: isStackable ? quantity : 1,
             stackable: isStackable ? "true" : "false"
         };
-        setPlayerInventory(inventory); // Update the inventory
-        return; // Exit after adding the first item
+        setPlayerInventory(inventory);
+        return;
     }
 
-    // Check for existing stackable item and handle accordingly
     for (let slot in inventory) {
         if (inventory[slot] && inventory[slot].object === objectId) {
             if (isStackable) {
-                // Increment the quantity of the existing stackable item
-                inventory[slot].quantity += quantity; // Update quantity in the existing slot
-                setPlayerInventory(inventory); // Update the inventory
-                return; // Exit after updating the stackable item
+                inventory[slot].quantity += quantity;
+                setPlayerInventory(inventory);
+                return;
             }
         }
     }
 
-    // Shift items down to make room for the new item in slot1
     const slots = Object.keys(inventory);
-    // Start from the last slot and move each item to the next slot
+
     for (let i = slots.length - 1; i >= 0; i--) {
         const currentSlot = slots[i];
-        const previousSlot = `slot${i + 2}`; // Shift to next slot (slot2 becomes slot1, etc.)
+        const previousSlot = `slot${i + 2}`;
 
-        // Shift item from current to next slot
         if (inventory[currentSlot]) {
-            inventory[previousSlot] = inventory[currentSlot]; // Move item to the next slot
+            inventory[previousSlot] = inventory[currentSlot];
         }
     }
 
-    // Set the new item in slot1
     inventory.slot1 = {
         object: objectId,
         quantity: isStackable ? quantity : 1,
         stackable: isStackable ? "true" : "false"
     };
     
-    setPlayerInventory(inventory); // Update the inventory
+    setPlayerInventory(inventory);
 }
 
-// Placeholder function to trigger events associated with the item
 function triggerEvent(objectId) {
     // Logic to check for and trigger any associated events
 }
 
-// Placeholder for handling "cannot pick up" messages
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
