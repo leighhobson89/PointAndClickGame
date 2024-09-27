@@ -1,6 +1,7 @@
 import { setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, showText, updateInteractionInfo } from "./ui.js";
+import { machineDEBUGActivate } from "./events.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -309,7 +310,7 @@ export function useItem(objectId1, objectId2, useWith) { //function uses all ite
         let dialogue;
 
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
-            objectEvent = getObjectEvents(objectId1);
+            const objectEvent = getObjectEvents(objectId1);
             executeObjectEvent(objectEvent); //READY FOR TESTING!!!!!!!!!
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[getLanguage()];
         } else if (object1.interactable.alreadyUsed) {
@@ -468,7 +469,7 @@ export function parseCommand(userCommand) {
     };
 }
 
-function setObjectData(objectId, path, newValue) {
+export function setObjectData(objectId, path, newValue) {
     const objectData = getObjectData();
 
     const keys = path.match(/([^[\].]+|\[\d+\])/g);
@@ -528,41 +529,59 @@ function getObjectEvents(objectId) {
 
 function executeObjectEvent(objectEvent) {
     // Check for actionUse1 and call its function if it exists
-    if (objectEvent.actionUse1 && typeof global[objectEvent.actionUse1] === 'function') {
-        if (objectEvent.objectUse) {
-            global[objectEvent.actionUse1](objectEvent.objectUse); // Call with objectUse as argument
-        } else {
-            global[objectEvent.actionUse1](); // Call without arguments
+    if (objectEvent.actionUse1) {
+        try {
+            if (objectEvent.objectUse) {
+                eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}')`); // Pass objectUse as argument
+            } else {
+                eval(`${objectEvent.actionUse1}()`); // Call without arguments
+            }
+        } catch (e) {
+            console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
         }
     }
 
     // Check for actionUse2 and call its function if it exists
-    if (objectEvent.actionUse2 && typeof global[objectEvent.actionUse2] === 'function') {
-        if (objectEvent.objectUse) {
-            global[objectEvent.actionUse2](objectEvent.objectUse); // Call with objectUse as argument
-        } else {
-            global[objectEvent.actionUse2](); // Call without arguments
+    if (objectEvent.actionUse2) {
+        try {
+            if (objectEvent.objectUse) {
+                eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}')`); // Pass objectUse as argument
+            } else {
+                eval(`${objectEvent.actionUse2}()`); // Call without arguments
+            }
+        } catch (e) {
+            console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
         }
     }
 
     // Check for actionUseWith11 and call it if it exists
-    if (objectEvent.actionUseWith11 && typeof global[objectEvent.actionUseWith11] === 'function') {
-        if (objectEvent.objectUseWith1) {
-            global[objectEvent.actionUseWith11](objectEvent.objectUseWith1); // Call with objectUseWith1 as argument
-        } else {
-            global[objectEvent.actionUseWith11](); // Call without arguments
+    if (objectEvent.actionUseWith11) {
+        try {
+            if (objectEvent.objectUseWith1) {
+                eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}')`); // Pass objectUseWith1 as argument
+            } else {
+                eval(`${objectEvent.actionUseWith11}()`); // Call without arguments
+            }
+        } catch (e) {
+            console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
         }
     }
 
     // Check for actionUseWith12 and call it if it exists
-    if (objectEvent.actionUseWith12 && typeof global[objectEvent.actionUseWith12] === 'function') {
-        if (objectEvent.objectUseWith1) {
-            global[objectEvent.actionUseWith12](objectEvent.objectUseWith1); // Call with objectUseWith1 as argument
-        } else {
-            global[objectEvent.actionUseWith12](); // Call without arguments
+    if (objectEvent.actionUseWith12) {
+        try {
+            if (objectEvent.objectUseWith1) {
+                eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}')`); // Pass objectUseWith1 as argument
+            } else {
+                eval(`${objectEvent.actionUseWith12}()`); // Call without arguments
+            }
+        } catch (e) {
+            console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
         }
     }
 }
+
+
 
 
 

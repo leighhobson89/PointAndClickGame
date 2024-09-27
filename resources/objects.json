@@ -29,9 +29,9 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objects/woodenDoorDEBUG",
-                "actionUseWith11": "events/woodenDoorDEBUG",
-                "actionUseWith12": "events/libraryFoyer"
+                "objectUseWith1": "woodenDoorDEBUG",
+                "actionUseWith11": "woodenDoorDEBUG",
+                "actionUseWith12": "libraryFoyer"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -74,8 +74,8 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objects/machineDEBUG",
-                "actionUseWith11": "events/batteryDEBUG",
+                "objectUseWith1": "machineDEBUG",
+                "actionUseWith11": "batteryDEBUG",
                 "actionUseWith12": ""
             },
             "location": "debugRoom",
@@ -117,7 +117,7 @@
             },
             "usedOn": {
                 "objectUse": "",
-                "actionUse1": "events/machineDEBUG",
+                "actionUse1": "machineDEBUGActivate",
                 "actionUse2": "",
                 "objectUseWith1": "",
                 "actionUseWith11": "",
@@ -164,8 +164,8 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "npc/monkeyDEBUG",
-                "actionUseWith11": "events/monkeyBanana",
+                "objectUseWith1": "monkeyDEBUG",
+                "actionUseWith11": "monkeyBanana",
                 "actionUseWith12": ""
             },
             "location": "debugRoom",
