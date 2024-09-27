@@ -187,7 +187,7 @@ export function getObjectData() {
     return objectData;
 }
 
-export function setObjectData(value) {
+export function setObjectsData(value) { // purposely spelt this way because we have a 'pre' setter called setObjectData(value) in handleCommands.js that provides an easier interface for setting thevalues faster
     objectData = value;
 }
 

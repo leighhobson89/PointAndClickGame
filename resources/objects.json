@@ -21,9 +21,10 @@
                 "canUseWith": true, 
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": false
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
             },
-            "activeStatus": true,
             "usedOn": {
                 "objectUse": "",
                 "actionUse1": "",
@@ -65,9 +66,10 @@
                 "canUseWith": true,
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
             },
-            "activeStatus": true,
             "usedOn": {
                 "objectUse": "",
                 "actionUse1": "",
@@ -109,14 +111,14 @@
                 "canUseWith": false, 
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": false
-
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
             },
-            "activeStatus": false,
             "usedOn": {
                 "objectUse": "",
                 "actionUse1": "events/machineDEBUG",
-                "actionUse2": "giveItem/bananaDEBUG",
+                "actionUse2": "",
                 "objectUseWith1": "",
                 "actionUseWith11": "",
                 "actionUseWith12": ""
@@ -154,9 +156,10 @@
                 "canUseWith": true, 
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false            
             },
-            "activeStatus": true,
             "usedOn": {
                 "objectUse": "",
                 "actionUse1": "",

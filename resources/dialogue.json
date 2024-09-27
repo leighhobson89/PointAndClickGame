@@ -2,26 +2,33 @@
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
-                "bananaDEBUG": {
-                    "en": "You eat the banana. It tastes sweet and satisfying.",
-                    "es": "Te comes el plátano. Sabe dulce y satisfactorio.",
-                    "de": "Du isst die Banane. Sie schmeckt süß und befriedigend.",
-                    "it": "Mangi la banana. Ha un sapore dolce e soddisfacente.",
-                    "fr": "Vous mangez la banane. Elle a un goût sucré et satisfaisant."
-                },
-                "keyDEBUG": {
-                    "en": "You use the key to unlock the door. You hear a faint click.",
-                    "es": "Usas la llave para abrir la puerta. Escuchas un leve clic.",
-                    "de": "Du benutzt den Schlüssel, um die Tür zu öffnen. Du hörst ein leises Klicken.",
-                    "it": "Usi la chiave per aprire la porta. Senti un leggero clic.",
-                    "fr": "Vous utilisez la clé pour déverrouiller la porte. Vous entendez un léger clic."
-                },
-                "batteryDEBUG": {
-                    "en": "You insert the battery into the machine. It hums to life.",
-                    "es": "Insertas la batería en la máquina. Empieza a zumbar.",
-                    "de": "Du setzt die Batterie in die Maschine ein. Sie beginnt zu summen.",
-                    "it": "Inserisci la batteria nella macchina. Inizia a ronzare.",
-                    "fr": "Vous insérez la batterie dans la machine. Elle se met à bourdonner."
+                "machineDEBUG": {
+                    "use": {
+                        "cantUseYet": {
+                            "en": "The machine needs power.",
+                            "es": "La máquina necesita energía",
+                            "de": "Die Maschine braucht Strom",
+                            "it": "La macchina ha bisogno di energia",
+                            "fr": "La machine a besoin d'énergie"
+                        },
+                        "alreadyUsed": {
+                            "en": "The machine seems to have powered off permanently!",
+                            "es": "¡La máquina parece haberse apagado permanentemente!",
+                            "de": "Die Maschine scheint dauerhaft abgeschaltet zu sein!",
+                            "it": "La macchina sembra essersi spenta definitivamente!",
+                            "fr": "La machine semble s'être éteinte définitivement !"
+                        },
+                        "canUse": {
+                            "en": "Ooo, a banana has fallen out!",
+                            "es": "¡Ooo, se ha caído un plátano!",
+                            "de": "Ooo, eine Banane ist herausgefallen!",
+                            "it": "Ooo, una banana è caduta fuori!",
+                            "fr": "Ooo, une banane est tombée !"
+                        }
+                    },
+                    "useWith": {
+                        "removeThisOnceMoreObjectsAreInAsSomeWontNeedUseWith": ""
+                    }
                 }
             },
             "verbLookAt": {
@@ -397,11 +404,11 @@
                 "fr": "Votre inventaire est plein."
             },
             "itemCannotBeUsed": {
-                "en": "This item can't be used.",
-                "es": "Este objeto no se puede usar.",
-                "de": "Dieser Gegenstand kann nicht verwendet werden.",
-                "it": "Questo oggetto non può essere utilizzato.",
-                "fr": "Cet objet ne peut pas être utilisé."
+                "en": "This item can't be used until you pick it up!",
+                "es": "¡Este objeto no se puede usar hasta que lo recojas!",
+                "de": "Dieser Gegenstand kann nicht verwendet werden, bis du ihn aufhebst!",
+                "it": "Questo oggetto non può essere utilizzato finché non lo prendi!",
+                "fr": "Cet objet ne peut pas être utilisé tant que vous ne l'avez pas ramassé!"
             },
             "itemCannotBePickedUp": {
                 "en": "I cannot pick that up.",
