@@ -124,7 +124,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
 }
 
 function pickUpItem(objectId, quantity) {
-    //removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
+    removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
@@ -251,14 +251,12 @@ function handleCannotPickUpMessage(language, dialogueData) {
 }
 
 // Handle "Use" action
-export function handleUse(verb, objectId, exitOrNot, inventoryItem) {
+export function handleUse(verb, objectId, exitOrNot, inventoryItem, quantity = 1) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object = objectData.objects[objectId];
     const inventory = getPlayerInventory();
-
-    let quantity = 1; //add conditions here for special cases like 29 gold or something, otherwise is just 1
 
     const use = checkIfItemCanBeUsed(objectId);  
     const useWith = checkIfItemCanBeUsedWith(objectId);
@@ -269,7 +267,7 @@ export function handleUse(verb, objectId, exitOrNot, inventoryItem) {
     }
 
     if (inventoryItem) {
-        handleInventoryAdjustment(objectId, quantity);  // check if decrement quantity ie remove from inventory and handle this
+        handleInventoryAdjustment(objectId, quantity);
         drawInventory(getCurrentStartIndexInventory());
         setVerbButtonConstructionStatus(null);
         updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);

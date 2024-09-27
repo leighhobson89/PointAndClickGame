@@ -63,7 +63,7 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": true,
-                "stackable": true,
+                "stackable": false,
                 "quantity": 1,
                 "decrementQuantityOnUse": true
             },
