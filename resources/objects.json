@@ -63,7 +63,7 @@
                 "canPickUp": true,
                 "canUse": true,
                 "canUseWith": true,
-                "stackable": false,
+                "stackable": true,
                 "quantity": 1,
                 "decrementQuantityOnUse": true
             },
@@ -108,7 +108,9 @@
                 "canUse": true,
                 "canUseWith": false, 
                 "stackable": false,
-                "quantity": 1
+                "quantity": 1,
+                "decrementQuantityOnUse": false
+
             },
             "activeStatus": false,
             "usedOn": {
@@ -151,7 +153,8 @@
                 "canUse": true,
                 "canUseWith": true, 
                 "stackable": false,
-                "quantity": 1
+                "quantity": 1,
+                "decrementQuantityOnUse": true
             },
             "activeStatus": false,
             "usedOn": {

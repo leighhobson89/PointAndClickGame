@@ -487,7 +487,6 @@ export function drawInventory(startIndex) {
             const imageUrl = objectData.inventoryUrl;
 
             const imgTag = `<img src="${imageUrl}" alt="${objectId}" class="inventory-img" />`;
-            
             inventoryDivs[i].innerHTML = imgTag;
         }
     }

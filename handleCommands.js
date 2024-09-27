@@ -1,5 +1,6 @@
-import { getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization } from "./constantsAndGlobalVars.js";
-import { drawInventory, drawTextOnCanvas, showText } from "./ui.js";
+import { setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory } from "./constantsAndGlobalVars.js";
+import { localize } from "./localization.js";
+import { drawInventory, drawTextOnCanvas, showText, updateInteractionInfo } from "./ui.js";
 
 
 export function performCommand(command, inventoryItem) {
@@ -8,6 +9,7 @@ export function performCommand(command, inventoryItem) {
         const verbKey = command.verbKey;
         const subjectToApplyCommand = command.objectId;
         const exitOrNot = command.exitOrNot;
+        const quantity = command.quantity;
 
         switch (verbKey) {
             case 'verbLookAt':
@@ -17,7 +19,7 @@ export function performCommand(command, inventoryItem) {
                 handlePickUp(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbUse':
-                handleUse(verbKey, subjectToApplyCommand, exitOrNot, inventoryItem);
+                handleUse(verbKey, subjectToApplyCommand, exitOrNot, inventoryItem, quantity);
                 break;
             case 'verbOpen':
                 handleOpen(verbKey, subjectToApplyCommand, exitOrNot);
@@ -122,7 +124,7 @@ export function handlePickUp(verb, objectId, exitOrNot) {
 }
 
 function pickUpItem(objectId, quantity) {
-    removeObjectFromEnvironment(objectId);
+    //removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
@@ -197,6 +199,43 @@ function addItemToInventory(objectId, quantity = 1) {
     setPlayerInventory(inventory);
 }
 
+function handleInventoryAdjustment(objectId, quantity) {
+    const inventory = getPlayerInventory();
+    const objectData = getObjectData().objects[objectId];
+
+    if (objectData.interactable && objectData.interactable.decrementQuantityOnUse) {
+        for (let slot in inventory) {
+            if (inventory[slot] && inventory[slot].object === objectId) {
+                if (inventory[slot].quantity >= quantity) {
+                    inventory[slot].quantity -= quantity;
+
+                    if (inventory[slot].quantity === 0) {
+                        let currentSlot = slot;
+
+                        while (inventory[`slot${parseInt(currentSlot.replace('slot', '')) + 1}`]) {
+                            const nextSlot = `slot${parseInt(currentSlot.replace('slot', '')) + 1}`;
+                            inventory[currentSlot] = inventory[nextSlot];
+                            currentSlot = nextSlot;
+                        }
+
+                        delete inventory[currentSlot];
+                        
+                        console.log(`Removed ${objectId} from inventory. Slots shifted down.`);
+                    } else {
+                        console.log(`Decreased quantity of ${objectId} by ${quantity}. New quantity: ${inventory[slot].quantity}`);
+                    }
+                } else {
+                    console.warn(`Not enough quantity to decrement. Current quantity: ${inventory[slot].quantity}.`);
+                }
+                setPlayerInventory(inventory);
+                return;
+            }
+        }
+        console.warn(`Object ID ${objectId} not found in inventory.`);
+    }
+}
+
+
 function triggerEvent(objectId) {
     // Logic to check for and trigger any associated events
 }
@@ -219,16 +258,21 @@ export function handleUse(verb, objectId, exitOrNot, inventoryItem) {
     const object = objectData.objects[objectId];
     const inventory = getPlayerInventory();
 
-    const use = checkIfItemCanBeUsed(objectId);  // check if first (or only if not a useWith item) item can be used or not with getObjectData().objects.objectId.interactable.canUse - cannot - global message cannot use cancel parser
-    const useWith = checkIfItemCanBeUsedWith(objectId); // check if is a use or a use with item - use proceed to use it - use with continue parser "with" handleWith(verb, objectId)
+    let quantity = 1; //add conditions here for special cases like 29 gold or something, otherwise is just 1
+
+    const use = checkIfItemCanBeUsed(objectId);  
+    const useWith = checkIfItemCanBeUsedWith(objectId);
     
     if (!use || exitOrNot) {
         handleCannotUseMessage(language, dialogueData);
         return;
     }
-        //NEED TO WORK ON ACTIVATING INVENTORY ITEMS FOR CLICKING VERBS ON FIRST
+
     if (inventoryItem) {
-        handleInventoryAdjustment(objectId);  // check if decrement quantity ie remove from inventory and handle this
+        handleInventoryAdjustment(objectId, quantity);  // check if decrement quantity ie remove from inventory and handle this
+        drawInventory(getCurrentStartIndexInventory());
+        setVerbButtonConstructionStatus(null);
+        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
     }
 
     if (useWith) {
@@ -328,10 +372,17 @@ export function parseCommand(userCommand) {
     let objectName = '';
     let verbPart = '';
     let exitOrNot = false;
+    let quantity = 1;
 
     for (let i = commandParts.length - 1; i >= 0; i--) {
         objectName = commandParts.slice(i).join(' ');
-
+    
+        const firstWord = objectName.split(' ')[0];
+    
+        if (!isNaN(firstWord)) {
+            quantity = parseInt(firstWord);
+        }
+    
         for (const objectId in objectData) {
             if (objectData[objectId].name[language] === objectName) {
                 objectMatch = objectId;
@@ -344,6 +395,7 @@ export function parseCommand(userCommand) {
             break;
         }
     }
+    
 
     if (!objectMatch) {
         for (const roomId in navigationData) {
@@ -385,7 +437,8 @@ export function parseCommand(userCommand) {
     return {
         objectId: objectMatch,
         verbKey: verbKey,
-        exitOrNot: exitOrNot
+        exitOrNot: exitOrNot,
+        quantity: quantity
     };
 }
 
