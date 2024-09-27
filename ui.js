@@ -2,6 +2,7 @@ import { getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDis
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
+import { parseCommand } from './handleCommands.js'
 
 let textTimer = null; 
 
@@ -151,6 +152,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     getElements().inventoryUpArrow.addEventListener('click', handleInventoryUpArrowClick);
     getElements().inventoryDownArrow.addEventListener('click', handleInventoryDownArrowClick);
 
+    const inventoryItems = document.querySelectorAll('.inventory-item');
+
+    inventoryItems.forEach(function(item, index) {
+        item.addEventListener('mouseover', function() {
+            const imgElement = item.querySelector('img');
+            const interactionText = getElements().interactionInfo.textContent;
+            if (imgElement) {
+                const objectId = imgElement.alt;
+                if (objectId !== "empty") {
+                    const objectName = getObjectData().objects[objectId].name[getLanguage()];
+                    console.log(objectName);
+                    if (interactionText === localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction')) {
+                        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
+                    } else if (objectId !== "empty" && interactionText !== localize('interactionWalking', getLanguage(), 'verbsActionsInteraction') && interactionText !== localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction')) {
+                        updateInteractionInfo(localize(interactionText, getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
+                    }
+                }
+            }
+        });
+    });
 
     initializeCanvasEventListener();
     setGameState(getMenuState());
