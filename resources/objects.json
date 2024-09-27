@@ -25,12 +25,12 @@
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "navigation/exit/libraryFoyer",
-                "actionUse1": "events/libraryFoyer",
+                "objectUse": "",
+                "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "",
-                "actionUseWith11": "",
-                "actionUseWith12": ""
+                "objectUseWith1": "objects/woodenDoorDEBUG",
+                "actionUseWith11": "events/woodenDoorDEBUG",
+                "actionUseWith12": "events/libraryFoyer"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -69,12 +69,12 @@
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "",
+                "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
                 "objectUseWith1": "objects/machineDEBUG",
-                "actionUseWith11": "events/machineDEBUG/activate",
-                "actionUseWith12": "events/batteryDEBUG"
+                "actionUseWith11": "events/batteryDEBUG",
+                "actionUseWith12": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/battery.png",
@@ -114,9 +114,9 @@
             },
             "activeStatus": false,
             "usedOn": {
-                "object": "",
-                "actionUse1": "giveItem/bananaDEBUG",
-                "actionUse2": "events/machineDEBUG",
+                "objectUse": "",
+                "actionUse1": "events/machineDEBUG",
+                "actionUse2": "giveItem/bananaDEBUG",
                 "objectUseWith1": "",
                 "actionUseWith11": "",
                 "actionUseWith12": ""
@@ -158,7 +158,7 @@
             },
             "activeStatus": true,
             "usedOn": {
-                "object": "",
+                "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
                 "objectUseWith1": "npc/monkeyDEBUG",
