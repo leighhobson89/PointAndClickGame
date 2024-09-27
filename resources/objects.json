@@ -17,7 +17,7 @@
             },
             "interactable": {
                 "canPickUp": true,
-                "canUse": true,
+                "canUse": false,
                 "canUseWith": true, 
                 "stackable": false,
                 "quantity": 1,
@@ -61,7 +61,7 @@
             },
             "interactable": {
                 "canPickUp": true,
-                "canUse": true,
+                "canUse": false,
                 "canUseWith": true,
                 "stackable": false,
                 "quantity": 1,
@@ -73,7 +73,7 @@
                 "actionUse1": "",
                 "actionUse2": "",
                 "objectUseWith1": "objects/machineDEBUG",
-                "actionUseWith11": "objects/machineDEBUG/activate",
+                "actionUseWith11": "events/machineDEBUG/activate",
                 "actionUseWith12": "events/batteryDEBUG"
             },
             "location": "debugRoom",
@@ -150,20 +150,20 @@
             },
             "interactable": {
                 "canPickUp": true,
-                "canUse": true,
+                "canUse": false,
                 "canUseWith": true, 
                 "stackable": false,
                 "quantity": 1,
                 "decrementQuantityOnUse": true
             },
-            "activeStatus": false,
+            "activeStatus": true,
             "usedOn": {
                 "object": "",
-                "actionUse1": "removeItem/bananaDEBUG",
+                "actionUse1": "",
                 "actionUse2": "",
                 "objectUseWith1": "npc/monkeyDEBUG",
-                "actionUseWith11": "removeItem/bananaDEBUG",
-                "actionUseWith12": "events/monkeyBanana"
+                "actionUseWith11": "events/monkeyBanana",
+                "actionUseWith12": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",

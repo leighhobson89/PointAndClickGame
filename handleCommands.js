@@ -128,7 +128,7 @@ function pickUpItem(objectId, quantity) {
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
-    drawInventory(0); //runs outside canvas so doesnt have to be updated every frame and we reset the position to the top if they pick up an item
+    drawInventory(0);
     triggerEvent(objectId);
 }
 
