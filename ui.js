@@ -181,6 +181,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
                         const firstTwoWords = words.slice(0, 2).join(" ");
+                        
+                        if (firstTwoWords === verbPickUp) return; //DEBUG: comment out to be able to duplicate items in inventory using pickup
                     
                         if (twoWordVerbs.includes(firstTwoWords)) {
                                     const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
