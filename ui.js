@@ -1,8 +1,8 @@
-import { getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setObjectData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setObjectData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS, getUpcomingAction } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
-import { parseCommand } from './handleCommands.js'
+import { parseCommand, performCommand } from './handleCommands.js'
 
 let textTimer = null; 
 
@@ -154,22 +154,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const inventoryItems = document.querySelectorAll('.inventory-item');
 
-    inventoryItems.forEach(function(item, index) {
-        item.addEventListener('mouseover', function() {
-            const imgElement = item.querySelector('img');
-            const interactionText = getElements().interactionInfo.textContent;
-            if (imgElement) {
-                const objectId = imgElement.alt;
-                if (objectId !== "empty") {
-                    const objectName = getObjectData().objects[objectId].name[getLanguage()];
-                    console.log(objectName);
-                    if (interactionText === localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction')) {
-                        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
-                    } else if (objectId !== "empty" && interactionText !== localize('interactionWalking', getLanguage(), 'verbsActionsInteraction') && interactionText !== localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction')) {
-                        updateInteractionInfo(localize(interactionText, getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
-                    }
+inventoryItems.forEach(function(item, index) {
+    item.addEventListener('mouseover', function() {
+        const imgElement = item.querySelector('img');
+        const interactionText = getElements().interactionInfo.textContent;
+
+        if (imgElement) {
+            const objectId = imgElement.alt;
+            if (objectId !== "empty") {
+                const objectName = getObjectData().objects[objectId].name[getLanguage()];
+                console.log(objectName);
+
+                // Extract the verbs
+                const verbLookAt = localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction');
+                const verbWalkTo = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
+                const verbWalking = localize('interactionWalking', getLanguage(), 'verbsActionsInteraction');
+
+                // Check if the interaction text matches "Walk To" and update the action accordingly
+                if (interactionText === verbWalkTo) {
+                    // Set the upcoming action to the "Look At" verb
+                    setUpcomingAction(verbLookAt);
+                    // Update interaction text with the verb and the current object name
+                    updateInteractionInfo(getUpcomingAction() + " " + objectName, false);
+                } else if (interactionText !== verbWalking && interactionText !== verbWalkTo) {
+                    // For other actions, set the current interaction verb
+                    setUpcomingAction(interactionText.split(" ")[0]); // Store only the verb
+                    // Update interaction text with the verb and the current object name
+                    updateInteractionInfo(getUpcomingAction() + " " + objectName, false);
                 }
             }
+        }
+    });
+});
+
+
+    inventoryItems.forEach(function(item, index) {
+        item.addEventListener('click', function() {
+            const interactionText = getElements().interactionInfo.textContent;
+            setUpcomingAction(interactionText);
+            const command = parseCommand(getUpcomingAction());
+            performCommand(command, true);
         });
     });
 

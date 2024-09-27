@@ -315,7 +315,9 @@ export function handleTalkTo(verb, objectId) {
 export function handleGive(verb, objectId) {
     console.log(`Giving object: ${objectId}`);
     // Add your implementation here
-}export function parseCommand(userCommand) {
+}
+
+export function parseCommand(userCommand) {
     const objectData = getObjectData().objects;
     const language = getLanguage();
     const localization = getLocalization()[language]['verbsActionsInteraction'];
