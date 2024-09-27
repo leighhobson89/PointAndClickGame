@@ -266,7 +266,7 @@ export function handleUse(verb, objectId, exitOrNot, inventoryItem, quantity = 1
         return;
     }
 
-    if (inventoryItem) {
+    if (inventoryItem) { //inventory items are ALWAYS Use With and never Use
         handleInventoryAdjustment(objectId, quantity);
         drawInventory(getCurrentStartIndexInventory());
         setVerbButtonConstructionStatus(null);
@@ -276,7 +276,7 @@ export function handleUse(verb, objectId, exitOrNot, inventoryItem, quantity = 1
     if (useWith) {
         handleWith(objectId); // call handleWith() to handle objects that are used with something or someone
     } else {
-        useItem(objectId, false); //use item and pass false for not a useWith item
+        useItem(objectId, null, false); //trigger checks and events for environment items that can have just Use like unlocked doors, machines etc, we pass in true or false depending if use or useWith, in this case always false
     }
 }
 
@@ -287,10 +287,16 @@ export function handleWith(verb, objectId, inventoryItem) {
     const object = objectData.objects[objectId];
     const inventory = getPlayerInventory();
 
-    // check if second item can be used or not with getObjectData().objects.objectId.interactable.canUse - cannot - global message cannot use cancel parser
-    // check if it is an inventory item or not
-    // check if decrement quantity ie remove from inventory and handle this
-    // use item trigger actionUseWith events
+    //get second item from user probably async call, ie call funtions to return to use item while waiting - investigate
+    //check if second item is inventory item or not
+    //if so check location is correct for using item (if important) and if item can be used with first item
+    //adjust inventory for both items
+    //if reach this point trigger useItem(objectId, secondObjectId, true)
+
+}
+
+export function useItem(objectId1, objectId2, useWith) { //function uses all items, use or use with
+    
 }
 
 function checkIfItemCanBeUsed(objectId) {
