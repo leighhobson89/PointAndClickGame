@@ -112,7 +112,7 @@
                 "stackable": false,
                 "quantity": 1,
                 "decrementQuantityOnUse": false,
-                "activeStatus": true,
+                "activeStatus": false,
                 "alreadyUsed": false
             },
             "usedOn": {

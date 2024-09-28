@@ -2,7 +2,7 @@ import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { getObjectData } from "./constantsAndGlobalVars.js";
 import { drawInventory } from "./ui.js";
 
-
+//Use Machine Debug
 export function machineDEBUGActivate(objectId) {
     addItemToInventory("bananaDEBUG", 1);
     drawInventory(0);

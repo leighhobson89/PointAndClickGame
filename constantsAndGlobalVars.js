@@ -21,6 +21,7 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
+export const AWAIT_INPUT_STATE = 'awaitInputState';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'libraryFoyerDebug'; //libraryFoyer is the start point change for debug
@@ -310,6 +311,10 @@ export function getMenuState() {
 
 export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
+}
+
+export function getAwaitInputState() {
+    return AWAIT_INPUT_STATE;
 }
 
 export function getNumberOfEnemySquares() {

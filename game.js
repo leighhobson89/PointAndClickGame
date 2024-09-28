@@ -775,5 +775,7 @@ export function setGameState(newState) {
             getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
             break;
+        case getAwaitInputState():
+            break;
     }
 }

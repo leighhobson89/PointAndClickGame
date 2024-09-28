@@ -19,7 +19,7 @@ export function performCommand(command, inventoryItem) {
                 handlePickUp(verbKey, subjectToApplyCommand, exitOrNot);
                 break;
             case 'verbUse':
-                handleUse(verbKey, subjectToApplyCommand, exitOrNot, inventoryItem, quantity);
+                handleUse(subjectToApplyCommand, exitOrNot, inventoryItem, quantity);
                 break;
             case 'verbOpen':
                 handleOpen(verbKey, subjectToApplyCommand, exitOrNot);
@@ -254,12 +254,10 @@ function handleCannotPickUpMessage(language, dialogueData) {
 }
 
 // Handle "Use" action
-export function handleUse(verb, objectId, exitOrNot, inventoryItem, quantity = 1) {
+export function handleUse(objectId, exitOrNot, inventoryItem, quantity = 1) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const object = objectData.objects[objectId];
-    const inventory = getPlayerInventory();
 
     const use = checkIfItemCanBeUsed(objectId);  
     const useWith = checkIfItemCanBeUsedWith(objectId);
@@ -277,13 +275,14 @@ export function handleUse(verb, objectId, exitOrNot, inventoryItem, quantity = 1
     }
 
     if (useWith) {
+        //change this so we set a global variable with the object already clicked, change the parser to have "with", set another flag to say awaiting next input, which blocks other verbs, and is cancelled on clicking an area without an object in it or on another verb, then conditions so that if the processClick is called with this flag set, we reset the flag and call the handleWith function with the two objects, this is easier than async or webworkers. 
         handleWith(objectId); // call handleWith() to handle objects that are used with something or someone
     } else {
         useItem(objectId, null, false); //trigger checks and events for environment items that can have just Use like unlocked doors, machines etc, we pass in true or false depending if use or useWith, in this case always false
     }
 }
 
-export function handleWith(verb, objectId, exitOrNot, inventoryItem, quantity = 1) {
+export function handleWith(objectId) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
@@ -311,12 +310,12 @@ export function useItem(objectId1, objectId2, useWith) { //function uses all ite
 
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             const objectEvent = getObjectEvents(objectId1);
-            executeObjectEvent(objectEvent); //READY FOR TESTING!!!!!!!!!
-            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[getLanguage()];
+            executeObjectEvent(objectEvent);
+            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
         } else if (object1.interactable.alreadyUsed) {
-            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[getLanguage()];
+            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
         } else {
-            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[getLanguage()];
+            dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
         }
         showText(dialogue);
     }
