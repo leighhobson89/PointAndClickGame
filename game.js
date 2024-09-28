@@ -1,4 +1,4 @@
-import { setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, setObjectToBeUsedWithSecondItem, setSecondItemAlreadyHovered } from './constantsAndGlobalVars.js';
+import { getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, setObjectToBeUsedWithSecondItem, setSecondItemAlreadyHovered } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
@@ -115,10 +115,15 @@ function movePlayerTowardsTarget() {
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
+            console.log("waiting for second item: " + getWaitingForSecondItem());
+            console.log("second item already hovered: " + getSecondItemAlreadyHovered());
+            console.log("object to be used with second item: " + getObjectToBeUsedWithSecondItem());
+            console.log("upcoming action: " + getUpcomingAction());
+            console.log("verb conbstruciton status: " + getVerbButtonConstructionStatus());
+
             const commandToPerform = parseCommand(getUpcomingAction());
             console.log("command: " + commandToPerform);
-            performCommand(commandToPerform, false, false); //we presume neither are inventory item if player moves // CHECK IF BUGS
-            setUpcomingAction(null);
+            performCommand(commandToPerform, false); //we presume neither are inventory item if player moves // CHECK IF BUGS
 
             setCurrentlyMovingToAction(false);
             setCurrentlyMoving(false);
@@ -531,7 +536,7 @@ export function processClickPoint(event, mouseClick) {
 
         console.log("verb construction: " + getVerbButtonConstructionStatus());
 
-        if (getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
+        if (getVerbButtonConstructionStatus() !== 'interactionWalkTo' && !getWaitingForSecondItem()) {
             const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
             updateInteractionInfo(
                 localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + 
@@ -549,7 +554,9 @@ export function processClickPoint(event, mouseClick) {
     }
     setVerbButtonConstructionStatus(null);
 
-    resetSecondItemState();
+    if (getWaitingForSecondItem()) {
+        setUpcomingAction(getElements().interactionInfo.textContent);
+    }
 
     //console.log(`Path: ${JSON.stringify(path)}`);
 }

@@ -255,7 +255,7 @@ function handleCannotPickUpMessage(language, dialogueData) {
     }
 }
 
-// Handle "Use" action
+// INVESTIGATE WHY IT IS NOT KEEPING THE ASSIGNED VARIABLES AFTER ENTERING THIS FUNCTION WITH A SECOND OBJECT CLICKED FROM ENVIRONEMNT
 export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();

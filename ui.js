@@ -245,17 +245,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         item.addEventListener('click', function() {
             const interactionText = getElements().interactionInfo.textContent;
             setUpcomingAction(interactionText);
-            console.log("waiting for second item: " + getWaitingForSecondItem());
-            console.log("second item already hovered: " + getSecondItemAlreadyHovered());
-            console.log("object to be used with second item: " + getObjectToBeUsedWithSecondItem());
-            console.log("upcoming action: " + getUpcomingAction());
-            console.log("verb conbstruciton status: " + getVerbButtonConstructionStatus());
 
             const command = parseCommand(getUpcomingAction());
             console.log("command to perform: " + command);
-            performCommand(command, true, true);
-
-            //resetSecondItemState();
+            performCommand(command, true);
         });
     });
 
