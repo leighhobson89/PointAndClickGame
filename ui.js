@@ -303,6 +303,7 @@ export function handleMouseMove(event, ctx) {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
     const gridData = getGridData();
+    const interactionText = getElements().interactionInfo.textContent;
 
     const hoverX = Math.floor(mouseX / getCanvasCellWidth());
     const hoverY = Math.floor(mouseY / getCanvasCellHeight());
@@ -336,6 +337,23 @@ export function handleMouseMove(event, ctx) {
             if (!getWaitingForSecondItem() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
                 const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
                 updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
+            }
+        }
+
+        if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
+            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
+            if (getSecondItemAlreadyHovered() !== screenOrObjectName) {
+                updateInteractionInfo(interactionText + " " + screenOrObjectName, false);
+                setSecondItemAlreadyHovered(screenOrObjectName);
+            }
+        }
+
+        if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
+            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
+            if (getSecondItemAlreadyHovered() !== screenOrObjectName) {
+                const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
+                updateInteractionInfo(updatedText, false);
+                setSecondItemAlreadyHovered(null);
             }
         }
 
