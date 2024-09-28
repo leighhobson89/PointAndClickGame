@@ -31,7 +31,8 @@
                 "actionUse2": "",
                 "objectUseWith1": "woodenDoorDEBUG",
                 "actionUseWith11": "woodenDoorDEBUG",
-                "actionUseWith12": "libraryFoyer"
+                "actionUseWith12": "libraryFoyer",
+                "useTogetherLocation": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -76,7 +77,8 @@
                 "actionUse2": "",
                 "objectUseWith1": "machineDEBUG",
                 "actionUseWith11": "batteryDEBUG",
-                "actionUseWith12": ""
+                "actionUseWith12": "",
+                "useTogetherLocation": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/battery.png",
@@ -121,7 +123,8 @@
                 "actionUse2": "",
                 "objectUseWith1": "",
                 "actionUseWith11": "",
-                "actionUseWith12": ""
+                "actionUseWith12": "",
+                "useTogetherLocation": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/machine.png",
@@ -166,7 +169,8 @@
                 "actionUse2": "",
                 "objectUseWith1": "monkeyDEBUG",
                 "actionUseWith11": "monkeyBanana",
-                "actionUseWith12": ""
+                "actionUseWith12": "",
+                "useTogetherLocation": ""
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",

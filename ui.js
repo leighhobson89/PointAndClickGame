@@ -214,23 +214,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
 
                     if (getWaitingForSecondItem()) {
-                        console.log("objectName: " + objectName);
-                        console.log("Object First Clicked On: " + getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]);
+                        //console.log("objectName: " + objectName);
+                        //console.log("Object First Clicked On: " + getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]);
     
                         if (!getSecondItemAlreadyHovered()) {
                             if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                                console.log("Other object wasnt hovered, setting now...");
+                                //console.log("Other object wasnt hovered, setting now...");
                                 updateInteractionInfo(interactionText + " " + objectName, false);
                                 setSecondItemAlreadyHovered(objectName); //will run first time then thats it
                             }
                         } else if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                            console.log("object previously hovered was: " + getSecondItemAlreadyHovered());
+                            //console.log("object previously hovered was: " + getSecondItemAlreadyHovered());
 
                             let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectName);
                             updateInteractionInfo(updatedText, false);
                             setSecondItemAlreadyHovered(objectName);
 
-                            console.log("object now set as secondObjectAlreadyHovered: " + getSecondItemAlreadyHovered());
+                            //console.log("object now set as secondObjectAlreadyHovered: " + getSecondItemAlreadyHovered());
                         } else if (objectName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
                             return;
                         }
@@ -245,8 +245,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         item.addEventListener('click', function() {
             const interactionText = getElements().interactionInfo.textContent;
             setUpcomingAction(interactionText);
+            console.log("waiting for second item: " + getWaitingForSecondItem());
+            console.log("second item already hovered: " + getSecondItemAlreadyHovered());
+            console.log("object to be used with second item: " + getObjectToBeUsedWithSecondItem());
+            console.log("upcoming action: " + getUpcomingAction());
+            console.log("verb conbstruciton status: " + getVerbButtonConstructionStatus());
+
             const command = parseCommand(getUpcomingAction());
-            performCommand(command, true);
+            console.log("command to perform: " + command);
+            performCommand(command, true, true);
+
+            //resetSecondItemState();
         });
     });
 

@@ -1,43 +1,45 @@
-import { setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
+import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
-import { drawInventory, showText, updateInteractionInfo } from "./ui.js";
+import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { machineDEBUGActivate } from "./events.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
     if (command !== null) {
         const verbKey = command.verbKey;
-        const subjectToApplyCommand = command.objectId;
-        const exitOrNot = command.exitOrNot;
+        const subjectToApplyCommand = command.objectId1;
+        const secondObject = command.objectId2;
+        const exitOrNot1 = command.exitOrNot1;
+        const exitOrNot2 = command.exitOrNot2;
         const quantity = command.quantity;
 
         switch (verbKey) {
             case 'verbLookAt':
-                handleLookAt(verbKey, subjectToApplyCommand, exitOrNot);
+                handleLookAt(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbPickUp':
-                handlePickUp(verbKey, subjectToApplyCommand, exitOrNot);
+                handlePickUp(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbUse':
-                handleUse(subjectToApplyCommand, exitOrNot, inventoryItem, quantity);
+                handleUse(subjectToApplyCommand, secondObject, exitOrNot1, exitOrNot2, inventoryItem, quantity);
                 break;
             case 'verbOpen':
-                handleOpen(verbKey, subjectToApplyCommand, exitOrNot);
+                handleOpen(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbClose':
-                handleClose(verbKey, subjectToApplyCommand, exitOrNot);
+                handleClose(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbPush':
-                handlePush(verbKey, subjectToApplyCommand, exitOrNot);
+                handlePush(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbPull':
-                handlePull(verbKey, subjectToApplyCommand, exitOrNot);
+                handlePull(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbTalkTo':
-                handleTalkTo(verbKey, subjectToApplyCommand, exitOrNot);
+                handleTalkTo(verbKey, subjectToApplyCommand, exitOrNot1);
                 break;
             case 'verbGive':
-                handleGive(verbKey, subjectToApplyCommand, exitOrNot);
+                handleGive(subjectToApplyCommand, secondObject, exitOrNot1, exitOrNot2, inventoryItem, quantity);
                 break;
             default:
                 console.warn(`Unhandled verbKey: ${verbKey}`);
@@ -254,56 +256,88 @@ function handleCannotPickUpMessage(language, dialogueData) {
 }
 
 // Handle "Use" action
-export function handleUse(objectId, exitOrNot, inventoryItem, quantity = 1) {
+export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const useWith = checkIfItemCanBeUsedWith(objectId);
+    const useWith = checkIfItemCanBeUsedWith(objectId1);
     
-    if ((!inventoryItem && useWith)) {
+    if ((!inventoryItem && useWith && !getWaitingForSecondItem())) {
         handleCannotUsedUntilPickedUpMessage(language, dialogueData);
         return;
     }
 
-    if (exitOrNot) { // cant use an exit although you might be able to use the door that blocks it if it isnt locked
+    if (exitOrNot1 && !getWaitingForSecondItem()) { // cant use an exit although you might be able to use the door that blocks it if it isnt locked
         handleCannotUseExitMessage(language, dialogueData);
         return;
     }
 
-    if (!inventoryItem) {
-        useItem(objectId, null, false);
-    } else { //inventory items are ALWAYS Use With and never Use although some will only be second objects ie the object you use something else with in which case it will return a message saying this has to be used with something else by being activeStatus = false
-        setWaitingForSecondItem(true);
-        setObjectToBeUsedWithSecondItem(objectId);
-        const interactiveInfoWith = getElements().interactionInfo.textContent + " " + localize('interactionWith', language, 'verbsActionsInteraction');
-        updateInteractionInfo(interactiveInfoWith, false);
-
+    if (!inventoryItem && !getWaitingForSecondItem()) { 
+        useItem(objectId1, null, false); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+    } else {
+        if (!getWaitingForSecondItem()) {
+            setWaitingForSecondItem(true);
+            setObjectToBeUsedWithSecondItem(objectId1);
+            const interactiveInfoWith = getElements().interactionInfo.textContent + " " + localize('interactionWith', language, 'verbsActionsInteraction');
+            updateInteractionInfo(interactiveInfoWith, false);
+        } else {
+            console.log("handling With use");
+            handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity); //inventoryItem always refers to object2 by this point
+            setVerbButtonConstructionStatus(null);
+            resetSecondItemState();
+            updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
+        }
     }
-        //change this so we set a global variable with the object already clicked, change the parser to have "with", set another flag to say awaiting next input, which blocks other verbs, and is cancelled on clicking an area without an object in it or on another verb, then conditions so that if the processClick is called with this flag set, we reset the flag and call the handleWith function with the two objects, this is easier than async or webworkers. 
-        
 }
 
-export function handleWith(objectId) {
+export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const object = objectData.objects[objectId];
+    const object1 = objectData.objects[objectId1];
+    const object2 = objectData.objects[objectId2];
     const inventory = getPlayerInventory();
+    const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
+    const useTogetherLocation2 = object2.usedOn.useTogetherLocation;
 
+    let locationCorrect = false;
+    let locationImportant = false;
 
+    if (inventoryItem) { //check if second item is inventory item or not we know first one is for certain
+        console.log("second object IS inventory Item");
+    } else {
+        console.log("second object is not inventory Item");
+    }
 
-    //get second item from user
-    //check if second item is inventory item or not
-    //if so check location is correct for using item (if important) and if item can be used with first item
-    //adjust inventory for both items
-    //if reach this point trigger useItem(objectId, secondObjectId, true)
+    if (exitOrNot2) {
+        console.log("second object is actually an exit");
+    } else {
+        console.log("second object is not an exit");
+    }
 
+    if (useTogetherLocation1 && useTogetherLocation2) { //using two inventory items together, need to have manually entered same useTogetherLocation in JSON.
+        locationImportant = true;
+        if (useTogetherLocation1 === useTogetherLocation2) {
+            if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2) {
+                locationCorrect = true;
+            }
+        } else {
+            // dialogue items cannot be useds together
+            console.log("Both objects have a use together location but it doesn't match, check JSON!");
+            return;
+        }
+    }
 
-        // handleInventoryAdjustment(objectId, quantity);
-    // drawInventory(getCurrentStartIndexInventory());
-    // setVerbButtonConstructionStatus(null);
-    // updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
+    if (locationImportant && !locationCorrect) {
+        //dialogue not in right location to use items
+        return;
+    }
 
+    handleInventoryAdjustment(objectId1, quantity);
+    handleInventoryAdjustment(objectId2, quantity);
+    drawInventory(0);
+
+    useItem(objectId1, objectId2, true);
 }
 
 export function useItem(objectId1, objectId2, useWith) { //function uses all items, use or use with
@@ -401,80 +435,150 @@ export function parseCommand(userCommand) {
     const language = getLanguage();
     const localization = getLocalization()[language]['verbsActionsInteraction'];
     const navigationData = getNavigationData();
-
+    
+    const waitingForSecondItem = getWaitingForSecondItem();
+    
     let commandParts = userCommand.split(' ');
-    let objectMatch = null;
+    let objectMatch1 = null;
+    let objectMatch2 = null;
     let objectName = '';
     let verbPart = '';
-    let exitOrNot = false;
+    let exitOrNot1 = false;
+    let exitOrNot2 = false;
     let quantity = 1;
 
-    for (let i = commandParts.length - 1; i >= 0; i--) {
-        objectName = commandParts.slice(i).join(' ');
-    
-        const firstWord = objectName.split(' ')[0];
-    
-        if (!isNaN(firstWord)) {
-            quantity = parseInt(firstWord);
-        }
-    
+    // Handle the case where we are waiting for the second item
+    if (waitingForSecondItem) {
+        // Extract the first object from getObjectToBeUsedWithSecondItem()
+        const object1 = objectData[getObjectToBeUsedWithSecondItem()].name[language];
+        // Extract the second object from getSecondItemAlreadyHovered()
+        const object2 = getSecondItemAlreadyHovered();
+
+        // Find the object IDs for object1 and object2 in the objectData
         for (const objectId in objectData) {
-            if (objectData[objectId].name[language] === objectName) {
-                objectMatch = objectId;
-                verbPart = commandParts.slice(0, i).join(' ');
+            if (objectData[objectId].name[language] === object1) {
+                objectMatch1 = objectId;
+            }
+            if (objectData[objectId].name[language] === object2) {
+                objectMatch2 = objectId;
+            }
+        }
+
+        // The verb should be the first word in the commandParts array
+        verbPart = commandParts[0];
+
+        // Check if verbPart matches any in localization
+        let verbKey = null;
+        for (const key in localization) {
+            if (localization[key] === verbPart) {
+                verbKey = key;
                 break;
             }
         }
-        if (objectMatch) {
-            exitOrNot = false;
-            break;
+
+        if (!verbKey) {
+            console.warn('No verb match found for the command:', verbPart);
+            return null;
         }
-    }
-    
 
-    if (!objectMatch) {
-        for (const roomId in navigationData) {
-            const roomName = navigationData[roomId][language];
+        // Now check if object2 (second item) is an exit (room)
+        if (!objectMatch2) {
+            for (const roomId in navigationData) {
+                const roomName = navigationData[roomId][language];
 
-            for (let i = commandParts.length - 1; i >= 0; i--) {
-                const roomCommandName = commandParts.slice(i).join(' ');
-                if (roomCommandName === roomName) {
-                    objectMatch = roomId;
+                for (let i = commandParts.length - 1; i >= 0; i--) {
+                    const roomCommandName = commandParts.slice(i).join(' ');
+                    if (roomCommandName === roomName) {
+                        objectMatch2 = roomId;
+                        exitOrNot2 = true;
+                        break;
+                    }
+                }
+                if (objectMatch2) {
+                    break;
+                }
+            }
+        }
+
+        return {
+            objectId1: objectMatch1,  // First object ID (from getObjectToBeUsedWithSecondItem())
+            objectId2: objectMatch2,  // Second object ID (from getSecondItemAlreadyHovered() or a room)
+            verbKey: verbKey,         // The verb/action
+            exitOrNot1: "",           // No exit for the first item when waiting for the second item
+            exitOrNot2: exitOrNot2,   // Exit status for the second item
+            quantity: quantity        // Keep the current quantity logic
+        };
+
+    } else {
+        // Handle the case where we're NOT waiting for a second item (existing logic)
+        for (let i = commandParts.length - 1; i >= 0; i--) {
+            objectName = commandParts.slice(i).join(' ');
+
+            const firstWord = objectName.split(' ')[0];
+
+            if (!isNaN(firstWord)) {
+                quantity = parseInt(firstWord);
+            }
+
+            for (const objectId in objectData) {
+                if (objectData[objectId].name[language] === objectName) {
+                    objectMatch1 = objectId;
                     verbPart = commandParts.slice(0, i).join(' ');
                     break;
                 }
             }
-            if (objectMatch) {
-                exitOrNot = true;
+            if (objectMatch1) {
+                exitOrNot1 = false;
                 break;
             }
         }
-    }
 
-    if (!objectMatch) {
-        console.warn('No object or room match found for the command:', userCommand);
-        return null;
-    }
+        if (!objectMatch1) {
+            for (const roomId in navigationData) {
+                const roomName = navigationData[roomId][language];
 
-    let verbKey = null;
-    for (const key in localization) {
-        if (localization[key] === verbPart) {
-            verbKey = key;
-            break;
+                for (let i = commandParts.length - 1; i >= 0; i--) {
+                    const roomCommandName = commandParts.slice(i).join(' ');
+                    if (roomCommandName === roomName) {
+                        objectMatch1 = roomId;
+                        verbPart = commandParts.slice(0, i).join(' ');
+                        exitOrNot1 = true;
+                        break;
+                    }
+                }
+                if (objectMatch1) {
+                    break;
+                }
+            }
         }
-    }
 
-    if (!verbKey) {
-        console.warn('No verb match found for the command:', verbPart);
-        return null;
-    }
+        if (!objectMatch1) {
+            console.warn('No object or room match found for the command:', userCommand);
+            return null;
+        }
 
-    return {
-        objectId: objectMatch,
-        verbKey: verbKey,
-        exitOrNot: exitOrNot,
-        quantity: quantity
-    };
+        let verbKey = null;
+        for (const key in localization) {
+            if (localization[key] === verbPart) {
+                verbKey = key;
+                break;
+            }
+        }
+
+        if (!verbKey) {
+            console.warn('No verb match found for the command:', verbPart);
+            return null;
+        }
+
+        return {
+            objectId1: objectMatch1,  // Object or room ID from current logic
+            objectId2: null,          // No second object when getWaitingForSecondItem() is false
+            verbKey: verbKey,         // The verb/action
+            exitOrNot1: exitOrNot1,   // Exit status for the first object
+            exitOrNot2: "",           // No second exit when getWaitingForSecondItem() is false
+            quantity: quantity        // Quantity remains unchanged
+        };
+    }
 }
 
 export function setObjectData(objectId, path, newValue) {
