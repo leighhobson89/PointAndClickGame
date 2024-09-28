@@ -1,4 +1,4 @@
-import { setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS, getUpcomingAction } from './constantsAndGlobalVars.js';
+import { setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS, getUpcomingAction } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -101,46 +101,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 //------------------------------------------------------------------------------------------------------
 
     getElements().btnLookAt.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnPickUp.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnUse.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnOpen.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnClose.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnPush.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnPull.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnTalkTo.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
 
     getElements().btnGive.addEventListener('click', function () {
+        resetSecondItemState();
         setVerbButtonConstructionStatus(this);
         updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
     });
@@ -175,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (interactionText === verbWalkTo) {
                         setUpcomingAction(verbLookAt);
                         updateInteractionInfo(getUpcomingAction() + " " + objectName, false);
-                    } else if (interactionText !== verbWalking && interactionText !== verbWalkTo) {
+                    } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
                         let words = interactionText.split(" ");
                         let verbKey = null;
 
@@ -203,7 +212,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                         updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
                     }
-                    
+
+                    if (getWaitingForSecondItem()) {
+                        console.log("objectName: " + objectName);
+                        console.log("Object First Clicked On: " + getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]);
+    
+                        if (!getSecondItemAlreadyHovered()) {
+                            if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                                console.log("Other object wasnt hovered, setting now...");
+                                updateInteractionInfo(interactionText + " " + objectName, false);
+                                setSecondItemAlreadyHovered(objectName); //will run first time then thats it
+                            }
+                        } else if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                            console.log("object previously hovered was: " + getSecondItemAlreadyHovered());
+
+                            let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectName);
+                            updateInteractionInfo(updatedText, false);
+                            setSecondItemAlreadyHovered(objectName);
+
+                            console.log("object now set as secondObjectAlreadyHovered: " + getSecondItemAlreadyHovered());
+                        } else if (objectName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                            return;
+                        }
+                    }
                 }
             }
         });
@@ -291,19 +322,18 @@ export function handleMouseMove(event, ctx) {
         }
 
         setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o'));
-        // console.log("are we hovering anything interesting? " + getHoveringInterestingObjectOrExit());
-        // console.log("verb construction status: " + getVerbButtonConstructionStatus());
-        if (getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+
+        if (!getWaitingForSecondItem() && getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
             const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
             updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
         } else {
-            if (!getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+            if (!getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
             }
-            if (getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
+            if (!getWaitingForSecondItem() && getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
                 updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
             }
-            if (!getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
+            if (!getWaitingForSecondItem() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
                 const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
                 updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
             }
@@ -623,4 +653,10 @@ export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {
         .catch(error => {
             console.error("Error loading dialogue data:", error);
         });
+}
+
+export function resetSecondItemState() {
+    setWaitingForSecondItem(false);
+    setObjectToBeUsedWithSecondItem(null);
+    setSecondItemAlreadyHovered(null);
 }

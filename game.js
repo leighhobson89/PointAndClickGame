@@ -1,8 +1,8 @@
-import { getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover } from './constantsAndGlobalVars.js';
+import { setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, setObjectToBeUsedWithSecondItem, setSecondItemAlreadyHovered } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
-import { animateTransitionAndChangeBackground as changeBackground, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas } from './ui.js';
+import { resetSecondItemState, animateTransitionAndChangeBackground as changeBackground, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas } from './ui.js';
 
 export const enemySquares = [];
 let currentPath = [];
@@ -548,6 +548,8 @@ export function processClickPoint(event, mouseClick) {
     }
     setVerbButtonConstructionStatus(null);
 
+    resetSecondItemState();
+
     //console.log(`Path: ${JSON.stringify(path)}`);
 }
 
@@ -774,8 +776,6 @@ export function setGameState(newState) {
             getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
-            break;
-        case getAwaitInputState():
             break;
     }
 }

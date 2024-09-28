@@ -1,4 +1,4 @@
-import { setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory } from "./constantsAndGlobalVars.js";
+import { setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, showText, updateInteractionInfo } from "./ui.js";
 import { machineDEBUGActivate } from "./events.js"
@@ -258,28 +258,29 @@ export function handleUse(objectId, exitOrNot, inventoryItem, quantity = 1) {
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
-
-    const use = checkIfItemCanBeUsed(objectId);  
     const useWith = checkIfItemCanBeUsedWith(objectId);
     
-    if (!use || exitOrNot) { // cant use an exit although you might be able to use the door that blocks it if it isnt locked
-        handleCannotUseMessage(language, dialogueData);
+    if ((!inventoryItem && useWith)) {
+        handleCannotUsedUntilPickedUpMessage(language, dialogueData);
         return;
     }
 
-    if (inventoryItem) { //inventory items are ALWAYS Use With and never Use although some will only be second objects ie the object you use something else with in which case it will return a message saying this has to be used with something else by being activeStatus = false
-        handleInventoryAdjustment(objectId, quantity);
-        drawInventory(getCurrentStartIndexInventory());
-        setVerbButtonConstructionStatus(null);
-        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
+    if (exitOrNot) { // cant use an exit although you might be able to use the door that blocks it if it isnt locked
+        handleCannotUseExitMessage(language, dialogueData);
+        return;
     }
 
-    if (useWith) {
-        //change this so we set a global variable with the object already clicked, change the parser to have "with", set another flag to say awaiting next input, which blocks other verbs, and is cancelled on clicking an area without an object in it or on another verb, then conditions so that if the processClick is called with this flag set, we reset the flag and call the handleWith function with the two objects, this is easier than async or webworkers. 
-        handleWith(objectId); // call handleWith() to handle objects that are used with something or someone
-    } else {
-        useItem(objectId, null, false); //trigger checks and events for environment items that can have just Use like unlocked doors, machines etc, we pass in true or false depending if use or useWith, in this case always false
+    if (!inventoryItem) {
+        useItem(objectId, null, false);
+    } else { //inventory items are ALWAYS Use With and never Use although some will only be second objects ie the object you use something else with in which case it will return a message saying this has to be used with something else by being activeStatus = false
+        setWaitingForSecondItem(true);
+        setObjectToBeUsedWithSecondItem(objectId);
+        const interactiveInfoWith = getElements().interactionInfo.textContent + " " + localize('interactionWith', language, 'verbsActionsInteraction');
+        updateInteractionInfo(interactiveInfoWith, false);
+
     }
+        //change this so we set a global variable with the object already clicked, change the parser to have "with", set another flag to say awaiting next input, which blocks other verbs, and is cancelled on clicking an area without an object in it or on another verb, then conditions so that if the processClick is called with this flag set, we reset the flag and call the handleWith function with the two objects, this is easier than async or webworkers. 
+        
 }
 
 export function handleWith(objectId) {
@@ -289,11 +290,19 @@ export function handleWith(objectId) {
     const object = objectData.objects[objectId];
     const inventory = getPlayerInventory();
 
-    //get second item from user probably async call, ie call funtions to return to use item while waiting - investigate
+
+
+    //get second item from user
     //check if second item is inventory item or not
     //if so check location is correct for using item (if important) and if item can be used with first item
     //adjust inventory for both items
     //if reach this point trigger useItem(objectId, secondObjectId, true)
+
+
+        // handleInventoryAdjustment(objectId, quantity);
+    // drawInventory(getCurrentStartIndexInventory());
+    // setVerbButtonConstructionStatus(null);
+    // updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
 
 }
 
@@ -321,16 +330,6 @@ export function useItem(objectId1, objectId2, useWith) { //function uses all ite
     }
 }
 
-function checkIfItemCanBeUsed(objectId) {
-    const objectData = getObjectData().objects[objectId];
-    
-    if (objectData && objectData.interactable) {
-        return objectData.interactable.canUse;
-    } else {
-        console.warn(`Object with ID ${objectId} does not exist.`);
-    }
-}
-
 function checkIfItemCanBeUsedWith(objectId) {
     const objectData = getObjectData().objects[objectId];
     
@@ -341,13 +340,23 @@ function checkIfItemCanBeUsedWith(objectId) {
     }
 }
 
-function handleCannotUseMessage(language, dialogueData) {
-    const cannotUseMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsed?.[language];
-    if (cannotUseMessage) {
-        showText(cannotUseMessage);
-        console.log(cannotUseMessage);
+function handleCannotUseExitMessage(language, dialogueData) {
+    const cannotUseExitMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedWithExit?.[language];
+    if (cannotUseExitMessage) {
+        showText(cannotUseExitMessage);
+        console.log(cannotUseExitMessage);
     } else {
-        console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
+        console.warn(`No global message found for itemCannotBeUsedWithExit in language ${language}`);
+    }
+}
+
+function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
+    const cannotUseUntilPickedUpMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedUntilPickedUp?.[language];
+    if (cannotUseUntilPickedUpMessage) {
+        showText(cannotUseUntilPickedUpMessage);
+        console.log(cannotUseUntilPickedUpMessage);
+    } else {
+        console.warn(`No global message found for itemCannotBeUsedUntilPickedUp in language ${language}`);
     }
 }
 

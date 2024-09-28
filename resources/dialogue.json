@@ -403,12 +403,19 @@
                 "it": "Il tuo inventario è pieno.",
                 "fr": "Votre inventaire est plein."
             },
-            "itemCannotBeUsed": {
+            "itemCannotBeUsedUntilPickedUp": {
                 "en": "This item can't be used until you pick it up!",
                 "es": "¡Este objeto no se puede usar hasta que lo recojas!",
                 "de": "Dieser Gegenstand kann nicht verwendet werden, bis du ihn aufhebst!",
                 "it": "Questo oggetto non può essere utilizzato finché non lo prendi!",
                 "fr": "Cet objet ne peut pas être utilisé tant que vous ne l'avez pas ramassé!"
+            },
+            "itemCannotBeUsedWithExit": {
+                "en": "You can't use this!",
+                "es": "¡No puedes usar esto!",
+                "de": "Du kannst das nicht benutzen!",
+                "it": "Non puoi usare questo!",
+                "fr": "Tu ne peux pas utiliser ça !"
             },
             "itemCannotBePickedUp": {
                 "en": "I cannot pick that up.",

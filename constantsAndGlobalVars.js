@@ -21,7 +21,6 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
-export const AWAIT_INPUT_STATE = 'awaitInputState';
 export const NUMBER_OF_ENEMY_SQUARES = 10;
 export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'libraryFoyerDebug'; //libraryFoyer is the start point change for debug
@@ -69,7 +68,8 @@ let upcomingAction = null;
 let originalValueInCellWhereObjectPlaced = {};
 let currentStartIndexInventory = 0;
 let displayText = null;
-//let textTimer = null;
+let objectToBeUsedWithSecondItem = null;
+let secondItemAlreadyHovered = null;
 
 //FLAGS
 let audioMuted;
@@ -83,6 +83,7 @@ let currentlyMovingToAction = false;
 let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;
 let verbConstructionActive = null;
+let waitingForSecondItem = null;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -311,10 +312,6 @@ export function getMenuState() {
 
 export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
-}
-
-export function getAwaitInputState() {
-    return AWAIT_INPUT_STATE;
 }
 
 export function getNumberOfEnemySquares() {
@@ -586,4 +583,28 @@ export function getTextDisplayDuration() {
 
 export function getMaxTexTDisplayWidth() {
     return MAX_TEXT_DISPLAY_WIDTH;
+}
+
+export function setWaitingForSecondItem(value) {
+    waitingForSecondItem = value;
+}
+
+export function getWaitingForSecondItem() {
+    return waitingForSecondItem;
+}
+
+export function setSecondItemAlreadyHovered(value) {
+    secondItemAlreadyHovered = value;
+}
+
+export function getSecondItemAlreadyHovered() {
+    return secondItemAlreadyHovered;
+}
+
+export function setObjectToBeUsedWithSecondItem(value) {
+    objectToBeUsedWithSecondItem = value;
+}
+
+export function getObjectToBeUsedWithSecondItem() {
+    return objectToBeUsedWithSecondItem;
 }
