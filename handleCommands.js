@@ -1,4 +1,4 @@
-import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
+import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeObjectEvent } from "./events.js"
@@ -137,7 +137,7 @@ function pickUpItem(objectId, quantity) {
 function removeObjectFromEnvironment(objectId) {
     const gridData = getGridData().gridData;
     const roomId = getCurrentScreenId();
-    const originalValues = getOriginalValueInCellWhereObjectPlaced();
+    const originalValues = getOriginalValueInCellWhereObjectOrNpcPlaced();
 
     if (originalValues.hasOwnProperty(roomId)) {
         for (const [position, data] of Object.entries(originalValues[roomId])) {

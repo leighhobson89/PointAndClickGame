@@ -1,4 +1,4 @@
-import { setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlWalkableJSONS, getUpcomingAction } from './constantsAndGlobalVars.js';
+import { setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setElements();
     getElements().customCursor.classList.add('d-none');
     getElements().customCursor.style.transform = 'translate(-50%, -50%)';
-    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData, urlDialogueData);
+    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData, urlDialogueData, urlNpcsData);
 
 
     getElements().newGameMenuButton.addEventListener('click', (event) => {
@@ -326,7 +326,7 @@ export function handleMouseMove(event, ctx) {
             //
         }
 
-        setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o'));
+        setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o') || cellValue.startsWith('c'));
 
         if (!getWaitingForSecondItem() && getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
             const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
@@ -370,10 +370,11 @@ export function handleMouseMove(event, ctx) {
 }
 
 export function returnHoveredInterestingObjectOrExitName(cellValue) {
-    if (cellValue && (cellValue.startsWith('e') || cellValue.startsWith('o'))) {
+    if (cellValue && (cellValue.startsWith('e') || cellValue.startsWith('o') || cellValue.startsWith('c'))) {
         const currentScreenId = getCurrentScreenId();
         const navigationData = getNavigationData();
         const objectData = getObjectData();
+        const npcData = getNpcData();
         const language = getLanguage();
 
         // If it is an exit
@@ -391,6 +392,14 @@ export function returnHoveredInterestingObjectOrExitName(cellValue) {
             const objectName = objectData.objects[objectId]?.name[language];
 
             return objectName || "Unknown Object";
+        }
+
+        // If it is an npc
+        if (navigationData[currentScreenId] && cellValue.startsWith('c')) {
+            const npcId = cellValue.substring(1);
+            const npcName = npcData.npcs[npcId]?.name[language];
+
+            return npcName || "Unknown Npc";
         }
     }
 
@@ -635,7 +644,7 @@ export function showText(text) {
     }, getTextDisplayDuration());
 }
 
-export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {
+export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
     fetch(gridUrl)
         .then(response => response.json())
         .then(gridData => {
@@ -675,6 +684,16 @@ export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl) {
         .catch(error => {
             console.error("Error loading dialogue data:", error);
         });
+
+    fetch(npcUrl)
+    .then(response => response.json())
+    .then(npcData => {
+        setNpcData(npcData);
+        console.log("Npc data loaded:", getNpcData());
+    })
+    .catch(error => {
+        console.error("Error loading npc data:", error);
+    });
 }
 
 export function resetSecondItemState() {

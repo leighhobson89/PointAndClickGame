@@ -1,4 +1,4 @@
-import { getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, setObjectToBeUsedWithSecondItem, setSecondItemAlreadyHovered, getHoveringInterestingObjectOrExit } from './constantsAndGlobalVars.js';
+import { getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced as getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, setObjectToBeUsedWithSecondItem, setSecondItemAlreadyHovered, getHoveringInterestingObjectOrExit } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
@@ -40,7 +40,7 @@ export function gameLoop() {
         }
 
         // checkPlayerEnemyCollisions();
-        drawPlayerAndObjects(ctx);
+        drawPlayerNpcsAndObjects(ctx);
 
         if (getDisplayText()) {
             drawTextOnCanvas(getDisplayText());
@@ -225,10 +225,12 @@ export function drawGrid() {
             setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
             context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`; 
         } else if (cellValue.startsWith('e')) {
-            context.fillStyle = 'rgba(255, 255, 0, 0.5)';
+            context.fillStyle = 'rgba(255, 255, 0, 0.5)'; //exit
         } else if (cellValue.startsWith('o')) {
-            context.fillStyle = 'rgba(255, 0, 255, 0.5)';
-        }else {
+            context.fillStyle = 'rgba(255, 0, 255, 0.5)'; //object
+        } else if (cellValue.startsWith('c')) {
+            context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
+        } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';
         }        
         
@@ -245,44 +247,65 @@ export function drawGrid() {
     }
 }
 
-export function drawPlayerAndObjects(ctx) {
+export function drawPlayerNpcsAndObjects(ctx) {
     const player = getPlayerObject();
+    const npcData = getNpcData().npcs;
     const gridData = getGridData().gridData;
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
     const objectsData = getObjectData().objects;
     const drawnObjects = new Set();
+    const drawnNpcs = new Set();
 
     //Objects
     for (let y = 0; y < gridData.length; y++) {
         for (let x = 0; x < gridData[y].length; x++) {
             const cellValue = gridData[y][x];
 
-            if (cellValue.startsWith('o')) {
-                const objectId = cellValue.substring(1);
+            if (cellValue.startsWith('o') || cellValue.startsWith('c')) {
+                const Id = cellValue.substring(1);
 
-                if (drawnObjects.has(objectId)) {
+                if (drawnObjects.has(Id)) {
                     continue;
                 }
 
-                const object = objectsData[objectId];
+                if (drawnNpcs.has(Id)) {
+                    continue;
+                }
+
+                const object = objectsData[Id];
+                const npc = npcData[Id];
+
+                const drawX = x * cellWidth;
+                const drawY = y * cellHeight;
+
+                let img;
+                let widthInCells;
+                let heightInCells;
+                let drawWidth;
+                let drawHeight;
 
                 if (object) {
-                    
-                    const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
-                    const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
-
-                    const drawX = x * cellWidth;
-                    const drawY = y * cellHeight;
-                    const drawWidth = widthInCells * cellWidth;
-                    const drawHeight = heightInCells * cellHeight;
-
-                    const img = new Image();
+                    widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
+                    heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
+                    drawWidth = widthInCells * cellWidth;
+                    drawHeight = heightInCells * cellHeight;
+                    img = new Image();
                     img.src = object.spriteUrl;
-
-                    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-                    drawnObjects.add(objectId);
+                    drawnObjects.add(Id);
+                } 
+                
+                if (npc) {
+                    widthInCells = Math.floor(npc.dimensions.width / cellWidth) + 1;
+                    heightInCells = Math.floor(npc.dimensions.height / cellHeight) + 1;
+                    drawWidth = widthInCells * cellWidth;
+                    drawHeight = heightInCells * cellHeight;
+                    img = new Image();
+                    img.src = npc.spriteUrl;
+                    drawnNpcs.add(Id);
                 }
+
+                ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
             }
         }
     }
@@ -655,6 +678,7 @@ function getLocationName(id) {
 
 export function setUpObjects() { 
     const objectsData = getObjectData();
+    const npcsData = getNpcData();
     const gridData = getAllGridData();
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
@@ -691,17 +715,63 @@ export function setUpObjects() {
             for (let x = startX; x < startX + widthInCells; x++) {
                 for (let y = startY; y < startY + heightInCells; y++) {
                     const originalValue = roomGridData[y][x];
-                    setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);
+                    setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
                     roomGridData[y][x] = `o${objectId}`; 
                 }
             }
 
             console.log("Original Values Object:");
-            console.log(getOriginalValueInCellWhereObjectPlaced());
+            console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
 
             console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}).`);
         } else {
             console.warn(`Could not place object ${objectId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
+        }
+    }
+
+    for (const npcId in npcsData.npcs) {
+        const npc = npcsData.npcs[npcId];
+        const roomName = npc.npcPlacementLocation;
+        const roomGridData = gridData[roomName];
+        
+        if (!roomGridData) {
+            console.warn(`No grid found for room: ${roomName}`);
+            continue;
+        }
+
+        const widthInCells = Math.floor(npc.dimensions.width / cellWidth) + 1;
+        const heightInCells = Math.floor(npc.dimensions.height / cellHeight) + 1;
+
+        const startX = npc.gridPosition.x;
+        const startY = npc.gridPosition.y;
+
+        let canPlace = true;
+
+        for (let x = startX; x < startX + widthInCells; x++) {
+            for (let y = startY; y < startY + heightInCells; y++) {
+                if (!roomGridData[y][x].startsWith('w') && roomGridData[y][x] !== 'n') {
+                    canPlace = false;
+                    break;
+                }
+            }
+            if (!canPlace) break;
+        }
+
+        if (canPlace) {
+            for (let x = startX; x < startX + widthInCells; x++) {
+                for (let y = startY; y < startY + heightInCells; y++) {
+                    const originalValue = roomGridData[y][x];
+                    setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, npcId, originalValue);
+                    roomGridData[y][x] = `c${npcId}`; 
+                }
+            }
+
+            console.log("Original Values Npc:");
+            console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
+
+            console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY}).`);
+        } else {
+            console.warn(`Could not place npc ${npcId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
         }
     }
 

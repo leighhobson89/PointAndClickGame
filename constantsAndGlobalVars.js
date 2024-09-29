@@ -15,6 +15,7 @@ export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONDa
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
 export const urlObjectsData = '.\\resources\\objects.json';
 export const urlDialogueData = '.\\resources\\dialogue.json';
+export const urlNpcsData = '.\\resources\\npc.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
@@ -59,13 +60,14 @@ let gridData = null;
 let navigationData = null;
 let objectData = null;
 let dialogueData = null;
+let npcData = null;
 let currentScreenId = INITIAL_SCREEN_ID;
 let previousScreenId = INITIAL_SCREEN_ID;
 let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
-let originalValueInCellWhereObjectPlaced = {};
+let originalValueInCellWhereObjectOrNpcPlaced = {};
 let currentStartIndexInventory = 0;
 let displayText = null;
 let objectToBeUsedWithSecondItem = null;
@@ -199,6 +201,14 @@ export function setDialogueData(value) {
 
 export function getDialogueData() {
     return dialogueData;
+}
+
+export function setNpcData(value) {
+    npcData = value;
+}
+
+export function getNpcData() {
+    return npcData;
 }
 
 export function getInitialScreenId() {
@@ -534,16 +544,16 @@ export function getUpcomingAction() {
     return upcomingAction;
 }
 
-export function getOriginalValueInCellWhereObjectPlaced() {
-    return originalValueInCellWhereObjectPlaced;
+export function getOriginalValueInCellWhereObjectOrNpcPlaced() {
+    return originalValueInCellWhereObjectOrNpcPlaced;
 }
 
-export function setOriginalValueInCellWhereObjectPlaced(roomId, gridX, gridY, objectId, originalValue) {
-    if (!originalValueInCellWhereObjectPlaced[roomId]) {
-        originalValueInCellWhereObjectPlaced[roomId] = {};
+export function setOriginalValueInCellWhereObjectOrNpcPlaced(roomId, gridX, gridY, objectId, originalValue) {
+    if (!originalValueInCellWhereObjectOrNpcPlaced[roomId]) {
+        originalValueInCellWhereObjectOrNpcPlaced[roomId] = {};
     }
     const cellKey = `${gridX},${gridY}`;
-    originalValueInCellWhereObjectPlaced[roomId][cellKey] = {
+    originalValueInCellWhereObjectOrNpcPlaced[roomId][cellKey] = {
         objectId: objectId,
         originalValue: originalValue,
     };
