@@ -427,13 +427,6 @@
             }
         },
         "globalMessages": {
-            "inventoryFull": {
-                "en": "Your inventory is full.",
-                "es": "Tu inventario está lleno.",
-                "de": "Dein Inventar ist voll.",
-                "it": "Il tuo inventario è pieno.",
-                "fr": "Votre inventaire est plein."
-            },
             "itemCannotBeUsedUntilPickedUp": {
                 "en": "This item can't be used until you pick it up!",
                 "es": "¡Este objeto no se puede usar hasta que lo recojas!",
