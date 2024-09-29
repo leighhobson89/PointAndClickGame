@@ -382,6 +382,15 @@
             }
         },
         "npcInteractions": {
+            "verbLookAt": {
+                "npcMonkeyDEBUG": {
+                    "en": "What a cute monkey, he looks hungry!",
+                    "es": "¡Qué mono tan lindo, parece que tiene hambre!",
+                    "de": "Was für ein süßer Affe, er sieht hungrig aus!",
+                    "it": "Che scimmietta carina, sembra affamato!",
+                    "fr": "Quel singe mignon, il a l'air affamé !"
+                }
+            },
             "talkTo": {
                 "goblin": {
                     "en": "The Goblin looks at you with curiosity. 'What do you need?'",

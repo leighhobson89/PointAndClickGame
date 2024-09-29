@@ -171,8 +171,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (imgElement) {
                 const objectId = imgElement.alt;
                 if (objectId !== "empty") {
-                    const objectName = getObjectData().objects[objectId].name[getLanguage()];
-                    console.log(objectName);
+                    const objectOrNpcName = getObjectData().objects[objectId].name[getLanguage()];
+                    console.log(objectOrNpcName);
     
                     // Extract the verbs
                     const verbLookAt = localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction');
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     if (interactionText === verbWalkTo) {
                         setUpcomingAction(verbLookAt);
-                        updateInteractionInfo(getUpcomingAction() + " " + objectName, false);
+                        updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
                     } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
                         let words = interactionText.split(" ");
                         let verbKey = null;
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 }
                             }
                         }
-                        updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectName, false);
+                        updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
                     }
 
                     if (getWaitingForSecondItem()) {
@@ -218,20 +218,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                         //console.log("Object First Clicked On: " + getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]);
     
                         if (!getSecondItemAlreadyHovered()) {
-                            if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                            if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
                                 //console.log("Other object wasnt hovered, setting now...");
-                                updateInteractionInfo(interactionText + " " + objectName, false);
-                                setSecondItemAlreadyHovered(objectName); //will run first time then thats it
+                                updateInteractionInfo(interactionText + " " + objectOrNpcName, false);
+                                setSecondItemAlreadyHovered(objectOrNpcName); //will run first time then thats it
                             }
-                        } else if (objectName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                        } else if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
                             //console.log("object previously hovered was: " + getSecondItemAlreadyHovered());
 
-                            let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectName);
+                            let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectOrNpcName);
                             updateInteractionInfo(updatedText, false);
-                            setSecondItemAlreadyHovered(objectName);
+                            setSecondItemAlreadyHovered(objectOrNpcName);
 
                             //console.log("object now set as secondObjectAlreadyHovered: " + getSecondItemAlreadyHovered());
-                        } else if (objectName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                        } else if (objectOrNpcName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
                             return;
                         }
                     }
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const command = parseCommand(getUpcomingAction());
             console.log("command to perform: " + command);
-            performCommand(command, true);
+            performCommand(command, true, false);
         });
     });
 
@@ -345,10 +345,10 @@ export function handleMouseMove(event, ctx) {
         }
 
         if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
-            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
-            if (getSecondItemAlreadyHovered() !== screenOrObjectName) {
-                updateInteractionInfo(interactionText + " " + screenOrObjectName, false);
-                setSecondItemAlreadyHovered(screenOrObjectName);
+            const screenObjectOrNpcName = returnHoveredInterestingObjectOrExitName(cellValue);
+            if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
+                updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
+                setSecondItemAlreadyHovered(screenObjectOrNpcName);
             }
         }
 

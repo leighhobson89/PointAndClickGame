@@ -1,4 +1,4 @@
-import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
+import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeObjectEvent } from "./events.js"
@@ -9,13 +9,15 @@ export function performCommand(command, inventoryItem) {
         const verbKey = command.verbKey;
         const objectId1 = command.objectId1;
         const objectId2 = command.objectId2;
+        const isObject1TrueNpcFalse = command.isObjectTrueNpcFalse;
+        const isObject2TrueNpcFalse = command.isObjectTrueNpcFalse;
         const exitOrNot1 = command.exitOrNot1;
         const exitOrNot2 = command.exitOrNot2;
         const quantity = command.quantity;
 
         switch (verbKey) {
             case 'verbLookAt':
-                handleLookAt(verbKey, objectId1, exitOrNot1);
+                handleLookAt(verbKey, objectId1, exitOrNot1, isObject1TrueNpcFalse);
                 break;
             case 'verbPickUp':
                 handlePickUp(verbKey, objectId1, exitOrNot1);
@@ -67,9 +69,16 @@ function findExitToRoom(roomId) {
     return null;
 }
 
-export function handleLookAt(verb, objectId, exitOrNot) {
+export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
+
+    if (!isObjectTrueNpcFalse) {
+        const dialogueString = dialogueData.dialogue.npcInteractions[verb]?.[objectId]?.[language];
+        showText(dialogueString);
+        console.log(dialogueString);
+        return;
+    }
 
     if (!exitOrNot) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
@@ -498,6 +507,7 @@ export function handleGive(verb, objectId) {
 
 export function parseCommand(userCommand) {
     const objectData = getObjectData().objects;
+    const npcData = getNpcData().npcs;
     const language = getLanguage();
     const localization = getLocalization()[language]['verbsActionsInteraction'];
     const navigationData = getNavigationData();
@@ -507,6 +517,8 @@ export function parseCommand(userCommand) {
     let commandParts = userCommand.split(' ');
     let objectMatch1 = null;
     let objectMatch2 = null;
+    let isObject1TrueNpcFalse = true;
+    let isObject2TrueNpcFalse = true;
     let objectName = '';
     let verbPart = '';
     let exitOrNot1 = false;
@@ -516,16 +528,16 @@ export function parseCommand(userCommand) {
     // Handle the case where we are waiting for the second item
     if (waitingForSecondItem) {
         // Extract the first object from getObjectToBeUsedWithSecondItem()
-        const object1 = objectData[getObjectToBeUsedWithSecondItem()].name[language];
+        const item1 = objectData[getObjectToBeUsedWithSecondItem()].name[language];
         // Extract the second object from getSecondItemAlreadyHovered()
-        const object2 = getSecondItemAlreadyHovered();
+        const item2 = getSecondItemAlreadyHovered();
 
         // Find the object IDs for object1 and object2 in the objectData
         for (const objectId in objectData) {
-            if (objectData[objectId].name[language] === object1) {
+            if (objectData[objectId].name[language] === item1) {
                 objectMatch1 = objectId;
             }
-            if (objectData[objectId].name[language] === object2) {
+            if (objectData[objectId].name[language] === item2) {
                 objectMatch2 = objectId;
             }
         }
@@ -547,7 +559,16 @@ export function parseCommand(userCommand) {
             return null;
         }
 
-        // Now check if object2 (second item) is an exit (room)
+        if (!objectMatch2) { //check for npc only match2 as cant use npc with something
+            for (const npcId in npcData) {
+                if (npcData[npcId].name[language] === item1) {
+                    objectMatch2 = npcId;
+                    isObject2TrueNpcFalse = false;
+                }
+            }
+        }
+
+        // Now check if object2 (second item) is an exit (room) if not object or npc
         if (!objectMatch2) {
             for (const roomId in navigationData) {
                 const roomName = navigationData[roomId][language];
@@ -569,6 +590,7 @@ export function parseCommand(userCommand) {
         return {
             objectId1: objectMatch1,  // First object ID (from getObjectToBeUsedWithSecondItem())
             objectId2: objectMatch2,  // Second object ID (from getSecondItemAlreadyHovered() or a room)
+            isObjectTrueNpcFalse: isObject2TrueNpcFalse, //Return if the object is an NPC
             verbKey: verbKey,         // The verb/action
             exitOrNot1: "",           // No exit for the first item when waiting for the second item
             exitOrNot2: exitOrNot2,   // Exit status for the second item
@@ -576,7 +598,7 @@ export function parseCommand(userCommand) {
         };
 
     } else {
-        // Handle the case where we're NOT waiting for a second item (existing logic)
+        // Handle the case where we're NOT waiting for a second item
         for (let i = commandParts.length - 1; i >= 0; i--) {
             objectName = commandParts.slice(i).join(' ');
 
@@ -590,12 +612,33 @@ export function parseCommand(userCommand) {
                 if (objectData[objectId].name[language] === objectName) {
                     objectMatch1 = objectId;
                     verbPart = commandParts.slice(0, i).join(' ');
+                    isObject1TrueNpcFalse = true;
                     break;
                 }
             }
+
             if (objectMatch1) {
                 exitOrNot1 = false;
                 break;
+            }
+        }
+
+        if (!objectMatch1) {
+            for (const npcId in npcData) {
+                const npcName = npcData[npcId].name[language];
+
+                for (let i = commandParts.length - 1; i >= 0; i--) {
+                    const npcCommandName = commandParts.slice(i).join(' ');
+                    if (npcCommandName === npcName) {
+                        objectMatch1 = npcId;
+                        verbPart = commandParts.slice(0, i).join(' ');
+                        isObject1TrueNpcFalse = false;
+                        break;
+                    }
+                }
+                if (objectMatch1) {
+                    break;
+                }
             }
         }
 
@@ -639,6 +682,7 @@ export function parseCommand(userCommand) {
         return {
             objectId1: objectMatch1,  // Object or room ID from current logic
             objectId2: null,          // No second object when getWaitingForSecondItem() is false
+            isObjectTrueNpcFalse: isObject1TrueNpcFalse,  //Return if the object is an NPC
             verbKey: verbKey,         // The verb/action
             exitOrNot1: exitOrNot1,   // Exit status for the first object
             exitOrNot2: "",           // No second exit when getWaitingForSecondItem() is false
