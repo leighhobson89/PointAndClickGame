@@ -272,9 +272,9 @@ function handleCannotPickUpMessage(language, dialogueData) {
 export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1, isObjectTrueNpcFalse) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const useWith = checkIfItemCanBeUsedWith(objectId1);
+    const useWith = checkIfItemCanBeUsedWith(objectId1, isObjectTrueNpcFalse);
     
-    if ((!inventoryItem && useWith && !getWaitingForSecondItem())) {
+    if ((!inventoryItem && useWith && !getWaitingForSecondItem() && isObjectTrueNpcFalse)) {
         handleCannotUsedUntilPickedUpMessage(language, dialogueData);
         return;
     }
@@ -289,7 +289,7 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
             //trigger TALK TO code TODO
             return;
         }
-        useItem(objectId1, null, false); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+        useItem(objectId1, null, useWith, null, null, null); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
     } else if (!getWaitingForSecondItem()) {
         setWaitingForSecondItem(true);
         setObjectToBeUsedWithSecondItem(objectId1);
@@ -460,7 +460,10 @@ export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem
     }
 }
 
-function checkIfItemCanBeUsedWith(objectId) {
+function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse) {
+    if (!isObjectTrueNpcFalse) { //npc
+        return true;
+    }
     const objectData = getObjectData().objects[objectId];
     
     if (objectData && objectData.interactable) {
