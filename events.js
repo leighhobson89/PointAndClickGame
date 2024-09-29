@@ -10,12 +10,12 @@ function openLibraryFoyerFromDebugRoom() {
     setObjectData(`objectKeyDEBUG`, `interactable.alreadyUsed`, true);
 }
 
-//Use batteryDEBUG to activate machineDEBUG
+//Use objectBatteryDEBUG to activate objectMachineDEBUG
 function useBatteryDEBUGOnMachineDEBUG() {
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, true);
 }
 
-//Use MachineDEBUG to get bananaDEBUG
+//Use objectMachineDEBUG to get objectBananaDEBUG
 function machineDEBUGActivate() {
     addItemToInventory("objectBananaDEBUG", 1);
     drawInventory(0);
@@ -23,7 +23,7 @@ function machineDEBUGActivate() {
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
 }
 
-//Give monkey banana to get it to talk and give player 10 batteryDEBUG
+//Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player 10 objectBatteryDEBUG
 function giveMonkeyBanana() {
     addItemToInventory("objectBatteryDEBUG", 10);
     drawInventory(0);

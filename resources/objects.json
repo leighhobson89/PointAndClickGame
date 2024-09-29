@@ -121,7 +121,7 @@
                 "width": 100,
                 "height": 100
             },
-            "comment": "If used when active, (need to use batteryDEBUG with it to activate it) then it gives player bananaDEBUG and then deactivates"
+            "comment": "If used when active, (need to use batteryDEBUG with it to activate it) then it gives player objectBananaDEBUG and then deactivates"
         },
         "objectBananaDEBUG": {
             "name": {
@@ -145,7 +145,7 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "npcMonkey",
+                "objectUseWith1": "npcMonkeyDEBUG",
                 "actionUseWith11": "giveMonkeyBanana",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom"
