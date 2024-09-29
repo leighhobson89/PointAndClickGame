@@ -423,7 +423,35 @@
                 "de": "Ich kann das nicht aufheben.",
                 "it": "Non posso raccoglierlo.",
                 "fr": "Je ne peux pas ramasser ça."
-            }
+            },
+            "correctItemsWrongLocation": {
+                "en": "They look like they should do something, but they don't seem to work where I am.",
+                "es": "Parece que deberían hacer algo, pero no parecen funcionar donde estoy.",
+                "de": "Sie sehen so aus, als sollten sie etwas tun, aber sie scheinen hier nicht zu funktionieren.",
+                "it": "Sembrano dover fare qualcosa, ma non sembrano funzionare dove mi trovo.",
+                "fr": "Ils semblent devoir faire quelque chose, mais ils ne semblent pas fonctionner là où je suis."
+            },
+            "cantBeUsedTogether": {
+                "en": "Well that didn't do anything!",
+                "es": "¡Bueno, eso no hizo nada!",
+                "de": "Das hat nichts bewirkt!",
+                "it": "Beh, non ha fatto nulla!",
+                "fr": "Eh bien, ça n'a rien fait!"
+            },
+            "howWouldThatWorkWithThis": {
+                "en": "Not really sure how I'm supposed to use that here!",
+                "es": "¡No estoy muy seguro de cómo se supone que debo usar eso aquí!",
+                "de": "Ich bin mir nicht sicher, wie ich das hier verwenden soll!",
+                "it": "Non sono sicuro di come dovrei usarlo qui!",
+                "fr": "Je ne suis pas vraiment sûr de savoir comment je suis censé utiliser ça ici!"
+            },
+            "problemInLogic": {
+                "en": "DEBUG:  Probably shouldn't see this so there's an issue somewhere in the game logic",
+                "es": "DEBUG: Probablemente no debería ver esto, así que hay un problema en la lógica del juego",
+                "de": "DEBUG: Das sollte man wahrscheinlich nicht sehen, also gibt es irgendwo ein Problem in der Spiellogik",
+                "it": "DEBUG: Probabilmente non dovrei vedere questo, quindi c'è un problema nella logica del gioco",
+                "fr": "DEBUG : Vous ne devriez probablement pas voir cela, donc il y a un problème quelque part dans la logique du jeu"
+            }            
         }
     }
 }

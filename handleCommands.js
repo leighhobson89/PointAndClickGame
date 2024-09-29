@@ -288,11 +288,14 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
 }
 
 export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity) {
+    const language = getLanguage();
     const objectData = getObjectData();
     const object1 = objectData.objects[objectId1];
+    const dialogueData = getDialogueData().dialogue.globalMessages;
     const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
     let object2;
     let useTogetherLocation2;
+    let dialogueString;
     
     if (objectId2 !== null) {
         object2 = objectData.objects[objectId2];
@@ -313,7 +316,8 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
                 locationCorrect = true;
             } else {
                 console.log("1: not right location to use these items together (2 inventory) - PASSED");
-                //dialogue not in right location to use items
+                dialogueString = dialogueData.correctItemsWrongLocation[language];
+                showText(dialogueString);
                 return;
             }
         } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 ) { //in json if location not important but items can be used togther use the other objectId in useTogetherLocation
@@ -324,8 +328,9 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             useItem (objectId1, objectId2, true);
             return;
         } else {
-            // dialogue items cannot be useds together
+            dialogueString = dialogueData.problemInLogic[language];
             console.log("3: Both objects have a use together location but it doesn't match, and they arent the other object cant be used together and check JSON! (2 inventory) - PASSED");
+            showText(dialogueString);
             return;
         }
     }
@@ -338,7 +343,8 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             useItem (objectId1, objectId2, true);
             return;
         } else {
-            //dialogue items cannot be used together
+            dialogueString = dialogueData.cantBeUsedTogether[language];
+            showText(dialogueString);
             console.log("5: items cannot be used together (envionment object) - PASSED");
             return;
         }
@@ -352,7 +358,8 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             useItem (objectId1, objectId2, true);
             return;
         } else {
-            //dialogue items cannot be used together
+            dialogueString = dialogueData.howWouldThatWorkWithThis[language];
+            showText(dialogueString);
             console.log("7: wrong object for exit - PASSED");
             return;
         }
@@ -365,6 +372,8 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         useItem(objectId1, objectId2, true);
         return;
     } else {
+        dialogueString = dialogueData.cantBeUsedTogether[language];
+        showText(dialogueString);
         console.log("9: items just cant be used together at all - PASSED");
         return;
     }
