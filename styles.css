@@ -299,49 +299,43 @@ canvas {
 }
 
 .inventory-arrow {
-    position: relative; /* Position relative for the pseudo-element */
-    width: 40px; /* Base width of the arrow */
-    height: 60px; /* Total height of the arrow */
-    background-color: #3B71CA; /* Arrow color */
-    margin: 20px auto; /* Center horizontally and add spacing */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    position: relative;
+    width: 40px;
+    height: 60px;
+    background-color: #3B71CA;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Pseudo-element for the stroke effect */
 .inventory-arrow::before {
-    content: ''; /* Required for pseudo-element */
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    clip-path: inherit; /* Use the same clip-path as the parent */
-    background-color: transparent; /* Transparent background */
-    border: 2px solid #1A3E8C; /* Darker blue stroke */
-    z-index: 1; /* Place behind the arrow */
+    clip-path: inherit;
+    background-color: transparent;
+    border: 2px solid #1A3E8C;
+    z-index: 1;
 }
 
-/* Up arrow */
 .inventory-up {
-    clip-path: polygon(0% 100%, 50% 0%, 100% 100%); /* Creates an upward arrow */
+    clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
 }
 
-/* Down arrow */
 .inventory-down {
-    clip-path: polygon(0% 0%, 50% 100%, 100% 0%); /* Creates a downward arrow */
+    clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
 }
 
-/* Hover effects */
 .inventory-arrow:hover {
-    background-color: orange; /* Change to orange on hover */
+    background-color: orange;
 }
 
 .inventory-arrow:hover::before {
-    border-color: #C65D25; /* Darker orange stroke on hover */
+    border-color: #C65D25;
 }
-
-
 
 .border-red {
     border: 1px solid red;
