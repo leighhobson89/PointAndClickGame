@@ -29,10 +29,10 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "woodenDoorDEBUG",
-                "actionUseWith11": "woodenDoorDEBUG",
-                "actionUseWith12": "libraryFoyer",
-                "useTogetherLocation": ""
+                "objectUseWith1": "bananaDEBUG",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "debugRoom"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
@@ -167,10 +167,10 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "monkeyDEBUG",
+                "objectUseWith1": "keyDEBUG",
                 "actionUseWith11": "monkeyBanana",
                 "actionUseWith12": "",
-                "useTogetherLocation": ""
+                "useTogetherLocation": "debugRoom"
             },
             "location": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",

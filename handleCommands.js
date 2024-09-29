@@ -293,10 +293,11 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
     const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
+    let object2;
     let useTogetherLocation2;
     
     if (objectId2 !== null) {
-        const object2 = objectData.objects[objectId2];
+        object2 = objectData.objects[objectId2];
         if (!exitOrNot2) {
             useTogetherLocation2 = object2.usedOn.useTogetherLocation;
         }
@@ -304,52 +305,71 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         return;
     }
 
-
     let locationCorrect = false;
     let locationImportant = false;
-
-    if (inventoryItem) { //check if second item is inventory item or not we know first one is for certain
-        console.log("second object IS inventory Item");
-    } else {
-        console.log("second object is not inventory Item");
-    }
-
-    if (exitOrNot2) {
-        console.log("second object is actually an exit");
-    } else {
-        console.log("second object is not an exit");
-    }
 
     if (useTogetherLocation1 && useTogetherLocation2) { //using two inventory items together, need to have manually entered same useTogetherLocation in JSON.
         locationImportant = true;
         if (useTogetherLocation1 === useTogetherLocation2) {
             if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2) {
                 locationCorrect = true;
+            } else {
+                console.log("1: not right location to use these items together (2 inventory) - PASSED");
+                //dialogue not in right location to use items
+                return;
             }
+        } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 ) { //in json if location not important but items can be used togther use the other objectId in useTogetherLocation
+            console.log("2: irrelevant location, can use these items together (2 inventory) - PASSED");
+            handleInventoryAdjustment(objectId1, quantity);
+            handleInventoryAdjustment(objectId2, quantity);
+            drawInventory(0);
+            useItem (objectId1, objectId2, true);
+            return;
         } else {
             // dialogue items cannot be useds together
-            console.log("Both objects have a use together location but it doesn't match, cant be used together and check JSON!");
+            console.log("3: Both objects have a use together location but it doesn't match, and they arent the other object cant be used together and check JSON! (2 inventory) - PASSED");
             return;
         }
     }
 
-    if (locationImportant && !locationCorrect) {
-        //dialogue not in right location to use items
+    if (!inventoryItem && !exitOrNot2) { //second object not inventory but is environment object
+        if (object1.usedOn.objectUseWith1 === objectId2) {
+            console.log("4: using object with environment object - PASSED");
+            handleInventoryAdjustment(objectId1, quantity);
+            drawInventory(0);
+            useItem (objectId1, objectId2, true);
+            return;
+        } else {
+            //dialogue items cannot be used together
+            console.log("5: items cannot be used together (envionment object) - PASSED");
+            return;
+        }
+    }
+
+    if (exitOrNot2) { //some items can be used on exits so if the object use with is the screenId of where the exit leads and the usetogether location is the current screen the user is on then allow useItem
+        if (object1.usedOn.objectUseWith1 === objectId2 && useTogetherLocation1 === getCurrentScreenId()) {
+            console.log("6: using object on exit - PASSED");
+            handleInventoryAdjustment(objectId1, quantity);
+            drawInventory(0);
+            useItem (objectId1, objectId2, true);
+            return;
+        } else {
+            //dialogue items cannot be used together
+            console.log("7: wrong object for exit - PASSED");
+            return;
+        }
+    }
+
+    if (object1.usedOn.objectUseWith1 === objectId2 && object2.usedOn.objectUseWith1 === objectId1) {
+        console.log("8: using two inventory items where location is important and location is correct - PASSED");
+        handleInventoryAdjustment(objectId1, quantity);
+        drawInventory(0);
+        useItem(objectId1, objectId2, true);
+        return;
+    } else {
+        console.log("9: items just cant be used together at all - PASSED");
         return;
     }
-
-
-    //check here if an inventory item can b used with an environemnt item because at moment always gets used
-
-    handleInventoryAdjustment(objectId1, quantity);
-    if (!exitOrNot2) {
-        handleInventoryAdjustment(objectId2, quantity);
-    }
-    drawInventory(0);
-
-    console.log("finally using item");
-
-    useItem(objectId1, objectId2, true);
 }
 
 export function useItem(objectId1, objectId2, useWith) { //function uses all items, use or use with
@@ -373,7 +393,10 @@ export function useItem(objectId1, objectId2, useWith) { //function uses all ite
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
         }
         showText(dialogue);
+    } else {
+        showText("item combination triggered useItem");
     }
+
 }
 
 function checkIfItemCanBeUsedWith(objectId) {
