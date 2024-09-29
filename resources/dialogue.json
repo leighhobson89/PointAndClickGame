@@ -391,13 +391,31 @@
                     "fr": "Quel singe mignon, il a l'air affamé !"
                 }
             },
-            "talkTo": {
-                "goblin": {
-                    "en": "The Goblin looks at you with curiosity. 'What do you need?'",
-                    "es": "El Duende te mira con curiosidad. '¿Qué necesitas?'",
-                    "de": "Der Goblin schaut dich neugierig an. 'Was brauchst du?'",
-                    "it": "Il Goblin ti guarda con curiosità. 'Di cosa hai bisogno?'",
-                    "fr": "Le Gobelin te regarde avec curiosité. 'De quoi as-tu besoin ?'"
+            "verbTalkTo": {
+                "npcMonkeyDEBUG": {
+                    "phases": {
+                        "0": {
+                            "en": "ee..ee..ooo..hungry..ee..ee",
+                            "es": "ee..ee..ooo..hambre..ee..ee",
+                            "de": "ee..ee..ooo..hungrig..ee..ee",
+                            "it": "ee..ee..ooo..fame..ee..ee",
+                            "fr": "ee..ee..ooo..faim..ee..ee"
+                        },
+                        "1": {
+                            "en": "ee..oo..nom..nom..have..ee.ooo",
+                            "es": "ee..oo..ñam..ñam..toma..ee.ooo",
+                            "de": "ee..oo..nom..nom..nimm..ee.ooo",
+                            "it": "ee..oo..gnam..gnam..prendi..ee.ooo",
+                            "fr": "ee..oo..miam..miam..prends..ee.ooo"                        
+                        },
+                        "2": {
+                            "en": "ee..oo...ee.ooo",
+                            "es": "ee..oo...ee.ooo",
+                            "de": "ee..oo...ee.ooo",
+                            "it": "ee..oo...ee.ooo",
+                            "fr": "ee..oo...ee.ooo"                        
+                        }
+                    }
                 }
             },
             "giveItem": {

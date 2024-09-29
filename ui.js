@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const command = parseCommand(getUpcomingAction());
             console.log("command to perform: " + command);
-            performCommand(command, true, false);
+            performCommand(command, true);
         });
     });
 
@@ -354,7 +354,7 @@ export function handleMouseMove(event, ctx) {
 
         if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
             const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
-            if (getSecondItemAlreadyHovered() !== screenOrObjectName) {
+            if (getSecondItemAlreadyHovered() !== screenOrObjectName && !getCurrentlyMovingToAction()) {
                 const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
                 updateInteractionInfo(updatedText, false);
                 //setSecondItemAlreadyHovered(null);

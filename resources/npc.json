@@ -12,7 +12,6 @@
             },
             "interactable": {
                 "canTalk": true,
-                "alreadyInteracted": false,
                 "dialoguePhase": 0
             },
             "usedOn": {

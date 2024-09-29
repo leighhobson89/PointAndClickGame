@@ -578,6 +578,7 @@ export function processClickPoint(event, mouseClick) {
     setVerbButtonConstructionStatus(null);
     console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
     if (getWaitingForSecondItem()) {
+        updateInteractionInfo(getElements().interactionInfo.textContent, true);
         setUpcomingAction(getElements().interactionInfo.textContent);
     }
 
