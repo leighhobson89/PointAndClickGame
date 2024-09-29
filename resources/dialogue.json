@@ -1,8 +1,10 @@
 {
+    "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
+    "generalComments2": "useWith1 field is ALWAYS a successful use as non successful are handled seperately in globalMessages section",
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
-                "machineDEBUG": {
+                "objectMachineDEBUG": {
                     "use": {
                         "cantUseYet": {
                             "en": "The machine needs power.",
@@ -25,10 +27,30 @@
                             "it": "Ooo, una banana è caduta fuori!",
                             "fr": "Ooo, une banane est tombée !"
                         }
-                    },
-                    "useWith": {
-                        "removeThisOnceMoreObjectsAreInAsSomeWontNeedUseWith": ""
                     }
+                },
+                "useWithObject1": {
+                    "objectKeyDEBUG": {
+                        "en": "Uff, it was a stiff lock, but it's finally opened!",
+                        "es": "¡Uf, era una cerradura difícil, pero finalmente se ha abierto!",
+                        "de": "Uff, das war ein steifes Schloss, aber es ist endlich offen!",
+                        "it": "Uff, era una serratura dura, ma finalmente si è aperta!",
+                        "fr": "Ouf, c'était une serrure rigide, mais elle est enfin ouverte!"
+                    },
+                    "objectBatteryDEBUG": {
+                        "en": "The machine roars into life, I can probably use it now!",
+                        "es": "La máquina cobra vida con un rugido, ¡probablemente puedo usarla ahora!",
+                        "de": "Die Maschine erwacht brüllend zum Leben, ich kann sie jetzt wahrscheinlich benutzen!",
+                        "it": "La macchina ruggisce in vita, probabilmente posso usarla ora!",
+                        "fr": "La machine rugit et prend vie, je peux probablement l'utiliser maintenant !"
+                    },
+                    "objectBananaDEBUG": {
+                        "en": "Here boy, do you want this banana?",
+                        "es": "Aquí chico, ¿quieres esta banana?",
+                        "de": "Hier Junge, willst du diese Banane?",
+                        "it": "Ehi ragazzo, vuoi questa banana?",
+                        "fr": "Tiens mon garçon, tu veux cette banane ?"
+                    }                 
                 }
             },
             "verbLookAt": {
@@ -306,28 +328,28 @@
                         }
                     }
                 },
-                "keyDEBUG": {
+                "objectKeyDEBUG": {
                     "en": "A small, brass key with an ornate pattern.",
                     "es": "Una pequeña llave de latón con un patrón ornamentado.",
                     "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
                     "it": "Una piccola chiave di ottone con un motivo ornato.",
                     "fr": "Une petite clé en laiton avec un motif orné."
                 },
-                "batteryDEBUG": {
+                "objectBatteryDEBUG": {
                     "en": "A small battery, still charged and ready to use.",
                     "es": "Una pequeña batería, aún cargada y lista para usar.",
                     "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
                     "it": "Una piccola batteria, ancora carica e pronta all'uso.",
                     "fr": "Une petite batterie, encore chargée et prête à l'emploi."
                 },
-                "machineDEBUG": {
+                "objectMachineDEBUG": {
                     "en": "The machine looks old and complex. It has a slot for a battery.",
                     "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
                     "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
                     "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
                     "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
                 },
-                "bananaDEBUG": {
+                "objectBananaDEBUG": {
                     "en": "A perfectly ripe banana. Ready to eat.",
                     "es": "Un plátano perfectamente maduro. Listo para comer.",
                     "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
@@ -336,21 +358,21 @@
                 }
             },
             "verbPickUp": {
-                "keyDEBUG": {
+                "objectKeyDEBUG": {
                     "en": "You pick up the brass key. It feels warm to the touch.",
                     "es": "Recoges la llave de latón. Se siente cálida al tacto.",
                     "de": "Du hebst den Messingschlüssel auf. Er fühlt sich warm an.",
                     "it": "Raccogli la chiave di ottone. Sembra calda al tatto.",
                     "fr": "Vous ramassez la clé en laiton. Elle est chaude au toucher."
                 },
-                "batteryDEBUG": {
+                "objectBatteryDEBUG": {
                     "en": "You pick up the battery. It seems fully charged.",
                     "es": "Recoges la batería. Parece completamente cargada.",
                     "de": "Du hebst die Batterie auf. Sie scheint vollständig geladen zu sein.",
                     "it": "Raccogli la batteria. Sembra completamente carica.",
                     "fr": "Vous ramassez la batterie. Elle semble complètement chargée."
                 },
-                "bananaDEBUG": {
+                "objectBananaDEBUG": {
                     "en": "You pick up the banana. It's firm but ripe.",
                     "es": "Recoges el plátano. Está firme pero maduro.",
                     "de": "Du hebst die Banane auf. Sie ist fest, aber reif.",
@@ -451,7 +473,28 @@
                 "de": "DEBUG: Das sollte man wahrscheinlich nicht sehen, also gibt es irgendwo ein Problem in der Spiellogik",
                 "it": "DEBUG: Probabilmente non dovrei vedere questo, quindi c'è un problema nella logica del gioco",
                 "fr": "DEBUG : Vous ne devriez probablement pas voir cela, donc il y a un problème quelque part dans la logique du jeu"
-            }            
+            },
+            "tryOtherWayAround": {
+                "en": "I can't use this on that, but maybe I can use that on this...",
+                "es": "No puedo usar esto en aquello, pero tal vez pueda usar aquello en esto...",
+                "de": "Ich kann das hier nicht darauf anwenden, aber vielleicht kann ich das darauf anwenden...",
+                "it": "Non posso usare questo su quello, ma forse posso usare quello su questo...",
+                "fr": "Je ne peux pas utiliser ceci sur cela, mais peut-être que je peux utiliser cela sur ceci..."
+            },
+            "activeStatusNotSet": {
+                "en": "I can't use these together yet...",
+                "es": "No puedo usar estos juntos todavía...",
+                "de": "Ich kann diese noch nicht zusammen verwenden...",
+                "it": "Non posso ancora usare questi insieme...",
+                "fr": "Je ne peux pas encore utiliser ces objets ensemble..."
+            },
+            "alreadyUsedButRetained": {
+                "en": "I think this has done its job already!",
+                "es": "¡Creo que esto ya ha cumplido su función!",
+                "de": "Ich denke, das hat seinen Zweck bereits erfüllt!",
+                "it": "Penso che abbia già fatto il suo lavoro!",
+                "fr": "Je pense que cela a déjà fait son travail!"
+            }         
         }
     }
 }

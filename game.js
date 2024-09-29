@@ -661,7 +661,7 @@ export function setUpObjects() {
 
     for (const objectId in objectsData.objects) {
         const object = objectsData.objects[objectId];
-        const roomName = object.location;
+        const roomName = object.objectPlacementLocation;
         const roomGridData = gridData[roomName];
         
         if (!roomGridData) {

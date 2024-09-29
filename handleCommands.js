@@ -1,7 +1,7 @@
 import { getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { machineDEBUGActivate } from "./events.js"
+import { executeObjectEvent } from "./events.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -287,7 +287,7 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
     }
 }
 
-export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity) {
+export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity) {
     const language = getLanguage();
     const objectData = getObjectData();
     const object1 = objectData.objects[objectId1];
@@ -306,8 +306,8 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         return;
     }
 
-    let locationCorrect = false;
-    let locationImportant = false;
+    let locationCorrect;
+    let locationImportant;
 
     if (useTogetherLocation1 && useTogetherLocation2) { //using two inventory items together, need to have manually entered same useTogetherLocation in JSON.
         locationImportant = true;
@@ -325,7 +325,7 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             handleInventoryAdjustment(objectId1, quantity);
             handleInventoryAdjustment(objectId2, quantity);
             drawInventory(0);
-            useItem (objectId1, objectId2, true);
+            useItem (objectId1, objectId2, true, exitOrNot2, inventoryItem2);
             return;
         } else {
             dialogueString = dialogueData.problemInLogic[language];
@@ -335,12 +335,12 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         }
     }
 
-    if (!inventoryItem && !exitOrNot2) { //second object not inventory but is environment object
+    if (!inventoryItem2 && !exitOrNot2) { //second object not inventory but is environment object
         if (object1.usedOn.objectUseWith1 === objectId2) {
             console.log("4: using object with environment object - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem (objectId1, objectId2, true);
+            useItem (objectId1, objectId2, true, exitOrNot2, inventoryItem2);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -355,7 +355,7 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             console.log("6: using object on exit - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem (objectId1, objectId2, true);
+            useItem (objectId1, objectId2, true, exitOrNot2, inventoryItem2);
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
@@ -369,7 +369,7 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         console.log("8: using two inventory items where location is important and location is correct - PASSED");
         handleInventoryAdjustment(objectId1, quantity);
         drawInventory(0);
-        useItem(objectId1, objectId2, true);
+        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2);
         return;
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -379,20 +379,20 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
     }
 }
 
-export function useItem(objectId1, objectId2, useWith) { //function uses all items, use or use with
+export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2) { //function uses all items, use or use with
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
     const object2 = objectData.objects[objectId2];
-    const inventory = getPlayerInventory();
 
-    if (!useWith && !objectId2) { //if a non inventory item the user has clicked to use in the room
-        let dialogue;
+    const objectEvent1 = getObjectEvents(objectId1);
 
+    let dialogue;
+
+    if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
-            const objectEvent = getObjectEvents(objectId1);
-            executeObjectEvent(objectEvent);
+            executeObjectEvent(objectEvent1);
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
         } else if (object1.interactable.alreadyUsed) {
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
@@ -400,10 +400,34 @@ export function useItem(objectId1, objectId2, useWith) { //function uses all ite
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
         }
         showText(dialogue);
-    } else {
-        showText("item combination triggered useItem");
-    }
+    } else { //useWith
+        if (!exitOrNot2) {
+            const objectEvent2 = getObjectEvents(objectId2); //in case in future we need to call events on object2
 
+            if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
+                if (object1.usedOn.actionUseWith11) {
+                    executeObjectEvent(objectEvent1);
+                    dialogue = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
+                } else {
+                    dialogue = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
+                }
+            } else if (!object1.interactable.alreadyUsed) {
+                dialogue = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
+            } else {
+                dialogue = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
+            }
+        } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
+            if (object1.interactable.activeStatus) {
+                executeObjectEvent(objectEvent1);
+                dialogue = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
+            } else if (!object1.interactable.alreadyUsed) {
+                dialogue = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
+            } else {
+                dialogue = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
+            }
+        }
+        showText(dialogue);
+    }
 }
 
 function checkIfItemCanBeUsedWith(objectId) {
@@ -657,19 +681,7 @@ export function setObjectData(objectId, path, newValue) {
 function getObjectEvents(objectId) {
     const objectData = getObjectData();
     const object = objectData.objects[objectId];
-
-    if (!object) {
-        console.warn(`Object ${objectId} not found.`);
-        return null;
-    }
-
     const usedOn = object.usedOn;
-
-    if (!usedOn) {
-        console.warn(`'usedOn' property not found for object ${objectId}.`);
-        return null;
-    }
-
     let result = {};
 
     for (let key in usedOn) {
@@ -680,63 +692,3 @@ function getObjectEvents(objectId) {
 
     return result;
 }
-
-function executeObjectEvent(objectEvent) {
-    // Check for actionUse1 and call its function if it exists
-    if (objectEvent.actionUse1) {
-        try {
-            if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}')`); // Pass objectUse as argument
-            } else {
-                eval(`${objectEvent.actionUse1}()`); // Call without arguments
-            }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
-        }
-    }
-
-    // Check for actionUse2 and call its function if it exists
-    if (objectEvent.actionUse2) {
-        try {
-            if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}')`); // Pass objectUse as argument
-            } else {
-                eval(`${objectEvent.actionUse2}()`); // Call without arguments
-            }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
-        }
-    }
-
-    // Check for actionUseWith11 and call it if it exists
-    if (objectEvent.actionUseWith11) {
-        try {
-            if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}')`); // Pass objectUseWith1 as argument
-            } else {
-                eval(`${objectEvent.actionUseWith11}()`); // Call without arguments
-            }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
-        }
-    }
-
-    // Check for actionUseWith12 and call it if it exists
-    if (objectEvent.actionUseWith12) {
-        try {
-            if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}')`); // Pass objectUseWith1 as argument
-            } else {
-                eval(`${objectEvent.actionUseWith12}()`); // Call without arguments
-            }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
-        }
-    }
-}
-
-
-
-
-
-

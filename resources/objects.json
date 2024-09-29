@@ -1,19 +1,15 @@
 {
+    "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
+    "generalComments2": "usedOn.objectUseWith1 can be another object or the screenId that an exit leads to",
+    "generalComments3": "usedOn.useTogetherLocation can be a screenId or an object if two objects can be used together anywhere, but they must both point to each other for this to work.",
     "objects": {
-        "keyDEBUG": {
+        "objectKeyDEBUG": {
             "name": {
                 "en": "Key",
                 "es": "Llave",
                 "de": "Schlüssel",
                 "it": "Chiave",
                 "fr": "Clé"
-            },
-            "description": {
-                "en": "A small brass key that unlocks the exit door.",
-                "es": "Una pequeña llave de latón que abre la puerta de salida.",
-                "de": "Ein kleiner Messingschlüssel, der die Ausgangstür öffnet.",
-                "it": "Una piccola chiave di ottone che apre la porta d'uscita.",
-                "fr": "Une petite clé en laiton qui déverrouille la porte de sortie."
             },
             "interactable": {
                 "canPickUp": true,
@@ -29,12 +25,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "bananaDEBUG",
-                "actionUseWith11": "",
+                "objectUseWith1": "libraryFoyerDebug",
+                "actionUseWith11": "openLibraryFoyerFromDebugRoom",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom"
             },
-            "location": "debugRoom",
+            "objectPlacementLocation": "debugRoom",
             "spriteUrl": "./resources/objects/goldKey.png",
             "inventoryUrl": "./resources/objects/goldKey.png",
             "gridPosition": {
@@ -44,22 +40,16 @@
             "dimensions": {
                 "width": 50,
                 "height": 50
-            }
+            },
+            "comment": "Key for opening debugRoom exit to libraryFoyer"
         },
-        "batteryDEBUG": {
+        "objectBatteryDEBUG": {
             "name": {
                 "en": "Battery",
                 "es": "Batería",
                 "de": "Batterie",
                 "it": "Batteria",
                 "fr": "Batterie"
-            },
-            "description": {
-                "en": "A small battery that powers devices.",
-                "es": "Una pequeña batería que alimenta dispositivos.",
-                "de": "Eine kleine Batterie, die Geräte mit Strom versorgt.",
-                "it": "Una piccola batteria che alimenta i dispositivi.",
-                "fr": "Une petite batterie qui alimente les appareils."
             },
             "interactable": {
                 "canPickUp": true,
@@ -75,12 +65,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "machineDEBUG",
-                "actionUseWith11": "batteryDEBUG",
+                "objectUseWith1": "objectMachineDEBUG",
+                "actionUseWith11": "useBatteryDEBUGOnMachineDEBUG",
                 "actionUseWith12": "",
-                "useTogetherLocation": ""
+                "useTogetherLocation": "debugRoom"
             },
-            "location": "debugRoom",
+            "objectPlacementLocation": "debugRoom",
             "spriteUrl": "./resources/objects/battery.png",
             "inventoryUrl": "./resources/objects/battery.png",
             "gridPosition": {
@@ -90,22 +80,16 @@
             "dimensions": {
                 "width": 60,
                 "height": 60
-            }
+            },
+            "comment": "Battery to power machineDEBUG"
         },
-        "machineDEBUG": {
+        "objectMachineDEBUG": {
             "name": {
                 "en": "Machine",
                 "es": "Máquina",
                 "de": "Maschine",
                 "it": "Macchina",
                 "fr": "Machine"
-            },
-            "description": {
-                "en": "A complex machine that requires a battery to function.",
-                "es": "Una máquina compleja que requiere una batería para funcionar.",
-                "de": "Eine komplexe Maschine, die eine Batterie benötigt, um zu funktionieren.",
-                "it": "Una macchina complessa che richiede una batteria per funzionare.",
-                "fr": "Une machine complexe qui nécessite une batterie pour fonctionner."
             },
             "interactable": {
                 "canPickUp": false,
@@ -126,7 +110,7 @@
                 "actionUseWith12": "",
                 "useTogetherLocation": ""
             },
-            "location": "debugRoom",
+            "objectPlacementLocation": "debugRoom",
             "spriteUrl": "./resources/objects/machine.png",
             "inventoryUrl": "",
             "gridPosition": {
@@ -136,22 +120,16 @@
             "dimensions": {
                 "width": 100,
                 "height": 100
-            }
+            },
+            "comment": "If used when active, (need to use batteryDEBUG with it to activate it) then it gives player bananaDEBUG and then deactivates"
         },
-        "bananaDEBUG": {
+        "objectBananaDEBUG": {
             "name": {
                 "en": "Banana",
                 "es": "Plátano",
                 "de": "Banane",
                 "it": "Banana",
                 "fr": "Banane"
-            },
-            "description": {
-                "en": "A ripe banana, perfect for snacking.",
-                "es": "Un plátano maduro, perfecto para picar.",
-                "de": "Eine reife Banane, perfekt zum Snacken.",
-                "it": "Una banana matura, perfetta per uno spuntino.",
-                "fr": "Une banane mûre, parfaite pour grignoter."
             },
             "interactable": {
                 "canPickUp": true,
@@ -167,12 +145,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "keyDEBUG",
-                "actionUseWith11": "monkeyBanana",
+                "objectUseWith1": "npcMonkey",
+                "actionUseWith11": "giveMonkeyBanana",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom"
             },
-            "location": "debugRoom",
+            "objectPlacementLocation": "debugRoom",
             "spriteUrl": "./resources/objects/banana.png",
             "inventoryUrl": "./resources/objects/banana.png",
             "gridPosition": {
@@ -182,7 +160,8 @@
             "dimensions": {
                 "width": 50,
                 "height": 70
-            }
+            },
+            "comment": "received from machineDEBUG, can be given to monkey npc"
         }
     }
 }
