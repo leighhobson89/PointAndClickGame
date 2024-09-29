@@ -1,22 +1,38 @@
 {
+    "generalComments1": "This file contains all NPCs, with fields to define their interactions, behaviors, and other properties in the game.",
+    "generalComments2": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
     "npcs": {
-        "goblin": {
+        "npcMonkeyDEBUG": {
             "name": {
-                "en": "Goblin",
-                "es": "Duende",
-                "de": "Goblin",
-                "it": "Goblin",
-                "fr": "Gobelin"
+                "en": "Monkey",
+                "es": "Mono",
+                "de": "Affe",
+                "it": "Scimmia",
+                "fr": "Singe"
             },
-            "dialogue": {
-                "en": "Take this banana, it's my favorite!",
-                "es": "¡Toma este plátano, es mi favorito!",
-                "de": "Nimm diese Banane, sie ist meine Lieblingsspeise!",
-                "it": "Prendi questa banana, è la mia preferita!",
-                "fr": "Prends cette banane, c'est ma préférée !"
+            "interactable": {
+                "canTalk": true,
+                "alreadyInteracted": false,
+                "dialoguePhase": 0
             },
-            "gives": "banana",
-            "location": "debugRoom"
+            "usedOn": {
+                "useTogetherLocation": "objectBananaDEBUG"
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "spriteUrl": "./resources/npcs/monkey.png",
+            "gridPosition": {
+                "x": 10,
+                "y": 30
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 50
+            },
+            "comment": "When objectBananaDEBUG is used or given to Monkey, it speaks and gives player 10 objectBatteryDEBUG"
         }
     }
 }
