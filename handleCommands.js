@@ -289,8 +289,6 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
 
 export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity) {
     const objectData = getObjectData();
-    const dialogueData = getDialogueData();
-    const language = getLanguage();
     const object1 = objectData.objects[objectId1];
     const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
     let object2;
