@@ -7,39 +7,39 @@ export function performCommand(command, inventoryItem) {
     console.log(command);
     if (command !== null) {
         const verbKey = command.verbKey;
-        const subjectToApplyCommand = command.objectId1;
-        const secondObject = command.objectId2;
+        const objectId1 = command.objectId1;
+        const objectId2 = command.objectId2;
         const exitOrNot1 = command.exitOrNot1;
         const exitOrNot2 = command.exitOrNot2;
         const quantity = command.quantity;
 
         switch (verbKey) {
             case 'verbLookAt':
-                handleLookAt(verbKey, subjectToApplyCommand, exitOrNot1);
+                handleLookAt(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbPickUp':
-                handlePickUp(verbKey, subjectToApplyCommand, exitOrNot1);
+                handlePickUp(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbUse':
-                handleUse(subjectToApplyCommand, secondObject, exitOrNot1, exitOrNot2, inventoryItem, quantity);
+                handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity);
                 break;
             case 'verbOpen':
-                handleOpen(verbKey, subjectToApplyCommand, exitOrNot1);
+                handleOpen(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbClose':
-                handleClose(verbKey, subjectToApplyCommand, exitOrNot1);
+                handleClose(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbPush':
-                handlePush(verbKey, subjectToApplyCommand, exitOrNot1);
+                handlePush(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbPull':
-                handlePull(verbKey, subjectToApplyCommand, exitOrNot1);
+                handlePull(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbTalkTo':
-                handleTalkTo(verbKey, subjectToApplyCommand, exitOrNot1);
+                handleTalkTo(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbGive':
-                handleGive(subjectToApplyCommand, secondObject, exitOrNot1, exitOrNot2, inventoryItem, quantity);
+                handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity);
                 break;
             default:
                 console.warn(`Unhandled verbKey: ${verbKey}`);
@@ -255,9 +255,8 @@ function handleCannotPickUpMessage(language, dialogueData) {
     }
 }
 
-// INVESTIGATE WHY IT IS NOT KEEhyPING THE ASSIGNED VARIABLES AFTER ENTERING THIS FUNCTION WITH A SECOND OBJECT CLICKED FROM ENVIRONEMNT
+// BREAKS IF USER MOVES MOUSE OFF OBJECT WHILE MOVING TOWARDS OBJECT TWO
 export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1) {
-    const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const useWith = checkIfItemCanBeUsedWith(objectId1);
@@ -274,19 +273,17 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
 
     if (!inventoryItem && !getWaitingForSecondItem()) { 
         useItem(objectId1, null, false); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+    } else if (!getWaitingForSecondItem()) {
+        setWaitingForSecondItem(true);
+        setObjectToBeUsedWithSecondItem(objectId1);
+        const interactiveInfoWith = getElements().interactionInfo.textContent + " " + localize('interactionWith', language, 'verbsActionsInteraction');
+        updateInteractionInfo(interactiveInfoWith, false);
     } else {
-        if (!getWaitingForSecondItem()) {
-            setWaitingForSecondItem(true);
-            setObjectToBeUsedWithSecondItem(objectId1);
-            const interactiveInfoWith = getElements().interactionInfo.textContent + " " + localize('interactionWith', language, 'verbsActionsInteraction');
-            updateInteractionInfo(interactiveInfoWith, false);
-        } else {
-            console.log("handling With use");
-            handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity); //inventoryItem always refers to object2 by this point
-            setVerbButtonConstructionStatus(null);
-            resetSecondItemState();
-            updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
-        }
+        console.log("handling With use");
+        handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity); //inventoryItem always refers to object2 by this point
+        setVerbButtonConstructionStatus(null);
+        resetSecondItemState();
+        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
     }
 }
 
@@ -295,10 +292,18 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
-    const object2 = objectData.objects[objectId2];
-    const inventory = getPlayerInventory();
     const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
-    const useTogetherLocation2 = object2.usedOn.useTogetherLocation;
+    let useTogetherLocation2;
+    
+    if (objectId2 !== null) {
+        const object2 = objectData.objects[objectId2];
+        if (!exitOrNot2) {
+            useTogetherLocation2 = object2.usedOn.useTogetherLocation;
+        }
+    } else {
+        return;
+    }
+
 
     let locationCorrect = false;
     let locationImportant = false;
@@ -323,7 +328,7 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
             }
         } else {
             // dialogue items cannot be useds together
-            console.log("Both objects have a use together location but it doesn't match, check JSON!");
+            console.log("Both objects have a use together location but it doesn't match, cant be used together and check JSON!");
             return;
         }
     }
@@ -333,9 +338,16 @@ export function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quan
         return;
     }
 
+
+    //check here if an inventory item can b used with an environemnt item because at moment always gets used
+
     handleInventoryAdjustment(objectId1, quantity);
-    handleInventoryAdjustment(objectId2, quantity);
+    if (!exitOrNot2) {
+        handleInventoryAdjustment(objectId2, quantity);
+    }
     drawInventory(0);
+
+    console.log("finally using item");
 
     useItem(objectId1, objectId2, true);
 }

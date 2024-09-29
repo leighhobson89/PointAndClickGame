@@ -244,7 +244,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     inventoryItems.forEach(function(item, index) {
         item.addEventListener('click', function() {
             const interactionText = getElements().interactionInfo.textContent;
-            setUpcomingAction(interactionText);
+            if (!getSecondItemAlreadyHovered()) {
+                setUpcomingAction(interactionText);
+            }
 
             const command = parseCommand(getUpcomingAction());
             console.log("command to perform: " + command);
@@ -355,7 +357,7 @@ export function handleMouseMove(event, ctx) {
             if (getSecondItemAlreadyHovered() !== screenOrObjectName) {
                 const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
                 updateInteractionInfo(updatedText, false);
-                setSecondItemAlreadyHovered(null);
+                //setSecondItemAlreadyHovered(null);
             }
         }
 
