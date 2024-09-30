@@ -74,10 +74,8 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 
     if (!isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.npcInteractions[verb]?.[objectId]?.[language];
-        showText(dialogueString, () => {
-            console.log(dialogueString);
-            return;
-        });
+        showText(dialogueString);
+        return;
 
     }
 
@@ -85,9 +83,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
 
         if (dialogueString) {
-            showText(dialogueString, () => {
-                console.log(dialogueString);
-            });
+            showText(dialogueString);
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
         }
@@ -97,9 +93,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.exits[connectsTo][openOrLocked][language];
 
         if (dialogueString) {
-            showText(dialogueString, () => {
-                console.log(dialogueString);
-            });
+            showText(dialogueString);
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
         }
@@ -127,9 +121,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         if (object?.interactable?.canPickUp) {
             const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
             if (dialogueString) {
-                showText(dialogueString, () => {
-                    console.log(dialogueString);
-                });
+                showText(dialogueString);
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
@@ -266,9 +258,7 @@ function triggerEvent(objectId, verb) {
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
-        showText(cannotPickUpMessage, () => {
-            console.log(cannotPickUpMessage);
-        });
+        showText(cannotPickUpMessage);
     } else {
         console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
     }
@@ -346,7 +336,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             } else {
                 console.log("1: not right location to use these items together (2 inventory) - PASSED");
                 dialogueString = dialogueData.correctItemsWrongLocation[language];
-                await showText(dialogueString); // Wait for the text to finish before proceeding
+                await showText(dialogueString);
                 return;
             }
         } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1) {
@@ -359,9 +349,9 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse);
             return;
         } else {
-            dialogueString = dialogueData.problemInLogic[language];
-            console.log("3: Both objects have a use together location but it doesn't match, and they arent the other object cant be used together and check JSON! (2 inventory) - PASSED");
-            await showText(dialogueString); // Wait for the text to finish before proceeding
+            dialogueString = dialogueData.cantBeUsedTogether[language];
+            console.log("3: Two items that are just not able to be used together - PASSED");
+            await showText(dialogueString);
             return;
         }
     }
@@ -375,7 +365,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
-            await showText(dialogueString); // Wait for the text to finish before proceeding
+            await showText(dialogueString);
             console.log("5: items cannot be used together (environment object) - PASSED");
             return;
         }
@@ -390,7 +380,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
-            await showText(dialogueString); // Wait for the text to finish before proceeding
+            await showText(dialogueString);
             console.log("7: wrong object for exit - PASSED");
             return;
         }
@@ -415,7 +405,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
 }
 
 
-export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse) { //function uses all items, use or use with
+export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse) { //function uses all items, use or use with
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
@@ -429,15 +419,14 @@ export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            showText(dialogueString, () => {
-                executeObjectEvent(objectEvent1);
-            });
+            await showText(dialogueString);
+            executeObjectEvent(objectEvent1);
         } else if (object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
-            showText(dialogueString, () => {});
+            await showText(dialogueString);
         } else {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
-            showText(dialogueString, () => {});
+            await showText(dialogueString);
         }
     } else { //useWith
         if (!exitOrNot2 && isObject2TrueNpcFalse) {
@@ -446,32 +435,30 @@ export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    showText(dialogueString, () => {
-                        executeObjectEvent(objectEvent1);
-                    });
+                    await showText(dialogueString);
+                    executeObjectEvent(objectEvent1);
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
-                    showText(dialogueString, () => {});
+                    await showText(dialogueString);
                 }
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
-                showText(dialogueString, () => {});
+                await showText(dialogueString);
             } else {
                 dialogueString = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
-                showText(dialogueString, () => {});
+                showText(dialogueString);
             }
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                showText(dialogueString, () => {
-                    executeObjectEvent(objectEvent1);
-                });
+                await showText(dialogueString)
+                executeObjectEvent(objectEvent1);
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
-                showText(dialogueString, () => {});
+                showText(dialogueString);
             } else {
                 dialogueString = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
-                showText(dialogueString, () => {});
+                await showText(dialogueString);
             }
         }
     }
@@ -493,9 +480,7 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse) {
 function handleCannotUseExitMessage(language, dialogueData) {
     const cannotUseExitMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedWithExit?.[language];
     if (cannotUseExitMessage) {
-        showText(dialogueString, () => {
-            console.log(cannotUseExitMessage);
-        });        
+        showText(cannotUseExitMessage);        
     } else {
         console.warn(`No global message found for itemCannotBeUsedWithExit in language ${language}`);
     }
@@ -504,9 +489,7 @@ function handleCannotUseExitMessage(language, dialogueData) {
 function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
     const cannotUseUntilPickedUpMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedUntilPickedUp?.[language];
     if (cannotUseUntilPickedUpMessage) {
-        showText(dialogueString, () => {
-            console.log(cannotUseUntilPickedUpMessage);
-        });  
+        showText(cannotUseUntilPickedUpMessage);  
     } else {
         console.warn(`No global message found for itemCannotBeUsedUntilPickedUp in language ${language}`);
     }
