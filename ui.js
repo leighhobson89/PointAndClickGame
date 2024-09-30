@@ -533,12 +533,10 @@ export function drawInventory(startIndex) {
     const inventory = getPlayerInventory();
     const inventoryDivs = document.querySelectorAll('.inventory-item');
 
-    inventoryDivs.forEach(div => {
+    inventoryDivs.forEach((div, index) => {
         div.innerHTML = '';
-    });
 
-    for (let i = 0; i < inventoryDivs.length; i++) {
-        const slotIndex = startIndex + i;
+        const slotIndex = startIndex + index;
         const slotKey = `slot${slotIndex + 1}`;
         const inventorySlot = inventory[slotKey];
 
@@ -548,13 +546,26 @@ export function drawInventory(startIndex) {
             const imageUrl = objectData.inventoryUrl;
 
             const imgTag = `<img src="${imageUrl}" alt="${objectId}" class="inventory-img" />`;
-            inventoryDivs[i].innerHTML = imgTag;
-        }
-    }
 
-    inventoryDivs.forEach(div => {
-        if (!div.innerHTML) {
+            div.innerHTML = imgTag;
+
+            const number = inventorySlot.quantity || null;
+            let numberSpan;
+
+            if (number !== null) {
+                if (number > 1) {
+                    numberSpan = `<span class="inventory-number">${number}</span>`;
+                    div.classList.add('show-triangle');
+                } else {
+                    numberSpan = `<span class="inventory-number"></span>`;
+                    div.classList.remove('show-triangle');
+                }
+
+                div.innerHTML += numberSpan;
+            }
+        } else {
             div.innerHTML = `<img src="./resources/objects/blank.png" alt="empty" class="inventory-img" />`;
+            div.classList.remove('show-triangle');
         }
     });
 }

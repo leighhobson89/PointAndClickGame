@@ -293,6 +293,39 @@ canvas {
     border: 1px solid red;
 }
 
+.inventory-item {
+    position: relative;
+    width: 100%; /* Ensure the inventory item div takes full width */
+    height: 100%; /* Ensure it takes full height */
+}
+
+.inventory-item::before {
+    display: none; /* Hidden by default */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(255, 255, 255);
+    clip-path: polygon(0% 100%, 0% 0%, 100% 100%);
+}
+
+.inventory-item.show-triangle::before {
+    display: block;
+}
+
+.inventory-item .inventory-number {
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    pointer-events: none;
+    line-height: 1;
+}
+
 .inventory-img {
     max-height: 100%;
     max-width: 100%;
