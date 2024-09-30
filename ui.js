@@ -1,4 +1,4 @@
-import { setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText } from './constantsAndGlobalVars.js';
+import { getColorTextPlayer, setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -511,7 +511,7 @@ export function animateTransitionAndChangeBackground() {
         const startY = startPosition.y;
 
         initializePlayerPosition(startX, startY);
-        setDisplayText(null); //remove text if change screen
+        setDisplayText('', null); //remove text if change screen
         fadeBackToGameInTransition();
         
         setTransitioningNow(true);
@@ -602,8 +602,12 @@ export function drawInventory(startIndex) {
     });
 }
 
-// Function to display text on canvas
-export function drawTextOnCanvas(text) {
+export function drawTextOnCanvas(text, color) {
+    if (!text) {
+        return;
+    }
+
+    console.log(color);
     const language = getLanguage();
     const player = getPlayerObject(); 
     let xPos = player.xPos; 
@@ -613,7 +617,7 @@ export function drawTextOnCanvas(text) {
     const ctx = canvas.getContext('2d');
 
     ctx.font = '1.8em monospace'; 
-    ctx.fillStyle = 'white'; 
+    ctx.fillStyle = color; 
     ctx.textAlign = 'center'; 
     ctx.textBaseline = 'bottom'; 
 
@@ -624,9 +628,9 @@ export function drawTextOnCanvas(text) {
 
     const halfCanvasHeight = canvas.height / 2;
     if (player.yPos + player.height < halfCanvasHeight) {
-        yPos = player.yPos + player.height + 165;  // Position below the player
+        yPos = player.yPos + player.height + 165;
     } else {
-        yPos = player.yPos - 10; // Position above the player
+        yPos = player.yPos - 10;
     }
 
     if (yPos + 50 > canvas.height) {
@@ -643,10 +647,9 @@ export function drawTextOnCanvas(text) {
     drawWrappedText(lines, ctx, xPos, yPos, lineHeight);
 }
 
-// Function to wrap text for display
 function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     if (!text.includes(" ")) {
-        return [text]; // Return the text as a single line if no spaces
+        return [text];
     }
 
     const words = text.split(' '); 
@@ -673,7 +676,6 @@ function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     return lines; 
 }
 
-// Function to draw wrapped text
 function drawWrappedText(lines, context, x, startY, lineHeight) {
     let adjustedY = startY - (lines.length * lineHeight);
     lines.forEach(line => {
@@ -683,7 +685,6 @@ function drawWrappedText(lines, context, x, startY, lineHeight) {
     });
 }
 
-// Queue processing function
 function processQueue() {
     let textQueue = getTextQueue();
 
@@ -694,41 +695,36 @@ function processQueue() {
 
     setIsDisplayingText(true);
 
-    const { text, callback } = textQueue.shift(); // Get the next text and callback
-    setDisplayText(text); 
+    const { text, callback, color, resolve } = textQueue.shift();
+    setDisplayText(text, color); 
 
     if (textTimer) {
         clearTimeout(textTimer);
     }
 
     textTimer = setTimeout(() => {
-        setDisplayText(''); // Clear the displayed text
-        drawTextOnCanvas(getDisplayText());
+        setDisplayText('', null);
+        drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2);
         if (callback) {
-            callback(); // Call the provided callback after the text is hidden
+            callback();
         }
-        processQueue(); // Process the next item in the queue
+        if (resolve) {
+            resolve();
+        }
+        processQueue();
     }, getTextDisplayDuration());
 }
 
-export function showText(text, callback) {
+export function showText(text, callback, color) {
     return new Promise((resolve) => {
         let textQueue = getTextQueue();
-        textQueue.push({text, callback});
+        textQueue.push({ text, callback, color, resolve });
         setTextQueue(textQueue);
 
         processQueue();
-
-        // Assuming the callback resolves the promise after the timer ends
-        textTimer = setTimeout(() => {
-            setDisplayText('');
-            if (callback) {
-                callback(); 
-            }
-            resolve(); // Resolve the promise when done
-        }, getTextDisplayDuration());
     });
 }
+
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
     fetch(gridUrl)

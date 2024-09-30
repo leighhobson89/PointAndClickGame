@@ -41,7 +41,7 @@ export function gameLoop() {
     drawPlayerNpcsAndObjects(ctx);
 
     if (getDisplayText()) {
-        drawTextOnCanvas(getDisplayText());
+        drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2);
     }
 
     requestAnimationFrame(gameLoop);

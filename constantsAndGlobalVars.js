@@ -31,6 +31,7 @@ export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
 export const TEXT_DISPLAY_DURATION = 3500;
 export const MAX_TEXT_DISPLAY_WIDTH = 1200;
+export const COLOR_TEXT_PLAYER = 'white';
 
 export let playerObject = {
     originalWidth: 45,
@@ -68,7 +69,7 @@ let zPosHover = null;
 let upcomingAction = null;
 let originalValueInCellWhereObjectOrNpcPlaced = {};
 let currentStartIndexInventory = 0;
-let displayText = null;
+let displayText = {};
 let objectToBeUsedWithSecondItem = null;
 let secondItemAlreadyHovered = null;
 let textQueue = [];
@@ -585,8 +586,8 @@ export function getCurrentStartIndexInventory() {
     return currentStartIndexInventory;
 }
 
-export function setDisplayText(value) {
-    displayText = value;
+export function setDisplayText(value1, value2) {
+    displayText = { value1, value2 };
 }
 
 export function getDisplayText() {
@@ -639,4 +640,8 @@ export function setTextQueue(value) {
 
 export function getTextQueue() {
     return textQueue;
+}
+
+export function getColorTextPlayer() {
+    return COLOR_TEXT_PLAYER;
 }

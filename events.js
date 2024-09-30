@@ -1,4 +1,4 @@
-import { getCutSceneState, getDialogueData, getGameStateVariable, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setGameStateVariable } from "./constantsAndGlobalVars.js";
+import { getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -35,7 +35,10 @@ function giveMonkeyBanana() {
     
         const showDialogue = (dialogueIndex) => {
             const dialogueText = dialogueData[dialogueIndex][language];
-
+    
+            // Determine the text color based on the dialogueIndex
+            const textColor = dialogueIndex === 2 ? getColorTextPlayer() : 'yellow';
+    
             showText(dialogueText, () => {
                 if (npcData.interactable.questPhase === 0) {
                     console.log(dialogueIndex);
@@ -50,10 +53,11 @@ function giveMonkeyBanana() {
                         setGameState(getGameVisibleActive());
                     }
                 }
-            });
+            }, textColor); // Pass the dynamic text color
         };
+    
         showDialogue(npcData.interactable.dialoguePhase);
-    }   
+    }     
 }
 
 
