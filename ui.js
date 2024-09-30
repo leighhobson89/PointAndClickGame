@@ -1,4 +1,4 @@
-import { getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData } from './constantsAndGlobalVars.js';
+import { setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -29,13 +29,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     getElements().resumeGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-        if (gameState === getMenuState()) {
-            setGameState(getGameVisibleActive());
+    
+        if (getPreviousGameState() !== null) {
+            setGameState(getPreviousGameState());
+            setPreviousGameState(null);
         }
+    
         gameLoop();
     });
 
     getElements().returnToMenuButton.addEventListener('click', () => {
+        setPreviousGameState(getGameStateVariable());
         setGameState(getMenuState());
     });
 
@@ -101,178 +105,203 @@ document.addEventListener('DOMContentLoaded', async () => {
 //------------------------------------------------------------------------------------------------------
 
     getElements().btnLookAt.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnPickUp.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnUse.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnOpen.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnClose.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnPush.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnPull.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnTalkTo.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
     getElements().btnGive.addEventListener('click', function () {
-        resetSecondItemState();
-        setVerbButtonConstructionStatus(this);
-        updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        if (getGameStateVariable() !== getCutSceneState()) {
+            resetSecondItemState();
+            setVerbButtonConstructionStatus(this);
+            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
+        }
     });
 
 //------------------------------------------------------------------------------------------------------
 // INVENTORY EVENT LISTENERS
 //------------------------------------------------------------------------------------------------------
 
-    getElements().inventoryUpArrow.addEventListener('click', handleInventoryUpArrowClick);
-    getElements().inventoryDownArrow.addEventListener('click', handleInventoryDownArrowClick);
+    // Event listeners for the up and down arrows
+getElements().inventoryUpArrow.addEventListener('click', handleInventoryUpArrowClick);
+getElements().inventoryDownArrow.addEventListener('click', handleInventoryDownArrowClick);
 
-    const inventoryItems = document.querySelectorAll('.inventory-item');
+// Convert NodeList to Array
+const inventoryItems = Array.from(document.querySelectorAll('.inventory-item'));
 
-    inventoryItems.forEach(function(item, index) {
-        item.addEventListener('mouseover', function() {
-            const imgElement = item.querySelector('img');
-            const interactionText = getElements().interactionInfo.textContent;
-    
-            if (imgElement) {
-                const objectId = imgElement.alt;
-                if (objectId !== "empty") {
-                    const objectOrNpcName = getObjectData().objects[objectId].name[getLanguage()];
-                    console.log(objectOrNpcName);
-    
-                    // Extract the verbs
-                    const verbLookAt = localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction');
-                    const verbWalkTo = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
-                    const verbWalking = localize('interactionWalking', getLanguage(), 'verbsActionsInteraction');
-                    const verbTalkTo = localize('interactionTalkTo', getLanguage(), 'verbsActionsInteraction');
-                    const verbPickUp = localize('interactionPickUp', getLanguage(), 'verbsActionsInteraction');
+// Adding mouseover event listener for each inventory item
+inventoryItems.forEach(function(item) {
+    item.addEventListener('mouseover', function() {
+        const imgElement = item.querySelector('img');
+        const interactionText = getElements().interactionInfo.textContent;
 
-                    if (interactionText === verbWalkTo) {
-                        setUpcomingAction(verbLookAt);
-                        updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
-                    } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
-                        let words = interactionText.split(" ");
-                        let verbKey = null;
+        if (imgElement) {
+            const objectId = imgElement.alt;
+            if (objectId !== "empty") {
+                const objectOrNpcName = getObjectData().objects[objectId].name[getLanguage()];
+                console.log(objectOrNpcName);
 
-                        const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
-                        const firstTwoWords = words.slice(0, 2).join(" ");
-                        
-                        if (firstTwoWords === verbPickUp) return; //DEBUG: comment out to be able to duplicate items in inventory using pickup
+                // Extract the verbs
+                const verbLookAt = localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction');
+                const verbWalkTo = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
+                const verbWalking = localize('interactionWalking', getLanguage(), 'verbsActionsInteraction');
+                const verbTalkTo = localize('interactionTalkTo', getLanguage(), 'verbsActionsInteraction');
+                const verbPickUp = localize('interactionPickUp', getLanguage(), 'verbsActionsInteraction');
+
+                if (interactionText === verbWalkTo) {
+                    setUpcomingAction(verbLookAt);
+                    updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
+                } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
+                    let words = interactionText.split(" ");
+                    let verbKey = null;
+
+                    const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
+                    const firstTwoWords = words.slice(0, 2).join(" ");
                     
-                        if (twoWordVerbs.includes(firstTwoWords)) {
-                                    const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
-                                    for (const [key, value] of Object.entries(verbsInteraction)) {
-                                        if (value === firstTwoWords) {
-                                            verbKey = key;
-                                            break;
-                                        }
-                                    }
-                        } else {
-                            const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
-                            for (const [key, value] of Object.entries(verbsInteraction)) {
-                                if (value === words[0]) {
-                                    verbKey = key;
-                                    break;
-                                }
+                    if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
+                    
+                    if (twoWordVerbs.includes(firstTwoWords)) {
+                        const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
+                        for (const [key, value] of Object.entries(verbsInteraction)) {
+                            if (value === firstTwoWords) {
+                                verbKey = key;
+                                break;
                             }
                         }
-                        updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
+                    } else {
+                        const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
+                        for (const [key, value] of Object.entries(verbsInteraction)) {
+                            if (value === words[0]) {
+                                verbKey = key;
+                                break;
+                            }
+                        }
                     }
+                    updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
+                }
 
-                    if (getWaitingForSecondItem()) {
-                        //console.log("objectName: " + objectName);
-                        //console.log("Object First Clicked On: " + getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]);
-    
-                        if (!getSecondItemAlreadyHovered()) {
-                            if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                                //console.log("Other object wasnt hovered, setting now...");
-                                updateInteractionInfo(interactionText + " " + objectOrNpcName, false);
-                                setSecondItemAlreadyHovered(objectOrNpcName); //will run first time then thats it
-                            }
-                        } else if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                            //console.log("object previously hovered was: " + getSecondItemAlreadyHovered());
-
-                            let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectOrNpcName);
-                            updateInteractionInfo(updatedText, false);
+                if (getWaitingForSecondItem()) {
+                    if (!getSecondItemAlreadyHovered()) {
+                        if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                            updateInteractionInfo(interactionText + " " + objectOrNpcName, false);
                             setSecondItemAlreadyHovered(objectOrNpcName);
-
-                            //console.log("object now set as secondObjectAlreadyHovered: " + getSecondItemAlreadyHovered());
-                        } else if (objectOrNpcName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                            return;
                         }
+                    } else if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                        let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectOrNpcName);
+                        updateInteractionInfo(updatedText, false);
+                        setSecondItemAlreadyHovered(objectOrNpcName);
+                    } else if (objectOrNpcName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
+                        return;
                     }
                 }
             }
-        });
+        }
     });
-    
+});
 
-    inventoryItems.forEach(function(item, index) {
-        item.addEventListener('click', function() {
-            const interactionText = getElements().interactionInfo.textContent;
-            if (!getSecondItemAlreadyHovered()) {
-                setUpcomingAction(interactionText);
-            }
+// Adding click event listener for each inventory item
+inventoryItems.some(function(item) {
+    if (getGameStateVariable() === getCutSceneState()) {
+        return true;
+    }
 
-            const command = parseCommand(getUpcomingAction());
-            console.log("command to perform: " + command);
-            performCommand(command, true);
-        });
+    item.addEventListener('click', function() {
+        const interactionText = getElements().interactionInfo.textContent;
+        if (!getSecondItemAlreadyHovered()) {
+            setUpcomingAction(interactionText);
+        }
+
+        const command = parseCommand(getUpcomingAction());
+        console.log("command to perform: " + command);
+        performCommand(command, true);
     });
 
-    initializeCanvasEventListener();
-    setGameState(getMenuState());
-    handleLanguageChange(getLanguageSelected());
+    return false; // Continue iterating
+});
+
+// Initialize canvas event listener and set the initial game state
+initializeCanvasEventListener();
+setGameState(getMenuState());
+handleLanguageChange(getLanguageSelected());
+
 });
 
 const handleInventoryUpArrowClick = () => {
-    if (getCurrentStartIndexInventory() > 0) {
-        setCurrentStartIndexInventory(getCurrentStartIndexInventory() - getSlotsPerRowInInventory());
-        drawInventory(getCurrentStartIndexInventory());
-    }
+    if (getGameStateVariable() !== getCutSceneState()) {
+        if (getCurrentStartIndexInventory() > 0) {
+            setCurrentStartIndexInventory(getCurrentStartIndexInventory() - getSlotsPerRowInInventory());
+            drawInventory(getCurrentStartIndexInventory());
+        }
+    }   
 };
 
 const handleInventoryDownArrowClick = () => {
-    const inventory = getPlayerInventory();
-    const totalSlots = Object.keys(inventory).length;
-
-    if (getCurrentStartIndexInventory() + (getSlotsPerRowInInventory() * 2) < totalSlots) {
-        setCurrentStartIndexInventory(getCurrentStartIndexInventory() + getSlotsPerRowInInventory());
-        drawInventory(getCurrentStartIndexInventory());
+    if (getGameStateVariable() !== getCutSceneState()) {
+        const inventory = getPlayerInventory();
+        const totalSlots = Object.keys(inventory).length;
+    
+        if (getCurrentStartIndexInventory() + (getSlotsPerRowInInventory() * 2) < totalSlots) {
+            setCurrentStartIndexInventory(getCurrentStartIndexInventory() + getSlotsPerRowInInventory());
+            drawInventory(getCurrentStartIndexInventory());
+        }
     }
 };
 
@@ -407,23 +436,24 @@ export function returnHoveredInterestingObjectOrExitName(cellValue) {
 }
 
 function handleCanvasClick(event) {
-
-    if (getBeginGameStatus) {
-        setBeginGameStatus(false);
+    console.log (getGameStateVariable());
+    console.log (getGameVisibleActive());
+    if (getGameStateVariable() === getGameVisibleActive()) {
+        if (getBeginGameStatus()) {
+            setBeginGameStatus(false);
+        }
+    
+        const canvas = getElements().canvas;
+        const rect = canvas.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+        
+        console.log(`Click Coordinates: (${clickX}, ${clickY})`);
+        
+        const clickPoint = { x: clickX, y: clickY};
+        
+        processClickPoint(clickPoint, true);
     }
-
-    const canvas = getElements().canvas;
-    const rect = canvas.getBoundingClientRect();
-    const clickX = event.clientX - rect.left;
-    const clickY = event.clientY - rect.top;
-    
-    console.log(`Click Coordinates: (${clickX}, ${clickY})`);
-    
-    const clickPoint = { x: clickX, y: clickY};
-
-    setBeginGameStatus(false);
-    
-    processClickPoint(clickPoint, true);
 }
 
 async function setElementsLanguageText() {
@@ -570,6 +600,7 @@ export function drawInventory(startIndex) {
     });
 }
 
+// Function to display text on canvas
 export function drawTextOnCanvas(text) {
     const language = getLanguage();
     const player = getPlayerObject(); 
@@ -610,9 +641,10 @@ export function drawTextOnCanvas(text) {
     drawWrappedText(lines, ctx, xPos, yPos, lineHeight);
 }
 
+// Function to wrap text for display
 function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     if (!text.includes(" ")) {
-        return [text];
+        return [text]; // Return the text as a single line if no spaces
     }
 
     const words = text.split(' '); 
@@ -639,6 +671,7 @@ function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     return lines; 
 }
 
+// Function to draw wrapped text
 function drawWrappedText(lines, context, x, startY, lineHeight) {
     let adjustedY = startY - (lines.length * lineHeight);
     lines.forEach(line => {
@@ -648,39 +681,47 @@ function drawWrappedText(lines, context, x, startY, lineHeight) {
     });
 }
 
+// Queue processing function
 function processQueue() {
     let textQueue = getTextQueue();
-    if (getIsDisplayingText() || textQueue.length === 0) {
+
+    if (textQueue.length === 0) {
+        setIsDisplayingText(false);
         return;
     }
 
     setIsDisplayingText(true);
 
-    const currentText = textQueue.shift();
-
-    setDisplayText(currentText);
+    const { text, callback } = textQueue.shift(); // Get the next text and callback
+    setDisplayText(text); 
 
     if (textTimer) {
         clearTimeout(textTimer);
     }
 
     textTimer = setTimeout(() => {
-        setDisplayText('');
-        setIsDisplayingText(false);
-        processQueue();
+        setDisplayText(''); // Clear the displayed text
+        drawTextOnCanvas(getDisplayText());
+        if (callback) {
+            callback(); // Call the provided callback after the text is hidden
+        }
+        processQueue(); // Process the next item in the queue
     }, getTextDisplayDuration());
 }
 
-export function showText(text) {
+// Function to show text and manage queue
+export function showText(text, callback) {
     // Add the text to the queue
     let textQueue = getTextQueue();
-    textQueue.push(text);
+    textQueue.push({ text, callback }); // Include callback in queue
     setTextQueue(textQueue);
-    console.log(getTextQueue());
 
     // Start processing the queue if not already displaying text
-    processQueue();
+    if (!getIsDisplayingText()) {
+        processQueue();
+    }
 }
+
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
     fetch(gridUrl)

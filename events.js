@@ -1,6 +1,7 @@
-import { getDialogueData, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
+import { getCutSceneState, getDialogueData, getGameStateVariable, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setGameStateVariable } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
+import { setGameState } from "./game.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
@@ -31,24 +32,28 @@ function giveMonkeyBanana() {
     let dialogueText;
 
     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
-        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
-        showText(dialogueText);
-        npcData.interactable.dialoguePhase++;
-        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
-        showText(dialogueText);
-        npcData.interactable.dialoguePhase++;
-        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
-        showText(dialogueText);
-        npcData.interactable.dialoguePhase++;
-        addItemToInventory("objectBatteryDEBUG", 1);
-        drawInventory(0);
-
-        npcData.interactable.questPhase++;
-    } else {
-        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
-        showText(dialogueText);
-        console.log(dialogueText + " (else condition)");
+        setGameState(getCutSceneState());
+    
+        const showDialogue = (dialogueIndex) => {
+            const dialogueText = dialogueData[dialogueIndex][language];
+            showText(dialogueText, () => {
+                if (dialogueIndex < 2) {
+                    showDialogue(dialogueIndex + 1);
+                } else {
+                    addItemToInventory("objectBatteryDEBUG", 1);
+                    drawInventory(0);
+                    
+                    npcData.interactable.questPhase++;
+                    
+                    setGameState(getGameVisibleActive());
+                }
+            });
+        };
+    
+        showDialogue(npcData.interactable.dialoguePhase);
     }
+    
+    
 }
 
 

@@ -22,6 +22,7 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
+export const CUT_SCENE = 'cutSceneState';
 export const INITIAL_SCREEN_ID = 'libraryFoyerDebug'; //libraryFoyer is the start point change for debug
 export const INITIAL_PLAYER_GRID_REF = {x: 5,y: 59}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
@@ -71,6 +72,7 @@ let displayText = null;
 let objectToBeUsedWithSecondItem = null;
 let secondItemAlreadyHovered = null;
 let textQueue = [];
+let previousGameState = null;
 
 //FLAGS
 let audioMuted;
@@ -320,8 +322,20 @@ export function getMenuState() {
     return MENU_STATE;
 }
 
+export function setPreviousGameState(value) {
+    previousGameState = value;
+}
+
+export function getPreviousGameState() {
+    return previousGameState;
+}
+
 export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
+}
+
+export function getCutSceneState() {
+    return CUT_SCENE;
 }
 
 export function getWalkSpeedPlayer() {
