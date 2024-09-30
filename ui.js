@@ -1,10 +1,10 @@
-import { setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData } from './constantsAndGlobalVars.js';
+import { getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 import { parseCommand, performCommand } from './handleCommands.js'
 
-let textTimer = null; 
+let textTimer; 
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -571,6 +571,7 @@ export function drawInventory(startIndex) {
 }
 
 export function drawTextOnCanvas(text) {
+    const language = getLanguage();
     const player = getPlayerObject(); 
     let xPos = player.xPos; 
     let yPos;
@@ -610,6 +611,10 @@ export function drawTextOnCanvas(text) {
 }
 
 function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
+    if (!text.includes(" ")) {
+        return [text];
+    }
+
     const words = text.split(' '); 
     const lines = [];
     let currentLine = ''; 
@@ -643,16 +648,38 @@ function drawWrappedText(lines, context, x, startY, lineHeight) {
     });
 }
 
-export function showText(text) {
-    setDisplayText(text); 
+function processQueue() {
+    let textQueue = getTextQueue();
+    if (getIsDisplayingText() || textQueue.length === 0) {
+        return;
+    }
+
+    setIsDisplayingText(true);
+
+    const currentText = textQueue.shift();
+
+    setDisplayText(currentText);
 
     if (textTimer) {
         clearTimeout(textTimer);
     }
 
     textTimer = setTimeout(() => {
-        setDisplayText(''); 
+        setDisplayText('');
+        setIsDisplayingText(false);
+        processQueue();
     }, getTextDisplayDuration());
+}
+
+export function showText(text) {
+    // Add the text to the queue
+    let textQueue = getTextQueue();
+    textQueue.push(text);
+    setTextQueue(textQueue);
+    console.log(getTextQueue());
+
+    // Start processing the queue if not already displaying text
+    processQueue();
 }
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {

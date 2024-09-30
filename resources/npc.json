@@ -1,37 +1,41 @@
 {
     "generalComments1": "This file contains all NPCs, with fields to define their interactions, behaviors, and other properties in the game.",
     "generalComments2": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
+    "generalComments3": "questPhase is the current phase ie if it is 0 you can give the monkey a banana for a battery if it is 1 you cannot but may be able to do something else",
+    "generalComments4": "dialoguePhase is the current dialogue phase ie if it is 0 and you talk to the monkey, you will hear that the monkey is hungry, then 1 will be here take the battery, and 2 just chatter",
+
     "npcs": {
-        "npcMonkeyDEBUG": {
-            "name": {
-                "en": "Monkey",
-                "es": "Mono",
-                "de": "Affe",
-                "it": "Scimmia",
-                "fr": "Singe"
-            },
-            "interactable": {
-                "canTalk": true,
-                "dialoguePhase": 0
-            },
-            "usedOn": {
-                "useTogetherLocation": "objectBananaDEBUG"
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "debugRoom",
-            "spriteUrl": "./resources/npcs/monkey.png",
-            "gridPosition": {
-                "x": 10,
-                "y": 30
-            },
-            "dimensions": {
-                "width": 50,
-                "height": 50
-            },
-            "comment": "When objectBananaDEBUG is used or given to Monkey, it speaks and gives player 10 objectBatteryDEBUG"
-        }
+    "npcMonkeyDEBUG": {
+        "name": {
+            "en": "Monkey",
+            "es": "Mono",
+            "de": "Affe",
+            "it": "Scimmia",
+            "fr": "Singe"
+        },
+        "interactable": {
+            "canTalk": true,
+            "dialoguePhase": 0,
+            "questPhase": 0
+        },
+        "usedOn": {
+            "useTogetherLocation": "objectBananaDEBUG"
+        },
+        "behavior": {
+            "movesAround": false,
+            "patrolPath": ""
+        },
+        "npcPlacementLocation": "debugRoom",
+        "spriteUrl": "./resources/npcs/monkey.png",
+        "gridPosition": {
+            "x": 10,
+            "y": 30
+        },
+        "dimensions": {
+            "width": 50,
+            "height": 50
+        },
+        "comment": "When objectBananaDEBUG is used or given to Monkey, it speaks and gives player 10 objectBatteryDEBUG"
+    }
     }
 }

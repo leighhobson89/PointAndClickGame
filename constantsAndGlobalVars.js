@@ -70,6 +70,7 @@ let currentStartIndexInventory = 0;
 let displayText = null;
 let objectToBeUsedWithSecondItem = null;
 let secondItemAlreadyHovered = null;
+let textQueue = [];
 
 //FLAGS
 let audioMuted;
@@ -84,6 +85,7 @@ let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;
 let verbConstructionActive = null;
 let waitingForSecondItem = null;
+let isDisplayingText = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -607,4 +609,20 @@ export function setObjectToBeUsedWithSecondItem(value) {
 
 export function getObjectToBeUsedWithSecondItem() {
     return objectToBeUsedWithSecondItem;
+}
+
+export function setIsDisplayingText(value) {
+    isDisplayingText = value;
+}
+
+export function getIsDisplayingText() {
+    return isDisplayingText;
+}
+
+export function setTextQueue(value) {
+    textQueue = value;
+}
+
+export function getTextQueue() {
+    return textQueue;
 }

@@ -1,6 +1,6 @@
-import { getNavigationData } from "./constantsAndGlobalVars.js";
+import { getDialogueData, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
-import { drawInventory } from "./ui.js";
+import { drawInventory, showText } from "./ui.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
@@ -17,17 +17,38 @@ function useBatteryDEBUGOnMachineDEBUG() {
 
 //Use objectMachineDEBUG to get objectBananaDEBUG
 function machineDEBUGActivate() {
-    addItemToInventory("objectBananaDEBUG", 1);
+    addItemToInventory("objectBananaDEBUG", 3);
     drawInventory(0);
     setObjectData(`objectMachineDEBUG`, `interactable.alreadyUsed`, true);
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
 }
 
-//Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player 10 objectBatteryDEBUG
+//Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player a objectBatteryDEBUG
 function giveMonkeyBanana() {
-    addItemToInventory("objectBatteryDEBUG", 10);
-    drawInventory(0);
-    //set dialogue stage for monkey TODO
+    const language = getLanguage();
+    const npcData = getNpcData().npcs.npcMonkeyDEBUG;
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo.npcMonkeyDEBUG.phases;
+    let dialogueText;
+
+    if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
+        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
+        showText(dialogueText);
+        npcData.interactable.dialoguePhase++;
+        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
+        showText(dialogueText);
+        npcData.interactable.dialoguePhase++;
+        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
+        showText(dialogueText);
+        npcData.interactable.dialoguePhase++;
+        addItemToInventory("objectBatteryDEBUG", 1);
+        drawInventory(0);
+
+        npcData.interactable.questPhase++;
+    } else {
+        dialogueText = dialogueData[npcData.interactable.dialoguePhase][language];
+        showText(dialogueText);
+        console.log(dialogueText + " (else condition)");
+    }
 }
 
 

@@ -422,41 +422,49 @@ export function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem
 
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
-            executeObjectEvent(objectEvent1);
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
+            showText(dialogue);
+            executeObjectEvent(objectEvent1);
         } else if (object1.interactable.alreadyUsed) {
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
+            showText(dialogue);
         } else {
             dialogue = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
+            showText(dialogue);
         }
-        showText(dialogue);
     } else { //useWith
         if (!exitOrNot2 && isObject2TrueNpcFalse) {
             const objectEvent2 = getObjectEvents(objectId2); //in case in future we need to call events on object2
 
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
-                    executeObjectEvent(objectEvent1);
                     dialogue = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
+                    showText(dialogue);
+                    executeObjectEvent(objectEvent1);
                 } else {
                     dialogue = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
+                    showText(dialogue);
                 }
             } else if (!object1.interactable.alreadyUsed) {
                 dialogue = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
+                showText(dialogue);
             } else {
                 dialogue = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
+                showText(dialogue);
             }
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
-                executeObjectEvent(objectEvent1);
                 dialogue = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
+                showText(dialogue);
+                executeObjectEvent(objectEvent1);
             } else if (!object1.interactable.alreadyUsed) {
                 dialogue = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
+                showText(dialogue);
             } else {
                 dialogue = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
+                showText(dialogue);
             }
         }
-        showText(dialogue);
     }
 }
 
