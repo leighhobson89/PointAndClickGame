@@ -35,16 +35,20 @@ function giveMonkeyBanana() {
     
         const showDialogue = (dialogueIndex) => {
             const dialogueText = dialogueData[dialogueIndex][language];
+
             showText(dialogueText, () => {
-                if (dialogueIndex < 2) {
-                    showDialogue(dialogueIndex + 1);
-                } else {
-                    addItemToInventory("objectBatteryDEBUG", 1);
-                    drawInventory(0);
-                    
-                    npcData.interactable.questPhase++;
-                    
-                    setGameState(getGameVisibleActive());
+                if (npcData.interactable.questPhase === 0) {
+                    console.log(dialogueIndex);
+                    if (dialogueIndex < 2) {
+                        showDialogue(dialogueIndex + 1);
+                    } else {
+                        addItemToInventory("objectBatteryDEBUG", 1);
+                        drawInventory(0);
+                        
+                        npcData.interactable.questPhase++;
+                        
+                        setGameState(getGameVisibleActive());
+                    }
                 }
             });
         };

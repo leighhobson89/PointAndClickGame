@@ -711,19 +711,24 @@ function processQueue() {
     }, getTextDisplayDuration());
 }
 
-// Function to show text and manage queue
 export function showText(text, callback) {
-    // Add the text to the queue
-    let textQueue = getTextQueue();
-    textQueue.push({ text, callback }); // Include callback in queue
-    setTextQueue(textQueue);
+    return new Promise((resolve) => {
+        let textQueue = getTextQueue();
+        textQueue.push({text, callback});
+        setTextQueue(textQueue);
 
-    // Start processing the queue if not already displaying text
-    if (!getIsDisplayingText()) {
         processQueue();
-    }
-}
 
+        // Assuming the callback resolves the promise after the timer ends
+        textTimer = setTimeout(() => {
+            setDisplayText('');
+            if (callback) {
+                callback(); 
+            }
+            resolve(); // Resolve the promise when done
+        }, getTextDisplayDuration());
+    });
+}
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
     fetch(gridUrl)
