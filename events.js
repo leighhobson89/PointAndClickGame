@@ -29,7 +29,6 @@ function giveMonkeyBanana() {
     const language = getLanguage();
     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo.npcMonkeyDEBUG.phases;
-    let dialogueText;
 
     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
         setGameState(getCutSceneState());
@@ -49,14 +48,13 @@ function giveMonkeyBanana() {
                 }
             });
         };
-    
         showDialogue(npcData.interactable.dialoguePhase);
-    }
-    
-    
+    }   
 }
 
 
+
+//----------------------------------------------------------------------------------------------------------------
 
 // Executor function
 
