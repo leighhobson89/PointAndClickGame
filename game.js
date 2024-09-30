@@ -1,10 +1,9 @@
-import { getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMaxAttemptsToDrawEnemies, getMenuState, getNavigationData, getNextScreenId, getNumberOfEnemySquares, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced as getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit } from './constantsAndGlobalVars.js';
+import { getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, getWaitingForSecondItem, getTextDisplayDuration, setDisplayText, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced as getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
 import { resetSecondItemState, animateTransitionAndChangeBackground as changeBackground, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas } from './ui.js';
 
-export const enemySquares = [];
 let currentPath = [];
 let currentPathIndex = 0;
 
@@ -14,7 +13,6 @@ export function startGame() {
     initializeCanvas();
     setUpObjects();
     initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
-    //initializeEnemySquares();
     gameLoop();
 }
 
@@ -39,16 +37,11 @@ export function gameLoop() {
             checkAndChangeScreen();
         }
 
-        // checkPlayerEnemyCollisions();
         drawPlayerNpcsAndObjects(ctx);
 
         if (getDisplayText()) {
             drawTextOnCanvas(getDisplayText());
         }
-
-        // enemySquares.forEach(square => {
-        //     drawEnemySquare(ctx, square.xPos, square.yPos, square.width, square.height);
-        // });
 
         requestAnimationFrame(gameLoop);
     }
@@ -390,69 +383,6 @@ export function initializePlayerPosition(gridX, gridY) {
     console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
 }
 
-function generateRandomGridSquare() {
-    let gridX, gridY, cellWidth, cellHeight;
-
-    do {
-        gridX = Math.floor(Math.random() * getGridSizeX());
-        gridY = Math.floor(Math.random() * getGridSizeY());
-        cellWidth = getCanvasCellWidth();
-        cellHeight = getCanvasCellHeight();
-    } while (!getGridData()[gridY] && getGridData()[gridY][gridX].startsWith('w'));
-
-    return {
-        xPos: gridX * cellWidth,
-        yPos: gridY * cellHeight,
-        width: cellWidth,
-        height: cellHeight
-    };
-}
-
-function initializeEnemySquares() {
-    enemySquares.length = 0;
-    let attempts = 0;
-
-    while (enemySquares.length < getNumberOfEnemySquares() && attempts < getMaxAttemptsToDrawEnemies()) {
-        const newSquare = generateRandomGridSquare();
-
-        if (!enemySquares.some(square => checkCollision(newSquare, square)) &&
-            !checkCollision(newSquare, getPlayerObject())) {
-            enemySquares.push(newSquare);
-
-            const gridX = Math.floor(newSquare.xPos / getCanvasCellWidth());
-            const gridY = Math.floor(newSquare.yPos / getCanvasCellHeight());
-
-            setGridRefAsNonWalkable(gridX, gridY);
-        }
-
-        attempts++;
-    }
-
-    if (attempts >= getMaxAttemptsToDrawEnemies()) {
-        console.warn(`Could not place all ${getNumberOfEnemySquares()} squares. Only ${enemySquares.length} squares were placed due to overlap constraints.`);
-    }
-}
-
-function setGridRefAsNonWalkable(gridX, gridY) { //for adding dynamic obstacles in game after loading for pathfinding to avoid
-    const gridData = getGridData(); 
-    if (gridX >= 0 && gridY >= 0 && gridY < gridData.length && gridX < gridData[gridY].length) {
-        gridData[gridY][gridX] = 'n';
-        console.log("grid ref set to non walkable: " + gridData[gridY][gridX]);
-    }
-}
-
-function generateRandomSquare() {
-    const size = 20;
-    const x = Math.random() * (getElements().canvas.width - size);
-    const y = Math.random() * (getElements().canvas.height - size);
-    return { x, y, width: size, height: size };
-}
-
-function drawEnemySquare(ctx, x, y, width, height) {
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(x, y, width, height);
-}
-
 function checkEdgeCollision(player, targetX) {
     const newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : - player.speed);
     let collisionOccurred = false;
@@ -470,46 +400,6 @@ function checkEdgeCollision(player, targetX) {
         return true;
     }
     return false;
-}
-
-function checkCollision(rect1, rect2) {
-    const isCollision = !(rect1.xPos + rect1.width < rect2.xPos ||
-                          rect1.xPos > rect2.xPos + rect2.width ||
-                          rect1.yPos + rect1.height < rect2.yPos ||
-                          rect1.yPos > rect2.yPos + rect2.height);
-    return isCollision;
-}
-
-function checkPlayerEnemyCollisions() {
-    enemySquares.forEach(square => {
-        if (checkCollision(getPlayerObject(), square)) {
-            resolveCollision(getPlayerObject(), square);
-        }
-    });
-}
-
-function resolveCollision(player, square) {
-    const rectCenterX = player.xPos + player.width / 2;
-    const rectCenterY = player.yPos + player.height / 2;
-    const squareCenterX = square.x + square.width / 2;
-    const squareCenterY = square.y + square.height / 2;
-
-    const dx = rectCenterX - squareCenterX;
-    const dy = rectCenterY - squareCenterY;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0) {
-            player.xPos = square.x + square.width;
-        } else {
-            player.xPos = square.x - player.width;
-        }
-    } else {
-        if (dy > 0) {
-            player.yPos = square.y + square.height;
-        } else {
-            player.yPos = square.y - player.height;
-        }
-    }
 }
 
 //-------------------------------------------------------------------------------------------------------------

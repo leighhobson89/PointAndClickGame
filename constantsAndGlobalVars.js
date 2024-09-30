@@ -22,8 +22,6 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
-export const NUMBER_OF_ENEMY_SQUARES = 10;
-export const MAX_ATTEMPTS_TO_DRAW_ENEMIES = 1000;
 export const INITIAL_SCREEN_ID = 'libraryFoyerDebug'; //libraryFoyer is the start point change for debug
 export const INITIAL_PLAYER_GRID_REF = {x: 5,y: 59}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
@@ -324,16 +322,8 @@ export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
 }
 
-export function getNumberOfEnemySquares() {
-    return NUMBER_OF_ENEMY_SQUARES;
-}
-
 export function getWalkSpeedPlayer() {
     return WALK_SPEED_PLAYER;
-}
-
-export function getMaxAttemptsToDrawEnemies() {
-    return MAX_ATTEMPTS_TO_DRAW_ENEMIES;
 }
 
 export function getLanguageSelected() {
