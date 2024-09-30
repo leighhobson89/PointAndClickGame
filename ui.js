@@ -375,6 +375,7 @@ export function handleMouseMove(event, ctx) {
 
         if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
             const screenObjectOrNpcName = returnHoveredInterestingObjectOrExitName(cellValue);
+            //without if keeps printing name of hovered object, with the if it doesnt but it doesnt even if you over away until you hover something else and then come back
             if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
                 updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
                 setSecondItemAlreadyHovered(screenObjectOrNpcName);
@@ -386,8 +387,9 @@ export function handleMouseMove(event, ctx) {
             if (getSecondItemAlreadyHovered() !== screenOrObjectName && !getCurrentlyMovingToAction()) {
                 const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
                 updateInteractionInfo(updatedText, false);
-                //setSecondItemAlreadyHovered(null);
+                setSecondItemAlreadyHovered(null);
             }
+            
         }
 
         if (getHoveringInterestingObjectOrExit()) {
