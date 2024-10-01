@@ -29,7 +29,7 @@ export function gameLoop() {
 
     if (getGameStateVariable() === getGameVisibleActive()) {
         if (!getCurrentlyMoving() && getBeginGameStatus()) {
-            findAndMoveToNearestWalkable({ x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, { x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, true);
+            //findAndMoveToNearestWalkable({ x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, { x: Math.floor(getPlayerObject().xPos / getCanvasCellWidth()), y: Math.floor(getPlayerObject().yPos / getCanvasCellHeight()) }, true);
         }
 
         if (!getBeginGameStatus()) {
@@ -347,7 +347,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
 
             // Check if the grid cell is within bounds and if it's not marked 'b'
             if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                if (gridData[gridY][gridX] !== 'b') {
+                if (!gridData[gridY][gridX].startsWith('b')) {
                     // Draw this pixel if it's not overlapping a 'b' cell
                     ctx.fillStyle = player.color;
                     ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
@@ -423,7 +423,8 @@ export function initializePlayerPosition(gridX, gridY) {
     setTargetX(xPos);
     setTargetY(yPos);
 
-    setPlayerObject(player);
+    setPlayerObject('xPos', player.xPos);
+    setPlayerObject('yPos', player.yPos);
 
     console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
 }
@@ -605,7 +606,7 @@ export function extractWValue(value) {
 export function extractBValue(value) {
 
     if (typeof value === 'string' && value.startsWith('b')) {
-        const matches = value.match(/w(\d{1,3})/);
+        const matches = value.match(/b(\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];
         }

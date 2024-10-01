@@ -24,7 +24,7 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
 export const INITIAL_SCREEN_ID = 'libraryFoyer'; //libraryFoyer is the start point change for debug
-export const INITIAL_PLAYER_GRID_REF = {x: 15,y: 50}; //player start location on initial screen
+export const INITIAL_PLAYER_GRID_REF = {x: 10,y: 57}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
@@ -36,8 +36,8 @@ export const COLOR_TEXT_PLAYER = 'white';
 export let playerObject = {
     originalWidth: 45,
     originalHeight: 180,
-    width: 45,
-    height: 180,
+    width: 40,
+    height: 160,
     speed: getWalkSpeedPlayer(),
     color: 'rgb(0, 100, 0)',
     xPos: '0',
@@ -254,9 +254,16 @@ export function setLanguageChangedFlag(value) {
 }
 
 export function resetAllVariables() {
-    // GLOBAL VARIABLES
-
-    // FLAGS
+    playerObject = {
+        originalWidth: 45,
+        originalHeight: 180,
+        width: 40,
+        height: 160,
+        speed: getWalkSpeedPlayer(),
+        color: 'rgb(0, 100, 0)',
+        xPos: '0',
+        yPos: '0'
+    };
 }
 
 export function captureGameStatusForSaving() {
