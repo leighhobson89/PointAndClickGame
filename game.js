@@ -143,13 +143,23 @@ export function resizePlayerObject() {
     const playerOffsetY = Math.floor(playerGridY + player.height / getCanvasCellHeight());
 
     const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
+    
+    let zPosStringW;
+    let zPosW;
+    let zPosStringB;
+    let zPosB;
 
-    if (!cellValue.startsWith('w')) {
+    if (!cellValue.startsWith('w') && !cellValue.startsWith('b')) {
         return;
     }
     
-    const zPosString = extractWValue(cellValue);
-    const zPos = parseInt(zPosString, 10);
+    if (cellValue.startsWith('w')) {
+        zPosStringW = extractWValue(cellValue);
+        zPosW = parseInt(zPosStringW, 10);
+    } else if (cellValue.startsWith('b')) {
+        zPosStringB = extractBValue(cellValue);
+        zPosB = parseInt(zPosStringB, 10);
+    }
 
     // Define size limits
     const furthestZPos = 100;
@@ -157,27 +167,29 @@ export function resizePlayerObject() {
     const originalWidth = player.originalWidth;
     const originalHeight = player.originalHeight;
 
-    // Calculate scale factor based on zPos
-    const scaleFactor = (zPos - furthestZPos) / (nearestZPos - furthestZPos);
-    const clampedScaleFactor = Math.min(Math.max(scaleFactor, 0), 1);
-
-    // Calculate new width and height
-    const newWidth = originalWidth * (0.1 + clampedScaleFactor * 0.9); // Scale from 10% to 100%
-    const newHeight = originalHeight * (0.1 + clampedScaleFactor * 0.9); // Same scaling for height
-
-    // Calculate size difference
-    const widthDifference = newWidth - player.width;
-    const heightDifference = newHeight - player.height;
-
-    // Move the player to accommodate the new size
-    setPlayerObject('xPos', player.xPos - widthDifference);
-    setPlayerObject('yPos', player.yPos - heightDifference);
-
-    //console.log("Moving Player: xPos: " + player.xPos + ", yPos: " + player.yPos);
-
-    // Set new dimensions for the player object
-    setPlayerObject('width', newWidth);
-    setPlayerObject('height', newHeight);
+    if (cellValue.startsWith('w')) {
+        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
+        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
+        const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9);
+        const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9);
+        const widthDifference = newWidthW - player.width;
+        const heightDifference = newHeightW - player.height;
+        setPlayerObject('xPos', player.xPos - widthDifference);
+        setPlayerObject('yPos', player.yPos - heightDifference);
+        setPlayerObject('width', newWidthW);
+        setPlayerObject('height', newHeightW);
+    } else if (cellValue.startsWith('b')) {
+        const scaleFactorB = (zPosB - furthestZPos) / (nearestZPos - furthestZPos);
+        const clampedScaleFactorB = Math.min(Math.max(scaleFactorB, 0), 1);
+        const newWidthB = originalWidth * (0.1 + clampedScaleFactorB * 0.9);
+        const newHeightB = originalHeight * (0.1 + clampedScaleFactorB * 0.9);
+        const widthDifference = newWidthB - player.width;
+        const heightDifference = newHeightB - player.height;
+        setPlayerObject('xPos', player.xPos - widthDifference);
+        setPlayerObject('yPos', player.yPos - heightDifference);
+        setPlayerObject('width', newWidthB);
+        setPlayerObject('height', newHeightB);
+    }
 }
 
 export function drawGrid() {
@@ -223,6 +235,9 @@ export function drawGrid() {
             context.fillStyle = 'rgba(255, 0, 255, 0.5)'; //object
         } else if (cellValue.startsWith('c')) {
             context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
+        }if (cellValue.startsWith('b')) {
+            setZPosHover(extractBValue(gridData.gridData[hoverCell.y][hoverCell.x]));
+            context.fillStyle = `rgba(100, 0, ${getZPosHover()}, 0.5)`; 
         } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';
         }        
@@ -578,6 +593,18 @@ function swapBackgroundOnRoomTransition(newScreenId) {
 export function extractWValue(value) {
 
     if (typeof value === 'string' && value.startsWith('w')) {
+        const matches = value.match(/w(\d{1,3})/);
+        if (matches && matches[1]) {
+            return matches[1];
+        }
+    }
+
+    return null;
+}
+
+export function extractBValue(value) {
+
+    if (typeof value === 'string' && value.startsWith('b')) {
         const matches = value.match(/w(\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];

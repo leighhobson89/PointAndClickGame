@@ -6,7 +6,6 @@ import argparse
 COLOR_MAP = {
     (255, 0, 0): 'n',  # Red (non-walkable)
     (255, 255, 0): 'e',  # Yellow (exit)
-    (100, 0, 175): 'b'   # Purple-like (custom reference for "b")
 }
 
 # Function to convert green color to zPos (0,100,0 -> 0,255,0)
@@ -16,6 +15,15 @@ def green_to_zPos(color):
     if r == 0 and b == 0 and 100 <= g <= 255:
         # Map the green channel to zPos (from 100 to 255 to zPos 100 to 255)
         return f'w{g}'
+    return None
+
+# Function to convert colors with green=0 and blue in range 100-255 to bPos
+def blue_to_bPos(color):
+    # Extract the RGB components
+    r, g, b = color
+    if g == 0 and 100 <= b <= 255:
+        # Map the blue channel to bPos (from 100 to 255 to b100 to b255)
+        return f'b{b}'
     return None
 
 def process_image(image_path):
@@ -39,12 +47,16 @@ def process_image(image_path):
             # Get the pixel color at the calculated position
             pixel = image.getpixel((pixel_x, pixel_y))
             
-            # First check if it's a standard mapped color (red, yellow, or purple-like)
+            # First check if it's a standard mapped color (red, yellow)
             cell_value = COLOR_MAP.get(pixel, None)
             
             # If it's not a standard color, check if it's green (walkable)
             if cell_value is None:
                 cell_value = green_to_zPos(pixel)
+            
+            # If it's not a green color, check if it's purple-blue (b-values)
+            if cell_value is None:
+                cell_value = blue_to_bPos(pixel)
             
             # If it's still unknown, mark it as 'unknown'
             if cell_value is None:
