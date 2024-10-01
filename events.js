@@ -67,34 +67,6 @@ function giveMonkeyBanana() {
         };
 
         showDialogue(npcData.interactable.dialoguePhase);
-    } else {
-            const dialogueSpeakers = {
-        0: "npc",
-        1: "player"
-    };
-
-    setGameState(getCutSceneState());
-
-    const showDialogue = (dialogueIndex) => {
-        const dialogueText = dialogueData[dialogueIndex][language];
-        const speaker = dialogueSpeakers[dialogueIndex];
-
-        const { xPos, yPos } = getTextPosition(speaker, npcData);
-        const textColor = getTextColor(speaker, 'yellow');
-
-        showText(dialogueText, () => {
-            if (npcData.interactable.questPhase === 1) {
-                if (dialogueIndex < 1) {
-                    showDialogue(dialogueIndex + 1);
-                } else {
-                    setCurrentSpeaker(null);
-                    setGameState(getGameVisibleActive());
-                }
-            }
-        }, textColor, xPos, yPos);
-    };
-
-    showDialogue(npcData.interactable.dialoguePhase);
     }
 }
 
