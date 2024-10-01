@@ -38,12 +38,13 @@
                         "fr": "Ouf, c'était une serrure rigide, mais elle est enfin ouverte!"
                     },
                     "objectBatteryDEBUG": {
-                        "en": "The machine roars into life, I can probably use it now!",
-                        "es": "La máquina cobra vida con un rugido, ¡probablemente puedo usarla ahora!",
-                        "de": "Die Maschine erwacht brüllend zum Leben, ich kann sie jetzt wahrscheinlich benutzen!",
-                        "it": "La macchina ruggisce in vita, probabilmente posso usarla ora!",
-                        "fr": "La machine rugit et prend vie, je peux probablement l'utiliser maintenant !"
-                    },
+                        "en": "Ooh, that has powered it up, I can probably use it now!",
+                        "es": "¡Oh, eso lo ha potenciado, probablemente pueda usarlo ahora!",
+                        "de": "Oh, das hat es aufgeladen, ich kann es jetzt wahrscheinlich benutzen!",
+                        "it": "Oh, questo lo ha potenziato, probabilmente posso usarlo ora!",
+                        "fr": "Oh, ça l'a alimenté, je peux probablement l'utiliser maintenant !"
+                    }                    
+                    ,
                     "objectBananaDEBUG": {
                         "en": "Here boy, do you want this banana?",
                         "es": "Aquí chico, ¿quieres esta banana?",
@@ -359,26 +360,26 @@
             },
             "verbPickUp": {
                 "objectKeyDEBUG": {
-                    "en": "You pick up the brass key. It feels warm to the touch.",
-                    "es": "Recoges la llave de latón. Se siente cálida al tacto.",
-                    "de": "Du hebst den Messingschlüssel auf. Er fühlt sich warm an.",
-                    "it": "Raccogli la chiave di ottone. Sembra calda al tatto.",
-                    "fr": "Vous ramassez la clé en laiton. Elle est chaude au toucher."
+                    "en": "It's a brass key. I'll take it, they always come in handy!",
+                    "es": "Es una llave de latón. La tomaré, ¡siempre son útiles!",
+                    "de": "Es ist ein Messingschlüssel. Ich nehme ihn, sie sind immer nützlich!",
+                    "it": "È una chiave di ottone. La prenderò, sono sempre utili!",
+                    "fr": "C'est une clé en laiton. Je vais la prendre, elles sont toujours utiles !"
                 },
                 "objectBatteryDEBUG": {
-                    "en": "You pick up the battery. It seems fully charged.",
-                    "es": "Recoges la batería. Parece completamente cargada.",
-                    "de": "Du hebst die Batterie auf. Sie scheint vollständig geladen zu sein.",
-                    "it": "Raccogli la batteria. Sembra completamente carica.",
-                    "fr": "Vous ramassez la batterie. Elle semble complètement chargée."
+                    "en": "If this just has a bit of power, I'm sure it'll be useful.",
+                    "es": "Si esto solo tiene un poco de energía, estoy seguro de que será útil.",
+                    "de": "Wenn das nur ein bisschen Energie hat, bin ich mir sicher, dass es nützlich sein wird.",
+                    "it": "Se questo ha solo un po' di energia, sono sicuro che sarà utile.",
+                    "fr": "Si cela a juste un peu de puissance, je suis sûr qu'il sera utile."
                 },
                 "objectBananaDEBUG": {
-                    "en": "You pick up the banana. It's firm but ripe.",
-                    "es": "Recoges el plátano. Está firme pero maduro.",
-                    "de": "Du hebst die Banane auf. Sie ist fest, aber reif.",
-                    "it": "Raccogli la banana. È soda ma matura.",
-                    "fr": "Vous ramassez la banane. Elle est ferme mais mûre."
-                }
+                    "en": "It's firm but ripe, just the way I like it!",
+                    "es": "Está firme pero maduro, justo como me gusta.",
+                    "de": "Es fest, aber reif, genau wie ich es mag!",
+                    "it": "È sodo ma maturo, proprio come piace a me!",
+                    "fr": "Il est ferme mais mûr, juste comme j'aime !"
+                }                
             }
         },
         "npcInteractions": {
@@ -424,47 +425,22 @@
                         }
                     }
                 }
-            },
-            "giveItem": {
-                "goblinGiveBanana": {
-                    "en": "Here, take this banana. It's my favorite!",
-                    "es": "¡Aquí, toma este plátano! Es mi favorito.",
-                    "de": "Hier, nimm diese Banane. Es ist mein Favorit!",
-                    "it": "Ecco, prendi questa banana. È la mia preferita!",
-                    "fr": "Tiens, prends cette banane. C'est ma préférée !"
-                },
-                "goblinGiveBattery": {
-                    "en": "You'll need this battery for the machine. Trust me.",
-                    "es": "Necesitarás esta batería para la máquina. Confía en mí.",
-                    "de": "Du wirst diese Batterie für die Maschine brauchen. Vertrau mir.",
-                    "it": "Ti servirà questa batteria per la macchina. Fidati di me.",
-                    "fr": "Tu auras besoin de cette batterie pour la machine. Fais-moi confiance."
-                }
-            },
-            "receiveItem": {
-                "goblinReceiveKey": {
-                    "en": "The Goblin grins. 'A key, huh? Don't lose it!'",
-                    "es": "El Duende sonríe. '¿Una llave, eh? ¡No la pierdas!'",
-                    "de": "Der Goblin grinst. 'Ein Schlüssel, hm? Verlier ihn nicht!'",
-                    "it": "Il Goblin sorride. 'Una chiave, eh? Non perderla!'",
-                    "fr": "Le Gobelin sourit. 'Une clé, hein ? Ne la perds pas !'"
-                }
             }
         },
         "globalMessages": {
             "itemCannotBeUsedUntilPickedUp": {
-                "en": "This item can't be used until you pick it up!",
-                "es": "¡Este objeto no se puede usar hasta que lo recojas!",
-                "de": "Dieser Gegenstand kann nicht verwendet werden, bis du ihn aufhebst!",
-                "it": "Questo oggetto non può essere utilizzato finché non lo prendi!",
-                "fr": "Cet objet ne peut pas être utilisé tant que vous ne l'avez pas ramassé!"
+                "en": "Uhm...I can't use this until I pick it up!",
+                "es": "Ehm...¡no puedo usar esto hasta que lo recoja!",
+                "de": "Ähm... ich kann das nicht benutzen, bis ich es aufhebe!",
+                "it": "Ehm... non posso usare questo finché non lo prendo!",
+                "fr": "Euh... je ne peux pas utiliser ça tant que je ne l'ai pas ramassé !"
             },
             "itemCannotBeUsedWithExit": {
-                "en": "You can't use this!",
-                "es": "¡No puedes usar esto!",
-                "de": "Du kannst das nicht benutzen!",
-                "it": "Non puoi usare questo!",
-                "fr": "Tu ne peux pas utiliser ça !"
+                "en": "I can't use this!",
+                "es": "¡No puedo usar esto!",
+                "de": "Ich kann das nicht benutzen!",
+                "it": "Non posso usare questo!",
+                "fr": "Je ne peux pas utiliser ça !"
             },
             "itemCannotBePickedUp": {
                 "en": "I cannot pick that up.",
@@ -493,13 +469,6 @@
                 "de": "Ich bin mir nicht sicher, wie ich das hier verwenden soll!",
                 "it": "Non sono sicuro di come dovrei usarlo qui!",
                 "fr": "Je ne suis pas vraiment sûr de savoir comment je suis censé utiliser ça ici!"
-            },
-            "problemInLogic": {
-                "en": "DEBUG:  Probably shouldn't see this so there's an issue somewhere in the game logic",
-                "es": "DEBUG: Probablemente no debería ver esto, así que hay un problema en la lógica del juego",
-                "de": "DEBUG: Das sollte man wahrscheinlich nicht sehen, also gibt es irgendwo ein Problem in der Spiellogik",
-                "it": "DEBUG: Probabilmente non dovrei vedere questo, quindi c'è un problema nella logica del gioco",
-                "fr": "DEBUG : Vous ne devriez probablement pas voir cela, donc il y a un problème quelque part dans la logique du jeu"
             },
             "tryOtherWayAround": {
                 "en": "I can't use this on that, but maybe I can use that on this...",

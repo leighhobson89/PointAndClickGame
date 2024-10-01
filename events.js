@@ -1,4 +1,4 @@
-import { getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
+import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -25,44 +25,76 @@ function machineDEBUGActivate() {
 }
 
 //Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player a objectBatteryDEBUG
+
+// Main function with refactored code
 function giveMonkeyBanana() {
     const language = getLanguage();
     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo.npcMonkeyDEBUG.phases;
 
+    const dialogueSpeakers = {
+        0: "npc",
+        1: "npc",
+        2: "player",
+        3: "npc"
+    };
+
     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
         setGameState(getCutSceneState());
-    
+
         const showDialogue = (dialogueIndex) => {
             const dialogueText = dialogueData[dialogueIndex][language];
-    
-            // Determine the text color based on the dialogueIndex
-            const textColor = dialogueIndex === 2 ? getColorTextPlayer() : 'yellow';
-    
+            const speaker = dialogueSpeakers[dialogueIndex];
+
+            const { xPos, yPos } = getTextPosition(speaker, npcData);
+            const textColor = getTextColor(speaker, 'yellow');
+
             showText(dialogueText, () => {
                 if (npcData.interactable.questPhase === 0) {
-                    console.log(dialogueIndex);
                     if (dialogueIndex < 2) {
                         showDialogue(dialogueIndex + 1);
                     } else {
                         addItemToInventory("objectBatteryDEBUG", 1);
                         drawInventory(0);
-                        
+
                         npcData.interactable.questPhase++;
-                        
                         setGameState(getGameVisibleActive());
                     }
                 }
-            }, textColor); // Pass the dynamic text color
+            }, textColor, xPos, yPos);
         };
-    
+
         showDialogue(npcData.interactable.dialoguePhase);
-    }     
+    }
 }
 
-
-
 //----------------------------------------------------------------------------------------------------------------
+
+// Helper function to determine the position of the text based on the speaker (player or NPC)
+function getTextPosition(speaker, npcData) {
+    let xPos, yPos;
+
+    if (speaker === 'player') {
+        const player = getPlayerObject();
+        xPos = player.xPos;
+        yPos = player.yPos - 20;
+    } else {
+        const npcXGrid = npcData.gridPosition.x;
+        const npcYGrid = npcData.gridPosition.y;
+        xPos = npcXGrid * getCanvasCellWidth();
+        yPos = npcYGrid * getCanvasCellHeight() - 20;
+    }
+
+    return { xPos, yPos };
+}
+
+function getTextColor(speaker, npcColor) {
+    if (speaker === 'player') {
+        return getColorTextPlayer();
+    } else {
+        return npcColor;
+    }
+}
 
 // Executor function
 

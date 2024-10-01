@@ -74,6 +74,8 @@ let objectToBeUsedWithSecondItem = null;
 let secondItemAlreadyHovered = null;
 let textQueue = [];
 let previousGameState = null;
+let currentXposNpc = null;
+let currentYposNpc = null;
 
 //FLAGS
 let audioMuted;
@@ -644,4 +646,20 @@ export function getTextQueue() {
 
 export function getColorTextPlayer() {
     return COLOR_TEXT_PLAYER;
+}
+
+export function setCurrentXposNpc(value) {
+    currentXposNpc = value;
+}
+
+export function getCurrentXposNpc() {
+    return currentXposNpc;
+}
+
+export function setCurrentYposNpc(value) {
+    currentYposNpc = value;
+}
+
+export function getCurrentYposNpc() {
+    return currentYposNpc;
 }

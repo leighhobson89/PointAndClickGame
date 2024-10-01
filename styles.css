@@ -149,7 +149,7 @@ button.disabled {
 }
 
 canvas {
-    background-image: url('resources\\backgrounds\\libraryFoyerDebug.png'); /*libraryFoyer is the start, change for debug*/
+    background-image: url('resources\\backgrounds\\libraryFoyer.png'); /*libraryFoyer is the start, change for debug*/
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -382,8 +382,6 @@ canvas {
     display: flex;
     background-color: #333;
     z-index: 1000;
-    padding-left: 20px;
-    padding-right: 20px;
 }
 
 #bottomContainer .col-6 {

@@ -1,4 +1,4 @@
-import { getColorTextPlayer, setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText } from './constantsAndGlobalVars.js';
+import { setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -602,37 +602,33 @@ export function drawInventory(startIndex) {
     });
 }
 
-export function drawTextOnCanvas(text, color) {
-    if (!text) {
-        return;
-    }
-
-    console.log(color);
-    const language = getLanguage();
-    const player = getPlayerObject(); 
-    let xPos = player.xPos; 
-    let yPos;
+export function drawTextOnCanvas(text, color, xPos = null, yPos = null) {
+    if (!text) return;
 
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
 
-    ctx.font = '1.8em monospace'; 
-    ctx.fillStyle = color; 
-    ctx.textAlign = 'center'; 
-    ctx.textBaseline = 'bottom'; 
+    ctx.font = '1.8em monospace';
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
 
-    const maxWidth = getMaxTexTDisplayWidth(); 
+    const maxWidth = getMaxTexTDisplayWidth();
     const lineHeight = parseFloat(ctx.font) * 1.2;
 
-    const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
+    const player = getPlayerObject();
 
-    const halfCanvasHeight = canvas.height / 2;
-    if (player.yPos + player.height < halfCanvasHeight) {
-        yPos = player.yPos + player.height + 165;
-    } else {
-        yPos = player.yPos - 10;
+    // If xPos and yPos aren't provided, use player's position by default
+    if (!xPos) xPos = player.xPos;
+    if (!yPos) {
+        const halfCanvasHeight = canvas.height / 2;
+
+        yPos = player.yPos + player.height < halfCanvasHeight
+            ? player.yPos + player.height + 165
+            : player.yPos - 10;
     }
 
+    // Ensure text is within canvas bounds
     if (yPos + 50 > canvas.height) {
         yPos = canvas.height - 50;
     }
@@ -644,8 +640,13 @@ export function drawTextOnCanvas(text, color) {
         xPos = canvas.width - maxWidth / 2 - 10;
     }
 
+    // Handle text wrapping and drawing
+    const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
     drawWrappedText(lines, ctx, xPos, yPos, lineHeight);
+    setCurrentXposNpc(null);
+    setCurrentYposNpc(null);
 }
+
 
 function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     if (!text.includes(" ")) {
@@ -695,7 +696,9 @@ function processQueue() {
 
     setIsDisplayingText(true);
 
-    const { text, callback, color, resolve } = textQueue.shift();
+    const { text, callback, color, resolve, xPos, yPos } = textQueue.shift();
+    setCurrentXposNpc(xPos);
+    setCurrentYposNpc(yPos);
     setDisplayText(text, color); 
 
     if (textTimer) {
@@ -704,7 +707,7 @@ function processQueue() {
 
     textTimer = setTimeout(() => {
         setDisplayText('', null);
-        drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2);
+        drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, xPos, yPos);
         if (callback) {
             callback();
         }
@@ -715,16 +718,15 @@ function processQueue() {
     }, getTextDisplayDuration());
 }
 
-export function showText(text, callback, color) {
+export function showText(text, callback, color, xPos, yPos) {
     return new Promise((resolve) => {
         let textQueue = getTextQueue();
-        textQueue.push({ text, callback, color, resolve });
+        textQueue.push({ text, callback, color, xPos, yPos, resolve });
         setTextQueue(textQueue);
 
         processQueue();
     });
 }
-
 
 export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
     fetch(gridUrl)
