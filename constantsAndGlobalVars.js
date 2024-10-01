@@ -39,7 +39,7 @@ export let playerObject = {
     width: 45,
     height: 180,
     speed: getWalkSpeedPlayer(),
-    color: 'rgba(0, 100, 0, 1)',
+    color: 'rgb(0, 100, 0)',
     xPos: '0',
     yPos: '0'
 };

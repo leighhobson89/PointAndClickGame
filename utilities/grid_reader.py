@@ -5,7 +5,8 @@ import argparse
 # Define the base color mappings
 COLOR_MAP = {
     (255, 0, 0): 'n',  # Red (non-walkable)
-    (255, 255, 0): 'e'  # Yellow (exit)
+    (255, 255, 0): 'e',  # Yellow (exit)
+    (100, 0, 175): 'b'   # Purple-like (custom reference for "b")
 }
 
 # Function to convert green color to zPos (0,100,0 -> 0,255,0)
@@ -38,7 +39,7 @@ def process_image(image_path):
             # Get the pixel color at the calculated position
             pixel = image.getpixel((pixel_x, pixel_y))
             
-            # First check if it's a standard mapped color (red or yellow)
+            # First check if it's a standard mapped color (red, yellow, or purple-like)
             cell_value = COLOR_MAP.get(pixel, None)
             
             # If it's not a standard color, check if it's green (walkable)
@@ -102,8 +103,8 @@ if __name__ == '__main__':
     parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
     args = parser.parse_args()
 
-    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\debugRoom.png'
-    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\debugRoom.json'
+    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\libraryFoyer.png'
+    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\libraryFoyer.json'
 
     grid = process_image(image_path)
     

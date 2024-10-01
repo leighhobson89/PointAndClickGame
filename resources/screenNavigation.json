@@ -80,20 +80,14 @@
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "exits": {
             "e1": {
-                "connectsTo": "researchRoom",
-                "status": "locked",
+                "connectsTo": "marketStreet",
+                "status": "open",
                 "startPosition": { "x": 33, "y": 51 },
                 "finalPosition": { "x": 33, "y": 51 }
             },
             "e2": {
-                "connectsTo": "libraryDesk",
-                "status": "open",
-                "startPosition": { "x": 39, "y": 59 }, 
-                "finalPosition": { "x": 39, "y": 57 }
-            },
-            "e3": {
-                "connectsTo": "marketStreet",
-                "status": "open",
+                "connectsTo": "researchRoom",
+                "status": "locked",
                 "startPosition": { "x": 38, "y": 38 },
                 "finalPosition": { "x": 38, "y": 43 }
             }

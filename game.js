@@ -243,70 +243,105 @@ export function drawGrid() {
 export function drawPlayerNpcsAndObjects(ctx) {
     const player = getPlayerObject();
     const npcData = getNpcData().npcs;
+    const objectsData = getObjectData().objects;
     const gridData = getGridData().gridData;
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
-    const objectsData = getObjectData().objects;
     const drawnObjects = new Set();
     const drawnNpcs = new Set();
 
-    //Objects
+    const baseCellWidth = 15;  // coefficients DO NOT TOUCH, change json dimensions and offset only
+    const baseCellHeight = 5;  // coefficients DO NOT TOUCH, change json dimensions and offset only
+
+    // Draw objects and NPCs
     for (let y = 0; y < gridData.length; y++) {
         for (let x = 0; x < gridData[y].length; x++) {
             const cellValue = gridData[y][x];
 
-            if (cellValue.startsWith('o') || cellValue.startsWith('c')) {
-                const Id = cellValue.substring(1);
+            if (cellValue.startsWith('o')) {
+                const objectId = cellValue.substring(1);
 
-                if (drawnObjects.has(Id)) {
+                if (drawnObjects.has(objectId)) {
                     continue;
                 }
 
-                if (drawnNpcs.has(Id)) {
+                const object = objectsData[objectId];
+
+                if (object && object.objectPlacementLocation === getCurrentScreenId()) {
+                    const { visualPosition, dimensions, spriteUrl, offset } = object;
+
+                    const drawX = visualPosition.x + (offset.x || 0);
+                    const drawY = visualPosition.y + (offset.y || 0);
+
+                    const scaledWidth = (dimensions.width * (cellWidth / baseCellWidth));
+                    const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
+
+                    const img = new Image();
+                    img.src = spriteUrl;
+
+                    ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
+
+                    drawnObjects.add(objectId);
+                }
+            }
+
+            if (cellValue.startsWith('c')) {
+                const npcId = cellValue.substring(1);
+
+                if (drawnNpcs.has(npcId)) {
                     continue;
                 }
 
-                const object = objectsData[Id];
-                const npc = npcData[Id];
+                const npc = npcData[npcId];
 
-                const drawX = x * cellWidth;
-                const drawY = y * cellHeight;
+                if (npc && npc.npcPlacementLocation === getCurrentScreenId()) {
+                    const { visualPosition, dimensions, spriteUrl, offset } = npc;
 
-                let img;
-                let widthInCells;
-                let heightInCells;
-                let drawWidth;
-                let drawHeight;
+                    const drawX = visualPosition.x + (offset.x || 0);
+                    const drawY = visualPosition.y + (offset.y || 0);
 
-                if (object) {
-                    widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
-                    heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
-                    drawWidth = widthInCells * cellWidth;
-                    drawHeight = heightInCells * cellHeight;
-                    img = new Image();
-                    img.src = object.spriteUrl;
-                    drawnObjects.add(Id);
-                } 
-                
-                if (npc) {
-                    widthInCells = Math.floor(npc.dimensions.width / cellWidth) + 1;
-                    heightInCells = Math.floor(npc.dimensions.height / cellHeight) + 1;
-                    drawWidth = widthInCells * cellWidth;
-                    drawHeight = heightInCells * cellHeight;
-                    img = new Image();
-                    img.src = npc.spriteUrl;
-                    drawnNpcs.add(Id);
+                    const scaledWidth = (dimensions.width * (cellWidth / baseCellWidth));
+                    const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
+
+                    const img = new Image();
+                    img.src = spriteUrl;
+
+                    ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
+
+                    drawnNpcs.add(npcId);
                 }
-
-                ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
             }
         }
     }
 
-    //Player
-    ctx.fillStyle = player.color;
-    ctx.fillRect(player.xPos, player.yPos, player.width, player.height);
+    // Player drawing with pixel precision
+    const playerXStart = player.xPos;
+    const playerYStart = player.yPos;
+    const playerWidth = player.width;
+    const playerHeight = player.height;
+
+    // Loop through each pixel row and column of the player's bounding box
+    for (let px = 0; px < playerWidth; px++) {
+        for (let py = 0; py < playerHeight; py++) {
+            const playerPixelX = playerXStart + px;
+            const playerPixelY = playerYStart + py;
+
+            // Calculate which grid cell this pixel corresponds to
+            const gridX = Math.floor(playerPixelX / cellWidth);
+            const gridY = Math.floor(playerPixelY / cellHeight);
+
+            // Check if the grid cell is within bounds and if it's not marked 'b'
+            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
+                if (gridData[gridY][gridX] !== 'b') {
+                    // Draw this pixel if it's not overlapping a 'b' cell
+                    ctx.fillStyle = player.color;
+                    ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
+                }
+            }
+        }
+    }
 }
+
 
 export function initializeCanvas() {
     const canvas = getElements().canvas;
@@ -317,14 +352,12 @@ export function initializeCanvas() {
         const canvas = getElements().canvas;
         const ctx = canvas.getContext('2d');
         const container = getElements().canvasContainer;
-    
-        // Calculate canvas dimensions
+
         const viewportHeight = window.innerHeight;
         const bottomContainerHeight = document.getElementById('bottomContainer')?.offsetHeight || 0;
         const canvasHeight = viewportHeight - bottomContainerHeight;
         const canvasWidth = container.clientWidth;
-    
-        // Apply canvas sizing
+
         container.style.width = '100%';
         container.style.height = `${canvasHeight}px`;
     
@@ -335,19 +368,16 @@ export function initializeCanvas() {
 
         const oldCellWidth = getCanvasCellWidth();
         const oldCellHeight = getCanvasCellHeight();
-        
-        // Update grid size
+
         const newCellWidth = canvasWidth / getGridSizeX();
         const newCellHeight = canvasHeight / getGridSizeY();
         setCanvasCellWidth(newCellWidth);
         setCanvasCellHeight(newCellHeight);
 
-        // Update player position based on new grid size
         const player = getPlayerObject();
         player.xPos = (player.xPos / oldCellWidth) * newCellWidth;
         player.yPos = (player.yPos / oldCellHeight) * newCellHeight;
-    
-        // Update the player object's properties
+
         setPlayerObject('xPos', player.xPos);
         setPlayerObject('yPos', player.yPos);
     
@@ -590,48 +620,27 @@ export function setUpObjects() {
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
-        // Add the offset for the object
-        const offsetX = object.offset.x || 0;
-        const offsetY = object.offset.y || 0;
-
-        let canPlace = true;
+        // Use proportional offsets (as percentages of cell dimensions)
+        const offsetX = (object.offset.x || 0) * cellWidth;  // Scaled offset
+        const offsetY = (object.offset.y || 0) * cellHeight; // Scaled offset
 
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
-                if (!roomGridData[y][x].startsWith('w') && !roomGridData[y][x].startsWith('e') && roomGridData[y][x] !== 'n') {
-                    canPlace = false;
-                    break;
-                }
-            }
-            if (!canPlace) {
-                console.log("cannot place " + objectId);
-                break;
+                const originalValue = roomGridData[y][x];
+                setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
+                roomGridData[y][x] = `o${objectId}`;
             }
         }
 
-        if (canPlace) {
-            for (let x = startX; x < startX + widthInCells; x++) {
-                for (let y = startY; y < startY + heightInCells; y++) {
-                    const originalValue = roomGridData[y][x];
-                    setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
-                    
-                    // Apply the offset to the object placement
-                    const finalX = x * cellWidth + offsetX;
-                    const finalY = y * cellHeight + offsetY;
+        const finalX = startX * cellWidth + offsetX;
+        const finalY = startY * cellHeight + offsetY;
 
-                    roomGridData[y][x] = `o${objectId}`; 
+        object.visualPosition = {
+            x: finalX,
+            y: finalY
+        };
 
-                    // Optionally store or use finalX and finalY if needed for object rendering
-                }
-            }
-
-            console.log("Original Values Object:");
-            console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
-
-            console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}) with offset (${offsetX}, ${offsetY}).`);
-        } else {
-            console.warn(`Could not place object ${objectId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
-        }
+        console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}) with pixel position (${finalX}, ${finalY}).`);
     }
 
     for (const npcId in npcsData.npcs) {
@@ -650,45 +659,19 @@ export function setUpObjects() {
         const startX = npc.gridPosition.x;
         const startY = npc.gridPosition.y;
 
-        // Add the offset for the NPC
-        const offsetX = npc.offset.x || 0;
-        const offsetY = npc.offset.y || 0;
-
-        let canPlace = true;
-
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
-                if (!roomGridData[y][x].startsWith('w') && roomGridData[y][x] !== 'n') {
-                    canPlace = false;
-                    break;
-                }
+                const originalValue = roomGridData[y][x];
+                setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, npcId, originalValue);
+
+                roomGridData[y][x] = `c${npcId}`;
             }
-            if (!canPlace) break;
         }
 
-        if (canPlace) {
-            for (let x = startX; x < startX + widthInCells; x++) {
-                for (let y = startY; y < startY + heightInCells; y++) {
-                    const originalValue = roomGridData[y][x];
-                    setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, npcId, originalValue);
+        console.log("Original Values Npc:");
+        console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
 
-                    // Apply the offset to the NPC placement
-                    const finalX = x * cellWidth + offsetX;
-                    const finalY = y * cellHeight + offsetY;
-
-                    roomGridData[y][x] = `c${npcId}`; 
-
-                    // Optionally store or use finalX and finalY if needed for NPC rendering
-                }
-            }
-
-            console.log("Original Values Npc:");
-            console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
-
-            console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY}) with offset (${offsetX}, ${offsetY}).`);
-        } else {
-            console.warn(`Could not place npc ${npcId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
-        }
+        console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY})).`);
     }
 
     console.log(getAllGridData());
