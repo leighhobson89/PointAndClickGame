@@ -181,7 +181,7 @@ export function resizePlayerObject() {
 }
 
 export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+    let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -594,7 +594,7 @@ export function setUpObjects() {
 
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
-                if (!roomGridData[y][x].startsWith('w') && roomGridData[y][x] !== 'n') {
+                if (!roomGridData[y][x].startsWith('w') && !roomGridData[y][x].startsWith('e') && roomGridData[y][x] !== 'n') {
                     canPlace = false;
                     break;
                 }

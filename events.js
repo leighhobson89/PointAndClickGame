@@ -1,4 +1,4 @@
-import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker } from "./constantsAndGlobalVars.js";
+import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -9,6 +9,14 @@ import { setGameState } from "./game.js";
 function openLibraryFoyerFromDebugRoom() {
     getNavigationData().debugRoom.exits.e1.status = "open";
     setObjectData(`objectKeyDEBUG`, `interactable.alreadyUsed`, true);
+}
+
+function unlockResearchRoomDoor() {
+    const objectData = getObjectData().objects.objectDoorLibraryFoyer;
+    const navigationData = getNavigationData().libraryFoyer.exits.e1;
+    navigationData.status = "open";
+    objectData.interactable.activeStatus = true; //code it so if this is true you can use the door which translates to opening it
+    objectData.interactable.alreadyUsed = true; //code it so if you use the key on the door when alreadyUsed is true, you get the global cant use message
 }
 
 //Use objectBatteryDEBUG to activate objectMachineDEBUG

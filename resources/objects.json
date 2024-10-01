@@ -162,6 +162,46 @@
                 "height": 70
             },
             "comment": "received from machineDEBUG, can be given to monkey npc"
+        },
+        "objectDoorLibraryFoyerResearchRoom": {
+                "name": {
+                    "en": "Door",
+                    "es": "Puerta",
+                    "de": "Tür",
+                    "it": "Porta",
+                    "fr": "Porte"
+                },
+                "interactable": {
+                    "canPickUp": false,
+                    "canUse": true,
+                    "canUseWith": false, 
+                    "stackable": false,
+                    "quantity": 1,
+                    "decrementQuantityOnUse": false,
+                    "activeStatus": false,
+                    "alreadyUsed": false            
+                },
+                "usedOn": {
+                    "objectUse": "",
+                    "actionUse1": "",
+                    "actionUse2": "",
+                    "objectUseWith1": "",
+                    "actionUseWith11": "",
+                    "actionUseWith12": "",
+                    "useTogetherLocation": "objectKeyDEBUG"
+                },
+                "objectPlacementLocation": "libraryFoyer",
+                "spriteUrl": "./resources/objects/images/libraryFoyer_Exit_ResearchRoom.png",
+                "inventoryUrl": "",
+                "gridPosition": {
+                    "x": 40,
+                    "y": 35
+                },
+                "dimensions": {
+                    "width": 50,
+                    "height": 70
+                },
+                "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyDEBUG on it"
         }
     }
 }
