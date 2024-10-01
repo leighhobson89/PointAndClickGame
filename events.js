@@ -30,16 +30,17 @@ function machineDEBUGActivate() {
 function giveMonkeyBanana() {
     const language = getLanguage();
     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
-    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo.npcMonkeyDEBUG.phases;
-
-    const dialogueSpeakers = {
-        0: "npc",
-        1: "npc",
-        2: "player",
-        3: "npc"
-    };
+    const questPhase = npcData.interactable.questPhase;
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbUse.npcMonkeyDEBUG.quest[questPhase].phase;
 
     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
+
+        const dialogueSpeakers = {
+            0: "npc",
+            1: "npc",
+            2: "player"
+        };
+
         setGameState(getCutSceneState());
 
         const showDialogue = (dialogueIndex) => {
@@ -58,6 +59,7 @@ function giveMonkeyBanana() {
                         drawInventory(0);
 
                         npcData.interactable.questPhase++;
+                        npcData.interactable.canUseWith = false;
                         setGameState(getGameVisibleActive());
                     }
                 }
@@ -65,6 +67,33 @@ function giveMonkeyBanana() {
         };
 
         showDialogue(npcData.interactable.dialoguePhase);
+    } else {
+            const dialogueSpeakers = {
+        0: "npc",
+        1: "player"
+    };
+
+    setGameState(getCutSceneState());
+
+    const showDialogue = (dialogueIndex) => {
+        const dialogueText = dialogueData[dialogueIndex][language];
+        const speaker = dialogueSpeakers[dialogueIndex];
+
+        const { xPos, yPos } = getTextPosition(speaker, npcData);
+        const textColor = getTextColor(speaker, 'yellow');
+
+        showText(dialogueText, () => {
+            if (npcData.interactable.questPhase === 1) {
+                if (dialogueIndex < 1) {
+                    showDialogue(dialogueIndex + 1);
+                } else {
+                    setGameState(getGameVisibleActive());
+                }
+            }
+        }, textColor, xPos, yPos);
+    };
+
+    showDialogue(npcData.interactable.dialoguePhase);
     }
 }
 

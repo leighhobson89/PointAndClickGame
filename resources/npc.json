@@ -16,7 +16,8 @@
         "interactable": {
             "canTalk": true,
             "dialoguePhase": 0,
-            "questPhase": 0
+            "questPhase": 0,
+            "canUseWith": true
         },
         "usedOn": {
             "useTogetherLocation": "objectBananaDEBUG"

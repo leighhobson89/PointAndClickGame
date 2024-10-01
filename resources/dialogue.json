@@ -392,36 +392,79 @@
                     "fr": "Quel singe mignon, il a l'air affamé !"
                 }
             },
-            "verbTalkTo": {
+            "verbUse": {
                 "npcMonkeyDEBUG": {
-                    "phases": {
+                    "quest": {
                         "0": {
-                            "en": "ee..ee..ooo..hungry..ee..ee",
-                            "es": "ee..ee..ooo..hambre..ee..ee",
-                            "de": "ee..ee..ooo..hungrig..ee..ee",
-                            "it": "ee..ee..ooo..fame..ee..ee",
-                            "fr": "ee..ee..ooo..faim..ee..ee"
+                            "phase": {
+                                "0": {
+                                    "en": "ee..ee..ooo..hungry..ee..ee",
+                                    "es": "ee..ee..ooo..hambre..ee..ee",
+                                    "de": "ee..ee..ooo..hungrig..ee..ee",
+                                    "it": "ee..ee..ooo..fame..ee..ee",
+                                    "fr": "ee..ee..ooo..faim..ee..ee"
+                                },
+                                "1": {
+                                    "en": "ee..oo..nom..nom..have..ee.ooo",
+                                    "es": "ee..oo..ñam..ñam..toma..ee.ooo",
+                                    "de": "ee..oo..nom..nom..nimm..ee.ooo",
+                                    "it": "ee..oo..gnam..gnam..prendi..ee.ooo",
+                                    "fr": "ee..oo..miam..miam..prends..ee.ooo"                        
+                                },
+                                "2": {
+                                    "en": "Thanks a lot! I mean ee..oo..thanks! I don't think a monkey will need this battery!",
+                                    "es": "¡Muchas gracias! Quiero decir, ee..oo..¡gracias! No creo que un mono necesite esta batería.",
+                                    "de": "Vielen Dank! Ich meine, ee..oo..Danke! Ich glaube nicht, dass ein Affe diese Batterie braucht.",
+                                    "it": "Grazie mille! Voglio dire, ee..oo..grazie! Non penso che una scimmia avrà bisogno di questa batteria.",
+                                    "fr": "Merci beaucoup ! Je veux dire, ee..oo..merci ! Je ne pense pas qu'un singe ait besoin de cette batterie."
+                                }
+                            }
                         },
                         "1": {
-                            "en": "ee..oo..nom..nom..have..ee.ooo",
-                            "es": "ee..oo..ñam..ñam..toma..ee.ooo",
-                            "de": "ee..oo..nom..nom..nimm..ee.ooo",
-                            "it": "ee..oo..gnam..gnam..prendi..ee.ooo",
-                            "fr": "ee..oo..miam..miam..prends..ee.ooo"                        
-                        },
-                        "2": {
-                            "en": "Thanks a lot! I mean ee..oo..thanks! I don't think a monkey will need this battery!",
-                            "es": "¡Muchas gracias! Quiero decir, ee..oo..¡gracias! No creo que un mono necesite esta batería.",
-                            "de": "Vielen Dank! Ich meine, ee..oo..Danke! Ich glaube nicht, dass ein Affe diese Batterie braucht.",
-                            "it": "Grazie mille! Voglio dire, ee..oo..grazie! Non penso che una scimmia avrà bisogno di questa batteria.",
-                            "fr": "Merci beaucoup ! Je veux dire, ee..oo..merci ! Je ne pense pas qu'un singe ait besoin de cette batterie."
-                        },
-                        "3": {
-                            "en": "ee..oo...ee.ooo",
-                            "es": "ee..oo...ee.ooo",
-                            "de": "ee..oo...ee.ooo",
-                            "it": "ee..oo...ee.ooo",
-                            "fr": "ee..oo...ee.ooo"                        
+                            "phase": {
+                                "0": {
+                                    "en": "ee..oo...ee.ooo",
+                                    "es": "ee..oo...ee.ooo",
+                                    "de": "ee..oo...ee.ooo",
+                                    "it": "ee..oo...ee.ooo",
+                                    "fr": "ee..oo...ee.ooo"                        
+                                },
+                                "1": {
+                                    "en": "I think he is happy as he is now.",
+                                    "es": "Creo que está feliz tal como está ahora.",
+                                    "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
+                                    "it": "Penso che sia felice così com'è ora.",
+                                    "fr": "Je pense qu'il est heureux tel qu'il est maintenant."                        
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "verbTalkTo": {
+                "npcMonkeyDebug": {
+                    "quest": {
+                        "0": {
+                            "phase": {
+                                "0": {
+                                    "en": "What a cute monkey, he looks hungry!",
+                                    "es": "¡Qué mono tan lindo, parece que tiene hambre!",
+                                    "de": "Was für ein süßer Affe, er sieht hungrig aus!",
+                                    "it": "Che scimmietta carina, sembra affamato!",
+                                    "fr": "Quel singe mignon, il a l'air affamé !"
+                                }
+                            }
+                        },                    
+                        "1": { 
+                            "phase": {
+                                "0": {
+                                    "en": "I think he is happy as he is now.",
+                                    "es": "Creo que está feliz tal como está ahora.",
+                                    "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
+                                    "it": "Penso che sia felice così com'è ora.",
+                                    "fr": "Je pense qu'il est heureux tel qu'il est maintenant."   
+                                }      
+                            }
                         }
                     }
                 }

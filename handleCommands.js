@@ -268,7 +268,7 @@ function handleCannotPickUpMessage(language, dialogueData) {
 export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1, isObjectTrueNpcFalse) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const useWith = checkIfItemCanBeUsedWith(objectId1, isObjectTrueNpcFalse);
+    const useWith = checkIfItemCanBeUsedWith(objectId1, isObjectTrueNpcFalse, true);
     
     if ((!inventoryItem && useWith && !getWaitingForSecondItem() && isObjectTrueNpcFalse)) {
         handleCannotUsedUntilPickedUpMessage(language, dialogueData);
@@ -307,6 +307,8 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     const object1 = objectData.objects[objectId1];
     const dialogueData = getDialogueData().dialogue.globalMessages;
     const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
+    const useWith2 = checkIfItemCanBeUsedWith(objectId2, isObject2TrueNpcFalse, false);
+
     let object2;
     let useTogetherLocation2;
     let dialogueString;
@@ -331,7 +333,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     if (useTogetherLocation1 && useTogetherLocation2) { 
         locationImportant = true;
         if (useTogetherLocation1 === useTogetherLocation2) {
-            if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2) {
+            if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2 && useWith2) {
                 locationCorrect = true;
             } else {
                 console.log("1: not right location to use these items together (2 inventory) - PASSED");
@@ -339,7 +341,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
                 await showText(dialogueString, null, getColorTextPlayer());
                 return;
             }
-        } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1) {
+        } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 && useWith2) {
             console.log("2: irrelevant location, can use these items together (2 inventory) - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             if (isObject2TrueNpcFalse) {
@@ -397,10 +399,6 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         await showText(dialogueString, null, getColorTextPlayer()); // Wait for the text to finish before proceeding
         console.log("9: items just cant be used together at all - PASSED");
         return;
-    }
-
-    if (!isObject2TrueNpcFalse) {
-        console.log("npc reached end of useItem()");
     }
 }
 
@@ -464,16 +462,32 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     }
 }
 
-function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse) {
-    if (!isObjectTrueNpcFalse) { //npc
+function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWithFalse) {
+    if (!isObjectTrueNpcFalse && useTrueUseWithFalse) { //npc use is just talk to
         return true;
     }
-    const objectData = getObjectData().objects[objectId];
+
+    if (!isObjectTrueNpcFalse) {
+        const npcData = getNpcData().npcs[objectId];
     
-    if (objectData && objectData.interactable) {
-        return objectData.interactable.canUseWith;
+        if (npcData && npcData.interactable) {
+            return npcData.interactable.canUseWith;
+        } else {
+            console.warn(`Npc with ID ${objectId} does not exist.`);
+            ;
+        }
+    } 
+
+    if (useTrueUseWithFalse) {
+        const objectData = getObjectData().objects[objectId];
+    
+        if (objectData && objectData.interactable && objectData.interactable.canUseWith) {
+            return objectData.interactable.canUseWith;
+        } else {
+            console.warn(`Object with ID ${objectId} does not exist.`);
+        } 
     } else {
-        console.warn(`Object with ID ${objectId} does not exist.`);
+        return true;
     }
 }
 
