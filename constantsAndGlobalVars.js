@@ -30,7 +30,7 @@ export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
 export const TEXT_DISPLAY_DURATION = 3500;
-export const MAX_TEXT_DISPLAY_WIDTH = 1200;
+export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
 export let playerObject = {
@@ -76,6 +76,7 @@ let textQueue = [];
 let previousGameState = null;
 let currentXposNpc = null;
 let currentYposNpc = null;
+let currentSpeaker = null;
 
 //FLAGS
 let audioMuted;
@@ -662,4 +663,12 @@ export function setCurrentYposNpc(value) {
 
 export function getCurrentYposNpc() {
     return currentYposNpc;
+}
+
+export function setCurrentSpeaker(value) {
+    currentSpeaker = value;
+}
+
+export function getCurrentSpeaker() {
+    return currentSpeaker;
 }

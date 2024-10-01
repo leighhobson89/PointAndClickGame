@@ -1,4 +1,4 @@
-import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData } from "./constantsAndGlobalVars.js";
+import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -87,6 +87,7 @@ function giveMonkeyBanana() {
                 if (dialogueIndex < 1) {
                     showDialogue(dialogueIndex + 1);
                 } else {
+                    setCurrentSpeaker(null);
                     setGameState(getGameVisibleActive());
                 }
             }
@@ -102,6 +103,7 @@ function giveMonkeyBanana() {
 // Helper function to determine the position of the text based on the speaker (player or NPC)
 function getTextPosition(speaker, npcData) {
     let xPos, yPos;
+    setCurrentSpeaker(speaker);
 
     if (speaker === 'player') {
         const player = getPlayerObject();
