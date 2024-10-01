@@ -37,6 +37,10 @@
                 "x": 10,
                 "y": 15
             },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
             "dimensions": {
                 "width": 50,
                 "height": 50
@@ -76,6 +80,10 @@
             "gridPosition": {
                 "x": 20,
                 "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
             },
             "dimensions": {
                 "width": 60,
@@ -117,6 +125,10 @@
                 "x": 30,
                 "y": 15
             },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
             "dimensions": {
                 "width": 100,
                 "height": 100
@@ -157,6 +169,10 @@
                 "x": 40,
                 "y": 15
             },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
             "dimensions": {
                 "width": 50,
                 "height": 70
@@ -194,12 +210,16 @@
                 "spriteUrl": "./resources/objects/images/libraryFoyer_Exit_ResearchRoom.png",
                 "inventoryUrl": "",
                 "gridPosition": {
-                    "x": 40,
-                    "y": 35
+                    "x": 37,
+                    "y": 29
+                },
+                "offset": {
+                    "x": 200,
+                    "y": 200
                 },
                 "dimensions": {
                     "width": 50,
-                    "height": 70
+                    "height": 180
                 },
                 "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyDEBUG on it"
         }

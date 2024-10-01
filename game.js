@@ -181,7 +181,7 @@ export function resizePlayerObject() {
 }
 
 export function drawGrid() {
-    let showGrid = true; //DEBUG: false to hide grid
+    let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -590,6 +590,10 @@ export function setUpObjects() {
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
+        // Add the offset for the object
+        const offsetX = object.offset.x || 0;
+        const offsetY = object.offset.y || 0;
+
         let canPlace = true;
 
         for (let x = startX; x < startX + widthInCells; x++) {
@@ -599,7 +603,10 @@ export function setUpObjects() {
                     break;
                 }
             }
-            if (!canPlace) break;
+            if (!canPlace) {
+                console.log("cannot place " + objectId);
+                break;
+            }
         }
 
         if (canPlace) {
@@ -607,14 +614,21 @@ export function setUpObjects() {
                 for (let y = startY; y < startY + heightInCells; y++) {
                     const originalValue = roomGridData[y][x];
                     setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
+                    
+                    // Apply the offset to the object placement
+                    const finalX = x * cellWidth + offsetX;
+                    const finalY = y * cellHeight + offsetY;
+
                     roomGridData[y][x] = `o${objectId}`; 
+
+                    // Optionally store or use finalX and finalY if needed for object rendering
                 }
             }
 
             console.log("Original Values Object:");
             console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
 
-            console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}).`);
+            console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}) with offset (${offsetX}, ${offsetY}).`);
         } else {
             console.warn(`Could not place object ${objectId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
         }
@@ -636,6 +650,10 @@ export function setUpObjects() {
         const startX = npc.gridPosition.x;
         const startY = npc.gridPosition.y;
 
+        // Add the offset for the NPC
+        const offsetX = npc.offset.x || 0;
+        const offsetY = npc.offset.y || 0;
+
         let canPlace = true;
 
         for (let x = startX; x < startX + widthInCells; x++) {
@@ -653,14 +671,21 @@ export function setUpObjects() {
                 for (let y = startY; y < startY + heightInCells; y++) {
                     const originalValue = roomGridData[y][x];
                     setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, npcId, originalValue);
+
+                    // Apply the offset to the NPC placement
+                    const finalX = x * cellWidth + offsetX;
+                    const finalY = y * cellHeight + offsetY;
+
                     roomGridData[y][x] = `c${npcId}`; 
+
+                    // Optionally store or use finalX and finalY if needed for NPC rendering
                 }
             }
 
             console.log("Original Values Npc:");
             console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
 
-            console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY}).`);
+            console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY}) with offset (${offsetX}, ${offsetY}).`);
         } else {
             console.warn(`Could not place npc ${npcId} at (${startX}, ${startY}) in room ${roomName} due to occupied cells.`);
         }
@@ -668,6 +693,7 @@ export function setUpObjects() {
 
     console.log(getAllGridData());
 }
+
 
 //-------------------------------------------------------------------------------------------------------------
 
