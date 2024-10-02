@@ -1,6 +1,6 @@
 import { setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
-import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
+import { aStarPathfinding } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
 import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
 
@@ -89,7 +89,7 @@ function movePlayerTowardsTarget() {
         return;
     }
 
-    let collisionEdgeCanvas = checkEdgeAndExitCollision(player, targetX, targetY);
+    let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
     if (collisionEdgeCanvas) return;
 
     if (Math.abs(player.xPos - targetX) > speed) {
@@ -181,7 +181,7 @@ export function resizePlayerObject() {
 }
 
 export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+    let showGrid = true; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
     const context = canvas.getContext('2d');
@@ -224,7 +224,7 @@ export function drawGrid() {
         } else if (cellValue.startsWith('c')) {
             context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
         }if (cellValue.startsWith('b')) {
-            setZPosHover(extractBValue(gridData.gridData[hoverCell.y][hoverCell.x]));
+            setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
             context.fillStyle = `rgba(100, 0, ${getZPosHover()}, 0.5)`; 
         } else {
             context.fillStyle = 'rgba(255, 0, 0, 0.5)';
@@ -431,106 +431,24 @@ export function initializePlayerPosition(gridX, gridY) {
     console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
 }
 
-function checkEdgeAndExitCollision(player, targetX, targetY) {
-    console.log("Checking collision and edge for player at:", player.xPos, player.yPos);
-
-    const gridData = getGridData();
-    const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
-    const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
-
-    console.log(`Player grid position: (${playerGridX}, ${playerGridY})`);
-
-    const playerOffsetX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
-    const playerOffsetY = Math.floor(playerGridY + getPlayerObject().height / getCanvasCellHeight());
-
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // +1 to fix reading wrong cell due to rounding
-    console.log(`Current cell value: ${cellValue} at (${playerOffsetX}, ${playerOffsetY + 1})`);
-
-    let newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : -player.speed);
-    let newYPos = player.yPos + ((player.yPos < targetY) ? player.speed : -player.speed);
-
+function checkEdgeCollision(player, targetX) {
+    const newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : - player.speed);
     let collisionOccurred = false;
 
-    // Check if the player is colliding with the edge of the canvas
     if (newXPos + player.width >= canvas.width) {
         player.xPos = canvas.width - player.width - getCanvasCellWidth();
         collisionOccurred = true;
-        console.log("Player collided with the edge of the canvas.");
     }
-
-    // Check if the current cell is an exit (starts with 'e')
-    if (cellValue.startsWith('e')) {
-        console.log("Player is on an exit cell.");
-
-        // Find the nearest walkable cell that starts with 'w' from the current path
-        const walkableCell = findNearestWalkableCellOnPath(playerGridX, playerGridY, gridData);
-
-        if (walkableCell) {
-            console.log(`Nearest walkable cell found at (${walkableCell.x}, ${walkableCell.y}).`);
-
-            // Update the player's position to the walkable cell
-            player.xPos = walkableCell.x * getCanvasCellWidth() - player.width / 2;
-            player.yPos = walkableCell.y * getCanvasCellHeight() - player.height;
-
-            console.log(`Player moved to walkable cell at: (${player.xPos}, ${player.yPos})`);
-
-            // Reset the target to the new position
-            setTargetX(player.xPos);
-            setTargetY(player.yPos);
-            currentPath = [];
-            currentPathIndex = 0;
-
-            return true; // Return as the player is moving to the walkable cell
-        } else {
-            console.log("No walkable cell found nearby.");
-        }
-    }
-
-    player = getPlayerObject();
 
     if (collisionOccurred) {
         setTargetX(player.xPos);
         setTargetY(player.yPos);
         currentPath = [];
         currentPathIndex = 0;
-        console.log("Player path reset after collision.");
         return true;
     }
-
-    console.log("No collision or edge issues detected.");
     return false;
 }
-
-// Helper function to find the nearest walkable cell ('w') from the current path
-function findNearestWalkableCellOnPath(playerGridX, playerGridY, gridData) {
-    console.log(`Searching for nearest walkable cell from position: (${playerGridX}, ${playerGridY})`);
-
-    const gridSizeX = getGridSizeX();
-    const gridSizeY = getGridSizeY();
-
-    // Define search range (you can increase or decrease this as needed)
-    const range = 15;
-    console.log(`Search range set to: ${range} cells`);
-
-    for (let y = playerGridY - range; y <= playerGridY + range; y++) {
-        for (let x = playerGridX - range; x <= playerGridX + range; x++) {
-            // Ensure we don't go out of grid bounds
-            if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY) {
-                const cellValue = gridData.gridData[y][x];
-                console.log(`Checking cell at (${x}, ${y}): ${cellValue}`);
-
-                if (cellValue.startsWith('w')) {
-                    console.log(`Walkable cell found at (${x}, ${y})`);
-                    return { x, y }; // Return the first walkable cell found
-                }
-            }
-        }
-    }
-
-    console.log("No walkable cell found in the search range.");
-    return null; // No walkable cell found
-}
-
 
 //-------------------------------------------------------------------------------------------------------------
 
@@ -625,8 +543,12 @@ export function checkAndChangeScreen() {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
 
-            if (getGridTargetX() === checkX && getGridTargetY() === checkY && gridData.gridData[checkY] && gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+            if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                 console.log("Player is moving to another screen");
+                currentPath = []
+                currentPathIndex = 0;
+                setCurrentlyMoving(false);
+                setCurrentlyMovingToAction(false)
 
                 changeBackground();
 
