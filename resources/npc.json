@@ -29,7 +29,7 @@
         "npcPlacementLocation": "debugRoom",
         "spriteUrl": "./resources/npcs/monkey.png",
         "gridPosition": {
-            "x": 10,
+            "x": 20,
             "y": 30
         },
         "offset": {

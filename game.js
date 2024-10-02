@@ -687,6 +687,10 @@ export function setUpObjects() {
         const startX = npc.gridPosition.x;
         const startY = npc.gridPosition.y;
 
+        // Use proportional offsets (as percentages of cell dimensions)
+        const offsetX = (npc.offset.x || 0) * cellWidth;  // Scaled offset
+        const offsetY = (npc.offset.y || 0) * cellHeight; // Scaled offset
+
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
                 const originalValue = roomGridData[y][x];
@@ -695,6 +699,14 @@ export function setUpObjects() {
                 roomGridData[y][x] = `c${npcId}`;
             }
         }
+
+        const finalX = startX * cellWidth + offsetX;
+        const finalY = startY * cellHeight + offsetY;
+
+        npc.visualPosition = {
+            x: finalX,
+            y: finalY
+        };
 
         console.log("Original Values Npc:");
         console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());

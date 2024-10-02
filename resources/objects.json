@@ -2,6 +2,8 @@
     "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
     "generalComments2": "usedOn.objectUseWith1 can be another object or the screenId that an exit leads to",
     "generalComments3": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
+    "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is open, and this should always match the status field in the navigation screen for the exit",
+    "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked.",
     "objects": {
         "objectKeyDEBUG": {
             "name": {
@@ -258,8 +260,8 @@
                 "stackable": false,
                 "quantity": 1,
                 "decrementQuantityOnUse": false,
-                "activeStatus": true,
-                "alreadyUsed": false            
+                "activeStatus": false,
+                "alreadyUsed": true            
             },
             "usedOn": {
                 "objectUse": "",

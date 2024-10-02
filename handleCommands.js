@@ -417,8 +417,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            await showText(dialogueString, null, getColorTextPlayer());
-            executeObjectEvent(objectEvent1);
+            executeObjectEvent(objectEvent1, dialogueString);
         } else if (object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
             await showText(dialogueString, null, getColorTextPlayer());
@@ -433,8 +432,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    await showText(dialogueString, null, getColorTextPlayer());
-                    executeObjectEvent(objectEvent1);
+                    executeObjectEvent(objectEvent1, dialogueString);
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
                     await showText(dialogueString, null, getColorTextPlayer());
@@ -449,8 +447,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                await showText(dialogueString, null, getColorTextPlayer())
-                executeObjectEvent(objectEvent1);
+                executeObjectEvent(objectEvent1, dialogueString);
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
                 showText(dialogueString, null, getColorTextPlayer());
@@ -481,10 +478,10 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWith
     if (useTrueUseWithFalse) {
         const objectData = getObjectData().objects[objectId];
     
-        if (objectData && objectData.interactable && objectData.interactable.canUseWith) {
+        if (objectData && objectData.interactable) {
             return objectData.interactable.canUseWith;
         } else {
-            console.warn(`Object with ID ${objectId} does not exist.`);
+            console.log(`Object with ID ${objectId} does not exist.`);
         } 
     } else {
         return true;
