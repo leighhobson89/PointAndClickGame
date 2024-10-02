@@ -92,6 +92,7 @@ let lookingForAlternativePathToNearestWalkable = false;
 let verbConstructionActive = null;
 let waitingForSecondItem = null;
 let isDisplayingText = false;
+let objectOriginalValueUpdatedYet = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -669,4 +670,12 @@ export function setCurrentSpeaker(value) {
 
 export function getCurrentSpeaker() {
     return currentSpeaker;
+}
+
+export function setObjectOriginalValueUpdatedYet(value) {
+    objectOriginalValueUpdatedYet = value;
+}
+
+export function getObjectOriginalValueUpdatedYet() {
+    return objectOriginalValueUpdatedYet;
 }
