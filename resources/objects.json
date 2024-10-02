@@ -27,17 +27,17 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "libraryFoyerDebug",
-                "actionUseWith11": "openLibraryFoyerFromDebugRoom",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom"
+                "useTogetherLocation": "libraryFoyer"
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "libraryFoyer",
             "spriteUrl": "./resources/objects/goldKey.png",
             "inventoryUrl": "./resources/objects/goldKey.png",
             "gridPosition": {
-                "x": 10,
-                "y": 15
+                "x": 39,
+                "y": 49
             },
             "offset": {
                 "x": 0,
@@ -48,10 +48,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 50
+                "width": 30,
+                "height": 20
             },
-            "comment": "Key for opening debugRoom exit to libraryFoyer"
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
         "objectBatteryDEBUG": {
             "name": {
@@ -199,11 +199,11 @@
         },
         "objectDoorLibraryFoyerResearchRoom": {
                 "name": {
-                    "en": "Door",
-                    "es": "Puerta",
-                    "de": "Tür",
-                    "it": "Porta",
-                    "fr": "Porte"
+                    "en": "Wooden Door",
+                    "es": "Puerta de madera",
+                    "de": "Holztür",
+                    "it": "Porta di legno",
+                    "fr": "Porte en bois"
                 },
                 "interactable": {
                     "canPickUp": false,
@@ -222,7 +222,7 @@
                     "objectUseWith1": "",
                     "actionUseWith11": "",
                     "actionUseWith12": "",
-                    "useTogetherLocation": "objectKeyDEBUG"
+                    "useTogetherLocation": "libraryFoyer"
                 },
                 "objectPlacementLocation": "libraryFoyer",
                 "spriteUrl": "./resources/objects/images/libraryFoyer_Exit_ResearchRoom.png",
@@ -247,11 +247,11 @@
         },
         "objectDoorLibraryFoyerMarketStreet": {
             "name": {
-                "en": "Door",
-                "es": "Puerta",
-                "de": "Tür",
-                "it": "Porta",
-                "fr": "Porte"
+                "en": "Library Exit Door",
+                "es": "Puerta de Salida de la Biblioteca",
+                "de": "Bibliotheksausgangstür",
+                "it": "Porta di Uscita della Biblioteca",
+                "fr": "Porte de Sortie de la Bibliothèque"
             },
             "interactable": {
                 "canPickUp": false,
@@ -292,6 +292,6 @@
                 "height": 140
             },
             "comment": "door from libraryFoyer to marketStreet, can be opened and closed from the start"
-    }
+        }
     }
 }

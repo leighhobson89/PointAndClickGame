@@ -17,7 +17,7 @@ export function aStarPathfinding(start, target, gridData) {
     start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
 
     const cellValue = gridData.gridData[start.y][start.x];
-    const isWalkable = cellValue !== 'n' && cellValue !== 'b';
+    const isWalkable = cellValue !== 'n' && cellValue !== 'b' && !cellValue.startsWith('e');
 
     
     console.log(`Start value is (${start.x}, ${start.y}) and this is ${isWalkable ? 'walkable' : 'not walkable'} (${cellValue})`);

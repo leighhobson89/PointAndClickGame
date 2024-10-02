@@ -427,7 +427,13 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         }
     } else { //useWith
         if (!exitOrNot2 && isObject2TrueNpcFalse) {
-            const objectEvent2 = getObjectEvents(objectId2); //in case in future we need to call events on object2
+            
+            //add if it contains door then if alreadyUsed is true then return global already open message for doors
+            if (objectId2.includes('objectDoor') && object2.interactable.alreadyUsed) {
+                dialogueString = dialogueData.dialogue.globalMessages.alreadyUnlocked[language];
+                showText(dialogueString, null, getColorTextPlayer());
+                return;
+            }
 
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {

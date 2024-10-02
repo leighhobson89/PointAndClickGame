@@ -14,7 +14,7 @@ function openLibraryFoyerFromDebugRoom(object, dialogueString) {
 
 function unlockResearchRoomDoor(object, dialogueString) {
     showText(dialogueString, null, getColorTextPlayer());
-    const objectData = getObjectData().objects.objectDoorLibraryFoyer;
+    const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
     objectData.interactable.alreadyUsed = true; //code it so if you use the key on the door when alreadyUsed is true, you get the global cant use message

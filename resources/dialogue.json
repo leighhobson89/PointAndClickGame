@@ -356,7 +356,21 @@
                     "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
                     "it": "Una banana perfettamente matura. Pronta da mangiare.",
                     "fr": "Une banane parfaitement mûre. Prête à être mangée."
-                }
+                },
+                "objectDoorLibraryFoyerResearchRoom": {
+                    "en": "A wooden door that seems to lead into another room.",
+                    "es": "Una puerta de madera que parece llevar a otra habitación.",
+                    "de": "Eine Holztür, die scheinbar in einen anderen Raum führt.",
+                    "it": "Una porta di legno che sembra condurre in un'altra stanza.",
+                    "fr": "Une porte en bois qui semble mener à une autre pièce."
+                },
+                "objectDoorLibraryFoyerMarketStreet": {
+                    "en": "It's an unremarkable door that leads outside.",
+                    "es": "Es una puerta sin importancia que lleva al exterior.",
+                    "de": "Es ist eine unscheinbare Tür, die nach draußen führt.",
+                    "it": "È una porta insignificante che conduce all'esterno.",
+                    "fr": "C'est une porte banale qui mène à l'extérieur."
+                }               
             },
             "verbPickUp": {
                 "objectKeyDEBUG": {
@@ -533,7 +547,14 @@
                 "de": "Ich denke, das hat seinen Zweck bereits erfüllt!",
                 "it": "Penso che abbia già fatto il suo lavoro!",
                 "fr": "Je pense que cela a déjà fait son travail!"
-            }         
+            },
+            "alreadyUnlocked": {
+                "en": "This door is already unlocked!",
+                "es": "¡Esta puerta ya está desbloqueada!",
+                "de": "Diese Tür ist bereits entriegelt!",
+                "it": "Questa porta è già sbloccata!",
+                "fr": "Cette porte est déjà déverrouillée!"
+            }           
         }
     }
 }

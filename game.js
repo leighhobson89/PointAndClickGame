@@ -1,4 +1,4 @@
-import { getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc } from './constantsAndGlobalVars.js';
+import { getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding, findAndMoveToNearestWalkable } from './pathFinding.js';
 import { performCommand, parseCommand } from './handleCommands.js';
@@ -48,6 +48,8 @@ export function gameLoop() {
 }
 
 function movePlayerTowardsTarget() {
+    const gridData = getGridData();
+
     const speed = getPlayerObject().speed;
     const player = getPlayerObject();
     const gridSizeX = getCanvasCellWidth();
@@ -58,6 +60,8 @@ function movePlayerTowardsTarget() {
 
     const playerOffsetX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
     const playerOffsetY = Math.floor(playerGridY + getPlayerObject().height / getCanvasCellHeight());
+
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
 
     let targetX, targetY;
 
@@ -85,7 +89,7 @@ function movePlayerTowardsTarget() {
         return;
     }
 
-    let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
+    let collisionEdgeCanvas = checkEdgeAndExitCollision(player, targetX, targetY);
     if (collisionEdgeCanvas) return;
 
     if (Math.abs(player.xPos - targetX) > speed) {
@@ -153,13 +157,10 @@ export function resizePlayerObject() {
         return;
     }
     
-    if (cellValue.startsWith('w')) {
+    if (cellValue.startsWith('w') || cellValue.startsWith('b')) {
         zPosStringW = extractWValue(cellValue);
         zPosW = parseInt(zPosStringW, 10);
-    } else if (cellValue.startsWith('b')) {
-        zPosStringB = extractBValue(cellValue);
-        zPosB = parseInt(zPosStringB, 10);
-    }
+    } 
 
     // Define size limits
     const furthestZPos = 100;
@@ -167,29 +168,16 @@ export function resizePlayerObject() {
     const originalWidth = player.originalWidth;
     const originalHeight = player.originalHeight;
 
-    if (cellValue.startsWith('w')) {
-        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
-        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
-        const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9);
-        const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9);
-        const widthDifference = newWidthW - player.width;
-        const heightDifference = newHeightW - player.height;
-        setPlayerObject('xPos', player.xPos - widthDifference);
-        setPlayerObject('yPos', player.yPos - heightDifference);
-        setPlayerObject('width', newWidthW);
-        setPlayerObject('height', newHeightW);
-    } else if (cellValue.startsWith('b')) {
-        const scaleFactorB = (zPosB - furthestZPos) / (nearestZPos - furthestZPos);
-        const clampedScaleFactorB = Math.min(Math.max(scaleFactorB, 0), 1);
-        const newWidthB = originalWidth * (0.1 + clampedScaleFactorB * 0.9);
-        const newHeightB = originalHeight * (0.1 + clampedScaleFactorB * 0.9);
-        const widthDifference = newWidthB - player.width;
-        const heightDifference = newHeightB - player.height;
-        setPlayerObject('xPos', player.xPos - widthDifference);
-        setPlayerObject('yPos', player.yPos - heightDifference);
-        setPlayerObject('width', newWidthB);
-        setPlayerObject('height', newHeightB);
-    }
+    const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
+    const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
+    const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9);
+    const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9);
+    const widthDifference = newWidthW - player.width;
+    const heightDifference = newHeightW - player.height;
+    setPlayerObject('xPos', player.xPos - widthDifference);
+    setPlayerObject('yPos', player.yPos - heightDifference);
+    setPlayerObject('width', newWidthW);
+    setPlayerObject('height', newHeightW);
 }
 
 export function drawGrid() {
@@ -429,24 +417,106 @@ export function initializePlayerPosition(gridX, gridY) {
     console.log(`Player initialized at grid position (${gridX}, ${gridY}), pixel position (${xPos}, ${yPos})`);
 }
 
-function checkEdgeCollision(player, targetX) {
-    const newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : - player.speed);
+function checkEdgeAndExitCollision(player, targetX, targetY) {
+    console.log("Checking collision and edge for player at:", player.xPos, player.yPos);
+
+    const gridData = getGridData();
+    const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
+    const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
+
+    console.log(`Player grid position: (${playerGridX}, ${playerGridY})`);
+
+    const playerOffsetX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
+    const playerOffsetY = Math.floor(playerGridY + getPlayerObject().height / getCanvasCellHeight());
+
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // +1 to fix reading wrong cell due to rounding
+    console.log(`Current cell value: ${cellValue} at (${playerOffsetX}, ${playerOffsetY + 1})`);
+
+    let newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : -player.speed);
+    let newYPos = player.yPos + ((player.yPos < targetY) ? player.speed : -player.speed);
+
     let collisionOccurred = false;
 
+    // Check if the player is colliding with the edge of the canvas
     if (newXPos + player.width >= canvas.width) {
         player.xPos = canvas.width - player.width - getCanvasCellWidth();
         collisionOccurred = true;
+        console.log("Player collided with the edge of the canvas.");
     }
+
+    // Check if the current cell is an exit (starts with 'e')
+    if (cellValue.startsWith('e')) {
+        console.log("Player is on an exit cell.");
+
+        // Find the nearest walkable cell that starts with 'w' from the current path
+        const walkableCell = findNearestWalkableCellOnPath(playerGridX, playerGridY, gridData);
+
+        if (walkableCell) {
+            console.log(`Nearest walkable cell found at (${walkableCell.x}, ${walkableCell.y}).`);
+
+            // Update the player's position to the walkable cell
+            player.xPos = walkableCell.x * getCanvasCellWidth() - player.width / 2;
+            player.yPos = walkableCell.y * getCanvasCellHeight() - player.height;
+
+            console.log(`Player moved to walkable cell at: (${player.xPos}, ${player.yPos})`);
+
+            // Reset the target to the new position
+            setTargetX(player.xPos);
+            setTargetY(player.yPos);
+            currentPath = [];
+            currentPathIndex = 0;
+
+            return true; // Return as the player is moving to the walkable cell
+        } else {
+            console.log("No walkable cell found nearby.");
+        }
+    }
+
+    player = getPlayerObject();
 
     if (collisionOccurred) {
         setTargetX(player.xPos);
         setTargetY(player.yPos);
         currentPath = [];
         currentPathIndex = 0;
+        console.log("Player path reset after collision.");
         return true;
     }
+
+    console.log("No collision or edge issues detected.");
     return false;
 }
+
+// Helper function to find the nearest walkable cell ('w') from the current path
+function findNearestWalkableCellOnPath(playerGridX, playerGridY, gridData) {
+    console.log(`Searching for nearest walkable cell from position: (${playerGridX}, ${playerGridY})`);
+
+    const gridSizeX = getGridSizeX();
+    const gridSizeY = getGridSizeY();
+
+    // Define search range (you can increase or decrease this as needed)
+    const range = 15;
+    console.log(`Search range set to: ${range} cells`);
+
+    for (let y = playerGridY - range; y <= playerGridY + range; y++) {
+        for (let x = playerGridX - range; x <= playerGridX + range; x++) {
+            // Ensure we don't go out of grid bounds
+            if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY) {
+                const cellValue = gridData.gridData[y][x];
+                console.log(`Checking cell at (${x}, ${y}): ${cellValue}`);
+
+                if (cellValue.startsWith('w')) {
+                    console.log(`Walkable cell found at (${x}, ${y})`);
+                    return { x, y }; // Return the first walkable cell found
+                }
+            }
+        }
+    }
+
+    console.log("No walkable cell found in the search range.");
+    return null; // No walkable cell found
+}
+
 
 //-------------------------------------------------------------------------------------------------------------
 
@@ -593,20 +663,8 @@ function swapBackgroundOnRoomTransition(newScreenId) {
 
 export function extractWValue(value) {
 
-    if (typeof value === 'string' && value.startsWith('w')) {
-        const matches = value.match(/w(\d{1,3})/);
-        if (matches && matches[1]) {
-            return matches[1];
-        }
-    }
-
-    return null;
-}
-
-export function extractBValue(value) {
-
-    if (typeof value === 'string' && value.startsWith('b')) {
-        const matches = value.match(/b(\d{1,3})/);
+    if (typeof value === 'string' && (value.startsWith('w') || value.startsWith('b'))) {
+        const matches = value.match(/[wb](\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];
         }
@@ -714,7 +772,7 @@ export function setUpObjects() {
         console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY})).`);
     }
 
-    console.log(getAllGridData());
+    console.table(getAllGridData());
 }
 
 

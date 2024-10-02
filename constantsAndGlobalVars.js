@@ -34,10 +34,10 @@ export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
 export let playerObject = {
-    originalWidth: 45,
-    originalHeight: 180,
-    width: 40,
-    height: 160,
+    originalWidth: 50,
+    originalHeight: 250,
+    width: 50,
+    height: 250,
     speed: getWalkSpeedPlayer(),
     color: 'rgb(0, 100, 0)',
     xPos: '0',
@@ -254,16 +254,7 @@ export function setLanguageChangedFlag(value) {
 }
 
 export function resetAllVariables() {
-    playerObject = {
-        originalWidth: 45,
-        originalHeight: 180,
-        width: 40,
-        height: 160,
-        speed: getWalkSpeedPlayer(),
-        color: 'rgb(0, 100, 0)',
-        xPos: '0',
-        yPos: '0'
-    };
+
 }
 
 export function captureGameStatusForSaving() {
