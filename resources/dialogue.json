@@ -29,6 +29,56 @@
                         }
                     }
                 },
+                "objectDoorLibraryFoyerResearchRoom": {
+                    "use": {
+                        "cantUseYet": {
+                            "en": "The research room is locked.",
+                            "es": "La sala de investigación está cerrada.",
+                            "de": "Der Forschungsraum ist verschlossen.",
+                            "it": "La sala di ricerca è chiusa.",
+                            "fr": "La salle de recherche est verrouillée."
+                        },
+                        "alreadyUsed": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "canUse": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        }
+                    }
+                },
+                "objectDoorLibraryFoyerMarketStreet": {
+                    "use": {
+                        "cantUseYet": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "alreadyUsed": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "canUse": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        }
+                    }
+                },
                 "useWithObject1": {
                     "objectKeyDEBUG": {
                         "en": "Uff, it was a stiff lock, but it's finally opened!",

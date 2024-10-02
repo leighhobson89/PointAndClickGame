@@ -704,6 +704,12 @@ export function setUpObjects() {
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
+    // Step 1: Capture the initial state of gridData before making changes
+    const initialGridData = JSON.parse(JSON.stringify(gridData));
+
+    // Step 2: Capture the second state after initial updates (for comparison)
+    const updatedGridData = JSON.parse(JSON.stringify(gridData));
+
     for (const objectId in objectsData.objects) {
         const object = objectsData.objects[objectId];
         const roomName = object.objectPlacementLocation;
@@ -727,7 +733,11 @@ export function setUpObjects() {
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
                 const originalValue = roomGridData[y][x];
+
+                // Record the original value before making changes
                 setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
+                
+                // Update the grid with new object placement
                 roomGridData[y][x] = `o${objectId}`;
             }
         }
@@ -743,51 +753,52 @@ export function setUpObjects() {
         console.log(`Successfully placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}) with pixel position (${finalX}, ${finalY}).`);
     }
 
-    for (const npcId in npcsData.npcs) {
-        const npc = npcsData.npcs[npcId];
-        const roomName = npc.npcPlacementLocation;
-        const roomGridData = gridData[roomName];
-        
-        if (!roomGridData) {
-            console.warn(`No grid found for room: ${roomName}`);
-            continue;
+    // Step 3: Compare the initial and updated gridData to detect changes and revert
+    for (const roomName in gridData) {
+        const initialRoomGrid = initialGridData[roomName];
+        const finalRoomGrid = gridData[roomName];
+
+        if (!initialRoomGrid || !finalRoomGrid) {
+            continue;  // Skip if there's no grid for this room
         }
 
-        const widthInCells = Math.floor(npc.dimensions.width / cellWidth) + 1;
-        const heightInCells = Math.floor(npc.dimensions.height / cellHeight) + 1;
+        for (let y = 0; y < finalRoomGrid.length; y++) {
+            for (let x = 0; x < finalRoomGrid[y].length; x++) {
+                const initialCellValue = initialRoomGrid[y][x];
+                const finalCellValue = finalRoomGrid[y][x];
 
-        const startX = npc.gridPosition.x;
-        const startY = npc.gridPosition.y;
-
-        // Use proportional offsets (as percentages of cell dimensions)
-        const offsetX = (npc.offset.x || 0) * cellWidth;  // Scaled offset
-        const offsetY = (npc.offset.y || 0) * cellHeight; // Scaled offset
-
-        for (let x = startX; x < startX + widthInCells; x++) {
-            for (let y = startY; y < startY + heightInCells; y++) {
-                const originalValue = roomGridData[y][x];
-                setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, npcId, originalValue);
-
-                roomGridData[y][x] = `c${npcId}`;
+                // Step 4: If there's a difference, check if it was recorded before or reverts
+                if (initialCellValue !== finalCellValue) {
+                    // If the cell has changed for the first time
+                    if (!hasChangeBeenRecorded(roomName, x, y)) {
+                        setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, null, initialCellValue);
+                    } else {
+                        // If the value reverts back, do not overwrite the original change
+                        if (finalCellValue === initialCellValue) {
+                            console.log(`Value reverted at (${x},${y}), keeping original.`);
+                        } else {
+                            console.log(`New change detected at (${x},${y}): ${initialCellValue} -> ${finalCellValue}`);
+                        }
+                    }
+                }
             }
         }
-
-        const finalX = startX * cellWidth + offsetX;
-        const finalY = startY * cellHeight + offsetY;
-
-        npc.visualPosition = {
-            x: finalX,
-            y: finalY
-        };
-
-        console.log("Original Values Npc:");
-        console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
-
-        console.log(`Successfully placed npc ${npcId} in room ${roomName} at grid position (${startX}, ${startY})).`);
     }
+
+    console.log("Updated Original Values:");
+    console.log(getOriginalValueInCellWhereObjectOrNpcPlaced());
 
     console.table(getAllGridData());
 }
+
+// Utility function to check if a change was already recorded
+function hasChangeBeenRecorded(roomName, x, y) {
+    const originalValues = getOriginalValueInCellWhereObjectOrNpcPlaced();
+    const cellKey = `${x},${y}`;
+    return originalValues[roomName] && originalValues[roomName][cellKey];
+}
+
+
 
 
 //-------------------------------------------------------------------------------------------------------------

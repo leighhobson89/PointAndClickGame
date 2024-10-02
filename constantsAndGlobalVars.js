@@ -34,10 +34,10 @@ export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
 export let playerObject = {
-    originalWidth: 50,
-    originalHeight: 250,
-    width: 50,
-    height: 250,
+    originalWidth: 30,
+    originalHeight: 160,
+    width: 30,
+    height: 160,
     speed: getWalkSpeedPlayer(),
     color: 'rgb(0, 100, 0)',
     xPos: '0',
