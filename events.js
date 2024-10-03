@@ -5,16 +5,9 @@ import { setGameState } from "./game.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
-//Open libraryFoyer from debugRoom
-function openLibraryFoyerFromDebugRoom(object, dialogueString) {
-    showText(dialogueString, null, getColorTextPlayer());
-    getNavigationData().debugRoom.exits.e1.status = "open";
-    setObjectData(`objectKeyDEBUG`, `interactable.alreadyUsed`, true);
-}
-
 function unlockResearchRoomDoor(object, dialogueString) {
     showText(dialogueString, null, getColorTextPlayer());
-    const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
+    const objectData = getObjectData().objects.objectDoorResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
     objectData.interactable.alreadyUsed = true; //code it so if you use the key on the door when alreadyUsed is true, you get the global cant use message

@@ -6,6 +6,7 @@ import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateIntera
 
 let currentPath = [];
 let currentPathIndex = 0;
+let isFirstDrawingIteration = true;
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -243,8 +244,6 @@ export function drawGrid() {
     }
 }
 
-let isFirstDraw = true; // Flag to check if it's the first call
-
 export function drawPlayerNpcsAndObjects(ctx) {
     const player = getPlayerObject();
     const npcData = getNpcData().npcs;
@@ -360,13 +359,12 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
-    // Set original values after the first draw with a timeout
-    if (isFirstDraw) {
-        isFirstDraw = false; // Set the flag to false immediately
+    if (isFirstDrawingIteration) {
+        isFirstDrawingIteration = false;
 
-        // Use setTimeout to delay the execution of the loop by 1 second
+        // Use setTimeout to delay the execution of the loop enough for the grid to update
         setTimeout(() => {
-            const originalValues = {}; // Object to hold the original values
+            const originalValues = {};
             
             for (let y = 0; y < gridData.length; y++) {
                 for (let x = 0; x < gridData[y].length; x++) {
@@ -385,12 +383,9 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 }
             }
 
-            // Log the original values object as JSON
-            console.log(JSON.stringify(originalValues, null, 2)); // Pretty-print JSON
-
             compareOriginalValuesAndUpdate();
 
-        }, 1000); // 1000 milliseconds = 1 second
+        }, 50);
     }
 }
 
@@ -661,8 +656,7 @@ export function setUpObjects() {
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    // Store the original state of the grid before making any changes
-    setOriginalGridState(gridData); // Save the grid's current state
+    setOriginalGridState(gridData);
 
     for (const objectId in objectsData.objects) {
         const object = objectsData.objects[objectId];
@@ -674,30 +668,23 @@ export function setUpObjects() {
             continue;
         }
 
-        // Calculate dimensions in cells
         const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
-        // Use offsets
         const offsetX = (object.offset.x || 0) * cellWidth;  
         const offsetY = (object.offset.y || 0) * cellHeight; 
 
-        // Place the object in the grid and record original values
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
                 const originalValue = roomGridData[y][x];
 
-                // Record the original value using the provided function
                 setOriginalValueInCellWhereObjectOrNpcPlaced(roomName, x, y, objectId, originalValue);
-
-                // Update the grid with the new object placement
                 roomGridData[y][x] = `o${objectId}`;
             }
         }
 
-        // Set the visual position of the object
         object.visualPosition = {
             x: startX * cellWidth + offsetX,
             y: startY * cellHeight + offsetY
@@ -705,33 +692,24 @@ export function setUpObjects() {
 
         console.log(`Placed object ${objectId} in room ${roomName} at grid position (${startX}, ${startY}) with visual position (${object.visualPosition.x}, ${object.visualPosition.y}).`);
     }
-
-    // Optionally, output all recorded original values (if needed)
-    const originalValues = getOriginalValueInCellWhereObjectOrNpcPlaced();
-    console.log("Recorded Original Values:");
-    console.log(JSON.stringify(originalValues, null, 2));  // Pretty-print with 2-space indentation
 }
 
 export function compareOriginalValuesAndUpdate() {
-    // Retrieve original values from both sources
+
     const originalValues = getOriginalValueInCellWhereObjectOrNpcPlaced();
     const newOriginalValues = getOriginalValueInCellWhereObjectOrNpcPlacedNew();
     
-    // Retrieve the original grid state to get the correct original values
     const originalGridState = getOriginalGridState(); 
 
     const differences = {};
-
-    // Check for cells that exist in the new values but not in the original
     for (const room in newOriginalValues) {
         if (!originalValues[room]) {
-            originalValues[room] = {}; // Initialize if room doesn't exist in original values
+            originalValues[room] = {};
         }
 
         for (const cell in newOriginalValues[room]) {
             const newValue = newOriginalValues[room][cell];
 
-            // If the original value doesn't exist for this cell, add it
             if (!originalValues[room][cell]) {
                 if (!differences[room]) {
                     differences[room] = {};
@@ -742,35 +720,20 @@ export function compareOriginalValuesAndUpdate() {
                     new: newValue
                 };
 
-                // Convert cell key to x and y
                 const [x, y] = cell.split(',').map(Number); 
-
-                // Retrieve the original value from the original grid state using x and y coordinates
                 const originalCellValue = originalGridState[room][y] && originalGridState[room][y][x] 
                     ? originalGridState[room][y][x] 
                     : null;
 
-                // Update the original values with the new objectId and the original value from the grid state
                 originalValues[room][cell] = {
-                    objectId: newValue.objectId, // Update with the new objectId
-                    originalValue: originalCellValue // Use the original value from the grid state
+                    objectId: newValue.objectId,
+                    originalValue: originalCellValue
                 };
 
-                // Set the original value in the cell where the object or NPC was placed
                 setOriginalValueInCellWhereObjectOrNpcPlaced(room, x, y, newValue.objectId, originalCellValue);
             }
         }
     }
-
-    // Log the differences in a structured JSON format
-    const jsonDifferences = JSON.stringify(differences, null, 2);
-    console.log("Cells added to original values:");
-    console.log(jsonDifferences); // Pretty-print differences
-
-    // Log the updated original values as JSON
-    const jsonOriginalValues = JSON.stringify(originalValues, null, 2);
-    console.log("Updated Original Values:");
-    console.log(jsonOriginalValues); // Pretty-print updated original values
 }
 
 

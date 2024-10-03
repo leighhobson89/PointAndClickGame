@@ -82,14 +82,14 @@
             "e1": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 33, "y": 51 },
-                "finalPosition": { "x": 33, "y": 51 }
+                "startPosition": { "x": 37, "y": 37 },
+                "finalPosition": { "x": 35, "y": 48 }
             },
             "e2": {
                 "connectsTo": "researchRoom",
                 "status": "locked",
-                "startPosition": { "x": 38, "y": 38 },
-                "finalPosition": { "x": 38, "y": 43 }
+                "startPosition": { "x": 34, "y": 50 },
+                "finalPosition": { "x": 38, "y": 43}
             }
         }
     },
@@ -104,8 +104,8 @@
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
-                "startPosition": { "x": 74, "y": 56 },
-                "finalPosition": { "x": 67, "y": 54 }
+                "startPosition": { "x": 45, "y": 56 },
+                "finalPosition": { "x": 43, "y": 48 }
             },
             "e2": {
                 "connectsTo": "seedyGuyAlley",
@@ -138,8 +138,8 @@
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
-                "startPosition": { "x": 65, "y": 50 },
-                "finalPosition": { "x": 60, "y": 54 }
+                "startPosition": { "x": 38, "y": 47 },
+                "finalPosition": { "x": 43, "y": 48 }
             }
         }
     },

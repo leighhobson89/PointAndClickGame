@@ -25,10 +25,9 @@ export function aStarPathfinding(start, target) {
     console.log("Start position:", start);
     console.log("Target position:", target);
 
-    // ** Call the Helper Function to check for objectDoor **
     const redirectedTarget = checkAndRedirectToDoor(target);
     if (redirectedTarget) {
-        target = redirectedTarget;  // Return the new path if redirected
+        target = redirectedTarget;
     }
 
     function heuristic(a, b) {
@@ -92,10 +91,8 @@ export function aStarPathfinding(start, target) {
 
             if (cellType.startsWith('w')) {
                 cellCost *= 1;
-            } else if (cellType.startsWith('e')) {
-                cellCost *= 5;
             } else if (cellType.startsWith('b')) {
-                cellCost *= 10;
+                cellCost *= 2;
             }
 
             const gScore = currentNode.g + cellCost;
@@ -231,37 +228,29 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
 }
 
 function checkAndRedirectToDoor(target) {
-    const gridData = getGridData();  // Fetch grid data directly
-    const cellValue = gridData.gridData[target.y][target.x];  // Access the target cell value directly
+    const gridData = getGridData();
+    const cellValue = gridData.gridData[target.y][target.x];
 
-    // Check if the current target cell value starts with 'o' and includes 'objectDoor'
     if (cellValue.startsWith('o') && cellValue.includes('objectDoor')) {
-        console.log("Found 'objectDoor' at the target location:", target);
 
-        let highestY = -1;  // Initialize the highest Y value found
-        let candidates = [];  // Array to hold candidates with the highest Y
+        let highestY = -1;
+        let candidates = [];
 
-        // Search for all grid references with the same value across the entire grid
         for (let y = 0; y < gridData.gridData.length; y++) {
             for (let x = 0; x < gridData.gridData[y].length; x++) {
                 if (gridData.gridData[y][x] === cellValue) {
-                    console.log(`Found matching 'objectDoor' at (${x}, ${y}).`);
 
-                    // Check if this cell has the highest Y value found
                     if (y > highestY) {
-                        highestY = y;  // Update highest Y
-                        candidates = [{ x, y }];  // Start a new candidates list
+                        highestY = y;
+                        candidates = [{ x, y }];
                     } else if (y === highestY) {
-                        // If Y value matches, add to candidates
                         candidates.push({ x, y });
                     }
                 }
             }
         }
 
-        // If we found candidates with the highest Y value, select one
         if (candidates.length > 0) {
-            // If there's more than one candidate, find the one closest to the middle X
             let middleX = Math.floor(gridData.gridData[0].length / 2);
             let bestCandidate = candidates[0];
             let closestDistance = Math.abs(bestCandidate.x - middleX);
@@ -269,17 +258,16 @@ function checkAndRedirectToDoor(target) {
             for (const candidate of candidates) {
                 let distance = Math.abs(candidate.x - middleX);
                 if (distance < closestDistance) {
-                    closestDistance = distance;  // Update the closest distance
-                    bestCandidate = candidate;    // Update best candidate
+                    closestDistance = distance;
+                    bestCandidate = candidate;
                 }
             }
 
             console.log(`Setting new target to (${bestCandidate.x}, ${bestCandidate.y})`);
-            return bestCandidate;  // Return the best candidate's coordinates
+            return bestCandidate;
         }
     }
 
-    // If no matching door found or condition not met, return null to continue with the original target
     return null;
 }
 

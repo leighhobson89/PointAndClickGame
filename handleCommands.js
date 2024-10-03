@@ -514,8 +514,21 @@ function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
 
 // Handle "Open" action
 export function handleOpen(verb, objectId) {
-    console.log(`Opening object: ${objectId}`);
-    // Add your implementation here
+    //look at objectId and check if canOpen is true
+    //if it is then call use block on it
+    //if it isnt then pass a custom dialogue saying that cannot be opened
+
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    let dialogueString;
+    
+    if (objectData.interactable.canOpen) {
+
+    } else {
+        dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
+        showText(dialogueString, null, getColorTextPlayer());
+    }
 }
 // Handle "Close" action
 

@@ -535,6 +535,13 @@
             }
         },
         "globalMessages": {
+            "itemCannotBeOpened": {
+                "en": "I can't open that!",
+                "es": "¡No puedo abrir eso!",
+                "de": "Ich kann das nicht öffnen!",
+                "it": "Non posso aprire quello!",
+                "fr": "Je ne peux pas ouvrir ça !"
+              },
             "itemCannotBeUsedUntilPickedUp": {
                 "en": "Uhm...I can't use this until I pick it up!",
                 "es": "Ehm...¡no puedo usar esto hasta que lo recoja!",
