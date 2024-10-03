@@ -261,6 +261,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
         for (let x = 0; x < gridData[y].length; x++) {
             const cellValue = gridData[y][x];
 
+            // Draw objects
             if (cellValue.startsWith('o')) {
                 const objectId = cellValue.substring(1);
 
@@ -271,10 +272,11 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 const object = objectsData[objectId];
 
                 if (object && object.objectPlacementLocation === getCurrentScreenId()) {
-                    const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset } = object;
+                    const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset, visualAnimatedStateOffsets } = object;
 
-                    const drawX = visualPosition.x + (offset.x || 0);
-                    const drawY = visualPosition.y + (offset.y || 0);
+                    // Calculate draw positions with offsets
+                    const drawX = visualPosition.x + (offset.x || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.x || 0);
+                    const drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);
 
                     const scaledWidth = (dimensions.width * (cellWidth / baseCellWidth));
                     const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
@@ -302,6 +304,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 }
             }
 
+            // Draw NPCs
             if (cellValue.startsWith('c')) {
                 const npcId = cellValue.substring(1);
 
@@ -331,26 +334,22 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
-    // Player drawing with pixel precision
     const playerXStart = player.xPos;
     const playerYStart = player.yPos;
     const playerWidth = player.width;
     const playerHeight = player.height;
 
-    // Loop through each pixel row and column of the player's bounding box
+    // Draw Player behind objects if necessary, or otherwise in front
     for (let px = 0; px < playerWidth; px++) {
         for (let py = 0; py < playerHeight; py++) {
             const playerPixelX = playerXStart + px;
             const playerPixelY = playerYStart + py;
 
-            // Calculate which grid cell this pixel corresponds to
             const gridX = Math.floor(playerPixelX / cellWidth);
             const gridY = Math.floor(playerPixelY / cellHeight);
 
-            // Check if the grid cell is within bounds and if it's not marked 'b'
             if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
                 if (!gridData[gridY][gridX].startsWith('b')) {
-                    // Draw this pixel if it's not overlapping a 'b' cell
                     ctx.fillStyle = player.color;
                     ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
                 }
@@ -358,6 +357,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
+    //every frame we check to see if the grid objects have moved and then update the grid accordingly
     const originalValues = {};
     
     for (let y = 0; y < gridData.length; y++) {
@@ -379,7 +379,6 @@ export function drawPlayerNpcsAndObjects(ctx) {
 
     compareOriginalValuesAndUpdate();
 }
-
 
 
 export function initializeCanvas() {
@@ -726,10 +725,6 @@ export function compareOriginalValuesAndUpdate() {
         }
     }
 }
-
-
-
-
 
 //-------------------------------------------------------------------------------------------------------------
 

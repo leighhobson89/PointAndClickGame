@@ -16,18 +16,20 @@ function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbU
             if (!objectData.interactable.activeStatus) {
                 setObjectData(doorId, `interactable.activeStatus`, true);
                 //door opening animation in future
-                setObjectData(doorId, `activeSpriteUrl`, objectData.spriteUrl.s2);
+                setObjectData(doorId, `activeSpriteUrl`, 's2');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
+                showText(dialogueString, null, getColorTextPlayer());
             }
             break;
         case 'verbClose':
             if (objectData.interactable.activeStatus) {
                 setObjectData(doorId, `interactable.activeStatus`, false);
                 //door closing animation in future
-                setObjectData(doorId, `activeSpriteUrl`, objectData.spriteUrl.s1);
+                setObjectData(doorId, `activeSpriteUrl`, 's1');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
+                showText(dialogueString, null, getColorTextPlayer());
             }
             break;
     }

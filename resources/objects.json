@@ -38,6 +38,16 @@
                 "s1": "./resources/objects/images/goldKey.png",
                 "s2": "./resources/objects/images/goldKey.png"
             },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
             "inventoryUrl": "./resources/objects/images/goldKey.png",
             "gridPosition": {
                 "x": 39,
@@ -90,6 +100,16 @@
             "spriteUrl": {
                 "s1": "./resources/objects/images/battery.png",
                 "s2": "./resources/objects/images/battery.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
             },
             "inventoryUrl": "./resources/objects/images/battery.png",
             "gridPosition": {
@@ -144,6 +164,16 @@
                 "s1": "./resources/objects/images/machine.png",
                 "s2": "./resources/objects/images/machine.png"
             },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 30,
@@ -196,6 +226,16 @@
             "spriteUrl": {
                 "s1": "./resources/objects/images/banana.png",
                 "s2": "./resources/objects/images/banana.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
             },
             "inventoryUrl": "./resources/objects/images/banana.png",
             "gridPosition": {
@@ -250,6 +290,16 @@
                     "s1": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
                     "s2": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png"
                 },
+                "visualAnimatedStateOffsets": {
+                    "s1": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "s2": {
+                        "x": 0,
+                        "y": 0
+                    }
+                },
                 "inventoryUrl": "",
                 "gridPosition": {
                     "x": 37,
@@ -302,6 +352,16 @@
             "spriteUrl": {
                 "s1": "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
                 "s2": "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 60,
+                    "y": 12
+                }
             },
             "inventoryUrl": "",
             "gridPosition": {

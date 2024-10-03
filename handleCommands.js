@@ -408,10 +408,8 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
-    const localizationData = getLocalization()[language];
-
     let object2;
-    
+
     if (objectId2) {
         object2 = objectData.objects[objectId2];
     }
@@ -523,10 +521,6 @@ function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
 
 // Handle "Open" action
 export function handleOpen(verb, objectId) {
-    //look at objectId and check if canOpen is true
-    //if it is then call use block on it
-    //if it isnt then pass a custom dialogue saying that cannot be opened
-
     const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
@@ -539,14 +533,23 @@ export function handleOpen(verb, objectId) {
         showText(dialogueString, null, getColorTextPlayer());
     }
 }
+
 // Handle "Close" action
-
 export function handleClose(verb, objectId) {
-    console.log(`Closing object: ${objectId}`);
-    // Add your implementation here
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    let dialogueString;
+    
+    if (objectData.interactable.canOpen) {
+        handleUse(objectId, null, null, null, false, 1, true, verb);
+    } else {
+        dialogueString = dialogueData.globalMessages.itemCannotBeClosed[language];
+        showText(dialogueString, null, getColorTextPlayer());
+    }
 }
-// Handle "Push" action
 
+// Handle "Push" action
 export function handlePush(verb, objectId) {
     console.log(`Pushing object: ${objectId}`);
     // Add your implementation here
