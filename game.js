@@ -6,7 +6,6 @@ import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateIntera
 
 let currentPath = [];
 let currentPathIndex = 0;
-let isFirstDrawingIteration = true;
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -359,34 +358,26 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
-    if (isFirstDrawingIteration) {
-        isFirstDrawingIteration = false;
+    const originalValues = {};
+    
+    for (let y = 0; y < gridData.length; y++) {
+        for (let x = 0; x < gridData[y].length; x++) {
+            const cellValue = gridData[y][x];
+            // Record original values for occupied cells
+            if (cellValue.startsWith('o') || cellValue.startsWith('c')) {
+                const objectId = cellValue.substring(1);
+                setOriginalValueInCellWhereObjectOrNpcPlacedNew(getCurrentScreenId(), x, y, objectId, cellValue);
 
-        // Use setTimeout to delay the execution of the loop enough for the grid to update
-        setTimeout(() => {
-            const originalValues = {};
-            
-            for (let y = 0; y < gridData.length; y++) {
-                for (let x = 0; x < gridData[y].length; x++) {
-                    const cellValue = gridData[y][x];
-                    // Record original values for occupied cells
-                    if (cellValue.startsWith('o') || cellValue.startsWith('c')) {
-                        const objectId = cellValue.substring(1);
-                        setOriginalValueInCellWhereObjectOrNpcPlacedNew(getCurrentScreenId(), x, y, objectId, cellValue);
-
-                        // Store original values in the JSON object
-                        if (!originalValues[getCurrentScreenId()]) {
-                            originalValues[getCurrentScreenId()] = {};
-                        }
-                        originalValues[getCurrentScreenId()][`${x},${y}`] = { objectId, originalValue: cellValue };
-                    }
+                // Store original values in the JSON object
+                if (!originalValues[getCurrentScreenId()]) {
+                    originalValues[getCurrentScreenId()] = {};
                 }
+                originalValues[getCurrentScreenId()][`${x},${y}`] = { objectId, originalValue: cellValue };
             }
-
-            compareOriginalValuesAndUpdate();
-
-        }, 50);
+        }
     }
+
+    compareOriginalValuesAndUpdate();
 }
 
 
