@@ -376,27 +376,21 @@ export function handleMouseMove(event, ctx) {
         if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
             const screenObjectOrNpcName = returnHoveredInterestingObjectOrExitName(cellValue);
             
-            // Check if the new hovered item is different from the already hovered item
             if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
                 console.log(interactionText);
                 console.log(interactionText + " " + screenObjectOrNpcName);
-        
-                // Remove the old one from interactionText
+
                 const oldItem = getSecondItemAlreadyHovered();
+
                 if (interactionText.includes(oldItem)) {
-                    // Find the position of the old item in the interactionText
                     const index = interactionText.indexOf(oldItem);
-                    // Remove the old item and everything after it
                     interactionText = interactionText.substring(0, index);
                 }
-        
-                // Update interaction text with the new item
+
                 updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
-                // Set the new hovered item
                 setSecondItemAlreadyHovered(screenObjectOrNpcName);
             }
         }
-        
 
         if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
             const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
