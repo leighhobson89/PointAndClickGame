@@ -612,7 +612,21 @@
                 "de": "Diese Tür ist bereits entriegelt!",
                 "it": "Questa porta è già sbloccata!",
                 "fr": "Cette porte est déjà déverrouillée!"
-            }           
+            },   
+            "alreadyOpen": {
+                "en": "It's already open!",
+                "es": "¡Ya está abierta!",
+                "de": "Es ist bereits offen!",
+                "it": "È già aperta!",
+                "fr": "C'est déjà ouvert!"
+            },
+            "alreadyClosed": {
+                "en": "It's already closed!",
+                "es": "¡Ya está cerrada!",
+                "de": "Es ist bereits geschlossen!",
+                "it": "È già chiusa!",
+                "fr": "C'est déjà fermé!"
+            }         
         }
     }
 }

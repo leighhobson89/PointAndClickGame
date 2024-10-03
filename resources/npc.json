@@ -27,7 +27,11 @@
             "patrolPath": ""
         },
         "npcPlacementLocation": "debugRoom",
-        "spriteUrl": "./resources/npcs/monkey.png",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+            "s1": "./resources/npcs/monkey.png",
+            "s2": "./resources/npcs/monkey.png"
+        },
         "gridPosition": {
             "x": 20,
             "y": 30

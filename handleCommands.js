@@ -418,21 +418,15 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
 
     const objectEvent1 = getObjectEvents(objectId1);
 
-    let dialogueString;
+    let dialogueString = "";
 
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
+            executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
         } else if (object1.interactable.alreadyUsed) { //also can be an UNLOCKED door in any state of open/closed
-            if (object1.interactable.activeStatus && object1.interactable.canOpen) { //unlocked door/container OPEN state
-                if (realVerbUsed === 'verbClose'){
-                    console.log("Closing Door");
-                }
-            } else if (!object1.interactable.activeStatus && object1.interactable.canOpen) { // unlocked door/container CLOSED state
-                if (realVerbUsed === 'verbopen'){
-                    console.log ("Opening Door...");
-                }
+            if (object1.interactable.canOpen && objectId1.includes('objectDoor')) { //unlocked door/container OPEN/CLOSED state
+                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
             }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
             await showText(dialogueString, null, getColorTextPlayer());
@@ -453,7 +447,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
+                    executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
                     await showText(dialogueString, null, getColorTextPlayer());
@@ -468,7 +462,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
+                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
                 showText(dialogueString, null, getColorTextPlayer());

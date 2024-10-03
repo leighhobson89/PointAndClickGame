@@ -606,7 +606,7 @@ export function drawInventory(startIndex) {
                 div.innerHTML += numberSpan;
             }
         } else {
-            div.innerHTML = `<img src="./resources/objects/blank.png" alt="empty" class="inventory-img" />`;
+            div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img" />`;
             div.classList.remove('show-triangle');
         }
     });

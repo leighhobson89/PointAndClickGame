@@ -2,8 +2,8 @@
     "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
     "generalComments2": "usedOn.objectUseWith1 can be another object or the screenId that an exit leads to",
     "generalComments3": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
-    "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is open, and this should always match the status field in the navigation screen for the exit",
-    "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked.",
+    "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is unlocked, and this should always match the status field in the navigation screen for the exit",
+    "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked. true is open, false is closed",
     "objects": {
         "objectKeyDEBUG": {
             "name": {
@@ -33,8 +33,12 @@
                 "useTogetherLocation": "libraryFoyer"
             },
             "objectPlacementLocation": "libraryFoyer",
-            "spriteUrl": "./resources/objects/goldKey.png",
-            "inventoryUrl": "./resources/objects/goldKey.png",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/goldKey.png",
+                "s2": "./resources/objects/images/goldKey.png"
+            },
+            "inventoryUrl": "./resources/objects/images/goldKey.png",
             "gridPosition": {
                 "x": 39,
                 "y": 49
@@ -82,8 +86,12 @@
                 "useTogetherLocation": "debugRoom"
             },
             "objectPlacementLocation": "debugRoom",
-            "spriteUrl": "./resources/objects/battery.png",
-            "inventoryUrl": "./resources/objects/battery.png",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/battery.png",
+                "s2": "./resources/objects/images/battery.png"
+            },
+            "inventoryUrl": "./resources/objects/images/battery.png",
             "gridPosition": {
                 "x": 20,
                 "y": 15
@@ -131,7 +139,11 @@
                 "useTogetherLocation": ""
             },
             "objectPlacementLocation": "debugRoom",
-            "spriteUrl": "./resources/objects/machine.png",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/machine.png",
+                "s2": "./resources/objects/images/machine.png"
+            },
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 30,
@@ -180,8 +192,12 @@
                 "useTogetherLocation": "npcMonkeyDEBUG"
             },
             "objectPlacementLocation": "debugRoom",
-            "spriteUrl": "./resources/objects/banana.png",
-            "inventoryUrl": "./resources/objects/banana.png",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/banana.png",
+                "s2": "./resources/objects/images/banana.png"
+            },
+            "inventoryUrl": "./resources/objects/images/banana.png",
             "gridPosition": {
                 "x": 40,
                 "y": 15
@@ -229,7 +245,11 @@
                     "useTogetherLocation": "libraryFoyer"
                 },
                 "objectPlacementLocation": "libraryFoyer",
-                "spriteUrl": "./resources/objects/images/libraryFoyer_Exit_ResearchRoom.png",
+                "activeSpriteUrl": "s1",
+                "spriteUrl": {
+                    "s1": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
+                    "s2": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png"
+                },
                 "inventoryUrl": "",
                 "gridPosition": {
                     "x": 37,
@@ -278,7 +298,11 @@
                 "useTogetherLocation": ""
             },
             "objectPlacementLocation": "libraryFoyer",
-            "spriteUrl": "./resources/objects/images/libraryFoyer_Exit_MarketStreet.png",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
+                "s2": "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png"
+            },
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 49,

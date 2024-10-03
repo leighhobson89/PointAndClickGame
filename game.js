@@ -272,7 +272,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 const object = objectsData[objectId];
 
                 if (object && object.objectPlacementLocation === getCurrentScreenId()) {
-                    const { visualPosition, dimensions, spriteUrl, offset } = object;
+                    const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset } = object;
 
                     const drawX = visualPosition.x + (offset.x || 0);
                     const drawY = visualPosition.y + (offset.y || 0);
@@ -281,7 +281,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
 
                     const img = new Image();
-                    img.src = spriteUrl;
+                    img.src = spriteUrl[activeSpriteUrl];
 
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
 
@@ -313,7 +313,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 const npc = npcData[npcId];
 
                 if (npc && npc.npcPlacementLocation === getCurrentScreenId()) {
-                    const { visualPosition, dimensions, spriteUrl, offset } = npc;
+                    const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset } = npc;
 
                     const drawX = visualPosition.x + (offset.x || 0);
                     const drawY = visualPosition.y + (offset.y || 0);
@@ -322,7 +322,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
 
                     const img = new Image();
-                    img.src = spriteUrl;
+                    img.src = spriteUrl[activeSpriteUrl];
 
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
 
