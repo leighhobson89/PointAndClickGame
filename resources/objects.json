@@ -62,6 +62,7 @@
                 "fr": "Batterie"
             },
             "interactable": {
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true,
@@ -110,6 +111,7 @@
                 "fr": "Machine"
             },
             "interactable": {
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
@@ -158,6 +160,7 @@
                 "fr": "Banane"
             },
             "interactable": {
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -206,6 +209,7 @@
                     "fr": "Porte en bois"
                 },
                 "interactable": {
+                    "canOpen": true,
                     "canPickUp": false,
                     "canUse": true,
                     "canUseWith": false, 
@@ -254,6 +258,7 @@
                 "fr": "Porte de Sortie de la Bibliothèque"
             },
             "interactable": {
+                "canOpen": true,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
