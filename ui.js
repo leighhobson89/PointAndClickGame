@@ -336,7 +336,7 @@ export function handleMouseMove(event, ctx) {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
     const gridData = getGridData();
-    const interactionText = getElements().interactionInfo.textContent;
+    let interactionText = getElements().interactionInfo.textContent;
 
     const hoverX = Math.floor(mouseX / getCanvasCellWidth());
     const hoverY = Math.floor(mouseY / getCanvasCellHeight());

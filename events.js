@@ -5,22 +5,27 @@ import { setGameState } from "./game.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
-function unlockResearchRoomDoor(object, dialogueString) {
+//any door that is unlocked will be closed or opened
+function openCloseGenericUnlockedDoor(object, dialogueString, realVerbUsed) {
+
+}
+
+function unlockResearchRoomDoor(object, dialogueString, realVerbUsed) {
     showText(dialogueString, null, getColorTextPlayer());
-    const objectData = getObjectData().objects.objectDoorResearchRoom;
+    const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
     objectData.interactable.alreadyUsed = true; //code it so if you use the key on the door when alreadyUsed is true, you get the global cant use message
 }
 
 //Use objectBatteryDEBUG to activate objectMachineDEBUG
-function useBatteryDEBUGOnMachineDEBUG(object, dialogueString) {
+function useBatteryDEBUGOnMachineDEBUG(object, dialogueString, realVerbUsed) {
     showText(dialogueString, null, getColorTextPlayer());
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, true);
 }
 
 //Use objectMachineDEBUG to get objectBananaDEBUG
-function machineDEBUGActivate(object, dialogueString) {
+function machineDEBUGActivate(object, dialogueString, realVerbUsed) {
     showText(dialogueString, null, getColorTextPlayer());
     addItemToInventory("objectBananaDEBUG", 3);
     drawInventory(0);
@@ -31,7 +36,7 @@ function machineDEBUGActivate(object, dialogueString) {
 //Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player a objectBatteryDEBUG
 
 // Main function with refactored code
-async function giveMonkeyBanana(object, dialogueString) {
+async function giveMonkeyBanana(object, dialogueString, realVerbUsed) {
     const language = getLanguage();
     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
     const questPhase = npcData.interactable.questPhase;
@@ -107,7 +112,7 @@ function getTextColor(speaker, npcColor) {
 
 // Executor function
 
-export function executeObjectEvent(objectEvent, dialogueString) {
+export function executeObjectEvent(objectEvent, dialogueString, realVerbUsed) {
     // Ensure dialogueString is properly formatted for eval calls
     const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`; // Escape single quotes in dialogueString
     
@@ -115,9 +120,9 @@ export function executeObjectEvent(objectEvent, dialogueString) {
     if (objectEvent.actionUse1) {
         try {
             if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString})`); // Pass objectUse and dialogue as argument
+                eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}')`); // Pass objectUse, dialogue, and realVerbUsed as arguments
             } else {
-                eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString})`); // Call without objectUse argument
+                eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}')`); // Call without objectUse argument
             }
         } catch (e) {
             console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
@@ -128,9 +133,9 @@ export function executeObjectEvent(objectEvent, dialogueString) {
     if (objectEvent.actionUse2) {
         try {
             if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString})`); // Pass objectUse and dialogue as argument
+                eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}')`); // Pass objectUse, dialogue, and realVerbUsed as arguments
             } else {
-                eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString})`);
+                eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}')`);
             }
         } catch (e) {
             console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
@@ -141,9 +146,9 @@ export function executeObjectEvent(objectEvent, dialogueString) {
     if (objectEvent.actionUseWith11) {
         try {
             if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString})`); // Pass objectUseWith1 and dialogue as argument
+                eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}')`); // Pass objectUseWith1, dialogue, and realVerbUsed as arguments
             } else {
-                eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString})`);
+                eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}')`);
             }
         } catch (e) {
             console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
@@ -154,14 +159,15 @@ export function executeObjectEvent(objectEvent, dialogueString) {
     if (objectEvent.actionUseWith12) {
         try {
             if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString})`); // Pass objectUseWith1 and dialogue as argument
+                eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}')`); // Pass objectUseWith1, dialogue, and realVerbUsed as arguments
             } else {
-                eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString})`);
+                eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}')`);
             }
         } catch (e) {
             console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
         }
     }
 }
+
 
 

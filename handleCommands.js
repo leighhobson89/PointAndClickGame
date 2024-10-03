@@ -265,7 +265,7 @@ function handleCannotPickUpMessage(language, dialogueData) {
 }
 
 // BREAKS IF USER MOVES MOUSE OFF OBJECT WHILE MOVING TOWARDS OBJECT TWO
-export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1, isObjectTrueNpcFalse) {
+export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity = 1, isObjectTrueNpcFalse, realVerbUsed) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const useWith = checkIfItemCanBeUsedWith(objectId1, isObjectTrueNpcFalse, true);
@@ -285,7 +285,7 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
             //trigger TALK TO code TODO
             return;
         }
-        useItem(objectId1, null, useWith, null, null, null); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+        useItem(objectId1, null, useWith, null, null, null, realVerbUsed); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
     } else if (!getWaitingForSecondItem()) {
         setWaitingForSecondItem(true);
         setObjectToBeUsedWithSecondItem(objectId1);
@@ -348,7 +348,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
                 handleInventoryAdjustment(objectId2, quantity);
             }
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -363,7 +363,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("4: using object with environment object - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -378,7 +378,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("6: using object on exit - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
@@ -392,7 +392,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         console.log("8: using two inventory items where location is important and location is correct - PASSED");
         handleInventoryAdjustment(objectId1, quantity);
         drawInventory(0);
-        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse);
+        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
         return;
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -403,12 +403,16 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
 }
 
 
-export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse) { //function uses all items, use or use with
+export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, realVerbUsed) { //function uses all items, use or use with
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
-    const object2 = objectData.objects[objectId2];
+    let object2;
+    
+    if (objectId2) {
+        object2 = objectData.objects[objectId2];
+    }
 
     const objectEvent1 = getObjectEvents(objectId1);
 
@@ -417,7 +421,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            executeObjectEvent(objectEvent1, dialogueString);
+            executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
         } else if (object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
             await showText(dialogueString, null, getColorTextPlayer());
@@ -438,7 +442,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    executeObjectEvent(objectEvent1, dialogueString);
+                    executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
                     await showText(dialogueString, null, getColorTextPlayer());
@@ -453,7 +457,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                executeObjectEvent(objectEvent1, dialogueString);
+                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
                 showText(dialogueString, null, getColorTextPlayer());
@@ -524,7 +528,7 @@ export function handleOpen(verb, objectId) {
     let dialogueString;
     
     if (objectData.interactable.canOpen) {
-
+        handleUse(objectId, null, null, null, false, 1, true);
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
         showText(dialogueString, null, getColorTextPlayer());
