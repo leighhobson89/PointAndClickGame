@@ -68,6 +68,8 @@ let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
 let originalValueInCellWhereObjectOrNpcPlaced = {};
+let originalValueInCellWhereObjectOrNpcPlacedNew = {};
+let originalGridState = {};
 let currentStartIndexInventory = 0;
 let displayText = {};
 let objectToBeUsedWithSecondItem = null;
@@ -568,6 +570,21 @@ export function setOriginalValueInCellWhereObjectOrNpcPlaced(roomId, gridX, grid
     };
 }
 
+export function getOriginalValueInCellWhereObjectOrNpcPlacedNew() {
+    return originalValueInCellWhereObjectOrNpcPlacedNew;
+}
+
+export function setOriginalValueInCellWhereObjectOrNpcPlacedNew(roomId, gridX, gridY, objectId, originalValue) {
+    if (!originalValueInCellWhereObjectOrNpcPlacedNew[roomId]) {
+        originalValueInCellWhereObjectOrNpcPlacedNew[roomId] = {};
+    }
+    const cellKey = `${gridX},${gridY}`;
+    originalValueInCellWhereObjectOrNpcPlacedNew[roomId][cellKey] = {
+        objectId: objectId,
+        originalValue: originalValue,
+    };
+}
+
 export function setPlayerInventory(value) {
     playerInventory = value;
 }
@@ -678,4 +695,12 @@ export function setObjectOriginalValueUpdatedYet(value) {
 
 export function getObjectOriginalValueUpdatedYet() {
     return objectOriginalValueUpdatedYet;
+}
+
+export function setOriginalGridState(value) {
+    originalGridState = JSON.parse(JSON.stringify(value));
+}
+
+export function getOriginalGridState() {
+    return JSON.parse(JSON.stringify(originalGridState)); // Return a new deep copy
 }
