@@ -125,7 +125,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
-            pickUpItem(objectId, quantity);
+            pickUpItem(objectId, quantity, verb);
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
@@ -135,13 +135,13 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
     handleCannotPickUpMessage(language, dialogueData);
 }
 
-function pickUpItem(objectId, quantity) {
+function pickUpItem(objectId, quantity, verb) {
     removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);
-    triggerEvent(objectId, "verbPickUp");
+    triggerEvent(objectId, verb);
 }
 
 function removeObjectFromEnvironment(objectId) {
@@ -408,6 +408,8 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     const dialogueData = getDialogueData();
     const language = getLanguage();
     const object1 = objectData.objects[objectId1];
+    const localizationData = getLocalization()[language];
+
     let object2;
     
     if (objectId2) {
@@ -422,10 +424,19 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
             executeObjectEvent(objectEvent1, dialogueString, realVerbUsed);
-        } else if (object1.interactable.alreadyUsed) {
+        } else if (object1.interactable.alreadyUsed) { //also can be an UNLOCKED door in any state of open/closed
+            if (object1.interactable.activeStatus && object1.interactable.canOpen) { //unlocked door/container OPEN state
+                if (realVerbUsed === 'verbClose'){
+                    console.log("Closing Door");
+                }
+            } else if (!object1.interactable.activeStatus && object1.interactable.canOpen) { // unlocked door/container CLOSED state
+                if (realVerbUsed === 'verbopen'){
+                    console.log ("Opening Door...");
+                }
+            }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
             await showText(dialogueString, null, getColorTextPlayer());
-        } else {
+        } else { // also can be LOCKED door
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
             await showText(dialogueString, null, getColorTextPlayer());
         }
@@ -528,7 +539,7 @@ export function handleOpen(verb, objectId) {
     let dialogueString;
     
     if (objectData.interactable.canOpen) {
-        handleUse(objectId, null, null, null, false, 1, true);
+        handleUse(objectId, null, null, null, false, 1, true, verb);
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
         showText(dialogueString, null, getColorTextPlayer());
@@ -565,7 +576,7 @@ export function handleGive(verb, objectId) {
     // Add your implementation here
 }
 
-export function parseCommand(userCommand) {
+export function constructCommand(userCommand) {
     const objectData = getObjectData().objects;
     const npcData = getNpcData().npcs;
     const language = getLanguage();

@@ -2,7 +2,7 @@ import { setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGa
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
-import { parseCommand, performCommand } from './handleCommands.js'
+import { constructCommand, performCommand } from './handleCommands.js'
 
 let textTimer; 
 
@@ -269,7 +269,7 @@ inventoryItems.some(function(item) {
             setUpcomingAction(interactionText);
         }
 
-        const command = parseCommand(getUpcomingAction());
+        const command = constructCommand(getUpcomingAction());
         console.log("command to perform: " + command);
         performCommand(command, true);
     });

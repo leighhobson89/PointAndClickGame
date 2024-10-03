@@ -1,7 +1,7 @@
 import { getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectOrNpcPlacedNew, setOriginalValueInCellWhereObjectOrNpcPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { performCommand, parseCommand } from './handleCommands.js';
+import { performCommand, constructCommand } from './handleCommands.js';
 import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
 
 let currentPath = [];
@@ -119,7 +119,7 @@ function movePlayerTowardsTarget() {
             console.log("upcoming action: " + getUpcomingAction());
             console.log("verb conbstruciton status: " + getVerbButtonConstructionStatus());
 
-            const commandToPerform = parseCommand(getUpcomingAction());
+            const commandToPerform = constructCommand(getUpcomingAction());
             console.log("command: " + commandToPerform);
             performCommand(commandToPerform, false); //we presume neither are inventory item if player moves // CHECK IF BUGS
 

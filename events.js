@@ -7,7 +7,7 @@ import { setGameState } from "./game.js";
 
 //any door that is unlocked will be closed or opened
 function openCloseGenericUnlockedDoor(object, dialogueString, realVerbUsed) {
-
+    
 }
 
 function unlockResearchRoomDoor(object, dialogueString, realVerbUsed) {
