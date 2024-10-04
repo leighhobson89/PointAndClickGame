@@ -67,10 +67,13 @@ let nextScreenId = INITIAL_SCREEN_ID;
 let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
-let originalValueInCellWhereObjectOrNpcPlaced = {};
-let originalValueInCellWhereObjectOrNpcPlacedNew = {};
+let originalValueInCellWhereObjectPlaced = {};
+let originalValueInCellWhereNpcPlaced = {};
+let originalValueInCellWhereObjectPlacedNew = {};
+let originalValueInCellWhereNpcPlacedNew = {};
 let originalGridState = {};
 let resizedObjectsGridState = {};
+let resizedNpcsGridState = {};
 let preAnimationGridState = {};
 let currentStartIndexInventory = 0;
 let displayText = {};
@@ -558,32 +561,62 @@ export function getUpcomingAction() {
     return upcomingAction;
 }
 
-export function getOriginalValueInCellWhereObjectOrNpcPlaced() {
-    return originalValueInCellWhereObjectOrNpcPlaced;
+export function getOriginalValueInCellWhereObjectPlaced() {
+    return originalValueInCellWhereObjectPlaced;
 }
 
-export function setOriginalValueInCellWhereObjectOrNpcPlaced(roomId, gridX, gridY, objectId, originalValue) {
-    if (!originalValueInCellWhereObjectOrNpcPlaced[roomId]) {
-        originalValueInCellWhereObjectOrNpcPlaced[roomId] = {};
+export function setOriginalValueInCellWhereObjectPlaced(roomId, gridX, gridY, objectId, originalValue) {
+    if (!originalValueInCellWhereObjectPlaced[roomId]) {
+        originalValueInCellWhereObjectPlaced[roomId] = {};
     }
     const cellKey = `${gridX},${gridY}`;
-    originalValueInCellWhereObjectOrNpcPlaced[roomId][cellKey] = {
+    originalValueInCellWhereObjectPlaced[roomId][cellKey] = {
         objectId: objectId,
         originalValue: originalValue,
     };
 }
 
-export function getOriginalValueInCellWhereObjectOrNpcPlacedNew() {
-    return originalValueInCellWhereObjectOrNpcPlacedNew;
+export function getOriginalValueInCellWhereNpcPlaced() {
+    return originalValueInCellWhereNpcPlaced;
 }
 
-export function setOriginalValueInCellWhereObjectOrNpcPlacedNew(roomId, gridX, gridY, objectId, originalValue) {
-    if (!originalValueInCellWhereObjectOrNpcPlacedNew[roomId]) {
-        originalValueInCellWhereObjectOrNpcPlacedNew[roomId] = {};
+export function setOriginalValueInCellWhereNpcPlaced(roomId, gridX, gridY, npcId, originalValue) {
+    if (!originalValueInCellWhereNpcPlaced[roomId]) {
+        originalValueInCellWhereNpcPlaced[roomId] = {};
     }
     const cellKey = `${gridX},${gridY}`;
-    originalValueInCellWhereObjectOrNpcPlacedNew[roomId][cellKey] = {
+    originalValueInCellWhereNpcPlaced[roomId][cellKey] = {
+        npcId: npcId,
+        originalValue: originalValue,
+    };
+}
+
+export function getOriginalValueInCellWhereObjectPlacedNew() {
+    return originalValueInCellWhereObjectPlacedNew;
+}
+
+export function setOriginalValueInCellWhereObjectPlacedNew(roomId, gridX, gridY, objectId, originalValue) {
+    if (!originalValueInCellWhereObjectPlacedNew[roomId]) {
+        originalValueInCellWhereObjectPlacedNew[roomId] = {};
+    }
+    const cellKey = `${gridX},${gridY}`;
+    originalValueInCellWhereObjectPlacedNew[roomId][cellKey] = {
         objectId: objectId,
+        originalValue: originalValue,
+    };
+}
+
+export function getOriginalValueInCellWhereNpcPlacedNew() {
+    return originalValueInCellWhereNpcPlacedNew;
+}
+
+export function setOriginalValueInCellWhereNpcPlacedNew(roomId, gridX, gridY, npcId, originalValue) {
+    if (!originalValueInCellWhereNpcPlacedNew[roomId]) {
+        originalValueInCellWhereNpcPlacedNew[roomId] = {};
+    }
+    const cellKey = `${gridX},${gridY}`;
+    originalValueInCellWhereNpcPlacedNew[roomId][cellKey] = {
+        npcId: npcId,
         originalValue: originalValue,
     };
 }
@@ -716,7 +749,13 @@ export function getResizedObjectsGridState() {
     return JSON.parse(JSON.stringify(resizedObjectsGridState)); // Return a new deep copy
 }
 
-setResizedObjectsGridState
+export function setResizedNpcsGridState(value) {
+    resizedNpcsGridState = JSON.parse(JSON.stringify(value));
+}
+
+export function getResizedNpcsGridState() {
+    return JSON.parse(JSON.stringify(resizedNpcsGridState)); // Return a new deep copy
+}
 
 export function setPreAnimationGridState(gridState, objectId, oldState, newState) {
     preAnimationGridState = {

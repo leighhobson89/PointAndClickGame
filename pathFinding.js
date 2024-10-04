@@ -1,6 +1,6 @@
 import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
-export function aStarPathfinding(start, target) {
+export function aStarPathfinding(start, target, action) {
     console.log("transitioning now: " + getTransitioningNow());
 
     const gridData = getGridData();  // Fetch grid data directly
@@ -17,7 +17,7 @@ export function aStarPathfinding(start, target) {
 
     start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
     start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
- 
+
     const openList = [];
     const closedList = [];
     const path = [];
@@ -51,6 +51,20 @@ export function aStarPathfinding(start, target) {
     while (openList.length > 0) {
         openList.sort((a, b) => a.f - b.f);
         const currentNode = openList.shift();
+
+        const distanceToTarget = heuristic(currentNode, target);
+
+        if (action === "Talk To" || action === "Give") { //special cases where npc inaccesible due to scenery not being walkable
+            if (distanceToTarget <= 13) {
+                let temp = currentNode;
+                while (temp) {
+                    path.push({ x: temp.x, y: temp.y });
+                    temp = temp.parent;
+                }
+    
+                return path.reverse();
+            }
+        }
 
         if (currentNode.x === target.x && currentNode.y === target.y) {
             let temp = currentNode;
@@ -123,7 +137,8 @@ export function aStarPathfinding(start, target) {
     if (getLookingForAlternativePathToNearestWalkable()) {
         const nearestPath = aStarPathfinding(
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
-            { x: nearestWalkableCell.x, y: nearestWalkableCell.y }
+            { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
+            action
         );
         console.log("No path found, so walking to " + nearestWalkableCell);
         setLookingForAlternativePathToNearestWalkable(false);
@@ -132,6 +147,7 @@ export function aStarPathfinding(start, target) {
 
     return [];
 }
+
 
 
 export function findAndMoveToNearestWalkable(start, target, teleport) {
@@ -167,11 +183,11 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
     const queue = [{ x: targetX, y: targetY }];
     
     let iterations = 0;
-    const maxIterations = 1000;
+    const maxIterations = 5000;
 
     while (queue.length > 0) {
         if (iterations >= maxIterations) {
-            console.error("Search timed out after checking 1000 cells.");
+            console.error("Search timed out after checking " + maxIterations + " cells.");
             return null;
         }
         

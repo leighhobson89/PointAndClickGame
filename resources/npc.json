@@ -5,50 +5,95 @@
     "generalComments4": "dialoguePhase is the current dialogue phase ie if it is 0 and you talk to the monkey, you will hear that the monkey is hungry, then 1 will be here take the battery, and 2 just chatter",
 
     "npcs": {
-    "npcMonkeyDEBUG": {
-        "name": {
-            "en": "Monkey",
-            "es": "Mono",
-            "de": "Affe",
-            "it": "Scimmia",
-            "fr": "Singe"
+        "npcMonkeyDEBUG": {
+            "name": {
+                "en": "Monkey",
+                "es": "Mono",
+                "de": "Affe",
+                "it": "Scimmia",
+                "fr": "Singe"
+            },
+            "interactable": {
+                "canTalk": true,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "canUseWith": true
+            },
+            "usedOn": {
+                "useTogetherLocation": "objectBananaDEBUG"
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/monkey.png",
+                "s2": "./resources/npcs/monkey.png"
+            },
+            "gridPosition": {
+                "x": 20,
+                "y": 30
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 50
+            },
+            "comment": "When objectBananaDEBUG is used or given to Monkey, it speaks and gives player 10 objectBatteryDEBUG"
         },
-        "interactable": {
-            "canTalk": true,
-            "dialoguePhase": 0,
-            "questPhase": 0,
-            "canUseWith": true
-        },
-        "usedOn": {
-            "useTogetherLocation": "objectBananaDEBUG"
-        },
-        "behavior": {
-            "movesAround": false,
-            "patrolPath": ""
-        },
-        "npcPlacementLocation": "debugRoom",
-        "activeSpriteUrl": "s1",
-        "spriteUrl": {
-            "s1": "./resources/npcs/monkey.png",
-            "s2": "./resources/npcs/monkey.png"
-        },
-        "gridPosition": {
-            "x": 20,
-            "y": 30
-        },
-        "offset": {
-            "x": 0,
-            "y": 0
-        },
-        "visualPosition": {
-            "x": 0,
-            "y": 0
-        },
-        "dimensions": {
-            "width": 50,
-            "height": 50
-        },
-        "comment": "When objectBananaDEBUG is used or given to Monkey, it speaks and gives player 10 objectBatteryDEBUG"
-    }
+        "npcLibrarian": {
+            "name": {
+                "en": "Librarian",
+                "es": "Bibliotecaria",
+                "de": "Bibliothekarin",
+                "it": "Bibliotecaria",
+                "fr": "Bibliothécaire"
+            },
+            "interactable": {
+                "canTalk": true,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "canUseWith": true
+            },
+            "usedOn": {
+                "useTogetherLocation": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/librarian.png",
+                "s2": "./resources/npcs/librarian.png"
+            },
+            "gridPosition": {
+                "x": 17,
+                "y": 35
+            },
+            "offset": {
+                "x": 1.7,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 35,
+                "height": 50
+            },
+            "comment": "Librarian"
+        }
     }
 }
