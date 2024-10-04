@@ -90,7 +90,7 @@ async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, s
             const speaker = dialogueSpeakers[dialogueIndex];
 
             const { xPos, yPos } = getTextPosition(speaker, npcData);
-            const textColor = getTextColor(speaker, 'yellow');
+            const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
 
             showText(dialogueText, () => {
                 if (npcData.interactable.questPhase === 0) {

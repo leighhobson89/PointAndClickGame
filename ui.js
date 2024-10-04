@@ -618,11 +618,6 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
 
-    ctx.font = '1.8em monospace';
-    ctx.fillStyle = color;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-
     const maxWidth = getMaxTexTDisplayWidth();
     const lineHeight = parseFloat(ctx.font) * 1.2;
 
@@ -656,7 +651,7 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
 
     // Handle text wrapping and drawing
     const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
-    drawWrappedText(lines, ctx, xPos, yPos, lineHeight);
+    drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
 }
 
 
@@ -689,11 +684,22 @@ function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
     return lines; 
 }
 
-function drawWrappedText(lines, context, x, startY, lineHeight) {
+function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
     let adjustedY = startY - (lines.length * lineHeight);
     lines.forEach(line => {
-        context.fillText(line, x, adjustedY);
-        context.strokeText(line, x, adjustedY);
+        ctx.font = '2.6em sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.letterSpacing = '3px';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'hanging';
+        ctx.fontVariantCaps = "all-small-caps";
+        ctx.lineWidth = 1.5;
+
+        ctx.fillStyle = color;
+        ctx.fillText(line, x, adjustedY);
+        ctx.strokeStyle = "black" //adjustColor(color, 50);
+        ctx.strokeText(line, x, adjustedY);
         adjustedY += lineHeight;
     });
 }
@@ -795,4 +801,10 @@ export function resetSecondItemState() {
     setWaitingForSecondItem(false);
     setObjectToBeUsedWithSecondItem(null);
     setSecondItemAlreadyHovered(null);
+}
+
+function adjustColor(color, reduction) {
+    const rgbValues = color.match(/\d+/g).map(Number);
+    const adjustedRgbValues = rgbValues.map(value => Math.max(0, value - reduction));
+    return `rgb(${adjustedRgbValues[0]}, ${adjustedRgbValues[1]}, ${adjustedRgbValues[2]})`;
 }

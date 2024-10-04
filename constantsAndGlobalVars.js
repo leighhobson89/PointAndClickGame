@@ -108,6 +108,8 @@ let animationInProgress = false;
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
+        verbsInventoryContainer: document.getElementById('verbsInventoryContainer'),
+        dialogueContainer: document.getElementById('dialogueContainer'),
         inventoryUpArrow: document.querySelector('.inventory-up'),
         inventoryDownArrow: document.querySelector('.inventory-down'),
         interactionInfo: document.getElementById('interactionInfo'),

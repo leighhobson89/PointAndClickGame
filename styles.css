@@ -258,7 +258,7 @@ canvas {
     pointer-events: none;
 }
 
-#infoRow {
+#commandRow {
     width: 100%;
     height: 20px;
     display: flex;
@@ -387,4 +387,12 @@ canvas {
 #bottomContainer .col-6 {
     flex: 1;
 }
+
+/* #dialogueContainer {
+    
+}
+
+#verbsInventoryContainer {
+
+} */
 

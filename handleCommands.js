@@ -37,7 +37,7 @@ export function performCommand(command, inventoryItem) {
                 handlePull(verbKey, objectId1, exitOrNot1);
                 break;
             case 'verbTalkTo':
-                handleTalkTo(verbKey, objectId1, exitOrNot1);
+                handleTalkTo(verbKey, objectId1, exitOrNot1, isObjectTrueNpcFalse);
                 break;
             case 'verbGive':
                 handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity);
@@ -575,12 +575,26 @@ export function handlePull(verb, objectId) {
 }
 // Handle "Talk To" action
 
-export function handleTalkTo(verb, objectId) {
-    console.log(`Talking to object: ${objectId}`);
-    // Add your implementation here
+export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
+    const npcData = getNpcData().npcs[npcId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    let dialogueString;
+    
+    if (!isObjectTrueNpcFalse && !exitOrNot) {
+        if (npcData.interactable.canTalk) {
+            handleUse(objectId, null, null, null, false, 1, true, verb);
+        } else {
+            dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[language];
+            showText(dialogueString, null, npcData.interactable.dialogueColor);
+        }
+    } else {
+        dialogueString = dialogueData.globalMessages.itemCannotBeTalkedTo[language];
+        showText(dialogueString, null, getColorTextPlayer());
+    }
 }
-// Handle "Give" action
 
+// Handle "Give" action
 export function handleGive(verb, objectId) {
     console.log(`Giving object: ${objectId}`);
     // Add your implementation here

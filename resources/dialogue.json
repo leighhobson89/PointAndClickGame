@@ -512,6 +512,39 @@
                         "0": {
                             "phase": {
                                 "0": {
+                                    "en": "",
+                                    "es": "",
+                                    "de": "",
+                                    "it": "",
+                                    "fr": ""
+                                }
+                            }
+                        },                    
+                        "1": { 
+                            "phase": {
+                                "0": {
+                                    "en": "",
+                                    "es": "",
+                                    "de": "",
+                                    "it": "",
+                                    "fr": ""  
+                                }      
+                            }
+                        }
+                    },
+                    "cantTalkDialogue": {
+                        "en": "I think he is happy as he is now.",
+                        "es": "Creo que está feliz tal como está ahora.",
+                        "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
+                        "it": "Penso che sia felice così com'è ora.",
+                        "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
+                    }
+                },
+                "npcLibrarian": {
+                    "quest": {
+                        "0": {
+                            "phase": {
+                                "0": {
                                     "en": "What a cute monkey, he looks hungry!",
                                     "es": "¡Qué mono tan lindo, parece que tiene hambre!",
                                     "de": "Was für ein süßer Affe, er sieht hungrig aus!",
@@ -531,11 +564,25 @@
                                 }      
                             }
                         }
+                    },
+                    "cantTalkDialogue": {
+                        "en": "Sssh, can't you see this is a library!",
+                        "es": "¡Shh, no ves que esto es una biblioteca!",
+                        "de": "Pssst, siehst du nicht, dass das eine Bibliothek ist!",
+                        "it": "Shh, non vedi che questa è una biblioteca!",
+                        "fr": "Chut, tu ne vois pas que c'est une bibliothèque!"
                     }
                 }
             }
         },
         "globalMessages": {
+            "itemCannotBeTalkedTo": {
+                "en": "People will think I'm crazy talking to that!",
+                "es": "La gente pensará que estoy loco hablando con eso.",
+                "de": "Die Leute werden denken, ich bin verrückt, wenn ich damit rede!",
+                "it": "La gente penserà che sono pazzo a parlare con quello!",
+                "fr": "Les gens vont penser que je suis fou de parler à ça !"
+            },
             "itemCannotBeOpened": {
                 "en": "I can't open that!",
                 "es": "¡No puedo abrir eso!",

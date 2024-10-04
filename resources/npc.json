@@ -17,7 +17,8 @@
                 "canTalk": true,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "canUseWith": true
+                "canUseWith": true,
+                "dialogueColor":  "rgb(0, 255, 255)"
             },
             "usedOn": {
                 "useTogetherLocation": "objectBananaDEBUG"
@@ -59,10 +60,11 @@
                 "fr": "Bibliothécaire"
             },
             "interactable": {
-                "canTalk": true,
+                "canTalk": false,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "canUseWith": true
+                "canUseWith": true,
+                "dialogueColor": "rgb(255, 0, 255)"
             },
             "usedOn": {
                 "useTogetherLocation": ""
