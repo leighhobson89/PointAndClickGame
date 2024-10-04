@@ -70,6 +70,7 @@ let upcomingAction = null;
 let originalValueInCellWhereObjectOrNpcPlaced = {};
 let originalValueInCellWhereObjectOrNpcPlacedNew = {};
 let originalGridState = {};
+let preAnimationGridState = {};
 let currentStartIndexInventory = 0;
 let displayText = {};
 let objectToBeUsedWithSecondItem = null;
@@ -95,6 +96,7 @@ let verbConstructionActive = null;
 let waitingForSecondItem = null;
 let isDisplayingText = false;
 let objectOriginalValueUpdatedYet = false;
+let animationInProgress = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -704,3 +706,25 @@ export function setOriginalGridState(value) {
 export function getOriginalGridState() {
     return JSON.parse(JSON.stringify(originalGridState)); // Return a new deep copy
 }
+
+export function setPreAnimationGridState(gridState, objectId, oldState, newState) {
+    preAnimationGridState = {
+        grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
+        objectId: objectId,                           // ID of the object
+        oldState: oldState,                           // Old state (before change)
+        newState: newState                            // New state (after change)
+    };
+}
+
+export function getPreAnimationGridState() {
+    return JSON.parse(JSON.stringify(preAnimationGridState)); // Return a new deep copy
+}
+
+export function setAnimationInProgress(value) {
+    animationInProgress = value;
+}
+
+export function getAnimationInProgress() {
+    return animationInProgress;
+}
+

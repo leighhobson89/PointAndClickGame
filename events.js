@@ -1,4 +1,4 @@
-import { getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData } from "./constantsAndGlobalVars.js";
+import { setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, getAllGridData, getCurrentScreenId, setAnimationInProgress } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -10,9 +10,13 @@ function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbU
     const objectData = getObjectData().objects[doorId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
+    const gridData = getGridData();
+
+    setAnimationInProgress(true);
 
     switch (realVerbUsed) {
         case 'verbOpen':
+            setPreAnimationGridState(gridData, doorId, 's1', 's2');
             if (!objectData.interactable.activeStatus) {
                 setObjectData(doorId, `interactable.activeStatus`, true);
                 //door opening animation in future
@@ -23,6 +27,7 @@ function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbU
             }
             break;
         case 'verbClose':
+            setPreAnimationGridState(gridData, doorId, 's2', 's1');
             if (objectData.interactable.activeStatus) {
                 setObjectData(doorId, `interactable.activeStatus`, false);
                 //door closing animation in future
