@@ -14,6 +14,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
 
     switch (realVerbUsed) {
         case 'verbOpen':
+        case 'verbUse':
             if (!objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
                 setPreAnimationGridState(gridData, doorId);

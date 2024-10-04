@@ -22,7 +22,7 @@ export function performCommand(command, inventoryItem) {
                 handlePickUp(verbKey, objectId1, exitOrNot1, isObjectTrueNpcFalse);
                 break;
             case 'verbUse':
-                handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse);
+                handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse, verbKey);
                 break;
             case 'verbOpen':
                 handleOpen(verbKey, objectId1, exitOrNot1);
@@ -275,7 +275,7 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
         return;
     }
 
-    if (exitOrNot1 && !getWaitingForSecondItem()) { // cant use an exit although you might be able to use the door that blocks it if it isnt locked
+    if (exitOrNot1 && !getWaitingForSecondItem()) {
         handleCannotUseExitMessage(language, dialogueData);
         return;
     }
@@ -523,14 +523,19 @@ function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
 }
 
 // Handle "Open" action
-export function handleOpen(verb, objectId) {
+export function handleOpen(verb, objectId, exitOrNot) {
     const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
     let dialogueString;
     
-    if (objectData.interactable.canOpen) {
-        handleUse(objectId, null, null, null, false, 1, true, verb);
+    if (objectData) {
+        if (objectData.interactable.canOpen) {
+            handleUse(objectId, null, null, null, false, 1, true, verb);
+        } else {
+            dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
+            showText(dialogueString, null, getColorTextPlayer());
+        }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
         showText(dialogueString, null, getColorTextPlayer());
@@ -538,14 +543,19 @@ export function handleOpen(verb, objectId) {
 }
 
 // Handle "Close" action
-export function handleClose(verb, objectId) {
+export function handleClose(verb, objectId, exitOrNot) {
     const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
     let dialogueString;
     
-    if (objectData.interactable.canOpen) {
-        handleUse(objectId, null, null, null, false, 1, true, verb);
+    if (objectData) {
+        if (objectData.interactable.canOpen) {
+            handleUse(objectId, null, null, null, false, 1, true, verb);
+        } else {
+            dialogueString = dialogueData.globalMessages.itemCannotBeClosed[language];
+            showText(dialogueString, null, getColorTextPlayer());
+        }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeClosed[language];
         showText(dialogueString, null, getColorTextPlayer());
