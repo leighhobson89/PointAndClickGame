@@ -710,9 +710,9 @@ export function getOriginalGridState() {
 export function setPreAnimationGridState(gridState, objectId, oldState, newState) {
     preAnimationGridState = {
         grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
-        objectId: objectId,                           // ID of the object
-        oldState: oldState,                           // Old state (before change)
-        newState: newState                            // New state (after change)
+        objectId: objectId,
+        oldState: oldState,
+        newState: newState
     };
 }
 

@@ -17,6 +17,7 @@ function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbU
     switch (realVerbUsed) {
         case 'verbOpen':
             setPreAnimationGridState(gridData, doorId, 's1', 's2');
+            console.log(JSON.stringify(getPreAnimationGridState().grid.gridData));
             if (!objectData.interactable.activeStatus) {
                 setObjectData(doorId, `interactable.activeStatus`, true);
                 //door opening animation in future
