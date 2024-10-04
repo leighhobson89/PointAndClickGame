@@ -1,4 +1,4 @@
-import { getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectOrNpcPlacedNew, setOriginalValueInCellWhereObjectOrNpcPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY } from './constantsAndGlobalVars.js';
+import { setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectOrNpcPlacedNew, setOriginalValueInCellWhereObjectOrNpcPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectOrNpcPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectOrNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { performCommand, constructCommand } from './handleCommands.js';
@@ -6,6 +6,7 @@ import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateIntera
 
 let currentPath = [];
 let currentPathIndex = 0;
+let firstDraw = true;
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -334,6 +335,11 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
+    if (firstDraw) {
+        setResizedObjectsGridState(gridData);
+        firstDraw = false;
+    }
+
     const playerXStart = player.xPos;
     const playerYStart = player.yPos;
     const playerWidth = player.width;
@@ -378,6 +384,11 @@ export function drawPlayerNpcsAndObjects(ctx) {
     }
 
     compareOriginalValuesAndUpdate();
+
+    if (getAnimationInProgress()) {
+        reconcileGridState();
+    }
+
 }
 
 
@@ -725,6 +736,61 @@ export function compareOriginalValuesAndUpdate() {
         }
     }
 }
+
+export function reconcileGridState() {
+    // Retrieve the objectId from the pre-animation state
+    const { objectId, grid } = getPreAnimationGridState();
+
+    // Retrieve grids
+    const originalGridState = getOriginalGridState()[getCurrentScreenId()];
+    const preAnimationGrid = grid.gridData;
+    const currentGrid = getAllGridData()[getCurrentScreenId()];
+
+    // Object to store the differences
+    const differences = {
+        currentDifferences: []
+    };
+
+    const objectCellPrefix = 'o' + objectId;  // Object-specific grid cell prefix
+
+    // Compare pre-animation grid with the current grid, but only for the specified objectId
+    for (let y = 0; y < preAnimationGrid.length; y++) {
+        for (let x = 0; x < preAnimationGrid[y].length; x++) {
+            const originalCell = preAnimationGrid[y][x];
+            const currentCell = currentGrid[y][x];
+
+            // Check if the current cell corresponds to the target objectId
+            if (currentCell !== originalCell && String(currentCell).startsWith(objectCellPrefix)) {
+                differences.currentDifferences.push({ x, y, originalCell, currentCell });
+            }
+        }
+    }
+
+    // Reset cells in the current grid that match the objectId but are not in the differences list
+    for (let y = 0; y < currentGrid.length; y++) {
+        for (let x = 0; x < currentGrid[y].length; x++) {
+            const currentCell = currentGrid[y][x];
+
+            // If the current cell corresponds to the objectId and is not in the differences
+            if (String(currentCell).startsWith(objectCellPrefix)) {
+                const isInDifferences = differences.currentDifferences.some(diff => diff.x === x && diff.y === y);
+
+                if (!isInDifferences) {
+                    // Reset the cell to its original value from the originalGridState
+                    currentGrid[y][x] = originalGridState[y][x];
+                }
+            }
+        }
+    }
+
+    // Console log the differences in the current grid, specifically for the objectId
+    console.log(`Current Differences for Object ${objectId}:`, JSON.stringify(differences.currentDifferences, null, 2));
+    console.log(`Current Grid after resetting non-differing cells for Object ${objectId}:`, JSON.stringify(currentGrid, null, 2));
+
+    setAnimationInProgress(false);
+}
+
+
 
 //-------------------------------------------------------------------------------------------------------------
 

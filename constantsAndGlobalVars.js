@@ -70,6 +70,7 @@ let upcomingAction = null;
 let originalValueInCellWhereObjectOrNpcPlaced = {};
 let originalValueInCellWhereObjectOrNpcPlacedNew = {};
 let originalGridState = {};
+let resizedObjectsGridState = {};
 let preAnimationGridState = {};
 let currentStartIndexInventory = 0;
 let displayText = {};
@@ -706,6 +707,16 @@ export function setOriginalGridState(value) {
 export function getOriginalGridState() {
     return JSON.parse(JSON.stringify(originalGridState)); // Return a new deep copy
 }
+
+export function setResizedObjectsGridState(value) {
+    resizedObjectsGridState = JSON.parse(JSON.stringify(value));
+}
+
+export function getResizedObjectsGridState() {
+    return JSON.parse(JSON.stringify(resizedObjectsGridState)); // Return a new deep copy
+}
+
+setResizedObjectsGridState
 
 export function setPreAnimationGridState(gridState, objectId, oldState, newState) {
     preAnimationGridState = {
