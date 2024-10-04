@@ -425,6 +425,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else if (object1.interactable.alreadyUsed) { //also can be an UNLOCKED door in any state of open/closed
             if (object1.interactable.canOpen && objectId1.includes('objectDoor')) { //unlocked door/container OPEN/CLOSED state
                 executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                return;
             }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
             await showText(dialogueString, null, getColorTextPlayer());
@@ -446,6 +447,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
                     executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                    return;
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
                     await showText(dialogueString, null, getColorTextPlayer());
@@ -461,6 +463,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
                 executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                return;
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
                 showText(dialogueString, null, getColorTextPlayer());

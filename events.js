@@ -6,36 +6,35 @@ import { setGameState } from "./game.js";
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
 //any door that is unlocked will be closed or opened
-function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
+async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
     const objectData = getObjectData().objects[doorId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
     const gridData = getGridData();
 
-    setAnimationInProgress(true);
-
     switch (realVerbUsed) {
         case 'verbOpen':
-            setPreAnimationGridState(gridData, doorId, 's1', 's2');
-            console.log(JSON.stringify(getPreAnimationGridState().grid.gridData));
             if (!objectData.interactable.activeStatus) {
+                setAnimationInProgress(true);
+                setPreAnimationGridState(gridData, doorId);
                 setObjectData(doorId, `interactable.activeStatus`, true);
                 //door opening animation in future
                 setObjectData(doorId, `activeSpriteUrl`, 's2');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
-                showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, null, getColorTextPlayer());
             }
             break;
         case 'verbClose':
-            setPreAnimationGridState(gridData, doorId, 's2', 's1');
             if (objectData.interactable.activeStatus) {
+                setAnimationInProgress(true);
+                setPreAnimationGridState(gridData, doorId);
                 setObjectData(doorId, `interactable.activeStatus`, false);
                 //door closing animation in future
                 setObjectData(doorId, `activeSpriteUrl`, 's1');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
-                showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, null, getColorTextPlayer());
             }
             break;
     }
@@ -46,7 +45,7 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
     const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
-    objectData.interactable.alreadyUsed = true; //code it so if you use the key on the door when alreadyUsed is true, you get the global cant use message
+    objectData.interactable.alreadyUsed = true;
 }
 
 //Use objectBatteryDEBUG to activate objectMachineDEBUG

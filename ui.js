@@ -732,7 +732,7 @@ function processQueue() {
 export function showText(text, callback, color, xPos, yPos) {
     return new Promise((resolve) => {
         let textQueue = getTextQueue();
-        textQueue.push({ text, callback, color, xPos, yPos, resolve });
+        textQueue.push({ text, callback, color, xPos, yPos, resolve});
         setTextQueue(textQueue);
 
         processQueue();

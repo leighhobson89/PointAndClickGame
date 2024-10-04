@@ -543,7 +543,7 @@
                 "it": "Non posso aprire quello!",
                 "fr": "Je ne peux pas ouvrir ça !"
             },
-              "itemCannotBeClosed": {
+            "itemCannotBeClosed": {
                 "en": "I can't close that!",
                 "es": "¡No puedo cerrar eso!",
                 "de": "Ich kann das nicht schließen!",
