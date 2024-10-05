@@ -87,8 +87,8 @@ let currentYposNpc = null;
 let currentSpeaker = null;
 let bottomContainerHeight = null;
 let currentDialogueRowsOptionsIds = {};
-let dialogueOptionsScrollReserve = {};
-let currentExitOptionRow = {};
+let dialogueOptionsScrollReserve = [];
+let currentExitOptionRow;
 let dialogueRows = [];
 let dialogueOptionClicked;
 
@@ -111,6 +111,7 @@ let animationInProgress = false;
 let transitioningToDialogueState = false;
 let readyToAdvanceNpcQuestPhase = false;
 let triggerQuestPhaseAdvance = false;
+let canExitDialogueAtThisPoint = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -866,3 +867,10 @@ export function getDialogueOptionClicked() {
     return dialogueOptionClicked;
 }
 
+export function setCanExitDialogueAtThisPoint(value) {
+    canExitDialogueAtThisPoint = value;
+}
+
+export function getCanExitDialogueAtThisPoint() {
+    return canExitDialogueAtThisPoint;
+}

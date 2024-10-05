@@ -1,4 +1,4 @@
-import { setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements } from "./constantsAndGlobalVars.js";
+import { setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -110,37 +110,61 @@ async function dialogueEngine(realVerbUsed, npcId) {
             console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
             dialoguePhase = 0;
 
-            let dialogueOptionsTexts = getDialogueOptionsForCurrentQuest(); //return language dialog options for this quest
-            let exitOptionText = getExitOptionForCurrentQuest(); //return exit option for this quest
+            let dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase); //return language dialog options for this quest
+            let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase); //return exit option for this quest
             
-            let currentDialogueRowsOptionsIds = {}; //global variable to call in event listener   //object of row child numbers cross referencing option ids for this quest
-            let currentExitOptionRow; //global variable to call in event listener   //current row that contains the option to exit
-            let dialogueOptionsScrollReserve = {}; //global variable to call in event listener
-
-            //clear all dialogue rows
+            setCanExitDialogueAtThisPoint(!!exitOptionText);
             removeDialogueRow(0);
+
+            let dialogueRowsOptionsIds;
+
+            if (getCanExitDialogueAtThisPoint()) {
+                let dialogueOptionsCount = 0;
+                let dialogueRowsOptionsIds = {};
             
-            //if can exit dialogue at this point is true {
-                //if quest has dialog options else only show exit dialog option
-                if (Object.keys(dialogueOptionsTexts).length > 0) {
-                    //loop through dialog options and add them as rows in the dialogue options up to 3 times and add them to currentDialogueRowsOptionsIds object
-                    //any more add to dialogueOptionsScrollReserve
-                    //add exit option to next row
+                if (dialogueOptionsTexts.length > 0) {
+                    let scrollReserve = [];
+            
+                    for (let i = 0; i < dialogueOptionsTexts.length; i++) {
+                        let dialogueOptionText = dialogueOptionsTexts[i];
+            
+                        if (dialogueOptionsCount < 3) {                            
+                            const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
+                            
+                            for (let phaseId in dialogueData) {
+                                if (dialogueData[phaseId][language] === dialogueOptionText) {
+                                    dialogueRowsOptionsIds[dialogueOptionsCount + 1] = phaseId;
+                                    break;
+                                }
+                            }
+
+                            addDialogueRow(dialogueOptionText);
+                            dialogueOptionsCount++;
+                        } else {
+                            scrollReserve.push(dialogueOptionText);
+                        }
+                    }
+                    
+                    addDialogueRow(exitOptionText);
+
+                    setCurrentDialogueRowsOptionsIds(dialogueRowsOptionsIds);
+                    setDialogueOptionsScrollReserve(scrollReserve);
+                    setCurrentExitOptionRow(dialogueOptionsCount + 1);
                 } else {
-                    //add exit option to first row
+                    addDialogueRow(exitOptionText);
+                    setCurrentExitOptionRow(dialogueOptionsCount + 1);
                 }
-            //} else {
-                //if dialogueOptionsScrollReserve has at least one item in it
-                //repeat condition above until 4 rows are filled or there are no more to add
-            //}
-
-
-
-
-
-
-
-
+            }
+             else {
+                //this doesnt work if no exit condition and not any scroll reserves, later on change it to check dialogue too which will be needed for advancing when its all mapped out properly
+                if (getDialogueOptionsScrollReserve().length > 0) {
+                    const scrollReserve = getDialogueOptionsScrollReserve();
+                    addDialogueRow(scrollReserve[0]);
+                    scrollReserve.shift();
+                    setDialogueOptionsScrollReserve(scrollReserve);
+                }
+            }
+            
             //if dialogue string ends in trailing space setReadyToAdvanceNpcQuestPhase to true
             // if (dialogueData.phase[lengthOfDialoguePhase - 1][language].endsWith(' ')) {
             //     setReadyToAdvanceNpcQuestPhase(true);
@@ -296,6 +320,63 @@ function getOrderOfDialogue(npcId, questPhase) {
 
     return dialogueOrder;
 }
+
+function returnExitOptionForCurrentQuest(npcId, questId) {
+    const language = getLanguage();
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
+    const questData = dialogueData[npcId].quest[questId];
+
+    if (!questData.exitOption) {
+        console.error('No exit option found for this quest.');
+        return null;
+    }
+
+    const exitOption = questData.exitOption;
+    const languageOptions = [];
+
+    return exitOption[language];
+}
+
+function returnDialogueOptionsForCurrentQuest(npcId, questId) {
+    const language = getLanguage();
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
+    const questData = dialogueData[npcId].quest[questId];
+
+    if (!questData.dialogueOptions) {
+        console.error('No dialogue options found for this quest.');
+        return [];
+    }
+
+    const dialogueOptions = questData.dialogueOptions;
+    const languageOptions = [];
+
+    for (let optionId in dialogueOptions) {
+        const option = dialogueOptions[optionId];
+        languageOptions.push(option[language]);   
+    }
+
+    return languageOptions;
+}
+
+function buildDialogueOptionsIds(npcId, questPhase, dialogueOptionsTexts) {
+    const currentLanguage = getLanguage();
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
+    let dialogueRowsOptionsIds = {};
+
+    dialogueOptionsTexts.forEach((dialogueOptionText, index) => {
+
+        for (let phaseId in dialogueData) {
+            if (dialogueData[phaseId][currentLanguage] === dialogueOptionText) {
+                dialogueRowsOptionsIds[index + 1] = phaseId;
+                break;
+            }
+        }
+    });
+
+    return dialogueRowsOptionsIds;
+}
+
+
 
 
 
