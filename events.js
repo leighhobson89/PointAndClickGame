@@ -165,6 +165,8 @@ async function dialogueEngine(realVerbUsed, npcId) {
                     setDialogueOptionsScrollReserve(scrollReserve);
                 }
             }
+
+            //if user clicked to leave dialogue, handle that
             
             //if dialogue string ends in trailing space setReadyToAdvanceNpcQuestPhase to true
             // if (dialogueData.phase[lengthOfDialoguePhase - 1][language].endsWith(' ')) {
