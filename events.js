@@ -1,4 +1,4 @@
-import { getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
+import { setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -83,23 +83,18 @@ async function dialogueEngine(realVerbUsed, npcId) {
     }
     
     //play intro dialogue
-    let dialogueString = dialogueData.introDialogue[language];
+    let dialogueString = dialogueData.introDialogue[language]; //to be shown when first reaching the npc and provoking a conversation, before the opening dialogue from them to us
     await showText(dialogueString, getColorTextPlayer());
 
-    let orderOfDialogue = getOrderOfDialogue(npcId, questPhase, dialoguePhase);
-    console.log(orderOfDialogue);
+    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, dialoguePhase);
+    const lengthOfDialoguePhase = Object.keys(orderOfStartingDialogue).length - 1; // number of conversation lines in phase
+
+    console.log(orderOfStartingDialogue);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getInteractiveDialogueState());
 
-    addDialogueRow("Nothing thanks, I'm going for a beer!");
-    addDialogueRow("Open Your Legs!");
-    addDialogueRow("What do you sell in here then?");
-    addDialogueRow("Shall we go for a date some time?");
-
-    //set game state dialogue and trigger css change for dialogue and cancel any actions and moving TODO
-
-    const showDialogue = async (dialoguePhase) => {
-        const speaker = orderOfDialogue[dialoguePhase];
+    const showDialogue = async (dialoguePhase) => { //initialise opening dialogue
+        const speaker = orderOfStartingDialogue[dialoguePhase];
         setCurrentSpeaker(speaker);
         const dialogueString = dialogueData.phase[dialoguePhase][language];
     
@@ -108,12 +103,63 @@ async function dialogueEngine(realVerbUsed, npcId) {
     
         await showText(dialogueString, textColor, xPos, yPos);
     
-        if (dialoguePhase < orderOfDialogue.end) {
+        if (dialoguePhase < orderOfStartingDialogue.end) { //opening chat before dialogue
             dialoguePhase++;
             await showDialogue(dialoguePhase);
-        } else {
+        } else { //trigger dialogue options and advanced dialogue and at the end close down the dialogue state
             console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
+            dialoguePhase = 0;
+
+            let dialogueOptionsTexts = getDialogueOptionsForCurrentQuest(); //return language dialog options for this quest
+            let exitOptionText = getExitOptionForCurrentQuest(); //return exit option for this quest
             
+            let currentDialogueRowsOptionsIds = {}; //global variable to call in event listener   //object of row child numbers cross referencing option ids for this quest
+            let currentExitOptionRow; //global variable to call in event listener   //current row that contains the option to exit
+            let dialogueOptionsScrollReserve = {}; //global variable to call in event listener
+
+            //clear all dialogue rows
+            removeDialogueRow(0);
+            
+            //if can exit dialogue at this point is true {
+                //if quest has dialog options else only show exit dialog option
+                if (Object.keys(dialogueOptionsTexts).length > 0) {
+                    //loop through dialog options and add them as rows in the dialogue options up to 3 times and add them to currentDialogueRowsOptionsIds object
+                    //any more add to dialogueOptionsScrollReserve
+                    //add exit option to next row
+                } else {
+                    //add exit option to first row
+                }
+            //} else {
+                //if dialogueOptionsScrollReserve has at least one item in it
+                //repeat condition above until 4 rows are filled or there are no more to add
+            //}
+
+
+
+
+
+
+
+
+            //if dialogue string ends in trailing space setReadyToAdvanceNpcQuestPhase to true
+            // if (dialogueData.phase[lengthOfDialoguePhase - 1][language].endsWith(' ')) {
+            //     setReadyToAdvanceNpcQuestPhase(true);
+            // }
+
+            //receive the clicked option from the event listener
+            //store its Dialogue option number
+            //mark if the option clicked was the one to advance the questPhase
+            //if it was then setTriggerQuestPhaseAdvance() true
+            //showDialog(0) to show player dialog option in canvas
+            //play out response phase from npc
+            
+            //advance questPhase
+            if (getReadyToAdvanceNpcQuestPhase() && getTriggerQuestPhaseAdvance()) {
+                questPhase++; 
+            }
+
+            //iterate back to check questPhase dialog responses or automatic exit if implemented on this chat
+
             setCurrentSpeaker('player');
             setTransitioningToDialogueState(false);
             updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);

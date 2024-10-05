@@ -86,6 +86,11 @@ let currentXposNpc = null;
 let currentYposNpc = null;
 let currentSpeaker = null;
 let bottomContainerHeight = null;
+let currentDialogueRowsOptionsIds = {};
+let dialogueOptionsScrollReserve = {};
+let currentExitOptionRow = {};
+let dialogueRows = [];
+let dialogueOptionClicked;
 
 //FLAGS
 let audioMuted;
@@ -104,6 +109,8 @@ let isDisplayingText = false;
 let objectOriginalValueUpdatedYet = false;
 let animationInProgress = false;
 let transitioningToDialogueState = false;
+let readyToAdvanceNpcQuestPhase = false;
+let triggerQuestPhaseAdvance = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -801,5 +808,61 @@ export function setTransitioningToDialogueState(value) {
 
 export function getTransitioningToDialogueState() {
     return transitioningToDialogueState;
+}
+
+export function setReadyToAdvanceNpcQuestPhase(value) {
+    readyToAdvanceNpcQuestPhase = value;
+}
+
+export function getReadyToAdvanceNpcQuestPhase() {
+    return readyToAdvanceNpcQuestPhase;
+}
+
+export function setTriggerQuestPhaseAdvance(value) {
+    triggerQuestPhaseAdvance = value;
+}
+
+export function getTriggerQuestPhaseAdvance() {
+    return triggerQuestPhaseAdvance;
+}
+
+export function setCurrentExitOptionRow(value) {
+    currentExitOptionRow = value;
+}
+
+export function getCurrentExitOptionRow() {
+    return currentExitOptionRow;
+}
+
+export function setDialogueOptionsScrollReserve(value) {
+    dialogueOptionsScrollReserve = value;
+}
+
+export function getDialogueOptionsScrollReserve() {
+    return dialogueOptionsScrollReserve;
+}
+
+export function setCurrentDialogueRowsOptionsIds(value) {
+    currentDialogueRowsOptionsIds = value;
+}
+
+export function getCurrentDialogueRowsOptionsIds() {
+    return currentDialogueRowsOptionsIds;
+}
+
+export function setDialogueRows(value) {
+    dialogueRows = value;
+}
+
+export function getDialogueRows() {
+    return dialogueRows;
+}
+
+export function setDialogueOptionClicked(value) {
+    dialogueOptionClicked = value;
+}
+
+export function getDialogueOptionClicked() {
+    return dialogueOptionClicked;
 }
 

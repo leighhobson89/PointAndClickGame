@@ -4,6 +4,7 @@
     "generalComments3": "Doors: Don't add alreadyUsed or canUse dialogues unless something specific to a certain door, and only cantUseYet if lockable door that is locked, handle dialogue in item that unlocks door, otherwise use two sets of double quotes only.",
     "generalComments4": "Order: 0 = player 1= npc talking to 2,3,4etc other parties who may talk with own colors",
     "generalComments5": "Order: Structure is a string ending with a ! signifying the end of the phase, i.e. 011001!",
+    "generalComments6": "Dialogue in npcInteractions.verbTalkTo that ends with a unicode u0020 on the LAST number of the phase tells the code to advance the questPhase by checking .endsWith space character",
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
@@ -561,14 +562,90 @@
                                     "fr": "Chut! Nous sommes dans une bibliothèque!"
                                 },
                                 "1": {
-                                    "en": "How can I help you?",
-                                    "es": "¿Cómo puedo ayudarte?",
-                                    "de": "Wie kann ich Ihnen helfen?",
-                                    "it": "Come posso aiutarti?",
-                                    "fr": "Comment puis-je vous aider?"
+                                    "en": "How can I help you?\u0020",
+                                    "es": "¿Cómo puedo ayudarte?\u0020",
+                                    "de": "Wie kann ich Ihnen helfen?\u0020",
+                                    "it": "Come posso aiutarti?\u0020",
+                                    "fr": "Comment puis-je vous aider?\u0020"
                                 }
                             },
-                            "order": "11!"
+                            "order": "11!",
+                            "initialDialogueOptions": {
+                                "0": {
+                                    "en": "Yes, I would like the key for the research room please.",
+                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.",
+                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.",
+                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.",
+                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît."
+                                },
+                                "1": {
+                                    "en": "Yes, how much did those glasses cost, I want some!",
+                                    "es": "Sí, ¿cuánto costaron esas gafas? ¡Quiero algunas!",
+                                    "de": "Ja, wie viel haben diese Brillen gekostet? Ich möchte welche!",
+                                    "it": "Sì, quanto costavano quegli occhiali? Ne voglio un paio!",
+                                    "fr": "Oui, combien coûtaient ces lunettes ? J'en veux !"
+                                },
+                                "2": {
+                                    "en": "What time do you clock off, fancy getting a bite to eat?",
+                                    "es": "¿A qué hora terminas, te apetece comer algo?",
+                                    "de": "Wann hast du Feierabend, hättest du Lust, etwas zu essen?",
+                                    "it": "A che ora esci dal lavoro, ti va di mangiare qualcosa?",
+                                    "fr": "À quelle heure termines-tu, ça te dit d'aller manger un morceau ?"
+                                },
+                                "3": {
+                                    "en": "On second thoughts, no don't worry about it!",
+                                    "es": "Pensándolo bien, no te preocupes por eso.",
+                                    "de": "Bei näherer Überlegung, nein, mach dir keine Sorgen darum!",
+                                    "it": "Riflettend, no, non preoccuparti di questo!",
+                                    "fr": "En y réfléchissant, non, ne t'inquiète pas pour ça !"
+                                }
+                            },
+                            "responses": {
+                                "0": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "And you think I'm just going to give it you?\u0020",
+                                            "es": "¿Y crees que solo te lo voy a dar?\u0020",
+                                            "de": "Und du denkst, ich werde es dir einfach geben?\u0020",
+                                            "it": "E pensi che io te lo darò così, senza motivo?\u0020",
+                                            "fr": "Et tu penses que je vais juste te le donner ?\u0020"
+                                        }
+                                    }
+                                },
+                                "1": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "They were a free gift from my fashion designer, unique!",
+                                            "es": "Fueron un regalo gratis de mi diseñador de moda, ¡único!",
+                                            "de": "Sie waren ein kostenloses Geschenk von meinem Modedesigner, einzigartig!",
+                                            "it": "Erano un regalo gratuito dal mio stilista, unico!",
+                                            "fr": "C'était un cadeau gratuit de mon designer de mode, unique !"
+                                        }
+                                    }
+                                },
+                                "2": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Hah! My dating days are done, but thanks for the offer!",
+                                            "es": "¡Jaja! Mis días de citas han terminado, ¡pero gracias por la oferta!",
+                                            "de": "Haha! Meine Dating-Tage sind vorbei, aber danke für das Angebot!",
+                                            "it": "Ahah! I miei giorni da appuntamenti sono finiti, ma grazie per l'offerta!",
+                                            "fr": "Haha ! Mes jours de rencontres sont finis, mais merci pour l'offre !"
+                                        }
+                                    }
+                                },
+                                "3": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Please yourself, but please do it quietly, this is a library.",
+                                            "es": "Haz lo que quieras, pero por favor hazlo en silencio, esta es una biblioteca.",
+                                            "de": "Mach, was du willst, aber bitte mach es leise, das ist eine Bibliothek.",
+                                            "it": "Fai come vuoi, ma per favore fallo in silenzio, questa è una biblioteca.",
+                                            "fr": "Fais comme bon te semble, mais fais-le en silence, c'est une bibliothèque."
+                                        }
+                                    }
+                                }
+                            }
                         },                    
                         "1": { 
                             "phase": {
