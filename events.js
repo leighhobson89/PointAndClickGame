@@ -110,13 +110,11 @@ async function dialogueEngine(realVerbUsed, npcId) {
             console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
             dialoguePhase = 0;
 
-            let dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase); //return language dialog options for this quest
-            let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase); //return exit option for this quest
+            let dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase);
+            let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase);
             
             setCanExitDialogueAtThisPoint(!!exitOptionText);
             removeDialogueRow(0);
-
-            let dialogueRowsOptionsIds;
 
             if (getCanExitDialogueAtThisPoint()) {
                 let dialogueOptionsCount = 0;
@@ -152,8 +150,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                     setCurrentExitOptionRow(dialogueOptionsCount + 1);
 
                     const userChoice = await waitForUserClickOnDialogueOption();
-                    console.log("User clicked: ", userChoice); 
-                    console.log(getDialogueOptionClicked());
+                    setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice]);
                 } else {
                     addDialogueRow(exitOptionText);
                     setCurrentExitOptionRow(dialogueOptionsCount + 1);
@@ -174,8 +171,6 @@ async function dialogueEngine(realVerbUsed, npcId) {
             //     setReadyToAdvanceNpcQuestPhase(true);
             // }
 
-            //receive the clicked option from the event listener
-            //store its Dialogue option number
             //mark if the option clicked was the one to advance the questPhase
             //if it was then setTriggerQuestPhaseAdvance() true
             //showDialog(0) to show player dialog option in canvas
@@ -370,7 +365,6 @@ function waitForUserClickOnDialogueOption() {
             
             item.onclick = function() {
                 dialogueRows.forEach(row => row.onclick = null);
-                setDialogueOptionClicked(rowNumber);
                 resolve(rowNumber);
             };
         });
