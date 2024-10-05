@@ -23,7 +23,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
                 setObjectData(doorId, `activeSpriteUrl`, 's2');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
-                await showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, getColorTextPlayer());
             }
             break;
         case 'verbClose':
@@ -35,14 +35,14 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
                 setObjectData(doorId, `activeSpriteUrl`, 's1');
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
-                await showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, getColorTextPlayer());
             }
             break;
     }
 }
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, null, getColorTextPlayer());
+    showText(dialogueString, getColorTextPlayer());
     const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
@@ -51,22 +51,19 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
 
 //Use objectBatteryDEBUG to activate objectMachineDEBUG
 function useBatteryDEBUGOnMachineDEBUG(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, null, getColorTextPlayer());
+    showText(dialogueString, getColorTextPlayer());
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, true);
 }
 
 //Use objectMachineDEBUG to get objectBananaDEBUG
 function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, null, getColorTextPlayer());
+    showText(dialogueString, getColorTextPlayer());
     addItemToInventory("objectBananaDEBUG", 3);
     drawInventory(0);
     setObjectData(`objectMachineDEBUG`, `interactable.alreadyUsed`, true);
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
 }
 
-//Give npcMonkeyDEBUG objectbananaDEBUG to get it to talk and give player a objectBatteryDEBUG
-
-// Main function with refactored code
 async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, special) {
     const language = getLanguage();
     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
@@ -83,7 +80,7 @@ async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, s
 
         setGameState(getCutSceneState());
 
-        await showText(dialogueString, null, getColorTextPlayer());
+        await showText(dialogueString, getColorTextPlayer());
 
         const showDialogue = (dialogueIndex) => {
             const dialogueText = dialogueData[dialogueIndex][language];
@@ -115,23 +112,58 @@ async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, s
 //----------------------------------------------------------------------------------------------------------------
 
 // Dialogue Engine
-function dialogueEngine(realVerbUsed, npcId) {
-    //console.log("You are now talking with " + npcId + " via the " + realVerbUsed + " verb.");
+async function dialogueEngine(realVerbUsed, npcId) {
+    const language = getLanguage();
+    const npcData = getNpcData().npcs[npcId];
+    const questPhase = npcData.interactable.questPhase;
+    const dialoguePhase = npcData.interactable.dialoguePhase;
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
+    
+    //play intro dialogue
+    let dialogueString = dialogueData.introDialogue[language];
+    await showText(dialogueString, getColorTextPlayer());
 
-    //read questId and dialoguePhase
-    //play intro dialogue like in monkey example
-    //if there are options then:
-    //trigger css change for dialogue
+    let orderOfDialogue = getOrderOfDialogue(npcId, questPhase, dialoguePhase);
+    console.log(orderOfDialogue);
+    setGameState(getCutSceneState());
+
+    //set game state dialogue and trigger css change for dialogue and cancel any actions and moving TODO
+
+    const showDialogue = async (dialoguePhase) => {
+        const speaker = orderOfDialogue[dialoguePhase];
+        setCurrentSpeaker(speaker);
+        const dialogueString = dialogueData.phase[dialoguePhase][language];
+    
+        const { xPos, yPos } = getTextPosition(speaker, npcData);
+        const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+    
+        await showText(dialogueString, textColor, xPos, yPos);
+    
+        if (dialoguePhase < orderOfDialogue.end) {
+            dialoguePhase++;
+            await showDialogue(dialoguePhase);
+        } else {
+            console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
+            
+            setCurrentSpeaker('player');
+            setGameState(getGameVisibleActive());
+        }
+    };
+    
+    showDialogue(0);
+
+        //if there are options then:
     //present talking options
     //read in clicked item and set questId and dialoguePhase based on this
     //trigger cutscene state
     //play dialogue sequence
-    //if last sequence contains a keyword dont show it but use it in condition to do something like auto exit dialogue, or trigger event
+    //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
     //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
     //if there are NO options then return or trigger other event like give player item
-}
 
 // Helper function to determine the position of the text based on the speaker (player or NPC)
+}
+
 function getTextPosition(speaker, npcData) {
     let xPos, yPos;
     setCurrentSpeaker(speaker);
@@ -216,6 +248,36 @@ export function executeObjectEvent(objectEvent, dialogueString, realVerbUsed, sp
             }
         }
     }
+}
+
+function getOrderOfDialogue(npcId, questPhase) {
+    const order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
+
+    const dialogueOrder = {};
+    let endPosition = -1;
+
+    for (let i = 0; i < order.length; i++) {
+        const char = order[i];
+
+        if (char === '!') {
+            endPosition = i - 1;
+            dialogueOrder['end'] = `${i}-1`;
+        } else {
+            if (char === '0') {
+                dialogueOrder[i] = 'player';
+            } else if (char === '1') {
+                dialogueOrder[i] = 'npc';
+            } else {
+                dialogueOrder[i] = `npc${parseInt(char)}`;
+            }
+        }
+    }
+
+    if (endPosition !== -1) {
+        dialogueOrder['end'] = `${endPosition}`;
+    }
+
+    return dialogueOrder;
 }
 
 

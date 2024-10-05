@@ -74,7 +74,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 
     if (!isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.npcInteractions[verb]?.[objectId]?.[language];
-        showText(dialogueString, null, getColorTextPlayer());
+        showText(dialogueString, getColorTextPlayer());
         return;
 
     }
@@ -83,7 +83,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
 
         if (dialogueString) {
-            showText(dialogueString, null, getColorTextPlayer());
+            showText(dialogueString, getColorTextPlayer());
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
         }
@@ -93,7 +93,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.exits[connectsTo][openOrLocked][language];
 
         if (dialogueString) {
-            showText(dialogueString, null, getColorTextPlayer());
+            showText(dialogueString, getColorTextPlayer());
         } else {
             console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
         }
@@ -121,7 +121,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
         if (object?.interactable?.canPickUp) {
             const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
             if (dialogueString) {
-                showText(dialogueString, null, getColorTextPlayer());
+                showText(dialogueString, getColorTextPlayer());
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
@@ -258,7 +258,7 @@ function triggerEvent(objectId, verb) {
 function handleCannotPickUpMessage(language, dialogueData) {
     const cannotPickUpMessage = dialogueData.dialogue.globalMessages.itemCannotBePickedUp?.[language];
     if (cannotPickUpMessage) {
-        showText(cannotPickUpMessage, null, getColorTextPlayer());
+        showText(cannotPickUpMessage, getColorTextPlayer());
     } else {
         console.warn(`No global message found for itemCannotBePickedUp in language ${language}`);
     }
@@ -339,7 +339,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             } else {
                 console.log("1: not right location to use these items together (2 inventory) - PASSED");
                 dialogueString = dialogueData.correctItemsWrongLocation[language];
-                await showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, getColorTextPlayer());
                 return;
             }
         } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 && useWith2) {
@@ -354,7 +354,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
             console.log("3: Two items that are just not able to be used together - PASSED");
-            await showText(dialogueString, null, getColorTextPlayer());
+            await showText(dialogueString, getColorTextPlayer());
             return;
         }
     }
@@ -368,7 +368,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
-            await showText(dialogueString, null, getColorTextPlayer());
+            await showText(dialogueString, getColorTextPlayer());
             console.log("5: items cannot be used together (environment object) - PASSED");
             return;
         }
@@ -383,7 +383,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
-            await showText(dialogueString, null, getColorTextPlayer());
+            await showText(dialogueString, getColorTextPlayer());
             console.log("7: wrong object for exit - PASSED");
             return;
         }
@@ -397,7 +397,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         return;
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
-        await showText(dialogueString, null, getColorTextPlayer()); // Wait for the text to finish before proceeding
+        await showText(dialogueString, getColorTextPlayer()); // Wait for the text to finish before proceeding
         console.log("9: items just cant be used together at all - PASSED");
         return;
     }
@@ -438,10 +438,10 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
                 return;
             }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
-            await showText(dialogueString, null, getColorTextPlayer());
+            await showText(dialogueString, getColorTextPlayer());
         } else { // also can be LOCKED door
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.cantUseYet[language];
-            await showText(dialogueString, null, getColorTextPlayer());
+            await showText(dialogueString, getColorTextPlayer());
         }
     } else { //useWith
         if (!exitOrNot2 && isObject2TrueNpcFalse) {
@@ -449,7 +449,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             //add if it contains door then if alreadyUsed is true then return global already open message for doors
             if (objectId2.includes('objectDoor') && object2.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.alreadyUnlocked[language];
-                showText(dialogueString, null, getColorTextPlayer());
+                showText(dialogueString, getColorTextPlayer());
                 return;
             }
 
@@ -460,14 +460,14 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
                     return;
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
-                    await showText(dialogueString, null, getColorTextPlayer());
+                    await showText(dialogueString, getColorTextPlayer());
                 }
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
-                await showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, getColorTextPlayer());
             } else {
                 dialogueString = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
-                showText(dialogueString, null, getColorTextPlayer());
+                showText(dialogueString, getColorTextPlayer());
             }
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
@@ -476,10 +476,10 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
                 return;
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
-                showText(dialogueString, null, getColorTextPlayer());
+                showText(dialogueString, getColorTextPlayer());
             } else {
                 dialogueString = dialogueData.dialogue.globalMessages.alreadyUsedButRetained[language];
-                await showText(dialogueString, null, getColorTextPlayer());
+                await showText(dialogueString, getColorTextPlayer());
             }
         }
     }
@@ -517,7 +517,7 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWith
 function handleCannotUseExitMessage(language, dialogueData) {
     const cannotUseExitMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedWithExit?.[language];
     if (cannotUseExitMessage) {
-        showText(cannotUseExitMessage, null, getColorTextPlayer());        
+        showText(cannotUseExitMessage, getColorTextPlayer());        
     } else {
         console.warn(`No global message found for itemCannotBeUsedWithExit in language ${language}`);
     }
@@ -526,7 +526,7 @@ function handleCannotUseExitMessage(language, dialogueData) {
 function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
     const cannotUseUntilPickedUpMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedUntilPickedUp?.[language];
     if (cannotUseUntilPickedUpMessage) {
-        showText(cannotUseUntilPickedUpMessage, null, getColorTextPlayer());  
+        showText(cannotUseUntilPickedUpMessage, getColorTextPlayer());  
     } else {
         console.warn(`No global message found for itemCannotBeUsedUntilPickedUp in language ${language}`);
     }
@@ -544,11 +544,11 @@ export function handleOpen(verb, objectId, exitOrNot) {
             handleUse(objectId, null, null, null, false, 1, true, verb);
         } else {
             dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
-            showText(dialogueString, null, getColorTextPlayer());
+            showText(dialogueString, getColorTextPlayer());
         }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeOpened[language];
-        showText(dialogueString, null, getColorTextPlayer());
+        showText(dialogueString, getColorTextPlayer());
     }
 }
 
@@ -564,11 +564,11 @@ export function handleClose(verb, objectId, exitOrNot) {
             handleUse(objectId, null, null, null, false, 1, true, verb);
         } else {
             dialogueString = dialogueData.globalMessages.itemCannotBeClosed[language];
-            showText(dialogueString, null, getColorTextPlayer());
+            showText(dialogueString, getColorTextPlayer());
         }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeClosed[language];
-        showText(dialogueString, null, getColorTextPlayer());
+        showText(dialogueString, getColorTextPlayer());
     }
 }
 
@@ -596,11 +596,11 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
             handleUse(npcId, null, null, null, false, 1, false, verb);
         } else {
             dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[language];
-            showText(dialogueString, null, npcData.interactable.dialogueColor);
+            showText(dialogueString, npcData.interactable.dialogueColor);
         }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeTalkedTo[language];
-        showText(dialogueString, null, getColorTextPlayer());
+        showText(dialogueString, getColorTextPlayer());
     }
 }
 

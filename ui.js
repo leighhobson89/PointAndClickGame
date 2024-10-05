@@ -637,9 +637,13 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
         yPos = getCurrentYposNpc();
     }
 
-    // Ensure text is within canvas bounds
-    if (yPos + 50 > canvas.height) {
-        yPos = canvas.height - 50;
+    // Ensure text is within canvas bounds probably needs adjusting and adding the condition for display it below if over half way up etc tweak as you go
+    if (yPos + 100 > canvas.height) {
+        yPos = canvas.height - 100;
+    }
+
+    if (yPos - 150 < 0) {
+        yPos += 50;
     }
 
     if (xPos - maxWidth / 2 < 0) {
@@ -655,7 +659,7 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
 }
 
 
-function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
+function wrapTextAndPosition(text, ctx, maxWidth) {
     if (!text.includes(" ")) {
         return [text];
     }
@@ -666,7 +670,7 @@ function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
 
     words.forEach(word => {
         const testLine = currentLine + word + ' '; 
-        const metrics = context.measureText(testLine); 
+        const metrics = ctx.measureText(testLine); 
         const testWidth = metrics.width; 
 
         if (testWidth > maxWidth && currentLine) {
@@ -686,21 +690,20 @@ function wrapTextAndPosition(text, context, maxWidth, x, y, lineHeight) {
 
 function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
     let adjustedY = startY - (lines.length * lineHeight);
+
     lines.forEach(line => {
         ctx.font = '2.6em sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         ctx.letterSpacing = '3px';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'hanging';
-        //ctx.fontVariantCaps = "all-small-caps";
+        ctx.textBaseline = 'baseline';
         ctx.lineWidth = 1.5;
-
         ctx.fillStyle = color;
         ctx.fillText(line, x, adjustedY);
         ctx.strokeStyle = "black"
-        //ctx.strokeStyle = adjustColor(color, 150);
         ctx.strokeText(line, x, adjustedY);
+
         adjustedY += lineHeight;
     });
 }
@@ -715,10 +718,11 @@ function processQueue() {
 
     setIsDisplayingText(true);
 
-    const { text, callback, color, resolve, xPos, yPos } = textQueue.shift();
+    const { text, color, resolve, xPos, yPos } = textQueue.shift();
     setCurrentXposNpc(xPos);
     setCurrentYposNpc(yPos);
     setDisplayText(text, color); 
+    console.log('Displaying text:', text);
 
     if (textTimer) {
         clearTimeout(textTimer);
@@ -726,20 +730,18 @@ function processQueue() {
 
     textTimer = setTimeout(() => {
         setDisplayText('', null);
-        if (callback) {
-            callback();
-        }
         if (resolve) {
+            console.log('Promise resolved!');
             resolve();
         }
         processQueue();
     }, getTextDisplayDuration());
 }
 
-export function showText(text, callback, color, xPos, yPos) {
+export function showText(text, color, xPos, yPos) {
     return new Promise((resolve) => {
         let textQueue = getTextQueue();
-        textQueue.push({ text, callback, color, xPos, yPos, resolve});
+        textQueue.push({ text, color, xPos, yPos, resolve});
         setTextQueue(textQueue);
 
         processQueue();

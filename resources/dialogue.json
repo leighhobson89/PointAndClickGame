@@ -2,6 +2,8 @@
     "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
     "generalComments2": "useWith1 field is ALWAYS a successful use as non successful are handled seperately in globalMessages section",
     "generalComments3": "Doors: Don't add alreadyUsed or canUse dialogues unless something specific to a certain door, and only cantUseYet if lockable door that is locked, handle dialogue in item that unlocks door, otherwise use two sets of double quotes only.",
+    "generalComments4": "Order: 0 = player 1= npc talking to 2,3,4etc other parties who may talk with own colors",
+    "generalComments5": "Order: Structure is a string ending with a ! signifying the end of the phase, i.e. 011001!",
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
@@ -543,15 +545,30 @@
                 "npcLibrarian": {
                     "quest": {
                         "0": {
+                            "introDialogue": {
+                                "en": "HELLO, uhm, I mean h.e.l.l.o... Sorry for shouting!",
+                                "es": "¡HOLA, eh, quiero decir h.o.l.a... ¡Perdón por gritar!",
+                                "de": "HALLO, ähm, ich meine h.a.l.l.o... Entschuldigung fürs Schreien!",
+                                "it": "CIAO, ehm, intendo c.i.a.o... Scusa per aver urlato!",
+                                "fr": "BONJOUR, euh, je veux dire b.o.n.j.o.u.r... Désolé pour avoir crié!"
+                            },
                             "phase": {
                                 "0": {
-                                    "en": "What a cute monkey, he looks hungry!",
-                                    "es": "¡Qué mono tan lindo, parece que tiene hambre!",
-                                    "de": "Was für ein süßer Affe, er sieht hungrig aus!",
-                                    "it": "Che scimmietta carina, sembra affamato!",
-                                    "fr": "Quel singe mignon, il a l'air affamé !"
+                                    "en": "Sssh! We are in a library!",
+                                    "es": "¡Shhh! ¡Estamos en una biblioteca!",
+                                    "de": "Pssst! Wir sind in einer Bibliothek!",
+                                    "it": "Sssh! Siamo in una biblioteca!",
+                                    "fr": "Chut! Nous sommes dans une bibliothèque!"
+                                },
+                                "1": {
+                                    "en": "How can I help you?",
+                                    "es": "¿Cómo puedo ayudarte?",
+                                    "de": "Wie kann ich Ihnen helfen?",
+                                    "it": "Come posso aiutarti?",
+                                    "fr": "Comment puis-je vous aider?"
                                 }
-                            }
+                            },
+                            "order": "11!"
                         },                    
                         "1": { 
                             "phase": {
