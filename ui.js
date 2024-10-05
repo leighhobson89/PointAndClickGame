@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 //------------------------------------------------------------------------------------------------------
 
     getElements().btnLookAt.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnPickUp.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnUse.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnOpen.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnClose.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnPush.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnPull.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnTalkTo.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     getElements().btnGive.addEventListener('click', function () {
-        if (getGameStateVariable() !== getCutSceneState()) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
             resetSecondItemState();
             setVerbButtonConstructionStatus(this);
             updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
@@ -259,7 +259,7 @@ inventoryItems.forEach(function(item) {
 
 // Adding click event listener for each inventory item
 inventoryItems.some(function(item) {
-    if (getGameStateVariable() === getCutSceneState()) {
+    if (getGameStateVariable() !== getGameVisibleActive()) {
         return true;
     }
 
@@ -285,7 +285,7 @@ handleLanguageChange(getLanguageSelected());
 });
 
 const handleInventoryUpArrowClick = () => {
-    if (getGameStateVariable() !== getCutSceneState()) {
+    if (getGameStateVariable() === getGameVisibleActive()) {
         if (getCurrentStartIndexInventory() > 0) {
             setCurrentStartIndexInventory(getCurrentStartIndexInventory() - getSlotsPerRowInInventory());
             drawInventory(getCurrentStartIndexInventory());
@@ -294,7 +294,7 @@ const handleInventoryUpArrowClick = () => {
 };
 
 const handleInventoryDownArrowClick = () => {
-    if (getGameStateVariable() !== getCutSceneState()) {
+    if (getGameStateVariable() === getGameVisibleActive()) {
         const inventory = getPlayerInventory();
         const totalSlots = Object.keys(inventory).length;
     
@@ -642,7 +642,7 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
         yPos = canvas.height - 100;
     }
 
-    if (yPos - 150 < 0) {
+    if (yPos - 190 < 0) {
         yPos += 50;
     }
 

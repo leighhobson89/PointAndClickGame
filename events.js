@@ -64,51 +64,6 @@ function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, spe
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
 }
 
-async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, special) {
-    const language = getLanguage();
-    const npcData = getNpcData().npcs.npcMonkeyDEBUG;
-    const questPhase = npcData.interactable.questPhase;
-    const dialogueData = getDialogueData().dialogue.npcInteractions.verbUse.npcMonkeyDEBUG.quest[questPhase].phase;
-
-    if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
-
-        const dialogueSpeakers = {
-            0: "npc",
-            1: "npc",
-            2: "player"
-        };
-
-        setGameState(getCutSceneState());
-
-        await showText(dialogueString, getColorTextPlayer());
-
-        const showDialogue = (dialogueIndex) => {
-            const dialogueText = dialogueData[dialogueIndex][language];
-            const speaker = dialogueSpeakers[dialogueIndex];
-
-            const { xPos, yPos } = getTextPosition(speaker, npcData);
-            const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
-
-            showText(dialogueText, () => {
-                if (npcData.interactable.questPhase === 0) {
-                    if (dialogueIndex < 2) {
-                        showDialogue(dialogueIndex + 1);
-                    } else {
-                        addItemToInventory("objectBatteryDEBUG", 1);
-                        drawInventory(0);
-
-                        npcData.interactable.questPhase++;
-                        npcData.interactable.canUseWith = false;
-                        setGameState(getGameVisibleActive());
-                    }
-                }
-            }, textColor, xPos, yPos);
-        };
-
-        showDialogue(npcData.interactable.dialoguePhase);
-    }
-}
-
 //----------------------------------------------------------------------------------------------------------------
 
 // Dialogue Engine
@@ -191,8 +146,7 @@ function getTextColor(speaker, npcColor) {
 }
 
 // Executor function
-
-export function executeObjectEvent(objectEvent, dialogueString, realVerbUsed, special) {
+export function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special) {
     if (objectEvent === 'dialogueEngine') {
         let npcId = special;
         eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}')`);
@@ -279,6 +233,57 @@ function getOrderOfDialogue(npcId, questPhase) {
 
     return dialogueOrder;
 }
+
+
+
+
+
+
+
+//async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, special) { //THIS FUNCTION WONT WORK ANYMORE IT IS THE OLD DEBUG IMPLEMENTATION
+    //     const language = getLanguage();
+    //     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
+    //     const questPhase = npcData.interactable.questPhase;
+    //     const dialogueData = getDialogueData().dialogue.npcInteractions.verbUse.npcMonkeyDEBUG.quest[questPhase].phase;
+    
+    //     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
+    
+    //         const dialogueSpeakers = {
+    //             0: "npc",
+    //             1: "npc",
+    //             2: "player"
+    //         };
+    
+    //         setGameState(getCutSceneState());
+    
+    //         await showText(dialogueString, getColorTextPlayer());
+    
+    //         const showDialogue = (dialogueIndex) => {
+    //             const dialogueText = dialogueData[dialogueIndex][language];
+    //             const speaker = dialogueSpeakers[dialogueIndex];
+    
+    //             const { xPos, yPos } = getTextPosition(speaker, npcData);
+    //             const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+    
+    //             showText(dialogueText, () => {
+    //                 if (npcData.interactable.questPhase === 0) {
+    //                     if (dialogueIndex < 2) {
+    //                         showDialogue(dialogueIndex + 1);
+    //                     } else {
+    //                         addItemToInventory("objectBatteryDEBUG", 1);
+    //                         drawInventory(0);
+    
+    //                         npcData.interactable.questPhase++;
+    //                         npcData.interactable.canUseWith = false;
+    //                         setGameState(getGameVisibleActive());
+    //                     }
+    //                 }
+    //             }, textColor, xPos, yPos);
+    //         };
+    
+    //         showDialogue(npcData.interactable.dialoguePhase);
+    //     }
+    // }
 
 
 

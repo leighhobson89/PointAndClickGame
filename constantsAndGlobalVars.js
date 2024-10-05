@@ -23,6 +23,7 @@ export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
+export const INTERACTION_DIALOGUE_STATE = 'interactionDialogueState';
 export const INITIAL_SCREEN_ID = 'libraryFoyer'; //libraryFoyer is the start point change for debug
 export const INITIAL_PLAYER_GRID_REF = {x: 10,y: 57}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
@@ -349,6 +350,10 @@ export function getGameVisibleActive() {
 
 export function getCutSceneState() {
     return CUT_SCENE;
+}
+
+export function getInteractionDialogueState() {
+    return INTERACTION_DIALOGUE_STATE;
 }
 
 export function getWalkSpeedPlayer() {
