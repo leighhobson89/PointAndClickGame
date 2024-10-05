@@ -85,6 +85,7 @@ let previousGameState = null;
 let currentXposNpc = null;
 let currentYposNpc = null;
 let currentSpeaker = null;
+let bottomContainerHeight = null;
 
 //FLAGS
 let audioMuted;
@@ -102,6 +103,7 @@ let waitingForSecondItem = null;
 let isDisplayingText = false;
 let objectOriginalValueUpdatedYet = false;
 let animationInProgress = false;
+let transitioningToDialogueState = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -109,10 +111,12 @@ let animationInProgress = false;
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
+        dialogueSection: document.getElementById('dialogueSection'),
+        bottomContainer: document.getElementById('bottomContainer'),
         verbsInventoryContainer: document.getElementById('verbsInventoryContainer'),
         dialogueContainer: document.getElementById('dialogueContainer'),
-        inventoryUpArrow: document.querySelector('.inventory-up'),
-        inventoryDownArrow: document.querySelector('.inventory-down'),
+        inventoryUpArrow: document.getElementById('inventoryScrollUp'),
+        inventoryDownArrow: document.getElementById('inventoryScrollDown'),
         interactionInfo: document.getElementById('interactionInfo'),
         customCursor: document.querySelector('.custom-mouse'),
         customCursorImage: document.querySelector('.custom-mouse-image'),
@@ -352,7 +356,7 @@ export function getCutSceneState() {
     return CUT_SCENE;
 }
 
-export function getInteractionDialogueState() {
+export function getInteractiveDialogueState() {
     return INTERACTION_DIALOGUE_STATE;
 }
 
@@ -781,5 +785,21 @@ export function setAnimationInProgress(value) {
 
 export function getAnimationInProgress() {
     return animationInProgress;
+}
+
+export function setBottomContainerHeight(value) {
+    bottomContainerHeight = value;
+}
+
+export function getBottomContainerHeight() {
+    return bottomContainerHeight;
+}
+
+export function setTransitioningToDialogueState(value) {
+    transitioningToDialogueState = value;
+}
+
+export function getTransitioningToDialogueState() {
+    return transitioningToDialogueState;
 }
 

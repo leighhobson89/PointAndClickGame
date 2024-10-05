@@ -1,7 +1,8 @@
-import { getPreAnimationGridState, getAnimationInProgress, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getCutSceneState, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, getAllGridData, getCurrentScreenId, setAnimationInProgress } from "./constantsAndGlobalVars.js";
+import { getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
-import { drawInventory, showText } from "./ui.js";
+import { updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
+import { localize } from "./localization.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 
@@ -73,6 +74,13 @@ async function dialogueEngine(realVerbUsed, npcId) {
     const questPhase = npcData.interactable.questPhase;
     const dialoguePhase = npcData.interactable.dialoguePhase;
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
+
+    if (npcData) { //update interactionInfo
+        setTransitioningToDialogueState(true);
+        updateInteractionInfo(localize('interactionTalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + npcData.name[language], true);
+    } else {
+        console.log("Error finding NPC data, check code");
+    }
     
     //play intro dialogue
     let dialogueString = dialogueData.introDialogue[language];
@@ -80,7 +88,13 @@ async function dialogueEngine(realVerbUsed, npcId) {
 
     let orderOfDialogue = getOrderOfDialogue(npcId, questPhase, dialoguePhase);
     console.log(orderOfDialogue);
-    setGameState(getCutSceneState());
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+    setGameState(getInteractiveDialogueState());
+
+    addDialogueRow("Nothing thanks, I'm going for a beer!");
+    addDialogueRow("Open Your Legs!");
+    addDialogueRow("What do you sell in here then?");
+    addDialogueRow("Shall we go for a date some time?");
 
     //set game state dialogue and trigger css change for dialogue and cancel any actions and moving TODO
 
@@ -101,7 +115,10 @@ async function dialogueEngine(realVerbUsed, npcId) {
             console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
             
             setCurrentSpeaker('player');
+            setTransitioningToDialogueState(false);
+            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
             setGameState(getGameVisibleActive());
+            removeDialogueRow(0); //remove all dialogue rows
         }
     };
     

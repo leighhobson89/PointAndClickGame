@@ -286,7 +286,7 @@ canvas {
     flex: 1;
 }
 
-.inventory .inventory-item .inventory-arrow {
+.inventory .inventory-item .arrowNavigate {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -331,7 +331,7 @@ canvas {
     max-width: 100%;
 }
 
-.inventory-arrow {
+.arrowNavigate {
     position: relative;
     width: 40px;
     height: 60px;
@@ -341,7 +341,7 @@ canvas {
     transition: background-color 0.3s ease;
 }
 
-.inventory-arrow::before {
+.arrowNavigate::before {
     content: '';
     position: absolute;
     top: 0;
@@ -354,19 +354,19 @@ canvas {
     z-index: 1;
 }
 
-.inventory-up {
+.arrowNavigateUp {
     clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
 }
 
-.inventory-down {
+.arrowNavigateDown {
     clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
 }
 
-.inventory-arrow:hover {
+.arrowNavigate:hover {
     background-color: orange;
 }
 
-.inventory-arrow:hover::before {
+.arrowNavigate:hover::before {
     border-color: #C65D25;
 }
 
@@ -396,3 +396,42 @@ canvas {
 
 } */
 
+#dialogueSection,
+#scrollSection {
+    height: 100%;
+}
+
+#dialogueSection {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dialogueRow {
+    display: flex;
+    height: 26%;
+    width: 100%;
+    justify-content: start;
+    align-items: center;
+    font-size: 2em;
+    color: white;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.dialogueRow:hover {
+    color: yellow;
+}
+
+#scrollSection {
+    position: relative;
+    padding-right: 10px;
+    height: 100%;
+}
+
+#dialogueScrollUp,
+#dialogueScrollDown {
+    height: 50%;
+    justify-content: center; 
+    align-items: center;
+}

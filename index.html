@@ -66,7 +66,23 @@
             <div id="commandRow" class="d-flex justify-content-start">
                 <div id="interactionInfo"></div>
             </div>
-            <div id="dialogueContainer" class="d-none flex-grow-1">dialogue container</div>
+                  <!-- Dialogue Container -->
+            <div id="dialogueContainer" class="d-none flex-grow-1 d-flex">
+                <div id="dialogueSection" class="col-11 d-flex flex-column">
+                </div>               
+                
+                <div id="scrollSection" class="col-1 d-flex flex-column">
+                    <div id="dialogueScrollUp" class="d-flex" style="height: 50%;">
+                        <div class="arrowNavigate arrowNavigateUp"></div>
+                    </div>
+                    
+                    <div id="dialogueScrollDown" class="d-flex" style="height: 50%;">
+                        <div class="arrowNavigate arrowNavigateDown"></div>
+                    </div>
+                </div>
+                
+            </div>
+            
             <div id="verbsInventoryContainer" class="d-flex flex-grow-1">
                 <div class="col-6 p-2">
                     <div class="verbs">
@@ -108,7 +124,7 @@
                 <div class="col-6 p-2">
                     <div class="inventory">
                         <div class="row ">
-                            <div class="col-2"><div class="inventory-arrow inventory-up"></div></div>
+                            <div class="col-2"><div id="inventoryScrollUp" class="arrowNavigate arrowNavigateUp"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number1"></span><img src="./resources/objects/images/blank.png" alt = "empty" class = "inventory-img"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number2"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number3"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
@@ -116,7 +132,7 @@
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number5"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
                         </div>
                         <div class="row ">
-                            <div class="col-2"><div class="inventory-arrow inventory-down"></div></div>
+                            <div class="col-2"><div id="inventoryScrollDown" class="arrowNavigate arrowNavigateDown"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number6"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number7"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
                             <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number8"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>

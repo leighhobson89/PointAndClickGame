@@ -1,4 +1,4 @@
-import { getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization } from './constantsAndGlobalVars.js';
+import { getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { performCommand, constructCommand } from './handleCommands.js';
@@ -18,6 +18,10 @@ export function startGame() {
 }
 
 export function gameLoop() {
+    const bottomContainer = getElements().bottomContainer;
+
+    bottomContainer.style.height = `${getBottomContainerHeight()}px`;
+    bottomContainer.offsetHeight;
     const ctx = getElements().canvas.getContext('2d');
 
     ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
@@ -125,7 +129,7 @@ function movePlayerTowardsTarget() {
 
             setCurrentlyMovingToAction(false);
             setCurrentlyMoving(false);
-            if (getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+            if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
             }
         }
@@ -419,19 +423,20 @@ export function drawPlayerNpcsAndObjects(ctx) {
 
 }
 
-
 export function initializeCanvas() {
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
     const container = getElements().canvasContainer;
 
-    function updateCanvasSize() {
+    function updateCanvasSize() { //can fix objects placement on resize by yPos - difference in viewport so store the canvas height globally then when this is called move the objects and check grid is updated!
         const canvas = getElements().canvas;
         const ctx = canvas.getContext('2d');
         const container = getElements().canvasContainer;
 
         const viewportHeight = window.innerHeight;
-        const bottomContainerHeight = document.getElementById('bottomContainer')?.offsetHeight || 0;
+        const bottomContainerHeight = getElements().bottomContainer.offsetHeight;
+        setBottomContainerHeight(bottomContainerHeight);
+
         const canvasHeight = viewportHeight - bottomContainerHeight;
         const canvasWidth = container.clientWidth;
 
@@ -465,6 +470,7 @@ export function initializeCanvas() {
     window.addEventListener('resize', updateCanvasSize);
 
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
+
     updateCanvasSize();
 }
 
@@ -513,81 +519,83 @@ function checkEdgeCollision(player, targetX) {
 //-------------------------------------------------------------------------------------------------------------
 
 export function processClickPoint(event, mouseClick) {
-    const player = getPlayerObject();
-    const localizationData = getLocalization();
-    const language = getLanguage();
+    if (getGameStateVariable() === getGameStateVariable()) {
+        const player = getPlayerObject();
+        const localizationData = getLocalization();
+        const language = getLanguage();
 
-    const gridX = getHoverCell().x;
-    const gridY = getHoverCell().y;
+        const gridX = getHoverCell().x;
+        const gridY = getHoverCell().y;
 
-    if (mouseClick) {    
-        setGridTargetX(gridX);
-        setGridTargetY(gridY);
-    } else {
-        setGridTargetX(event.x);
-        setGridTargetY(event.y);
-    }
-
-    const verb = getVerbButtonConstructionStatus();
-    const action = localizationData[language].verbsActionsInteraction[verb];
-    console.log("CLICK: action = " + action);
-
-    const path = aStarPathfinding(
-        { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
-        { x: getGridTargetX(), y: getGridTargetY() },
-        action,
-    );
-
-    currentPath = path;
-    currentPathIndex = 0;
-
-    setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
-
-    if (currentPath.length > 0) {
-        setCurrentlyMoving(true);
-        if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-            updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
+        if (mouseClick) {    
+            setGridTargetX(gridX);
+            setGridTargetY(gridY);
+        } else {
+            setGridTargetX(event.x);
+            setGridTargetY(event.y);
         }
-        const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
-        if (cellValue && cellValue.startsWith('e') && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-            const exitNumberMatch = cellValue.match(/e(\d+)/);
-            if (exitNumberMatch) {
-                const exitNumber = exitNumberMatch[1];
-                const exitData = getNavigationData()[getCurrentScreenId()].exits[`e${exitNumber}`];
-                console.log("Exit number:", exitNumber);
-                setTransitioningToAnotherScreen(true);
-                setExitNumberToTransitionTo(exitNumber);
-                setNextScreenId(exitData.connectsTo);
-                updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
+
+        const verb = getVerbButtonConstructionStatus();
+        const action = localizationData[language].verbsActionsInteraction[verb];
+        console.log("CLICK: action = " + action);
+
+        const path = aStarPathfinding(
+            { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
+            { x: getGridTargetX(), y: getGridTargetY() },
+            action,
+        );
+
+        currentPath = path;
+        currentPathIndex = 0;
+
+        setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
+
+        if (currentPath.length > 0) {
+            setCurrentlyMoving(true);
+            if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+                updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
             }
+            const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
+            if (cellValue && cellValue.startsWith('e') && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+                const exitNumberMatch = cellValue.match(/e(\d+)/);
+                if (exitNumberMatch) {
+                    const exitNumber = exitNumberMatch[1];
+                    const exitData = getNavigationData()[getCurrentScreenId()].exits[`e${exitNumber}`];
+                    console.log("Exit number:", exitNumber);
+                    setTransitioningToAnotherScreen(true);
+                    setExitNumberToTransitionTo(exitNumber);
+                    setNextScreenId(exitData.connectsTo);
+                    updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
+                }
+            }
+
+            console.log("verb construction: " + getVerbButtonConstructionStatus());
+
+            if (getVerbButtonConstructionStatus() !== 'interactionWalkTo' && !getWaitingForSecondItem()) {
+                const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
+                updateInteractionInfo(
+                    localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + 
+                    " " + (screenName ? screenName : ""),
+                    true
+                );
+            }
+            
+
+            const nextStep = currentPath[0];
+            setTargetX(nextStep.x * getCanvasCellWidth());
+            setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
+        } else {
+            setCustomMouseCursor(getCustomMouseCursor('error'));
         }
-
-        console.log("verb construction: " + getVerbButtonConstructionStatus());
-
-        if (getVerbButtonConstructionStatus() !== 'interactionWalkTo' && !getWaitingForSecondItem()) {
-            const screenName = returnHoveredInterestingObjectOrExitName(cellValue);
-            updateInteractionInfo(
-                localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + 
-                " " + (screenName ? screenName : ""),
-                true
-            );
+        setVerbButtonConstructionStatus(null);
+        console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
+        if (getWaitingForSecondItem()) {
+            updateInteractionInfo(getElements().interactionInfo.textContent, true);
+            setUpcomingAction(getElements().interactionInfo.textContent);
         }
         
-
-        const nextStep = currentPath[0];
-        setTargetX(nextStep.x * getCanvasCellWidth());
-        setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
-    } else {
-        setCustomMouseCursor(getCustomMouseCursor('error'));
+        //console.log(`Path: ${JSON.stringify(path)}`);
     }
-    setVerbButtonConstructionStatus(null);
-    console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
-    if (getWaitingForSecondItem()) {
-        updateInteractionInfo(getElements().interactionInfo.textContent, true);
-        setUpcomingAction(getElements().interactionInfo.textContent);
-    }
-    
-    //console.log(`Path: ${JSON.stringify(path)}`);
 }
 
 export function checkAndChangeScreen() {
@@ -911,41 +919,30 @@ export function setGameState(newState) {
 
     switch (newState) {
         case getMenuState():
+            // Handle menu state
             getElements().menu.classList.remove('d-none');
             getElements().menu.classList.add('d-flex');
+            // Hide unnecessary elements
             getElements().buttonRow.classList.add('d-none');
             getElements().buttonRow.classList.remove('d-flex');
             getElements().canvasContainer.classList.remove('d-flex');
             getElements().canvasContainer.classList.add('d-none');
             getElements().returnToMenuButton.classList.remove('d-flex');
             getElements().returnToMenuButton.classList.add('d-none');
-
-            // Handle language buttons and localization
+            // Handle language buttons
             const languageButtons = [getElements().btnEnglish, getElements().btnSpanish, getElements().btnGerman, getElements().btnItalian, getElements().btnFrench];
             languageButtons.forEach(button => {
                 button.classList.remove('active');
             });
-
             const currentLanguage = getLanguage();
             console.log("Language is " + currentLanguage);
             switch (currentLanguage) {
-                case 'en':
-                    getElements().btnEnglish.classList.add('active');
-                    break;
-                case 'es':
-                    getElements().btnSpanish.classList.add('active');
-                    break;
-                case 'de':
-                    getElements().btnGerman.classList.add('active');
-                    break;
-                case 'it':
-                    getElements().btnItalian.classList.add('active');
-                    break;
-                case 'fr':
-                    getElements().btnFrench.classList.add('active');
-                    break;
+                case 'en': getElements().btnEnglish.classList.add('active'); break;
+                case 'es': getElements().btnSpanish.classList.add('active'); break;
+                case 'de': getElements().btnGerman.classList.add('active'); break;
+                case 'it': getElements().btnItalian.classList.add('active'); break;
+                case 'fr': getElements().btnFrench.classList.add('active'); break;
             }
-
             if (getGameInProgress()) {
                 getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage(), 'ui')}`;
                 getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage(), 'ui')}`;
@@ -953,6 +950,7 @@ export function setGameState(newState) {
             break;
 
         case getGameVisibleActive():
+            // Handle the active game state
             getElements().menu.classList.remove('d-flex');
             getElements().menu.classList.add('d-none');
             getElements().buttonRow.classList.remove('d-none');
@@ -961,15 +959,9 @@ export function setGameState(newState) {
             getElements().canvasContainer.classList.add('d-flex');
             getElements().returnToMenuButton.classList.remove('d-none');
             getElements().returnToMenuButton.classList.add('d-flex');
-
-            // Remove the pause/resume button
-            // getElements().pauseResumeGameButton.classList.remove('d-flex');
-            // getElements().pauseResumeGameButton.classList.add('d-none');
-
             // Set button labels based on game state
             getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
-
-            // Set verb buttons
+            // Set verb buttons for actions
             getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage(), 'verbsActionsInteraction')}`;
@@ -979,8 +971,40 @@ export function setGameState(newState) {
             getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
             getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
+
+            // Hide the verbs and inventory container
+            getElements().verbsInventoryContainer.classList.add('d-flex');
+            getElements().verbsInventoryContainer.classList.remove('d-none');
+
+            // Show the dialogue container
+            getElements().dialogueContainer.classList.remove('d-flex');
+            getElements().dialogueContainer.classList.add('d-none');
+
             break;
-            default:
-                break;
-    } 
+
+            case getInteractiveDialogueState():
+            getElements().menu.classList.remove('d-flex');
+            getElements().menu.classList.add('d-none');
+            getElements().buttonRow.classList.remove('d-none');
+            getElements().buttonRow.classList.add('d-flex');
+            getElements().canvasContainer.classList.remove('d-none');
+            getElements().canvasContainer.classList.add('d-flex');
+            getElements().returnToMenuButton.classList.remove('d-none');
+            getElements().returnToMenuButton.classList.add('d-flex');
+            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
+
+            // Hide the verbs and inventory container
+            getElements().verbsInventoryContainer.classList.add('d-none');
+            getElements().verbsInventoryContainer.classList.remove('d-flex');
+
+            // Show the dialogue container
+            getElements().dialogueContainer.classList.remove('d-none');
+            getElements().dialogueContainer.classList.add('d-flex');
+            break;
+
+        default:
+            console.log("Unknown game state");
+            break;
+    }
 }
+

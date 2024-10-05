@@ -1,4 +1,4 @@
-import { setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getCutSceneState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc } from './constantsAndGlobalVars.js';
+import { getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
@@ -342,7 +342,8 @@ export function handleMouseMove(event, ctx) {
     const hoverY = Math.floor(mouseY / getCanvasCellHeight());
 
     if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
-        const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
+        if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) {
+            const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
 
         const walkable = (cellValue.startsWith('e') || cellValue.startsWith('w'));
 
@@ -399,13 +400,13 @@ export function handleMouseMove(event, ctx) {
                 updateInteractionInfo(updatedText, false);
                 setSecondItemAlreadyHovered(null);
             }
-            
         }
 
         if (getHoveringInterestingObjectOrExit()) {
             setCustomMouseCursor(getCustomMouseCursor('hoveringInteresting'));
         } else {
             setCustomMouseCursor(getCustomMouseCursor('normal'));
+        }
         }
     }
 }
@@ -811,3 +812,35 @@ function adjustColor(color, reduction) {
     const adjustedRgbValues = rgbValues.map(value => Math.max(0, value - reduction));
     return `rgb(${adjustedRgbValues[0]}, ${adjustedRgbValues[1]}, ${adjustedRgbValues[2]})`;
 }
+
+export function addDialogueRow(dialogueOptionText) {
+    const dialogueSection = getElements().dialogueSection;
+    
+    const newRow = document.createElement('div');
+    newRow.classList.add('row', 'dialogueRow');
+    
+    const newCol = document.createElement('div');
+    newCol.classList.add('col-12');
+
+    newCol.textContent = dialogueOptionText;
+    newRow.appendChild(newCol);
+    dialogueSection.appendChild(newRow);
+}
+
+export function removeDialogueRow(rowNumber) {
+    const dialogueSection = getElements().dialogueSection;
+
+    if (rowNumber === 0) { //remove all rows
+        dialogueSection.innerHTML = "";
+        return;
+    }
+
+    if (rowNumber > 0 && rowNumber <= dialogueSection.children.length) {
+        const index = rowNumber - 1;
+        dialogueSection.removeChild(dialogueSection.children[index]);
+    } else {
+        console.error('Invalid row number cannot remove check code');
+    }
+}
+
+
