@@ -1,7 +1,7 @@
 import { getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { executeObjectEvent } from "./events.js"
+import { executeObjectEvent as executeInteractionEvent } from "./events.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -282,10 +282,11 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
 
     if (!inventoryItem && !getWaitingForSecondItem()) {
         if (!isObjectTrueNpcFalse) { //if is npc
-            //trigger TALK TO code TODO
+            useItem(objectId1, null, useWith, null, null, false, null, realVerbUsed);
             return;
         }
-        useItem(objectId1, null, useWith, null, null, null, realVerbUsed); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+        useItem(objectId1, null, useWith, null, null, true, null, realVerbUsed); //at this line we're always talking about object1 and no useWith scenario ie inventory item is always false by this point
+        return;
     } else if (!getWaitingForSecondItem()) {
         setWaitingForSecondItem(true);
         setObjectToBeUsedWithSecondItem(objectId1);
@@ -348,7 +349,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
                 handleInventoryAdjustment(objectId2, quantity);
             }
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -363,7 +364,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("4: using object with environment object - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -378,7 +379,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("6: using object on exit - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
@@ -392,7 +393,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         console.log("8: using two inventory items where location is important and location is correct - PASSED");
         handleInventoryAdjustment(objectId1, quantity);
         drawInventory(0);
-        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, null);
+        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
         return;
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -403,28 +404,37 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
 }
 
 
-export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject2TrueNpcFalse, realVerbUsed) { //function uses all items, use or use with
+export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject1TrueNpcFalse, isObject2TrueNpcFalse, realVerbUsed) { //function uses all items, use or use with
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
-    const object1 = objectData.objects[objectId1];
+
+    let object1;
     let object2;
+    let objectEvent1;
+
+    let dialogueString = "";
+
+    if (isObject1TrueNpcFalse) {
+        object1 = objectData.objects[objectId1];
+        objectEvent1 = getObjectEvents(objectId1);
+    } else { //npc
+        objectEvent1 = 'dialogueEngine';
+        executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+        return;
+    }
 
     if (objectId2) {
         object2 = objectData.objects[objectId2];
     }
 
-    const objectEvent1 = getObjectEvents(objectId1);
-
-    let dialogueString = "";
-
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+            executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
         } else if (object1.interactable.alreadyUsed) { //also can be an UNLOCKED door in any state of open/closed
             if (object1.interactable.canOpen && objectId1.includes('objectDoor')) { //unlocked door/container OPEN/CLOSED state
-                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
                 return;
             }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
@@ -446,7 +456,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                    executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
                     return;
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
@@ -462,7 +472,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                executeObjectEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
                 return;
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
@@ -477,7 +487,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
 
 function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWithFalse) {
     if (!isObjectTrueNpcFalse && useTrueUseWithFalse) { //npc use is just talk to
-        return true;
+        return false;
     }
 
     if (!isObjectTrueNpcFalse) {
@@ -583,7 +593,7 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
     
     if (!isObjectTrueNpcFalse && !exitOrNot) {
         if (npcData.interactable.canTalk) {
-            handleUse(objectId, null, null, null, false, 1, true, verb);
+            handleUse(npcId, null, null, null, false, 1, false, verb);
         } else {
             dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[language];
             showText(dialogueString, null, npcData.interactable.dialogueColor);

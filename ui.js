@@ -693,12 +693,13 @@ function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
         ctx.letterSpacing = '3px';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'hanging';
-        ctx.fontVariantCaps = "all-small-caps";
+        //ctx.fontVariantCaps = "all-small-caps";
         ctx.lineWidth = 1.5;
 
         ctx.fillStyle = color;
         ctx.fillText(line, x, adjustedY);
-        ctx.strokeStyle = "black" //adjustColor(color, 50);
+        ctx.strokeStyle = "black"
+        //ctx.strokeStyle = adjustColor(color, 150);
         ctx.strokeText(line, x, adjustedY);
         adjustedY += lineHeight;
     });

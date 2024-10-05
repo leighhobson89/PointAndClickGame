@@ -114,6 +114,23 @@ async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, s
 
 //----------------------------------------------------------------------------------------------------------------
 
+// Dialogue Engine
+function dialogueEngine(realVerbUsed, npcId) {
+    //console.log("You are now talking with " + npcId + " via the " + realVerbUsed + " verb.");
+
+    //read questId and dialoguePhase
+    //play intro dialogue like in monkey example
+    //if there are options then:
+    //trigger css change for dialogue
+    //present talking options
+    //read in clicked item and set questId and dialoguePhase based on this
+    //trigger cutscene state
+    //play dialogue sequence
+    //if last sequence contains a keyword dont show it but use it in condition to do something like auto exit dialogue, or trigger event
+    //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
+    //if there are NO options then return or trigger other event like give player item
+}
+
 // Helper function to determine the position of the text based on the speaker (player or NPC)
 function getTextPosition(speaker, npcData) {
     let xPos, yPos;
@@ -144,58 +161,59 @@ function getTextColor(speaker, npcColor) {
 // Executor function
 
 export function executeObjectEvent(objectEvent, dialogueString, realVerbUsed, special) {
-    // Ensure dialogueString is properly formatted for eval calls
-    const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`; // Escape single quotes in dialogueString
-    
-    // Check for actionUse1 and call its function if it exists
-    if (objectEvent.actionUse1) {
-        try {
-            if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`); // Pass objectUse, dialogue, and realVerbUsed as arguments
-            } else {
-                eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`); // Call without objectUse argument
+    if (objectEvent === 'dialogueEngine') {
+        let npcId = special;
+        eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}')`);
+        return;
+    } else {
+        const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
+        
+        if (objectEvent.actionUse1) {
+            try {
+                if (objectEvent.objectUse) {
+                    eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                } else {
+                    eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                }
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
             }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
         }
-    }
 
-    // Check for actionUse2 and call its function if it exists
-    if (objectEvent.actionUse2) {
-        try {
-            if (objectEvent.objectUse) {
-                eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`); // Pass objectUse, dialogue, and realVerbUsed as arguments
-            } else {
-                eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+        if (objectEvent.actionUse2) {
+            try {
+                if (objectEvent.objectUse) {
+                    eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                } else {
+                    eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                }
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
             }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
         }
-    }
 
-    // Check for actionUseWith11 and call it if it exists
-    if (objectEvent.actionUseWith11) {
-        try {
-            if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`); // Pass objectUseWith1, dialogue, and realVerbUsed as arguments
-            } else {
-                eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+        if (objectEvent.actionUseWith11) {
+            try {
+                if (objectEvent.objectUseWith1) {
+                    eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                } else {
+                    eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                }
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
             }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
         }
-    }
 
-    // Check for actionUseWith12 and call it if it exists
-    if (objectEvent.actionUseWith12) {
-        try {
-            if (objectEvent.objectUseWith1) {
-                eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`); // Pass objectUseWith1, dialogue, and realVerbUsed as arguments
-            } else {
-                eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+        if (objectEvent.actionUseWith12) {
+            try {
+                if (objectEvent.objectUseWith1) {
+                    eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                } else {
+                    eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                }
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
             }
-        } catch (e) {
-            console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
         }
     }
 }
