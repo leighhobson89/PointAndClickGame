@@ -1,4 +1,4 @@
-import { setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements } from "./constantsAndGlobalVars.js";
+import { setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -150,6 +150,10 @@ async function dialogueEngine(realVerbUsed, npcId) {
                     setCurrentDialogueRowsOptionsIds(dialogueRowsOptionsIds);
                     setDialogueOptionsScrollReserve(scrollReserve);
                     setCurrentExitOptionRow(dialogueOptionsCount + 1);
+
+                    const userChoice = await waitForUserClickOnDialogueOption();
+                    console.log("User clicked: ", userChoice); 
+                    console.log(getDialogueOptionClicked());
                 } else {
                     addDialogueRow(exitOptionText);
                     setCurrentExitOptionRow(dialogueOptionsCount + 1);
@@ -358,30 +362,20 @@ function returnDialogueOptionsForCurrentQuest(npcId, questId) {
     return languageOptions;
 }
 
-function buildDialogueOptionsIds(npcId, questPhase, dialogueOptionsTexts) {
-    const currentLanguage = getLanguage();
-    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
-    let dialogueRowsOptionsIds = {};
-
-    dialogueOptionsTexts.forEach((dialogueOptionText, index) => {
-
-        for (let phaseId in dialogueData) {
-            if (dialogueData[phaseId][currentLanguage] === dialogueOptionText) {
-                dialogueRowsOptionsIds[index + 1] = phaseId;
-                break;
-            }
-        }
+function waitForUserClickOnDialogueOption() {
+    return new Promise((resolve) => {
+        const dialogueRows = Array.from(getElements().dialogueSection.children);
+        dialogueRows.forEach((item, index) => {
+            const rowNumber = index + 1;
+            
+            item.onclick = function() {
+                dialogueRows.forEach(row => row.onclick = null);
+                setDialogueOptionClicked(rowNumber);
+                resolve(rowNumber);
+            };
+        });
     });
-
-    return dialogueRowsOptionsIds;
 }
-
-
-
-
-
-
-
 
 
 //async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, special) { //THIS FUNCTION WONT WORK ANYMORE IT IS THE OLD DEBUG IMPLEMENTATION

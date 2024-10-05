@@ -281,13 +281,6 @@ inventoryItems.some(function(item) {
 // DIALOGUE EVENT LISTENERS
 //--------------------------------------------------------------------------------------------------------------
 
-getDialogueRows().forEach(function(item, index) {
-    item.addEventListener('click', function() {
-        setDialogueOptionClicked(item.textContent || item.innerText);
-        console.log(getDialogueOptionClicked());
-    });
-});
-
 // Initialize canvas event listener and set the initial game state
 initializeCanvasEventListener();
 setGameState(getMenuState());
