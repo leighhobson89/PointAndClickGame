@@ -103,7 +103,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
         
             await showText(dialogueString, textColor, xPos, yPos);
         }
-        
+
         if (type === 'starting') {
             if (dialoguePhase < orderOfStartingDialogue.end) { //opening chat before dialogue
                 dialoguePhase++;
@@ -231,10 +231,9 @@ async function dialogueEngine(realVerbUsed, npcId) {
     //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
     //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
     //if there are NO options then return or trigger other event like give player item
-
-// Helper function to determine the position of the text based on the speaker (player or NPC)
 }
 
+// Helper function to determine the position of the text based on the speaker (player or NPC)
 function getTextPosition(speaker, npcData) {
     let xPos, yPos;
     setCurrentSpeaker(speaker);
