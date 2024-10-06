@@ -704,11 +704,11 @@
                                 "5": {
                                     "phase": {
                                         "0": {
-                                            "en": "What's in the research room?",
-                                            "es": "¿Qué hay en la sala de investigación?",
-                                            "de": "Was ist im Forschungsraum?",
-                                            "it": "Cosa c'è nella stanza di ricerca?",
-                                            "fr": "Qu'est-ce qu'il y a dans la salle de recherche ?"
+                                            "en": "Just a desk and some research materials.",
+                                            "es": "Solo un escritorio y algunos materiales de investigación.",
+                                            "de": "Nur ein Schreibtisch und einige Forschungsmaterialien.",
+                                            "it": "Solo una scrivania e alcuni materiali di ricerca.",
+                                            "fr": "Juste un bureau et quelques matériaux de recherche."
                                         }
                                     },
                                     "order": "1!"

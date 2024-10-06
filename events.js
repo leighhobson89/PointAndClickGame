@@ -1,4 +1,4 @@
-import { getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setCurrentExitOptionText, getCurrentExitOptionText, setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked } from "./constantsAndGlobalVars.js";
+import { getExitOptionIndex, setExitOptionIndex, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setCurrentExitOptionText, getCurrentExitOptionText, setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked, getDialogueScrollCount, setDialogueScrollCount } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { showDialogueArrows, hideDialogueArrows, updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -167,9 +167,10 @@ async function dialogueEngine(realVerbUsed, npcId) {
                         }
                     }
 
-                    updateDialogueDisplay(getCurrentExitOptionText());
+                    const dialogueRows = Array.from(getElements().dialogueSection.children);
                     
                     const userChoice = await waitForUserClickOnDialogueOption();
+
                     if (getCurrentDialogueRowsOptionsIds()[userChoice[0]]) {
                         setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice[0]]);
                         setDialogueTextClicked(userChoice[1]);
@@ -192,6 +193,8 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 }
 
                 if (type !== 'exiting') { //play dialogue option, response and set quest where necessary
+                    setDialogueScrollCount(0);
+                    setCurrentScrollIndexDialogue(0);
                     const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()));
                     
                     if (type !== 'continuing') {
@@ -238,7 +241,6 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 //if there are options then:
                 //trigger cutscene state
                 //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
-                //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
                 //if there are NO options then return or trigger other event like give player item
     
                 //iterate back to check questPhase dialog responses or automatic exit if implemented on this chat
@@ -265,6 +267,10 @@ async function dialogueEngine(realVerbUsed, npcId) {
             } else {
                 dialoguePhase = 0;
                 setCurrentSpeaker('player');
+                setDialogueScrollCount(0);
+                setCurrentScrollIndexDialogue(0);
+                setCurrentExitOptionRow(null);
+                setCurrentExitOptionText(null);
                 setTransitioningToDialogueState(false);
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 setGameState(getGameVisibleActive());
@@ -460,26 +466,22 @@ function changeDialogueOptionsForCurrentQuest(npcId, questPhase, optionIdToRemov
 }
 
 function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId) {
-    const removedDialogueOptions = getRemovedDialogueOptions(); // Get the array of removed dialogue options
-    const language = getLanguage(); // Get the current language
+    const removedDialogueOptions = getRemovedDialogueOptions();
+    const language = getLanguage();
 
     if (removedDialogueOptions.length > 0 && questPhase > 0) {
-            // Iterate over each removed dialogue option
-    removedDialogueOptions.forEach(option => {
-        // Check if the npcId matches
+        
+        removedDialogueOptions.forEach(option => {
         if (option.npcId === npcId) {
-            // Get the text for the current option
             let optionText = null;
             const optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
             if (optionId) {
                 optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
             }
 
-            // Check if the text matches any of the dialogue strings
             if (dialogueStrings.includes(optionText)) {
                 console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
-                
-                // Call the function to change dialogue options for the current quest phase
+
                 changeDialogueOptionsForCurrentQuest(npcId, questPhase, option.optionId);
             }
         }
@@ -487,107 +489,99 @@ function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId
     }
 }
 
+export function reattachDialogueOptionListeners() {
+    const dialogueRows = Array.from(getElements().dialogueSection.children);
+
+    dialogueRows.forEach((item, index) => {
+        item.onclick = function() {
+            let result = [index + 1 + getDialogueScrollCount(), item.textContent || item.innerText];
+            const resolveClick = getResolveDialogueOptionClick();
+            
+            // Check if the clicked item is the exit option
+            if (index + 1 === getExitOptionIndex()) {
+                // Resolve with the exit option
+                result = getExitOptionIndex(), getCurrentExitOptionText();
+                if (resolveClick) {
+                    resolveClick(result);
+                    setResolveDialogueOptionClick(null);
+                }
+            } else {
+                // Resolve with a normal dialogue option
+                if (resolveClick) {
+                    resolveClick(result);
+                    setResolveDialogueOptionClick(null);
+                }
+            }
+        };
+    });
+}
+
+function triggerExitDialogue() {
+    console.log("Exit option selected, triggering exit behavior...");
+}
 
 function waitForUserClickOnDialogueOption() {
     return new Promise((resolve) => {
-        const dialogueRows = Array.from(getElements().dialogueSection.children);
-
-        dialogueRows.forEach((item, index) => {
-            const oldListener = item.onclick;
-            item.onclick = function() {
-                dialogueRows.forEach(row => row.removeEventListener('click', oldListener));
-
-                const result = [index + 1, item.textContent || item.innerText];
-                resolve(result);
-            };
-        });
+        setResolveDialogueOptionClick(resolve);
+        updateDialogueDisplay(getCurrentExitOptionText());
     });
 }
 
 export function updateDialogueDisplay(exitOptionText) {
     let currentScrollIndex = getCurrentScrollIndexDialogue();
     const scrollReserve = getDialogueOptionsScrollReserve();
+    removeDialogueRow(0);
 
-    // Clear the current dialogue rows
-    removeDialogueRow(0); // Implement this function to clear existing rows
+    const dialogueOptionsToShow = [];
 
-    const dialogueOptionsToShow = []; // Array to hold options to show
-
-    // Get the current displayed options based on scroll index
-    for (let i = 0; i < 3; i++) { // Show three options
+    for (let i = 0; i < 3; i++) {
         const index = currentScrollIndex + i;
         
         if (index < scrollReserve.length) {
-            dialogueOptionsToShow.push(scrollReserve[index][1]); // Add text to show
+            dialogueOptionsToShow.push(scrollReserve[index][1]);
         }
     }
 
-    // Add the current visible dialogue options
     for (let text of dialogueOptionsToShow) {
-        addDialogueRow(text); // Add each option to the UI
+        addDialogueRow(text);
     }
 
-    // Show the exit option (or another from scrollReserve if exit is not allowed)
     if (getCanExitDialogueAtThisPoint()) {
         addDialogueRow(exitOptionText);
-    } else if (scrollReserve.length > currentScrollIndex + 3) { // Only if there's a next
-        addDialogueRow(scrollReserve[currentScrollIndex + 3][1]); // Next option from scrollReserve
+        setExitOptionIndex(dialogueOptionsToShow.length + 1);
+    } else if (scrollReserve.length > currentScrollIndex + 3) {
+        addDialogueRow(scrollReserve[currentScrollIndex + 3][1]);
     }
 
-    // Show or hide arrows based on the state of scrollReserve
-    if (scrollReserve.length > 3) { // More options in scrollReserve
-        showDialogueArrows();
-    } else {
-        hideDialogueArrows();
-    }
+    updateArrowVisibility(currentScrollIndex, scrollReserve.length);
+    reattachDialogueOptionListeners(getExitOptionIndex());
 }
 
+export function updateArrowVisibility(currentScrollIndex, totalOptions) {
+    const upArrow = getElements().dialogueUpArrow;
+    const downArrow = getElements().dialogueDownArrow;
 
+    if (currentScrollIndex === 0) {
+        upArrow.classList.add("arrow-disabled");
+        upArrow.style.pointerEvents = 'none';
+    } else {
+        upArrow.classList.remove("arrow-disabled");
+        upArrow.style.pointerEvents = 'auto';
+    }
 
-//async function giveMonkeyBanana(objectToUseWith, dialogueString, realVerbUsed, special) { //THIS FUNCTION WONT WORK ANYMORE IT IS THE OLD DEBUG IMPLEMENTATION
-    //     const language = getLanguage();
-    //     const npcData = getNpcData().npcs.npcMonkeyDEBUG;
-    //     const questPhase = npcData.interactable.questPhase;
-    //     const dialogueData = getDialogueData().dialogue.npcInteractions.verbUse.npcMonkeyDEBUG.quest[questPhase].phase;
-    
-    //     if (npcData.interactable.questPhase === 0 && npcData.interactable.dialoguePhase === 0) {
-    
-    //         const dialogueSpeakers = {
-    //             0: "npc",
-    //             1: "npc",
-    //             2: "player"
-    //         };
-    
-    //         setGameState(getCutSceneState());
-    
-    //         await showText(dialogueString, getColorTextPlayer());
-    
-    //         const showDialogue = (dialogueIndex) => {
-    //             const dialogueText = dialogueData[dialogueIndex][language];
-    //             const speaker = dialogueSpeakers[dialogueIndex];
-    
-    //             const { xPos, yPos } = getTextPosition(speaker, npcData);
-    //             const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
-    
-    //             showText(dialogueText, () => {
-    //                 if (npcData.interactable.questPhase === 0) {
-    //                     if (dialogueIndex < 2) {
-    //                         showDialogue(dialogueIndex + 1);
-    //                     } else {
-    //                         addItemToInventory("objectBatteryDEBUG", 1);
-    //                         drawInventory(0);
-    
-    //                         npcData.interactable.questPhase++;
-    //                         npcData.interactable.canUseWith = false;
-    //                         setGameState(getGameVisibleActive());
-    //                     }
-    //                 }
-    //             }, textColor, xPos, yPos);
-    //         };
-    
-    //         showDialogue(npcData.interactable.dialoguePhase);
-    //     }
-    // }
+    let maxVisibleOptions;
 
+    if (getCanExitDialogueAtThisPoint()) {
+        maxVisibleOptions = 3;
+    } else {
+        maxVisibleOptions = 4;
+    }
 
-
+    if (currentScrollIndex + maxVisibleOptions >= totalOptions) {
+        downArrow.classList.add("arrow-disabled");
+        downArrow.style.pointerEvents = 'none';
+    } else {
+        downArrow.classList.remove("arrow-disabled");
+        downArrow.style.pointerEvents = 'auto';
+    }
+}

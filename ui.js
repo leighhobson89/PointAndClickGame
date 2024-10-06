@@ -1,9 +1,9 @@
-import { getCurrentExitOptionText, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setDialogueOptionClicked, setDialogueRows, getDialogueRows, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc, getDialogueOptionClicked, getCanExitDialogueAtThisPoint } from './constantsAndGlobalVars.js';
+import { setDialogueScrollCount, getDialogueScrollCount, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentExitOptionText, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setDialogueOptionClicked, setDialogueRows, getDialogueRows, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc, getDialogueOptionClicked, getCanExitDialogueAtThisPoint } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 import { constructCommand, performCommand } from './handleCommands.js'
-import { updateDialogueDisplay } from './events.js'
+import { reattachDialogueOptionListeners, updateDialogueDisplay } from './events.js'
 
 let textTimer;
 
@@ -896,6 +896,8 @@ async function scrollDown() {
         }
     }
 
+    setDialogueScrollCount(getDialogueScrollCount() + 1);
+    reattachDialogueOptionListeners();
 }
 
 async function scrollUp() {
@@ -904,6 +906,8 @@ async function scrollUp() {
         setCurrentScrollIndexDialogue(currentScrollIndex - 1);
         updateDialogueDisplay(getCurrentExitOptionText());
     }
+    
+    setDialogueScrollCount(getDialogueScrollCount() - 1);
+    reattachDialogueOptionListeners();
 }
-
 

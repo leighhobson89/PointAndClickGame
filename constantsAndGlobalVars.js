@@ -30,7 +30,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 800; //3500
+export const TEXT_DISPLAY_DURATION = 1200; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
@@ -95,6 +95,9 @@ let dialogueTextClicked;
 let removedDialogueOptions = [];
 let currentExitOptionText = null;
 let currentScrollIndexDialogue = 0;
+let resolveDialogueOptionClick;
+let dialogueScrollCount = 0;
+let exitOptionIndex = -1;
 
 //FLAGS
 let audioMuted;
@@ -924,6 +927,33 @@ export function setCurrentScrollIndexDialogue(value) {
 export function getCurrentScrollIndexDialogue() {
     return currentScrollIndexDialogue;
 }
+
+export function setResolveDialogueOptionClick(value) {
+    resolveDialogueOptionClick = value;
+}
+
+export function getResolveDialogueOptionClick() {
+    return resolveDialogueOptionClick;
+}
+
+export function setDialogueScrollCount(value) {
+    dialogueScrollCount = value;
+}
+
+export function getDialogueScrollCount() {
+    return dialogueScrollCount;
+}
+
+export function setExitOptionIndex(value) {
+    exitOptionIndex = value;
+}
+
+export function getExitOptionIndex() {
+    return exitOptionIndex;
+}
+
+
+
 
 
 
