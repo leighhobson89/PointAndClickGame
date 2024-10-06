@@ -236,9 +236,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 }
                 
                 //if there are options then:
-                //read in clicked item and set questId and dialoguePhase based on this
                 //trigger cutscene state
-                //play dialogue sequence
                 //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
                 //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
                 //if there are NO options then return or trigger other event like give player item
