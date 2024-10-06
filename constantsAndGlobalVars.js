@@ -91,6 +91,7 @@ let dialogueOptionsScrollReserve = [];
 let currentExitOptionRow;
 let dialogueRows = [];
 let dialogueOptionClicked;
+let dialogueTextClicked;
 
 //FLAGS
 let audioMuted;
@@ -866,6 +867,16 @@ export function setDialogueOptionClicked(value) {
 export function getDialogueOptionClicked() {
     return dialogueOptionClicked;
 }
+
+export function setDialogueTextClicked(value) {
+    dialogueTextClicked = value;
+}
+
+export function getDialogueTextClicked() {
+    return dialogueTextClicked;
+}
+
+
 
 export function setCanExitDialogueAtThisPoint(value) {
     canExitDialogueAtThisPoint = value;
