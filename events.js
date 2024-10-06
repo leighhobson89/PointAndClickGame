@@ -239,11 +239,8 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 }
                 
                 //if there are options then:
-                //trigger cutscene state
-                //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
+                //if last sequence contains a keyword to use in condition to do something could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
                 //if there are NO options then return or trigger other event like give player item
-    
-                //iterate back to check questPhase dialog responses or automatic exit if implemented on this chat
             }
         }
     
