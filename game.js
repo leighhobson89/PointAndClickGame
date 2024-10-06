@@ -528,7 +528,7 @@ function checkEdgeCollision(player, targetX) {
 //-------------------------------------------------------------------------------------------------------------
 
 export function processClickPoint(event, mouseClick) {
-    if (getGameStateVariable() === getGameStateVariable()) {
+    if (getGameStateVariable() === getGameVisibleActive()) {
         const player = getPlayerObject();
         const localizationData = getLocalization();
         const language = getLanguage();

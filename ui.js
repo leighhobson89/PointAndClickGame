@@ -209,7 +209,9 @@ inventoryItems.forEach(function(item) {
 
                 if (interactionText === verbWalkTo) {
                     setUpcomingAction(verbLookAt);
-                    updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
+                    if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) {
+                        updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
+                    }
                 } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
                     let words = interactionText.split(" ");
                     let verbKey = null;
@@ -236,8 +238,10 @@ inventoryItems.forEach(function(item) {
                             }
                         }
                     }
-                    updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
-                }
+                    if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) { 
+                        updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
+                    }
+                    }
 
                 if (getWaitingForSecondItem()) {
                     if (!getSecondItemAlreadyHovered()) {
@@ -260,10 +264,6 @@ inventoryItems.forEach(function(item) {
 
 // Adding click event listener for each inventory item
 inventoryItems.some(function(item) {
-    if (getGameStateVariable() !== getGameVisibleActive()) {
-        return true;
-    }
-
     item.addEventListener('click', function() {
         const interactionText = getElements().interactionInfo.textContent;
         if (!getSecondItemAlreadyHovered()) {
