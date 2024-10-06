@@ -1,8 +1,9 @@
-import { setDialogueOptionClicked, setDialogueRows, getDialogueRows, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc, getDialogueOptionClicked } from './constantsAndGlobalVars.js';
+import { getCurrentExitOptionText, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setDialogueOptionClicked, setDialogueRows, getDialogueRows, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc, getDialogueOptionClicked, getCanExitDialogueAtThisPoint } from './constantsAndGlobalVars.js';
 import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 import { constructCommand, performCommand } from './handleCommands.js'
+import { updateDialogueDisplay } from './events.js'
 
 let textTimer;
 
@@ -280,6 +281,10 @@ inventoryItems.some(function(item) {
 //--------------------------------------------------------------------------------------------------------------
 // DIALOGUE EVENT LISTENERS
 //--------------------------------------------------------------------------------------------------------------
+
+
+getElements().dialogueDownArrow.addEventListener("click", scrollDown);
+getElements().dialogueUpArrow.addEventListener("click", scrollUp);
 
 // Initialize canvas event listener and set the initial game state
 initializeCanvasEventListener();
@@ -834,7 +839,7 @@ export function addDialogueRow(dialogueOptionText) {
 export function removeDialogueRow(rowNumber) {
     const dialogueSection = getElements().dialogueSection;
 
-    if (rowNumber === 0) { //remove all rows
+    if (rowNumber === 0) {
         dialogueSection.innerHTML = "";
         return;
     }
@@ -844,6 +849,60 @@ export function removeDialogueRow(rowNumber) {
         dialogueSection.removeChild(dialogueSection.children[index]);
     } else {
         console.error('Invalid row number cannot remove check code');
+    }
+}
+
+export function showDialogueArrows() {
+    const upArrow = getElements().dialogueUpArrow;
+    const downArrow = getElements().dialogueDownArrow;
+
+    if (upArrow) {
+        upArrow.classList.remove("arrow-disabled");
+    }
+
+    if (downArrow) {
+        downArrow.classList.remove("arrow-disabled");
+    }
+}
+
+export function hideDialogueArrows() {
+    const upArrow = getElements().dialogueUpArrow;
+    const downArrow = getElements().dialogueDownArrow;
+
+    if (upArrow) {
+        upArrow.classList.add("arrow-disabled");
+    }
+
+    if (downArrow) {
+        downArrow.classList.add("arrow-disabled");
+    }
+}
+
+
+async function scrollDown() {
+    const currentScrollIndex = getCurrentScrollIndexDialogue();
+    const scrollReserve = getDialogueOptionsScrollReserve();
+    const canExit = getCanExitDialogueAtThisPoint();
+
+    if (canExit) {
+        if (currentScrollIndex + 3 < scrollReserve.length) {
+            setCurrentScrollIndexDialogue(currentScrollIndex + 1);
+            updateDialogueDisplay(getCurrentExitOptionText());
+        }
+    } else {
+        if (currentScrollIndex + 4 < scrollReserve.length) {
+            setCurrentScrollIndexDialogue(currentScrollIndex + 1);
+            updateDialogueDisplay(getCurrentExitOptionText());
+        }
+    }
+
+}
+
+async function scrollUp() {
+    const currentScrollIndex = getCurrentScrollIndexDialogue();
+    if (currentScrollIndex > 0) {
+        setCurrentScrollIndexDialogue(currentScrollIndex - 1);
+        updateDialogueDisplay(getCurrentExitOptionText());
     }
 }
 

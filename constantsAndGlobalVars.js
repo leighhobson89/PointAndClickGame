@@ -93,6 +93,8 @@ let dialogueRows = [];
 let dialogueOptionClicked;
 let dialogueTextClicked;
 let removedDialogueOptions = [];
+let currentExitOptionText = null;
+let currentScrollIndexDialogue = 0;
 
 //FLAGS
 let audioMuted;
@@ -127,6 +129,8 @@ export function setElements() {
         dialogueContainer: document.getElementById('dialogueContainer'),
         inventoryUpArrow: document.getElementById('inventoryScrollUp'),
         inventoryDownArrow: document.getElementById('inventoryScrollDown'),
+        dialogueUpArrow: document.getElementById('dialogueScrollUp'),
+        dialogueDownArrow: document.getElementById('dialogueScrollDown'),
         interactionInfo: document.getElementById('interactionInfo'),
         customCursor: document.querySelector('.custom-mouse'),
         customCursorImage: document.querySelector('.custom-mouse-image'),
@@ -904,4 +908,23 @@ export function setRemovedDialogueOptions(npcId, questPhase, optionId) {
 export function getRemovedDialogueOptions() {
     return removedDialogueOptions;
 }
+
+export function setCurrentExitOptionText(value) {
+    currentExitOptionText = value;
+}
+
+export function getCurrentExitOptionText() {
+    return currentExitOptionText;
+}
+
+export function setCurrentScrollIndexDialogue(value) {
+    currentScrollIndexDialogue = value;
+}
+
+export function getCurrentScrollIndexDialogue() {
+    return currentScrollIndexDialogue;
+}
+
+
+
 

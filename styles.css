@@ -370,6 +370,26 @@ canvas {
     border-color: #C65D25;
 }
 
+/* New Disabled State */
+.arrow-disabled {
+    background-color: #333; /* Change background color */
+    border-color: #333; /* Change border color */
+    cursor: default; /* Change cursor to default */
+}
+
+.arrow-disabled:hover {
+    background-color: #333; /* No change on hover */
+}
+
+.arrow-disabled::before {
+    border-color: #333; /* Change the border color on the disabled state */
+}
+
+.arrow-disabled:hover::before {
+    border-color: #333; /* No change on hover for the border */
+}
+
+
 .border-red {
     border: 1px solid red;
 }
@@ -387,14 +407,6 @@ canvas {
 #bottomContainer .col-6 {
     flex: 1;
 }
-
-/* #dialogueContainer {
-    
-}
-
-#verbsInventoryContainer {
-
-} */
 
 #dialogueSection,
 #scrollSection {

@@ -598,6 +598,20 @@
                                     "de": "Hast du in letzter Zeit gute Gerüchte gehört?",
                                     "it": "Hai sentito qualche buon pettegolezzo ultimamente?",
                                     "fr": "Tu as entendu de bons ragots récemment ?"
+                                },
+                                "4": {
+                                    "en": "Nice Weather isn't it?",
+                                    "es": "¿Hace buen tiempo, verdad?",
+                                    "de": "Schönes Wetter, nicht wahr?",
+                                    "it": "Bel tempo, vero?",
+                                    "fr": "Il fait beau, n'est-ce pas?"
+                                },
+                                "5": {
+                                    "en": "What's in the research room?",
+                                    "es": "¿Qué hay en la sala de investigación?",
+                                    "de": "Was ist im Forschungsraum?",
+                                    "it": "Cosa c'è nella stanza di ricerca?",
+                                    "fr": "Qu'est-ce qu'il y a dans la salle de recherche ?"
                                 }
                             },
                             "exitOption": {
@@ -671,6 +685,30 @@
                                             "de": "Hast du von dem Hund der Stadt gehört?\u0020",
                                             "it": "Hai sentito parlare del cane del paese?\u0020",
                                             "fr": "As-tu entendu parler du chien de la ville ?\u0020"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "4": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "How would I know, I'm stuck in here!",
+                                            "es": "¿Cómo podría saberlo? ¡Estoy atrapado aquí!",
+                                            "de": "Wie soll ich das wissen? Ich bin hier eingesperrt!",
+                                            "it": "Come potrei saperlo, sono bloccato qui dentro!",
+                                            "fr": "Comment le saurais-je, je suis coincé ici !"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "5": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "What's in the research room?",
+                                            "es": "¿Qué hay en la sala de investigación?",
+                                            "de": "Was ist im Forschungsraum?",
+                                            "it": "Cosa c'è nella stanza di ricerca?",
+                                            "fr": "Qu'est-ce qu'il y a dans la salle de recherche ?"
                                         }
                                     },
                                     "order": "1!"
