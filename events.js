@@ -274,6 +274,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 setTransitioningToDialogueState(false);
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 setGameState(getGameVisibleActive());
+                setDialogueTextClicked(null);
                 return;
             }
         }
