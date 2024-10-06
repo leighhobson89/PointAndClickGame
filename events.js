@@ -118,57 +118,68 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 setCanExitDialogueAtThisPoint(!!exitOptionText);
                 removeDialogueRow(0);
     
-                if (getCanExitDialogueAtThisPoint()) {
-                    let dialogueOptionsCount = 0;
-                    let dialogueRowsOptionsIds = {};
-                
-                    if (dialogueOptionsTexts.length > 0) {
-                        let scrollReserve = [];
-                
-                        for (let i = 0; i < dialogueOptionsTexts.length; i++) {
-                            let dialogueOptionText = dialogueOptionsTexts[i];
-                
-                            if (dialogueOptionsCount < 3) {                            
-                                const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
-                                
-                                for (let phaseId in dialogueData) {
-                                    if (dialogueData[phaseId][language] === dialogueOptionText) {
-                                        dialogueRowsOptionsIds[dialogueOptionsCount + 1] = phaseId;
-                                        break;
-                                    }
+                let dialogueOptionsCount = 0;
+                let dialogueRowsOptionsIds = {};
+            
+                if (dialogueOptionsTexts.length > 0) {
+                    let scrollReserve = [];
+            
+                    for (let i = 0; i < dialogueOptionsTexts.length; i++) {
+                        let dialogueOptionText = dialogueOptionsTexts[i];
+            
+                        if (dialogueOptionsCount < 3) {                            
+                            const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
+                            
+                            for (let phaseId in dialogueData) {
+                                if (dialogueData[phaseId][language] === dialogueOptionText) {
+                                    dialogueRowsOptionsIds[dialogueOptionsCount + 1] = phaseId;
+                                    break;
                                 }
-    
-                                addDialogueRow(dialogueOptionText);
-                                dialogueOptionsCount++;
-                            } else {
-                                scrollReserve.push(dialogueOptionText);
+                            }
+
+                            addDialogueRow(dialogueOptionText);
+                            dialogueOptionsCount++;
+                        } else {
+                            scrollReserve.push(dialogueOptionText);
+                        }
+                    }
+
+                    setCurrentDialogueRowsOptionsIds(dialogueRowsOptionsIds);
+                    setDialogueOptionsScrollReserve(scrollReserve);
+
+                    if (getCanExitDialogueAtThisPoint()) {
+                        addDialogueRow(exitOptionText);
+                        setCurrentExitOptionRow(dialogueOptionsCount + 1);
+                    } else if (scrollReserve.length > 0) {
+                        addDialogueRow(scrollReserve[0]);
+                        const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
+                    
+                        for (let phaseId in dialogueData) {
+                            if (dialogueData[phaseId][language] === scrollReserve[0]) {
+                                const nextRowIndex = dialogueOptionsCount + 1;
+                                dialogueRowsOptionsIds[nextRowIndex] = phaseId; // Add the new option to the existing object
+                                break;
                             }
                         }
-                        
-                        addDialogueRow(exitOptionText);
-    
-                        setCurrentDialogueRowsOptionsIds(dialogueRowsOptionsIds);
-                        setDialogueOptionsScrollReserve(scrollReserve);
-                        setCurrentExitOptionRow(dialogueOptionsCount + 1);
-    
-                        const userChoice = await waitForUserClickOnDialogueOption();
-                        if (getCurrentDialogueRowsOptionsIds()[userChoice]) {
-                            setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice]);
-                        } else {
-                            setDialogueOptionClicked(getCurrentExitOptionRow());
-                            type = 'exiting';
-                        }
-                    } else {
-                        addDialogueRow(exitOptionText);
-                        setCurrentExitOptionRow(dialogueOptionsCount + 1);
                     }
+                    
+                    const userChoice = await waitForUserClickOnDialogueOption();
+                    if (getCurrentDialogueRowsOptionsIds()[userChoice]) {
+                        setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice]);
+                    } else {
+                        setDialogueOptionClicked(getCurrentExitOptionRow());
+                        type = 'exiting';
+                    }
+
                 } else {
-                    //this doesnt work if no exit condition and not any scroll reserves, later on change it to check dialogue too which will be needed for advancing when its all mapped out properly
-                    if (getDialogueOptionsScrollReserve().length > 0) {
-                        const scrollReserve = getDialogueOptionsScrollReserve();
-                        addDialogueRow(scrollReserve[0]);
-                        scrollReserve.shift();
-                        setDialogueOptionsScrollReserve(scrollReserve);
+                    addDialogueRow(exitOptionText);
+                    setCurrentExitOptionRow(dialogueOptionsCount + 1);
+                    
+                    const userChoice = await waitForUserClickOnDialogueOption();
+                    
+                    if (userChoice === getCurrentExitOptionRow()) {
+                        setDialogueOptionClicked(getCurrentExitOptionRow());
+                        type = 'exiting';
                     }
                 }
                 
