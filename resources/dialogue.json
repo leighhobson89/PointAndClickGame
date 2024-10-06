@@ -601,11 +601,23 @@
                                 }
                             },
                             "exitOption": {
-                                "en": "On second thoughts, no don't worry about it!",
-                                "es": "Pensándolo bien, no te preocupes por eso.",
-                                "de": "Bei näherer Überlegung, nein, mach dir keine Sorgen darum!",
-                                "it": "Riflettend, no, non preoccuparti di questo!",
-                                "fr": "En y réfléchissant, non, ne t'inquiète pas pour ça !"
+                                "phase": {
+                                    "0": {
+                                        "en": "On second thoughts, no don't worry about it!",
+                                        "es": "Pensándolo bien, no te preocupes por eso.",
+                                        "de": "Bei näherer Überlegung, nein, mach dir keine Sorgen darum!",
+                                        "it": "Riflettend, no, non preoccuparti di questo!",
+                                        "fr": "En y réfléchissant, non, ne t'inquiète pas pour ça !"
+                                    },
+                                    "1": {
+                                        "en": "Ok please yourself, but please be quiet in the library!",
+                                        "es": "Está bien, haz lo que quieras, pero por favor guarda silencio en la biblioteca.",
+                                        "de": "In Ordnung, mach was du willst, aber sei bitte leise in der Bibliothek!",
+                                        "it": "Va bene, fai come vuoi, ma per favore stai tranquillo in biblioteca!",
+                                        "fr": "D'accord, fais ce que tu veux, mais s'il te plaît sois silencieux dans la bibliothèque!"
+                                    }
+                                },
+                                "order": "01!"
                             },
                             "responses": {
                                 "0": {
