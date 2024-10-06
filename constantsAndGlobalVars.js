@@ -30,7 +30,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 3500;
+export const TEXT_DISPLAY_DURATION = 800; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
@@ -92,6 +92,7 @@ let currentExitOptionRow;
 let dialogueRows = [];
 let dialogueOptionClicked;
 let dialogueTextClicked;
+let removedDialogueOptions = [];
 
 //FLAGS
 let audioMuted;
@@ -876,8 +877,6 @@ export function getDialogueTextClicked() {
     return dialogueTextClicked;
 }
 
-
-
 export function setCanExitDialogueAtThisPoint(value) {
     canExitDialogueAtThisPoint = value;
 }
@@ -885,3 +884,24 @@ export function setCanExitDialogueAtThisPoint(value) {
 export function getCanExitDialogueAtThisPoint() {
     return canExitDialogueAtThisPoint;
 }
+
+export function setQuestPhaseNpc(npcId, value) {
+    getNpcData().npcs[npcId].interactable.questPhase = value;
+}
+
+export function getQuestPhaseNpc(npcId) {
+    return getNpcData().npcs[npcId].interactable.questPhase;
+}
+
+export function setRemovedDialogueOptions(npcId, questPhase, optionId) {
+    removedDialogueOptions.push({
+        npcId: npcId,
+        questPhase: questPhase,
+        optionId: optionId
+    });
+}
+
+export function getRemovedDialogueOptions() {
+    return removedDialogueOptions;
+}
+

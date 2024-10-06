@@ -572,11 +572,11 @@
                             "order": "11!",
                             "dialogueOptions": {
                                 "0": {
-                                    "en": "Yes, I would like the key for the research room please.",
-                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.",
-                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.",
-                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.",
-                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît."
+                                    "en": "Yes, I would like the key for the research room please.\u0020",
+                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.\u0020",
+                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
+                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.\u0020",
+                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
                                 },
                                 "1": {
                                     "en": "Yes, how much did those glasses cost, I want some!",
@@ -628,8 +628,16 @@
                                             "de": "Und du denkst, ich werde es dir einfach geben?",
                                             "it": "E pensi che io te lo darò così, senza motivo?",
                                             "fr": "Et tu penses que je vais juste te le donner ?"
+                                        },
+                                        "1": {
+                                            "en": "Why do you need it?",
+                                            "es": "¿Y crees que solo te lo voy a dar?",
+                                            "de": "Und du denkst, ich werde es dir einfach geben?",
+                                            "it": "E pensi che io te lo darò così, senza motivo?",
+                                            "fr": "Et tu penses que je vais juste te le donner ?"
                                         }
-                                    }
+                                    },
+                                    "order": "11!"
                                 },
                                 "1": {
                                     "phase": {
@@ -640,7 +648,8 @@
                                             "it": "Erano un regalo gratuito dal mio stilista, unico!",
                                             "fr": "C'était un cadeau gratuit de mon designer de mode, unique !"
                                         }
-                                    }
+                                    },
+                                    "order": "1!"
                                 },
                                 "2": {
                                     "phase": {
@@ -651,7 +660,8 @@
                                             "it": "Ahah! I miei giorni da appuntamenti sono finiti, ma grazie per l'offerta!",
                                             "fr": "Haha ! Mes jours de rencontres sont finis, mais merci pour l'offre !"
                                         }
-                                    }
+                                    },
+                                    "order": "1!"
                                 },
                                 "3": {
                                     "phase": {
@@ -662,19 +672,141 @@
                                             "it": "Hai sentito parlare del cane del paese?\u0020",
                                             "fr": "As-tu entendu parler du chien de la ville ?\u0020"
                                         }
-                                    }
+                                    },
+                                    "order": "1!"
                                 }
                             }
                         },                    
-                        "1": { 
+                        "1": {
+                            "introDialogue": {
+                                "en": "h..e..l..l..o again!",
+                                "es": "h..o..l..a de nuevo!",
+                                "de": "h..a..l..l..o nochmal!",
+                                "it": "c..i..a..o di nuovo!",
+                                "fr": "b..o..n..j..o..u..r encore!"
+                            },
                             "phase": {
                                 "0": {
-                                    "en": "I think he is happy as he is now.",
-                                    "es": "Creo que está feliz tal como está ahora.",
-                                    "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
-                                    "it": "Penso che sia felice così com'è ora.",
-                                    "fr": "Je pense qu'il est heureux tel qu'il est maintenant."   
-                                }      
+                                    "en": "Oh hello, you're back!",
+                                    "es": "¡Oh, hola, has vuelto!",
+                                    "de": "Oh hallo, du bist zurück!",
+                                    "it": "Oh ciao, sei tornato!",
+                                    "fr": "Oh bonjour, tu es de retour!"
+                                },
+                                "1": {
+                                    "en": "What do you need this time?",
+                                    "es": "¿Qué necesitas esta vez?",
+                                    "de": "Was brauchst du diesmal?",
+                                    "it": "Di cosa hai bisogno stavolta?",
+                                    "fr": "De quoi as-tu besoin cette fois?"
+                                }
+                            },
+                            "order": "11!",
+                            "dialogueOptions": {
+                                "0": {
+                                    "en": "Just give it me please, I have something important to check.\u0020",
+                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.\u0020",
+                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
+                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.\u0020",
+                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
+                                },
+                                "1": {
+                                    "en": "Yes, how much did those glasses cost, I want some!",
+                                    "es": "Sí, ¿cuánto costaron esas gafas? ¡Quiero algunas!",
+                                    "de": "Ja, wie viel haben diese Brillen gekostet? Ich möchte welche!",
+                                    "it": "Sì, quanto costavano quegli occhiali? Ne voglio un paio!",
+                                    "fr": "Oui, combien coûtaient ces lunettes ? J'en veux !"
+                                },
+                                "2": {
+                                    "en": "What time do you clock off, fancy getting a bite to eat?",
+                                    "es": "¿A qué hora terminas, te apetece comer algo?",
+                                    "de": "Wann hast du Feierabend, hättest du Lust, etwas zu essen?",
+                                    "it": "A che ora esci dal lavoro, ti va di mangiare qualcosa?",
+                                    "fr": "À quelle heure termines-tu, ça te dit d'aller manger un morceau ?"
+                                },
+                                "3": {
+                                    "en": "Heard any good rumours lately?",
+                                    "es": "¿Has oído algún buen rumor últimamente?",
+                                    "de": "Hast du in letzter Zeit gute Gerüchte gehört?",
+                                    "it": "Hai sentito qualche buon pettegolezzo ultimamente?",
+                                    "fr": "Tu as entendu de bons ragots récemment ?"
+                                }
+                            },
+                            "exitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "On second thoughts, no don't worry about it!",
+                                        "es": "Pensándolo bien, no te preocupes por eso.",
+                                        "de": "Bei näherer Überlegung, nein, mach dir keine Sorgen darum!",
+                                        "it": "Riflettend, no, non preoccuparti di questo!",
+                                        "fr": "En y réfléchissant, non, ne t'inquiète pas pour ça !"
+                                    },
+                                    "1": {
+                                        "en": "Ok please yourself, but please be quiet in the library!",
+                                        "es": "Está bien, haz lo que quieras, pero por favor guarda silencio en la biblioteca.",
+                                        "de": "In Ordnung, mach was du willst, aber sei bitte leise in der Bibliothek!",
+                                        "it": "Va bene, fai come vuoi, ma per favore stai tranquillo in biblioteca!",
+                                        "fr": "D'accord, fais ce que tu veux, mais s'il te plaît sois silencieux dans la bibliothèque!"
+                                    }
+                                },
+                                "order": "01!"
+                            },
+                            "responses": {
+                                "0": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Look, the truth is I have misplaced it!",
+                                            "es": "Mira, la verdad es que lo he perdido.",
+                                            "de": "Schau, die Wahrheit ist, ich habe es verlegt!",
+                                            "it": "Guarda, la verità è che l'ho smarrito!",
+                                            "fr": "Écoute, la vérité c'est que je l'ai égaré !"
+                                        },
+                                        "1": {
+                                            "en": "I was over by the table doing something...",
+                                            "es": "Estaba junto a la mesa haciendo algo...",
+                                            "de": "Ich war drüben am Tisch und habe etwas gemacht...",
+                                            "it": "Ero vicino al tavolo facendo qualcosa...",
+                                            "fr": "J'étais près de la table en train de faire quelque chose..."
+                                        }
+                                    },
+                                    "order": "11!"
+                                },
+                                "1": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "They were a free gift from my fashion designer, unique!",
+                                            "es": "Fueron un regalo gratis de mi diseñador de moda, ¡único!",
+                                            "de": "Sie waren ein kostenloses Geschenk von meinem Modedesigner, einzigartig!",
+                                            "it": "Erano un regalo gratuito dal mio stilista, unico!",
+                                            "fr": "C'était un cadeau gratuit de mon designer de mode, unique !"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "2": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Hah! My dating days are done, but thanks for the offer!",
+                                            "es": "¡Jaja! Mis días de citas han terminado, ¡pero gracias por la oferta!",
+                                            "de": "Haha! Meine Dating-Tage sind vorbei, aber danke für das Angebot!",
+                                            "it": "Ahah! I miei giorni da appuntamenti sono finiti, ma grazie per l'offerta!",
+                                            "fr": "Haha ! Mes jours de rencontres sont finis, mais merci pour l'offre !"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "3": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Have you heard about the town dog?\u0020",
+                                            "es": "¿Has oído hablar del perro del pueblo?\u0020",
+                                            "de": "Hast du von dem Hund der Stadt gehört?\u0020",
+                                            "it": "Hai sentito parlare del cane del paese?\u0020",
+                                            "fr": "As-tu entendu parler du chien de la ville ?\u0020"
+                                        }
+                                    },
+                                    "order": "1!"
+                                }
                             }
                         }
                     },

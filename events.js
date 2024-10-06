@@ -1,4 +1,4 @@
-import { setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked } from "./constantsAndGlobalVars.js";
+import { setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -71,8 +71,9 @@ function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, spe
 async function dialogueEngine(realVerbUsed, npcId) {
     const language = getLanguage();
     const npcData = getNpcData().npcs[npcId];
-    const questPhase = npcData.interactable.questPhase;
     const dialoguePhase = npcData.interactable.dialoguePhase;
+
+    let questPhase = getQuestPhaseNpc(npcId);
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
 
     if (npcData) { //update interactionInfo
@@ -86,13 +87,14 @@ async function dialogueEngine(realVerbUsed, npcId) {
     let dialogueString = dialogueData.introDialogue[language]; //to be shown when first reaching the npc and provoking a conversation, before the opening dialogue from them to us
     await showText(dialogueString, getColorTextPlayer());
 
-    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting');
+    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting', null);
 
     console.log(orderOfStartingDialogue);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getInteractiveDialogueState());
 
     const showDialogue = async (dialoguePhase, type) => { //initialise opening dialogue
+        console.log("questphase upon calling function is " + getQuestPhaseNpc(npcId));
         if (type === 'starting') {
             const speaker = orderOfStartingDialogue[dialoguePhase];
             setCurrentSpeaker(speaker);
@@ -104,15 +106,21 @@ async function dialogueEngine(realVerbUsed, npcId) {
             await showText(dialogueString, textColor, xPos, yPos);
         }
 
-        if (type === 'starting') {
-            if (dialoguePhase < orderOfStartingDialogue.end) { //opening chat before dialogue
+        if (type === 'starting' || type === 'continuing' || type === 'advancing' || type === 'looping') { //just for clarity remove if block later
+            if (dialoguePhase < orderOfStartingDialogue.end && type === 'starting') { //opening chat before dialogue
                 dialoguePhase++;
                 await showDialogue(dialoguePhase, 'starting');
             } else { //trigger dialogue options and advanced dialogue and at the end close down the dialogue state
-                console.log("Calling extra events like dialogue options or giving items etc if needed and then ending flow");
-                dialoguePhase = 0;
+
+                if (type !== 'continuing') {
+                    dialoguePhase = 0;
+                }
     
                 let dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase);
+                crossReferenceDialoguesAlreadySpoken(dialogueOptionsTexts, questPhase, npcId);
+                dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase);
+
+
                 let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase);
                 
                 setCanExitDialogueAtThisPoint(!!exitOptionText);
@@ -121,7 +129,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 let dialogueOptionsCount = 0;
                 let dialogueRowsOptionsIds = {};
             
-                if (dialogueOptionsTexts.length > 0) {
+                if (dialogueOptionsTexts.length > 0 && (type === 'starting' || type === 'advancing') || type === 'looping') {
                     let scrollReserve = [];
             
                     for (let i = 0; i < dialogueOptionsTexts.length; i++) {
@@ -172,7 +180,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                         type = 'exiting';
                     }
 
-                } else {
+                } else if (type === 'starting' || type === 'advancing') {
                     addDialogueRow(exitOptionText);
                     setCurrentExitOptionRow(dialogueOptionsCount + 1);
                     
@@ -185,27 +193,57 @@ async function dialogueEngine(realVerbUsed, npcId) {
                     }
                 }
 
-                if (type !== 'exiting') {
+                if (type !== 'exiting') { //play dialogue option, response and set quest where necessary
+                    const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()));
+                    
+                    if (type !== 'continuing') {
+                        dialoguePhase = 0;
 
-                }
-                
-                //if dialogue string ends in trailing space setReadyToAdvanceNpcQuestPhase to true
-                // if (dialogueData.phase[lengthOfDialoguePhase - 1][language].endsWith(' ')) {
-                //     setReadyToAdvanceNpcQuestPhase(true);
-                //     
-                // } else {
-                //     make sure dialogue options are not available again if the quest doesnt move on    
-                // }
+                        removeDialogueRow(0);
     
-                //mark if the option clicked was the one to advance the questPhase
-                //if it was then setTriggerQuestPhaseAdvance() true
-                //showDialog(0) to show player dialog option in canvas
-                //play out response phase from npc
-                
-                //advance questPhase
-                if (getReadyToAdvanceNpcQuestPhase() && getTriggerQuestPhaseAdvance()) {
-                    questPhase++; 
+                        setCurrentSpeaker('player');
+                        await showText(getDialogueTextClicked(), getColorTextPlayer()); //play dialog option in game
+                    }
+                        const dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[getDialogueOptionClicked()].phase[dialoguePhase][language];
+                        
+                        const speaker = orderOfExitDialogue[dialoguePhase];
+                        setCurrentSpeaker(speaker);
+    
+                        const { xPos, yPos } = getTextPosition(speaker, npcData);
+                        const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+                    
+                        await showText(dialogueString, textColor, xPos, yPos);
+
+                    if (dialoguePhase < orderOfExitDialogue.end) {
+                        dialoguePhase++;
+                        await showDialogue(dialoguePhase, 'continuing');
+                    } else {
+                        dialoguePhase = 0;
+                        setCurrentSpeaker('player');
+                    }
+
+                    if (getDialogueTextClicked().endsWith(' ')) {
+                        console.log("advancing quest phase");
+                        questPhase++;
+                        setQuestPhaseNpc(npcId, questPhase);
+                        console.log("updated questPhase to " + questPhase);
+                        await showDialogue(0, 'advancing');
+                    } else {
+                        setReadyToAdvanceNpcQuestPhase(false);
+                        console.log("NOT advancing quest phase");
+                        changeDialogueOptionsForCurrentQuest(npcId, questPhase, getDialogueOptionClicked());
+                        console.log(getRemovedDialogueOptions());
+                        await showDialogue(0, 'looping');  
+                    }
                 }
+                
+                //if there are options then:
+                //read in clicked item and set questId and dialoguePhase based on this
+                //trigger cutscene state
+                //play dialogue sequence
+                //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
+                //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
+                //if there are NO options then return or trigger other event like give player item
     
                 //iterate back to check questPhase dialog responses or automatic exit if implemented on this chat
             }
@@ -214,7 +252,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
         if (getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') { //exiting out of dialogue
             removeDialogueRow(0);
 
-            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting');
+            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null);
             const dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.phase[dialoguePhase][language];
             
             const speaker = orderOfExitDialogue[dialoguePhase];
@@ -240,14 +278,6 @@ async function dialogueEngine(realVerbUsed, npcId) {
     };
     
     showDialogue(0, 'starting');
-
-    //if there are options then:
-    //read in clicked item and set questId and dialoguePhase based on this
-    //trigger cutscene state
-    //play dialogue sequence
-    //if last sequence contains a keyword to use in condition to do something like auto exit dialogue could be '!!' at the end of the string or something, or trigger event (could be 'give you' etc) then detect it and extract it
-    //otherwise trigger gameActive state, return to list of dialogues minus the one just played (or not if keyword says so)
-    //if there are NO options then return or trigger other event like give player item
 }
 
 // Helper function to determine the position of the text based on the speaker (player or NPC)
@@ -336,7 +366,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
     }
 }
 
-function getOrderOfDialogue(npcId, questPhase, type) {
+function getOrderOfDialogue(npcId, questPhase, type, responseId) {
     let order;
 
     switch(type) {
@@ -345,6 +375,9 @@ function getOrderOfDialogue(npcId, questPhase, type) {
             break;
         case 'exiting':
             order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+            break;
+        case 'continuing':
+            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
             break;
     }
 
@@ -411,6 +444,53 @@ function returnDialogueOptionsForCurrentQuest(npcId, questId) {
 
     return languageOptions;
 }
+
+function changeDialogueOptionsForCurrentQuest(npcId, questPhase, optionIdToRemove) {
+    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
+    const questData = dialogueData[npcId].quest[questPhase];
+
+    const dialogueOptions = questData.dialogueOptions;
+    const responses = questData.responses;
+
+    if (dialogueOptions && dialogueOptions[optionIdToRemove]) {
+        setRemovedDialogueOptions(npcId, questPhase, optionIdToRemove);
+
+        delete dialogueOptions[optionIdToRemove];
+    }
+
+    if (responses && responses[optionIdToRemove]) {
+        delete responses[optionIdToRemove];
+    }
+}
+
+function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId) {
+    const removedDialogueOptions = getRemovedDialogueOptions(); // Get the array of removed dialogue options
+    const language = getLanguage(); // Get the current language
+
+    if (removedDialogueOptions.length > 0 && questPhase > 0) {
+            // Iterate over each removed dialogue option
+    removedDialogueOptions.forEach(option => {
+        // Check if the npcId matches
+        if (option.npcId === npcId) {
+            // Get the text for the current option
+            let optionText = null;
+            const optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
+            if (optionId) {
+                optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
+            }
+
+            // Check if the text matches any of the dialogue strings
+            if (dialogueStrings.includes(optionText)) {
+                console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
+                
+                // Call the function to change dialogue options for the current quest phase
+                changeDialogueOptionsForCurrentQuest(npcId, questPhase, option.optionId);
+            }
+        }
+    });
+    }
+}
+
 
 function waitForUserClickOnDialogueOption() {
     return new Promise((resolve) => {
