@@ -148,8 +148,6 @@ export function aStarPathfinding(start, target, action) {
     return [];
 }
 
-
-
 export function findAndMoveToNearestWalkable(start, target, teleport) {
     const gridData = getGridData();
     const player = getPlayerObject();

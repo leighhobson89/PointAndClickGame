@@ -13,14 +13,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     getElements().customCursor.style.transform = 'translate(-50%, -50%)';
     loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData, urlDialogueData, urlNpcsData);
 
-
     getElements().newGameMenuButton.addEventListener('click', (event) => {
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
         resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
         setBeginGameStatus(true);
-        if (!getGameInProgress()) {
-            setGameInProgress(true);
-        }
         updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
         disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
         disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
@@ -35,8 +31,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             setGameState(getPreviousGameState());
             setPreviousGameState(null);
         }
-    
-        gameLoop();
     });
 
     getElements().returnToMenuButton.addEventListener('click', () => {
@@ -702,7 +696,7 @@ function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
     let adjustedY = startY - (lines.length * lineHeight);
 
     lines.forEach(line => {
-        ctx.font = '2.6em sans-serif';
+        ctx.font = '2.4em sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         ctx.letterSpacing = '3px';
@@ -877,7 +871,6 @@ export function hideDialogueArrows() {
         downArrow.classList.add("arrow-disabled");
     }
 }
-
 
 async function scrollDown() {
     const currentScrollIndex = getCurrentScrollIndexDialogue();
