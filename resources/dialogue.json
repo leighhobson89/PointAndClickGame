@@ -572,18 +572,18 @@
                             "order": "11!",
                             "dialogueOptions": {
                                 "0": {
-                                    "en": "Yes, I would like the key for the research room please.\u0020",
-                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.\u0020",
-                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
-                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.\u0020",
-                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
+                                    "en": "I would like the key for the research room please.\u0020",
+                                    "es": "Me gustaría la llave para la sala de investigación, por favor.\u0020",
+                                    "de": "Ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
+                                    "it": "Vorrei la chiave per la stanza di ricerca, per favore.\u0020",
+                                    "fr": "Je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
                                 },
                                 "1": {
-                                    "en": "Yes, how much did those glasses cost, I want some!",
-                                    "es": "Sí, ¿cuánto costaron esas gafas? ¡Quiero algunas!",
-                                    "de": "Ja, wie viel haben diese Brillen gekostet? Ich möchte welche!",
-                                    "it": "Sì, quanto costavano quegli occhiali? Ne voglio un paio!",
-                                    "fr": "Oui, combien coûtaient ces lunettes ? J'en veux !"
+                                    "en": "How much did those glasses cost, I want some!",
+                                    "es": "¿Cuánto costaron esas gafas? ¡Quiero algunas!",
+                                    "de": "Wie viel haben diese Brillen gekostet? Ich möchte welche!",
+                                    "it": "Quanto costavano quegli occhiali? Ne voglio un paio!",
+                                    "fr": "Combien coûtaient ces lunettes ? J'en veux !"
                                 },
                                 "2": {
                                     "en": "What time do you clock off, fancy getting a bite to eat?",
