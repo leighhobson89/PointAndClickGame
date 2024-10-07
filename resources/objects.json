@@ -15,7 +15,7 @@
                 "fr": "Clé"
             },
             "interactable": {
-                "canHover": true,
+                "canHover": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -37,8 +37,8 @@
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/goldKey.png",
-                "s2": "./resources/objects/images/goldKey.png"
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -50,10 +50,10 @@
                     "y": 0
                 }
             },
-            "inventoryUrl": "./resources/objects/images/goldKey.png",
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
             "gridPosition": {
-                "x": 39,
-                "y": 49
+                "x": 27,
+                "y": 52
             },
             "offset": {
                 "x": 0,
@@ -68,6 +68,69 @@
                 "height": 20
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectPileOfBooksLibraryFoyer": {
+            "name": {
+                "en": "Pile of Books",
+                "es": "Pila de libros",
+                "de": "Stapel Bücher",
+                "it": "Pila di libri",
+                "fr": "Pile de livres"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false, 
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "moveBooksToGetResearchRoomKey",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/blank.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 19,
+                "y": 47
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 130,
+                "height": 50
+            },
+            "comment": "Pile of books you use or push or pull to get the key for the research room"
         },
         "objectBatteryDEBUG": {
             "name": {

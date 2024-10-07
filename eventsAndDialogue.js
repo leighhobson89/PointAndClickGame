@@ -65,6 +65,14 @@ function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, spe
     setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
 }
 
+function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerbUsed, special) {
+    showText(dialogueString, getColorTextPlayer());
+    setObjectData(`objectKeyResearchRoom`, `interactable.canHover`, true);
+    setObjectData(`objectKeyResearchRoom`, `activeSpriteUrl`, 's2');
+    setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.alreadyUsed`, true);
+    setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.activeStatus`, false);
+}
+
 //----------------------------------------------------------------------------------------------------------------
 
 // Dialogue Engine

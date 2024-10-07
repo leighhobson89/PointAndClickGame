@@ -8,6 +8,31 @@
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
+                "objectPileOfBooksLibraryFoyer": {
+                    "use": {
+                        "cantUseYet": {
+                            "en": "", 
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "alreadyUsed": {
+                            "en": "I haven't got time to read right now.", 
+                            "es": "No tengo tiempo para leer ahora mismo.",
+                            "de": "Ich habe jetzt keine Zeit zum Lesen.",
+                            "it": "Non ho tempo per leggere adesso.",
+                            "fr": "Je n'ai pas le temps de lire en ce moment."
+                        },
+                        "canUse": {
+                            "en": "Ooo, a key fell out of this book!", 
+                            "es": "¡Ooo, una llave se ha caído de este libro!",
+                            "de": "Ooo, ein Schlüssel ist aus diesem Buch gefallen!",
+                            "it": "Ooo, una chiave è caduta fuori da questo libro!",
+                            "fr": "Ooo, une clé est tombée de ce livre !"
+                        }
+                    }
+                },
                 "objectMachineDEBUG": {
                     "use": {
                         "cantUseYet": {
@@ -382,6 +407,13 @@
                             "fr": "La porte mène à la carte. Une clé est nécessaire."
                         }
                     }
+                },
+                "objectPileOfBooksLibraryFoyer": {
+                    "en": "A large pile of books, that look to have been used recently.",
+                    "es": "Una gran pila de libros que parecen haber sido usados recientemente.",
+                    "de": "Ein großer Stapel Bücher, der kürzlich benutzt worden zu sein scheint.",
+                    "it": "Una grande pila di libri che sembrano essere stati usati di recente.",
+                    "fr": "Une grande pile de livres qui semblent avoir été utilisés récemment."
                 },
                 "objectKeyResearchRoom": {
                     "en": "A small, brass key with an ornate pattern.",
