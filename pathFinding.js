@@ -162,6 +162,10 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
         targetY = Math.floor(target.y + (player.height / getCanvasCellHeight()));
     }
 
+    // Calculate midpoint between start and target
+    let midX = Math.floor((start.x + targetX) / 2);
+    let midY = Math.floor((start.y + targetY) / 2);
+
     const directionX = Math.sign(start.x - target.x);
     const directionY = Math.sign(start.y - target.y);
 
@@ -178,8 +182,8 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
     ];
 
     const visited = new Set();
-    const queue = [{ x: targetX, y: targetY }];
-    
+    const queue = [{ x: midX, y: midY }];
+
     let iterations = 0;
     const maxIterations = 5000;
 
@@ -188,21 +192,25 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
             console.error("Search timed out after checking " + maxIterations + " cells.");
             return null;
         }
-        
+
         const current = queue.shift();
         const { x, y } = current;
 
         iterations++;
-
         visited.add(`${x},${y}`);
 
+        // Skip out-of-bounds cells
         if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY) {
             continue;
         }
 
         const cellType = gridData.gridData[y][x];
 
-        if (cellType.startsWith('w')) {
+        // Skip non-walkable cells (anything marked as 'n')
+        if (cellType === 'n') {
+            // Still need to explore neighbors, so continue below
+        } else if (cellType.startsWith('w')) {
+            // Found a walkable cell, return or teleport player
             const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
             const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
 
@@ -216,6 +224,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
             return { x: x, y: y };
         }
 
+        // Add priority directions to the queue first
         for (const dir of priorityDirections) {
             const neighborX = x + dir.x;
             const neighborY = y + dir.y;
@@ -223,9 +232,11 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
 
             if (!visited.has(key)) {
                 queue.push({ x: neighborX, y: neighborY });
+                visited.add(key); // Mark neighbor as visited right away
             }
         }
 
+        // Add fallback directions to the queue
         for (const dir of fallbackDirections) {
             const neighborX = x + dir.x;
             const neighborY = y + dir.y;
@@ -233,13 +244,15 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
 
             if (!visited.has(key)) {
                 queue.push({ x: neighborX, y: neighborY });
+                visited.add(key); // Mark neighbor as visited right away
             }
         }
     }
 
-    //console.error("No walkable square found");
-    return null;
+    return null; // No walkable square found
 }
+
+
 
 function checkAndRedirectToDoor(target) {
     const gridData = getGridData();
