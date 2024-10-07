@@ -944,6 +944,20 @@
                 "it": "La gente penserà che sono pazzo a parlare con quello!",
                 "fr": "Les gens vont penser que je suis fou de parler à ça !"
             },
+            "itemCannotBePulled": {
+                "en": "I can't pull that!",
+                "es": "¡No puedo jalar eso!",
+                "de": "Ich kann das nicht ziehen!",
+                "it": "Non posso tirare quello!",
+                "fr": "Je ne peux pas tirer ça !"
+            },
+            "itemCannotBePushed": {
+                "en": "I can't push that!",
+                "es": "¡No puedo empujar eso!",
+                "de": "Ich kann das nicht schieben!",
+                "it": "Non posso spingere quello!",
+                "fr": "Je ne peux pas pousser ça !"
+            },
             "itemCannotBeOpened": {
                 "en": "I can't open that!",
                 "es": "¡No puedo abrir eso!",

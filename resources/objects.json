@@ -16,6 +16,8 @@
             },
             "interactable": {
                 "canHover": false,
+                "canPush": false,
+                "canPull": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -79,6 +81,8 @@
             },
             "interactable": {
                 "canHover": true,
+                "canPush": true,
+                "canPull": true,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
@@ -142,6 +146,8 @@
             },
             "interactable": {
                 "canHover": true,
+                "canPush": false,
+                "canPull": false,
                 "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
@@ -206,6 +212,8 @@
             },
             "interactable": {
                 "canHover": true,
+                "canPush": false,
+                "canPull": false,
                 "canOpen": false,
                 "canPickUp": false,
                 "canUse": true,
@@ -270,6 +278,8 @@
             },
             "interactable": {
                 "canHover": true,
+                "canPush": false,
+                "canPull": false,
                 "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
@@ -334,6 +344,8 @@
                 },
                 "interactable": {
                     "canHover": true,
+                    "canPush": false,
+                    "canPull": false,
                     "canOpen": true,
                     "canPickUp": false,
                     "canUse": true,
@@ -398,6 +410,8 @@
             },
             "interactable": {
                 "canHover": true,
+                "canPush": false,
+                "canPull": false,
                 "canOpen": true,
                 "canPickUp": false,
                 "canUse": true,

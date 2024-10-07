@@ -571,17 +571,50 @@ export function handleClose(verb, objectId, exitOrNot) {
 
 // Handle "Push" action
 export function handlePush(verb, objectId) {
-    console.log(`Pushing object: ${objectId}`);
-    // Add your implementation here
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    let dialogueString;
+
+    
+    if (objectData) { //can only push objects and not other types
+        if (objectData.interactable.canPush && !objectData.interactable.canUse) {
+            //handle cases where you can push but cannot use if ever comes about
+        } else if (objectData.interactable.canPush) {
+            handleUse(objectId, null, null, null, false, 1, true, verb);
+        } else {
+            dialogueString = dialogueData.globalMessages.itemCannotBePushed[language];
+            showText(dialogueString, getColorTextPlayer());
+        }
+    } else {
+        dialogueString = dialogueData.globalMessages.itemCannotBePushed[language];
+        showText(dialogueString, getColorTextPlayer());
+    }
 }
+
 // Handle "Pull" action
-
 export function handlePull(verb, objectId) {
-    console.log(`Pulling object: ${objectId}`);
-    // Add your implementation here
-}
-// Handle "Talk To" action
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    let dialogueString;
 
+    if (objectData) { //can only pull objects and not other types
+        if (objectData.interactable.canPull && !objectData.interactable.canUse) {
+            //handle cases where you can pull but cannot use if ever comes about
+        } else if (objectData.interactable.canPull) {
+            handleUse(objectId, null, null, null, false, 1, true, verb);
+        } else {
+            dialogueString = dialogueData.globalMessages.itemCannotBePulled[language];
+            showText(dialogueString, getColorTextPlayer());
+        }
+    } else {
+        dialogueString = dialogueData.globalMessages.itemCannotBePulled[language];
+        showText(dialogueString, getColorTextPlayer());
+    }
+}
+
+// Handle "Talk To" action
 export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
     const npcData = getNpcData().npcs[npcId];
     const dialogueData = getDialogueData().dialogue;
