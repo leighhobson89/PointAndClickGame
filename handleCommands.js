@@ -40,7 +40,7 @@ export function performCommand(command, inventoryItem) {
                 handleTalkTo(verbKey, objectId1, exitOrNot1, isObjectTrueNpcFalse);
                 break;
             case 'verbGive':
-                handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity);
+                handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse);
                 break;
         }
     }
@@ -400,7 +400,6 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     }
 }
 
-
 export async function useItem(objectId1, objectId2, useWith, exitOrNot2, inventoryItem2, isObject1TrueNpcFalse, isObject2TrueNpcFalse, realVerbUsed) { //function uses all items, use or use with
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
@@ -513,20 +512,12 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWith
 
 function handleCannotUseExitMessage(language, dialogueData) {
     const cannotUseExitMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedWithExit?.[language];
-    if (cannotUseExitMessage) {
-        showText(cannotUseExitMessage, getColorTextPlayer());        
-    } else {
-        console.warn(`No global message found for itemCannotBeUsedWithExit in language ${language}`);
-    }
+    showText(cannotUseExitMessage, getColorTextPlayer());        
 }
 
 function handleCannotUsedUntilPickedUpMessage(language, dialogueData) {
     const cannotUseUntilPickedUpMessage = dialogueData.dialogue.globalMessages.itemCannotBeUsedUntilPickedUp?.[language];
-    if (cannotUseUntilPickedUpMessage) {
-        showText(cannotUseUntilPickedUpMessage, getColorTextPlayer());  
-    } else {
-        console.warn(`No global message found for itemCannotBeUsedUntilPickedUp in language ${language}`);
-    }
+    showText(cannotUseUntilPickedUpMessage, getColorTextPlayer());  
 }
 
 // Handle "Open" action
@@ -576,7 +567,6 @@ export function handlePush(verb, objectId) {
     const language = getLanguage();
     let dialogueString;
 
-    
     if (objectData) { //can only push objects and not other types
         if (objectData.interactable.canPush && !objectData.interactable.canUse) {
             //handle cases where you can push but cannot use if ever comes about
@@ -636,9 +626,172 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
 }
 
 // Handle "Give" action
-export function handleGive(verb, objectId) {
-    console.log(`Giving object: ${objectId}`);
-    // Add your implementation here
+export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse) {
+    const dialogueData = getDialogueData();
+    const language = getLanguage();
+    let canGiveObject;
+
+    if (!getWaitingForSecondItem()) {
+        canGiveObject = checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNot1, isObjectTrueNpcFalse, objectId1, inventoryItem);
+        if (!canGiveObject) return;
+    }
+
+    //by this point we have established that we have not done any of the items in the environment:
+    //give environment object,
+    //give exit, 
+    //give non inventory but pickable object
+    //give npc
+    //give inventory item that cannot be given
+
+    //and established that the item clicked can be given.
+
+    if (!getWaitingForSecondItem()) {
+        setWaitingForSecondItem(true);
+        setObjectToBeUsedWithSecondItem(objectId1);
+        const interactiveInfoTo = getElements().interactionInfo.textContent + " " + localize('interactionTo', language, 'verbsActionsInteraction');
+        updateInteractionInfo(interactiveInfoTo, false);
+    } else {
+        console.log("handling Give To");
+        handleTo(objectId1, objectId2, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse); //inventoryItem always refers to object2 by this point
+        setVerbButtonConstructionStatus(null);
+        resetSecondItemState();
+        updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
+    }
+}
+
+function checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNot, isObjectTrueNpcFalse, objectId, inventoryItem) {
+    let dialogueString;
+    let objectData;
+    let canGive;
+
+    if (isObjectTrueNpcFalse) {
+        if (!exitOrNot) {
+            objectData = getObjectData().objects[objectId]; //any object
+            canGive = objectData.interactable.canGive;
+        } else {
+            canGive = false; //exit
+        }
+    } else {
+        objectData = getNpcData().npcs[objectId]; //npc
+    }
+
+    if (exitOrNot) {
+        dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenToExit[language]; //exits
+    } else if (!isObjectTrueNpcFalse) {
+        dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenAsIsNpc[language]; //npc
+    } else if (inventoryItem && !canGive) {
+        dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGiven[language]; //inventory objects that cannot be given
+    } else if (!inventoryItem) {
+        dialogueString = dialogueData.dialogue.globalMessages.itemNotInPossessionToGive[language]; //all objects in environemnt whether pickable or not
+    } else {
+        return true; // inventory items that can be given
+    }
+    
+    showText(dialogueString, getColorTextPlayer()); 
+    return false;
+}
+
+export async function handleTo(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse) {
+    console.log("handle to");
+    // const language = getLanguage();
+    // const objectData = getObjectData();
+    // const npcData = getNpcData();
+    // const object1 = objectData.objects[objectId1];
+    // const dialogueData = getDialogueData().dialogue.globalMessages;
+    // const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
+    // const useWith2 = checkIfItemCanBeUsedWith(objectId2, isObject2TrueNpcFalse, false);
+
+    // let object2;
+    // let useTogetherLocation2;
+    // let dialogueString;
+
+    // if (objectId2 !== null) {
+    //     if (isObject2TrueNpcFalse) {
+    //         object2 = objectData.objects[objectId2];
+    //         if (!exitOrNot2) {
+    //             useTogetherLocation2 = object2.usedOn.useTogetherLocation;
+    //         }
+    //     } else {
+    //         object2 = npcData.npcs[objectId2];
+    //         useTogetherLocation2 = object2.usedOn.useTogetherLocation;
+    //     }
+    // } else {
+    //     return;
+    // }
+
+    // let locationCorrect;
+    // let locationImportant;
+
+    // if (useTogetherLocation1 && useTogetherLocation2) { 
+    //     locationImportant = true;
+    //     if (useTogetherLocation1 === useTogetherLocation2) {
+    //         if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2 && useWith2) {
+    //             locationCorrect = true;
+    //         } else {
+    //             console.log("1: not right location to use these items together (2 inventory) - PASSED");
+    //             dialogueString = dialogueData.correctItemsWrongLocation[language];
+    //             await showText(dialogueString, getColorTextPlayer());
+    //             return;
+    //         }
+    //     } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 && useWith2) {
+    //         console.log("2: irrelevant location, can use these items together (2 inventory) - PASSED");
+    //         handleInventoryAdjustment(objectId1, quantity);
+    //         if (isObject2TrueNpcFalse) {
+    //             handleInventoryAdjustment(objectId2, quantity);
+    //         }
+    //         drawInventory(0);
+    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+    //         return;
+    //     } else {
+    //         dialogueString = dialogueData.cantBeUsedTogether[language];
+    //         console.log("3: Two items that are just not able to be used together - PASSED");
+    //         await showText(dialogueString, getColorTextPlayer());
+    //         return;
+    //     }
+    // }
+
+    // if (!inventoryItem2 && !exitOrNot2) {
+    //     if (object1.usedOn.objectUseWith1 === objectId2) {
+    //         console.log("4: using object with environment object - PASSED");
+    //         handleInventoryAdjustment(objectId1, quantity);
+    //         drawInventory(0);
+    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+    //         return;
+    //     } else {
+    //         dialogueString = dialogueData.cantBeUsedTogether[language];
+    //         await showText(dialogueString, getColorTextPlayer());
+    //         console.log("5: items cannot be used together (environment object) - PASSED");
+    //         return;
+    //     }
+    // }
+
+    // if (exitOrNot2) {
+    //     if (object1.usedOn.objectUseWith1 === objectId2 && useTogetherLocation1 === getCurrentScreenId()) {
+    //         console.log("6: using object on exit - PASSED");
+    //         handleInventoryAdjustment(objectId1, quantity);
+    //         drawInventory(0);
+    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+    //         return;
+    //     } else {
+    //         dialogueString = dialogueData.howWouldThatWorkWithThis[language];
+    //         await showText(dialogueString, getColorTextPlayer());
+    //         console.log("7: wrong object for exit - PASSED");
+    //         return;
+    //     }
+    // }
+
+    // if (object1.usedOn.objectUseWith1 === objectId2 && object2.usedOn.objectUseWith1 === objectId1 && isObject2TrueNpcFalse) {
+    //     console.log("8: using two inventory items where location is important and location is correct - PASSED");
+    //     handleInventoryAdjustment(objectId1, quantity);
+    //     drawInventory(0);
+    //     useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+    //     return;
+    // } else {
+    //     dialogueString = dialogueData.cantBeUsedTogether[language];
+    //     await showText(dialogueString, getColorTextPlayer()); // Wait for the text to finish before proceeding
+    //     console.log("9: items just cant be used together at all - PASSED");
+    //     return;
+    // }
 }
 
 export function constructCommand(userCommand, canHover) {

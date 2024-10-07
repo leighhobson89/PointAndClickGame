@@ -480,6 +480,15 @@
                     "it": "È sodo ma maturo, proprio come piace a me!",
                     "fr": "Il est ferme mais mûr, juste comme j'aime !"
                 }                
+            },
+            "verbGive": {
+                "object": {
+                    "en": "",
+                    "es": "",
+                    "de": "",
+                    "it": "",
+                    "fr": ""
+                }
             }
         },
         "npcInteractions": {
@@ -937,6 +946,48 @@
             }
         },
         "globalMessages": {
+            "itemCannotBeGivenAsIsNpc": {
+                "en": "How do I give them? And to who, or what?!",
+                "es": "¿Cómo se lo doy? ¿Y a quién o a qué?!",
+                "de": "Wie gebe ich sie? Und an wen oder was?!",
+                "it": "Come faccio a darli? E a chi o a cosa?!",
+                "fr": "Comment puis-je les donner ? Et à qui ou à quoi ?!"
+            },
+            "itemNotInPossessionToGive": {
+                "en": "I can only give things I have in my inventory!",
+                "es": "¡Solo puedo dar cosas que tengo en mi inventario!",
+                "de": "Ich kann nur Dinge geben, die ich in meinem Inventar habe!",
+                "it": "Posso dare solo le cose che ho nel mio inventario!",
+                "fr": "Je ne peux donner que des choses que j'ai dans mon inventaire !"
+            },
+            "itemCannotBeGiven": {
+                "en": "I am going to hold on to this, you never know.",
+                "es": "Voy a quedarme con esto, nunca se sabe.",
+                "de": "Ich behalte das mal, man weiß ja nie.",
+                "it": "Terrò questo, non si sa mai.",
+                "fr": "Je vais garder ça, on ne sait jamais."
+            },
+            "itemCannotBeGivenToObject": {
+                "en": "And how do I 'give' this to an inanimate object?!",
+                "es": "¿Y cómo voy a 'dar' esto a un objeto inanimado?!",
+                "de": "Und wie soll ich das einem unbelebten Objekt 'geben'?!",
+                "it": "E come faccio a 'dare' questo a un oggetto inanimato?!",
+                "fr": "Et comment puis-je 'donner' ça à un objet inanimé ?!"
+            },
+            "itemCannotBeGivenToExit": {
+                "en": "Huh? Give it to what exactly?",
+                "es": "¿Eh? ¿A qué se supone que debo darlo?",
+                "de": "Hä? Was genau soll ich geben?",
+                "it": "Eh? A cosa dovrei darlo esattamente?",
+                "fr": "Hein? À quoi exactement dois-je le donner ?"
+            },
+            "itemCannotBeGivenToThisNpc": {
+                "en": "This is of no interest to them.",
+                "es": "Esto no le interesa.",
+                "de": "Das interessiert nicht.",
+                "it": "Questo non interessa.",
+                "fr": "Cela n'intéresse pas."
+            },
             "itemCannotBeTalkedTo": {
                 "en": "People will think I'm crazy talking to that!",
                 "es": "La gente pensará que estoy loco hablando con eso.",
