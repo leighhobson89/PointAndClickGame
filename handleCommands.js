@@ -632,7 +632,7 @@ export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, invento
     let canGiveObject;
 
     if (!getWaitingForSecondItem()) {
-        canGiveObject = checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNot1, isObjectTrueNpcFalse, objectId1, inventoryItem);
+        canGiveObject = checkIfCanGiveOrShownCannotGiveMessage(exitOrNot1, isObjectTrueNpcFalse, objectId1, inventoryItem);
         if (!canGiveObject) return;
     }
 
@@ -659,7 +659,9 @@ export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, invento
     }
 }
 
-function checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNot, isObjectTrueNpcFalse, objectId, inventoryItem) {
+function checkIfCanGiveOrShownCannotGiveMessage(exitOrNot, isObjectTrueNpcFalse, objectId, inventoryItem) {
+    let dialogueData = getDialogueData();
+    let language = getLanguage();
     let dialogueString;
     let objectData;
     let canGive;
@@ -676,7 +678,7 @@ function checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNo
     }
 
     if (exitOrNot) {
-        dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenToExit[language]; //exits
+        dialogueString = dialogueData.dialogue.globalMessages.itemCannotGiveExitorBeGivenToExit[language]; //exits
     } else if (!isObjectTrueNpcFalse) {
         dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenAsIsNpc[language]; //npc
     } else if (inventoryItem && !canGive) {
@@ -692,106 +694,62 @@ function checkIfCanGiveOrShownCannotGiveMessage(language, dialogueData, exitOrNo
 }
 
 export async function handleTo(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse) {
+    //quantity at a later date if needed
     console.log("handle to");
-    // const language = getLanguage();
-    // const objectData = getObjectData();
-    // const npcData = getNpcData();
-    // const object1 = objectData.objects[objectId1];
-    // const dialogueData = getDialogueData().dialogue.globalMessages;
-    // const useTogetherLocation1 = object1.usedOn.useTogetherLocation;
-    // const useWith2 = checkIfItemCanBeUsedWith(objectId2, isObject2TrueNpcFalse, false);
+    const language = getLanguage();
+    const objectData = getObjectData();
+    const npcData = getNpcData();
+    const object1 = objectData.objects[objectId1];
+    const dialogueData = getDialogueData().dialogue.globalMessages;
+    
+    const giveTo2 = checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, isObject2TrueNpcFalse, exitOrNot2);
 
-    // let object2;
-    // let useTogetherLocation2;
-    // let dialogueString;
+    let object2;
+    let dialogueString;
 
-    // if (objectId2 !== null) {
-    //     if (isObject2TrueNpcFalse) {
-    //         object2 = objectData.objects[objectId2];
-    //         if (!exitOrNot2) {
-    //             useTogetherLocation2 = object2.usedOn.useTogetherLocation;
-    //         }
-    //     } else {
-    //         object2 = npcData.npcs[objectId2];
-    //         useTogetherLocation2 = object2.usedOn.useTogetherLocation;
-    //     }
-    // } else {
-    //     return;
-    // }
+    if (!giveTo2) { //if wrong npc or invalid Give To object then this is already handled and we can return
+        return;
+    }
 
-    // let locationCorrect;
-    // let locationImportant;
+    //here we definitely have a valid combination
+    //trigger event
+    console.log("can trigger event now, we definitely have a good combo");
+}
 
-    // if (useTogetherLocation1 && useTogetherLocation2) { 
-    //     locationImportant = true;
-    //     if (useTogetherLocation1 === useTogetherLocation2) {
-    //         if (getCurrentScreenId() === useTogetherLocation1 && getCurrentScreenId() === useTogetherLocation2 && useWith2) {
-    //             locationCorrect = true;
-    //         } else {
-    //             console.log("1: not right location to use these items together (2 inventory) - PASSED");
-    //             dialogueString = dialogueData.correctItemsWrongLocation[language];
-    //             await showText(dialogueString, getColorTextPlayer());
-    //             return;
-    //         }
-    //     } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 && useWith2) {
-    //         console.log("2: irrelevant location, can use these items together (2 inventory) - PASSED");
-    //         handleInventoryAdjustment(objectId1, quantity);
-    //         if (isObject2TrueNpcFalse) {
-    //             handleInventoryAdjustment(objectId2, quantity);
-    //         }
-    //         drawInventory(0);
-    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
-    //         return;
-    //     } else {
-    //         dialogueString = dialogueData.cantBeUsedTogether[language];
-    //         console.log("3: Two items that are just not able to be used together - PASSED");
-    //         await showText(dialogueString, getColorTextPlayer());
-    //         return;
-    //     }
-    // }
+function checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, isObject2TrueNpcFalse, exitOrNot2) {
+    let dialogueData = getDialogueData();
+    let language = getLanguage();
+    let dialogueString;
 
-    // if (!inventoryItem2 && !exitOrNot2) {
-    //     if (object1.usedOn.objectUseWith1 === objectId2) {
-    //         console.log("4: using object with environment object - PASSED");
-    //         handleInventoryAdjustment(objectId1, quantity);
-    //         drawInventory(0);
-    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
-    //         return;
-    //     } else {
-    //         dialogueString = dialogueData.cantBeUsedTogether[language];
-    //         await showText(dialogueString, getColorTextPlayer());
-    //         console.log("5: items cannot be used together (environment object) - PASSED");
-    //         return;
-    //     }
-    // }
+    if (!isObject2TrueNpcFalse) { //is npc
+        const npcSlotForObject = extractNumberFromTheObjectsNpcGiveToValue(objectId1); //which slot does it belong in on npc?
+        const npcForObject = extractNpcFromTheObjectsNpcGiveToValue(objectId1); //which npc is it given to
+        if (objectId2 === npcForObject) { //correct npc
+            return { "npc": npcForObject, "slot": npcSlotForObject };
+        } else { //wrong npc
+            dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenToThisNpc[language];
+        }
+    } else {
+        if (exitOrNot2) {  //exits
+            dialogueString = dialogueData.dialogue.globalMessages.itemCannotGiveExitorBeGivenToExit[language];
+        } else if (isObject2TrueNpcFalse) { //any pickable or non pickable environment object, or any inventory object
+            dialogueString = dialogueData.dialogue.globalMessages.itemCannotBeGivenToObject[language];
+        }
+    }
+    showText(dialogueString, getColorTextPlayer());
+        return false;
+}
 
-    // if (exitOrNot2) {
-    //     if (object1.usedOn.objectUseWith1 === objectId2 && useTogetherLocation1 === getCurrentScreenId()) {
-    //         console.log("6: using object on exit - PASSED");
-    //         handleInventoryAdjustment(objectId1, quantity);
-    //         drawInventory(0);
-    //         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
-    //         return;
-    //     } else {
-    //         dialogueString = dialogueData.howWouldThatWorkWithThis[language];
-    //         await showText(dialogueString, getColorTextPlayer());
-    //         console.log("7: wrong object for exit - PASSED");
-    //         return;
-    //     }
-    // }
+function extractNumberFromTheObjectsNpcGiveToValue(objectId) {
+    const npcGiveToValue = getObjectData().objects[objectId].usedOn.npcGiveTo;
+    const match = npcGiveToValue.match(/(\d+)$/);
+    return match ? match[1] : null; //null means regex error
+}
 
-    // if (object1.usedOn.objectUseWith1 === objectId2 && object2.usedOn.objectUseWith1 === objectId1 && isObject2TrueNpcFalse) {
-    //     console.log("8: using two inventory items where location is important and location is correct - PASSED");
-    //     handleInventoryAdjustment(objectId1, quantity);
-    //     drawInventory(0);
-    //     useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
-    //     return;
-    // } else {
-    //     dialogueString = dialogueData.cantBeUsedTogether[language];
-    //     await showText(dialogueString, getColorTextPlayer()); // Wait for the text to finish before proceeding
-    //     console.log("9: items just cant be used together at all - PASSED");
-    //     return;
-    // }
+function extractNpcFromTheObjectsNpcGiveToValue(objectId) {
+    const npc = getObjectData().objects[objectId].usedOn.npcGiveTo;
+    const result = npc.replace(/\d+$/, '');
+    return result;
 }
 
 export function constructCommand(userCommand, canHover) {

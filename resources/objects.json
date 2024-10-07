@@ -35,7 +35,8 @@
                 "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
                 "actionUseWith11": "unlockResearchRoomDoor",
                 "actionUseWith12": "",
-                "useTogetherLocation": "libraryFoyer"
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1"
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
@@ -101,7 +102,8 @@
                 "objectUseWith1": "",
                 "actionUseWith11": "",
                 "actionUseWith12": "",
-                "useTogetherLocation": ""
+                "useTogetherLocation": "",
+                "npcGiveTo": ""
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
@@ -168,7 +170,8 @@
                 "objectUseWith1": "objectMachineDEBUG",
                 "actionUseWith11": "useBatteryDEBUGOnMachineDEBUG",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom"
+                "useTogetherLocation": "debugRoom",
+                "npcGiveTo": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -235,7 +238,8 @@
                 "objectUseWith1": "",
                 "actionUseWith11": "",
                 "actionUseWith12": "",
-                "useTogetherLocation": ""
+                "useTogetherLocation": "",
+                "npcGiveTo": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -302,7 +306,8 @@
                 "objectUseWith1": "npcMonkeyDEBUG",
                 "actionUseWith11": "giveMonkeyBanana",
                 "actionUseWith12": "",
-                "useTogetherLocation": "npcMonkeyDEBUG"
+                "useTogetherLocation": "npcMonkeyDEBUG",
+                "npcGiveTo": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -360,7 +365,7 @@
                     "quantity": 1,
                     "decrementQuantityOnUse": false,
                     "activeStatus": false,
-                    "alreadyUsed": false            
+                    "alreadyUsed": false        
                 },
                 "usedOn": {
                     "objectUse": "",
@@ -369,7 +374,8 @@
                     "objectUseWith1": "",
                     "actionUseWith11": "",
                     "actionUseWith12": "",
-                    "useTogetherLocation": "libraryFoyer"
+                    "useTogetherLocation": "libraryFoyer",
+                    "npcGiveTo": ""
                 },
                 "objectPlacementLocation": "libraryFoyer",
                 "activeSpriteUrl": "s1",
@@ -427,7 +433,7 @@
                 "quantity": 1,
                 "decrementQuantityOnUse": false,
                 "activeStatus": false,
-                "alreadyUsed": true            
+                "alreadyUsed": true      
             },
             "usedOn": {
                 "objectUse": "",
@@ -436,7 +442,8 @@
                 "objectUseWith1": "",
                 "actionUseWith11": "",
                 "actionUseWith12": "",
-                "useTogetherLocation": ""
+                "useTogetherLocation": "",
+                "npcGiveTo": ""
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",

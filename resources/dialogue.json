@@ -974,7 +974,7 @@
                 "it": "E come faccio a 'dare' questo a un oggetto inanimato?!",
                 "fr": "Et comment puis-je 'donner' ça à un objet inanimé ?!"
             },
-            "itemCannotBeGivenToExit": {
+            "itemCannotGiveExitorBeGivenToExit": {
                 "en": "Huh? Give it to what exactly?",
                 "es": "¿Eh? ¿A qué se supone que debo darlo?",
                 "de": "Hä? Was genau soll ich geben?",

@@ -386,7 +386,7 @@ export function handleMouseMove(event, ctx) {
         if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
             const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
             const screenObjectOrNpcName = screenOrObjectNameAndHoverStatus[0];
-            if (screenOrObjectNameAndHoverStatus[1]){
+            if (screenOrObjectNameAndHoverStatus[1] && !getCurrentlyMovingToAction()){
                 if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
                     console.log(interactionText);
                     console.log(interactionText + " " + screenObjectOrNpcName);

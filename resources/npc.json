@@ -22,7 +22,10 @@
                 "dialogueColor":  "rgb(0, 255, 255)"
             },
             "usedOn": {
-                "useTogetherLocation": "objectBananaDEBUG"
+                "useTogetherLocation": "objectBananaDEBUG",
+                "objectCanReceive1": "",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
             },
             "behavior": {
                 "movesAround": false,
@@ -71,7 +74,10 @@
                 "dialogueColor": "rgb(255, 0, 255)"
             },
             "usedOn": {
-                "useTogetherLocation": ""
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectKeyResearchRoom",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
             },
             "behavior": {
                 "movesAround": false,
