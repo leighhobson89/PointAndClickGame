@@ -3,7 +3,7 @@ import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, pro
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 import { constructCommand, performCommand } from './handleCommands.js'
-import { reattachDialogueOptionListeners, updateDialogueDisplay } from './events.js'
+import { reattachDialogueOptionListeners, updateDialogueDisplay } from './eventsAndDialogue.js'
 
 let textTimer;
 

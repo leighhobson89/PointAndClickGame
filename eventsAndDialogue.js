@@ -71,7 +71,6 @@ function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, spe
 async function dialogueEngine(realVerbUsed, npcId) {
     const language = getLanguage();
     const npcData = getNpcData().npcs[npcId];
-    const dialoguePhase = npcData.interactable.dialoguePhase;
 
     let questPhase = getQuestPhaseNpc(npcId);
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
@@ -96,6 +95,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
 
     const showDialogue = async (dialoguePhase, type) => { //initialise opening dialogue
         console.log("questphase upon calling function is " + getQuestPhaseNpc(npcId));
+        const autoExitOption = dialogueData.exitOption;
         if (type === 'starting') {
             const speaker = orderOfStartingDialogue[dialoguePhase];
             setCurrentSpeaker(speaker);
@@ -123,13 +123,27 @@ async function dialogueEngine(realVerbUsed, npcId) {
 
 
                 let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase);
+
+                if (exitOptionText === null && npcData.interactable.questCutOffNumber === questPhase) {
+                    exitOptionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.phase[0][language];              
+                }
+
                 setCurrentExitOptionText(exitOptionText);
                 
-                setCanExitDialogueAtThisPoint(!!exitOptionText);
+                if (npcData.interactable.questCutOffNumber === questPhase) {
+                    setCanExitDialogueAtThisPoint(false);
+                } else {
+                    setCanExitDialogueAtThisPoint(!!exitOptionText);
+                }
+
                 removeDialogueRow(0);
     
                 let dialogueOptionsCount = 0;
                 let dialogueRowsOptionsIds = {};
+
+                if (dialogueOptionsTexts.length === 0 && !getCanExitDialogueAtThisPoint()) {
+                    type = 'exiting';
+                }
             
                 if (dialogueOptionsTexts.length > 0 && (type === 'starting' || type === 'advancing') || type === 'looping') {
                     let scrollReserve = [];
@@ -168,15 +182,19 @@ async function dialogueEngine(realVerbUsed, npcId) {
                     }
 
                     const dialogueRows = Array.from(getElements().dialogueSection.children);
-                    
-                    const userChoice = await waitForUserClickOnDialogueOption();
 
-                    if (getCurrentDialogueRowsOptionsIds()[userChoice[0]]) {
-                        setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice[0]]);
-                        setDialogueTextClicked(userChoice[1]);
-                    } else {
-                        setDialogueOptionClicked(getCurrentExitOptionRow());
-                        type = 'exiting';
+                    let userChoice;
+                    
+                    if (type !== 'exiting') {
+                        userChoice = await waitForUserClickOnDialogueOption();
+
+                        if (getCurrentDialogueRowsOptionsIds()[userChoice[0]]) {
+                            setDialogueOptionClicked(getCurrentDialogueRowsOptionsIds()[userChoice[0]]);
+                            setDialogueTextClicked(userChoice[1]);
+                        } else {
+                            setDialogueOptionClicked(getCurrentExitOptionRow() || questPhase === npcData.interactable.questCutOffNumber);
+                            type = 'exiting';
+                        }
                     }
 
                 } else if (type === 'starting' || type === 'advancing') {
@@ -223,18 +241,20 @@ async function dialogueEngine(realVerbUsed, npcId) {
                         setCurrentSpeaker('player');
                     }
 
-                    if (getDialogueTextClicked().endsWith(' ')) {
-                        console.log("advancing quest phase");
-                        questPhase++;
-                        setQuestPhaseNpc(npcId, questPhase);
-                        console.log("updated questPhase to " + questPhase);
-                        await showDialogue(0, 'advancing');
-                    } else {
-                        setReadyToAdvanceNpcQuestPhase(false);
-                        console.log("NOT advancing quest phase");
-                        changeDialogueOptionsForCurrentQuest(npcId, questPhase, getDialogueOptionClicked());
-                        console.log(getRemovedDialogueOptions());
-                        await showDialogue(0, 'looping');  
+                    if (getDialogueTextClicked()) {
+                        if (getDialogueTextClicked().endsWith(' ')) {
+                            console.log("advancing quest phase");
+                            questPhase++;
+                            setQuestPhaseNpc(npcId, questPhase);
+                            console.log("updated questPhase to " + questPhase);
+                            await showDialogue(0, 'advancing');
+                        } else {
+                            setReadyToAdvanceNpcQuestPhase(false);
+                            console.log("NOT advancing quest phase");
+                            changeDialogueOptionsForCurrentQuest(npcId, questPhase, getDialogueOptionClicked());
+                            console.log(getRemovedDialogueOptions());
+                            await showDialogue(0, 'looping');  
+                        }
                     }
                 }
                 
@@ -244,12 +264,19 @@ async function dialogueEngine(realVerbUsed, npcId) {
             }
         }
     
-        if (getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') { //exiting out of dialogue
+        if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting') { //exiting out of dialogue
             removeDialogueRow(0);
 
             const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null);
-            const dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.phase[dialoguePhase][language];
-            
+
+            let dialogueString;
+
+            if (npcData.interactable.questCutOffNumber === questPhase) {
+                dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.phase[dialoguePhase][language];
+            } else {
+                dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.phase[dialoguePhase][language];
+            }
+
             const speaker = orderOfExitDialogue[dialoguePhase];
             setCurrentSpeaker(speaker);
 
@@ -263,6 +290,10 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 await showDialogue(dialoguePhase, 'exiting');
             } else {
                 dialoguePhase = 0;
+                if (npcData.interactable.questCutOffNumber === questPhase) {
+                    npcData.interactable.canTalk = false;
+                    npcData.interactable.cantTalkDialogueNumber = 1;
+                }
                 setCurrentSpeaker('player');
                 setDialogueScrollCount(0);
                 setCurrentScrollIndexDialogue(0);
@@ -374,7 +405,11 @@ function getOrderOfDialogue(npcId, questPhase, type, responseId) {
             order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
             break;
         case 'exiting':
-            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+            if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
+                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+            } else {
+                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
+            }
             break;
         case 'continuing':
             order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
@@ -413,8 +448,13 @@ function returnExitOptionForCurrentQuest(npcId, questId) {
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
     const questData = dialogueData[npcId].quest[questId];
 
+    if (!questData) {
+        console.log ("Hit the quest cut off, exiting...");
+        return null;
+    }
+
     if (!questData.exitOption) {
-        console.error('No exit option found for this quest.');
+        console.log('No exit option found for this quest.');
         return null;
     }
 
@@ -429,7 +469,7 @@ function returnDialogueOptionsForCurrentQuest(npcId, questId) {
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
     const questData = dialogueData[npcId].quest[questId];
 
-    if (!questData.dialogueOptions) {
+    if (!questData) {
         console.error('No dialogue options found for this quest.');
         return [];
     }
@@ -470,20 +510,24 @@ function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId
     if (removedDialogueOptions.length > 0 && questPhase > 0) {
         
         removedDialogueOptions.forEach(option => {
-        if (option.npcId === npcId) {
-            let optionText = null;
-            const optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
-            if (optionId) {
-                optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
+            if (option.npcId === npcId) {
+                let optionText = null;
+                if (getNpcData().npcs[npcId].interactable.questCutOffNumber === questPhase) {
+                    return;
+                } else {
+                    const optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
+                    if (optionId) {
+                        optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
+                    }
+        
+                    if (dialogueStrings.includes(optionText)) {
+                        console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
+        
+                        changeDialogueOptionsForCurrentQuest(npcId, questPhase, option.optionId);
+                    }
+                }
             }
-
-            if (dialogueStrings.includes(optionText)) {
-                console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
-
-                changeDialogueOptionsForCurrentQuest(npcId, questPhase, option.optionId);
-            }
-        }
-    });
+        });
     }
 }
 

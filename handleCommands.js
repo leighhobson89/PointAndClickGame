@@ -1,7 +1,7 @@
 import { getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { executeInteractionEvent } from "./events.js"
+import { executeInteractionEvent } from "./eventsAndDialogue.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -595,7 +595,8 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
         if (npcData.interactable.canTalk) {
             handleUse(npcId, null, null, null, false, 1, false, verb);
         } else {
-            dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[language];
+            const cantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
+            dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[cantTalkDialogueNumber][language];
             showText(dialogueString, npcData.interactable.dialogueColor);
         }
     } else {

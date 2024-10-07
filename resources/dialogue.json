@@ -536,11 +536,20 @@
                         }
                     },
                     "cantTalkDialogue": {
-                        "en": "I think he is happy as he is now.",
-                        "es": "Creo que está feliz tal como está ahora.",
-                        "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
-                        "it": "Penso che sia felice così com'è ora.",
-                        "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
+                        "0": {
+                            "en": "I think he is happy as he is now.",
+                            "es": "Creo que está feliz tal como está ahora.",
+                            "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
+                            "it": "Penso che sia felice così com'è ora.",
+                            "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
+                        },
+                        "1": {
+                            "en": "I think he is happy as he is now.",
+                            "es": "Creo que está feliz tal como está ahora.",
+                            "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
+                            "it": "Penso che sia felice così com'è ora.",
+                            "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
+                        }
                     }
                 },
                 "npcLibrarian": {
@@ -846,14 +855,44 @@
                                     "order": "1!"
                                 }
                             }
+                        },
+                        "2": {
+                            "autoExitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "Well, I'll get going anyway, nice to talk.",
+                                        "es": "Bueno, de todas formas me voy, fue agradable hablar.",
+                                        "de": "Nun, ich werde jetzt sowieso gehen, schön, mit dir gesprochen zu haben.",
+                                        "it": "Bene, vado comunque, è stato un piacere parlare.",
+                                        "fr": "Bon, je vais y aller, c'était sympa de discuter."
+                                    },
+                                    "1": {
+                                        "en": "Ok please yourself, but please be quiet in the library!",
+                                        "es": "Está bien, haz lo que quieras, pero por favor guarda silencio en la biblioteca.",
+                                        "de": "In Ordnung, mach was du willst, aber sei bitte leise in der Bibliothek!",
+                                        "it": "Va bene, fai come vuoi, ma per favore stai tranquillo in biblioteca!",
+                                        "fr": "D'accord, fais ce que tu veux, mais s'il te plaît sois silencieux dans la bibliothèque!"
+                                    }
+                                },
+                                "order": "01!"
+                            }
                         }
                     },
                     "cantTalkDialogue": {
-                        "en": "Sssh, can't you see this is a library!",
-                        "es": "¡Shh, no ves que esto es una biblioteca!",
-                        "de": "Pssst, siehst du nicht, dass das eine Bibliothek ist!",
-                        "it": "Shh, non vedi che questa è una biblioteca!",
-                        "fr": "Chut, tu ne vois pas que c'est une bibliothèque!"
+                        "0": {
+                            "en": "Sssh, can't you see this is a library!",
+                            "es": "¡Shh, no ves que esto es una biblioteca!",
+                            "de": "Pssst, siehst du nicht, dass das eine Bibliothek ist!",
+                            "it": "Shh, non vedi che questa è una biblioteca!",
+                            "fr": "Chut, tu ne vois pas que c'est une bibliothèque!"
+                        },
+                        "1": {
+                            "en": "Now where did I put that key, I was around the table before I'm sure of it...",
+                            "es": "¿Dónde habré puesto esa llave? Estaba cerca de la mesa antes, estoy seguro...",
+                            "de": "Wo habe ich nur diesen Schlüssel hingelegt? Ich war vorher am Tisch, da bin ich mir sicher...",
+                            "it": "Dove ho messo quella chiave? Ero vicino al tavolo prima, ne sono sicuro...",
+                            "fr": "Où ai-je mis cette clé ? J'étais près de la table tout à l'heure, j'en suis sûr..."
+                        }
                     }
                 }
             }

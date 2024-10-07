@@ -62,6 +62,7 @@
             },
             "interactable": {
                 "canTalk": true,
+                "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,
                 "questCutOffNumber": 2,
