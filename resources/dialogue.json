@@ -84,7 +84,7 @@
                     }
                 },
                 "useWithObject1": {
-                    "objectKeyDEBUG": {
+                    "objectKeyResearchRoom": {
                         "en": "Uff, it was a stiff lock, but it's finally opened!",
                         "es": "¡Uf, era una cerradura difícil, pero finalmente se ha abierto!",
                         "de": "Uff, das war ein steifes Schloss, aber es ist endlich offen!",
@@ -383,7 +383,7 @@
                         }
                     }
                 },
-                "objectKeyDEBUG": {
+                "objectKeyResearchRoom": {
                     "en": "A small, brass key with an ornate pattern.",
                     "es": "Una pequeña llave de latón con un patrón ornamentado.",
                     "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
@@ -424,10 +424,10 @@
                     "de": "Es ist eine unscheinbare Tür, die nach draußen führt.",
                     "it": "È una porta insignificante che conduce all'esterno.",
                     "fr": "C'est une porte banale qui mène à l'extérieur."
-                }               
+                }            
             },
             "verbPickUp": {
-                "objectKeyDEBUG": {
+                "objectKeyResearchRoom": {
                     "en": "It's a brass key. I'll take it, they always come in handy!",
                     "es": "Es una llave de latón. La tomaré, ¡siempre son útiles!",
                     "de": "Es ist ein Messingschlüssel. Ich nehme ihn, sie sind immer nützlich!",
@@ -458,7 +458,14 @@
                     "de": "Was für ein süßer Affe, er sieht hungrig aus!",
                     "it": "Che scimmietta carina, sembra affamato!",
                     "fr": "Quel singe mignon, il a l'air affamé !"
-                }
+                },
+                "npcLibrarian": {
+                    "en": "She looks like she wants to look like she is busy!",
+                    "es": "¡Parece que quiere aparentar que está ocupada!",
+                    "de": "Sie sieht so aus, als ob sie beschäftigt wirken will!",
+                    "it": "Sembra che voglia sembrare occupata!",
+                    "fr": "On dirait qu'elle veut donner l'impression d'être occupée !"  
+                } 
             },
             "verbUse": {
                 "npcMonkeyDEBUG": {

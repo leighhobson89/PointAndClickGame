@@ -61,6 +61,7 @@
                 "fr": "Bibliothécaire"
             },
             "interactable": {
+                "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,

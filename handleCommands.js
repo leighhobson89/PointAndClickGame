@@ -42,9 +42,6 @@ export function performCommand(command, inventoryItem) {
             case 'verbGive':
                 handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity);
                 break;
-            default:
-                console.warn(`Unhandled verbKey: ${verbKey}`);
-                break;
         }
     }
 
@@ -611,7 +608,7 @@ export function handleGive(verb, objectId) {
     // Add your implementation here
 }
 
-export function constructCommand(userCommand) {
+export function constructCommand(userCommand, canHover) {
     const objectData = getObjectData().objects;
     const npcData = getNpcData().npcs;
     const language = getLanguage();
@@ -620,7 +617,6 @@ export function constructCommand(userCommand) {
     
     const waitingForSecondItem = getWaitingForSecondItem();
     
-    let commandParts = userCommand.split(' ');
     let objectMatch1 = null;
     let objectMatch2 = null;
     let isObject1TrueNpcFalse = true;
@@ -630,6 +626,24 @@ export function constructCommand(userCommand) {
     let exitOrNot1 = false;
     let exitOrNot2 = false;
     let quantity = 1;
+
+    if (!canHover) {
+        userCommand = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
+
+        let verbKey = 'verbWalkTo';
+
+        return {
+            objectId1: objectMatch1,
+            objectId2: objectMatch2,
+            isObjectTrueNpcFalse: isObject2TrueNpcFalse,
+            verbKey: verbKey,
+            exitOrNot1: "",
+            exitOrNot2: exitOrNot2,
+            quantity: quantity
+        }
+    }
+
+    let commandParts = userCommand.split(' ');
 
     // Handle the case where we are waiting for the second item
     if (waitingForSecondItem) {

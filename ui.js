@@ -264,7 +264,7 @@ inventoryItems.some(function(item) {
             setUpcomingAction(interactionText);
         }
 
-        const command = constructCommand(getUpcomingAction());
+        const command = constructCommand(getUpcomingAction(), true);
         console.log("command to perform: " + command);
         performCommand(command, true);
     });
@@ -358,12 +358,15 @@ export function handleMouseMove(event, ctx) {
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
             //
         }
-
+        
         setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o') || cellValue.startsWith('c'));
 
         if (!getWaitingForSecondItem() && getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
-            updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
+            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+            const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+            if (screenOrObjectNameAndHoverStatus[1]){
+                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
+            }
         } else {
             if (!getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
@@ -372,41 +375,55 @@ export function handleMouseMove(event, ctx) {
                 updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
             }
             if (!getWaitingForSecondItem() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
-                const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
-                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
+                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+                const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+                if (screenOrObjectNameAndHoverStatus[1]){
+                    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
+                }
             }
         }
 
         if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
-            const screenObjectOrNpcName = returnHoveredInterestingObjectOrExitName(cellValue);
-            
-            if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
-                console.log(interactionText);
-                console.log(interactionText + " " + screenObjectOrNpcName);
-
-                const oldItem = getSecondItemAlreadyHovered();
-
-                if (interactionText.includes(oldItem)) {
-                    const index = interactionText.indexOf(oldItem);
-                    interactionText = interactionText.substring(0, index);
+            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+            const screenObjectOrNpcName = screenOrObjectNameAndHoverStatus[0];
+            if (screenOrObjectNameAndHoverStatus[1]){
+                if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
+                    console.log(interactionText);
+                    console.log(interactionText + " " + screenObjectOrNpcName);
+    
+                    const oldItem = getSecondItemAlreadyHovered();
+    
+                    if (interactionText.includes(oldItem)) {
+                        const index = interactionText.indexOf(oldItem);
+                        interactionText = interactionText.substring(0, index);
+                    }
+    
+                    updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
+                    setSecondItemAlreadyHovered(screenObjectOrNpcName);
                 }
-
-                updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
-                setSecondItemAlreadyHovered(screenObjectOrNpcName);
             }
         }
 
         if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
-            const screenOrObjectName = returnHoveredInterestingObjectOrExitName(cellValue);
-            if (getSecondItemAlreadyHovered() !== screenOrObjectName && !getCurrentlyMovingToAction()) {
-                const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
-                updateInteractionInfo(updatedText, false);
-                setSecondItemAlreadyHovered(null);
+            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+            const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+
+            if (screenOrObjectNameAndHoverStatus[1]){
+                if (getSecondItemAlreadyHovered() !== screenOrObjectName && !getCurrentlyMovingToAction()) {
+                    const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
+                    updateInteractionInfo(updatedText, false);
+                    setSecondItemAlreadyHovered(null);
+                }
             }
         }
 
         if (getHoveringInterestingObjectOrExit()) {
-            setCustomMouseCursor(getCustomMouseCursor('hoveringInteresting'));
+            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+            if (screenOrObjectNameAndHoverStatus[1]) {
+                setCustomMouseCursor(getCustomMouseCursor('hoveringInteresting'));
+            } else {
+                setCustomMouseCursor(getCustomMouseCursor('normal'));
+            }
         } else {
             setCustomMouseCursor(getCustomMouseCursor('normal'));
         }
@@ -427,7 +444,7 @@ export function returnHoveredInterestingObjectOrExitName(cellValue) {
             const exitId = navigationData[currentScreenId].exits[cellValue].connectsTo;
 
             if (navigationData[exitId]) {
-                return navigationData[exitId][language];
+                return [navigationData[exitId][language], true];
             }
         }
 
@@ -435,20 +452,22 @@ export function returnHoveredInterestingObjectOrExitName(cellValue) {
         if (navigationData[currentScreenId] && cellValue.startsWith('o')) {
             const objectId = cellValue.substring(1);
             const objectName = objectData.objects[objectId]?.name[language];
+            const canHover = objectData.objects[objectId].interactable.canHover;
 
-            return objectName || "Unknown Object";
+            return [objectName, canHover];
         }
 
         // If it is an npc
         if (navigationData[currentScreenId] && cellValue.startsWith('c')) {
             const npcId = cellValue.substring(1);
             const npcName = npcData.npcs[npcId]?.name[language];
+            const canHover = npcData.npcs[npcId]?.interactable.canHover;
 
-            return npcName || "Unknown Npc";
+            return [npcName, canHover];
         }
     }
 
-    return null;
+    return [null, null];
 }
 
 function handleCanvasClick(event) {
