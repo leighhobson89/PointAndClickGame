@@ -207,9 +207,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
         const cellType = gridData.gridData[y][x];
 
         // Skip non-walkable cells (anything marked as 'n')
-        if (cellType === 'n') {
-            // Still need to explore neighbors, so continue below
-        } else if (cellType.startsWith('w')) {
+        if (cellType.startsWith('w')) {
             // Found a walkable cell, return or teleport player
             const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
             const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
@@ -251,8 +249,6 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
 
     return null; // No walkable square found
 }
-
-
 
 function checkAndRedirectToDoor(target) {
     const gridData = getGridData();
