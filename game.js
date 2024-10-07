@@ -43,7 +43,7 @@ export function gameLoop() {
     drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
     //
 
-    if (getGameStateVariable() === getGameVisibleActive()) {
+    if (getGameStateVariable() === getGameVisibleActive() || getGameStateVariable() === getInteractiveDialogueState()) {
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
