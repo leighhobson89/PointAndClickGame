@@ -514,10 +514,6 @@ export function reattachDialogueOptionListeners() {
     });
 }
 
-function triggerExitDialogue() {
-    console.log("Exit option selected, triggering exit behavior...");
-}
-
 function waitForUserClickOnDialogueOption() {
     return new Promise((resolve) => {
         setResolveDialogueOptionClick(resolve);
