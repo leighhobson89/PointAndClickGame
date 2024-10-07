@@ -702,10 +702,10 @@
                                         },
                                         "1": {
                                             "en": "Why do you need it?",
-                                            "es": "¿Y crees que solo te lo voy a dar?",
-                                            "de": "Und du denkst, ich werde es dir einfach geben?",
-                                            "it": "E pensi che io te lo darò così, senza motivo?",
-                                            "fr": "Et tu penses que je vais juste te le donner ?"
+                                            "es": "¿Por qué lo necesitas?",
+                                            "de": "Warum brauchst du es?",
+                                            "it": "Perché ne hai bisogno?",
+                                            "fr": "Pourquoi en as-tu besoin ?"
                                         }
                                     },
                                     "order": "11!"
@@ -799,11 +799,11 @@
                             "order": "11!",
                             "dialogueOptions": {
                                 "0": {
-                                    "en": "Just give it me please, I have something important to check.\u0020",
-                                    "es": "Sí, me gustaría la llave para la sala de investigación, por favor.\u0020",
-                                    "de": "Ja, ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
-                                    "it": "Sì, vorrei la chiave per la stanza di ricerca, per favore.\u0020",
-                                    "fr": "Oui, je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
+                                    "en": "Just give it to me please, I have something important to check.",
+                                    "es": "Solo dámelo por favor, tengo algo importante que revisar.",
+                                    "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen.",
+                                    "it": "Dammi solo, per favore, ho qualcosa di importante da controllare.",
+                                    "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier."
                                 },
                                 "1": {
                                     "en": "Yes, how much did those glasses cost, I want some!",

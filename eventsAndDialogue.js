@@ -487,7 +487,12 @@ function returnDialogueOptionsForCurrentQuest(npcId, questId) {
 
     for (let optionId in dialogueOptions) {
         const option = dialogueOptions[optionId];
-        languageOptions.push(option[language]);   
+        if (!option[language]) {
+            console.warn(`Dialogue option for language "${language}" not found for option ID "${optionId}".`);
+            languageOptions.push("Option not available in this language."); // Or handle it appropriately
+        } else {
+            languageOptions.push(option[language]);
+        } 
     }
 
     return languageOptions;
