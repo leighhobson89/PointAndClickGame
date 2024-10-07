@@ -680,11 +680,11 @@
                                 "3": {
                                     "phase": {
                                         "0": {
-                                            "en": "Have you heard about the town dog?\u0020",
-                                            "es": "¿Has oído hablar del perro del pueblo?\u0020",
-                                            "de": "Hast du von dem Hund der Stadt gehört?\u0020",
-                                            "it": "Hai sentito parlare del cane del paese?\u0020",
-                                            "fr": "As-tu entendu parler du chien de la ville ?\u0020"
+                                            "en": "Have you heard about the town dog?",
+                                            "es": "¿Has oído hablar del perro del pueblo?",
+                                            "de": "Hast du von dem Hund der Stadt gehört?",
+                                            "it": "Hai sentito parlare del cane del paese?",
+                                            "fr": "As-tu entendu parler du chien de la ville ?"
                                         }
                                     },
                                     "order": "1!"
