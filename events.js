@@ -1,5 +1,5 @@
 import { getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
-import { addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
+import { handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { setGameState } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
@@ -56,8 +56,11 @@ async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
     setGameState(getCutSceneState());
 
     await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
-    addItemToInventory('objectParrotFlyer', 1);
-    drawInventory(0);
+    if (giveScenarioId === 1) {
+        handleInventoryAdjustment(objectId, 1, true);
+        addItemToInventory('objectParrotFlyer', 1);
+        drawInventory(0);
+    }
 }
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
@@ -65,8 +68,7 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
     objectData.interactable.alreadyUsed = true;
-    const npcGiveScenarioiD = getNpcData().npcs.npcLibrarian.interactable.receiveObjectScenarioId;
-    setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, npcGiveScenarioiD + 1);
+    setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);
 
     showText(dialogueString, getColorTextPlayer());
 }

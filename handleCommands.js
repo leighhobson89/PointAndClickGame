@@ -208,11 +208,11 @@ export function addItemToInventory(objectId, quantity = 1) {
     setPlayerInventory(inventory);
 }
 
-function handleInventoryAdjustment(objectId, quantity) {
+export function handleInventoryAdjustment(objectId, quantity, overrideDecrementFalse) {
     const inventory = getPlayerInventory();
     const objectData = getObjectData().objects[objectId];
 
-    if (objectData.interactable && objectData.interactable.decrementQuantityOnUse) {
+    if (objectData.interactable && (objectData.interactable.decrementQuantityOnUse || overrideDecrementFalse)) {
         for (let slot in inventory) {
             if (inventory[slot] && inventory[slot].object === objectId) {
                 if (inventory[slot].quantity >= quantity) {
@@ -341,9 +341,9 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             }
         } else if (useTogetherLocation1 === objectId2 && useTogetherLocation2 === objectId1 && useWith2) {
             console.log("2: irrelevant location, can use these items together (2 inventory) - PASSED");
-            handleInventoryAdjustment(objectId1, quantity);
+            handleInventoryAdjustment(objectId1, quantity, false);
             if (isObject2TrueNpcFalse) {
-                handleInventoryAdjustment(objectId2, quantity);
+                handleInventoryAdjustment(objectId2, quantity, false);
             }
             drawInventory(0);
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
@@ -359,7 +359,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     if (!inventoryItem2 && !exitOrNot2) {
         if (object1.usedOn.objectUseWith1 === objectId2) {
             console.log("4: using object with environment object - PASSED");
-            handleInventoryAdjustment(objectId1, quantity);
+            handleInventoryAdjustment(objectId1, quantity, false);
             drawInventory(0);
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
@@ -374,7 +374,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     if (exitOrNot2) {
         if (object1.usedOn.objectUseWith1 === objectId2 && useTogetherLocation1 === getCurrentScreenId()) {
             console.log("6: using object on exit - PASSED");
-            handleInventoryAdjustment(objectId1, quantity);
+            handleInventoryAdjustment(objectId1, quantity, false);
             drawInventory(0);
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
@@ -388,7 +388,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
 
     if (object1.usedOn.objectUseWith1 === objectId2 && object2.usedOn.objectUseWith1 === objectId1 && isObject2TrueNpcFalse) {
         console.log("8: using two inventory items where location is important and location is correct - PASSED");
-        handleInventoryAdjustment(objectId1, quantity);
+        handleInventoryAdjustment(objectId1, quantity, false);
         drawInventory(0);
         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
         return;
