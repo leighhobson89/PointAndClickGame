@@ -30,7 +30,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 3500; //3500
+export const TEXT_DISPLAY_DURATION = 800; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'white';
 
@@ -243,7 +243,7 @@ export function getDialogueData() {
     return dialogueData;
 }
 
-export function setNpcData(value) {
+export function setNpcsData(value) {
     npcData = value;
 }
 

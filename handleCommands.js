@@ -1,7 +1,7 @@
-import { getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
+import { setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { executeInteractionEvent } from "./eventsAndDialogue.js"
+import { executeInteractionEvent } from "./events.js"
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -983,6 +983,37 @@ export function setObjectData(objectId, path, newValue) {
     }
 
     setObjectsData(objectData);
+}
+
+export function setNpcData(npcId, path, newValue) {
+    const npcData = getNpcData();
+
+    const keys = path.match(/([^[\].]+|\[\d+\])/g);
+    
+    if (!keys) {
+        console.warn("Invalid path format.");
+        return;
+    }
+
+    let current = npcData.npcs[npcId];
+    for (let i = 0; i < keys.length - 1; i++) {
+        let key = keys[i].replace(/\[|\]/g, '');
+        if (!current[key]) {
+            console.warn(`Invalid path: ${key} does not exist in the object.`);
+            return;
+        }
+        current = current[key];
+    }
+
+    const finalKey = keys[keys.length - 1].replace(/\[|\]/g, '');
+    if (current.hasOwnProperty(finalKey)) {
+        current[finalKey] = newValue;
+        console.log(`Updated ${path} to`, newValue);
+    } else {
+        console.warn(`Invalid path: ${finalKey} does not exist in the object.`);
+    }
+
+    setNpcsData(npcData);
 }
 
 function getObjectEvents(objectId) {

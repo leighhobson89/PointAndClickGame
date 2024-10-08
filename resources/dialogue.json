@@ -848,11 +848,11 @@
                             "order": "11!",
                             "dialogueOptions": {
                                 "0": {
-                                    "en": "Just give it to me please, I have something important to check.",
-                                    "es": "Solo dámelo por favor, tengo algo importante que revisar.",
-                                    "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen.",
-                                    "it": "Dammi solo, per favore, ho qualcosa di importante da controllare.",
-                                    "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier."
+                                    "en": "Just give it to me please, I have something important to check.\u0020",
+                                    "es": "Solo dámelo por favor, tengo algo importante que revisar.\u0020",
+                                    "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen.\u0020",
+                                    "it": "Dammi solo, per favore, ho qualcosa di importante da controllare.\u0020",
+                                    "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier.\u0020"
                                 },
                                 "1": {
                                     "en": "Yes, how much did those glasses cost, I want some!",

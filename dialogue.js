@@ -1,97 +1,10 @@
-import { getCutSceneState, getExitOptionIndex, setExitOptionIndex, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setCurrentExitOptionText, getCurrentExitOptionText, setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked, getDialogueScrollCount, setDialogueScrollCount, setGameStateVariable } from "./constantsAndGlobalVars.js";
-import { addItemToInventory, setObjectData } from "./handleCommands.js";
-import { showDialogueArrows, hideDialogueArrows, updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
-import { setGameState } from "./game.js";
+import { getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
+import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
-
-//OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
-
-//any door that is unlocked will be closed or opened
-async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
-    const objectData = getObjectData().objects[doorId];
-    const dialogueData = getDialogueData().dialogue;
-    const language = getLanguage();
-    const gridData = getGridData();
-
-    switch (realVerbUsed) {
-        case 'verbOpen':
-        case 'verbUse':
-            if (!objectData.interactable.activeStatus) {
-                setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId);
-                setObjectData(doorId, `interactable.activeStatus`, true);
-                //door opening animation in future
-                setObjectData(doorId, `activeSpriteUrl`, 's2');
-            } else {
-                const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
-                await showText(dialogueString, getColorTextPlayer());
-            }
-            break;
-        case 'verbClose':
-            if (objectData.interactable.activeStatus) {
-                setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId);
-                setObjectData(doorId, `interactable.activeStatus`, false);
-                //door closing animation in future
-                setObjectData(doorId, `activeSpriteUrl`, 's1');
-            } else {
-                const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
-                await showText(dialogueString, getColorTextPlayer());
-            }
-            break;
-    }
-}
-
-function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
-    const language = getLanguage();
-    const objectData = getObjectData().objects.objectKeyResearchRoom;
-    const objectId = 'objectKeyResearchRoom';
-    const npcData = getNpcData().npcs.npcLibrarian;
-    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
-    const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
-
-    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
-    setCustomMouseCursor(getCustomMouseCursor('normal'));
-    setGameState(getCutSceneState());
-
-    showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
-}
-
-function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
-    const navigationData = getNavigationData().libraryFoyer.exits.e1;
-    navigationData.status = "open";
-    objectData.interactable.alreadyUsed = true;
-}
-
-//Use objectBatteryDEBUG to activate objectMachineDEBUG
-function useBatteryDEBUGOnMachineDEBUG(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, true);
-}
-
-//Use objectMachineDEBUG to get objectBananaDEBUG
-function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    addItemToInventory("objectBananaDEBUG", 3);
-    drawInventory(0);
-    setObjectData(`objectMachineDEBUG`, `interactable.alreadyUsed`, true);
-    setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
-}
-
-function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    setObjectData(`objectKeyResearchRoom`, `interactable.canHover`, true);
-    setObjectData(`objectKeyResearchRoom`, `activeSpriteUrl`, 's2');
-    setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.alreadyUsed`, true);
-    setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.activeStatus`, false);
-}
-
-//----------------------------------------------------------------------------------------------------------------
+import { setGameState } from "./game.js"
 
 // Dialogue Engine
-async function dialogueEngine(realVerbUsed, npcId) {
+export async function dialogueEngine(realVerbUsed, npcId) {
     const language = getLanguage();
     const npcData = getNpcData().npcs[npcId];
 
@@ -335,7 +248,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
 }
 
 // Helper function to determine the position of the text based on the speaker (player or NPC)
-function getTextPosition(speaker, npcData) {
+export function getTextPosition(speaker, npcData) {
     let xPos, yPos;
     setCurrentSpeaker(speaker);
 
@@ -353,7 +266,7 @@ function getTextPosition(speaker, npcData) {
     return { xPos, yPos };
 }
 
-function getTextColor(speaker, npcColor) {
+export function getTextColor(speaker, npcColor) {
     if (speaker === 'player') {
         return getColorTextPlayer();
     } else {
@@ -361,78 +274,11 @@ function getTextColor(speaker, npcColor) {
     }
 }
 
-// Executor function
-export function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special) {
-    if (objectEvent === 'dialogueEngine') {
-        let npcId = special;
-        eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}')`);
-        return;
-    } else {
-        const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
-        
-        if (objectEvent.actionUse1 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
-            try {
-                if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                } else {
-                    eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
-            }
-        }
-
-        if (objectEvent.actionUse2 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
-            try {
-                if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                } else {
-                    eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
-            }
-        }
-
-        if (objectEvent.actionUseWith11 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
-            try {
-                if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                } else {
-                    eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
-            }
-        }
-
-        if (objectEvent.actionUseWith12 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
-            try {
-                if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                } else {
-                    eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
-            }
-        }
-
-        if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
-            try {
-                eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
-            }
-        }
-    }
-}
-
-function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFalse, giveScenarioId) {
+export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFalse, giveScenarioId) {
     let order;
 
     if (talkTrueGiveFalse) { //talk
-        switch(type) {
+        switch (type) {
             case 'starting':
                 order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
                 break;
@@ -446,45 +292,44 @@ function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFal
             case 'continuing':
                 order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
                 break;
-        } 
+        }
     } else { //give
         order = getDialogueData().dialogue.objectInteractions.verbGive[npcId].scenario[giveScenarioId].order;
     }
 
     const dialogueOrder = {};
-        let endPosition = -1;
-    
-        for (let i = 0; i < order.length; i++) {
-            const char = order[i];
-    
-            if (char === '!') {
-                endPosition = i - 1;
-                dialogueOrder['end'] = `${i}-1`;
+    let endPosition = -1;
+
+    for (let i = 0; i < order.length; i++) {
+        const char = order[i];
+
+        if (char === '!') {
+            endPosition = i - 1;
+            dialogueOrder['end'] = `${i}-1`;
+        } else {
+            if (char === '0') {
+                dialogueOrder[i] = 'player';
+            } else if (char === '1') {
+                dialogueOrder[i] = 'npc';
             } else {
-                if (char === '0') {
-                    dialogueOrder[i] = 'player';
-                } else if (char === '1') {
-                    dialogueOrder[i] = 'npc';
-                } else {
-                    dialogueOrder[i] = `npc${parseInt(char)}`;
-                }
+                dialogueOrder[i] = `npc${parseInt(char)}`;
             }
         }
-    
-        if (endPosition !== -1) {
-            dialogueOrder['end'] = `${endPosition}`;
-        }
+    }
+
+    if (endPosition !== -1) {
+        dialogueOrder['end'] = `${endPosition}`;
+    }
 
     return dialogueOrder;
 }
-
-function returnExitOptionForCurrentQuest(npcId, questId) {
+export function returnExitOptionForCurrentQuest(npcId, questId) {
     const language = getLanguage();
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
     const questData = dialogueData[npcId].quest[questId];
 
     if (!questData) {
-        console.log ("Hit the quest cut off, exiting...");
+        console.log("Hit the quest cut off, exiting...");
         return null;
     }
 
@@ -498,8 +343,7 @@ function returnExitOptionForCurrentQuest(npcId, questId) {
 
     return exitOption[language];
 }
-
-function returnDialogueOptionsForCurrentQuest(npcId, questId) {
+export function returnDialogueOptionsForCurrentQuest(npcId, questId) {
     const language = getLanguage();
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
     const questData = dialogueData[npcId].quest[questId];
@@ -519,13 +363,12 @@ function returnDialogueOptionsForCurrentQuest(npcId, questId) {
             languageOptions.push("Option not available in this language."); // Or handle it appropriately
         } else {
             languageOptions.push(option[language]);
-        } 
+        }
     }
 
     return languageOptions;
 }
-
-function changeDialogueOptionsForCurrentQuest(npcId, questPhase, optionIdToRemove) {
+export function changeDialogueOptionsForCurrentQuest(npcId, questPhase, optionIdToRemove) {
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;
     const questData = dialogueData[npcId].quest[questPhase];
 
@@ -542,13 +385,12 @@ function changeDialogueOptionsForCurrentQuest(npcId, questPhase, optionIdToRemov
         delete responses[optionIdToRemove];
     }
 }
-
-function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId) {
+export function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId) {
     const removedDialogueOptions = getRemovedDialogueOptions();
     const language = getLanguage();
 
     if (removedDialogueOptions.length > 0 && questPhase > 0) {
-        
+
         removedDialogueOptions.forEach(option => {
             if (option.npcId === npcId) {
                 let optionText = null;
@@ -559,10 +401,10 @@ function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase, npcId
                     if (optionId) {
                         optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
                     }
-        
+
                     if (dialogueStrings.includes(optionText)) {
                         console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
-        
+
                         changeDialogueOptionsForCurrentQuest(npcId, questPhase, option.optionId);
                     }
                 }
@@ -575,10 +417,10 @@ export function reattachDialogueOptionListeners() {
     const dialogueRows = Array.from(getElements().dialogueSection.children);
 
     dialogueRows.forEach((item, index) => {
-        item.onclick = function() {
+        item.onclick = function () {
             let result = [index + 1 + getDialogueScrollCount(), item.textContent || item.innerText];
             const resolveClick = getResolveDialogueOptionClick();
-            
+
             // Check if the clicked item is the exit option
             if (index + 1 === getExitOptionIndex()) {
                 // Resolve with the exit option
@@ -597,8 +439,7 @@ export function reattachDialogueOptionListeners() {
         };
     });
 }
-
-function waitForUserClickOnDialogueOption() {
+export function waitForUserClickOnDialogueOption() {
     return new Promise((resolve) => {
         setResolveDialogueOptionClick(resolve);
         updateDialogueDisplay(getCurrentExitOptionText());
@@ -614,7 +455,7 @@ export function updateDialogueDisplay(exitOptionText) {
 
     for (let i = 0; i < 3; i++) {
         const index = currentScrollIndex + i;
-        
+
         if (index < scrollReserve.length) {
             dialogueOptionsToShow.push(scrollReserve[index][1]);
         }
@@ -661,24 +502,5 @@ export function updateArrowVisibility(currentScrollIndex, totalOptions) {
     } else {
         downArrow.classList.remove("arrow-disabled");
         downArrow.style.pointerEvents = 'auto';
-    }
-}
-
-async function showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStartingDialogue, npcData) {
-    const speaker = orderOfStartingDialogue[dialogueIndex];
-    setCurrentSpeaker(speaker);
-    const dialogueString = dialogueData[dialogueIndex][getLanguage()];
-
-    const { xPos, yPos } = getTextPosition(speaker, npcData);
-    const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
-
-    await showText(dialogueString, textColor, xPos, yPos);
-
-    if (dialogueIndex < orderOfStartingDialogue.end) {
-        dialogueIndex++;
-        await showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStartingDialogue, npcData);
-    } else {
-        setGameState(getGameVisibleActive());
-        setCurrentSpeaker('player');
     }
 }
