@@ -408,6 +408,13 @@
                         }
                     }
                 },
+                "objectParrotFlyer": {
+                    "en": "A ticket for an exotic bird park that is no longer open, sheesh!",
+                    "es": "Un boleto para un parque de aves exóticas que ya no está abierto, ¡uf!",
+                    "de": "Ein Ticket für einen exotischen Vogelpark, der nicht mehr geöffnet ist, Mensch!",
+                    "it": "Un biglietto per un parco di uccelli esotici che non è più aperto, uffa!",
+                    "fr": "Un billet pour un parc d'oiseaux exotiques qui n'est plus ouvert, pff!"
+                },
                 "objectPileOfBooksLibraryFoyer": {
                     "en": "A large pile of books, that look to have been used recently.",
                     "es": "Una gran pila de libros que parecen haber sido usados recientemente.",

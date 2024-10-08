@@ -42,9 +42,10 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
     }
 }
 
-function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
+async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
     const language = getLanguage();
-    const objectData = getObjectData().objects.objectKeyResearchRoom;
+    const objectData = getObjectData().objects;
+    const objectGiving = objectData.objectKeyResearchRoom;
     const objectId = 'objectKeyResearchRoom';
     const npcData = getNpcData().npcs.npcLibrarian;
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
@@ -54,7 +55,9 @@ function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getCutSceneState());
 
-    showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
+    await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
+    addItemToInventory('objectParrotFlyer', 1);
+    drawInventory(0);
 }
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {

@@ -354,6 +354,76 @@
             },
             "comment": "received from machineDEBUG, can be given to monkey npc"
         },
+        "objectParrotFlyer": {
+            "name": {
+                "en": "Useless Parrot Flyer",
+                "es": "Volante de Loro Inútil",
+                "de": "Nutzloser Papageienflieger",
+                "it": "Volantino del Pappagallo Inutile",
+                "fr": "Flyer de Perroquet Inutile"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true,
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false            
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectParrotMirror",
+                "actionUseWith11": "swapParrotFlyerForMirror",
+                "actionUseWith12": "",
+                "useTogetherLocation": "marketStreet",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "marketStreet",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/parrotFlyerWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/parrotFlyerInv.png",
+            "gridPosition": {
+                "x": 40,
+                "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 70
+            },
+            "comment": "place over top of mirror and show when user takes mirror"
+        },
         "objectDoorLibraryFoyerResearchRoom": {
                 "name": {
                     "en": "Wooden Door",
