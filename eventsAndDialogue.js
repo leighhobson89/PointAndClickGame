@@ -43,7 +43,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
 }
 
 function giveKeyToLibrarian(npcAndSlot, dialogueString, realVerbUsed, special) {
-    
+    console.log("hi!");
 }
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
@@ -409,7 +409,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
 
         if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
             try {
-                eval(`${objectEvent.actionGive1}(${objectEvent.npcGiveTo}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }

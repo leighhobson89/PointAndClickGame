@@ -291,14 +291,14 @@ export function handleUse(objectId1, objectId2, exitOrNot1, exitOrNot2, inventor
         updateInteractionInfo(interactiveInfoWith, false);
     } else {
         console.log("handling With use");
-        handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse); //inventoryItem always refers to object2 by this point
+        handleWith(objectId1, objectId2, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse, realVerbUsed); //inventoryItem always refers to object2 by this point
         setVerbButtonConstructionStatus(null);
         resetSecondItemState();
         updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
     }
 }
 
-export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse) {
+export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse, realVerbUsed) {
     const language = getLanguage();
     const objectData = getObjectData();
     const npcData = getNpcData();
@@ -346,7 +346,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
                 handleInventoryAdjustment(objectId2, quantity);
             }
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -361,7 +361,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("4: using object with environment object - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
@@ -376,7 +376,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             console.log("6: using object on exit - PASSED");
             handleInventoryAdjustment(objectId1, quantity);
             drawInventory(0);
-            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
@@ -390,7 +390,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         console.log("8: using two inventory items where location is important and location is correct - PASSED");
         handleInventoryAdjustment(objectId1, quantity);
         drawInventory(0);
-        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, null);
+        useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
         return;
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
