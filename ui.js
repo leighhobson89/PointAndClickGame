@@ -1,11 +1,14 @@
-import { setDialogueScrollCount, getDialogueScrollCount, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentExitOptionText, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setDialogueOptionClicked, setDialogueRows, getDialogueRows, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, getTransitioningToDialogueState, setCurrentXposNpc, setCurrentYposNpc, getColorTextPlayer, setPreviousGameState, getPreviousGameState, getTextQueue, setTextQueue, getIsDisplayingText, setIsDisplayingText, setNpcsData, setObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setSecondItemAlreadyHovered, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, setObjectsData, getLocalization, getMaxTexTDisplayWidth, getPlayerObject, getTextDisplayDuration, setDisplayText, gameState, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentStartIndexInventory, getCustomMouseCursor, getDialogueData, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getMenuState, getNavigationData, getObjectData, getPlayerInventory, getSlotsPerRowInInventory, getVerbButtonConstructionStatus, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentStartIndexInventory, setCustomMouseCursor, setDialogueData, setElements, setGameInProgress, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setLanguage, setLanguageSelected, setNavigationData, setPreviousScreenId, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, urlDialogueData, urlNavigationData, urlObjectsData, urlNpcsData, urlWalkableJSONS, getUpcomingAction, getNpcData, getGameStateVariable, getDisplayText, getCurrentXposNpc, getCurrentYposNpc, getDialogueOptionClicked, getCanExitDialogueAtThisPoint } from './constantsAndGlobalVars.js';
-import { drawGrid, gameLoop, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
+import { setScrollPositionX, getScrollPositionX, getBeginGameStatus, getCanExitDialogueAtThisPoint, getCanvasCellHeight, getCanvasCellWidth, getCurrentExitOptionText, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentScrollIndexDialogue, getCurrentStartIndexInventory, getCurrentXposNpc, getCurrentYposNpc, getCustomMouseCursor, getDialogueData, getDialogueOptionsScrollReserve, getDialogueScrollCount, getElements, getExitNumberToTransitionTo, getGameStateVariable, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getLocalization, getMaxTexTDisplayWidth, getMenuState, getNavigationData, getNpcData, getObjectData, getObjectToBeUsedWithSecondItem, getPlayerInventory, getPlayerObject, getPreviousGameState, getSecondItemAlreadyHovered, getSlotsPerRowInInventory, getTextDisplayDuration, getTextQueue, getTransitioningToAnotherScreen, getTransitioningToDialogueState, getUpcomingAction, getVerbButtonConstructionStatus, getWaitingForSecondItem, getWalkSpeedPlayer, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentScrollIndexDialogue, setCurrentStartIndexInventory, setCurrentXposNpc, setCurrentYposNpc, setCustomMouseCursor, setDialogueData, setDialogueScrollCount, setDisplayText, setElements, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setIsDisplayingText, setLanguage, setLanguageSelected, setNavigationData, setNpcsData, setObjectsData, setObjectToBeUsedWithSecondItem, setPreviousGameState, setPreviousScreenId, setSecondItemAlreadyHovered, setTextQueue, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setWaitingForSecondItem, urlDialogueData, urlNavigationData, urlNpcsData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { reattachDialogueOptionListeners, updateDialogueDisplay } from "./dialogue.js";
+import { drawGrid, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
+import { constructCommand, performCommand } from './handleCommands.js';
 import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
-import { constructCommand, performCommand } from './handleCommands.js'
-import { reattachDialogueOptionListeners, updateDialogueDisplay } from "./dialogue.js";
 
 let textTimer;
+let scrollPositionX = 0;
+let scrollingActive = false; // New flag to indicate active scrolling
+let scrollDirection = 0; // -1 for left, 1 for right, 0 for none
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -923,8 +926,8 @@ async function scrollUp() {
     reattachDialogueOptionListeners();
 }
 
-export function setDynamicBackgroundWithOffset(canvas, imageUrl, xOffset, yOffset) {
-    // Create a new Image object to get the background image dimensions
+export function setDynamicBackgroundWithOffset(canvas, imageUrl, xOffset, yOffset, screenTilesWidebgImg) {
+    // add offset as in background position +/- offsetX * getCanvasCellWidth()
     const backgroundImage = new Image();
     backgroundImage.src = imageUrl;
 
@@ -932,42 +935,111 @@ export function setDynamicBackgroundWithOffset(canvas, imageUrl, xOffset, yOffse
         const imgWidth = backgroundImage.width;
         const imgHeight = backgroundImage.height;
 
-        // Get the current canvas dimensions
         const canvasWidth = canvas.offsetWidth;
         const canvasHeight = canvas.offsetHeight;
 
-        // Scale the image to the height of the canvas, maintaining the aspect ratio
-        const scaleRatio = canvasHeight / imgHeight; // Calculate the scale ratio for height
-        const scaledHeight = imgHeight * scaleRatio;  // Calculate the scaled height
-        const scaledWidth = imgWidth * scaleRatio;    // Calculate the scaled width (for maintaining aspect ratio)
+        const scaleRatio = canvasHeight / imgHeight;
+        const scaledHeight = imgHeight * scaleRatio;
+        const scaledWidth = imgWidth * scaleRatio;
 
-        // Stretch the width to fit the canvas
-        const finalWidth = canvasWidth; // The width should now stretch to fill the canvas
-        const finalHeight = scaledHeight; // Height will be the scaled height
+        const finalWidth = canvasWidth * screenTilesWidebgImg;
+        const finalHeight = scaledHeight;
 
-        // Set the new background image size
         canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
-
-        // Calculate the center of the canvas after stretching
-        const centerX = (canvasWidth / 2) - (finalWidth / 2);
-        const centerY = (canvasHeight / 2) - (finalHeight / 2); // Center the height as needed
-
-        // Calculate offsets based on the grid cell size
-        const cellWidth = getCanvasCellWidth();
-        const cellHeight = getCanvasCellHeight();
-        const calculatedXOffset = centerX + (xOffset * cellWidth); // Scale xOffset by cellWidth
-        const calculatedYOffset = centerY + (yOffset * cellHeight); // Scale yOffset by cellHeight
-
-        // Apply the calculated background position using px values
         canvas.style.backgroundImage = `url(${imageUrl})`;
-        canvas.style.backgroundPosition = `${calculatedXOffset}px ${calculatedYOffset}px`;
-
-        // Optionally log the values for debugging
-        console.log(`Background set to: ${imageUrl}, Position: ${calculatedXOffset}px, ${calculatedYOffset}px`);
     };
 
-    // Handle errors in image loading
     backgroundImage.onerror = function() {
         console.error(`Failed to load image: ${imageUrl}`);
     };
+}
+
+export function handleEdgeScroll() {
+    const player = getPlayerObject();
+    const canvasWidthInCells = 80;
+    const proximityThreshold = 3;
+    const screenData = getNavigationData()[getCurrentScreenId()];
+    const screenTilesWide = screenData.screenTilesWidebgImg;
+    const imgWidth = screenTilesWide * getCanvasCellWidth() * canvasWidthInCells; // Full image width
+    const playerWalkSpeed = getWalkSpeedPlayer();
+    const scrollSpeed = playerWalkSpeed * 1.5;
+
+    const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
+
+    // Log player's grid X position
+    console.log("Player Grid X:", playerGridX);
+
+    const isNearLeftEdge = playerGridX <= proximityThreshold;
+    const isNearRightEdge = playerGridX >= (canvasWidthInCells - 1 - proximityThreshold);
+
+    const targetX = getGridTargetX();
+    const targetY = getGridTargetY();
+
+    // Log target X and Y positions
+    console.log("Target X:", targetX, "Target Y:", targetY);
+
+    const isTargetingLeftEdge = targetX < 3 && targetY >= 0 && targetY < 60;
+    const isTargetingRightEdge = targetX > 77 && targetY >= 0 && targetY < 60;
+
+    // Log edge targeting info
+    console.log("Is Near Left Edge:", isNearLeftEdge);
+    console.log("Is Near Right Edge:", isNearRightEdge);
+    console.log("Is Targeting Left Edge:", isTargetingLeftEdge);
+    console.log("Is Targeting Right Edge:", isTargetingRightEdge);
+
+    // Check if we're scrolling to the left or right and set scroll direction
+    if (!getTransitioningToAnotherScreen() && screenTilesWide > 1) {
+        let bgPosition = getScrollPositionX() || 0;
+
+        console.log("Background Position X:", bgPosition);
+
+        if (isNearLeftEdge && isTargetingLeftEdge) {
+            const maxScrollLeft = 0;  // Leftmost scroll limit
+            console.log("Attempting to scroll left...");
+            if (bgPosition < maxScrollLeft) {
+                scrollingActive = true;
+                scrollDirection = -1; // Scroll to the left
+                console.log("Scrolling Left: Active");
+            }
+        } 
+        else if (isNearRightEdge && isTargetingRightEdge) {
+            const maxScrollRight = -(imgWidth / 2);  // Rightmost scroll limit (50% image width)
+            console.log("Attempting to scroll right...");
+            if (bgPosition > maxScrollRight) {
+                scrollingActive = true;
+                scrollDirection = 1; // Scroll to the right
+                console.log("Scrolling Right: Active");
+            }
+        }
+    }
+
+    // Continue scrolling while the flag is active
+    if (scrollingActive) {
+        let bgPosition = getScrollPositionX() || 0;
+
+        if (scrollDirection === -1) { // Scrolling left
+            const maxScrollLeft = 0;
+            bgPosition = Math.min(bgPosition + scrollSpeed, maxScrollLeft);
+            console.log("Scrolling left... New Position X:", bgPosition);
+
+            if (bgPosition <= maxScrollLeft) {
+                scrollingActive = false; // Stop scrolling when the boundary is reached
+                console.log("Stopped scrolling left, reached boundary.");
+            }
+        } 
+        else if (scrollDirection === 1) { // Scrolling right
+            const maxScrollRight = -(imgWidth /2);
+            bgPosition = Math.max(bgPosition - scrollSpeed, maxScrollRight);
+            console.log("Scrolling right... New Position X:", bgPosition);
+
+            if (bgPosition >= maxScrollRight) {
+                scrollingActive = false; // Stop scrolling when the boundary is reached
+                console.log("Stopped scrolling right, reached boundary.");
+            }
+        }
+
+        // Apply the new background position and update the global scroll position
+        canvas.style.backgroundPositionX = `${bgPosition}px`;
+        setScrollPositionX(bgPosition);
+    }
 }

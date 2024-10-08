@@ -151,7 +151,6 @@ button.disabled {
 canvas {
     background-image: url('resources\\backgrounds\\libraryFoyer.png'); /*libraryFoyer is the start, change for debug*/
     background-size: cover;
-    background-position: calc() center;
     background-repeat: no-repeat;
     border: 1px solid white;
 }

@@ -99,6 +99,7 @@ let resolveDialogueOptionClick;
 let dialogueScrollCount = 0;
 let exitOptionIndex = -1;
 let clickPoint = null;
+let scrollPositionX;
 
 //FLAGS
 let audioMuted;
@@ -959,6 +960,14 @@ export function setClickPoint(value) {
 
 export function getClickPoint() {
     return clickPoint;
+}
+
+export function setScrollPositionX(value) {
+    scrollPositionX = value;
+}
+
+export function getScrollPositionX() {
+    return scrollPositionX;
 }
 
 

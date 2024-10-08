@@ -2,7 +2,7 @@ import { getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialog
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { performCommand, constructCommand } from './handleCommands.js';
-import { setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
+import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
 
 let currentPath = [];
 let currentPathIndex = 0;
@@ -28,6 +28,8 @@ export function gameLoop() {
             setDialogueRows(Array.from(dialogueSection.children).slice(0, 4));
         }
     }
+
+    handleEdgeScroll();
 
     const bottomContainer = getElements().bottomContainer;
 
@@ -102,7 +104,7 @@ function movePlayerTowardsTarget() {
     }
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
-    if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
+    //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
 
     // Move the player toward the target position
     if (Math.abs(player.xPos - targetX) > speed) {
@@ -148,6 +150,7 @@ function movePlayerTowardsTarget() {
     }
 
     resizePlayerObject(player);
+
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
 }
@@ -678,11 +681,12 @@ function swapBackgroundOnRoomTransition(newScreenId) {
     console.log("Loading background for " + newScreenId);
     const exit = 'e' + getExitNumberToTransitionTo();
     // Transition complete, update the background position here if needed
-    const xPosCameraEnterHere = getNavigationData()[getPreviousScreenId()].exits[exit].xPosCameraEnterHere;
-    const yPosCameraEnterHere = getNavigationData()[getPreviousScreenId()].exits[exit].yPosCameraEnterHere;
+    const xPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].xPosCameraEnterHere;
+    const yPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].yPosCameraEnterHere;
     const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl; // Get the new background image
+    const screenTilesWidebgImg = getNavigationData()[getNextScreenId()].screenTilesWidebgImg;
 
-    setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere);
+    setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
     console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
 }
 

@@ -110,7 +110,7 @@
                 "status": "open",
                 "startPosition": { "x": 37, "y": 37 },
                 "finalPosition": { "x": 35, "y": 48 },
-                "xPosCameraEnterHere": 40,
+                "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
         }
