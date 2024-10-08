@@ -48,13 +48,13 @@ export function gameLoop() {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
         }
+    }
     
         drawPlayerNpcsAndObjects(ctx);
 
         if (getDisplayText().value1) {
             drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
         }
-    }
 
     requestAnimationFrame(gameLoop);
 }

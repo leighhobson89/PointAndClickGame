@@ -1,4 +1,4 @@
-import { getExitOptionIndex, setExitOptionIndex, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setCurrentExitOptionText, getCurrentExitOptionText, setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked, getDialogueScrollCount, setDialogueScrollCount } from "./constantsAndGlobalVars.js";
+import { getCutSceneState, getExitOptionIndex, setExitOptionIndex, setResolveDialogueOptionClick, getResolveDialogueOptionClick, getCurrentScrollIndexDialogue, setCurrentScrollIndexDialogue, setCurrentExitOptionText, getCurrentExitOptionText, setRemovedDialogueOptions, getRemovedDialogueOptions, setQuestPhaseNpc, getQuestPhaseNpc, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, setCanExitDialogueAtThisPoint, getCanExitDialogueAtThisPoint, setCurrentExitOptionRow, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentExitOptionRow, getDialogueOptionsScrollReserve, getCurrentDialogueRowsOptionsIds, setTriggerQuestPhaseAdvance, getTriggerQuestPhaseAdvance, setReadyToAdvanceNpcQuestPhase, getReadyToAdvanceNpcQuestPhase, getInteractiveDialogueState, setPreAnimationGridState, getGridData, getPlayerObject, getCanvasCellHeight, getCanvasCellWidth, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setTransitioningToDialogueState, getTransitioningToDialogueState, setCustomMouseCursor, getCustomMouseCursor, getElements, getDialogueOptionClicked, getDialogueScrollCount, setDialogueScrollCount, setGameStateVariable } from "./constantsAndGlobalVars.js";
 import { addItemToInventory, setObjectData } from "./handleCommands.js";
 import { showDialogueArrows, hideDialogueArrows, updateInteractionInfo, addDialogueRow, drawInventory, removeDialogueRow, showText } from "./ui.js";
 import { setGameState } from "./game.js";
@@ -42,8 +42,19 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
     }
 }
 
-function giveKeyToLibrarian(npcAndSlot, dialogueString, realVerbUsed, special) {
-    console.log("hi!");
+function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
+    const language = getLanguage();
+    const objectData = getObjectData().objects.objectKeyResearchRoom;
+    const objectId = 'objectKeyResearchRoom';
+    const npcData = getNpcData().npcs.npcLibrarian;
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
+
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+    setGameState(getCutSceneState());
+
+    showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
 }
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
@@ -98,7 +109,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
     let dialogueString = dialogueData.introDialogue[language]; //to be shown when first reaching the npc and provoking a conversation, before the opening dialogue from them to us
     await showText(dialogueString, getColorTextPlayer());
 
-    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting', null);
+    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting', null, true);
 
     console.log(orderOfStartingDialogue);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
@@ -225,7 +236,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
                 if (type !== 'exiting') { //play dialogue option, response and set quest where necessary
                     setDialogueScrollCount(0);
                     setCurrentScrollIndexDialogue(0);
-                    const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()));
+                    const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()), true);
                     
                     if (type !== 'continuing') {
                         dialoguePhase = 0;
@@ -279,7 +290,7 @@ async function dialogueEngine(realVerbUsed, npcId) {
         if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting') { //exiting out of dialogue
             removeDialogueRow(0);
 
-            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null);
+            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null, true);
 
             let dialogueString;
 
@@ -417,48 +428,52 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
     }
 }
 
-function getOrderOfDialogue(npcId, questPhase, type, responseId) {
+function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFalse, giveScenarioId) {
     let order;
 
-    switch(type) {
-        case 'starting':
-            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
-            break;
-        case 'exiting':
-            if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
-                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
-            } else {
-                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
-            }
-            break;
-        case 'continuing':
-            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
-            break;
+    if (talkTrueGiveFalse) { //talk
+        switch(type) {
+            case 'starting':
+                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
+                break;
+            case 'exiting':
+                if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
+                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+                } else {
+                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
+                }
+                break;
+            case 'continuing':
+                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
+                break;
+        } 
+    } else { //give
+        order = getDialogueData().dialogue.objectInteractions.verbGive[npcId].scenario[giveScenarioId].order;
     }
 
     const dialogueOrder = {};
-    let endPosition = -1;
-
-    for (let i = 0; i < order.length; i++) {
-        const char = order[i];
-
-        if (char === '!') {
-            endPosition = i - 1;
-            dialogueOrder['end'] = `${i}-1`;
-        } else {
-            if (char === '0') {
-                dialogueOrder[i] = 'player';
-            } else if (char === '1') {
-                dialogueOrder[i] = 'npc';
+        let endPosition = -1;
+    
+        for (let i = 0; i < order.length; i++) {
+            const char = order[i];
+    
+            if (char === '!') {
+                endPosition = i - 1;
+                dialogueOrder['end'] = `${i}-1`;
             } else {
-                dialogueOrder[i] = `npc${parseInt(char)}`;
+                if (char === '0') {
+                    dialogueOrder[i] = 'player';
+                } else if (char === '1') {
+                    dialogueOrder[i] = 'npc';
+                } else {
+                    dialogueOrder[i] = `npc${parseInt(char)}`;
+                }
             }
         }
-    }
-
-    if (endPosition !== -1) {
-        dialogueOrder['end'] = `${endPosition}`;
-    }
+    
+        if (endPosition !== -1) {
+            dialogueOrder['end'] = `${endPosition}`;
+        }
 
     return dialogueOrder;
 }
@@ -646,5 +661,24 @@ export function updateArrowVisibility(currentScrollIndex, totalOptions) {
     } else {
         downArrow.classList.remove("arrow-disabled");
         downArrow.style.pointerEvents = 'auto';
+    }
+}
+
+async function showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStartingDialogue, npcData) {
+    const speaker = orderOfStartingDialogue[dialogueIndex];
+    setCurrentSpeaker(speaker);
+    const dialogueString = dialogueData[dialogueIndex][getLanguage()];
+
+    const { xPos, yPos } = getTextPosition(speaker, npcData);
+    const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+
+    await showText(dialogueString, textColor, xPos, yPos);
+
+    if (dialogueIndex < orderOfStartingDialogue.end) {
+        dialogueIndex++;
+        await showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStartingDialogue, npcData);
+    } else {
+        setGameState(getGameVisibleActive());
+        setCurrentSpeaker('player');
     }
 }

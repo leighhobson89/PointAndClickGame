@@ -711,10 +711,8 @@ export async function handleTo(objectId1, objectId2, exitOrNot2, inventoryItem2,
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
     const objectEvent = getObjectEvents(objectId1);
 
-    //here we definitely have a valid combination
-
-    const dialogueString = dialogueData.npcInteractions.verbGive[objectId1].scenario[giveScenarioId].phase[0][language];
-    executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
+    //here we definitely have a valid combination (handle dialogue in event)
+    executeInteractionEvent(objectEvent, "", realVerbUsed, objectId1);
 }
 
 function checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, isObject2TrueNpcFalse, exitOrNot2) {
