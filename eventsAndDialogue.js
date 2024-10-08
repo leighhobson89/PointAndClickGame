@@ -370,7 +370,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
     } else {
         const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
         
-        if (objectEvent.actionUse1 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
+        if (objectEvent.actionUse1 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
             try {
                 if (objectEvent.objectUse) {
                     eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
@@ -382,7 +382,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
 
-        if (objectEvent.actionUse2 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
+        if (objectEvent.actionUse2 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
             try {
                 if (objectEvent.objectUse) {
                     eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
