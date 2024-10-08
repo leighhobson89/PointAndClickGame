@@ -68,6 +68,10 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
     showText(dialogueString, getColorTextPlayer());
 }
 
+function allowInteractionPileOfBooks(objectToUseWith, dialogueString, realVerbUsed, special) {
+    setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.canHover`, true);
+}
+
 
 function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerbUsed, special) {
     showText(dialogueString, getColorTextPlayer());
@@ -143,6 +147,14 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
                 console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }
         }
+
+        if (objectEvent.dialogueEvent) {
+            try {
+                eval(`${objectEvent.dialogueEvent}(${null}, ${null}, ${null}, '${special}')`);
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
+            }
+        }
     }
 }
 
@@ -164,8 +176,6 @@ async function showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStarting
         setCurrentSpeaker('player');
     }
 }
-
-
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 //--UNUSED EVENTS-----------------------------------------------------------------------------------------------------------------------

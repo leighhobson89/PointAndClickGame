@@ -2,6 +2,7 @@ import { getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdva
 import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
+import { executeInteractionEvent } from "./events.js";
 
 // Dialogue Engine
 export async function dialogueEngine(realVerbUsed, npcId) {
@@ -229,6 +230,9 @@ export async function dialogueEngine(realVerbUsed, npcId) {
                 if (npcData.interactable.questCutOffNumber === questPhase) {
                     npcData.interactable.canTalk = false;
                     npcData.interactable.cantTalkDialogueNumber = 1;
+                    let npcEvent = npcData.interactable.questCutOffEvents[npcData.interactable.questCutOffNumber].event;
+                    executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
+                    //trigger post quest events
                 }
                 setCurrentSpeaker('player');
                 setDialogueScrollCount(0);

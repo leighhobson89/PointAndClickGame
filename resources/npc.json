@@ -71,6 +71,11 @@
                 "dialoguePhase": 0,
                 "questPhase": 0,
                 "questCutOffNumber": 2,
+                "questCutOffEvents": {
+                    "2": {
+                        "event": "allowInteractionPileOfBooks"
+                    }
+                },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
                 "dialogueColor": "rgb(255, 0, 255)"

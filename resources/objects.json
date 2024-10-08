@@ -84,7 +84,7 @@
                 "fr": "Pile de livres"
             },
             "interactable": {
-                "canHover": true,
+                "canHover": false,
                 "canPush": true,
                 "canPull": true,
                 "canPickUp": false,
