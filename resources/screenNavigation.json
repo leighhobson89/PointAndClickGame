@@ -6,30 +6,39 @@
         "it": "Foyer della Biblioteca DEBUG",
         "fr": "Foyer de la Bibliothèque DEBUG",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "researchRoom",
                 "status": "open",
                 "startPosition": { "x": 33, "y": 51 },
-                "finalPosition": { "x": 33, "y": 51 }
+                "finalPosition": { "x": 33, "y": 51 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "libraryDesk",
                 "status": "open",
                 "startPosition": { "x": 39, "y": 59 }, 
-                "finalPosition": { "x": 39, "y": 57 }
+                "finalPosition": { "x": 39, "y": 57 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e3": {
                 "connectsTo": "marketStreet",
                 "status": "open",
                 "startPosition": { "x": 38, "y": 38 },
-                "finalPosition": { "x": 38, "y": 43 }
+                "finalPosition": { "x": 38, "y": 43 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e4": {
                 "connectsTo": "debugRoom",
                 "status": "open",
                 "startPosition": { "x": 39, "y": 59 }, 
-                "finalPosition": { "x": 39, "y": 57 }
+                "finalPosition": { "x": 39, "y": 57 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -40,12 +49,15 @@
         "it": "DEBUG",
         "fr": "DEBUG",
         "bgUrl": "./resources/backgrounds/debugRoom.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyerDebug",
                 "status": "locked",
                 "startPosition": { "x": 33, "y": 51 },
-                "finalPosition": { "x": 33, "y": 51 }
+                "finalPosition": { "x": 33, "y": 51 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -56,18 +68,23 @@
         "it": "Scrivania della Biblioteca",
         "fr": "Bureau de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryDesk.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
                 "startPosition": { "x": 29, "y": 55 },
-                "finalPosition": { "x": 29, "y": 55 }
+                "finalPosition": { "x": 29, "y": 55 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
                 "startPosition": { "x": 58, "y": 55 },
-                "finalPosition": { "x": 58, "y": 55 }
+                "finalPosition": { "x": 58, "y": 55 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -78,18 +95,23 @@
         "it": "Foyer della Biblioteca",
         "fr": "Foyer de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "researchRoom",
                 "status": "locked",
                 "startPosition": { "x": 34, "y": 50 },
-                "finalPosition": { "x": 38, "y": 43 }
+                "finalPosition": { "x": 38, "y": 43 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
                 "startPosition": { "x": 37, "y": 37 },
-                "finalPosition": { "x": 35, "y": 48 }
+                "finalPosition": { "x": 35, "y": 48 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -100,30 +122,39 @@
         "it": "Via del Mercato",
         "fr": "Rue du Marché",
         "bgUrl": "./resources/backgrounds/marketStreet.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
                 "startPosition": { "x": 45, "y": 56 },
-                "finalPosition": { "x": 43, "y": 48 }
+                "finalPosition": { "x": 43, "y": 48 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "seedyGuyAlley",
                 "status": "open",
                 "startPosition": { "x": 45, "y": 58 },
-                "finalPosition": { "x": 40, "y": 54 }
+                "finalPosition": { "x": 40, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e3": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 73, "y": 58 },
-                "finalPosition": { "x": 63, "y": 52 }
+                "finalPosition": { "x": 63, "y": 52 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e4": {
                 "connectsTo": "stables",
                 "status": "open",
                 "startPosition": { "x": 9, "y": 52 },
-                "finalPosition": { "x": 15, "y": 53 }
+                "finalPosition": { "x": 15, "y": 53 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -134,12 +165,15 @@
         "it": "Sala di Ricerca",
         "fr": "Salle de Recherche",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
                 "status": "open",
                 "startPosition": { "x": 38, "y": 47 },
-                "finalPosition": { "x": 43, "y": 48 }
+                "finalPosition": { "x": 43, "y": 48 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -150,18 +184,23 @@
         "it": "Vicolo del Tizio Squallido",
         "fr": "Allée du Type Louche",
         "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "den",
                 "status": "locked",
                 "startPosition": { "x": 21, "y": 50 },
-                "finalPosition": { "x": 27, "y": 50 }
+                "finalPosition": { "x": 27, "y": 50 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
                 "startPosition": { "x": 45, "y": 34 },
-                "finalPosition": { "x": 45, "y": 34 }
+                "finalPosition": { "x": 45, "y": 34 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -172,12 +211,15 @@
         "it": "Tana",
         "fr": "Cachette",
         "bgUrl": "./resources/backgrounds/den.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "seedyGuyAlley",
                 "status": "open",
                 "startPosition": { "x": 34, "y": 47 },
-                "finalPosition": { "x": 34, "y": 53 }
+                "finalPosition": { "x": 34, "y": 53 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -188,18 +230,23 @@
         "it": "Casa",
         "fr": "Maison",
         "bgUrl": "./resources/backgrounds/house.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "insideHouse",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "stables",
                 "status": "open",
                 "startPosition": { "x": 62, "y": 48 },
-                "finalPosition": { "x": 57, "y": 50 }
+                "finalPosition": { "x": 57, "y": 50 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -210,30 +257,39 @@
         "it": "Stalla",
         "fr": "Écurie",
         "bgUrl": "./resources/backgrounds/stables.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "barn",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "house",
                 "status": "open",
                 "startPosition": { "x": 63, "y": 55 },
-                "finalPosition": { "x": 60, "y": 53 }
+                "finalPosition": { "x": 60, "y": 53 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e3": {
                 "connectsTo": "marketStreet",
                 "status": "open",
                 "startPosition": { "x": 4, "y": 54 },
-                "finalPosition": { "x": 15, "y": 52 }
+                "finalPosition": { "x": 15, "y": 52 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e4": {
                 "connectsTo": "bigTree",
                 "status": "open",
                 "startPosition": { "x": 3, "y": 53 },
-                "finalPosition": { "x": 13, "y": 54 }
+                "finalPosition": { "x": 13, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -244,12 +300,15 @@
         "it": "Fienile",
         "fr": "Grange",
         "bgUrl": "./resources/backgrounds/barn.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "stables",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -260,24 +319,31 @@
         "it": "Grande Albero",
         "fr": "Grand Arbre",
         "bgUrl": "./resources/backgrounds/bigTree.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "enterTree",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 66, "y": 39 },
-                "finalPosition": { "x": 61, "y": 42 }
+                "finalPosition": { "x": 61, "y": 42 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e3": {
                 "connectsTo": "stables",
                 "status": "open",
                 "startPosition": { "x": 72, "y": 54 },
-                "finalPosition": { "x": 63, "y": 54 }
+                "finalPosition": { "x": 63, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -288,30 +354,39 @@
         "it": "Strada verso la Città",
         "fr": "Route vers la Ville",
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
                 "status": "open",
                 "startPosition": { "x": 73, "y": 49 },
-                "finalPosition": { "x": 64, "y": 49 }
+                "finalPosition": { "x": 64, "y": 49 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "bigTree",
                 "status": "open",
                 "startPosition": { "x": 65, "y": 51 },
-                "finalPosition": { "x": 60, "y": 52 }
+                "finalPosition": { "x": 60, "y": 52 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e3": {
                 "connectsTo": "stinkingDump",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e4": {
                 "connectsTo": "marketStreet",
                 "status": "open",
                 "startPosition": { "x": 71, "y": 48 },
-                "finalPosition": { "x": 65, "y": 47 }
+                "finalPosition": { "x": 65, "y": 47 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -322,18 +397,23 @@
         "it": "Discarica Puzzolente",
         "fr": "Décharge Malodorante",
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "largePileOfPoo",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -344,12 +424,15 @@
         "it": "Grande Pila di Feci",
         "fr": "Grande Tas de Crottes",
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "stinkingDump",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -360,18 +443,23 @@
         "it": "Attraversamento del Fiume",
         "fr": "Traversée de la Rivière",
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "map",
                 "status": "locked",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             },
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 28, "y": 39 },
-                "finalPosition": { "x": 32, "y": 41 }
+                "finalPosition": { "x": 32, "y": 41 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     },
@@ -382,12 +470,15 @@
         "it": "Mappa",
         "fr": "Carte",
         "bgUrl": "./resources/backgrounds/map.png",
+        "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 }
+                "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
             }
         }
     }
