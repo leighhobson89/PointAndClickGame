@@ -204,7 +204,7 @@ inventoryItems.forEach(function(item) {
                 const verbTalkTo = localize('interactionTalkTo', getLanguage(), 'verbsActionsInteraction');
                 const verbPickUp = localize('interactionPickUp', getLanguage(), 'verbsActionsInteraction');
 
-                if (interactionText === verbWalkTo) {
+                if (interactionText.includes(verbWalkTo)) {
                     setUpcomingAction(verbLookAt);
                     if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) {
                         updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
