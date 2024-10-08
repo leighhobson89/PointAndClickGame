@@ -100,6 +100,7 @@ let dialogueScrollCount = 0;
 let exitOptionIndex = -1;
 let clickPoint = null;
 let scrollPositionX;
+let scrollDirection = 0;
 
 //FLAGS
 let audioMuted;
@@ -121,6 +122,7 @@ let transitioningToDialogueState = false;
 let readyToAdvanceNpcQuestPhase = false;
 let triggerQuestPhaseAdvance = false;
 let canExitDialogueAtThisPoint = false;
+let scrollingActive = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -968,6 +970,23 @@ export function setScrollPositionX(value) {
 
 export function getScrollPositionX() {
     return scrollPositionX;
+}
+
+export function getScrollingActive() {
+    return scrollingActive;
+}
+
+export function setScrollingActive(value) {
+    scrollingActive = value;
+}
+
+// Getter and Setter for scrollDirection
+export function getScrollDirection() {
+    return scrollDirection;
+}
+
+export function setScrollDirection(value) {
+    scrollDirection = value;
 }
 
 

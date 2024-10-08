@@ -264,10 +264,7 @@ export function drawGrid() {
 }
 
 export function drawPlayerNpcsAndObjects(ctx) {
-    // TEST
-    // const canvas = getElements().canvas;
-    // setDynamicBackground(canvas, './resources/backgrounds/debugRoom.png');
-
+    
     const player = getPlayerObject();
     const npcsData = getNpcData().npcs;
     const objectsData = getObjectData().objects;

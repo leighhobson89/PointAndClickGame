@@ -1,4 +1,4 @@
-import { setScrollPositionX, getScrollPositionX, getBeginGameStatus, getCanExitDialogueAtThisPoint, getCanvasCellHeight, getCanvasCellWidth, getCurrentExitOptionText, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentScrollIndexDialogue, getCurrentStartIndexInventory, getCurrentXposNpc, getCurrentYposNpc, getCustomMouseCursor, getDialogueData, getDialogueOptionsScrollReserve, getDialogueScrollCount, getElements, getExitNumberToTransitionTo, getGameStateVariable, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getLocalization, getMaxTexTDisplayWidth, getMenuState, getNavigationData, getNpcData, getObjectData, getObjectToBeUsedWithSecondItem, getPlayerInventory, getPlayerObject, getPreviousGameState, getSecondItemAlreadyHovered, getSlotsPerRowInInventory, getTextDisplayDuration, getTextQueue, getTransitioningToAnotherScreen, getTransitioningToDialogueState, getUpcomingAction, getVerbButtonConstructionStatus, getWaitingForSecondItem, getWalkSpeedPlayer, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentScrollIndexDialogue, setCurrentStartIndexInventory, setCurrentXposNpc, setCurrentYposNpc, setCustomMouseCursor, setDialogueData, setDialogueScrollCount, setDisplayText, setElements, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setIsDisplayingText, setLanguage, setLanguageSelected, setNavigationData, setNpcsData, setObjectsData, setObjectToBeUsedWithSecondItem, setPreviousGameState, setPreviousScreenId, setSecondItemAlreadyHovered, setTextQueue, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setWaitingForSecondItem, urlDialogueData, urlNavigationData, urlNpcsData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
+import { setScrollingActive, getScrollingActive, setScrollDirection, getScrollDirection, setScrollPositionX, getScrollPositionX, getBeginGameStatus, getCanExitDialogueAtThisPoint, getCanvasCellHeight, getCanvasCellWidth, getCurrentExitOptionText, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentScrollIndexDialogue, getCurrentStartIndexInventory, getCurrentXposNpc, getCurrentYposNpc, getCustomMouseCursor, getDialogueData, getDialogueOptionsScrollReserve, getDialogueScrollCount, getElements, getExitNumberToTransitionTo, getGameStateVariable, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getLocalization, getMaxTexTDisplayWidth, getMenuState, getNavigationData, getNpcData, getObjectData, getObjectToBeUsedWithSecondItem, getPlayerInventory, getPlayerObject, getPreviousGameState, getSecondItemAlreadyHovered, getSlotsPerRowInInventory, getTextDisplayDuration, getTextQueue, getTransitioningToAnotherScreen, getTransitioningToDialogueState, getUpcomingAction, getVerbButtonConstructionStatus, getWaitingForSecondItem, getWalkSpeedPlayer, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentScrollIndexDialogue, setCurrentStartIndexInventory, setCurrentXposNpc, setCurrentYposNpc, setCustomMouseCursor, setDialogueData, setDialogueScrollCount, setDisplayText, setElements, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setIsDisplayingText, setLanguage, setLanguageSelected, setNavigationData, setNpcsData, setObjectsData, setObjectToBeUsedWithSecondItem, setPreviousGameState, setPreviousScreenId, setSecondItemAlreadyHovered, setTextQueue, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setWaitingForSecondItem, urlDialogueData, urlNavigationData, urlNpcsData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
 import { reattachDialogueOptionListeners, updateDialogueDisplay } from "./dialogue.js";
 import { drawGrid, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
 import { constructCommand, performCommand } from './handleCommands.js';
@@ -6,9 +6,6 @@ import { initLocalization, localize } from './localization.js';
 import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
 
 let textTimer;
-let scrollPositionX = 0;
-let scrollingActive = false; // New flag to indicate active scrolling
-let scrollDirection = 0; // -1 for left, 1 for right, 0 for none
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -495,7 +492,6 @@ function handleCanvasClick(event) {
 }
 
 async function setElementsLanguageText() {
-    // Localization text
     getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage(), 'ui')}</h2>`;
     getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage(), 'ui')}`;
     getElements().resumeGameMenuButton.innerHTML = `${localize('resumeGame', getLanguage(), 'ui')}`;
@@ -547,7 +543,7 @@ export function animateTransitionAndChangeBackground() {
         const startY = startPosition.y;
 
         initializePlayerPosition(startX, startY);
-        setDisplayText('', null); //remove text if change screen
+        setDisplayText('', null);
         fadeBackToGameInTransition();
         
         setTransitioningNow(true);
@@ -638,7 +634,7 @@ export function drawInventory(startIndex) {
     });
 }
 
-export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentSpeaker) { //do currentSpeaker
+export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentSpeaker) {
     if (!text) return;
 
     const canvas = getElements().canvas;
@@ -679,7 +675,6 @@ export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentS
         xPos = canvas.width - maxWidth / 2 - 10;
     }
 
-    // Handle text wrapping and drawing
     const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
     drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
 }
@@ -960,14 +955,13 @@ export function handleEdgeScroll() {
     const proximityThreshold = 3;
     const screenData = getNavigationData()[getCurrentScreenId()];
     const screenTilesWide = screenData.screenTilesWidebgImg;
-    const imgWidth = screenTilesWide * getCanvasCellWidth() * canvasWidthInCells; // Full image width
+    const imgWidth = screenTilesWide * getCanvasCellWidth() * canvasWidthInCells;
     const playerWalkSpeed = getWalkSpeedPlayer();
     const scrollSpeed = playerWalkSpeed * 1.5;
 
     const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
 
-    // Log player's grid X position
-    console.log("Player Grid X:", playerGridX);
+    //console.log("Player Grid X:", playerGridX);
 
     const isNearLeftEdge = playerGridX <= proximityThreshold;
     const isNearRightEdge = playerGridX >= (canvasWidthInCells - 1 - proximityThreshold);
@@ -975,66 +969,64 @@ export function handleEdgeScroll() {
     const targetX = getGridTargetX();
     const targetY = getGridTargetY();
 
-    // Log target X and Y positions
-    console.log("Target X:", targetX, "Target Y:", targetY);
+    //console.log("Target X:", targetX, "Target Y:", targetY);
 
     const isTargetingLeftEdge = targetX < 3 && targetY >= 0 && targetY < 60;
     const isTargetingRightEdge = targetX > 77 && targetY >= 0 && targetY < 60;
 
-    // Log edge targeting info
-    console.log("Is Near Left Edge:", isNearLeftEdge);
-    console.log("Is Near Right Edge:", isNearRightEdge);
-    console.log("Is Targeting Left Edge:", isTargetingLeftEdge);
-    console.log("Is Targeting Right Edge:", isTargetingRightEdge);
+    // console.log("Is Near Left Edge:", isNearLeftEdge);
+    // console.log("Is Near Right Edge:", isNearRightEdge);
+    // console.log("Is Targeting Left Edge:", isTargetingLeftEdge);
+    // console.log("Is Targeting Right Edge:", isTargetingRightEdge);
 
     // Check if we're scrolling to the left or right and set scroll direction
     if (!getTransitioningToAnotherScreen() && screenTilesWide > 1) {
         let bgPosition = getScrollPositionX() || 0;
 
-        console.log("Background Position X:", bgPosition);
+        // console.log("Background Position X:", bgPosition);
 
         if (isNearLeftEdge && isTargetingLeftEdge) {
             const maxScrollLeft = 0;  // Leftmost scroll limit
-            console.log("Attempting to scroll left...");
+            // console.log("Attempting to scroll left...");
             if (bgPosition < maxScrollLeft) {
-                scrollingActive = true;
-                scrollDirection = -1; // Scroll to the left
-                console.log("Scrolling Left: Active");
+                setScrollingActive(true);
+                setScrollDirection(-1); // Scroll to the left
+                // console.log("Scrolling Left: Active");
             }
         } 
         else if (isNearRightEdge && isTargetingRightEdge) {
             const maxScrollRight = -(imgWidth / 2);  // Rightmost scroll limit (50% image width)
-            console.log("Attempting to scroll right...");
+            // console.log("Attempting to scroll right...");
             if (bgPosition > maxScrollRight) {
-                scrollingActive = true;
-                scrollDirection = 1; // Scroll to the right
-                console.log("Scrolling Right: Active");
+                setScrollingActive(true);
+                setScrollDirection(1); // Scroll to the right
+                // console.log("Scrolling Right: Active");
             }
         }
     }
 
     // Continue scrolling while the flag is active
-    if (scrollingActive) {
+    if (getScrollingActive()) {
         let bgPosition = getScrollPositionX() || 0;
 
-        if (scrollDirection === -1) { // Scrolling left
+        if (getScrollDirection() === -1) { // Scrolling left
             const maxScrollLeft = 0;
             bgPosition = Math.min(bgPosition + scrollSpeed, maxScrollLeft);
-            console.log("Scrolling left... New Position X:", bgPosition);
+            // console.log("Scrolling left... New Position X:", bgPosition);
 
             if (bgPosition <= maxScrollLeft) {
-                scrollingActive = false; // Stop scrolling when the boundary is reached
-                console.log("Stopped scrolling left, reached boundary.");
+                setScrollingActive(false); // Stop scrolling when the boundary is reached
+                // console.log("Stopped scrolling left, reached boundary.");
             }
         } 
-        else if (scrollDirection === 1) { // Scrolling right
+        else if (getScrollDirection() === 1) { // Scrolling right
             const maxScrollRight = -(imgWidth /2);
             bgPosition = Math.max(bgPosition - scrollSpeed, maxScrollRight);
-            console.log("Scrolling right... New Position X:", bgPosition);
+            // console.log("Scrolling right... New Position X:", bgPosition);
 
             if (bgPosition >= maxScrollRight) {
-                scrollingActive = false; // Stop scrolling when the boundary is reached
-                console.log("Stopped scrolling right, reached boundary.");
+                setScrollingActive(false); // Stop scrolling when the boundary is reached
+                // console.log("Stopped scrolling right, reached boundary.");
             }
         }
 
