@@ -2,7 +2,7 @@ import { getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialog
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { performCommand, constructCommand } from './handleCommands.js';
-import { handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
+import { setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
 
 let currentPath = [];
 let currentPathIndex = 0;
@@ -61,19 +61,18 @@ export function gameLoop() {
 
 function movePlayerTowardsTarget() {
     const gridData = getGridData();
-
     const speed = getPlayerObject().speed;
     const player = getPlayerObject();
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
 
-    const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
-    const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
+    const playerGridX = Math.floor(player.xPos / gridSizeX);
+    const playerGridY = Math.floor(player.yPos / gridSizeY);
 
-    const playerOffsetX = Math.floor(playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth()));
-    const playerOffsetY = Math.floor(playerGridY + getPlayerObject().height / getCanvasCellHeight());
+    const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / gridSizeX));
+    const playerOffsetY = Math.floor(playerGridY + player.height / gridSizeY);
 
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // Adjust for rounding
 
     let targetX, targetY;
 
@@ -82,28 +81,30 @@ function movePlayerTowardsTarget() {
         const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
         const tolerance = 3;
 
-    if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
-        Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
-        currentPath = [];
-        currentPathIndex = 0;
-        setTransitioningNow(false);
-        resizePlayerObject();
-        getElements().customCursor.classList.remove('d-none');
-        canvas.style.pointerEvents = 'auto';
-        console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
+        // Check if player has reached the final position for the transition
+        if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
+            Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
+            currentPath = [];
+            currentPathIndex = 0;
+            setTransitioningNow(false);
+            resizePlayerObject();
+            getElements().customCursor.classList.remove('d-none');
+            canvas.style.pointerEvents = 'auto';
         }
     }
 
+    // Normal movement logic
     if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
         targetX = currentPath[currentPathIndex].x * gridSizeX;
         targetY = currentPath[currentPathIndex].y * gridSizeY - player.height;
     } else {
-        return;
+        return; // No target to move toward
     }
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
-    if (collisionEdgeCanvas) return;
+    if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
 
+    // Move the player toward the target position
     if (Math.abs(player.xPos - targetX) > speed) {
         player.xPos += (player.xPos < targetX) ? speed : -speed;
     } else {
@@ -116,6 +117,7 @@ function movePlayerTowardsTarget() {
         player.yPos = targetY;
     }
 
+    // Check if player has reached the target position
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
         currentPathIndex++;
 
@@ -124,15 +126,9 @@ function movePlayerTowardsTarget() {
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
-            console.log("waiting for second item: " + getWaitingForSecondItem());
-            console.log("second item already hovered: " + getSecondItemAlreadyHovered());
-            console.log("object to be used with second item: " + getObjectToBeUsedWithSecondItem());
-            console.log("upcoming action: " + getUpcomingAction());
-            console.log("verb construction status: " + getVerbButtonConstructionStatus());
-
+            // Logic for when the player reaches the final destination
             let commandToPerform;
             console.log(cellValue);
-            console.log(getClickPoint());
             const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
             const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
 
@@ -142,9 +138,7 @@ function movePlayerTowardsTarget() {
                 commandToPerform = constructCommand(getUpcomingAction(), false);
             }
 
-            console.log("command: " + commandToPerform);
-            performCommand(commandToPerform, false); //we presume neither are inventory item if player moves // CHECK IF BUGS
-
+            performCommand(commandToPerform, false); // Perform the command
             setCurrentlyMovingToAction(false);
             setCurrentlyMoving(false);
             if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
@@ -154,10 +148,10 @@ function movePlayerTowardsTarget() {
     }
 
     resizePlayerObject(player);
-
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
 }
+
 
 export function resizePlayerObject() {
     const player = getPlayerObject(); 
@@ -267,6 +261,10 @@ export function drawGrid() {
 }
 
 export function drawPlayerNpcsAndObjects(ctx) {
+    // TEST
+    // const canvas = getElements().canvas;
+    // setDynamicBackground(canvas, './resources/backgrounds/debugRoom.png');
+
     const player = getPlayerObject();
     const npcsData = getNpcData().npcs;
     const objectsData = getObjectData().objects;
@@ -678,20 +676,14 @@ export function handleRoomTransition() {
 
 function swapBackgroundOnRoomTransition(newScreenId) {
     console.log("Loading background for " + newScreenId);
-    const navigationData = getNavigationData();
+    const exit = 'e' + getExitNumberToTransitionTo();
+    // Transition complete, update the background position here if needed
+    const xPosCameraEnterHere = getNavigationData()[getPreviousScreenId()].exits[exit].xPosCameraEnterHere;
+    const yPosCameraEnterHere = getNavigationData()[getPreviousScreenId()].exits[exit].yPosCameraEnterHere;
+    const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl; // Get the new background image
 
-    if (navigationData[newScreenId] && navigationData[newScreenId].bgUrl) {
-        const bgUrl = navigationData[newScreenId].bgUrl;
-
-        const canvas = document.querySelector("canvas");
-        if (canvas) {
-            canvas.style.backgroundImage = `url('${bgUrl}')`;
-        } else {
-            console.error("Canvas element not found!");
-        }
-    } else {
-        console.error("Screen ID or bgUrl not found in navigation data!");
-    }
+    setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere);
+    console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
 }
 
 export function extractWValue(value) {

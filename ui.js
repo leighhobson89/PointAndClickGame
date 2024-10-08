@@ -923,3 +923,51 @@ async function scrollUp() {
     reattachDialogueOptionListeners();
 }
 
+export function setDynamicBackgroundWithOffset(canvas, imageUrl, xOffset, yOffset) {
+    // Create a new Image object to get the background image dimensions
+    const backgroundImage = new Image();
+    backgroundImage.src = imageUrl;
+
+    backgroundImage.onload = function() {
+        const imgWidth = backgroundImage.width;
+        const imgHeight = backgroundImage.height;
+
+        // Get the current canvas dimensions
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+
+        // Scale the image to the height of the canvas, maintaining the aspect ratio
+        const scaleRatio = canvasHeight / imgHeight; // Calculate the scale ratio for height
+        const scaledHeight = imgHeight * scaleRatio;  // Calculate the scaled height
+        const scaledWidth = imgWidth * scaleRatio;    // Calculate the scaled width (for maintaining aspect ratio)
+
+        // Stretch the width to fit the canvas
+        const finalWidth = canvasWidth; // The width should now stretch to fill the canvas
+        const finalHeight = scaledHeight; // Height will be the scaled height
+
+        // Set the new background image size
+        canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
+
+        // Calculate the center of the canvas after stretching
+        const centerX = (canvasWidth / 2) - (finalWidth / 2);
+        const centerY = (canvasHeight / 2) - (finalHeight / 2); // Center the height as needed
+
+        // Calculate offsets based on the grid cell size
+        const cellWidth = getCanvasCellWidth();
+        const cellHeight = getCanvasCellHeight();
+        const calculatedXOffset = centerX + (xOffset * cellWidth); // Scale xOffset by cellWidth
+        const calculatedYOffset = centerY + (yOffset * cellHeight); // Scale yOffset by cellHeight
+
+        // Apply the calculated background position using px values
+        canvas.style.backgroundImage = `url(${imageUrl})`;
+        canvas.style.backgroundPosition = `${calculatedXOffset}px ${calculatedYOffset}px`;
+
+        // Optionally log the values for debugging
+        console.log(`Background set to: ${imageUrl}, Position: ${calculatedXOffset}px, ${calculatedYOffset}px`);
+    };
+
+    // Handle errors in image loading
+    backgroundImage.onerror = function() {
+        console.error(`Failed to load image: ${imageUrl}`);
+    };
+}
