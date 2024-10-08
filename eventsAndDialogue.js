@@ -42,6 +42,10 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
     }
 }
 
+function giveKeyToLibrarian(npcAndSlot, dialogueString, realVerbUsed, special) {
+    
+}
+
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
     showText(dialogueString, getColorTextPlayer());
     const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
@@ -355,7 +359,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
     } else {
         const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
         
-        if (objectEvent.actionUse1) {
+        if (objectEvent.actionUse1 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUse) {
                     eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
@@ -367,7 +371,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
 
-        if (objectEvent.actionUse2) {
+        if (objectEvent.actionUse2 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUse) {
                     eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
@@ -379,7 +383,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
 
-        if (objectEvent.actionUseWith11) {
+        if (objectEvent.actionUseWith11 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUseWith1) {
                     eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
@@ -391,7 +395,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
 
-        if (objectEvent.actionUseWith12) {
+        if (objectEvent.actionUseWith12 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUseWith1) {
                     eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
@@ -400,6 +404,14 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
                 }
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
+            }
+        }
+
+        if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
+            try {
+                eval(`${objectEvent.actionGive1}(${objectEvent.npcGiveTo}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }
         }
     }

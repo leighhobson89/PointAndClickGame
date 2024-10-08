@@ -480,15 +480,6 @@
                     "it": "È sodo ma maturo, proprio come piace a me!",
                     "fr": "Il est ferme mais mûr, juste comme j'aime !"
                 }                
-            },
-            "verbGive": {
-                "object": {
-                    "en": "",
-                    "es": "",
-                    "de": "",
-                    "it": "",
-                    "fr": ""
-                }
             }
         },
         "npcInteractions": {
@@ -923,6 +914,64 @@
                                     }
                                 },
                                 "order": "01!"
+                            }
+                        }
+                    },
+                    "verbGive": {
+                        "objectKeyResearchRoom": {
+                            "scenario": {
+                                "0": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Oh there it is, I knew it was around somewhere!",
+                                            "es": "¡Oh, ahí está, sabía que estaba por aquí en algún lugar!",
+                                            "de": "Oh, da ist es, ich wusste, dass es irgendwo hier ist!",
+                                            "it": "Oh, eccolo, sapevo che era da qualche parte!",
+                                            "fr": "Oh, le voilà, je savais qu'il était quelque part par ici!"
+                                        },
+                                        "1": {
+                                            "en": "Use it and bring it back when you are done.",
+                                            "es": "Úsalo y tráelo de vuelta cuando hayas terminado.",
+                                            "de": "Benutze es und bring es zurück, wenn du fertig bist.",
+                                            "it": "Usalo e riportalo quando hai finito.",
+                                            "fr": "Utilise-le et rapporte-le quand tu auras terminé."
+                                        }
+                                    },
+                                    "order": "11!"
+                                },
+                                "1": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Thanks a lot, I'll try not to lose it again!",
+                                            "es": "¡Muchas gracias, intentaré no perderlo de nuevo!",
+                                            "de": "Vielen Dank, ich werde versuchen, es nicht noch einmal zu verlieren!",
+                                            "it": "Grazie mille, cercherò di non perderlo di nuovo!",
+                                            "fr": "Merci beaucoup, je vais essayer de ne plus le perdre!"
+                                        },
+                                        "1": {
+                                            "en": "Here take this as a thank you for finding it for me...",
+                                            "es": "Aquí, toma esto como agradecimiento por encontrarlo para mí...",
+                                            "de": "Hier, nimm das als Dankeschön, dass du es für mich gefunden hast...",
+                                            "it": "Ecco, prendi questo come ringraziamento per averlo trovato per me...",
+                                            "fr": "Tiens, prends ça en guise de remerciement pour l'avoir trouvé pour moi..."
+                                        },
+                                        "2": {
+                                            "en": "Oh thanks, it's a ticket to enter the exotic bird park.",
+                                            "es": "Oh gracias, es un boleto para entrar al parque de aves exóticas.",
+                                            "de": "Oh danke, es ist ein Ticket für den Eintritt in den exotischen Vogelpark.",
+                                            "it": "Oh grazie, è un biglietto per entrare nel parco degli uccelli esotici.",
+                                            "fr": "Oh merci, c'est un billet pour entrer dans le parc des oiseaux exotiques."
+                                        },
+                                        "3": {
+                                            "en": "Hey that place closed down! Oh well, thank you anyway...I think!",
+                                            "es": "¡Oye, ese lugar cerró! Bueno, gracias de todas formas...¡creo!",
+                                            "de": "Hey, der Ort wurde geschlossen! Naja, danke trotzdem...glaube ich!",
+                                            "it": "Ehi, quel posto è chiuso! Beh, grazie comunque...credo!",
+                                            "fr": "Hé, cet endroit est fermé ! Bon, merci quand même...je crois !"
+                                        }
+                                    },
+                                    "order": "1100!"
+                                }
                             }
                         }
                     },

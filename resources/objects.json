@@ -36,7 +36,9 @@
                 "actionUseWith11": "unlockResearchRoomDoor",
                 "actionUseWith12": "",
                 "useTogetherLocation": "libraryFoyer",
-                "npcGiveTo": "npcLibrarian1"
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
@@ -103,7 +105,9 @@
                 "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "",
-                "npcGiveTo": ""
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
@@ -171,7 +175,9 @@
                 "actionUseWith11": "useBatteryDEBUGOnMachineDEBUG",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": ""
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -239,7 +245,9 @@
                 "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "",
-                "npcGiveTo": ""
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -307,7 +315,9 @@
                 "actionUseWith11": "giveMonkeyBanana",
                 "actionUseWith12": "",
                 "useTogetherLocation": "npcMonkeyDEBUG",
-                "npcGiveTo": ""
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
@@ -375,7 +385,9 @@
                     "actionUseWith11": "",
                     "actionUseWith12": "",
                     "useTogetherLocation": "libraryFoyer",
-                    "npcGiveTo": ""
+                    "npcGiveTo": "",
+                    "actionGive1": "",
+                    "actionGive2": ""
                 },
                 "objectPlacementLocation": "libraryFoyer",
                 "activeSpriteUrl": "s1",
@@ -443,7 +455,9 @@
                 "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "",
-                "npcGiveTo": ""
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
             },
             "objectPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",

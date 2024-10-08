@@ -40,7 +40,7 @@ export function performCommand(command, inventoryItem) {
                 handleTalkTo(verbKey, objectId1, exitOrNot1, isObjectTrueNpcFalse);
                 break;
             case 'verbGive':
-                handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse);
+                handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse, verbKey);
                 break;
         }
     }
@@ -407,16 +407,16 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
 
     let object1;
     let object2;
-    let objectEvent1;
+    let objectEvent;
 
     let dialogueString = "";
 
     if (isObject1TrueNpcFalse) {
         object1 = objectData.objects[objectId1];
-        objectEvent1 = getObjectEvents(objectId1);
+        objectEvent = getObjectEvents(objectId1);
     } else { //npc
-        objectEvent1 = 'dialogueEngine';
-        executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+        objectEvent = 'dialogueEngine';
+        executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
         return;
     }
 
@@ -427,10 +427,10 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     if (!useWith && !objectId2) { //Use item in room
         if (object1.interactable.activeStatus && !object1.interactable.alreadyUsed) {
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.canUse[language];
-            executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
         } else if (object1.interactable.alreadyUsed) { //also can be an UNLOCKED door in any state of open/closed
             if (object1.interactable.canOpen && objectId1.includes('objectDoor')) { //unlocked door/container OPEN/CLOSED state
-                executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
                 return;
             }
             dialogueString = dialogueData.dialogue.objectInteractions.verbUse[objectId1].use.alreadyUsed[language];
@@ -452,7 +452,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             if ((object1.interactable.activeStatus && object2.interactable.activeStatus) || !inventoryItem2) {
                 if (object1.usedOn.actionUseWith11) {
                     dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                    executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                    executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
                     return;
                 } else {
                     dialogueString = dialogueData.dialogue.globalMessages.tryOtherWayAround[language];
@@ -468,7 +468,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         } else { //second object is an exit so we dont need to check object2 events, and possibly never will in any situation but in case...
             if (object1.interactable.activeStatus) {
                 dialogueString = dialogueData.dialogue.objectInteractions.verbUse.useWithObject1[objectId1][language];
-                executeInteractionEvent(objectEvent1, dialogueString, realVerbUsed, objectId1);
+                executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
                 return;
             } else if (!object1.interactable.alreadyUsed) {
                 dialogueString = dialogueData.dialogue.globalMessages.activeStatusNotSet[language];
@@ -626,7 +626,7 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
 }
 
 // Handle "Give" action
-export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse) {
+export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse, realVerbUsed) {
     const dialogueData = getDialogueData();
     const language = getLanguage();
     let canGiveObject;
@@ -652,7 +652,7 @@ export function handleGive(objectId1, objectId2, exitOrNot1, exitOrNot2, invento
         updateInteractionInfo(interactiveInfoTo, false);
     } else {
         console.log("handling Give To");
-        handleTo(objectId1, objectId2, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse); //inventoryItem always refers to object2 by this point
+        handleTo(objectId1, objectId2, exitOrNot2, inventoryItem, quantity, isObjectTrueNpcFalse, realVerbUsed); //inventoryItem always refers to object2 by this point
         setVerbButtonConstructionStatus(null);
         resetSecondItemState();
         updateInteractionInfo(localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction'), false);
@@ -693,27 +693,28 @@ function checkIfCanGiveOrShownCannotGiveMessage(exitOrNot, isObjectTrueNpcFalse,
     return false;
 }
 
-export async function handleTo(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse) {
+export async function handleTo(objectId1, objectId2, exitOrNot2, inventoryItem2, quantity, isObject2TrueNpcFalse, realVerbUsed) {
     //quantity at a later date if needed
     console.log("handle to");
     const language = getLanguage();
     const objectData = getObjectData();
-    const npcData = getNpcData();
     const object1 = objectData.objects[objectId1];
-    const dialogueData = getDialogueData().dialogue.globalMessages;
+    const dialogueData = getDialogueData().dialogue;
     
     const giveTo2 = checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, isObject2TrueNpcFalse, exitOrNot2);
-
-    let object2;
-    let dialogueString;
 
     if (!giveTo2) { //if wrong npc or invalid Give To object then this is already handled and we can return
         return;
     }
 
+    const npcData = getNpcData().npcs[objectId2];
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const objectEvent = getObjectEvents(objectId1);
+
     //here we definitely have a valid combination
-    //trigger event
-    console.log("can trigger event now, we definitely have a good combo");
+
+    const dialogueString = dialogueData.npcInteractions.verbGive[objectId1].scenario[giveScenarioId].phase[0][language];
+    executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
 }
 
 function checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, isObject2TrueNpcFalse, exitOrNot2) {
@@ -743,7 +744,7 @@ function checkIfItemCanBeGivenToSecondItemAndReturnSlot(objectId1, objectId2, is
 function extractNumberFromTheObjectsNpcGiveToValue(objectId) {
     const npcGiveToValue = getObjectData().objects[objectId].usedOn.npcGiveTo;
     const match = npcGiveToValue.match(/(\d+)$/);
-    return match ? match[1] : null; //null means regex error
+    return match ? match[1] : null;
 }
 
 function extractNpcFromTheObjectsNpcGiveToValue(objectId) {
