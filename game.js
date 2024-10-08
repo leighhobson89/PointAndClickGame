@@ -640,21 +640,25 @@ export function checkAndChangeScreen() {
         for (let dy = -2; dy <= 2; dy++) {
             const checkX = playerOffsetGridX + dx;
             const checkY = playerOffsetGridY + dy;
-
-            if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
-                console.log("Player is moving to another screen");
-                currentPath = []
-                currentPathIndex = 0;
-                setCurrentlyMoving(false);
-                setCurrentlyMovingToAction(false)
-
-                changeBackground();
-
-                setTransitioningToAnotherScreen(false);
-                return;
+    
+            // Add boundary checks to prevent out-of-bounds access
+            if (checkX >= 0 && checkX < 80 && checkY >= 0 && checkY < 60) {
+                // Perform the check if within bounds
+                if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
+                    console.log("Player is moving to another screen");
+                    currentPath = [];
+                    currentPathIndex = 0;
+                    setCurrentlyMoving(false);
+                    setCurrentlyMovingToAction(false);
+    
+                    changeBackground();
+                    setTransitioningToAnotherScreen(false);
+                    return;
+                }
             }
         }
     }
+    
     return; 
 }
 
