@@ -377,27 +377,98 @@ export function drawPlayerNpcsAndObjects(ctx) {
     }
 
     const playerXStart = player.xPos;
-    const playerYStart = player.yPos;
+    const playerYStart = player.yPos + player.height;
     const playerWidth = player.width;
     const playerHeight = player.height;
+    const skipCells = new Set();
 
-    // Draw Player behind objects if necessary, or otherwise in front
-    for (let px = 0; px < playerWidth; px++) {
-        for (let py = 0; py < playerHeight; py++) {
-            const playerPixelX = playerXStart + px;
-            const playerPixelY = playerYStart + py;
+    // Function to check for consecutive 'b' cells above or below the player
+    function checkForConsecutiveBCells(gridX, gridYStart, direction) {
+        let bCount = 0;
+        for (let i = 0; i < 2; i++) {  // Check two cells in a row
+            const gridY = gridYStart + i * direction;  // direction -1 for above, +1 for below
+            if (gridY >= 0 && gridY < gridData.length && gridData[gridY][gridX].startsWith('b')) {
+                bCount++;
+            } else {
+                break;  // Stop if a 'b' is not found
+            }
+        }
+        return bCount === 2;  // Return true if two consecutive 'b' cells are found
+    }
 
-            const gridX = Math.floor(playerPixelX / cellWidth);
-            const gridY = Math.floor(playerPixelY / cellHeight);
+    // Determine whether the player is in front or behind the object
+    const playerGridX = Math.floor(playerXStart / cellWidth);
+    const playerGridY = Math.floor(playerYStart / cellHeight);
+    let drawAllPlayer = false;
 
-            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                if (!gridData[gridY][gridX].startsWith('b')) {
+    // First, check above the player
+    if (checkForConsecutiveBCells(playerGridX, playerGridY - 1, -1)) {
+        // If two 'b' cells are found above, the player is in front of the object
+        drawAllPlayer = true;
+    } else if (checkForConsecutiveBCells(playerGridX, playerGridY + 1, 1)) {
+        // If two 'b' cells are found below, the player is behind the object
+        drawAllPlayer = false;
+    }
+
+    // Drawing logic based on the result
+    if (drawAllPlayer) {
+        // Draw the entire player without skipping cells
+        for (let px = 0; px < playerWidth; px++) {
+            for (let py = 0; py < playerHeight; py++) {
+                const playerPixelX = playerXStart + px;
+                const playerPixelY = playerYStart - py;
+
+                const gridX = Math.floor(playerPixelX / cellWidth);
+                const gridY = Math.floor(playerPixelY / cellHeight);
+
+                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
                     ctx.fillStyle = player.color;
                     ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
                 }
             }
         }
+    } else {
+        // Apply the original skip logic if the player is behind the object
+        for (let py = 0; py < playerHeight; py++) {
+            const playerPixelY = playerYStart - py;
+            const gridY = Math.floor(playerPixelY / cellHeight);
+            const gridX = Math.floor(playerXStart / cellWidth);
+
+            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
+                if (gridData[gridY][gridX].startsWith('b')) {
+                    skipCells.add(`${gridX},${gridY}`);
+                    for (let i = 1; i <= 3; i++) {
+                        if (gridX - i >= 0) {
+                            skipCells.add(`${gridX - i},${gridY}`);
+                        }
+                        if (gridX + i < gridData[0].length) {
+                            skipCells.add(`${gridX + i},${gridY}`);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Now draw the player based on the skipCells logic
+        for (let px = 0; px < playerWidth; px++) {
+            for (let py = 0; py < playerHeight; py++) {
+                const playerPixelX = playerXStart + px;
+                const playerPixelY = playerYStart - py;
+
+                const gridX = Math.floor(playerPixelX / cellWidth);
+                const gridY = Math.floor(playerPixelY / cellHeight);
+
+                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
+                    if (!skipCells.has(`${gridX},${gridY}`)) {
+                        ctx.fillStyle = player.color;
+                        ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
+                    }
+                }
+            }
+        }
     }
+
+
 
     //every frame we check to see if the grid objects have moved and then update the grid accordingly
     const originalValuesObject = {};
