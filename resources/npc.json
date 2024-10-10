@@ -102,11 +102,11 @@
                 "s2": "./resources/npcs/librarian.png"
             },
             "gridPosition": {
-                "x": 17,
+                "x": 16,
                 "y": 35
             },
             "offset": {
-                "x": 1.7,
+                "x": 1.8,
                 "y": -0.1
             },
             "visualPosition": {

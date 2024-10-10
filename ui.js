@@ -353,7 +353,7 @@ export function handleMouseMove(event, ctx) {
         if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
             setHoverCell(hoverX, hoverY);
 
-            //console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}, zPos: ${getZPosHover()}`);
+            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`); //, zPos: ${getZPosHover()}
             //DEBUG
             drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
             //

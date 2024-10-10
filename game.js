@@ -953,12 +953,30 @@ export function reconcileGridState() {
         }
     }
 
+    // Now calculate the new position of the object based on grid cell offsets
+    for (const diff of differences.currentDifferences) {
+        const { x, y, currentCell } = diff;
+
+        // Calculate the offset between the current position and the original one
+        const offsetX = x;  // Assuming x is the current grid cell position
+        const offsetY = y;  // Assuming y is the current grid cell position
+
+        // Determine the new position in terms of grid cells (no need for pixel calculations)
+        const newGridX = offsetX; // This is already in grid cells, so no conversion needed
+        const newGridY = offsetY; // This is already in grid cells
+
+        // Update the grid to reflect the new object position
+        currentGrid[newGridY][newGridX] = objectCellPrefix;
+    }
+
     // Console log the differences in the current grid, specifically for the objectId
     console.log(`Current Differences for Object ${objectId}:`, JSON.stringify(differences.currentDifferences, null, 2));
     console.log(`Current Grid after resetting non-differing cells for Object ${objectId}:`, JSON.stringify(currentGrid, null, 2));
 
+    // Set animation state to false (animation completed)
     setAnimationInProgress(false);
 }
+
 
 
 

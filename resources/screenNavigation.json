@@ -108,8 +108,8 @@
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 37, "y": 37 },
-                "finalPosition": { "x": 35, "y": 48 },
+                "startPosition": { "x": 26, "y": 54 },
+                "finalPosition": { "x": 36, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -125,10 +125,10 @@
         "screenTilesWidebgImg": 1,
         "exits": {
             "e1": {
-                "connectsTo": "libraryFoyer",
+                "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 45, "y": 56 },
-                "finalPosition": { "x": 43, "y": 48 },
+                "startPosition": { "x": 73, "y": 58 },
+                "finalPosition": { "x": 63, "y": 52 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -141,7 +141,7 @@
                 "yPosCameraEnterHere": 0
             },
             "e3": {
-                "connectsTo": "roadIntoTown",
+                "connectsTo": "carpenter",
                 "status": "open",
                 "startPosition": { "x": 73, "y": 58 },
                 "finalPosition": { "x": 63, "y": 52 },
@@ -149,6 +149,14 @@
                 "yPosCameraEnterHere": 0
             },
             "e4": {
+                "connectsTo": "libraryFoyer",
+                "status": "open",
+                "startPosition": { "x": 45, "y": 56 },
+                "finalPosition": { "x": 43, "y": 48 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e5": {
                 "connectsTo": "stables",
                 "status": "open",
                 "startPosition": { "x": 9, "y": 52 },
@@ -197,8 +205,8 @@
             "e2": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 45, "y": 34 },
-                "finalPosition": { "x": 45, "y": 34 },
+                "startPosition": { "x": 59, "y": 42 },
+                "finalPosition": { "x": 58, "y": 45 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -278,8 +286,8 @@
             "e3": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 4, "y": 54 },
-                "finalPosition": { "x": 15, "y": 52 },
+                "startPosition": { "x": 74, "y": 46 },
+                "finalPosition": { "x": 70, "y": 42 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -383,8 +391,8 @@
             "e4": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 71, "y": 48 },
-                "finalPosition": { "x": 65, "y": 47 },
+                "startPosition": { "x": 47, "y": 41 },
+                "finalPosition": { "x": 43, "y": 45 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
