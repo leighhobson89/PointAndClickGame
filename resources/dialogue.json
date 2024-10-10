@@ -544,17 +544,54 @@
                             "order": "1100!"
                         }
                     }
+                },
+                "objectMilkInBowl": {
+                    "scenario": {
+                        "0": {
+                            "phase": {
+                                "0": {
+                                    "en": "Here boy, drink this that's a good lad!",
+                                    "es": "¡Aquí chico, bebe esto, buen muchacho!",
+                                    "de": "Hier Junge, trink das, guter Junge!",
+                                    "it": "Ecco ragazzo, bevi questo, bravo ragazzo!",
+                                    "fr": "Tiens mon grand, bois ça, bon garçon !"
+                                },
+                                "1": {
+                                    "en": "Wow he is drinking it all, he must have been super thirsty!",
+                                    "es": "¡Vaya, se lo está bebiendo todo, debe de estar muy sediento!",
+                                    "de": "Wow, er trinkt alles, er muss sehr durstig gewesen sein!",
+                                    "it": "Wow, sta bevendo tutto, deve essere stato davvero assetato!",
+                                    "fr": "Wow, il boit tout, il devait vraiment avoir soif !"
+                                },
+                                "2": {
+                                    "en": "Ruff ruff!",
+                                    "es": "¡Guau guau!",
+                                    "de": "Wuff wuff!",
+                                    "it": "Bau bau!",
+                                    "fr": "Ouaf ouaf !"
+                                },
+                                "3": {
+                                    "en": "Another happy customer, he's even forgotten all about his bone!",
+                                    "es": "Otro cliente feliz, ¡incluso se ha olvidado de su hueso!",
+                                    "de": "Ein weiterer zufriedener Kunde, er hat sogar sein Knochen vergessen!",
+                                    "it": "Un altro cliente felice, ha persino dimenticato il suo osso!",
+                                    "fr": "Un autre client heureux, il a même oublié son os !"
+                                }
+                            },
+                            "order": "0010!"
+                        }
+                    }
                 }
             }
         },
         "npcInteractions": {
             "verbLookAt": {
-                "npcMonkeyDEBUG": {
-                    "en": "What a cute monkey, he looks hungry!",
-                    "es": "¡Qué mono tan lindo, parece que tiene hambre!",
-                    "de": "Was für ein süßer Affe, er sieht hungrig aus!",
-                    "it": "Che scimmietta carina, sembra affamato!",
-                    "fr": "Quel singe mignon, il a l'air affamé !"
+                "npcTownDog": {
+                    "en": "Here boy! Aww he looks thirsty!",
+                    "es": "¡Aquí chico! ¡Aww parece que tiene sed!",
+                    "de": "Hier Junge! Aww er sieht durstig aus!",
+                    "it": "Qui ragazzo! Aww sembra che abbia sete!",
+                    "fr": "Viens ici, mon grand ! Aww il a l'air assoiffé !"
                 },
                 "npcLibrarian": {
                     "en": "She looks like she wants to look like she is busy!",
@@ -564,95 +601,55 @@
                     "fr": "On dirait qu'elle veut donner l'impression d'être occupée !"  
                 } 
             },
-            "verbUse": {
-                "npcMonkeyDEBUG": {
-                    "quest": {
-                        "0": {
-                            "phase": {
-                                "0": {
-                                    "en": "ee..ee..ooo..hungry..ee..ee",
-                                    "es": "ee..ee..ooo..hambre..ee..ee",
-                                    "de": "ee..ee..ooo..hungrig..ee..ee",
-                                    "it": "ee..ee..ooo..fame..ee..ee",
-                                    "fr": "ee..ee..ooo..faim..ee..ee"
-                                },
-                                "1": {
-                                    "en": "ee..oo..nom..nom..have..ee.ooo",
-                                    "es": "ee..oo..ñam..ñam..toma..ee.ooo",
-                                    "de": "ee..oo..nom..nom..nimm..ee.ooo",
-                                    "it": "ee..oo..gnam..gnam..prendi..ee.ooo",
-                                    "fr": "ee..oo..miam..miam..prends..ee.ooo"                        
-                                },
-                                "2": {
-                                    "en": "Thanks a lot! I mean ee..oo..thanks! I don't think a monkey will need this battery!",
-                                    "es": "¡Muchas gracias! Quiero decir, ee..oo..¡gracias! No creo que un mono necesite esta batería.",
-                                    "de": "Vielen Dank! Ich meine, ee..oo..Danke! Ich glaube nicht, dass ein Affe diese Batterie braucht.",
-                                    "it": "Grazie mille! Voglio dire, ee..oo..grazie! Non penso che una scimmia avrà bisogno di questa batteria.",
-                                    "fr": "Merci beaucoup ! Je veux dire, ee..oo..merci ! Je ne pense pas qu'un singe ait besoin de cette batterie."
-                                }
-                            }
-                        },
-                        "1": {
-                            "phase": {
-                                "0": {
-                                    "en": "ee..oo...ee.ooo",
-                                    "es": "ee..oo...ee.ooo",
-                                    "de": "ee..oo...ee.ooo",
-                                    "it": "ee..oo...ee.ooo",
-                                    "fr": "ee..oo...ee.ooo"                        
-                                },
-                                "1": {
-                                    "en": "I think he is happy as he is now.",
-                                    "es": "Creo que está feliz tal como está ahora.",
-                                    "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
-                                    "it": "Penso che sia felice così com'è ora.",
-                                    "fr": "Je pense qu'il est heureux tel qu'il est maintenant."                        
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "verbTalkTo": {
-                "npcMonkeyDebug": {
+                "npcTownDog": {
                     "quest": {
                         "0": {
+                            "introDialogue": {
+                                "en": "Here boy! Aww he looks thirsty!",
+                                "es": "¡Aquí chico! ¡Aww parece que tiene sed!",
+                                "de": "Hier Junge! Aww, er sieht durstig aus!",
+                                "it": "Qui ragazzo! Aww sembra che abbia sete!",
+                                "fr": "Viens ici, mon grand ! Aww il a l'air assoiffé !"
+                            },
                             "phase": {
                                 "0": {
-                                    "en": "",
-                                    "es": "",
-                                    "de": "",
-                                    "it": "",
-                                    "fr": ""
+                                    "en": "Grrr!",
+                                    "es": "¡Grrr!",
+                                    "de": "Grrr!",
+                                    "it": "Grrr!",
+                                    "fr": "Grrr!"
+                                },
+                                "1": {
+                                    "en": "Ooo he isn't giving that bone up for anybody!",
+                                    "es": "¡Ooo, no va a soltar ese hueso por nada!",
+                                    "de": "Ooo, er gibt diesen Knochen für niemanden auf!",
+                                    "it": "Ooo, non cederà quel osso a nessuno!",
+                                    "fr": "Ooo, il ne lâchera pas ce os pour personne !"
                                 }
-                            }
-                        },                    
-                        "1": { 
-                            "phase": {
-                                "0": {
-                                    "en": "",
-                                    "es": "",
-                                    "de": "",
-                                    "it": "",
-                                    "fr": ""  
-                                }      
+                            },
+                            "order": "10!",
+                            "autoExitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "",
+                                        "es": "",
+                                        "de": "",
+                                        "it": "",
+                                        "fr": ""
+                                    }
+                                },
+                                "order": "0!"
                             }
                         }
                     },
                     "cantTalkDialogue": {
                         "0": {
-                            "en": "I think he is happy as he is now.",
-                            "es": "Creo que está feliz tal como está ahora.",
-                            "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
-                            "it": "Penso che sia felice così com'è ora.",
-                            "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
-                        },
-                        "1": {
-                            "en": "I think he is happy as he is now.",
-                            "es": "Creo que está feliz tal como está ahora.",
-                            "de": "Ich denke, er ist jetzt glücklich, so wie er ist.",
-                            "it": "Penso che sia felice così com'è ora.",
-                            "fr": "Je pense qu'il est heureux tel qu'il est maintenant."
+                            "en": "It looks like I made a friend for life!",
+                            "es": "¡Parece que hice un amigo para toda la vida!",
+                            "de": "Es sieht so aus, als hätte ich einen Freund fürs Leben gemacht!",
+                            "it": "Sembra che io abbia fatto un amico per la vita!",
+                            "fr": "On dirait que je me suis fait un ami pour la vie !"
                         }
                     }
                 },

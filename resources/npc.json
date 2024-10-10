@@ -118,6 +118,64 @@
                 "height": 50
             },
             "comment": "Librarian"
+        },
+        "npcTownDog": {
+            "name": {
+                "en": "Dog",
+                "es": "Perro",
+                "de": "Hund",
+                "it": "Cane",
+                "fr": "Chien"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 0,
+                "questCutOffEvents": {
+                    "0": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(137, 80, 0)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectMilkInBowl",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "marketStreet",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/townDog.png",
+                "s2": "./resources/npcs/townDog.png"
+            },
+            "gridPosition": {
+                "x":60,
+                "y": 45
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 55,
+                "height": 35
+            },
+            "comment": "Town Dog gives bone if given Milk In Bowl"
         }
     }
 }
