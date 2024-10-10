@@ -609,7 +609,7 @@ export function drawInventory(startIndex) {
             const objectData = getObjectData().objects[objectId];
             const imageUrl = objectData.inventoryUrl;
 
-            const imgTag = `<img src="${imageUrl}" alt="${objectId}" class="inventory-img" />`;
+            const imgTag = `<img src="${imageUrl}" alt="${objectId}" style="width: 85%; height: 85%;" class="inventory-img" />`;
 
             div.innerHTML = imgTag;
 
@@ -628,7 +628,7 @@ export function drawInventory(startIndex) {
                 div.innerHTML += numberSpan;
             }
         } else {
-            div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img" />`;
+            div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" style="width: 50%; height: 50%;" class="inventory-img" />`;
             div.classList.remove('show-triangle');
         }
     });

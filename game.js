@@ -444,26 +444,51 @@ export function initializeCanvas() {
     const ctx = canvas.getContext('2d');
     const container = getElements().canvasContainer;
 
-    function updateCanvasSize() { //can fix objects placement on resize by yPos - difference in viewport so store the canvas height globally then when this is called move the objects and check grid is updated!
-        const canvas = getElements().canvas;
-        const ctx = canvas.getContext('2d');
-        const container = getElements().canvasContainer;
+    // Utility function to adjust sizes and positions of child elements inside bottomContainer
+    function updateBottomContainerElements() {
+        const bottomContainer = getElements().bottomContainer;
+        const dialogueContainer = getElements().dialogueContainer;
+        const verbsInventoryContainer = getElements().verbsInventoryContainer;
+        
+        // Adjust dialogue container's height to match bottom container
+        dialogueContainer.style.height = `${bottomContainer.offsetHeight * 0.4}px`;
 
+        // Adjust verbs and inventory container
+        verbsInventoryContainer.style.height = `${bottomContainer.offsetHeight * 0.6}px`;
+
+        // Dynamically adjust button sizes or other content
+        const buttons = bottomContainer.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.style.height = `${bottomContainer.offsetHeight * 0.15}px`;
+            button.style.fontSize = `${bottomContainer.offsetHeight * 0.05}px`;
+        });
+
+        // Adjust inventory items size to fit the container dynamically
+        const inventoryItems = bottomContainer.querySelectorAll('.inventory-item img');
+        inventoryItems.forEach(item => {
+            item.style.width = `${bottomContainer.offsetHeight * 0.1}px`;
+            item.style.height = `${bottomContainer.offsetHeight * 0.1}px`;
+        });
+    }
+
+    function updateCanvasSize() {
         const viewportHeight = window.innerHeight;
         const bottomContainerHeight = getElements().bottomContainer.offsetHeight;
-        setBottomContainerHeight(bottomContainerHeight);
+
+        setBottomContainerHeight(bottomContainerHeight - 10);
 
         const canvasHeight = viewportHeight - bottomContainerHeight;
-        const canvasWidth = container.clientWidth;
+        const canvasWidth = container.clientWidth * 0.8;
 
         container.style.width = '100%';
         container.style.height = `${canvasHeight}px`;
-    
+
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
         canvas.style.backgroundSize = `${canvasWidth}px ${canvasHeight}px`;
 
+        // Updating cell sizes based on canvas resizing
         const oldCellWidth = getCanvasCellWidth();
         const oldCellHeight = getCanvasCellHeight();
 
@@ -472,23 +497,30 @@ export function initializeCanvas() {
         setCanvasCellWidth(newCellWidth);
         setCanvasCellHeight(newCellHeight);
 
+        // Update player position based on new cell size
         const player = getPlayerObject();
         player.xPos = (player.xPos / oldCellWidth) * newCellWidth;
         player.yPos = (player.yPos / oldCellHeight) * newCellHeight;
 
         setPlayerObject('xPos', player.xPos);
         setPlayerObject('yPos', player.yPos);
-    
+
+        // Redraw the grid with new cell sizes
         drawGrid(ctx, newCellWidth, newCellHeight, getHoverCell().x, getHoverCell().y);
-    }    
+
+        // Update the elements inside bottomContainer
+        updateBottomContainerElements();
+    }
 
     window.addEventListener('load', updateCanvasSize);
     window.addEventListener('resize', updateCanvasSize);
 
+    // Example event to handle mouse movements and interaction
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
 
-    updateCanvasSize();
+    updateCanvasSize(); // Initial setup
 }
+
 
 export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();

@@ -60,10 +60,12 @@
         </div>
         <div class="canvas-wrapper">
             <div id="overlayCanvas" class="overlay-canvas"></div>
+            <div class = "game-borders-left"><img src="./resources/border_left.png"></div>
             <canvas id="canvas"></canvas>
+            <div class = "game-borders-right"><img src="./resources/border_right.png"></div>
         </div>
-        <div id="bottomContainer" class="d-flex flex-column p-2">
-            <div id="commandRow" class="d-flex justify-content-start">
+        <div id="bottomContainer" class="d-flex flex-column">
+            <div id="commandRow" class="d-flex">
                 <div id="interactionInfo"></div>
             </div>
                   <!-- Dialogue Container -->
@@ -88,35 +90,35 @@
                     <div class="verbs">
                         <div class="row ">
                             <div class="col-3 ">
-                                <button id="btnLookAt" class="btn btn-primary w-100">PH_LookAt</button>
+                                <button id="btnLookAt" class="verbBtn btn btn-primary w-100">PH_LookAt</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnPickUp" class="btn btn-primary w-100">PH_PickUp</button>
+                                <button id="btnPickUp" class="verbBtn btn btn-primary w-100">PH_PickUp</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnUse" class="btn btn-primary w-100">PH_Use</button>
+                                <button id="btnUse" class="verbBtn btn btn-primary w-100">PH_Use</button>
                             </div>
                         </div>
                         <div class="row ">
                             <div class="col-3 ">
-                                <button id="btnOpen" class="btn btn-primary w-100">PH_Open</button>
+                                <button id="btnOpen" class="verbBtn btn btn-primary w-100">PH_Open</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnClose" class="btn btn-primary w-100">PH_Close</button>
+                                <button id="btnClose" class="verbBtn btn btn-primary w-100">PH_Close</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnPush" class="btn btn-primary w-100">PH_Push</button>
+                                <button id="btnPush" class="verbBtn btn btn-primary w-100">PH_Push</button>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-3 ">
-                                <button id="btnPull" class="btn btn-primary w-100">PH_Pull</button>
+                                <button id="btnPull" class="verbBtn btn btn-primary w-100">PH_Pull</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnTalkTo" class="btn btn-primary w-100">PH_TalkTo</button>
+                                <button id="btnTalkTo" class="verbBtn btn btn-primary w-100">PH_TalkTo</button>
                             </div>
                             <div class="col-3 ">
-                                <button id="btnGive" class="btn btn-primary w-100">PH_Give</button>
+                                <button id="btnGive" class="verbBtn btn btn-primary w-100">PH_Give</button>
                             </div>
                         </div>                    
                     </div>
