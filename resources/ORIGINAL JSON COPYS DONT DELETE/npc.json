@@ -39,15 +39,15 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "marketStreet",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/donkeyOnRope.png",
                 "s2": "./resources/npcs/donkeyNotOnRope.png"
             },
             "gridPosition": {
-                "x": 10,
-                "y": 10
+                "x": 37,
+                "y": 44
             },
             "offset": {
                 "x": 0,
@@ -58,8 +58,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 70,
-                "height": 40
+                "width": 150,
+                "height": 80
             },
             "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
         },
@@ -97,15 +97,15 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "libraryFoyer",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/librarian.png",
                 "s2": "./resources/npcs/librarian.png"
             },
             "gridPosition": {
-                "x": 20,
-                "y": 10
+                "x": 16,
+                "y": 35
             },
             "offset": {
                 "x": 1.8,
@@ -155,15 +155,15 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "marketStreet",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/townDog.png",
                 "s2": "./resources/npcs/townDog.png"
             },
             "gridPosition": {
-                "x": 30,
-                "y": 10
+                "x":60,
+                "y": 45
             },
             "offset": {
                 "x": 1.8,
@@ -213,15 +213,15 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "marketStreet",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/womanLostMirror.png",
                 "s2": "./resources/npcs/womanLostMirror.png"
             },
             "gridPosition": {
-                "x": 40,
-                "y": 10
+                "x": 38,
+                "y": 35
             },
             "offset": {
                 "x": 1.8,
@@ -271,15 +271,15 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "seedyGuyAlley",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/seedyGuy.png",
                 "s2": "./resources/npcs/seedyGuy.png"
             },
             "gridPosition": {
-                "x": 50,
-                "y": 10
+                "x": 41,
+                "y": 36
             },
             "offset": {
                 "x": 1.8,
@@ -290,8 +290,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 50
+                "width": 100,
+                "height": 100
             },
             "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
         }

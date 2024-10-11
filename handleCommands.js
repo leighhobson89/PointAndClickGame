@@ -149,10 +149,10 @@ function removeObjectFromEnvironment(objectId) {
     if (originalValues.hasOwnProperty(roomId)) {
         for (const [position, data] of Object.entries(originalValues[roomId])) {
             if (data.objectId === objectId) {
-                const [y, x] = position.split(',').map(Number);
+                const [x, y] = position.split(',').map(Number);
 
-                if (y >= 0 && y < gridData.length && x >= 0 && x < gridData[y].length) {
-                    gridData[x][y] = data.originalValue;
+                if (y >= 0 && y < gridData.length && y >= 0 && x < gridData[y].length) {
+                    gridData[y][x] = data.originalValue;
                 } else {
                     console.error(`Position out of bounds: (${x}, ${y})`);
                 }
@@ -404,6 +404,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     const objectData = getObjectData();
     const dialogueData = getDialogueData();
     const language = getLanguage();
+    const npcData = getNpcData();
 
     let object1;
     let object2;
@@ -415,8 +416,15 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         object1 = objectData.objects[objectId1];
         objectEvent = getObjectEvents(objectId1);
     } else { //npc
-        objectEvent = 'dialogueEngine';
-        executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
+        object1 = npcData.npcs[objectId1];
+        if (!isObject1TrueNpcFalse && object1.interactable.canTalk) {
+            objectEvent = 'dialogueEngine';
+            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
+        } else {
+            const cantTalkDialogueNumber = npcData.npcs[objectId1].interactable.cantTalkDialogueNumber;
+            dialogueString = dialogueData.dialogue.npcInteractions.verbTalkTo[objectId1].cantTalkDialogue[cantTalkDialogueNumber][language];
+            showText(dialogueString, npcData.npcs[objectId1].interactable.dialogueColor);
+        }
         return;
     }
 

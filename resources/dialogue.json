@@ -490,6 +490,62 @@
                 }                
             },
             "verbGive": {
+                "objectCarrot": {
+                    "scenario": {
+                        "0": {
+                            "phase": {
+                                "0": {
+                                    "en": "Here you go, eat that up!",
+                                    "es": "¡Aquí tienes, cómetelo!",
+                                    "de": "Hier, iss das mal!",
+                                    "it": "Ecco, mangialo!",
+                                    "fr": "Tiens, mange ça !"
+                                },
+                                "1": {
+                                    "en": "He really enjoyed that carrot, I think he'll let me pet him now.",
+                                    "es": "Realmente disfrutó esa zanahoria, creo que ahora me dejará acariciarlo.",
+                                    "de": "Er hat diese Karotte wirklich genossen, ich denke, er wird mich jetzt streicheln lassen.",
+                                    "it": "Si è davvero goduto quella carota, penso che ora mi lascerà accarezzarlo.",
+                                    "fr": "Il a vraiment aimé cette carotte, je pense qu'il va maintenant me laisser le caresser."
+                                }
+                            },
+                            "order": "00!"
+                        },
+                        "1": {
+                            "phase": {
+                                "0": {
+                                    "en": "Thanks a lot, I'll try not to lose it again!",
+                                    "es": "¡Muchas gracias, intentaré no perderlo de nuevo!",
+                                    "de": "Vielen Dank, ich werde versuchen, es nicht noch einmal zu verlieren!",
+                                    "it": "Grazie mille, cercherò di non perderlo di nuovo!",
+                                    "fr": "Merci beaucoup, je vais essayer de ne plus le perdre!"
+                                },
+                                "1": {
+                                    "en": "Here take this as a thank you for finding it for me...",
+                                    "es": "Aquí, toma esto como agradecimiento por encontrarlo para mí...",
+                                    "de": "Hier, nimm das als Dankeschön, dass du es für mich gefunden hast...",
+                                    "it": "Ecco, prendi questo come ringraziamento per averlo trovato per me...",
+                                    "fr": "Tiens, prends ça en guise de remerciement pour l'avoir trouvé pour moi..."
+                                },
+                                "2": {
+                                    "en": "Oh thanks, it's a ticket to enter the exotic bird park.",
+                                    "es": "Oh gracias, es un boleto para entrar al parque de aves exóticas.",
+                                    "de": "Oh danke, es ist ein Ticket für den Eintritt in den exotischen Vogelpark.",
+                                    "it": "Oh grazie, è un biglietto per entrare nel parco degli uccelli esotici.",
+                                    "fr": "Oh merci, c'est un billet pour entrer dans le parc des oiseaux exotiques."
+                                },
+                                "3": {
+                                    "en": "Hey that place closed down! Oh well, thank you anyway...I think!",
+                                    "es": "¡Oye, ese lugar cerró! Bueno, gracias de todas formas...¡creo!",
+                                    "de": "Hey, der Ort wurde geschlossen! Naja, danke trotzdem...glaube ich!",
+                                    "it": "Ehi, quel posto è chiuso! Beh, grazie comunque...credo!",
+                                    "fr": "Hé, cet endroit est fermé ! Bon, merci quand même...je crois !"
+                                }
+                            },
+                            "order": "1100!"
+                        }
+                    }
+                },
                 "objectKeyResearchRoom": {
                     "scenario": {
                         "0": {
@@ -652,6 +708,13 @@
         },
         "npcInteractions": {
             "verbLookAt": {
+                "npcDonkey": {
+                    "en": "He looks old and shattered, no use for nothing bless.",
+                    "es": "Se ve viejo y destrozado, no sirve para nada, pobre.",
+                    "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
+                    "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
+                    "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
+                },
                 "npcTownDog": {
                     "en": "Here boy! Aww he looks thirsty!",
                     "es": "¡Aquí chico! ¡Aww parece que tiene sed!",
@@ -762,6 +825,50 @@
                         }
                     }
                 },
+                "npcDonkey": {
+                    "quest": {
+                        "0": {
+                            "introDialogue": {
+                                "en": "",
+                                "es": "",
+                                "de": "",
+                                "it": "",
+                                "fr": ""
+                            },
+                            "phase": {
+                                "0": {
+                                    "en": "",
+                                    "es": "",
+                                    "de": "",
+                                    "it": "",
+                                    "fr": ""
+                                }
+                            },
+                            "order": "0!",
+                            "autoExitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "",
+                                        "es": "",
+                                        "de": "",
+                                        "it": "",
+                                        "fr": ""
+                                    }
+                                },
+                                "order": "0!"
+                            }
+                        }
+                    },
+                    "cantTalkDialogue": {
+                        "0": {
+                            "en": "Hee haw!",
+                            "es": "¡Hii-haw!",
+                            "de": "I-Aah!",
+                            "it": "Iah-iah!",
+                            "fr": "Hii-haw!"
+                        }
+                    }
+                },
                 "npcTownDog": {
                     "quest": {
                         "0": {
@@ -824,11 +931,11 @@
                     "quest": {
                         "0": {
                             "introDialogue": {
-                                "en": "Here boy! Aww he looks thirsty!",
-                                "es": "¡Aquí chico! ¡Aww parece que tiene sed!",
-                                "de": "Hier Junge! Aww, er sieht durstig aus!",
-                                "it": "Qui ragazzo! Aww sembra che abbia sete!",
-                                "fr": "Viens ici, mon grand ! Aww il a l'air assoiffé !"
+                                "en": "Hey there, how's things?",
+                                "es": "¡Hola! ¿Cómo van las cosas?",
+                                "de": "Hallo! Wie läuft's?",
+                                "it": "Ciao! Come va?",
+                                "fr": "Salut ! Comment ça va ?"
                             },
                             "phase": {
                                 "0": {
