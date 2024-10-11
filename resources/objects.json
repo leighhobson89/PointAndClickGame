@@ -5,6 +5,7 @@
     "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is unlocked, and this should always match the status field in the navigation screen for the exit",
     "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked. true is open, false is closed",
     "generalComments6": "canHover: Can be set to false and will stop user hovering and interacting for example object in canvas but invisible until they push something or look at something etc, can make not hoverable and add a blank png and replace it when it should become visible",
+    "generalComments7": "name property of an object cannot have its last word as the same as another objects name ie one object is hook you can not use rope and hook, and check other languages too",
     "objects": {
         "objectDoorLibraryFoyerResearchRoom": {
                 "name": {
@@ -917,12 +918,12 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
-                "canPickUp": false,
+                "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
                 "canGive": false,
                 "stackable": false,
-                "quantity": 3,
+                "quantity": 1,
                 "decrementQuantityOnUse": true,
                 "activeStatus": true,
                 "alreadyUsed": false
@@ -1183,11 +1184,11 @@
         },
         "objectMilkInBowl": {
             "name": {
-                "en": "Milk in Bowl",
-                "es": "Leche en cuenco",
-                "de": "Milch in Schüssel",
-                "it": "Latte nella ciotola",
-                "fr": "Lait dans le bol"
+                "en": "Bowl of Milk",
+                "es": "Cuenco de leche",
+                "de": "Schüssel mit Milch",
+                "it": "Ciotola di latte",
+                "fr": "Bol de lait"
             },
             "interactable": {
                 "canHover": true,
@@ -1252,11 +1253,11 @@
         },
         "objectBoneJammedInPulley": {
             "name": {
-                "en": "Bone Jammed in Pulley",
-                "es": "Hueso atascado en polea",
-                "de": "Knochen in der Seilrolle eingeklemmt",
-                "it": "Osso bloccato nella puleggia",
-                "fr": "Os coincé dans la poulie"
+                "en": "Pulley With Bone Jammed In It",
+                "es": "Polea con hueso atascado",
+                "de": "Seilrolle mit eingeklemmtem Knochen",
+                "it": "Puleggia con osso bloccato",
+                "fr": "Poulie avec os coincé"
             },
             "interactable": {
                 "canHover": true,
@@ -1321,11 +1322,11 @@
         },
         "objectRopeAndHook": {
             "name": {
-                "en": "Rope and Hook",
-                "es": "Cuerda y gancho",
-                "de": "Seil und Haken",
-                "it": "Corda e gancio",
-                "fr": "Corde et crochet"
+                "en": "Hook'n'Rope",
+                "es": "Gancho'n'Cuerda",
+                "de": "Haken'n'Seil",
+                "it": "Gancio'n'Corda",
+                "fr": "Crochet'n'Corde"
             },
             "interactable": {
                 "canHover": true,

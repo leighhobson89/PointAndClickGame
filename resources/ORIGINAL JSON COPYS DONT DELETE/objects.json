@@ -5,6 +5,7 @@
     "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is unlocked, and this should always match the status field in the navigation screen for the exit",
     "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked. true is open, false is closed",
     "generalComments6": "canHover: Can be set to false and will stop user hovering and interacting for example object in canvas but invisible until they push something or look at something etc, can make not hoverable and add a blank png and replace it when it should become visible",
+    "generalComments7": "name property of an object cannot have its last word as the same as another objects name ie one object is hook you can not use rope and hook, and check other languages too",
     "objects": {
         "objectKeyResearchRoom": {
             "name": {
