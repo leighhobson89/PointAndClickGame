@@ -1,7 +1,7 @@
 import { getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
 import { handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { setGameState } from "./game.js";
+import { showHideObjectAndMakeHoverable, setGameState } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -39,6 +39,36 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
                 await showText(dialogueString, getColorTextPlayer());
             }
             break;
+    }
+}
+
+async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
+    const gridData = getGridData();
+    const language = getLanguage();
+    const objectData = getObjectData().objects;
+    const objectGiving = objectData.objectCarrot;
+    const objectId = 'objectCarrot';
+    const npcData = getNpcData().npcs.npcDonkey;
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
+
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+    setGameState(getCutSceneState());
+
+    await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
+
+    if (giveScenarioId === 0) {
+        handleInventoryAdjustment(objectId, 1, false);
+        drawInventory(0);
+        const objectToShowId = 'objectDonkeyRope';
+        const spriteUrl = 's2';
+        //need to do animation code for custom movement like below
+        showHideObjectAndMakeHoverable(spriteUrl, objectToShowId, true);
+        setAnimationInProgress(true);
+        setPreAnimationGridState(gridData, objectId);
+        //setNpcData(`npcDonkey`, `gridPosition.x`, (npcData.gridPosition.x + 50)); //set this number when positioned
+        setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x + 300)); //set this number when positioned
     }
 }
 

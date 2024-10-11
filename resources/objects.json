@@ -380,12 +380,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "npcGiveTo": "npcDonkey",
+                "actionGive1": "giveCarrotToDonkey",
                 "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
@@ -421,7 +421,7 @@
                 "width": 30,
                 "height": 20
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Give carrot to donkey in order to show objectDonkeyRope and move the donkey so can access barn"
         },
         "objectParrotHook": {
             "name": {
@@ -777,7 +777,7 @@
                 "fr": "Corde"
             },
             "interactable": {
-                "canHover": true,
+                "canHover": false,
                 "canPush": false,
                 "canPull": false,
                 "canPickUp": true,
@@ -805,7 +805,7 @@
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/ropeWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/ropeWorld.png"
             },
             "visualAnimatedStateOffsets": {
