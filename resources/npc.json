@@ -233,7 +233,65 @@
                 "width": 50,
                 "height": 39
             },
-            "comment": "Town Dog gives bone if given Milk In Bowl"
+            "comment": "Woman give Key To Den if given objectParrotMirror"
+        },
+        "npcSeedyLookingGuy": {
+            "name": {
+                "en": "Seedy Looking Guy",
+                "es": "Hombre de aspecto sospechoso",
+                "de": "Zwielichtiger Typ",
+                "it": "Uomo dall'aspetto losco",
+                "fr": "Homme à l'air louche"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 2,
+                "questCutOffEvents": {
+                    "1": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(20, 20, 20)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectKeyToDen",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "seedyGuyAlley",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/seedyGuy.png",
+                "s2": "./resources/npcs/seedyGuy.png"
+            },
+            "gridPosition": {
+                "x": 41,
+                "y": 36
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 100,
+                "height": 100
+            },
+            "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
         }
     }
 }
