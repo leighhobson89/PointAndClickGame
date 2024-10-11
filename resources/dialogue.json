@@ -673,9 +673,95 @@
                     "it": "Bella, rilassata, ma sembra un po' irritata.",
                     "fr": "Belle, détendue, mais semble un peu contrariée."
                                        
+                },
+                "npcSeedyLookingGuy": {
+                    "en": "Now I'm not one to judge, but that guy looks very suspicious!",
+                    "es": "No soy de juzgar, pero ese tipo parece muy sospechoso.",
+                    "de": "Ich will ja nicht urteilen, aber dieser Typ sieht sehr verdächtig aus!",
+                    "it": "Non sono uno che giudica, ma quel tipo sembra molto sospetto!",
+                    "fr": "Je ne veux pas juger, mais ce type a vraiment l'air louche!"                   
                 }
             },
             "verbTalkTo": {
+                "npcSeedyLookingGuy": {
+                    "quest": {
+                        "0": {
+                            "introDialogue": {
+                                "en": "Hey there, nice suit and trilby!",
+                                "es": "¡Hola, buen traje y trilby!",
+                                "de": "Hey, schicker Anzug und Trilby!",
+                                "it": "Ehi, bel vestito e trilby!",
+                                "fr": "Salut, beau costume et trilby!"
+                            },
+                            "phase": {
+                                "0": {
+                                    "en": "What do you want? Be careful around here",
+                                    "es": "¿Qué quieres? Ten cuidado por aquí",
+                                    "de": "Was willst du? Sei vorsichtig hier",
+                                    "it": "Cosa vuoi? Stai attento qui intorno",
+                                    "fr": "Que veux-tu? Fais attention ici"
+                                },
+                                "1": {
+                                    "en": "What would you do if someone mugged you?",
+                                    "es": "¿Qué harías si alguien te asaltara?",
+                                    "de": "Was würdest du tun, wenn dich jemand ausraubt?",
+                                    "it": "Cosa faresti se qualcuno ti derubasse?",
+                                    "fr": "Que ferais-tu si quelqu'un te volait?"
+                                }
+                            },
+                            "order": "11!",
+                            "autoExitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "Well it's been an interesting chat, take care!",
+                                        "es": "Bueno, ha sido una charla interesante, ¡cuídate!",
+                                        "de": "Nun, das war ein interessantes Gespräch, pass auf dich auf!",
+                                        "it": "Beh, è stata una conversazione interessante, stammi bene!",
+                                        "fr": "Eh bien, c'était une discussion intéressante, prends soin de toi !"
+                                    },
+                                    "1": {
+                                        "en": "Look over your shoulder from time to time...",
+                                        "es": "Mira por encima de tu hombro de vez en cuando...",
+                                        "de": "Schau ab und zu über deine Schulter...",
+                                        "it": "Guarda dietro di te di tanto in tanto...",
+                                        "fr": "Regarde par-dessus ton épaule de temps en temps..."
+                                    },
+                                    "2": {
+                                        "en": "And think yourself lucky I am in a good mood today!",
+                                        "es": "¡Y considérate afortunado de que estoy de buen humor hoy!",
+                                        "de": "Und sei froh, dass ich heute gute Laune habe!",
+                                        "it": "E considerati fortunato che oggi sono di buon umore!",
+                                        "fr": "Et considère-toi chanceux que je sois de bonne humeur aujourd'hui!"
+                                    },
+                                    "3": {
+                                        "en": "Is he threatening me or is that just his style? Guess we'll see!",
+                                        "es": "¿Me está amenazando o es solo su estilo? ¡Supongo que lo veremos!",
+                                        "de": "Droht er mir oder ist das einfach sein Stil? Mal sehen!",
+                                        "it": "Mi sta minacciando o è solo il suo stile? Vedremo!",
+                                        "fr": "Est-ce qu'il me menace ou est-ce juste son style ? On verra bien !"
+                                    }
+                                },
+                                "order": "0110!"
+                            }
+                        }
+                    },
+                    "cantTalkDialogue": {
+                        "0": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "1": {
+                            "en": "I don't think I want to go near him any more if it's all the same.",
+                            "es": "No creo que quiera acercarme a él si no le importa.",
+                            "de": "Ich glaube nicht, dass ich ihm näher kommen möchte, wenn es ihm egal ist.",
+                            "it": "Non credo di volermi avvicinare a lui, se è lo stesso.",
+                            "fr": "Je ne pense pas que je veuille m'approcher de lui, si cela ne le dérange pas."
+                        }
+                    }
+                },
                 "npcTownDog": {
                     "quest": {
                         "0": {
