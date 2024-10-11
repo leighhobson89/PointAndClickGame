@@ -980,7 +980,7 @@ export function compareOriginalValuesAndUpdate() {
 
 export function reconcileGridState() {
     // Retrieve the objectId from the pre-animation state
-    const { objectId, grid } = getPreAnimationGridState();
+    const { id, grid, isObjectTrueNpcFalse } = getPreAnimationGridState();
 
     // Retrieve grids
     const originalGridState = getOriginalGridState()[getCurrentScreenId()];
@@ -992,7 +992,13 @@ export function reconcileGridState() {
         currentDifferences: []
     };
 
-    const objectCellPrefix = 'o' + objectId;  // Object-specific grid cell prefix
+    let cellPrefix;
+
+    if (isObjectTrueNpcFalse) {
+        cellPrefix = 'o' + id;
+    } else {
+        cellPrefix = 'c' + id;
+    }
 
     // Compare pre-animation grid with the current grid, but only for the specified objectId
     for (let y = 0; y < preAnimationGrid.length; y++) {
@@ -1001,7 +1007,7 @@ export function reconcileGridState() {
             const currentCell = currentGrid[y][x];
 
             // Check if the current cell corresponds to the target objectId
-            if (currentCell !== originalCell && String(currentCell).startsWith(objectCellPrefix)) {
+            if (currentCell !== originalCell && String(currentCell).startsWith(cellPrefix)) {
                 differences.currentDifferences.push({ x, y, originalCell, currentCell });
             }
         }
@@ -1013,7 +1019,7 @@ export function reconcileGridState() {
             const currentCell = currentGrid[y][x];
 
             // If the current cell corresponds to the objectId and is not in the differences
-            if (String(currentCell).startsWith(objectCellPrefix)) {
+            if (String(currentCell).startsWith(cellPrefix)) {
                 const isInDifferences = differences.currentDifferences.some(diff => diff.x === x && diff.y === y);
 
                 if (!isInDifferences) {
@@ -1037,12 +1043,12 @@ export function reconcileGridState() {
         const newGridY = offsetY; // This is already in grid cells
 
         // Update the grid to reflect the new object position
-        currentGrid[newGridY][newGridX] = objectCellPrefix;
+        currentGrid[newGridY][newGridX] = cellPrefix;
     }
 
     // Console log the differences in the current grid, specifically for the objectId
-    console.log(`Current Differences for Object ${objectId}:`, JSON.stringify(differences.currentDifferences, null, 2));
-    console.log(`Current Grid after resetting non-differing cells for Object ${objectId}:`, JSON.stringify(currentGrid, null, 2));
+    console.log(`Current Differences for Object ${id}:`, JSON.stringify(differences.currentDifferences, null, 2));
+    console.log(`Current Grid after resetting non-differing cells for Object ${id}:`, JSON.stringify(currentGrid, null, 2));
 
     // Set animation state to false (animation completed)
     setAnimationInProgress(false);

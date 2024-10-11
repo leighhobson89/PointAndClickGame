@@ -18,7 +18,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         case 'verbUse':
             if (!objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId);
+                setPreAnimationGridState(gridData, doorId, true);
                 setObjectData(doorId, `interactable.activeStatus`, true);
                 //door opening animation in future
                 setObjectData(doorId, `activeSpriteUrl`, 's2');
@@ -30,7 +30,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         case 'verbClose':
             if (objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId);
+                setPreAnimationGridState(gridData, doorId, true);
                 setObjectData(doorId, `interactable.activeStatus`, false);
                 //door closing animation in future
                 setObjectData(doorId, `activeSpriteUrl`, 's1');
@@ -62,13 +62,13 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
         handleInventoryAdjustment(objectId, 1, false);
         drawInventory(0);
         const objectToShowId = 'objectDonkeyRope';
-        const spriteUrl = 's2';
-        //need to do animation code for custom movement like below
-        showHideObjectAndMakeHoverable(spriteUrl, objectToShowId, true);
+        const spriteUrlObjectToShow = 's2';
+
+        showHideObjectAndMakeHoverable(spriteUrlObjectToShow, objectToShowId, true);
         setAnimationInProgress(true);
-        setPreAnimationGridState(gridData, objectId);
-        //setNpcData(`npcDonkey`, `gridPosition.x`, (npcData.gridPosition.x + 50)); //set this number when positioned
+        setPreAnimationGridState(gridData, 'npcDonkey', false);
         setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x + 300)); //set this number when positioned
+        setNpcData(`npcDonkey`, `activeSpriteUrl`, 's2');
     }
 }
 

@@ -789,10 +789,11 @@ export function getResizedNpcsGridState() {
     return JSON.parse(JSON.stringify(resizedNpcsGridState)); // Return a new deep copy
 }
 
-export function setPreAnimationGridState(gridState, objectId, oldState, newState) {
+export function setPreAnimationGridState(gridState, objectId, isObjectTrueNpcFalse) {
     preAnimationGridState = {
         grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
-        objectId: objectId,
+        id: objectId,
+        isObjectTrueNpcFalse: isObjectTrueNpcFalse
     };
 }
 

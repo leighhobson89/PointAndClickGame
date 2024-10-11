@@ -409,6 +409,13 @@
                         }
                     }
                 },
+                "objectDonkeyRope": {
+                    "en": "A thick strong rope, it can definitely hold plenty of weight!",
+                    "es": "Una cuerda gruesa y fuerte, ¡definitivamente puede soportar mucho peso!",
+                    "de": "Ein dickes starkes Seil, es kann definitiv viel Gewicht halten!",
+                    "it": "Una corda spessa e resistente, può sicuramente reggere molto peso!",
+                    "fr": "Une corde épaisse et solide, elle peut certainement supporter beaucoup de poids !"
+                },
                 "objectParrotFlyer": {
                     "en": "A ticket for an exotic bird park that is no longer open, sheesh!",
                     "es": "Un boleto para un parque de aves exóticas que ya no está abierto, ¡uf!",
@@ -464,9 +471,16 @@
                     "de": "Es ist eine unscheinbare Tür, die nach draußen führt.",
                     "it": "È una porta insignificante che conduce all'esterno.",
                     "fr": "C'est une porte banale qui mène à l'extérieur."
-                }            
+                }         
             },
             "verbPickUp": {
+                "objectDonkeyRope": {
+                    "en": "A thick strong rope, it can definitely hold plenty of weight!",
+                    "es": "Una cuerda gruesa y fuerte, ¡definitivamente puede soportar mucho peso!",
+                    "de": "Ein dickes starkes Seil, es kann definitiv viel Gewicht halten!",
+                    "it": "Una corda spessa e resistente, può sicuramente reggere molto peso!",
+                    "fr": "Une corde épaisse et solide, elle peut certainement supporter beaucoup de poids !"
+                },
                 "objectKeyResearchRoom": {
                     "en": "It's a brass key. I'll take it, they always come in handy!",
                     "es": "Es una llave de latón. La tomaré, ¡siempre son útiles!",
