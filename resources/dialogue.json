@@ -582,6 +582,71 @@
                             "order": "0010!"
                         }
                     }
+                },
+                "objectParrotMirror": {
+                    "scenario": {
+                        "0": {
+                            "phase": {
+                                "0": {
+                                    "en": "Oh, thanks so much! I need this right now!",
+                                    "es": "¡Oh, muchas gracias! ¡Necesito esto ahora mismo!",
+                                    "de": "Oh, vielen Dank! Ich brauche das jetzt!",
+                                    "it": "Oh, grazie mille! Ne ho davvero bisogno ora!",
+                                    "fr": "Oh, merci beaucoup ! J'en ai vraiment besoin maintenant !"
+                                },
+                                "1": {
+                                    "en": "I don't have anything to give you for this, I'm sorry.",
+                                    "es": "Lo siento, no tengo nada para darte a cambio.",
+                                    "de": "Es tut mir leid, ich habe nichts, das ich dir dafür geben könnte.",
+                                    "it": "Mi dispiace, non ho niente da darti in cambio.",
+                                    "fr": "Je suis désolée, je n'ai rien à te donner en échange."
+                                },
+                                "2": {
+                                    "en": "Don't worry, I know a pretty woman like you likes to have a mirror handy...",
+                                    "es": "No te preocupes, sé que a una mujer bonita como tú le gusta tener un espejo a mano...",
+                                    "de": "Keine Sorge, ich weiß, dass eine hübsche Frau wie du gerne einen Spiegel zur Hand hat...",
+                                    "it": "Non ti preoccupare, so che una bella donna come te ama avere uno specchio a portata di mano...",
+                                    "fr": "Ne t'inquiète pas, je sais qu'une jolie femme comme toi aime avoir un miroir à portée de main..."
+                                },
+                                "3": {
+                                    "en": "Gee, thanks! I think. Well, I do have this rusty old key I found on the floor.",
+                                    "es": "Vaya, gracias... Creo. Bueno, tengo esta llave oxidada que encontré en el suelo.",
+                                    "de": "Oh, danke... denke ich. Nun, ich habe diesen alten rostigen Schlüssel, den ich auf dem Boden gefunden habe.",
+                                    "it": "Grazie... credo. Beh, ho questa vecchia chiave arrugginita che ho trovato per terra.",
+                                    "fr": "Eh bien, merci... je suppose. J'ai cette vieille clé rouillée que j'ai trouvée par terre."
+                                },
+                                "4": {
+                                    "en": "Have you any idea what it could be for?",
+                                    "es": "¿Tienes alguna idea de para qué podría servir?",
+                                    "de": "Hast du eine Ahnung, wofür die sein könnte?",
+                                    "it": "Hai idea di cosa potrebbe servire?",
+                                    "fr": "As-tu une idée de ce à quoi elle pourrait servir ?"
+                                },
+                                "5": {
+                                    "en": "I may as well give it to you, I have no use for it.",
+                                    "es": "Bueno, te la daré, no tengo uso para ella.",
+                                    "de": "Ich gebe sie dir, ich habe keine Verwendung dafür.",
+                                    "it": "Te la do, tanto non mi serve.",
+                                    "fr": "Je te la donne, je n'en ai pas l'utilité."
+                                },
+                                "6": {
+                                    "en": "Thanks, I'll take it. Have a lovely day, ma'am!",
+                                    "es": "Gracias, lo tomaré. ¡Que tengas un día genial, chica!",
+                                    "de": "Danke, ich nehme es. Einen schönen Tag noch, gnädige Frau!",
+                                    "it": "Grazie, lo prenderò. Buona giornata, signora!",
+                                    "fr": "Merci, je le prends. Passez une belle journée, madame !"
+                                },
+                                "7": {
+                                    "en": "Bye handsome!",
+                                    "es": "¡Adiós guapo!",
+                                    "de": "Tschüss, Hübscher!",
+                                    "it": "Ciao bello!",
+                                    "fr": "Au revoir beau gosse !"
+                                }
+                            },
+                            "order": "11011101!"
+                        }
+                    }
                 }
             }
         },
@@ -600,10 +665,76 @@
                     "de": "Sie sieht so aus, als ob sie beschäftigt wirken will!",
                     "it": "Sembra che voglia sembrare occupata!",
                     "fr": "On dirait qu'elle veut donner l'impression d'être occupée !"  
-                } 
+                },
+                "npcWomanLostMirror": {
+                    "en": "Beautiful, relaxed, but looks a bit vexed!",
+                    "es": "Hermosa, relajada, pero parece un poco molesta.",
+                    "de": "Schön, entspannt, aber sieht etwas verärgert aus.",
+                    "it": "Bella, rilassata, ma sembra un po' irritata.",
+                    "fr": "Belle, détendue, mais semble un peu contrariée."
+                                       
+                }
             },
             "verbTalkTo": {
                 "npcTownDog": {
+                    "quest": {
+                        "0": {
+                            "introDialogue": {
+                                "en": "Here boy! Aww he looks thirsty!",
+                                "es": "¡Aquí chico! ¡Aww parece que tiene sed!",
+                                "de": "Hier Junge! Aww, er sieht durstig aus!",
+                                "it": "Qui ragazzo! Aww sembra che abbia sete!",
+                                "fr": "Viens ici, mon grand ! Aww il a l'air assoiffé !"
+                            },
+                            "phase": {
+                                "0": {
+                                    "en": "Grrr!",
+                                    "es": "¡Grrr!",
+                                    "de": "Grrr!",
+                                    "it": "Grrr!",
+                                    "fr": "Grrr!"
+                                },
+                                "1": {
+                                    "en": "Ooo he isn't giving that bone up for anybody!",
+                                    "es": "¡Ooo, no va a soltar ese hueso por nada!",
+                                    "de": "Ooo, er gibt diesen Knochen für niemanden auf!",
+                                    "it": "Ooo, non cederà quel osso a nessuno!",
+                                    "fr": "Ooo, il ne lâchera pas ce os pour personne !"
+                                }
+                            },
+                            "order": "10!",
+                            "autoExitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "",
+                                        "es": "",
+                                        "de": "",
+                                        "it": "",
+                                        "fr": ""
+                                    }
+                                },
+                                "order": "0!"
+                            }
+                        }
+                    },
+                    "cantTalkDialogue": {
+                        "0": {
+                            "en": "",
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "1": {
+                            "en": "Ruff...Ruff!",
+                            "es": "¡Guau...Guau!",
+                            "de": "Wuff...Wuff!",
+                            "it": "Bau...Bau!",
+                            "fr": "Ouaf...Ouaf!"
+                        }
+                    }
+                },
+                "npcWomanLostMirror": {
                     "quest": {
                         "0": {
                             "introDialogue": {
