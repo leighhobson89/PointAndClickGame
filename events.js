@@ -78,13 +78,6 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); //set this number when positioned
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
     setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
-
-    // if (giveScenarioId === 0) {
-    //     handleInventoryAdjustment(objectId, 1, false);
-    //     drawInventory(0);
-
-
-    // }
 }
 
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
