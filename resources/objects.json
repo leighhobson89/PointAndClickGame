@@ -16,6 +16,7 @@
                     "fr": "Porte en bois"
                 },
                 "interactable": {
+                    "specialNpcObjectStandIn" : false,
                     "canHover": true,
                     "canPush": false,
                     "canPull": false,
@@ -86,6 +87,7 @@
                 "fr": "Clé"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -155,6 +157,7 @@
                 "fr": "Pile de livres"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": true,
                 "canPull": true,
@@ -224,6 +227,7 @@
                 "fr": "Flyer de Perroquet Inutile"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -294,6 +298,7 @@
                 "fr": "Miroir"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -363,6 +368,7 @@
                 "fr": "Carotte"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -423,6 +429,77 @@
             },
             "comment": "Give carrot to donkey in order to show objectDonkeyRope and move the donkey so can access barn"
         },
+        "objectDonkeyFake": {
+            "name": {
+                "en": "Donkey ",
+                "es": "Burro ",
+                "de": "Esel ",
+                "it": "Asino ",
+                "fr": "Âne "
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : true,
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false,
+                "dialogueColor": "rgb(0, 0, 0)"
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "donkeyMoveRopeAvailable",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/donkeyOnRope.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 50,
+                "y": 10
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 70,
+                "height": 40
+            },
+            "comment": "Object instance of Donkey npc that can be used to show the rope, the space after the name is important or the code wont work"
+        },
         "objectParrotHook": {
             "name": {
                 "en": "Hook",
@@ -432,6 +509,7 @@
                 "fr": "Crochet"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -501,6 +579,7 @@
                 "fr": "Roue de poulie"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -570,6 +649,7 @@
                 "fr": "Pied-de-biche"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -639,6 +719,7 @@
                 "fr": "Carte illisible"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -708,6 +789,7 @@
                 "fr": "Fourche"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -777,6 +859,7 @@
                 "fr": "Corde"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
@@ -846,6 +929,7 @@
                 "fr": "Maillet"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -915,6 +999,7 @@
                 "fr": "Clous"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -984,6 +1069,7 @@
                 "fr": "Os"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1053,6 +1139,7 @@
                 "fr": "Bouteille de lait"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1122,6 +1209,7 @@
                 "fr": "Bol"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1191,6 +1279,7 @@
                 "fr": "Bol de lait"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1260,6 +1349,7 @@
                 "fr": "Poulie avec os coincé"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1329,6 +1419,7 @@
                 "fr": "Crochet'n'Corde"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": true,
@@ -1398,6 +1489,7 @@
                 "fr": "Clé de la tanière"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1467,6 +1559,7 @@
                 "fr": "Papier avec des instructions griffonnées"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
@@ -1536,6 +1629,7 @@
                 "fr": "Pince"
             },
             "interactable": {
+                "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,

@@ -141,7 +141,7 @@ function pickUpItem(objectId, quantity, verb) {
     triggerEvent(objectId, verb);
 }
 
-function removeObjectFromEnvironment(objectId) {
+export function removeObjectFromEnvironment(objectId) {
     const gridData = getGridData().gridData;
     const roomId = getCurrentScreenId();
     const originalValues = getOriginalValueInCellWhereObjectPlaced();
@@ -614,18 +614,33 @@ export function handlePull(verb, objectId) {
 
 // Handle "Talk To" action
 export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
-    const npcData = getNpcData().npcs[npcId];
+    let npcData;
+
+    if (isObjectTrueNpcFalse) {
+        npcData = getObjectData().objects[npcId]; //for special cases of objects standing in for npc, code is correct dont worry
+        if (!npcData.interactable.specialNpcObjectStandIn) {
+            npcData = getNpcData().npcs[npcId];
+        }
+    } else {
+        npcData = getNpcData().npcs[npcId];
+    }
+
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
     let dialogueString;
     
-    if (!isObjectTrueNpcFalse && !exitOrNot) {
+    if ((!isObjectTrueNpcFalse && !exitOrNot) || npcData.interactable.specialNpcObjectStandIn) {
         if (npcData.interactable.canTalk) {
             handleUse(npcId, null, null, null, false, 1, false, verb);
         } else {
-            const cantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
-            dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[cantTalkDialogueNumber][language];
-            showText(dialogueString, npcData.interactable.dialogueColor);
+            if (!npcData.interactable.specialNpcObjectStandIn) {
+                const cantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
+                dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[cantTalkDialogueNumber][language];
+                showText(dialogueString, npcData.interactable.dialogueColor);
+            } else {
+                dialogueString = dialogueData.objectInteractions.verbUse[npcId].use.cantUseYet[language];
+                showText(dialogueString, npcData.interactable.dialogueColor);
+            }
         }
     } else {
         dialogueString = dialogueData.globalMessages.itemCannotBeTalkedTo[language];

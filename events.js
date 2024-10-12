@@ -1,5 +1,5 @@
 import { getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
-import { handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
+import { removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { showHideObjectAndMakeHoverable, setGameState } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
@@ -58,18 +58,47 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
 
     await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
 
-    if (giveScenarioId === 0) {
-        handleInventoryAdjustment(objectId, 1, false);
-        drawInventory(0);
-        const objectToShowId = 'objectDonkeyRope';
-        const spriteUrlObjectToShow = 's2';
+    handleInventoryAdjustment(objectId, 1, false);
+    drawInventory(0);
 
-        showHideObjectAndMakeHoverable(spriteUrlObjectToShow, objectToShowId, true);
-        setAnimationInProgress(true);
-        setPreAnimationGridState(gridData, 'npcDonkey', false);
-        setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x + 300)); //set this number when positioned
-        setNpcData(`npcDonkey`, `activeSpriteUrl`, 's2');
-    }
+    const originalDonkeyX = npcData.visualPosition.x;
+    const originalDonkeyY = npcData.visualPosition.y;
+
+    //move real donkey and hide
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'npcDonkey', false);
+    setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x + 300)); //set this number when positioned
+    setNpcData(`npcDonkey`, `visualPosition.y`, (npcData.visualPosition.y + 0)); //set this number when positioned
+    setNpcData(`npcDonkey`, `activeSpriteUrl`, 's3');
+    setNpcData(`npcDonkey`, `interactable.canHover`, false);
+
+    //move object donkey to place of real and show
+    setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
+    setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); //set this number when positioned
+    setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); //set this number when positioned
+    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
+    setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
+
+    // if (giveScenarioId === 0) {
+    //     handleInventoryAdjustment(objectId, 1, false);
+    //     drawInventory(0);
+
+
+    // }
+}
+
+async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
+    await showText(dialogueString, getColorTextPlayer());
+
+    removeObjectFromEnvironment(objectId);
+
+    setNpcData(`npcDonkey`, `activeSpriteUrl`, 's2');
+    setNpcData(`npcDonkey`, `interactable.canHover`, true);
+
+    const objectToShowId = 'objectDonkeyRope';
+    const spriteUrlObjectToShow = 's2';
+
+    showHideObjectAndMakeHoverable(spriteUrlObjectToShow, objectToShowId, true);
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {

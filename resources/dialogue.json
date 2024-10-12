@@ -9,6 +9,31 @@
     "dialogue": {
         "objectInteractions": {
             "verbUse": {
+                "objectDonkeyFake": {
+                    "use": {
+                        "cantUseYet": {
+                            "en": "Hee haw!",
+                            "es": "¡Hii-haw!",
+                            "de": "I-Aah!",
+                            "it": "Iah-iah!",
+                            "fr": "Hii-haw!"
+                        },
+                        "alreadyUsed": {
+                            "en": "", 
+                            "es": "",
+                            "de": "",
+                            "it": "",
+                            "fr": ""
+                        },
+                        "canUse": {
+                            "en": "His rope has come loose, oops, I can't tie knots!",
+                            "es": "¡Su cuerda se ha soltado, oops, no sé hacer nudos!",
+                            "de": "Sein Seil hat sich gelöst, oops, ich kann keine Knoten binden!",
+                            "it": "La sua corda si è sciolta, oops, non so fare i nodi!",
+                            "fr": "Sa corde s'est défaite, oups, je ne sais pas faire de nœuds !"
+                        }
+                    }
+                },
                 "objectPileOfBooksLibraryFoyer": {
                     "use": {
                         "cantUseYet": {
@@ -408,6 +433,13 @@
                             "fr": "La porte mène à la carte. Une clé est nécessaire."
                         }
                     }
+                },
+                "objectDonkeyFake": {
+                    "en": "He looks old and shattered, no use for nothing bless.",
+                    "es": "Se ve viejo y destrozado, no sirve para nada, pobre.",
+                    "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
+                    "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
+                    "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
                 },
                 "objectDonkeyRope": {
                     "en": "A thick strong rope, it can definitely hold plenty of weight!",

@@ -895,6 +895,8 @@ export function setUpObjectsAndNpcs() {
         };
 
         console.log(`Placed NPC ${npcId} in room ${roomName} at grid position (${startX}, ${startY}) with visual position (${npc.visualPosition.x}, ${npc.visualPosition.y}).`);
+        console.log(gridData);
+
     }
 }
 
@@ -979,80 +981,94 @@ export function compareOriginalValuesAndUpdate() {
 }
 
 export function reconcileGridState() {
-    // Retrieve the objectId from the pre-animation state
-    const { id, grid, isObjectTrueNpcFalse } = getPreAnimationGridState();
+    // Retrieve the array of pre-animation states
+    const preAnimationGridStates = getPreAnimationGridState();
 
     // Retrieve grids
     const originalGridState = getOriginalGridState()[getCurrentScreenId()];
-    const preAnimationGrid = grid.gridData;
     const currentGrid = getAllGridData()[getCurrentScreenId()];
 
-    // Object to store the differences
-    const differences = {
-        currentDifferences: []
-    };
+    // Object to store all differences
+    const allDifferences = [];
 
-    let cellPrefix;
+    // Loop through each pre-animation state
+    for (let i = 0; i < preAnimationGridStates.length; i++) {
+        const { id, grid, isObjectTrueNpcFalse } = preAnimationGridStates[i];
 
-    if (isObjectTrueNpcFalse) {
-        cellPrefix = 'o' + id;
-    } else {
-        cellPrefix = 'c' + id;
-    }
+        const preAnimationGrid = grid.gridData;
 
-    // Compare pre-animation grid with the current grid, but only for the specified objectId
-    for (let y = 0; y < preAnimationGrid.length; y++) {
-        for (let x = 0; x < preAnimationGrid[y].length; x++) {
-            const originalCell = preAnimationGrid[y][x];
-            const currentCell = currentGrid[y][x];
+        // Object to store the differences for this specific pre-animation state
+        const differences = {
+            id: id,
+            currentDifferences: []
+        };
 
-            // Check if the current cell corresponds to the target objectId
-            if (currentCell !== originalCell && String(currentCell).startsWith(cellPrefix)) {
-                differences.currentDifferences.push({ x, y, originalCell, currentCell });
-            }
+        let cellPrefix;
+
+        if (isObjectTrueNpcFalse) {
+            cellPrefix = 'o' + id;
+        } else {
+            cellPrefix = 'c' + id;
         }
-    }
 
-    // Reset cells in the current grid that match the objectId but are not in the differences list
-    for (let y = 0; y < currentGrid.length; y++) {
-        for (let x = 0; x < currentGrid[y].length; x++) {
-            const currentCell = currentGrid[y][x];
+        // Compare pre-animation grid with the current grid, but only for the specified objectId
+        for (let y = 0; y < preAnimationGrid.length; y++) {
+            for (let x = 0; x < preAnimationGrid[y].length; x++) {
+                const originalCell = preAnimationGrid[y][x];
+                const currentCell = currentGrid[y][x];
 
-            // If the current cell corresponds to the objectId and is not in the differences
-            if (String(currentCell).startsWith(cellPrefix)) {
-                const isInDifferences = differences.currentDifferences.some(diff => diff.x === x && diff.y === y);
-
-                if (!isInDifferences) {
-                    // Reset the cell to its original value from the originalGridState
-                    currentGrid[y][x] = originalGridState[y][x];
+                // Check if the current cell corresponds to the target objectId
+                if (currentCell !== originalCell && String(currentCell).startsWith(cellPrefix)) {
+                    differences.currentDifferences.push({ x, y, originalCell, currentCell });
                 }
             }
         }
+
+        // Reset cells in the current grid that match the objectId but are not in the differences list
+        for (let y = 0; y < currentGrid.length; y++) {
+            for (let x = 0; x < currentGrid[y].length; x++) {
+                const currentCell = currentGrid[y][x];
+
+                // If the current cell corresponds to the objectId and is not in the differences
+                if (String(currentCell).startsWith(cellPrefix)) {
+                    const isInDifferences = differences.currentDifferences.some(diff => diff.x === x && diff.y === y);
+
+                    if (!isInDifferences) {
+                        // Reset the cell to its original value from the originalGridState
+                        currentGrid[y][x] = originalGridState[y][x];
+                    }
+                }
+            }
+        }
+
+        // Now calculate the new position of the object based on grid cell offsets
+        for (const diff of differences.currentDifferences) {
+            const { x, y, currentCell } = diff;
+
+            // Calculate the offset between the current position and the original one
+            const offsetX = x;  // Assuming x is the current grid cell position
+            const offsetY = y;  // Assuming y is the current grid cell position
+
+            // Determine the new position in terms of grid cells (no need for pixel calculations)
+            const newGridX = offsetX; // This is already in grid cells, so no conversion needed
+            const newGridY = offsetY; // This is already in grid cells
+
+            // Update the grid to reflect the new object position
+            currentGrid[newGridY][newGridX] = cellPrefix;
+        }
+
+        // Store the differences for this specific object in the overall differences array
+        allDifferences.push(differences);
     }
 
-    // Now calculate the new position of the object based on grid cell offsets
-    for (const diff of differences.currentDifferences) {
-        const { x, y, currentCell } = diff;
-
-        // Calculate the offset between the current position and the original one
-        const offsetX = x;  // Assuming x is the current grid cell position
-        const offsetY = y;  // Assuming y is the current grid cell position
-
-        // Determine the new position in terms of grid cells (no need for pixel calculations)
-        const newGridX = offsetX; // This is already in grid cells, so no conversion needed
-        const newGridY = offsetY; // This is already in grid cells
-
-        // Update the grid to reflect the new object position
-        currentGrid[newGridY][newGridX] = cellPrefix;
-    }
-
-    // Console log the differences in the current grid, specifically for the objectId
-    console.log(`Current Differences for Object ${id}:`, JSON.stringify(differences.currentDifferences, null, 2));
-    console.log(`Current Grid after resetting non-differing cells for Object ${id}:`, JSON.stringify(currentGrid, null, 2));
+    // Console log the differences in the current grid for all objects
+    console.log(`All Differences for Pre-animation Objects:`, JSON.stringify(allDifferences, null, 2));
+    console.log(`Current Grid after resetting non-differing cells for all objects:`, JSON.stringify(currentGrid, null, 2));
 
     // Set animation state to false (animation completed)
     setAnimationInProgress(false);
 }
+
 
 
 

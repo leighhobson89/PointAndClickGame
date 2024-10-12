@@ -22,7 +22,7 @@
                 "questCutOffNumber": 1,
                 "questCutOffEvents": {
                     "1": {
-                        "event": "donkeyMovesToAllowBarnAccessAndCreateRopeObject"
+                        "event": ""
                     }
                 },
                 "canUseWith": false,
@@ -43,7 +43,8 @@
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/donkeyOnRope.png",
-                "s2": "./resources/npcs/donkeyNotOnRope.png"
+                "s2": "./resources/npcs/donkeyNotOnRope.png",
+                "s3": "./resources/npcs/blank.png"
             },
             "gridPosition": {
                 "x": 10,
@@ -278,7 +279,7 @@
                 "s2": "./resources/npcs/seedyGuy.png"
             },
             "gridPosition": {
-                "x": 50,
+                "x": 70,
                 "y": 10
             },
             "offset": {
@@ -290,8 +291,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 50
+                "width": 1,
+                "height": 1
             },
             "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
         }

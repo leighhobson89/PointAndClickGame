@@ -75,7 +75,7 @@ let originalValueInCellWhereNpcPlacedNew = {};
 let originalGridState = {};
 let resizedObjectsGridState = {};
 let resizedNpcsGridState = {};
-let preAnimationGridState = {};
+let preAnimationGridStates = [];
 let currentStartIndexInventory = 0;
 let displayText = {};
 let objectToBeUsedWithSecondItem = null;
@@ -790,15 +790,17 @@ export function getResizedNpcsGridState() {
 }
 
 export function setPreAnimationGridState(gridState, objectId, isObjectTrueNpcFalse) {
-    preAnimationGridState = {
+    const newState = {
         grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
         id: objectId,
         isObjectTrueNpcFalse: isObjectTrueNpcFalse
     };
+    
+    preAnimationGridStates.push(newState);
 }
 
 export function getPreAnimationGridState() {
-    return JSON.parse(JSON.stringify(preAnimationGridState)); // Return a new deep copy
+    return JSON.parse(JSON.stringify(preAnimationGridStates)); // Return a new deep copy
 }
 
 export function setAnimationInProgress(value) {
