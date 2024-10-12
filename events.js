@@ -44,9 +44,6 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const gridData = getGridData();
-    const language = getLanguage();
-    const objectData = getObjectData().objects;
-    const objectGiving = objectData.objectCarrot;
     const objectId = 'objectCarrot';
     const npcData = getNpcData().npcs.npcDonkey;
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
