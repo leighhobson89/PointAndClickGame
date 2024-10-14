@@ -1,10 +1,11 @@
-import { setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight } from "./constantsAndGlobalVars.js";
+import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData } from "./constantsAndGlobalVars.js";
 import { removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { getVisualPositionForObject, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
+import { showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
+//REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
 
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
@@ -45,13 +46,14 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
 async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
-    const gridData = getGridData();
+    let gridData = getGridData();
 
+    setAnimationInProgress(true);
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    setObjectData(`objectParrotHook`, `visualPosition.x`, 1);
-    setObjectData(`objectParrotHook`, `visualPosition.y`, 1);
-    setObjectData(`objectParrotHook`, `dimensions.width`, 1); //20
-    setObjectData(`objectParrotHook`, `dimensions.height`, 1); //15
+    setObjectData(`objectParrotFlyer`, `dimensions.width`, 1);
+    setObjectData(`objectParrotFlyer`, `dimensions.height`, 1);
+    setObjectData(`objectParrotHook`, `visualPosition.x`, 50);
+    setObjectData(`objectParrotHook`, `visualPosition.y`, 50);
     showHideObjectAndMakeHoverable('s2', 'objectParrotHook', false);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -59,8 +61,14 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const gridPositionX = 65;
     const gridPositionY = 14;
 
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + (getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellWidth());
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + (getObjectData().objects['objectParrotFlyer'].offset.y * getCanvasCellHeight());
+    const offsetX = getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = 0;
+    const offSetAdjustmentY = 0;
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
 
     // draw parrotflyer world on background left hook
     setPreAnimationGridState(gridData, 'objectParrotFlyer', true);
@@ -81,6 +89,9 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 
     dialogueString = dialogueData.postAnimationEventDialogue.animationParrotMoveToParrotFlyer[language];
     await showText(dialogueString, getColorTextPlayer());
+
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
 }
 
 async function combineMilkAndBowl(blank, dialogueString, blank2, blank3) {
@@ -176,13 +187,37 @@ function allowInteractionPileOfBooks(objectToUseWith, dialogueString, realVerbUs
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.canHover`, true);
 }
 
-
 function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerbUsed, special) {
     showText(dialogueString, getColorTextPlayer());
     setObjectData(`objectKeyResearchRoom`, `interactable.canHover`, true);
     setObjectData(`objectKeyResearchRoom`, `activeSpriteUrl`, 's2');
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.alreadyUsed`, true);
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.activeStatus`, false);
+}
+
+function resetHookBackToTreePosition() {
+    const gridData = getGridData();
+
+    const gridPositionX = 70; //68
+    const gridPositionY = 15;
+
+    const offsetX = getObjectData().objects['objectParrotHook'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectParrotHook'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = offsetX - (0.6 * getCanvasCellWidth()); //change these to move object with fine control
+    const offSetAdjustmentY = 0; //change these to move object with fine control
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
+
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'objectParrotHook', true);
+    setObjectData(`objectParrotHook`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectParrotHook`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectParrotHook`, `dimensions.width`, 20);
+    setObjectData(`objectParrotHook`, `dimensions.height`, 12);
+    setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
+    showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -247,6 +282,14 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
         if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
             try {
                 eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
+            }
+        }
+
+        if (realVerbUsed === "verbPickUp") {
+            try {
+                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, ${null})`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }

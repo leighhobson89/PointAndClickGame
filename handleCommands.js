@@ -123,6 +123,11 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
             pickUpItem(objectId, quantity, verb);
+
+            const objectEvent = getObjectEvents(objectId);
+            if (objectEvent.actionPickUp !== "") { //if there is an event to trigger after picking up object
+                executeInteractionEvent(objectEvent, dialogueString, verb, objectId);
+            }
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
@@ -135,7 +140,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 function pickUpItem(objectId, quantity, verb) {
     removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
-    addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
+    //addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);
