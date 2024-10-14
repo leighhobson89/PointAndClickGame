@@ -279,7 +279,7 @@
                 "s2": "./resources/npcs/seedyGuy.png"
             },
             "gridPosition": {
-                "x": 70,
+                "x": 50,
                 "y": 10
             },
             "offset": {
@@ -291,8 +291,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 1,
-                "height": 1
+                "width": 30,
+                "height": 40
             },
             "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
         }
