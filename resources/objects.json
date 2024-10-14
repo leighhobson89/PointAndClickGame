@@ -17,7 +17,7 @@
                 },
                 "interactable": {
                     "specialNpcObjectStandIn" : false,
-                    "canHover": true,
+                    "canHover": false,
                     "canPush": false,
                     "canPull": false,
                     "canOpen": true,
@@ -61,8 +61,8 @@
                 },
                 "inventoryUrl": "",
                 "gridPosition": {
-                    "x": 65,
-                    "y": 10
+                    "x": 3,
+                    "y": 1
                 },
                 "offset": {
                     "x": 0,
@@ -73,8 +73,8 @@
                     "y": 0
                 },
                 "dimensions": {
-                    "width": 50,
-                    "height": 50
+                    "width": 1,
+                    "height": 1
                 },
                 "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyResearchRoom on it"
         },
@@ -228,7 +228,7 @@
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
-                "canHover": true,
+                "canHover": false,
                 "canPush": false,
                 "canPull": false,
                 "canOpen": false,
@@ -247,7 +247,7 @@
                 "actionUse1": "",
                 "actionUse2": "",
                 "objectUseWith1": "objectParrotHook",
-                "actionUseWith11": "swapParrotFlyerForMirror",
+                "actionUseWith11": "placeParrotFlyerOnHook",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom",
                 "npcGiveTo": "",
@@ -257,7 +257,7 @@
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/parrotFlyerWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/parrotFlyerWorld.png"
             },
             "visualAnimatedStateOffsets": {
@@ -272,20 +272,20 @@
             },
             "inventoryUrl": "./resources/objects/images/parrotFlyerInv.png",
             "gridPosition": {
-                "x": 11,
-                "y": 28
+                "x": 4,
+                "y": 1
             },
             "offset": {
-                "x": 0,
-                "y": 0
+                "x": 0.4,
+                "y": 0.5
             },
             "visualPosition": {
                 "x": 0,
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 70
+                "width": 1,
+                "height": 1
             },
             "comment": "place over top of mirror and show when user takes mirror"
         },
@@ -342,11 +342,11 @@
             },
             "inventoryUrl": "./resources/objects/images/parrotMirrorInv.png",
             "gridPosition": {
-                "x": 16,
-                "y": 31
+                "x": 68,
+                "y": 15
             },
             "offset": {
-                "x": 0,
+                "x": 0.2,
                 "y": 0
             },
             "visualPosition": {
@@ -354,8 +354,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 60,
-                "height": 45
+                "width": 20,
+                "height": 15
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -412,8 +412,8 @@
             },
             "inventoryUrl": "./resources/objects/images/carrotInv.png",
             "gridPosition": {
-                "x": 23,
-                "y": 32
+                "x": 67,
+                "y": 33
             },
             "offset": {
                 "x": 0,
@@ -513,7 +513,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
-                "canPickUp": true,
+                "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
                 "canGive": false,
@@ -539,7 +539,7 @@
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/objects/images/hookWorld.png",
-                "s2": "./resources/objects/images/hookWorld.png"
+                "s2": "./resources/objects/images/blank.png"
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -553,20 +553,20 @@
             },
             "inventoryUrl": "./resources/objects/images/hookInv.png",
             "gridPosition": {
-                "x": 29,
-                "y": 32
+                "x": 65,
+                "y": 14
             },
             "offset": {
-                "x": 0,
-                "y": 0
+                "x": 0.4,
+                "y": 0.5
             },
             "visualPosition": {
                 "x": 0,
                 "y": 0
             },
             "dimensions": {
-                "width": 35,
-                "height": 25
+                "width": 20,
+                "height": 12
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -693,7 +693,7 @@
             },
             "inventoryUrl": "./resources/objects/images/crowBarInv.png",
             "gridPosition": {
-                "x": 65,
+                "x": 23,
                 "y": 30
             },
             "offset": {
@@ -763,7 +763,7 @@
             },
             "inventoryUrl": "./resources/objects/images/IllegibleMapInv.png",
             "gridPosition": {
-                "x": 73,
+                "x": 29,
                 "y": 45
             },
             "offset": {
@@ -833,7 +833,7 @@
             },
             "inventoryUrl": "./resources/objects/images/pitchForkInv.png",
             "gridPosition": {
-                "x": 65,
+                "x": 22,
                 "y": 45
             },
             "offset": {
@@ -973,8 +973,8 @@
             },
             "inventoryUrl": "./resources/objects/images/malletInv.png",
             "gridPosition": {
-                "x": 60,
-                "y": 45
+                "x": 38,
+                "y": 44
             },
             "offset": {
                 "x": 0,
@@ -1140,7 +1140,7 @@
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
-                "canHover": true,
+                "canHover": false,
                 "canPush": false,
                 "canPull": false,
                 "canPickUp": false,
@@ -1157,19 +1157,19 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "objectBowl",
+                "actionUseWith11": "combineMilkAndBowl",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "useTogetherLocation": "objectBowl",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/milkBottleWorld.png",
-                "s2": "./resources/objects/images/milkBottleWorld.png"
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/blank.png"
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -1183,8 +1183,8 @@
             },
             "inventoryUrl": "./resources/objects/images/milkBottleInv.png",
             "gridPosition": {
-                "x": 39,
-                "y": 45
+                "x": 1,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1195,8 +1195,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -1227,12 +1227,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "objectMilkBottle",
+                "actionUseWith11": "combineMilkAndBowl",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "useTogetherLocation": "objectMilkBottle",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": ""
             },
             "objectPlacementLocation": "debugRoom",
@@ -1253,7 +1253,7 @@
             },
             "inventoryUrl": "./resources/objects/images/bowlInv.png",
             "gridPosition": {
-                "x": 28,
+                "x": 73,
                 "y": 45
             },
             "offset": {
@@ -1268,7 +1268,7 @@
                 "width": 50,
                 "height": 40
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Bowl to combine with Milk Bottle, for giving to Dog"
         },
         "objectMilkInBowl": {
             "name": {
@@ -1280,7 +1280,7 @@
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
-                "canHover": true,
+                "canHover": false,
                 "canPush": false,
                 "canPull": false,
                 "canPickUp": false,
@@ -1308,8 +1308,8 @@
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/debug/milkInBowlWorld.png",
-                "s2": "./resources/objects/images/debug/milkInBowlWorld.png"
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/blank.png"
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -1323,8 +1323,8 @@
             },
             "inventoryUrl": "./resources/objects/images/milkInBowlInv.png",
             "gridPosition": {
-                "x": 22,
-                "y": 45
+                "x": 2,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1335,8 +1335,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -1533,8 +1533,8 @@
             },
             "inventoryUrl": "./resources/objects/images/keyDenInv.png",
             "gridPosition": {
-                "x": 55,
-                "y": 35
+                "x": 61,
+                "y": 34
             },
             "offset": {
                 "x": 0,
@@ -1603,7 +1603,7 @@
             },
             "inventoryUrl": "./resources/objects/images/paperScrawledOnInv.png",
             "gridPosition": {
-                "x": 61,
+                "x": 48,
                 "y": 34
             },
             "offset": {

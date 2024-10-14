@@ -1,7 +1,7 @@
-import { getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor } from "./constantsAndGlobalVars.js";
+import { setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight } from "./constantsAndGlobalVars.js";
 import { removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { showHideObjectAndMakeHoverable, setGameState } from "./game.js";
+import { getVisualPositionForObject, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -40,6 +40,56 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
             }
             break;
     }
+}
+
+async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    const gridData = getGridData();
+
+    setPreAnimationGridState(gridData, 'objectParrotHook', true);
+    setObjectData(`objectParrotHook`, `visualPosition.x`, 1);
+    setObjectData(`objectParrotHook`, `visualPosition.y`, 1);
+    setObjectData(`objectParrotHook`, `dimensions.width`, 1); //20
+    setObjectData(`objectParrotHook`, `dimensions.height`, 1); //15
+    showHideObjectAndMakeHoverable('s2', 'objectParrotHook', false);
+
+    await showText(dialogueString, getColorTextPlayer());
+
+    const gridPositionX = 65;
+    const gridPositionY = 14;
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + (getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellWidth());
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + (getObjectData().objects['objectParrotFlyer'].offset.y * getCanvasCellHeight());
+
+    // draw parrotflyer world on background left hook
+    setPreAnimationGridState(gridData, 'objectParrotFlyer', true);
+    setObjectData(`objectParrotFlyer`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectParrotFlyer`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
+    setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
+    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', false);
+
+    const waitForTimeout = (duration) => {
+        return new Promise(resolve => setTimeout(resolve, duration));
+    };
+
+    await waitForTimeout(3000); //await animation function TODO
+    setParrotCompletedMovingToFlyer(true);
+    
+    setObjectData(`objectParrotMirror`, `interactable.canPickUp`, true);
+
+    dialogueString = dialogueData.postAnimationEventDialogue.animationParrotMoveToParrotFlyer[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function combineMilkAndBowl(blank, dialogueString, blank2, blank3) {
+    const objectMilkInBowl = 'objectMilkInBowl';
+
+    addItemToInventory(objectMilkInBowl, 1);
+    drawInventory(0);
+
+    await showText(dialogueString, getColorTextPlayer());
 }
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {

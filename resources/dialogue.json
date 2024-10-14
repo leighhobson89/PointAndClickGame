@@ -7,6 +7,15 @@
     "generalComments6": "Dialogue in npcInteractions.verbTalkTo that ends with a unicode u0020 on the LAST number of the phase tells the code to advance the questPhase by checking for space characters, the number of them indicates how many questPhases to advance by",
     "generalComments7": "cantTalk is set to 1 after ALL quests for an npc are done and as such can only be used before they start or after they are done, so basically when all dialogue is exhausted, 0 or 1, also it is always the npc that speaks - Note, you can still give items and trigger dialogue that way through the verbGive property",
     "dialogue": {
+        "postAnimationEventDialogue": {
+            "animationParrotMoveToParrotFlyer": {
+                "en": "It looks like he prefers the beauty on the flyer than his own reflection!",
+                "es": "¡Parece que prefiere la belleza del folleto a su propio reflejo!",
+                "de": "Es sieht so aus, als würde er die Schönheit auf dem Flugblatt seinem eigenen Spiegelbild vorziehen!",
+                "it": "Sembra che preferisca la bellezza sul volantino al suo stesso riflesso!",
+                "fr": "On dirait qu'il préfère la beauté sur le flyer à son propre reflet !"
+            }
+        },
         "objectInteractions": {
             "verbUse": {
                 "objectDonkeyFake": {
@@ -135,6 +144,27 @@
                     }
                 },
                 "useWithObject1": {
+                    "objectParrotFlyer": {
+                        "en": "I wonder what will happen if...",
+                        "es": "Me pregunto qué pasará si...",
+                        "de": "Ich frage mich, was passiert, wenn...",
+                        "it": "Mi chiedo cosa succederà se...",
+                        "fr": "Je me demande ce qui se passera si..."
+                    },
+                    "objectMilkBottle": {
+                        "en": "A refreshing looking bowl of milk, yum!",
+                        "es": "Un cuenco de leche que parece refrescante, ¡yum!",
+                        "de": "Eine erfrischend aussehende Schüssel Milch, yum!",
+                        "it": "Una ciotola di latte che sembra rinfrescante, yum!",
+                        "fr": "Un bol de lait rafraîchissant, miam !"
+                    },
+                    "objectBowl": {
+                        "en": "A refreshing looking bowl of milk, yum!",
+                        "es": "Un cuenco de leche que parece refrescante, ¡yum!",
+                        "de": "Eine erfrischend aussehende Schüssel Milch, yum!",
+                        "it": "Una ciotola di latte che sembra rinfrescante, yum!",
+                        "fr": "Un bol de lait rafraîchissant, miam !"
+                    },
                     "objectKeyResearchRoom": {
                         "en": "Uff, it was a stiff lock, but it's finally opened!",
                         "es": "¡Uf, era una cerradura difícil, pero finalmente se ha abierto!",
@@ -540,11 +570,11 @@
                     "fr": "Une roue de poulie, je ne suis pas vraiment sûr de pourquoi elle est là-haut !"
                 },
                 "objectParrotHook": {
-                    "en": "A strong metal hook, cobbled together on this perch to hold the parrot's mirror!",
-                    "es": "Un fuerte gancho de metal, ensamblado en esta percha para sostener el espejo del loro.",
-                    "de": "Ein starker Metallhaken, der auf dieser Stange zusammengebaut wurde, um den Spiegel des Papageis zu halten!",
-                    "it": "Un forte gancio di metallo, assemblato su questo posatoio per tenere lo specchio del pappagallo!",
-                    "fr": "Un crochet en métal solide, assemblé sur ce perchoir pour tenir le miroir du perroquet !"
+                    "en": "A strong metal hook, cobbled together on this perch.",
+                    "es": "Un fuerte gancho de metal, ensamblado en este posadero.",
+                    "de": "Ein starker Metallhaken, der auf diesem Sitzplatz zusammengebaut wurde.",
+                    "it": "Un forte gancio di metallo, assemblato su questo posatoio.",
+                    "fr": "Un crochet en métal solide, assemblé sur ce perchoir."
                 },
                 "objectCarrot": {
                     "en": "A carrot, past its best, but still edible...I think!",

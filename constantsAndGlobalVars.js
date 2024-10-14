@@ -123,6 +123,7 @@ let readyToAdvanceNpcQuestPhase = false;
 let triggerQuestPhaseAdvance = false;
 let canExitDialogueAtThisPoint = false;
 let scrollingActive = false;
+let parrotCompletedMovingToFlyer = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -983,13 +984,20 @@ export function setScrollingActive(value) {
     scrollingActive = value;
 }
 
-// Getter and Setter for scrollDirection
 export function getScrollDirection() {
     return scrollDirection;
 }
 
 export function setScrollDirection(value) {
     scrollDirection = value;
+}
+
+export function getParrotCompletedMovingToFlyer() {
+    return parrotCompletedMovingToFlyer;
+}
+
+export function setParrotCompletedMovingToFlyer(value) {
+    parrotCompletedMovingToFlyer = value;
 }
 
 

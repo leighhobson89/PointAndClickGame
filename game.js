@@ -1176,3 +1176,34 @@ export function showHideObjectAndMakeHoverable(spriteUrlSNumber, objectId, showT
     setObjectData(`${objectId}`, `interactable.canHover`, showTrueHideFalse);
 }
 
+export function getVisualPositionForObject(objectId) {
+    const gridData = getGridData();
+    let positions = [];
+
+        const roomGrid = gridData.gridData;
+
+        for (let y = 0; y < roomGrid.length; y++) {
+            for (let x = 0; x < roomGrid[y].length; x++) {
+                if (roomGrid[y][x] === `o${objectId}`) {
+                    positions.push({ x, y });
+                }
+            }
+        }
+
+    if (positions.length === 0) {
+        console.warn(`No positions found for objectId: ${objectId}`);
+        return { x: 0, y: 0 }; // Return a default value if not found
+    }
+
+    // Calculate the average position
+    const totalPositions = positions.length;
+    const avgX = positions.reduce((sum, pos) => sum + pos.x, 0) / totalPositions;
+    const avgY = positions.reduce((sum, pos) => sum + pos.y, 0) / totalPositions;
+
+    return {
+        x: avgX,
+        y: avgY,
+    };
+}
+
+

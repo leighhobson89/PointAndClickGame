@@ -135,6 +135,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 function pickUpItem(objectId, quantity, verb) {
     removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
+    addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);
