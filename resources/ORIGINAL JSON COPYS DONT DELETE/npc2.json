@@ -1,0 +1,300 @@
+{
+    "generalComments1": "This file contains all NPCs, with fields to define their interactions, behaviors, and other properties in the game.",
+    "generalComments2": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
+    "generalComments3": "questPhase is the current phase ie if it is 0 you can give the monkey a banana for a battery if it is 1 you cannot but may be able to do something else",
+    "generalComments4": "dialoguePhase is the current dialogue phase ie if it is 0 and you talk to the monkey, you will hear that the monkey is hungry, then 1 will be here take the battery, and 2 just chatter",
+
+    "npcs": {
+        "npcDonkey": {
+            "name": {
+                "en": "Donkey",
+                "es": "Burro",
+                "de": "Esel",
+                "it": "Asino",
+                "fr": "Âne"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": false,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 1,
+                "questCutOffEvents": {
+                    "1": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(0, 0, 0)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectCarrot",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/donkeyOnRope.png",
+                "s2": "./resources/npcs/donkeyNotOnRope.png",
+                "s3": "./resources/npcs/blank.png"
+            },
+            "gridPosition": {
+                "x": 10,
+                "y": 10
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 70,
+                "height": 40
+            },
+            "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
+        },
+        "npcLibrarian": {
+            "name": {
+                "en": "Librarian",
+                "es": "Bibliotecaria",
+                "de": "Bibliothekarin",
+                "it": "Bibliotecaria",
+                "fr": "Bibliothécaire"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 2,
+                "questCutOffEvents": {
+                    "2": {
+                        "event": "allowInteractionPileOfBooks"
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(255, 0, 255)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectKeyResearchRoom",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/librarian.png",
+                "s2": "./resources/npcs/librarian.png"
+            },
+            "gridPosition": {
+                "x": 20,
+                "y": 10
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 35,
+                "height": 50
+            },
+            "comment": "Librarian"
+        },
+        "npcTownDog": {
+            "name": {
+                "en": "Dog",
+                "es": "Perro",
+                "de": "Hund",
+                "it": "Cane",
+                "fr": "Chien"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 0,
+                "questCutOffEvents": {
+                    "0": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(137, 80, 0)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectMilkInBowl",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/townDog.png",
+                "s2": "./resources/npcs/townDog.png"
+            },
+            "gridPosition": {
+                "x": 30,
+                "y": 10
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 55,
+                "height": 35
+            },
+            "comment": "Town Dog gives bone if given Milk In Bowl"
+        },
+        "npcWomanLostMirror": {
+            "name": {
+                "en": "Young Woman",
+                "es": "Joven Mujer",
+                "de": "Junge Frau",
+                "it": "Giovane Donna",
+                "fr": "Jeune Femme"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 0,
+                "questCutOffEvents": {
+                    "1": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(255, 180, 0)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectParrotMirror",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/womanLostMirror.png",
+                "s2": "./resources/npcs/womanLostMirror.png"
+            },
+            "gridPosition": {
+                "x": 40,
+                "y": 10
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 39
+            },
+            "comment": "Woman give Key To Den if given objectParrotMirror"
+        },
+        "npcSeedyLookingGuy": {
+            "name": {
+                "en": "Seedy Looking Guy",
+                "es": "Hombre de aspecto sospechoso",
+                "de": "Zwielichtiger Typ",
+                "it": "Uomo dall'aspetto losco",
+                "fr": "Homme à l'air louche"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 2,
+                "questCutOffEvents": {
+                    "1": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(20, 20, 20)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "objectKeyToDen",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/seedyGuy.png",
+                "s2": "./resources/npcs/seedyGuy.png"
+            },
+            "gridPosition": {
+                "x": 50,
+                "y": 10
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 40
+            },
+            "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
+        }
+    }
+}

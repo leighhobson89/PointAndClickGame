@@ -1,4 +1,4 @@
-import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData } from "./constantsAndGlobalVars.js";
+import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
 import { setDialogueData, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
@@ -140,6 +140,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
 }
 
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
+    const navigationData = getNavigationData();
     await showText(dialogueString, getColorTextPlayer());
 
     removeObjectFromEnvironment(objectId);
@@ -149,6 +150,9 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
 
     const objectToShowId = 'objectDonkeyRope';
     const spriteUrlObjectToShow = 's2';
+
+    navigationData.stables.exits.e1.status = "open";
+    setNavigationData(navigationData); //allow player to enter barn
 
     showHideObjectAndMakeHoverable(spriteUrlObjectToShow, objectToShowId, true);
 }
@@ -178,6 +182,7 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
     const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
     const navigationData = getNavigationData().libraryFoyer.exits.e1;
     navigationData.status = "open";
+    setNavigationData(navigationData); //allow player to enter barn
     objectData.interactable.alreadyUsed = true;
     setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);
 

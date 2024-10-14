@@ -21,6 +21,9 @@ export function startGame() {
 }
 
 export function gameLoop() {
+    const screenData = getNavigationData()[getCurrentScreenId()];
+    const screenTilesWide = screenData.screenTilesWidebgImg;
+
     if (getGameStateVariable() === getInteractiveDialogueState()) {
         const dialogueSection = getElements().dialogueSection;
 
@@ -29,7 +32,9 @@ export function gameLoop() {
         }
     }
 
-    handleEdgeScroll();
+    if (screenTilesWide > 1) {
+        handleEdgeScroll();
+    }
 
     const bottomContainer = getElements().bottomContainer;
 
@@ -682,8 +687,12 @@ export function processClickPoint(event, mouseClick) {
                     const exitNumber = exitNumberMatch[1];
                     const exitData = getNavigationData()[getCurrentScreenId()].exits[`e${exitNumber}`];
                     console.log("Exit number:", exitNumber);
-                    setTransitioningToAnotherScreen(true);
-                    setExitNumberToTransitionTo(exitNumber);
+
+                    if (exitData.status === "open") {
+                        setTransitioningToAnotherScreen(true);
+                        setExitNumberToTransitionTo(exitNumber);
+                    }
+                    
                     setNextScreenId(exitData.connectsTo);
                     updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
                 }

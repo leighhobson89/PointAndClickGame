@@ -126,7 +126,7 @@
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
-                "status": "open",
+                "status": "locked",
                 "startPosition": { "x": 73, "y": 58 },
                 "finalPosition": { "x": 63, "y": 52 },
                 "xPosCameraEnterHere": 0,
@@ -269,7 +269,7 @@
         "exits": {
             "e1": {
                 "connectsTo": "barn",
-                "status": "open",
+                "status": "locked",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 },
                 "xPosCameraEnterHere": 0,
