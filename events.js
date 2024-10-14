@@ -1,5 +1,5 @@
 import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData } from "./constantsAndGlobalVars.js";
-import { removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
+import { setDialogueData, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
@@ -70,13 +70,14 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
 
-    // draw parrotflyer world on background left hook
     setPreAnimationGridState(gridData, 'objectParrotFlyer', true);
     setObjectData(`objectParrotFlyer`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectParrotFlyer`, `visualPosition.y`, desiredVisualPositionY);
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
-    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', false);
+    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', true);
+
+    setDialogueData('objectInteractions.verbLookAt.objectParrotFlyer', '0', '1');
 
     const waitForTimeout = (duration) => {
         return new Promise(resolve => setTimeout(resolve, duration));

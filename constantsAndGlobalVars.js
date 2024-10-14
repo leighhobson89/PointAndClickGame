@@ -101,6 +101,7 @@ let exitOptionIndex = -1;
 let clickPoint = null;
 let scrollPositionX;
 let scrollDirection = 0;
+let swappedDialogueObject = {};
 
 //FLAGS
 let audioMuted;
@@ -239,7 +240,7 @@ export function setObjectsData(value) { // purposely spelt this way because we h
     objectData = value;
 }
 
-export function setDialogueData(value) {
+export function setDialoguesData(value) {
     dialogueData = value;
 }
 
@@ -998,6 +999,14 @@ export function getParrotCompletedMovingToFlyer() {
 
 export function setParrotCompletedMovingToFlyer(value) {
     parrotCompletedMovingToFlyer = value;
+}
+
+export function getSwappedDialogueObject() {
+    return swappedDialogueObject;
+}
+
+export function setSwappedDialogueObject(value) {
+    swappedDialogueObject = value;
 }
 
 

@@ -465,200 +465,263 @@
                     }
                 },
                 "objectPaperWithInstructionsScrawledOn": {
-                    "en": "\"Cast the rope, the hook is set, now lift that plank without a sweat!\" - I have no idea what this means!",
-                    "es": "\"Lanza la cuerda, el gancho está listo, levanta esa tabla sin un despiste!\" - ¡No tengo idea de lo que significa!",
-                    "de": "\"Wirf das Seil, der Haken ist fest, heb das Brett ohne Stress!\" - Ich habe keine Ahnung, was das bedeuten soll!",
-                    "it": "\"Lancia la corda, il gancio è pronto, solleva la tavola senza scontro!\" - Non ho idea di cosa significhi!",
-                    "fr": "\"Lance la corde, le crochet est prêt, soulève cette planche sans suer!\" - Je n'ai aucune idée de ce que cela signifie!"
+                    "0": {
+                        "en": "\"Cast the rope, the hook is set, now lift that plank without a sweat!\" - I have no idea what this means!",
+                        "es": "\"Lanza la cuerda, el gancho está listo, levanta esa tabla sin un despiste!\" - ¡No tengo idea de lo que significa!",
+                        "de": "\"Wirf das Seil, der Haken ist fest, heb das Brett ohne Stress!\" - Ich habe keine Ahnung, was das bedeuten soll!",
+                        "it": "\"Lancia la corda, il gancio è pronto, solleva la tavola senza scontro!\" - Non ho idea di cosa significhi!",
+                        "fr": "\"Lance la corde, le crochet est prêt, soulève cette planche sans suer!\" - Je n'ai aucune idée de ce que cela signifie!"
+                    }
                 },
                 "objectKeyToDen": {
-                    "en": "A small iron key, one person's trash is another's treasure I guess!",
-                    "es": "Una pequeña llave de hierro, ¡la basura de una persona es el tesoro de otra, supongo!",
-                    "de": "Ein kleiner Eisen-Schlüssel, der Müll des einen ist der Schatz des anderen, schätze ich!",
-                    "it": "Una piccola chiave di ferro, la spazzatura di una persona è un tesoro per un'altra, credo!",
-                    "fr": "Une petite clé en fer, les déchets de l'un sont le trésor de l'autre, je suppose !"
+                    "0": {
+                        "en": "A small iron key, one person's trash is another's treasure I guess!",
+                        "es": "Una pequeña llave de hierro, ¡la basura de una persona es el tesoro de otra, supongo!",
+                        "de": "Ein kleiner Eisen-Schlüssel, der Müll des einen ist der Schatz des anderen, schätze ich!",
+                        "it": "Una piccola chiave di ferro, la spazzatura di una persona è un tesoro per un'altra, credo!",
+                        "fr": "Une petite clé en fer, les déchets de l'un sont le trésor de l'autre, je suppose !"
+                    }
                 },
                 "objectPitchFork": {
-                    "en": "A pitchfork, with what looks like poo encrusted on the tip! Yuck!",
-                    "es": "¡Una horca, con lo que parece ser caca incrustada en la punta! ¡Qué asco!",
-                    "de": "Eine Heugabel, mit dem, was wie Kacke aussieht, verkrustet an der Spitze! Igitt!",
-                    "it": "Un forcone, con quello che sembra essere cacca incrostata sulla punta! Che schifo!",
-                    "fr": "Une fourche, avec ce qui ressemble à du caca incrusté sur la pointe ! Beurk !"
+                    "0": {
+                        "en": "A pitchfork, with what looks like poo encrusted on the tip! Yuck!",
+                        "es": "¡Una horca, con lo que parece ser caca incrustada en la punta! ¡Qué asco!",
+                        "de": "Eine Heugabel, mit dem, was wie Kacke aussieht, verkrustet an der Spitze! Igitt!",
+                        "it": "Un forcone, con quello che sembra essere cacca incrostata sulla punta! Che schifo!",
+                        "fr": "Une fourche, avec ce qui ressemble à du caca incrusté sur la pointe ! Beurk !"
+                    }
                 },
                 "objectMallet": {
-                    "en": "A wood mallet, looks strong, but has been indented by whacking a lot of nails over the years!",
-                    "es": "Un mazo de madera, parece fuerte, pero está lleno de marcas por golpear muchos clavos a lo largo de los años.",
-                    "de": "Ein Holzhammer, sieht stark aus, aber ist durch das Einschlagen vieler Nägel über die Jahre eingedellt!",
-                    "it": "Un martello di legno, sembra robusto, ma è stato ammaccato dopo aver colpito tanti chiodi nel corso degli anni!",
-                    "fr": "Un maillet en bois, semble solide, mais est marqué par des années à enfoncer des clous !"
+                    "0": {
+                        "en": "A wood mallet, looks strong, but has been indented by whacking a lot of nails over the years!",
+                        "es": "Un mazo de madera, parece fuerte, pero está lleno de marcas por golpear muchos clavos a lo largo de los años.",
+                        "de": "Ein Holzhammer, sieht stark aus, aber ist durch das Einschlagen vieler Nägel über die Jahre eingedellt!",
+                        "it": "Un martello di legno, sembra robusto, ma è stato ammaccato dopo aver colpito tanti chiodi nel corso degli anni!",
+                        "fr": "Un maillet en bois, semble solide, mais est marqué par des années à enfoncer des clous !"
+                    }
                 },
                 "objectNails": {
-                    "en": "A box of strong wood nails.",
-                    "es": "Una caja de clavos fuertes para madera.",
-                    "de": "Eine Schachtel mit starken Holznägeln.",
-                    "it": "Una scatola di chiodi robusti per legno.",
-                    "fr": "Une boîte de clous solides pour bois."
+                    "0": {
+                        "en": "A box of strong wood nails.",
+                        "es": "Una caja de clavos fuertes para madera.",
+                        "de": "Eine Schachtel mit starken Holznägeln.",
+                        "it": "Una scatola di chiodi robusti per legno.",
+                        "fr": "Une boîte de clous solides pour bois."
+                    }
                 },
                 "objectBone": {
-                    "en": "A half chewed dog bone.",
-                    "es": "Un hueso de perro medio masticado.",
-                    "de": "Ein halb gekauter Hundeknochen.",
-                    "it": "Un osso di cane mezzo masticato.",
-                    "fr": "Un os de chien à moitié mâché."
+                    "0": {
+                        "en": "A half chewed dog bone.",
+                        "es": "Un hueso de perro medio masticado.",
+                        "de": "Ein halb gekauter Hundeknochen.",
+                        "it": "Un osso di cane mezzo masticato.",
+                        "fr": "Un os de chien à moitié mâché."
+                    }
                 },
                 "objectMilkBottle": {
-                    "en": "A bottle of milk from the farmer. Lovely and cold!",
-                    "es": "Una botella de leche del granjero. ¡Encantadora y fría!",
-                    "de": "Eine Flasche Milch vom Bauern. Schön und kalt!",
-                    "it": "Una bottiglia di latte del contadino. Bella e fredda!",
-                    "fr": "Une bouteille de lait du fermier. Magnifique et froide !"
+                    "0": {
+                        "en": "A bottle of milk from the farmer. Lovely and cold!",
+                        "es": "Una botella de leche del granjero. ¡Encantadora y fría!",
+                        "de": "Eine Flasche Milch vom Bauern. Schön und kalt!",
+                        "it": "Una bottiglia di latte del contadino. Bella e fredda!",
+                        "fr": "Une bouteille de lait du fermier. Magnifique et froide !"
+                    }
                 },
                 "objectBowl": {
-                    "en": "A multi-purpose wooden bowl.",
-                    "es": "Un cuenco de madera multiusos.",
-                    "de": "Eine vielseitige Holzschüssel.",
-                    "it": "Una ciotola di legno multiuso.",
-                    "fr": "Un bol en bois multi-usage."
+                    "0": {
+                        "en": "A multi-purpose wooden bowl.",
+                        "es": "Un cuenco de madera multiusos.",
+                        "de": "Eine vielseitige Holzschüssel.",
+                        "it": "Una ciotola di legno multiuso.",
+                        "fr": "Un bol en bois multi-usage."
+                    }
                 },
                 "objectMilkInBowl": {
-                    "en": "A refreshing looking bowl of milk, yum!",
-                    "es": "Un cuenco de leche que parece refrescante, ¡yum!",
-                    "de": "Eine erfrischend aussehende Schüssel Milch, yum!",
-                    "it": "Una ciotola di latte che sembra rinfrescante, yum!",
-                    "fr": "Un bol de lait rafraîchissant, miam !"
+                    "0": {
+                        "en": "A refreshing looking bowl of milk, yum!",
+                        "es": "Un cuenco de leche que parece refrescante, ¡yum!",
+                        "de": "Eine erfrischend aussehende Schüssel Milch, yum!",
+                        "it": "Una ciotola di latte che sembra rinfrescante, yum!",
+                        "fr": "Un bol de lait rafraîchissant, miam !"
+                    }
                 },
                 "objectBoneJammedInPulley": {
-                    "en": "That is not going anywhere, it's totally locked!",
-                    "es": "Eso no va a ninguna parte, ¡está totalmente bloqueado!",
-                    "de": "Das geht nirgendwohin, es ist völlig verriegelt!",
-                    "it": "Non va da nessuna parte, è completamente bloccato!",
-                    "fr": "Ça ne va nulle part, c'est totalement verrouillé !"
+                    "0": {
+                        "en": "That is not going anywhere, it's totally locked!",
+                        "es": "Eso no va a ninguna parte, ¡está totalmente bloqueado!",
+                        "de": "Das geht nirgendwohin, es ist völlig verriegelt!",
+                        "it": "Non va da nessuna parte, è completamente bloccato!",
+                        "fr": "Ça ne va nulle part, c'est totalement verrouillé !"
+                    }
                 },
                 "objectRopeAndHook": {
-                    "en": "A big hook, and a very strong looking rope, connected by one of my questionable knots!",
-                    "es": "Un gran gancho y una cuerda que parece muy fuerte, conectados por uno de mis nudos cuestionables.",
-                    "de": "Ein großer Haken und ein sehr stark aussehendes Seil, verbunden durch einen meiner fragwürdigen Knoten!",
-                    "it": "Un grande gancio e una corda che sembra molto resistente, collegati da uno dei miei nodi discutibili!",
-                    "fr": "Un grand crochet et une corde qui a l'air très solide, reliés par un de mes nœuds douteux !"
+                    "0": {
+                        "en": "A big hook, and a very strong looking rope, connected by one of my questionable knots!",
+                        "es": "Un gran gancho y una cuerda que parece muy fuerte, conectados por uno de mis nudos cuestionables.",
+                        "de": "Ein großer Haken und ein sehr stark aussehendes Seil, verbunden durch einen meiner fragwürdigen Knoten!",
+                        "it": "Un grande gancio e una corda che sembra molto resistente, collegati da uno dei miei nodi discutibili!",
+                        "fr": "Un grand crochet et une corde qui a l'air très solide, reliés par un de mes nœuds douteux !"
+                    }
                 },
                 "objectPliers": {
-                    "en": "You know when you just can't grip something, these are for you!",
-                    "es": "Sabes cuando no puedes agarrar algo, ¡esto es para ti!",
-                    "de": "Weißt du, wenn du etwas nicht greifen kannst, das ist für dich!",
-                    "it": "Sai quando non riesci a afferrare qualcosa, questi sono per te!",
-                    "fr": "Tu sais quand tu ne peux pas saisir quelque chose, ceux-ci sont pour toi!"
+                    "0": {
+                        "en": "You know when you just can't grip something, these are for you!",
+                        "es": "Sabes cuando no puedes agarrar algo, ¡esto es para ti!",
+                        "de": "Weißt du, wenn du etwas nicht greifen kannst, das ist für dich!",
+                        "it": "Sai quando non riesci a afferrare qualcosa, questi sono per te!",
+                        "fr": "Tu sais quand tu ne peux pas saisir quelque chose, ceux-ci sont pour toi!"
+                    }
                 },
                 "objectCrowbar": {
-                    "en": "A strong iron crowbar, great for prising things open!",
-                    "es": "Una palanca de hierro resistente, ¡perfecta para abrir cosas!",
-                    "de": "Ein starker Eisenhebel, hervorragend zum Aufhebeln von Dingen!",
-                    "it": "Un robusto piede di porco in ferro, ottimo per sollevare cose!",
-                    "fr": "Un pied de biche en fer solide, idéal pour ouvrir des choses !"
+                    "0": {
+                        "en": "A strong iron crowbar, great for prising things open!",
+                        "es": "Una palanca de hierro resistente, ¡perfecta para abrir cosas!",
+                        "de": "Ein starker Eisenhebel, hervorragend zum Aufhebeln von Dingen!",
+                        "it": "Un robusto piede di porco in ferro, ottimo per sollevare cose!",
+                        "fr": "Un pied de biche en fer solide, idéal pour ouvrir des choses !"
+                    }
                 },
                 "objectIllegibleMap": {
-                    "en": "Some kind of map, but it is encrypted, I can't read or understand anything!",
-                    "es": "Algún tipo de mapa, pero está encriptado, ¡no puedo leer ni entender nada!",
-                    "de": "Irgendeine Art von Karte, aber sie ist verschlüsselt, ich kann nichts lesen oder verstehen!",
-                    "it": "Qualche tipo di mappa, ma è crittografata, non riesco a leggere o capire niente!",
-                    "fr": "Une sorte de carte, mais elle est cryptée, je ne peux rien lire ni comprendre !"
+                    "0": {
+                        "en": "Some kind of map, but it is encrypted, I can't read or understand anything!",
+                        "es": "Algún tipo de mapa, pero está encriptado, ¡no puedo leer ni entender nada!",
+                        "de": "Irgendeine Art von Karte, aber sie ist verschlüsselt, ich kann nichts lesen oder verstehen!",
+                        "it": "Qualche tipo di mappa, ma è crittografata, non riesco a leggere o capire niente!",
+                        "fr": "Une sorte de carte, mais elle est cryptée, je ne peux rien lire ni comprendre !"
+                    }
                 },
                 "objectPulleyWheel": {
-                    "en": "A pulley wheel, not really sure why it is up there!",
-                    "es": "Una polea, ¡no estoy realmente seguro de por qué está ahí arriba!",
-                    "de": "Ein Flaschenzugrad, ich bin mir nicht wirklich sicher, warum es dort oben ist!",
-                    "it": "Una ruota di puleggia, non sono davvero sicuro del perché sia là sopra!",
-                    "fr": "Une roue de poulie, je ne suis pas vraiment sûr de pourquoi elle est là-haut !"
+                    "0": {
+                        "en": "A pulley wheel, not really sure why it is up there!",
+                        "es": "Una polea, ¡no estoy realmente seguro de por qué está ahí arriba!",
+                        "de": "Ein Flaschenzugrad, ich bin mir nicht wirklich sicher, warum es dort oben ist!",
+                        "it": "Una ruota di puleggia, non sono davvero sicuro del perché sia là sopra!",
+                        "fr": "Une roue de poulie, je ne suis pas vraiment sûr de pourquoi elle est là-haut !"
+                    }
                 },
                 "objectParrotHook": {
-                    "en": "A strong metal hook, cobbled together on this perch.",
-                    "es": "Un fuerte gancho de metal, ensamblado en este posadero.",
-                    "de": "Ein starker Metallhaken, der auf diesem Sitzplatz zusammengebaut wurde.",
-                    "it": "Un forte gancio di metallo, assemblato su questo posatoio.",
-                    "fr": "Un crochet en métal solide, assemblé sur ce perchoir."
+                    "0": {
+                        "en": "A strong metal hook, cobbled together on this perch.",
+                        "es": "Un fuerte gancho de metal, ensamblado en este posadero.",
+                        "de": "Ein starker Metallhaken, der auf diesem Sitzplatz zusammengebaut wurde.",
+                        "it": "Un forte gancio di metallo, assemblato su questo posatoio.",
+                        "fr": "Un crochet en métal solide, assemblé sur ce perchoir."
+                    }
                 },
                 "objectCarrot": {
-                    "en": "A carrot, past its best, but still edible...I think!",
-                    "es": "Una zanahoria, pasada de fecha, pero aún comestible... creo.",
-                    "de": "Eine Karotte, die nicht mehr frisch ist, aber immer noch essbar... denke ich!",
-                    "it": "Una carota, oltre il suo meglio, ma ancora commestibile... credo!",
-                    "fr": "Une carotte, qui n'est plus au top, mais encore comestible... je pense !"
+                    "0": {
+                        "en": "A carrot, past its best, but still edible...I think!",
+                        "es": "Una zanahoria, pasada de fecha, pero aún comestible... creo.",
+                        "de": "Eine Karotte, die nicht mehr frisch ist, aber immer noch essbar... denke ich!",
+                        "it": "Una carota, oltre il suo meglio, ma ancora commestibile... credo!",
+                        "fr": "Une carotte, qui n'est plus au top, mais encore comestible... je pense !"
+                    }
                 },
                 "objectParrotMirror": {
-                    "en": "Cute little pocket mirror, handy for checking out your hair.",
-                    "es": "Lindo espejito de bolsillo, útil para revisar tu cabello.",
-                    "de": "Niedlicher kleiner Taschenspiegel, praktisch, um deine Haare zu überprüfen.",
-                    "it": "Carino piccolo specchio da tasca, utile per controllare i capelli.",
-                    "fr": "Mignon petit miroir de poche, pratique pour vérifier tes cheveux."
+                    "0": {
+                        "en": "Cute little pocket mirror, handy for checking out your hair.",
+                        "es": "Lindo espejito de bolsillo, útil para revisar tu cabello.",
+                        "de": "Niedlicher kleiner Taschenspiegel, praktisch, um deine Haare zu überprüfen.",
+                        "it": "Carino piccolo specchio da tasca, utile per controllare i capelli.",
+                        "fr": "Mignon petit miroir de poche, pratique pour vérifier tes cheveux."
+                    }
                 },
                 "objectDonkeyFake": {
-                    "en": "He looks old and shattered, no use for nothing bless.",
-                    "es": "Se ve viejo y destrozado, no sirve para nada, pobre.",
-                    "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
-                    "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
-                    "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
+                    "0": {
+                        "en": "He looks old and shattered, no use for nothing bless.",
+                        "es": "Se ve viejo y destrozado, no sirve para nada, pobre.",
+                        "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
+                        "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
+                        "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
+                    }
                 },
                 "objectDonkeyRope": {
-                    "en": "A thick strong rope, it can definitely hold plenty of weight!",
-                    "es": "Una cuerda gruesa y fuerte, ¡definitivamente puede soportar mucho peso!",
-                    "de": "Ein dickes starkes Seil, es kann definitiv viel Gewicht halten!",
-                    "it": "Una corda spessa e resistente, può sicuramente reggere molto peso!",
-                    "fr": "Une corde épaisse et solide, elle peut certainement supporter beaucoup de poids !"
+                    "0": {
+                        "en": "A thick strong rope, it can definitely hold plenty of weight!",
+                        "es": "Una cuerda gruesa y fuerte, ¡definitivamente puede soportar mucho peso!",
+                        "de": "Ein dickes starkes Seil, es kann definitiv viel Gewicht halten!",
+                        "it": "Una corda spessa e resistente, può sicuramente reggere molto peso!",
+                        "fr": "Une corde épaisse et solide, elle peut certainement supporter beaucoup de poids !"
+                    }
                 },
                 "objectParrotFlyer": {
-                    "en": "A ticket for an exotic bird park that is no longer open, sheesh!",
-                    "es": "Un boleto para un parque de aves exóticas que ya no está abierto, ¡uf!",
-                    "de": "Ein Ticket für einen exotischen Vogelpark, der nicht mehr geöffnet ist, Mensch!",
-                    "it": "Un biglietto per un parco di uccelli esotici che non è più aperto, uffa!",
-                    "fr": "Un billet pour un parc d'oiseaux exotiques qui n'est plus ouvert, pff!"
+                    "0": {
+                        "en": "A ticket for an exotic bird park that is no longer open, sheesh!",
+                        "es": "Un boleto para un parque de aves exóticas que ya no está abierto, ¡uf!",
+                        "de": "Ein Ticket für einen exotischen Vogelpark, der nicht mehr geöffnet ist, Mensch!",
+                        "it": "Un biglietto per un parco di uccelli esotici che non è più aperto, uffa!",
+                        "fr": "Un billet pour un parc d'oiseaux exotiques qui n'est plus ouvert, pff!"
+                    },
+                    "1": {
+                        "en": "I'm glad I found a use for it!",
+                        "es": "¡Me alegra haber encontrado un uso para ello!",
+                        "de": "Ich bin froh, dass ich einen Verwendungszweck dafür gefunden habe!",
+                        "it": "Sono contento di aver trovato un uso per esso!",
+                        "fr": "Je suis content d'avoir trouvé une utilité à ça !"
+                    }
                 },
                 "objectPileOfBooksLibraryFoyer": {
-                    "en": "A large pile of books, that look to have been used recently.",
-                    "es": "Una gran pila de libros que parecen haber sido usados recientemente.",
-                    "de": "Ein großer Stapel Bücher, der kürzlich benutzt worden zu sein scheint.",
-                    "it": "Una grande pila di libri che sembrano essere stati usati di recente.",
-                    "fr": "Une grande pile de livres qui semblent avoir été utilisés récemment."
+                    "0": {
+                        "en": "A large pile of books, that look to have been used recently.",
+                        "es": "Una gran pila de libros que parecen haber sido usados recientemente.",
+                        "de": "Ein großer Stapel Bücher, der kürzlich benutzt worden zu sein scheint.",
+                        "it": "Una grande pila di libri che sembrano essere stati usati di recente.",
+                        "fr": "Une grande pile de livres qui semblent avoir été utilisés récemment."
+                    }
                 },
                 "objectKeyResearchRoom": {
-                    "en": "A small, brass key with an ornate pattern.",
-                    "es": "Una pequeña llave de latón con un patrón ornamentado.",
-                    "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
-                    "it": "Una piccola chiave di ottone con un motivo ornato.",
-                    "fr": "Une petite clé en laiton avec un motif orné."
+                    "0": {
+                        "en": "A small, brass key with an ornate pattern.",
+                        "es": "Una pequeña llave de latón con un patrón ornamentado.",
+                        "de": "Ein kleiner Messingschlüssel mit einem verzierten Muster.",
+                        "it": "Una piccola chiave di ottone con un motivo ornato.",
+                        "fr": "Une petite clé en laiton avec un motif orné."
+                    }
                 },
                 "objectBatteryDEBUG": {
-                    "en": "A small battery, still charged and ready to use.",
-                    "es": "Una pequeña batería, aún cargada y lista para usar.",
-                    "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
-                    "it": "Una piccola batteria, ancora carica e pronta all'uso.",
-                    "fr": "Une petite batterie, encore chargée et prête à l'emploi."
+                    "0": {
+                        "en": "A small battery, still charged and ready to use.",
+                        "es": "Una pequeña batería, aún cargada y lista para usar.",
+                        "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
+                        "it": "Una piccola batteria, ancora carica e pronta all'uso.",
+                        "fr": "Une petite batterie, encore chargée et prête à l'emploi."
+                    }
                 },
                 "objectMachineDEBUG": {
-                    "en": "The machine looks old and complex. It has a slot for a battery.",
-                    "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
-                    "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
-                    "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
-                    "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
+                    "0": {
+                        "en": "The machine looks old and complex. It has a slot for a battery.",
+                        "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
+                        "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
+                        "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
+                        "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
+                    }
                 },
                 "objectBananaDEBUG": {
-                    "en": "A perfectly ripe banana. Ready to eat.",
-                    "es": "Un plátano perfectamente maduro. Listo para comer.",
-                    "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
-                    "it": "Una banana perfettamente matura. Pronta da mangiare.",
-                    "fr": "Une banane parfaitement mûre. Prête à être mangée."
+                    "0": {
+                        "en": "A perfectly ripe banana. Ready to eat.",
+                        "es": "Un plátano perfectamente maduro. Listo para comer.",
+                        "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
+                        "it": "Una banana perfettamente matura. Pronta da mangiare.",
+                        "fr": "Une banane parfaitement mûre. Prête à être mangée."
+                    }
                 },
                 "objectDoorLibraryFoyerResearchRoom": {
-                    "en": "A wooden door that seems to lead into another room.",
-                    "es": "Una puerta de madera que parece llevar a otra habitación.",
-                    "de": "Eine Holztür, die scheinbar in einen anderen Raum führt.",
-                    "it": "Una porta di legno che sembra condurre in un'altra stanza.",
-                    "fr": "Une porte en bois qui semble mener à une autre pièce."
+                    "0": {
+                        "en": "A wooden door that seems to lead into another room.",
+                        "es": "Una puerta de madera que parece llevar a otra habitación.",
+                        "de": "Eine Holztür, die scheinbar in einen anderen Raum führt.",
+                        "it": "Una porta di legno che sembra condurre in un'altra stanza.",
+                        "fr": "Une porte en bois qui semble mener à une autre pièce."
+                    }
                 },
                 "objectDoorLibraryFoyerMarketStreet": {
-                    "en": "It's an unremarkable door that leads outside.",
-                    "es": "Es una puerta sin importancia que lleva al exterior.",
-                    "de": "Es ist eine unscheinbare Tür, die nach draußen führt.",
-                    "it": "È una porta insignificante che conduce all'esterno.",
-                    "fr": "C'est une porte banale qui mène à l'extérieur."
+                    "0": {
+                        "en": "It's an unremarkable door that leads outside.",
+                        "es": "Es una puerta sin importancia que lleva al exterior.",
+                        "de": "Es ist eine unscheinbare Tür, die nach draußen führt.",
+                        "it": "È una porta insignificante che conduce all'esterno.",
+                        "fr": "C'est une porte banale qui mène à l'extérieur."
+                    }
                 }         
             },
             "verbPickUp": {

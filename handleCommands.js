@@ -1,4 +1,4 @@
-import { setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
+import { getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js"
@@ -70,14 +70,14 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
     const language = getLanguage();
 
     if (!isObjectTrueNpcFalse) {
-        const dialogueString = dialogueData.dialogue.npcInteractions[verb]?.[objectId]?.[language];
+        const dialogueString = dialogueData.dialogue.npcInteractions[verb][objectId][language];
         showText(dialogueString, getColorTextPlayer());
         return;
 
     }
 
     if (!exitOrNot) {
-        const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
+        const dialogueString = dialogueData.dialogue.objectInteractions[verb][objectId][0][language];
 
         if (dialogueString) {
             showText(dialogueString, getColorTextPlayer());
@@ -122,12 +122,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
             } else {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
-            pickUpItem(objectId, quantity, verb);
-
-            const objectEvent = getObjectEvents(objectId);
-            if (objectEvent.actionPickUp !== "") { //if there is an event to trigger after picking up object
-                executeInteractionEvent(objectEvent, dialogueString, verb, objectId);
-            }
+            pickUpItem(objectId, quantity, verb, dialogueString);
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
@@ -137,14 +132,19 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
     handleCannotPickUpMessage(language, dialogueData);
 }
 
-function pickUpItem(objectId, quantity, verb) {
+function pickUpItem(objectId, quantity, verb, dialogueString) {
+    const objectEvent = getObjectEvents(objectId);
+
     removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
-    //addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
+    addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);
-    triggerEvent(objectId, verb);
+    
+    if (objectEvent.actionPickUp !== "") { //if there is an event to trigger after picking up object
+        executeInteractionEvent(objectEvent, dialogueString, verb, objectId);
+    }
 }
 
 export function removeObjectFromEnvironment(objectId) {
@@ -248,14 +248,6 @@ export function handleInventoryAdjustment(objectId, quantity, overrideDecrementF
         }
         console.warn(`Object ID ${objectId} not found in inventory.`);
     }
-}
-
-
-function triggerEvent(objectId, verb) {
-    switch (verb) {
-
-    }
-    // Logic to check for and trigger any associated events
 }
 
 function handleCannotPickUpMessage(language, dialogueData) {
@@ -981,6 +973,48 @@ export function constructCommand(userCommand, canHover) {
             quantity: quantity        // Quantity remains unchanged
         };
     }
+}
+
+export function setDialogueData(path, dialogueSetToReplace, dialogueSetNewSource) {
+    const dialogueData = getDialogueData();
+    const swappedDialogueChanges = getSwappedDialogueObject() || {};
+
+    const keys = path.match(/([^[\].]+|\[\d+\])/g);
+    
+    if (!keys) {
+        console.warn("Invalid path format.");
+        return;
+    }
+
+    let current = dialogueData.dialogue;
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i].replace(/\[|\]/g, '');
+        if (!current[key]) {
+            console.warn(`Invalid path: ${key} does not exist in the dialogue.`);
+            return;
+        }
+        current = current[key];
+    }
+
+    if (current[dialogueSetNewSource]) {
+        if (!swappedDialogueChanges[dialogueSetToReplace]) {
+            swappedDialogueChanges[dialogueSetToReplace] = current[dialogueSetToReplace];
+        }
+
+        current[dialogueSetToReplace] = { ...current[dialogueSetNewSource] };
+        current[dialogueSetNewSource] = { ...swappedDialogueChanges[dialogueSetToReplace] };
+
+        const globalKey = `${path}[${dialogueSetToReplace}]`;
+        swappedDialogueChanges[globalKey] = dialogueSetNewSource;
+
+        delete swappedDialogueChanges[dialogueSetToReplace];
+    } else {
+        console.warn(`Source dialogue ${dialogueSetNewSource} does not exist at path: ${path}`);
+    }
+
+    setDialoguesData(dialogueData);
+    setSwappedDialogueObject(swappedDialogueChanges);
 }
 
 export function setObjectData(objectId, path, newValue) {
