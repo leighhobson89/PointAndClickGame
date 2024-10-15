@@ -137,7 +137,12 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
 
     removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
     addItemToInventory(objectId, quantity);
-    addItemToInventory('objectParrotFlyer', 1); //DEBUG testing combinations
+
+    //DEBUG ZONE
+    addItemToInventory('objectPulleyWheel', 1);
+    // addItemToInventory('objectParrotHook', 1);
+    //
+
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);

@@ -6,6 +6,7 @@ import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } fro
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
+//EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
@@ -104,6 +105,43 @@ async function combineMilkAndBowl(blank, dialogueString, blank2, blank3) {
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
+    const objectRopeAndHook = 'objectRopeAndHook';
+
+    addItemToInventory(objectRopeAndHook, 1);
+    drawInventory(0);
+
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
+    let gridData = getGridData();
+    const objectSturdyAnchor = 'objectSturdyAnchor';
+    removeObjectFromEnvironment(objectSturdyAnchor);
+
+    await showText(dialogueString, getColorTextPlayer());
+
+    const gridPositionX = 65;
+    const gridPositionY = 20;
+
+    const offsetX = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = 0;
+    const offSetAdjustmentY = 0;
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
+
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
+    setObjectData(`objectPulleyWheel`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectPulleyWheel`, `dimensions.width`, 25);
+    setObjectData(`objectPulleyWheel`, `dimensions.height`, 15);
+    showHideObjectAndMakeHoverable('s2', 'objectPulleyWheel', true);
+}
+
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const gridData = getGridData();
     const objectId = 'objectCarrot';
@@ -190,6 +228,8 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
 }
 
 function allowInteractionPileOfBooks(objectToUseWith, dialogueString, realVerbUsed, special) {
+    setNpcData(`npcLibrarian`, `interactable.canTalk`, false);
+    setNpcData(`npcLibrarian`, `interactable.cantTalkDialogueNumber`, 1);
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.canHover`, true);
 }
 

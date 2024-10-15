@@ -194,7 +194,7 @@
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "questCutOffNumber": 0,
+                "questCutOffNumber": 2,
                 "questCutOffEvents": {
                     "1": {
                         "event": ""
@@ -283,8 +283,8 @@
                 "y": 10
             },
             "offset": {
-                "x": 1.8,
-                "y": -0.1
+                "x": 0,
+                "y": 0
             },
             "visualPosition": {
                 "x": 0,

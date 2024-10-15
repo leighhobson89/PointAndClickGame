@@ -1,4 +1,4 @@
-import { getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
+import { getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
 import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
@@ -178,6 +178,13 @@ export async function dialogueEngine(realVerbUsed, npcId) {
                         setCurrentSpeaker('player');
                     }
 
+                    if (dialogueString.endsWith('!!!')) { //if response is terminating with !!! then exit now
+                        console.log('should exit here and now!');
+                        type = 'exiting';
+                        setDialogueTextClicked(false);
+                        setEarlyExitFromDialogue(true);
+                    }
+
                     if (getDialogueTextClicked()) {
                         if (getDialogueTextClicked().endsWith(' ')) {
                             console.log("advancing quest phase");
@@ -201,7 +208,7 @@ export async function dialogueEngine(realVerbUsed, npcId) {
             }
         }
     
-        if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting') { //exiting out of dialogue
+        if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting' || getEarlyExitFromDialogue()) { //exiting out of dialogue
             removeDialogueRow(0);
 
             const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null, true);
@@ -220,16 +227,17 @@ export async function dialogueEngine(realVerbUsed, npcId) {
             const { xPos, yPos } = getTextPosition(speaker, npcData);
             const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
         
-            await showText(dialogueString, textColor, xPos, yPos);
+            if (!getEarlyExitFromDialogue()) {
+                await showText(dialogueString, textColor, xPos, yPos);
+            }
         
-            if (dialoguePhase < orderOfExitDialogue.end) {
+            if (dialoguePhase < orderOfExitDialogue.end && !getEarlyExitFromDialogue()) {
                 dialoguePhase++;
                 await showDialogue(dialoguePhase, 'exiting');
             } else {
                 dialoguePhase = 0;
                 if (npcData.interactable.questCutOffNumber === questPhase) {
-                    npcData.interactable.canTalk = false;
-                    npcData.interactable.cantTalkDialogueNumber = 1;
+                    //handle if questCutOffAdvances or cantTalk in the end of questCutOffEvent not here
                     let npcEvent = npcData.interactable.questCutOffEvents[npcData.interactable.questCutOffNumber].event;
                     executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
                     //trigger post quest events
@@ -243,6 +251,7 @@ export async function dialogueEngine(realVerbUsed, npcId) {
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 setGameState(getGameVisibleActive());
                 setDialogueTextClicked(null);
+                setEarlyExitFromDialogue(false);
                 return;
             }
         }
