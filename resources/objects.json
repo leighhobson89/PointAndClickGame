@@ -347,8 +347,8 @@
             },
             "inventoryUrl": "./resources/objects/images/parrotMirrorInv.png",
             "gridPosition": {
-                "x": 68,
-                "y": 15
+                "x": 6,
+                "y": 1
             },
             "offset": {
                 "x": 0.2,
@@ -359,8 +359,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 20,
-                "height": 15
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -534,10 +534,10 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "",
-                "actionUseWith11": "",
+                "objectUseWith1": "objectDonkeyRope",
+                "actionUseWith11": "combineRopeAndHook",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
+                "useTogetherLocation": "objectDonkeyRope",
                 "npcGiveTo": "",
                 "actionGive1": "",
                 "actionGive2": "",
@@ -561,8 +561,8 @@
             },
             "inventoryUrl": "./resources/objects/images/hookInv.png",
             "gridPosition": {
-                "x": 65,
-                "y": 14
+                "x": 5,
+                "y": 1
             },
             "offset": {
                 "x": 0.4,
@@ -573,8 +573,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 20,
-                "height": 12
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -889,12 +889,12 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "objectParrotHook",
+                "actionUseWith11": "combineRopeAndHook",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "useTogetherLocation": "objectParrotHook",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
                 "actionPickUp": ""
             },

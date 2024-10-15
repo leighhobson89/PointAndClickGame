@@ -144,6 +144,20 @@
                     }
                 },
                 "useWithObject1": {
+                    "objectParrotHook": {
+                        "en": "That should hold, I think...",
+                        "es": "Eso debería aguantar, creo...",
+                        "de": "Das sollte halten, denke ich...",
+                        "it": "Questo dovrebbe tenere, penso...",
+                        "fr": "Ça devrait tenir, je pense..."
+                    },
+                    "objectDonkeyRope": {
+                        "en": "That should hold, I think...",
+                        "es": "Eso debería aguantar, creo...",
+                        "de": "Das sollte halten, denke ich...",
+                        "it": "Questo dovrebbe tenere, penso...",
+                        "fr": "Ça devrait tenir, je pense..."
+                    },
                     "objectParrotFlyer": {
                         "en": "I wonder what will happen if...",
                         "es": "Me pregunto qué pasará si...",

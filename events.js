@@ -104,6 +104,15 @@ async function combineMilkAndBowl(blank, dialogueString, blank2, blank3) {
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
+    const objectRopeAndHook = 'objectRopeAndHook';
+
+    addItemToInventory(objectRopeAndHook, 1);
+    drawInventory(0);
+
+    await showText(dialogueString, getColorTextPlayer());
+}
+
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const gridData = getGridData();
     const objectId = 'objectCarrot';
