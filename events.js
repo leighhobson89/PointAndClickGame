@@ -113,6 +113,34 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
+    let gridData = getGridData();
+    const objectSturdyAnchor = 'objectSturdyAnchor';
+    removeObjectFromEnvironment(objectSturdyAnchor);
+
+    await showText(dialogueString, getColorTextPlayer());
+
+    const gridPositionX = 65;
+    const gridPositionY = 20;
+
+    const offsetX = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = 0;
+    const offSetAdjustmentY = 0;
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
+
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
+    setObjectData(`objectPulleyWheel`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectPulleyWheel`, `dimensions.width`, 25);
+    setObjectData(`objectPulleyWheel`, `dimensions.height`, 15);
+    showHideObjectAndMakeHoverable('s2', 'objectPulleyWheel', true);
+}
+
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const gridData = getGridData();
     const objectId = 'objectCarrot';

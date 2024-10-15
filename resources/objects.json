@@ -576,7 +576,78 @@
                 "width": 1,
                 "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Hook for attaching parrotFlyer and can also be taken after this puzzle finishes and used with Rope"
+        },
+        "objectSturdyAnchor": {
+            "name": {
+                "en": "Sturdy Anchor",
+                "es": "Gancho resistente",
+                "de": "Stabiler Haken",
+                "it": "Gancio robusto",
+                "fr": "Crochet robuste"
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : false,
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "objectPulleyWheel",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/hookWorld.png",
+                "s2": "./resources/objects/images/blank.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/hookInv.png",
+            "gridPosition": {
+                "x": 65,
+                "y": 20
+            },
+            "offset": {
+                "x": 0.4,
+                "y": 0.5
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 25,
+                "height": 15
+            },
+            "comment": "Anchor for attaching pulley wheel to on river crossing tree"
         },
         "objectPulleyWheel": {
             "name": {
@@ -605,19 +676,19 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "objectSturdyAnchor",
+                "actionUseWith11": "combinePulleyAndSturdyAnchor",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "useTogetherLocation": "objectSturdyAnchor",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
                 "actionPickUp": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/pulleyWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/pulleyWorld.png"
             },
             "visualAnimatedStateOffsets": {
@@ -632,20 +703,20 @@
             },
             "inventoryUrl": "./resources/objects/images/pulleyInv.png",
             "gridPosition": {
-                "x": 39,
-                "y": 33
+                "x": 14,
+                "y": 1
             },
             "offset": {
-                "x": 0,
-                "y": 0
+                "x": 0.4,
+                "y": 0.2
             },
             "visualPosition": {
                 "x": 0,
                 "y": 0
             },
             "dimensions": {
-                "width": 35,
-                "height": 25
+                "width": 31,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },

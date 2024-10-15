@@ -139,8 +139,8 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
     addItemToInventory(objectId, quantity);
 
     //DEBUG ZONE
-    addItemToInventory('objectDonkeyRope', 1);
-    addItemToInventory('objectParrotHook', 1);
+    addItemToInventory('objectPulleyWheel', 1);
+    // addItemToInventory('objectParrotHook', 1);
     //
 
     console.log(getPlayerInventory());

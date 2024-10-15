@@ -144,6 +144,13 @@
                     }
                 },
                 "useWithObject1": {
+                    "objectPulleyWheel": {
+                        "en": "I've never seen a pulley get fixed to a hook before, maybe I am naive!",
+                        "es": "Nunca he visto que una polea se fije a un gancho antes, ¡tal vez soy ingenuo!",
+                        "de": "Ich habe noch nie gesehen, dass eine Rolle an einem Haken befestigt wird, vielleicht bin ich naiv!",
+                        "it": "Non ho mai visto una puleggia fissata a un gancio prima, forse sono ingenuo!",
+                        "fr": "Je n'ai jamais vu une poulie fixée à un crochet avant, peut-être que je suis naïf !"
+                    },
                     "objectParrotHook": {
                         "en": "That should hold, I think...",
                         "es": "Eso debería aguantar, creo...",
@@ -476,6 +483,15 @@
                             "it": "La porta conduce alla mappa. Serve una chiave.",
                             "fr": "La porte mène à la carte. Une clé est nécessaire."
                         }
+                    }
+                },
+                "objectSturdyAnchor": {
+                    "0": {
+                        "en": "It looks like something was attached here, it's clearly a very strong branch!",
+                        "es": "Parece que algo estaba unido aquí, ¡es claramente una rama muy fuerte!",
+                        "de": "Es sieht so aus, als wäre hier etwas befestigt gewesen, es ist eindeutig ein sehr starker Ast!",
+                        "it": "Sembra che qui fosse attaccato qualcosa, è chiaramente un ramo molto forte!",
+                        "fr": "On dirait que quelque chose était attaché ici, c'est clairement une branche très solide !"
                     }
                 },
                 "objectPaperWithInstructionsScrawledOn": {
