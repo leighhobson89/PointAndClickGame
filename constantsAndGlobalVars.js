@@ -125,6 +125,7 @@ let triggerQuestPhaseAdvance = false;
 let canExitDialogueAtThisPoint = false;
 let scrollingActive = false;
 let parrotCompletedMovingToFlyer = false;
+let earlyExitFromDialogue = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -1007,6 +1008,14 @@ export function getSwappedDialogueObject() {
 
 export function setSwappedDialogueObject(value) {
     swappedDialogueObject = value;
+}
+
+export function getEarlyExitFromDialogue() {
+    return earlyExitFromDialogue;
+}
+
+export function setEarlyExitFromDialogue(value) {
+    earlyExitFromDialogue = value;
 }
 
 

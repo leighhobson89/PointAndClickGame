@@ -6,6 +6,7 @@
     "generalComments5": "Order: Structure is a string ending with a ! signifying the end of the phase, i.e. 011001!",
     "generalComments6": "Dialogue in npcInteractions.verbTalkTo that ends with a unicode u0020 on the LAST number of the phase tells the code to advance the questPhase by checking for space characters, the number of them indicates how many questPhases to advance by",
     "generalComments7": "cantTalk is set to 1 after ALL quests for an npc are done and as such can only be used before they start or after they are done, so basically when all dialogue is exhausted, 0 or 1, also it is always the npc that speaks - Note, you can still give items and trigger dialogue that way through the verbGive property",
+    "generalComments8": "!!! at the end of dialogue responses ends the dialogue then and there.",
     "dialogue": {
         "postAnimationEventDialogue": {
             "animationParrotMoveToParrotFlyer": {
@@ -1391,11 +1392,11 @@
                                 "2": {
                                     "phase": {
                                         "0": {
-                                            "en": "Uuf, that's fine, sorry to ask!",
-                                            "es": "Uuf, está bien, ¡perdón por preguntar!",
-                                            "de": "Uuf, das ist in Ordnung, tut mir leid, dass ich gefragt habe!",
-                                            "it": "Uuf, va bene, scusa per aver chiesto!",
-                                            "fr": "Ouf, c'est bon, désolé d'avoir demandé !"
+                                            "en": "Uuf, that's fine, sorry to ask!!!",
+                                            "es": "Uuf, está bien, ¡perdón por preguntar!!!",
+                                            "de": "Uuf, das ist in Ordnung, tut mir leid, dass ich gefragt habe!!!",
+                                            "it": "Uuf, va bene, scusa per aver chiesto!!!",
+                                            "fr": "Ouf, c'est bon, désolé d'avoir demandé !!!"
                                         }
                                     },
                                     "order": "1!"
