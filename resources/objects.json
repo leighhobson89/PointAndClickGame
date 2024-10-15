@@ -133,8 +133,8 @@
             },
             "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
             "gridPosition": {
-                "x": 72,
-                "y": 32
+                "x": 8,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -145,8 +145,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 60,
-                "height": 50
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
@@ -204,8 +204,8 @@
             },
             "inventoryUrl": "",
             "gridPosition": {
-                "x": 1,
-                "y": 30
+                "x": 11,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -216,8 +216,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 130,
-                "height": 50
+                "width": 1,
+                "height": 1
             },
             "comment": "Pile of books you use or push or pull to get the key for the research room"
         },
@@ -418,8 +418,8 @@
             },
             "inventoryUrl": "./resources/objects/images/carrotInv.png",
             "gridPosition": {
-                "x": 67,
-                "y": 33
+                "x": 7,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -430,8 +430,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 30,
-                "height": 20
+                "width": 1,
+                "height": 1
             },
             "comment": "Give carrot to donkey in order to show objectDonkeyRope and move the donkey so can access barn"
         },
@@ -1271,8 +1271,8 @@
             },
             "inventoryUrl": "./resources/objects/images/bowlInv.png",
             "gridPosition": {
-                "x": 73,
-                "y": 45
+                "x": 10,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1283,8 +1283,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
             "comment": "Bowl to combine with Milk Bottle, for giving to Dog"
         },
@@ -1484,8 +1484,8 @@
             },
             "inventoryUrl": "./resources/objects/images/ropeHookInv.png",
             "gridPosition": {
-                "x": 11,
-                "y": 45
+                "x": 9,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1496,8 +1496,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
