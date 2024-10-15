@@ -227,9 +227,11 @@ export async function dialogueEngine(realVerbUsed, npcId) {
             const { xPos, yPos } = getTextPosition(speaker, npcData);
             const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
         
-            await showText(dialogueString, textColor, xPos, yPos);
+            if (!getEarlyExitFromDialogue()) {
+                await showText(dialogueString, textColor, xPos, yPos);
+            }
         
-            if (dialoguePhase < orderOfExitDialogue.end) {
+            if (dialoguePhase < orderOfExitDialogue.end && !getEarlyExitFromDialogue()) {
                 dialoguePhase++;
                 await showDialogue(dialoguePhase, 'exiting');
             } else {

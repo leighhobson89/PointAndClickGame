@@ -1416,6 +1416,152 @@
                             }
                         },
                         "1": {
+                            "introDialogue": {
+                                "en": "Hello again, we have to stop meeting like this!",
+                                "es": "¡Hola de nuevo, tenemos que dejar de encontrarnos así!",
+                                "de": "Hallo nochmal, wir müssen aufhören, uns so zu treffen!",
+                                "it": "Ciao di nuovo, dobbiamo smettere di incontrarci così!",
+                                "fr": "Bonjour encore, il faut qu'on arrête de se croiser comme ça !"
+                            },
+                            "phase": {
+                                "0": {
+                                    "en": "Haha that's true, someone might think something is going on!",
+                                    "es": "¡Jaja, es verdad, alguien podría pensar que está pasando algo!",
+                                    "de": "Haha, das stimmt, jemand könnte denken, dass etwas vor sich geht!",
+                                    "it": "Ahah, è vero, qualcuno potrebbe pensare che stia succedendo qualcosa!",
+                                    "fr": "Haha c'est vrai, quelqu'un pourrait penser qu'il se passe quelque chose !"
+                                },
+                                "1": {
+                                    "en": "So, do you think you can help me, it won't take long...Please?",
+                                    "es": "Así que, ¿crees que puedes ayudarme? No tomará mucho tiempo... ¿Por favor?",
+                                    "de": "Also, denkst du, dass du mir helfen kannst? Es wird nicht lange dauern... Bitte?",
+                                    "it": "Quindi, pensi di poter mi aiutare? Non ci vorrà molto... Per favore?",
+                                    "fr": "Alors, penses-tu que tu peux m'aider ? Ça ne prendra pas longtemps... S'il te plaît ?"
+                                }
+                            },
+                            "order": "11!",
+                            "dialogueOptions": {
+                                "0": {
+                                    "en": "So then, what do you need?",
+                                    "es": "Entonces, ¿qué necesitas?",
+                                    "de": "Also, was brauchst du?",
+                                    "it": "Allora, di cosa hai bisogno?",
+                                    "fr": "Alors, que veux-tu?"
+                                },
+                                "1": {
+                                    "en": "Ok I am ready to help you!\u0020",
+                                    "es": "¡Ok, estoy listo para ayudarte!\u0020",
+                                    "de": "Ok, ich bin bereit, dir zu helfen!\u0020",
+                                    "it": "Ok, sono pronto ad aiutarti!\u0020",
+                                    "fr": "Ok, je suis prêt à t'aider !\u0020"
+                                },
+                                "2": {
+                                    "en": "I just remembered, I left the gas on at home.",
+                                    "es": "Acabo de recordar, dejé el gas encendido en casa.",
+                                    "de": "Ich habe gerade erinnert, dass ich das Gas zu Hause angelassen habe.",
+                                    "it": "Mi sono appena ricordato, ho lasciato il gas acceso a casa.",
+                                    "fr": "Je viens de me souvenir, j'ai laissé le gaz allumé à la maison."
+                                },
+                                "3": {
+                                    "en": "So about that date?",
+                                    "es": "¿Entonces sobre esa cita?",
+                                    "de": "Also, wie sieht es mit diesem Date aus?",
+                                    "it": "Allora, per quanto riguarda quell'appuntamento?",
+                                    "fr": "Alors, à propos de ce rendez-vous ?"
+                                }
+                            },
+                            "exitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "I'm going, I suddenly remembered something!",
+                                        "es": "¡Me voy, de repente recordé algo!",
+                                        "de": "Ich gehe, ich habe plötzlich etwas erinnert!",
+                                        "it": "Vado, ho improvvisamente ricordato qualcosa!",
+                                        "fr": "Je m'en vais, je viens de me souvenir de quelque chose !"
+                                    },
+                                    "1": {
+                                        "en": "Make your mind up, one minute you can help, next no, typical man! Joking of course!",
+                                        "es": "Decídete, un minuto puedes ayudar, al siguiente no, ¡típico hombre! ¡Es una broma, por supuesto!",
+                                        "de": "Such dir endlich eine Meinung, im einen Moment kannst du helfen, im nächsten nicht, typischer Mann! Natürlich nur ein Scherz!",
+                                        "it": "Decidi, un minuto puoi aiutare, l'attimo dopo no, tipico uomo! Sto scherzando, ovviamente!",
+                                        "fr": "Décide-toi, un moment tu peux aider, l'instant d'après non, homme typique ! Je rigole bien sûr !"
+                                    }
+                                },
+                                "order": "01!"
+                            },
+                            "responses": {
+                                "0": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "It's silly really...",
+                                            "es": "Es realmente tonto... ",
+                                            "de": "Es ist wirklich albern... ",
+                                            "it": "È davvero sciocco... ",
+                                            "fr": "C'est vraiment idiot... "
+                                        },
+                                        "1": {
+                                            "en": "I lost my mirror and I need to finish my make up.",
+                                            "es": "Perdí mi espejo y necesito terminar mi maquillaje.",
+                                            "de": "Ich habe meinen Spiegel verloren und muss mein Make-up fertigstellen.",
+                                            "it": "Ho perso il mio specchio e ho bisogno di finire il mio trucco.",
+                                            "fr": "J'ai perdu mon miroir et j'ai besoin de finir mon maquillage."
+                                        },
+                                        "2": {
+                                            "en": "I wondered if you would help me look for it, or lend me another one.",
+                                            "es": "Me preguntaba si me ayudarías a buscarlo o si podrías prestarme otro.",
+                                            "de": "Ich habe mich gefragt, ob du mir helfen würdest, es zu suchen oder mir ein anderes leihen könntest.",
+                                            "it": "Mi chiedevo se mi aiuteresti a cercarlo o se potresti prestarmene un altro.",
+                                            "fr": "Je me demandais si tu m'aiderais à le chercher ou si tu pourrais m'en prêter un autre."
+                                        },
+                                        "3": {
+                                            "en": "Any will do, I am on my way somewhere important and I need it now.",
+                                            "es": "Cualquiera servirá, voy a un lugar importante y lo necesito ahora.",
+                                            "de": "Jede wird tun, ich bin auf dem Weg zu einem wichtigen Ort und ich brauche es jetzt.",
+                                            "it": "Qualsiasi va bene, sono in viaggio verso un posto importante e ne ho bisogno adesso.",
+                                            "fr": "N'importe lequel fera l'affaire, je suis en route pour un endroit important et j'en ai besoin maintenant."
+                                        }
+                                    },
+                                    "order": "1111!"
+                                },
+                                "1": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Great Ok, find me that mirror then handsome!",
+                                            "es": "¡Genial! Entonces, encuéntrame ese espejo, guapo.",
+                                            "de": "Super! Finde mir dann diesen Spiegel, hübscher.",
+                                            "it": "Ottimo! Trova quel specchio per me, allora bello.",
+                                            "fr": "Super ! Trouve-moi ce miroir alors, beau gosse."
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "2": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "You guys are all the same, excuses! Only joking!!!",
+                                            "es": "¡Ustedes son todos iguales, excusas! ¡Solo bromeando!!!",
+                                            "de": "Ihr seid alle gleich, Ausreden! Nur ein Scherz!!!",
+                                            "it": "Siete tutti uguali, scuse! Scherzo!!!",
+                                            "fr": "Vous êtes tous les mêmes, des excuses ! Je rigole !!!"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "3": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "I'm sure we can sort something out after you help me!",
+                                            "es": "¡Estoy seguro de que podemos resolver algo después de que me ayudes!",
+                                            "de": "Ich bin mir sicher, dass wir etwas klären können, nachdem du mir geholfen hast!",
+                                            "it": "Sono sicuro che possiamo sistemare qualcosa dopo che mi aiuti!",
+                                            "fr": "Je suis sûr que nous pouvons régler quelque chose après que tu m'aides !"
+                                        }
+                                    },
+                                    "order": "1!"
+                                }
+                            }
+                        },
+                        "2": {
                             "autoExitOption": {
                                 "phase": {
                                     "0": {
