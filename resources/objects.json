@@ -490,8 +490,8 @@
             },
             "inventoryUrl": "",
             "gridPosition": {
-                "x": 50,
-                "y": 10
+                "x": 12,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -502,8 +502,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 70,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
             "comment": "Object instance of Donkey npc that can be used to show the rope, the space after the name is important or the code wont work"
         },
