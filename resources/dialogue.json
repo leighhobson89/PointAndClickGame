@@ -1292,21 +1292,129 @@
                             },
                             "phase": {
                                 "0": {
-                                    "en": "Grrr!",
-                                    "es": "¡Grrr!",
-                                    "de": "Grrr!",
-                                    "it": "Grrr!",
-                                    "fr": "Grrr!"
+                                    "en": "Hey how are you?",
+                                    "es": "¡Hola, cómo estás?",
+                                    "de": "Hallo, wie geht's dir?",
+                                    "it": "Ciao, come stai?",
+                                    "fr": "Salut, comment ça va?"
                                 },
                                 "1": {
-                                    "en": "Ooo he isn't giving that bone up for anybody!",
-                                    "es": "¡Ooo, no va a soltar ese hueso por nada!",
-                                    "de": "Ooo, er gibt diesen Knochen für niemanden auf!",
-                                    "it": "Ooo, non cederà quel osso a nessuno!",
-                                    "fr": "Ooo, il ne lâchera pas ce os pour personne !"
+                                    "en": "Listen, could you help me?",
+                                    "es": "Escucha, ¿podrías ayudarme?",
+                                    "de": "Hör zu, könntest du mir helfen?",
+                                    "it": "Ascolta, potresti aiutarmi?",
+                                    "fr": "Écoute, pourrais-tu m'aider?"
                                 }
                             },
-                            "order": "10!",
+                            "order": "11!",
+                            "dialogueOptions": {
+                                "0": {
+                                    "en": "I'm in a rush, what do you need?\u0020",
+                                    "es": "Estoy apurado, ¿qué necesitas?\u0020",
+                                    "de": "Ich habe es eilig, was brauchst du?\u0020",
+                                    "it": "Ho fretta, di cosa hai bisogno?\u0020",
+                                    "fr": "Je suis pressé, que veux-tu?\u0020"
+                                },
+                                "1": {
+                                    "en": "Absolutely I can help out a lady in need! What is the issue?\u0020",
+                                    "es": "¡Absolutamente puedo ayudar a una dama en apuros! ¿Cuál es el problema?\u0020",
+                                    "de": "Natürlich kann ich einer Dame in Not helfen! Was ist das Problem?\u0020",
+                                    "it": "Assolutamente posso aiutare una signora in difficoltà! Qual è il problema?\u0020",
+                                    "fr": "Bien sûr, je peux aider une dame dans le besoin ! Quel est le problème ?\u0020"
+                                },
+                                "2": {
+                                    "en": "Sorry I don't want to help you.",
+                                    "es": "Lo siento, no quiero ayudarte.",
+                                    "de": "Entschuldigung, ich möchte dir nicht helfen.",
+                                    "it": "Mi dispiace, non voglio aiutarti.",
+                                    "fr": "Désolé, je ne veux pas t'aider."
+                                },
+                                "3": {
+                                    "en": "Do you want to go on a date with me, you are beautiful!",
+                                    "es": "¿Quieres salir conmigo, eres hermosa!",
+                                    "de": "Möchtest du mit mir ausgehen, du bist schön!",
+                                    "it": "Vuoi uscire con me? Sei bella!",
+                                    "fr": "Veux-tu sortir avec moi, tu es belle!"
+                                }
+                            },
+                            "exitOption": {
+                                "phase": {
+                                    "0": {
+                                        "en": "I need to get going, bye!",
+                                        "es": "¡Tengo que irme, adiós!",
+                                        "de": "Ich muss gehen, tschüss!",
+                                        "it": "Devo andare, ciao!",
+                                        "fr": "Je dois y aller, au revoir!"
+                                    },
+                                    "1": {
+                                        "en": "Ok, it was nice to speak to you, hope we can do it again soon!",
+                                        "es": "Está bien, fue un placer hablar contigo, ¡espero que podamos hacerlo de nuevo pronto!",
+                                        "de": "Okay, es war schön, mit dir zu sprechen, ich hoffe, wir können das bald wieder tun!",
+                                        "it": "Va bene, è stato bello parlare con te, spero che possiamo farlo di nuovo presto!",
+                                        "fr": "D'accord, c'était agréable de parler avec vous, j'espère que nous pourrons le refaire bientôt !"
+                                    }
+                                },
+                                "order": "01!"
+                            },
+                            "responses": {
+                                "0": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "I don't want to slow you down, sorry!",
+                                            "es": "No quiero retrasarte, ¡lo siento!",
+                                            "de": "Ich möchte dich nicht aufhalten, tut mir leid!",
+                                            "it": "Non voglio rallentarti, mi dispiace!",
+                                            "fr": "Je ne veux pas te ralentir, désolé !"
+                                        },
+                                        "1": {
+                                            "en": "If you really can help me then I could use it.",
+                                            "es": "Si realmente puedes ayudarme, me vendría bien.",
+                                            "de": "Wenn du mir wirklich helfen kannst, könnte ich es gebrauchen.",
+                                            "it": "Se davvero puoi aiutarmi, potrei usarlo.",
+                                            "fr": "Si tu peux vraiment m'aider, cela me serait utile."
+                                        }
+                                    },
+                                    "order": "11!"
+                                },
+                                "1": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Great, I am so sorry to ask you when I just met you.",
+                                            "es": "Genial, lamento mucho pedirte esto justo cuando te acabo de conocer.",
+                                            "de": "Super, es tut mir leid, dich um etwas zu bitten, wo wir uns gerade erst getroffen haben.",
+                                            "it": "Fantastico, mi dispiace chiedertelo proprio ora che ci siamo appena conosciuti.",
+                                            "fr": "Super, je suis vraiment désolé de te demander ça alors qu'on vient juste de se rencontrer."
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "2": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "Uuf, that's fine, sorry to ask!",
+                                            "es": "Uuf, está bien, ¡perdón por preguntar!",
+                                            "de": "Uuf, das ist in Ordnung, tut mir leid, dass ich gefragt habe!",
+                                            "it": "Uuf, va bene, scusa per aver chiesto!",
+                                            "fr": "Ouf, c'est bon, désolé d'avoir demandé !"
+                                        }
+                                    },
+                                    "order": "1!"
+                                },
+                                "3": {
+                                    "phase": {
+                                        "0": {
+                                            "en": "I hardly know you! Maybe if you help me?",
+                                            "es": "¡Apenas te conozco! ¿Tal vez si me ayudas?",
+                                            "de": "Ich kenne dich kaum! Vielleicht, wenn du mir hilfst?",
+                                            "it": "Ti conosco a malapena! Forse se mi aiuti?",
+                                            "fr": "Je te connais à peine ! Peut-être si tu m'aides ?"
+                                        }
+                                    },
+                                    "order": "1!"
+                                }
+                            }
+                        },
+                        "1": {
                             "autoExitOption": {
                                 "phase": {
                                     "0": {
@@ -1330,11 +1438,11 @@
                             "fr": ""
                         },
                         "1": {
-                            "en": "Ruff...Ruff!",
-                            "es": "¡Guau...Guau!",
-                            "de": "Wuff...Wuff!",
-                            "it": "Bau...Bau!",
-                            "fr": "Ouaf...Ouaf!"
+                            "en": "She looks busy attending to her make-up!",
+                            "es": "¡Parece que está ocupada con su maquillaje!",
+                            "de": "Sie sieht beschäftigt aus, während sie sich schminkt!",
+                            "it": "Sembra occupata a truccarsi!",
+                            "fr": "Elle a l'air occupée à se maquiller !"
                         }
                     }
                 },
