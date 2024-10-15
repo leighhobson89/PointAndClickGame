@@ -6,6 +6,7 @@ import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } fro
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
+//EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
@@ -227,6 +228,8 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
 }
 
 function allowInteractionPileOfBooks(objectToUseWith, dialogueString, realVerbUsed, special) {
+    setNpcData(`npcLibrarian`, `interactable.canTalk`, false);
+    setNpcData(`npcLibrarian`, `interactable.cantTalkDialogueNumber`, 1);
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.canHover`, true);
 }
 

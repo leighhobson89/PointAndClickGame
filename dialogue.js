@@ -228,8 +228,7 @@ export async function dialogueEngine(realVerbUsed, npcId) {
             } else {
                 dialoguePhase = 0;
                 if (npcData.interactable.questCutOffNumber === questPhase) {
-                    npcData.interactable.canTalk = false;
-                    npcData.interactable.cantTalkDialogueNumber = 1;
+                    //handle if questCutOffAdvances or cantTalk in the end of questCutOffEvent
                     let npcEvent = npcData.interactable.questCutOffEvents[npcData.interactable.questCutOffNumber].event;
                     executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
                     //trigger post quest events
