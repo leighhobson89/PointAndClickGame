@@ -279,8 +279,9 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
     if (objectData.interactable.activeStatus && !objectData.interactable.alreadyUsed) {
         showText(dialogueString, getColorTextPlayer());
         setObjectData(`objectPliers`, `interactable.alreadyUsed`, true);
+        setDialogueData('npcInteractions.verbLookAt.npcCow', '0', '1');
     } else {
-        if (objectData.interactable.alreadyUsed) {
+        if (!objectData.interactable.alreadyUsed) {
             dialogueString = dialogueData.globalMessages.activeStatusNotSet[language];
             showText(dialogueString, getColorTextPlayer());
         } else {
