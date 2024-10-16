@@ -70,7 +70,7 @@ export function handleLookAt(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
     const language = getLanguage();
 
     if (!isObjectTrueNpcFalse) {
-        const dialogueString = dialogueData.dialogue.npcInteractions[verb][objectId][language];
+        const dialogueString = dialogueData.dialogue.npcInteractions[verb][objectId][0][language];
         showText(dialogueString, getColorTextPlayer());
         return;
 

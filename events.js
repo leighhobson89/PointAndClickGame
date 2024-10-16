@@ -266,6 +266,10 @@ function resetHookBackToTreePosition() {
     showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 
+function makeCowNotTalkable() {
+    setNpcData(`npcCow`, `interactable.canTalk`, false);
+}
+
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Executor function

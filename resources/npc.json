@@ -222,7 +222,7 @@
             },
             "gridPosition": {
                 "x": 40,
-                "y": 20
+                "y": 10
             },
             "offset": {
                 "x": 1.8,
@@ -237,6 +237,64 @@
                 "height": 39
             },
             "comment": "Woman give Key To Den if given objectParrotMirror"
+        },
+        "npcCow": {
+            "name": {
+                "en": "Cow",
+                "es": "Vaca",
+                "de": "Kuh",
+                "it": "Mucca",
+                "fr": "Vache"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 1,
+                "questCutOffEvents": {
+                    "1": {
+                        "event": "makeCowNotTalkable"
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(150, 150, 150)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/cow.png",
+                "s2": "./resources/npcs/cow.png"
+            },
+            "gridPosition": {
+                "x": 60,
+                "y": 10
+            },
+            "offset": {
+                "x": 1.8,
+                "y": -0.1
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 90,
+                "height": 35
+            },
+            "comment": "Cow needs splinter removing with pliers so farmer appears"
         },
         "npcSeedyLookingGuy": {
             "name": {
