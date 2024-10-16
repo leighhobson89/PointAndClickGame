@@ -280,6 +280,8 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
         showText(dialogueString, getColorTextPlayer());
         setObjectData(`objectPliers`, `interactable.alreadyUsed`, true);
         setDialogueData('npcInteractions.verbLookAt.npcCow', '0', '1');
+        addItemToInventory('objectSplinter', 1);
+        drawInventory(0);
     } else {
         if (!objectData.interactable.alreadyUsed) {
             dialogueString = dialogueData.globalMessages.activeStatusNotSet[language];

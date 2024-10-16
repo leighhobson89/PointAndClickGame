@@ -1161,6 +1161,78 @@
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
+        "objectSplinter": {
+            "name": {
+                "en": "Wood Splinter",
+                "es": "Astilla de madera",
+                "de": "Holzsplitter",
+                "it": "Scheggia di legno",
+                "fr": "Écharde de bois"
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : false,
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectPulleyWheel",
+                "npcUseWith1": "",
+                "actionUseWith11": "addSplinterToJamPulley",
+                "actionUseWith12": "",
+                "useTogetherLocation": "debugRoom",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
+            },
+            "objectPlacementLocation": "objectPulleyWheel",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "",
+                "s2": ""
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/splinterInv.png",
+            "gridPosition": {
+                "x": 15,
+                "y": 1
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 1,
+                "height": 1
+            },
+            "comment": "Splinter stuck in cows foot that will jam the pulley wheel"
+        },
         "objectBone": {
             "name": {
                 "en": "Bone",
@@ -1448,6 +1520,78 @@
                 "height": 1
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectSplinterJammedInPulley": {
+            "name": {
+                "en": "Pulley With Splinter Jammed In It",
+                "es": "Polea con astilla atascada",
+                "de": "Seilrolle mit eingeklemmtem Splitter",
+                "it": "Puleggia con scheggia bloccata",
+                "fr": "Poulie avec écharde coincée"
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : false,
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "npcUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "debugRoom",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/splinterPulleyWorld.png",
+                "s2": "./resources/objects/images/splinterPulleyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 17,
+                "y": 44
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 40
+            },
+            "comment": "Combined pulley wheel and splinter for jamming wood when hoisted"
         },
         "objectBoneJammedInPulley": {
             "name": {

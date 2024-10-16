@@ -485,6 +485,15 @@
                    }
                 }
              },
+             "objectSplinter":{
+                "0":{
+                    "en": "A surprisingly strong looking wood splinter!",
+                    "es": "¡Una astilla de madera sorprendentemente fuerte!",
+                    "de": "Ein überraschend stark aussehender Holzsplitter!",
+                    "it": "Una scheggia di legno sorprendentemente robusta!",
+                    "fr": "Une écharde de bois d'apparence étonnamment solide !"
+                }
+             },
              "objectSturdyAnchor":{
                 "0":{
                    "en":"It looks like something was attached here, it's clearly a very strong branch!",
