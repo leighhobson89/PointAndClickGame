@@ -1060,6 +1060,17 @@
           }
        },
        "npcInteractions":{
+          "verbUse": {
+            "useWithNpc1": {
+                "npcCow": {
+                    "en": "Uff, uff, there we go, it's out, woah, don't trample on me!",
+                    "es": "Uff, uff, ahí vamos, ya está fuera, ¡cuidado, no me pises!",
+                    "de": "Uff, uff, da haben wir es, es ist draußen, woah, tritt nicht auf mich!",
+                    "it": "Uff, uff, ci siamo, è uscito, woah, non calpestarmi!",
+                    "fr": "Ouf, ouf, voilà, c'est sorti, woah, ne me piétine pas !"
+                }
+            }
+          },
           "verbLookAt":{
             "npcDonkey": {
                 "0": {
@@ -1998,7 +2009,7 @@
                          "1":{
                             "en":"I guess I could try to help... although I don't like getting dirty.\u0020",
                             "es":"Supongo que podría intentar ayudarte... pero no me gusta ensuciarme.\u0020",
-                            "de":"Ich denke, ich könnte versuchen zu helfen... aber ich mag es nicht, schmutzig zu werden.\u0200",
+                            "de":"Ich denke, ich könnte versuchen zu helfen... aber ich mag es nicht, schmutzig zu werden.\u0020",
                             "it":"Immagino che potrei provare ad aiutarti... ma non mi piace sporcarmi.\u0020",
                             "fr":"Je suppose que je pourrais essayer d'aider... mais je n'aime pas me salir.\u0020"
                          },

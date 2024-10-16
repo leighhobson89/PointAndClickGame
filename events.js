@@ -266,8 +266,28 @@ function resetHookBackToTreePosition() {
     showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 
-function makeCowNotTalkable() {
+function makeCowNotTalkableAndPliersUseable() {
     setNpcData(`npcCow`, `interactable.canTalk`, false);
+    setObjectData(`objectPliers`, `interactable.activeStatus`, true);
+}
+
+async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectId) {
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+
+    if (objectData.interactable.activeStatus && !objectData.interactable.alreadyUsed) {
+        showText(dialogueString, getColorTextPlayer());
+        setObjectData(`objectPliers`, `interactable.alreadyUsed`, true);
+    } else {
+        if (objectData.interactable.alreadyUsed) {
+            dialogueString = dialogueData.globalMessages.activeStatusNotSet[language];
+            showText(dialogueString, getColorTextPlayer());
+        } else {
+            dialogueString = dialogueData.globalMessages.alreadyUsedButRetained[language];
+            showText(dialogueString, getColorTextPlayer());
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

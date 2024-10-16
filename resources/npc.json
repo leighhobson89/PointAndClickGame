@@ -255,7 +255,7 @@
                 "questCutOffNumber": 1,
                 "questCutOffEvents": {
                     "1": {
-                        "event": "makeCowNotTalkable"
+                        "event": "makeCowNotTalkableAndPliersUseable"
                     }
                 },
                 "canUseWith": false,

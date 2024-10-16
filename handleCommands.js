@@ -366,17 +366,23 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
             drawInventory(0);
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
             return;
+        } else if (object1.usedOn.npcUseWith1 === objectId2) {
+            console.log("5: using object with npc - PASSED");
+            handleInventoryAdjustment(objectId1, quantity, false);
+            drawInventory(0);
+            useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
+            return;
         } else {
             dialogueString = dialogueData.cantBeUsedTogether[language];
             await showText(dialogueString, getColorTextPlayer());
-            console.log("5: items cannot be used together (environment object) - PASSED");
+            console.log("6: items cannot be used together (environment object) - PASSED");
             return;
         }
     }
 
     if (exitOrNot2) {
         if (object1.usedOn.objectUseWith1 === objectId2 && useTogetherLocation1 === getCurrentScreenId()) {
-            console.log("6: using object on exit - PASSED");
+            console.log("7: using object on exit - PASSED");
             handleInventoryAdjustment(objectId1, quantity, false);
             drawInventory(0);
             useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
@@ -384,13 +390,13 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
         } else {
             dialogueString = dialogueData.howWouldThatWorkWithThis[language];
             await showText(dialogueString, getColorTextPlayer());
-            console.log("7: wrong object for exit - PASSED");
+            console.log("8: wrong object for exit - PASSED");
             return;
         }
     }
 
     if (object1.usedOn.objectUseWith1 === objectId2 && object2.usedOn.objectUseWith1 === objectId1 && isObject2TrueNpcFalse) {
-        console.log("8: using two inventory items where location is important and location is correct - PASSED");
+        console.log("9: using two inventory items where location is important and location is correct - PASSED");
         handleInventoryAdjustment(objectId1, quantity, false);
         drawInventory(0);
         useItem(objectId1, objectId2, true, exitOrNot2, inventoryItem2, true, isObject2TrueNpcFalse, realVerbUsed);
@@ -398,7 +404,7 @@ export async function handleWith(objectId1, objectId2, exitOrNot2, inventoryItem
     } else {
         dialogueString = dialogueData.cantBeUsedTogether[language];
         await showText(dialogueString, getColorTextPlayer()); // Wait for the text to finish before proceeding
-        console.log("9: items just cant be used together at all - PASSED");
+        console.log("10: items just cant be used together at all - PASSED");
         return;
     }
 }
@@ -432,7 +438,11 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     }
 
     if (objectId2) {
-        object2 = objectData.objects[objectId2];
+        if (isObject2TrueNpcFalse) {
+            object2 = objectData.objects[objectId2];
+        } else {
+            object2 = npcData.npcs[objectId2];
+        }
     }
 
     if (!useWith && !objectId2) { //Use item in room
@@ -451,6 +461,11 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
             await showText(dialogueString, getColorTextPlayer());
         }
     } else { //useWith
+        if (!isObject2TrueNpcFalse) {
+            dialogueString = dialogueData.dialogue.npcInteractions.verbUse.useWithNpc1[objectId2][language];
+            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
+            return;
+        }
         if (!exitOrNot2 && isObject2TrueNpcFalse) {
             
             //add if it contains door then if alreadyUsed is true then return global already open message for doors
