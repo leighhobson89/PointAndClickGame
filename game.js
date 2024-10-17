@@ -57,11 +57,11 @@ export function gameLoop() {
         }
     }
     
-        drawPlayerNpcsAndObjects(ctx);
+    drawPlayerNpcsAndObjects(ctx);
 
-        if (getDisplayText().value1) {
-            drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
-        }
+    if (getDisplayText().value1) {
+        drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
+    }
 
     requestAnimationFrame(gameLoop);
 }

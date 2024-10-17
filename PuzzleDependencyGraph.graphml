@@ -437,7 +437,7 @@ In Den<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mod
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="163.7814207650274" x="812.6034943891768" y="577.5"/>
-          <y:Fill color="#FF6600" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="87.369140625" x="38.2061400700137" xml:space="preserve" y="38.2490234375">Give Dog<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
           <y:Shape type="rectangle"/>
@@ -448,7 +448,7 @@ In Den<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mod
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="163.7814207650274" x="628.8220736241501" y="577.5"/>
-          <y:Fill color="#FF6600" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="28.501953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="50.708984375" x="56.5362181950137" xml:space="preserve" y="38.2490234375">Bone<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
           <y:Shape type="rectangle"/>
@@ -963,20 +963,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e42" source="n36" target="n37">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="35.0">
-            <y:Point x="618.8220736241501" y="630.0"/>
-            <y:Point x="618.8220736241501" y="395.0"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e43" source="n37" target="n30">
+    <edge id="e42" source="n37" target="n30">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="55.5" ty="35.0">
@@ -989,7 +976,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e44" source="n38" target="n35">
+    <edge id="e43" source="n38" target="n35">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="0.0"/>
@@ -999,8 +986,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e45" source="n33" target="n39">
-      <data key="d9"/>
+    <edge id="e44" source="n33" target="n39">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="0.0"/>
@@ -1010,8 +996,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e46" source="n39" target="n37">
-      <data key="d9"/>
+    <edge id="e45" source="n39" target="n37">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="-35.0">
@@ -1024,8 +1009,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e47" source="n17" target="n34">
-      <data key="d9"/>
+    <edge id="e46" source="n17" target="n34">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-68.89836065573769" sy="26.25" tx="81.8907103825137" ty="0.0"/>
