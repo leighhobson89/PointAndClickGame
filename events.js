@@ -300,6 +300,9 @@ async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
     addItemToInventory('objectKeyToDen', 1);
     drawInventory(0);
 
+    setDialogueData('npcInteractions.verbLookAt.npcWomanLostMirror', '0', '1');
+    setNpcData(`npcWomanLostMirror`, `interactable.canTalk`, false);
+
     //woman accepts mirror and speaks saying will give key to Den
     //key to den added to inventory directly
     //woman goes to cantTalk state with correcvt dialogue

@@ -1136,6 +1136,13 @@
                     "de": "Schön, entspannt, aber sieht etwas verärgert aus.",
                     "it": "Bella, rilassata, ma sembra un po' irritata.",
                     "fr": "Belle, détendue, mais semble un peu contrariée."
+                },
+                "1": {
+                    "en": "She is engrossed in her make up and mirror!",
+                    "es": "¡Está absorta en su maquillaje y espejo!",
+                    "de": "Sie ist ganz in ihr Make-up und ihren Spiegel vertieft!",
+                    "it": "È completamente concentrata sul suo trucco e sullo specchio!",
+                    "fr": "Elle est absorbée par son maquillage et son miroir !"
                 }
             },
             "npcSeedyLookingGuy": {
@@ -1643,18 +1650,11 @@
                 },
                 "cantTalkDialogue":{
                    "0":{
-                      "en":"",
-                      "es":"",
-                      "de":"",
-                      "it":"",
-                      "fr":""
-                   },
-                   "1":{
-                      "en":"She looks busy attending to her make-up!",
-                      "es":"¡Parece que está ocupada con su maquillaje!",
-                      "de":"Sie sieht beschäftigt aus, während sie sich schminkt!",
-                      "it":"Sembra occupata a truccarsi!",
-                      "fr":"Elle a l'air occupée à se maquiller !"
+                        "en": "I need to finish doing my make-up, handsome!",
+                        "es": "¡Necesito terminar de hacerme el maquillaje, guapo!",
+                        "de": "Ich muss mein Make-up fertig machen, Hübscher!",
+                        "it": "Devo finire di truccarmi, bello!",
+                        "fr": "Je dois finir de me maquiller, beau gosse !"
                    }
                 }
              },
