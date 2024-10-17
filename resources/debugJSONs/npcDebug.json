@@ -248,7 +248,7 @@
             },
             "interactable": {
                 "canHover": true,
-                "canTalk": true,
+                "canTalk": false,
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,

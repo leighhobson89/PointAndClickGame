@@ -271,6 +271,10 @@ function resizeBowlInObjectsJSON() {
     setObjectData(`objectBowl`, `dimensions.height`, 1);
 }
 
+function makeCowTalkableAfterSpeakingToFarmer() { //add to npcFarmer when made him so that cant talk to cow until farmer spoke to you and asked to help it
+    setNpcData(`npcCow`, `interactable.canTalk`, true);
+}
+
 function makeCowNotTalkableAndPliersUseable() {
     setNpcData(`npcCow`, `interactable.canTalk`, false);
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
