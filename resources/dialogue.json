@@ -573,7 +573,14 @@
                    "de":"Eine vielseitige Holzschüssel.",
                    "it":"Una ciotola di legno multiuso.",
                    "fr":"Un bol en bois multi-usage."
-                }
+                },
+                "1":{
+                    "en": "A multi-purpose wooden bowl, complete with dog slurp, yuk!",
+                    "es": "Un cuenco de madera multiusos, completo con babas de perro, ¡qué asco!",
+                    "de": "Eine vielseitige Holzschüssel, komplett mit Hundeschlürfen, igitt!",
+                    "it": "Una ciotola di legno multiuso, completa di slurp di cane, che schifo!",
+                    "fr": "Un bol en bois multi-usage, avec des traces de slurp de chien, beurk !"
+                 }
              },
              "objectMilkInBowl":{
                 "0":{
@@ -1088,6 +1095,13 @@
                     "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
                     "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
                     "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
+                },
+                "1": {
+                    "en": "Old and disheveled, but not hungry!",
+                    "es": "Viejo y despeinado, ¡pero no hambriento!",
+                    "de": "Alt und zerzaust, aber nicht hungrig!",
+                    "it": "Vecchio e spettinato, ma non affamato!",
+                    "fr": "Vieux et débraillé, mais pas affamé !"
                 }
             },
             "npcTownDog": {
@@ -1097,6 +1111,13 @@
                     "de": "Hier Junge! Aww er sieht durstig aus!",
                     "it": "Qui ragazzo! Aww sembra che abbia sete!",
                     "fr": "Viens ici, mon grand ! Aww il a l'air assoiffé !"
+                },
+                "1": {
+                    "en": "That is one happy doggy!",
+                    "es": "¡Ese es un perrito muy feliz!",
+                    "de": "Das ist ein sehr glücklicher Hund!",
+                    "it": "Quello è un cagnolino davvero felice!",
+                    "fr": "C'est un chien bien heureux !"
                 }
             },
             "npcLibrarian": {
@@ -1284,25 +1305,18 @@
                             "de":"Grrr!",
                             "it":"Grrr!",
                             "fr":"Grrr!"
-                         },
-                         "1":{
-                            "en":"Ooo he isn't giving that bone up for anybody!",
-                            "es":"¡Ooo, no va a soltar ese hueso por nada!",
-                            "de":"Ooo, er gibt diesen Knochen für niemanden auf!",
-                            "it":"Ooo, non cederà quel osso a nessuno!",
-                            "fr":"Ooo, il ne lâchera pas ce os pour personne !"
                          }
                       },
                       "order":"10!",
                       "autoExitOption":{
                          "phase":{
                             "0":{
-                               "en":"",
-                               "es":"",
-                               "de":"",
-                               "it":"",
-                               "fr":""
-                            }
+                                "en":"Ooo he isn't giving that bone up for anybody!",
+                                "es":"¡Ooo, no va a soltar ese hueso por nada!",
+                                "de":"Ooo, er gibt diesen Knochen für niemanden auf!",
+                                "it":"Ooo, non cederà quel osso a nessuno!",
+                                "fr":"Ooo, il ne lâchera pas ce os pour personne !"
+                             }
                          },
                          "order":"0!"
                       }

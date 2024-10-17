@@ -160,7 +160,7 @@
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/townDog.png",
-                "s2": "./resources/npcs/townDog.png"
+                "s2": "./resources/npcs/townDogNoBone.png"
             },
             "gridPosition": {
                 "x": 30,

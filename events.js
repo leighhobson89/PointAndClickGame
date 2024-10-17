@@ -1,7 +1,7 @@
 import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
 import { setDialogueData, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
+import { addObjectToEnvironment, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -266,6 +266,11 @@ function resetHookBackToTreePosition() {
     showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 
+function resizeBowlInObjectsJSON() {
+    setObjectData(`objectBowl`, `dimensions.width`, 1);
+    setObjectData(`objectBowl`, `dimensions.height`, 1);
+}
+
 function makeCowNotTalkableAndPliersUseable() {
     setNpcData(`npcCow`, `interactable.canTalk`, false);
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
@@ -291,6 +296,58 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
             showText(dialogueString, getColorTextPlayer());
         }
     }
+}
+
+async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
+    const objectData = getObjectData().objects[objectId];
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+    const npcData = getNpcData().npcs[townDog];
+    const gridData = getGridData();
+
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const dialogueStringData = dialogueData.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
+
+    handleInventoryAdjustment(objectId, 1, true);
+    drawInventory(0);
+
+    setNpcData(`${townDog}`, `activeSpriteUrl`, 's2');
+
+    const gridPositionX = 34;
+    const gridPositionY = 18;
+
+    const offsetX = getObjectData().objects['objectBone'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectBone'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = offsetX - (0.6 * getCanvasCellWidth()); //change these to move object with fine control
+    const offSetAdjustmentY = 0; //change these to move object with fine control
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
+
+    addObjectToEnvironment('objectBowl', 31, 16, 0, 0, 30, 20); //add empty bowl back in for dog having drunk it
+
+    setObjectData(`objectBowl`, `dimensions.width`, 30);
+    setObjectData(`objectBowl`, `dimensions.height`, 20);
+    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
+
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'objectBone', true);
+    setObjectData(`objectBone`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectBone`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectBone`, `dimensions.width`, 20);
+    setObjectData(`objectBone`, `dimensions.height`, 12);
+    setObjectData(`objectBone`, `interactable.canPickUp`, true);
+    showHideObjectAndMakeHoverable('s2', 'objectBone', true); 
+    
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+    setGameState(getCutSceneState());
+
+    await showCutSceneDialogue(0, dialogueStringData, orderOfStartingDialogue, npcData);
+
+    setDialogueData('npcInteractions.verbLookAt.npcTownDog', '0', '1');
+    setDialogueData('objectInteractions.verbLookAt.objectBowl', '0', '1');
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
