@@ -1,1052 +1,1472 @@
-import { setInitialScreenId, urlNpcsDataDebug, urlObjectsDataDebug, setScrollingActive, getScrollingActive, setScrollDirection, getScrollDirection, setScrollPositionX, getScrollPositionX, getBeginGameStatus, getCanExitDialogueAtThisPoint, getCanvasCellHeight, getCanvasCellWidth, getCurrentExitOptionText, getCurrentlyMovingToAction, getCurrentScreenId, getCurrentScrollIndexDialogue, getCurrentStartIndexInventory, getCurrentXposNpc, getCurrentYposNpc, getCustomMouseCursor, getDialogueData, getDialogueOptionsScrollReserve, getDialogueScrollCount, getElements, getExitNumberToTransitionTo, getGameStateVariable, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getHoveringInterestingObjectOrExit, getInitialScreenId, getLanguage, getLanguageSelected, getLocalization, getMaxTexTDisplayWidth, getMenuState, getNavigationData, getNpcData, getObjectData, getObjectToBeUsedWithSecondItem, getPlayerInventory, getPlayerObject, getPreviousGameState, getSecondItemAlreadyHovered, getSlotsPerRowInInventory, getTextDisplayDuration, getTextQueue, getTransitioningToAnotherScreen, getTransitioningToDialogueState, getUpcomingAction, getVerbButtonConstructionStatus, getWaitingForSecondItem, getWalkSpeedPlayer, resetAllVariables, setBeginGameStatus, setCurrentlyMovingToAction, setCurrentScreenId, setCurrentScrollIndexDialogue, setCurrentStartIndexInventory, setCurrentXposNpc, setCurrentYposNpc, setCustomMouseCursor, setDialoguesData, setDialogueScrollCount, setDisplayText, setElements, setGridData, setHoverCell, setHoveringInterestingObjectOrExit, setIsDisplayingText, setLanguage, setLanguageSelected, setNavigationData, setNpcsData, setObjectsData, setObjectToBeUsedWithSecondItem, setPreviousGameState, setPreviousScreenId, setSecondItemAlreadyHovered, setTextQueue, setTransitioningNow, setUpcomingAction, setVerbButtonConstructionStatus, setWaitingForSecondItem, urlDialogueData, urlNavigationData, urlNpcsData, urlObjectsData, urlWalkableJSONS } from './constantsAndGlobalVars.js';
-import { reattachDialogueOptionListeners, updateDialogueDisplay } from "./dialogue.js";
-import { drawGrid, handleRoomTransition, initializePlayerPosition, processClickPoint, setGameState, startGame } from './game.js';
-import { constructCommand, performCommand } from './handleCommands.js';
-import { initLocalization, localize } from './localization.js';
-import { copySaveStringToClipBoard, loadGame, loadGameOption, saveGame } from './saveLoadGame.js';
+import {
+    getInitialBackgroundUrl,
+    setInitialBackgroundUrl,
+	setInitialScreenId,
+	urlNpcsDataDebug,
+	urlObjectsDataDebug,
+	setScrollingActive,
+	getScrollingActive,
+	setScrollDirection,
+	getScrollDirection,
+	setScrollPositionX,
+	getScrollPositionX,
+	getBeginGameStatus,
+	getCanExitDialogueAtThisPoint,
+	getCanvasCellHeight,
+	getCanvasCellWidth,
+	getCurrentExitOptionText,
+	getCurrentlyMovingToAction,
+	getCurrentScreenId,
+	getCurrentScrollIndexDialogue,
+	getCurrentStartIndexInventory,
+	getCurrentXposNpc,
+	getCurrentYposNpc,
+	getCustomMouseCursor,
+	getDialogueData,
+	getDialogueOptionsScrollReserve,
+	getDialogueScrollCount,
+	getElements,
+	getExitNumberToTransitionTo,
+	getGameStateVariable,
+	getGameVisibleActive,
+	getGridData,
+	getGridSizeX,
+	getGridSizeY,
+	getGridTargetX,
+	getGridTargetY,
+	getHoverCell,
+	getHoveringInterestingObjectOrExit,
+	getInitialScreenId,
+	getLanguage,
+	getLanguageSelected,
+	getLocalization,
+	getMaxTexTDisplayWidth,
+	getMenuState,
+	getNavigationData,
+	getNpcData,
+	getObjectData,
+	getObjectToBeUsedWithSecondItem,
+	getPlayerInventory,
+	getPlayerObject,
+	getPreviousGameState,
+	getSecondItemAlreadyHovered,
+	getSlotsPerRowInInventory,
+	getTextDisplayDuration,
+	getTextQueue,
+	getTransitioningToAnotherScreen,
+	getTransitioningToDialogueState,
+	getUpcomingAction,
+	getVerbButtonConstructionStatus,
+	getWaitingForSecondItem,
+	getWalkSpeedPlayer,
+	resetAllVariables,
+	setBeginGameStatus,
+	setCurrentlyMovingToAction,
+	setCurrentScreenId,
+	setCurrentScrollIndexDialogue,
+	setCurrentStartIndexInventory,
+	setCurrentXposNpc,
+	setCurrentYposNpc,
+	setCustomMouseCursor,
+	setDialoguesData,
+	setDialogueScrollCount,
+	setDisplayText,
+	setElements,
+	setGridData,
+	setHoverCell,
+	setHoveringInterestingObjectOrExit,
+	setIsDisplayingText,
+	setLanguage,
+	setLanguageSelected,
+	setNavigationData,
+	setNpcsData,
+	setObjectsData,
+	setObjectToBeUsedWithSecondItem,
+	setPreviousGameState,
+	setPreviousScreenId,
+	setSecondItemAlreadyHovered,
+	setTextQueue,
+	setTransitioningNow,
+	setUpcomingAction,
+	setVerbButtonConstructionStatus,
+	setWaitingForSecondItem,
+	urlDialogueData,
+	urlNavigationData,
+	urlNpcsData,
+	urlObjectsData,
+	urlWalkableJSONS,
+    INITIAL_GAME_ID_NORMAL,
+    INITIAL_GAME_ID_DEBUG,
+    INITIAL_GAME_BACKGROUND_URL_NORMAL,
+    INITIAL_GAME_BACKGROUND_URL_DEBUG
+} from "./constantsAndGlobalVars.js";
+import {
+	reattachDialogueOptionListeners,
+	updateDialogueDisplay,
+} from "./dialogue.js";
+import {
+	drawGrid,
+	handleRoomTransition,
+	initializePlayerPosition,
+	processClickPoint,
+	setGameState,
+	startGame,
+} from "./game.js";
+import { constructCommand, performCommand } from "./handleCommands.js";
+import { initLocalization, localize } from "./localization.js";
+import {
+	copySaveStringToClipBoard,
+	loadGame,
+	loadGameOption,
+	saveGame,
+} from "./saveLoadGame.js";
 
 let textTimer;
 
-document.addEventListener('DOMContentLoaded', async () => {
-    setElements();
-    getElements().customCursor.classList.add('d-none');
-    getElements().customCursor.style.transform = 'translate(-50%, -50%)';
-    loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsData, urlDialogueData, urlNpcsData);
+document.addEventListener("DOMContentLoaded", () => {
+	setElements();
+	getElements().customCursor.classList.add("d-none");
+	getElements().customCursor.style.transform = "translate(-50%, -50%)";
 
-    getElements().newGameMenuButton.addEventListener('click', (event) => {
-        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-        resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
-        setBeginGameStatus(true);
-        updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
-        disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
-        disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
-        setGameState(getGameVisibleActive());
-        startGame(getInitialScreenId());
-    });
+	getElements().newGameMenuButton.addEventListener("click", async (event) => {
+        await loadGameData(
+            urlWalkableJSONS,
+            urlNavigationData,
+            urlObjectsData,
+            urlDialogueData,
+            urlNpcsData,
+        );
 
-    getElements().debugRoomMenuButton.addEventListener('click', (event) => {
-        //switch to debug mode
-        loadGameData(urlWalkableJSONS, urlNavigationData, urlObjectsDataDebug, urlDialogueData, urlNpcsDataDebug);
-        setInitialScreenId('debugRoom');
-        //
-        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-        resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
-        setBeginGameStatus(true);
-        updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
-        disableActivateButton(getElements().resumeGameMenuButton, 'active', 'btn-primary');
-        disableActivateButton(getElements().saveGameButton, 'active', 'btn-primary');
-        setGameState(getGameVisibleActive());
-        startGame(getInitialScreenId());
-    });
+        setInitialScreenId(INITIAL_GAME_ID_NORMAL);
+        setCurrentScreenId(getInitialScreenId());
+        setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_NORMAL);
+        setInitialBackgroundImage();
 
-    getElements().resumeGameMenuButton.addEventListener('click', (event) => {
-        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-    
-        if (getPreviousGameState() !== null) {
-            setGameState(getPreviousGameState());
-            setPreviousGameState(null);
-        }
-    });
+		getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+		resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
+		setBeginGameStatus(true);
+		updateInteractionInfo(
+			localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"),
+			false,
+		);
+		disableActivateButton(
+			getElements().resumeGameMenuButton,
+			"active",
+			"btn-primary",
+		);
+		disableActivateButton(
+			getElements().saveGameButton,
+			"active",
+			"btn-primary",
+		);
+		setGameState(getGameVisibleActive());
+		startGame(getInitialScreenId());
+	});
 
-    getElements().returnToMenuButton.addEventListener('click', () => {
-        setPreviousGameState(getGameStateVariable());
-        setGameState(getMenuState());
-    });
+	getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
+        await loadGameData(
+            urlWalkableJSONS,
+            urlNavigationData,
+            urlObjectsDataDebug,
+            urlDialogueData,
+            urlNpcsDataDebug,
+        );
+		setInitialScreenId(INITIAL_GAME_ID_DEBUG);
+        setCurrentScreenId(getInitialScreenId());
+        setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_DEBUG);
+        setInitialBackgroundImage();
 
-    getElements().btnEnglish.addEventListener('click', () => {
-        handleLanguageChange('en');
-        setGameState(getMenuState());
-    });
+		getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+		resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
+		setBeginGameStatus(true);
+		updateInteractionInfo(
+			localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"),
+			false,
+		);
+		disableActivateButton(
+			getElements().resumeGameMenuButton,
+			"active",
+			"btn-primary",
+		);
+		disableActivateButton(
+			getElements().saveGameButton,
+			"active",
+			"btn-primary",
+		);
+		setGameState(getGameVisibleActive());
+		startGame(getInitialScreenId());
+        console.log(getCurrentScreenId());
+	});
 
-    getElements().btnSpanish.addEventListener('click', () => {
-        handleLanguageChange('es');
-        setGameState(getMenuState());
-    });
+	getElements().resumeGameMenuButton.addEventListener("click", (event) => {
+		getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
 
-    getElements().btnGerman.addEventListener('click', () => {
-        handleLanguageChange('de');
-        setGameState(getMenuState());
-    });
+		if (getPreviousGameState() !== null) {
+			setGameState(getPreviousGameState());
+			setPreviousGameState(null);
+		}
+	});
 
-    getElements().btnItalian.addEventListener('click', () => {
-        handleLanguageChange('it');
-        setGameState(getMenuState());
-    });
+	getElements().returnToMenuButton.addEventListener("click", () => {
+		setPreviousGameState(getGameStateVariable());
+		setGameState(getMenuState());
+	});
 
-    getElements().btnFrench.addEventListener('click', () => {
-        handleLanguageChange('fr');
-        setGameState(getMenuState());
-    });
+	getElements().btnEnglish.addEventListener("click", () => {
+		handleLanguageChange("en");
+		setGameState(getMenuState());
+	});
 
-    getElements().saveGameButton.addEventListener('click', function () {
-        getElements().overlay.classList.remove('d-none');
-        saveGame(true);
-    });
+	getElements().btnSpanish.addEventListener("click", () => {
+		handleLanguageChange("es");
+		setGameState(getMenuState());
+	});
 
-    getElements().loadGameButton.addEventListener('click', function () {
-        getElements().overlay.classList.remove('d-none');
-        loadGameOption();
-    });
+	getElements().btnGerman.addEventListener("click", () => {
+		handleLanguageChange("de");
+		setGameState(getMenuState());
+	});
 
-    getElements().copyButtonSavePopup.addEventListener('click', function () {
-        copySaveStringToClipBoard();
-    });
+	getElements().btnItalian.addEventListener("click", () => {
+		handleLanguageChange("it");
+		setGameState(getMenuState());
+	});
 
-    getElements().closeButtonSavePopup.addEventListener('click', function () {
-        getElements().saveLoadPopup.classList.add('d-none');
-        getElements().overlay.classList.add('d-none');
-    });
+	getElements().btnFrench.addEventListener("click", () => {
+		handleLanguageChange("fr");
+		setGameState(getMenuState());
+	});
 
-    getElements().loadStringButton.addEventListener('click', function () {
-        loadGame(true)
-            .then(() => {
-                setElements();
-                getElements().saveLoadPopup.classList.add('d-none');
-                document.getElementById('overlay').classList.add('d-none');
-                setGameState(getMenuState());
-            })
-            .catch((error) => {
-                console.error('Error loading game:', error);
-            });
-    });
+	getElements().saveGameButton.addEventListener("click", function () {
+		getElements().overlay.classList.remove("d-none");
+		saveGame(true);
+	});
 
-//------------------------------------------------------------------------------------------------------
-// VERB EVENT LISTENERS
-//------------------------------------------------------------------------------------------------------
+	getElements().loadGameButton.addEventListener("click", function () {
+		getElements().overlay.classList.remove("d-none");
+		loadGameOption();
+	});
 
-    getElements().btnLookAt.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().copyButtonSavePopup.addEventListener("click", function () {
+		copySaveStringToClipBoard();
+	});
 
-    getElements().btnPickUp.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().closeButtonSavePopup.addEventListener("click", function () {
+		getElements().saveLoadPopup.classList.add("d-none");
+		getElements().overlay.classList.add("d-none");
+	});
 
-    getElements().btnUse.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().loadStringButton.addEventListener("click", function () {
+		loadGame(true)
+			.then(() => {
+				setElements();
+				getElements().saveLoadPopup.classList.add("d-none");
+				document.getElementById("overlay").classList.add("d-none");
+				setGameState(getMenuState());
+			})
+			.catch((error) => {
+				console.error("Error loading game:", error);
+			});
+	});
 
-    getElements().btnOpen.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	//------------------------------------------------------------------------------------------------------
+	// VERB EVENT LISTENERS
+	//------------------------------------------------------------------------------------------------------
 
-    getElements().btnClose.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().btnLookAt.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-    getElements().btnPush.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().btnPickUp.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-    getElements().btnPull.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().btnUse.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-    getElements().btnTalkTo.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().btnOpen.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-    getElements().btnGive.addEventListener('click', function () {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            resetSecondItemState();
-            setVerbButtonConstructionStatus(this);
-            updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-        }
-    });
+	getElements().btnClose.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-//------------------------------------------------------------------------------------------------------
-// INVENTORY EVENT LISTENERS
-//------------------------------------------------------------------------------------------------------
+	getElements().btnPush.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-    // Event listeners for the up and down arrows
-getElements().inventoryUpArrow.addEventListener('click', handleInventoryUpArrowClick);
-getElements().inventoryDownArrow.addEventListener('click', handleInventoryDownArrowClick);
+	getElements().btnPull.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-// Convert NodeList to Array
-const inventoryItems = Array.from(document.querySelectorAll('.inventory-item'));
+	getElements().btnTalkTo.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-// Adding mouseover event listener for each inventory item
-inventoryItems.forEach(function(item) {
-    item.addEventListener('mouseover', function() {
-        const imgElement = item.querySelector('img');
-        const interactionText = getElements().interactionInfo.textContent;
+	getElements().btnGive.addEventListener("click", function () {
+		if (getGameStateVariable() === getGameVisibleActive()) {
+			resetSecondItemState();
+			setVerbButtonConstructionStatus(this);
+			updateInteractionInfo(
+				localize(
+					getVerbButtonConstructionStatus(),
+					getLanguage(),
+					"verbsActionsInteraction",
+				),
+				false,
+			);
+		}
+	});
 
-        if (imgElement) {
-            const objectId = imgElement.alt;
-            if (objectId !== "empty") {
-                const objectOrNpcName = getObjectData().objects[objectId].name[getLanguage()];
-                console.log(objectOrNpcName);
+	//------------------------------------------------------------------------------------------------------
+	// INVENTORY EVENT LISTENERS
+	//------------------------------------------------------------------------------------------------------
 
-                // Extract the verbs
-                const verbLookAt = localize('interactionLookAt', getLanguage(), 'verbsActionsInteraction');
-                const verbWalkTo = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
-                const verbWalking = localize('interactionWalking', getLanguage(), 'verbsActionsInteraction');
-                const verbTalkTo = localize('interactionTalkTo', getLanguage(), 'verbsActionsInteraction');
-                const verbPickUp = localize('interactionPickUp', getLanguage(), 'verbsActionsInteraction');
+	// Event listeners for the up and down arrows
+	getElements().inventoryUpArrow.addEventListener(
+		"click",
+		handleInventoryUpArrowClick,
+	);
+	getElements().inventoryDownArrow.addEventListener(
+		"click",
+		handleInventoryDownArrowClick,
+	);
 
-                if (interactionText.includes(verbWalkTo)) {
-                    setUpcomingAction(verbLookAt);
-                    if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) {
-                        updateInteractionInfo(getUpcomingAction() + " " + objectOrNpcName, false);
-                    }
-                } else if (!getWaitingForSecondItem() && interactionText !== verbWalking && interactionText !== verbWalkTo) {
-                    let words = interactionText.split(" ");
-                    let verbKey = null;
+	// Convert NodeList to Array
+	const inventoryItems = Array.from(
+		document.querySelectorAll(".inventory-item"),
+	);
 
-                    const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
-                    const firstTwoWords = words.slice(0, 2).join(" ");
-                    
-                    if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
-                    
-                    if (twoWordVerbs.includes(firstTwoWords)) {
-                        const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
-                        for (const [key, value] of Object.entries(verbsInteraction)) {
-                            if (value === firstTwoWords) {
-                                verbKey = key;
-                                break;
-                            }
-                        }
-                    } else {
-                        const verbsInteraction = getLocalization()[getLanguage()]['verbsActionsInteraction'];
-                        for (const [key, value] of Object.entries(verbsInteraction)) {
-                            if (value === words[0]) {
-                                verbKey = key;
-                                break;
-                            }
-                        }
-                    }
-                    if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) { 
-                        updateInteractionInfo(localize(verbKey, getLanguage(), 'verbsActionsInteraction') + " " + objectOrNpcName, false);
-                    }
-                    }
+	// Adding mouseover event listener for each inventory item
+	inventoryItems.forEach(function (item) {
+		item.addEventListener("mouseover", function () {
+			const imgElement = item.querySelector("img");
+			const interactionText = getElements().interactionInfo.textContent;
 
-                if (getWaitingForSecondItem()) {
-                    if (!getSecondItemAlreadyHovered()) {
-                        if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                            updateInteractionInfo(interactionText + " " + objectOrNpcName, false);
-                            setSecondItemAlreadyHovered(objectOrNpcName);
-                        }
-                    } else if (objectOrNpcName !== getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                        let updatedText = interactionText.replace(new RegExp(getSecondItemAlreadyHovered()), objectOrNpcName);
-                        updateInteractionInfo(updatedText, false);
-                        setSecondItemAlreadyHovered(objectOrNpcName);
-                    } else if (objectOrNpcName === getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()]) {
-                        return;
-                    }
-                }
-            }
-        }
-    });
-});
+			if (imgElement) {
+				const objectId = imgElement.alt;
+				if (objectId !== "empty") {
+					const objectOrNpcName =
+						getObjectData().objects[objectId].name[getLanguage()];
+					console.log(objectOrNpcName);
 
-// Adding click event listener for each inventory item
-inventoryItems.some(function(item) {
-    item.addEventListener('click', function() {
-        const interactionText = getElements().interactionInfo.textContent;
-        if (!getSecondItemAlreadyHovered()) {
-            setUpcomingAction(interactionText);
-        }
+					// Extract the verbs
+					const verbLookAt = localize(
+						"interactionLookAt",
+						getLanguage(),
+						"verbsActionsInteraction",
+					);
+					const verbWalkTo = localize(
+						"interactionWalkTo",
+						getLanguage(),
+						"verbsActionsInteraction",
+					);
+					const verbWalking = localize(
+						"interactionWalking",
+						getLanguage(),
+						"verbsActionsInteraction",
+					);
+					const verbTalkTo = localize(
+						"interactionTalkTo",
+						getLanguage(),
+						"verbsActionsInteraction",
+					);
+					const verbPickUp = localize(
+						"interactionPickUp",
+						getLanguage(),
+						"verbsActionsInteraction",
+					);
 
-        const command = constructCommand(getUpcomingAction(), true);
-        console.log("command to perform: " + command);
-        performCommand(command, true);
-    });
+					if (interactionText.includes(verbWalkTo)) {
+						setUpcomingAction(verbLookAt);
+						if (
+							getGameStateVariable() === getGameVisibleActive() &&
+							!getTransitioningToDialogueState()
+						) {
+							updateInteractionInfo(
+								getUpcomingAction() + " " + objectOrNpcName,
+								false,
+							);
+						}
+					} else if (
+						!getWaitingForSecondItem() &&
+						interactionText !== verbWalking &&
+						interactionText !== verbWalkTo
+					) {
+						let words = interactionText.split(" ");
+						let verbKey = null;
 
-    return false; // Continue iterating
-});
+						const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
+						const firstTwoWords = words.slice(0, 2).join(" ");
 
-//--------------------------------------------------------------------------------------------------------------
-// DIALOGUE EVENT LISTENERS
-//--------------------------------------------------------------------------------------------------------------
+						if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
 
+						if (twoWordVerbs.includes(firstTwoWords)) {
+							const verbsInteraction =
+								getLocalization()[getLanguage()]["verbsActionsInteraction"];
+							for (const [key, value] of Object.entries(verbsInteraction)) {
+								if (value === firstTwoWords) {
+									verbKey = key;
+									break;
+								}
+							}
+						} else {
+							const verbsInteraction =
+								getLocalization()[getLanguage()]["verbsActionsInteraction"];
+							for (const [key, value] of Object.entries(verbsInteraction)) {
+								if (value === words[0]) {
+									verbKey = key;
+									break;
+								}
+							}
+						}
+						if (
+							getGameStateVariable() === getGameVisibleActive() &&
+							!getTransitioningToDialogueState()
+						) {
+							updateInteractionInfo(
+								localize(verbKey, getLanguage(), "verbsActionsInteraction") +
+									" " +
+									objectOrNpcName,
+								false,
+							);
+						}
+					}
 
-getElements().dialogueDownArrow.addEventListener("click", scrollDown);
-getElements().dialogueUpArrow.addEventListener("click", scrollUp);
+					if (getWaitingForSecondItem()) {
+						if (!getSecondItemAlreadyHovered()) {
+							if (
+								objectOrNpcName !==
+								getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
+									getLanguage()
+								]
+							) {
+								updateInteractionInfo(
+									interactionText + " " + objectOrNpcName,
+									false,
+								);
+								setSecondItemAlreadyHovered(objectOrNpcName);
+							}
+						} else if (
+							objectOrNpcName !==
+							getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
+								getLanguage()
+							]
+						) {
+							let updatedText = interactionText.replace(
+								new RegExp(getSecondItemAlreadyHovered()),
+								objectOrNpcName,
+							);
+							updateInteractionInfo(updatedText, false);
+							setSecondItemAlreadyHovered(objectOrNpcName);
+						} else if (
+							objectOrNpcName ===
+							getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
+								getLanguage()
+							]
+						) {
+							return;
+						}
+					}
+				}
+			}
+		});
+	});
 
-// Initialize canvas event listener and set the initial game state
-initializeCanvasEventListener();
-setGameState(getMenuState());
-handleLanguageChange(getLanguageSelected());
+	// Adding click event listener for each inventory item
+	inventoryItems.some(function (item) {
+		item.addEventListener("click", function () {
+			const interactionText = getElements().interactionInfo.textContent;
+			if (!getSecondItemAlreadyHovered()) {
+				setUpcomingAction(interactionText);
+			}
 
+			const command = constructCommand(getUpcomingAction(), true);
+			console.log("command to perform: " + command);
+			performCommand(command, true);
+		});
+
+		return false; // Continue iterating
+	});
+
+	//--------------------------------------------------------------------------------------------------------------
+	// DIALOGUE EVENT LISTENERS
+	//--------------------------------------------------------------------------------------------------------------
+
+	getElements().dialogueDownArrow.addEventListener("click", scrollDown);
+	getElements().dialogueUpArrow.addEventListener("click", scrollUp);
+
+	// Initialize canvas event listener and set the initial game state
+	initializeCanvasEventListener();
+	setGameState(getMenuState());
+	handleLanguageChange(getLanguageSelected());
 });
 
 const handleInventoryUpArrowClick = () => {
-    if (getGameStateVariable() === getGameVisibleActive()) {
-        if (getCurrentStartIndexInventory() > 0) {
-            setCurrentStartIndexInventory(getCurrentStartIndexInventory() - getSlotsPerRowInInventory());
-            drawInventory(getCurrentStartIndexInventory());
-        }
-    }   
+	if (getGameStateVariable() === getGameVisibleActive()) {
+		if (getCurrentStartIndexInventory() > 0) {
+			setCurrentStartIndexInventory(
+				getCurrentStartIndexInventory() - getSlotsPerRowInInventory(),
+			);
+			drawInventory(getCurrentStartIndexInventory());
+		}
+	}
 };
 
 const handleInventoryDownArrowClick = () => {
-    if (getGameStateVariable() === getGameVisibleActive()) {
-        const inventory = getPlayerInventory();
-        const totalSlots = Object.keys(inventory).length;
-    
-        if (getCurrentStartIndexInventory() + (getSlotsPerRowInInventory() * 2) < totalSlots) {
-            setCurrentStartIndexInventory(getCurrentStartIndexInventory() + getSlotsPerRowInInventory());
-            drawInventory(getCurrentStartIndexInventory());
-        }
-    }
+	if (getGameStateVariable() === getGameVisibleActive()) {
+		const inventory = getPlayerInventory();
+		const totalSlots = Object.keys(inventory).length;
+
+		if (
+			getCurrentStartIndexInventory() + getSlotsPerRowInInventory() * 2 <
+			totalSlots
+		) {
+			setCurrentStartIndexInventory(
+				getCurrentStartIndexInventory() + getSlotsPerRowInInventory(),
+			);
+			drawInventory(getCurrentStartIndexInventory());
+		}
+	}
 };
 
 export function initializeCanvasEventListener() {
-    const canvas = getElements().canvas;
+	const canvas = getElements().canvas;
 
-    canvas.addEventListener('click', handleCanvasClick);
-    canvas.addEventListener('mouseenter', enableCustomCursor);
-    canvas.addEventListener('mouseleave', disableCustomCursor);
-    canvas.addEventListener('mousemove', trackCursor);
+	canvas.addEventListener("click", handleCanvasClick);
+	canvas.addEventListener("mouseenter", enableCustomCursor);
+	canvas.addEventListener("mouseleave", disableCustomCursor);
+	canvas.addEventListener("mousemove", trackCursor);
 }
 
 function trackCursor(event) {
-    getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+	getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
 }
 
 function enableCustomCursor() {
-    const canvas = getElements().canvas;
-    canvas.style.cursor = 'none';
-    getElements().customCursor.classList.remove('d-none');
+	const canvas = getElements().canvas;
+	canvas.style.cursor = "none";
+	getElements().customCursor.classList.remove("d-none");
 }
 
 function disableCustomCursor() {
-    const canvas = getElements().canvas;
-    canvas.style.cursor = 'pointer';
-    getElements().customCursor.classList.add('d-none');
+	const canvas = getElements().canvas;
+	canvas.style.cursor = "pointer";
+	getElements().customCursor.classList.add("d-none");
 }
 
 export function handleMouseMove(event, ctx) {
-    const canvas = getElements().canvas;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    const gridData = getGridData();
-    let interactionText = getElements().interactionInfo.textContent;
+	const canvas = getElements().canvas;
+	const rect = canvas.getBoundingClientRect();
+	const mouseX = event.clientX - rect.left;
+	const mouseY = event.clientY - rect.top;
+	const gridData = getGridData();
+	let interactionText = getElements().interactionInfo.textContent;
 
-    const hoverX = Math.floor(mouseX / getCanvasCellWidth());
-    const hoverY = Math.floor(mouseY / getCanvasCellHeight());
+	const hoverX = Math.floor(mouseX / getCanvasCellWidth());
+	const hoverY = Math.floor(mouseY / getCanvasCellHeight());
 
-    if (hoverX >= 0 && hoverX < getGridSizeX() && hoverY >= 0 && hoverY < getGridSizeY()) {
-        if (getGameStateVariable() === getGameVisibleActive() && !getTransitioningToDialogueState()) {
-            const cellValue = gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
+	if (
+		hoverX >= 0 &&
+		hoverX < getGridSizeX() &&
+		hoverY >= 0 &&
+		hoverY < getGridSizeY()
+	) {
+		if (
+			getGameStateVariable() === getGameVisibleActive() &&
+			!getTransitioningToDialogueState()
+		) {
+			const cellValue =
+				gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
 
-        const walkable = (cellValue.startsWith('e') || cellValue.startsWith('w'));
+			const walkable = cellValue.startsWith("e") || cellValue.startsWith("w");
 
-        if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
-            setHoverCell(hoverX, hoverY);
+			if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
+				setHoverCell(hoverX, hoverY);
 
-            console.log(`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`); //, zPos: ${getZPosHover()}
-            //DEBUG
-            drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
-            //
-        }
-        
-        setHoveringInterestingObjectOrExit(cellValue.startsWith('e') || cellValue.startsWith('o') || cellValue.startsWith('c'));
+				console.log(
+					`Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
+				); //, zPos: ${getZPosHover()}
+				//DEBUG
+				drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
+				//
+			}
 
-        if (!getWaitingForSecondItem() && getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
-            const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
-            if (screenOrObjectNameAndHoverStatus[1]){
-                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
-            }
-        } else {
-            if (!getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
-                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
-            }
-            if (!getWaitingForSecondItem() && getVerbButtonConstructionStatus() !== 'interactionWalkTo') {
-                updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction'), false);
-            }
-            if (!getWaitingForSecondItem() && !getCurrentlyMovingToAction() && getVerbButtonConstructionStatus() !== 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
-                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
-                const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
-                if (screenOrObjectNameAndHoverStatus[1]){
-                    updateInteractionInfo(localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + " " + screenOrObjectName, false);
-                }
-            }
-        }
+			setHoveringInterestingObjectOrExit(
+				cellValue.startsWith("e") ||
+					cellValue.startsWith("o") ||
+					cellValue.startsWith("c"),
+			);
 
-        if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
-            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
-            const screenObjectOrNpcName = screenOrObjectNameAndHoverStatus[0];
-            if (screenOrObjectNameAndHoverStatus[1] && !getCurrentlyMovingToAction()){
-                if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
-                    console.log(interactionText);
-                    console.log(interactionText + " " + screenObjectOrNpcName);
-    
-                    const oldItem = getSecondItemAlreadyHovered();
-    
-                    if (interactionText.includes(oldItem)) {
-                        const index = interactionText.indexOf(oldItem);
-                        interactionText = interactionText.substring(0, index);
-                    }
-    
-                    updateInteractionInfo(interactionText + " " + screenObjectOrNpcName, false);
-                    setSecondItemAlreadyHovered(screenObjectOrNpcName);
-                }
-            }
-        }
+			if (
+				!getWaitingForSecondItem() &&
+				getHoveringInterestingObjectOrExit() &&
+				!getCurrentlyMovingToAction() &&
+				getVerbButtonConstructionStatus() === "interactionWalkTo"
+			) {
+				const screenOrObjectNameAndHoverStatus =
+					returnHoveredInterestingObjectOrExitName(cellValue);
+				const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+				if (screenOrObjectNameAndHoverStatus[1]) {
+					updateInteractionInfo(
+						localize(
+							"interactionWalkTo",
+							getLanguage(),
+							"verbsActionsInteraction",
+						) +
+							" " +
+							screenOrObjectName,
+						false,
+					);
+				}
+			} else {
+				if (
+					!getWaitingForSecondItem() &&
+					!getHoveringInterestingObjectOrExit() &&
+					!getCurrentlyMovingToAction() &&
+					getVerbButtonConstructionStatus() === "interactionWalkTo"
+				) {
+					updateInteractionInfo(
+						localize(
+							"interactionWalkTo",
+							getLanguage(),
+							"verbsActionsInteraction",
+						),
+						false,
+					);
+				}
+				if (
+					!getWaitingForSecondItem() &&
+					getVerbButtonConstructionStatus() !== "interactionWalkTo"
+				) {
+					updateInteractionInfo(
+						localize(
+							getVerbButtonConstructionStatus(),
+							getLanguage(),
+							"verbsActionsInteraction",
+						),
+						false,
+					);
+				}
+				if (
+					!getWaitingForSecondItem() &&
+					!getCurrentlyMovingToAction() &&
+					getVerbButtonConstructionStatus() !== "interactionWalkTo" &&
+					getHoveringInterestingObjectOrExit()
+				) {
+					const screenOrObjectNameAndHoverStatus =
+						returnHoveredInterestingObjectOrExitName(cellValue);
+					const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+					if (screenOrObjectNameAndHoverStatus[1]) {
+						updateInteractionInfo(
+							localize(
+								getVerbButtonConstructionStatus(),
+								getLanguage(),
+								"verbsActionsInteraction",
+							) +
+								" " +
+								screenOrObjectName,
+							false,
+						);
+					}
+				}
+			}
 
-        if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
-            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
-            const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+			if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
+				const screenOrObjectNameAndHoverStatus =
+					returnHoveredInterestingObjectOrExitName(cellValue);
+				const screenObjectOrNpcName = screenOrObjectNameAndHoverStatus[0];
+				if (
+					screenOrObjectNameAndHoverStatus[1] &&
+					!getCurrentlyMovingToAction()
+				) {
+					if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
+						console.log(interactionText);
+						console.log(interactionText + " " + screenObjectOrNpcName);
 
-            if (screenOrObjectNameAndHoverStatus[1]){
-                if (getSecondItemAlreadyHovered() !== screenOrObjectName && !getCurrentlyMovingToAction()) {
-                    const updatedText = interactionText.replace(new RegExp("\\s" + getSecondItemAlreadyHovered()), "");
-                    updateInteractionInfo(updatedText, false);
-                    setSecondItemAlreadyHovered(null);
-                }
-            }
-        }
+						const oldItem = getSecondItemAlreadyHovered();
 
-        if (getHoveringInterestingObjectOrExit()) {
-            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
-            if (screenOrObjectNameAndHoverStatus[1]) {
-                setCustomMouseCursor(getCustomMouseCursor('hoveringInteresting'));
-            } else {
-                setCustomMouseCursor(getCustomMouseCursor('normal'));
-            }
-        } else {
-            setCustomMouseCursor(getCustomMouseCursor('normal'));
-        }
-        }
-    }
+						if (interactionText.includes(oldItem)) {
+							const index = interactionText.indexOf(oldItem);
+							interactionText = interactionText.substring(0, index);
+						}
+
+						updateInteractionInfo(
+							interactionText + " " + screenObjectOrNpcName,
+							false,
+						);
+						setSecondItemAlreadyHovered(screenObjectOrNpcName);
+					}
+				}
+			}
+
+			if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
+				const screenOrObjectNameAndHoverStatus =
+					returnHoveredInterestingObjectOrExitName(cellValue);
+				const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
+
+				if (screenOrObjectNameAndHoverStatus[1]) {
+					if (
+						getSecondItemAlreadyHovered() !== screenOrObjectName &&
+						!getCurrentlyMovingToAction()
+					) {
+						const updatedText = interactionText.replace(
+							new RegExp("\\s" + getSecondItemAlreadyHovered()),
+							"",
+						);
+						updateInteractionInfo(updatedText, false);
+						setSecondItemAlreadyHovered(null);
+					}
+				}
+			}
+
+			if (getHoveringInterestingObjectOrExit()) {
+				const screenOrObjectNameAndHoverStatus =
+					returnHoveredInterestingObjectOrExitName(cellValue);
+				if (screenOrObjectNameAndHoverStatus[1]) {
+					setCustomMouseCursor(getCustomMouseCursor("hoveringInteresting"));
+				} else {
+					setCustomMouseCursor(getCustomMouseCursor("normal"));
+				}
+			} else {
+				setCustomMouseCursor(getCustomMouseCursor("normal"));
+			}
+		}
+	}
 }
 
 export function returnHoveredInterestingObjectOrExitName(cellValue) {
-    if (cellValue && (cellValue.startsWith('e') || cellValue.startsWith('o') || cellValue.startsWith('c'))) {
-        const currentScreenId = getCurrentScreenId();
-        const navigationData = getNavigationData();
-        const objectData = getObjectData();
-        const npcData = getNpcData();
-        const language = getLanguage();
+	if (
+		cellValue &&
+		(cellValue.startsWith("e") ||
+			cellValue.startsWith("o") ||
+			cellValue.startsWith("c"))
+	) {
+		const currentScreenId = getCurrentScreenId();
+		const navigationData = getNavigationData();
+		const objectData = getObjectData();
+		const npcData = getNpcData();
+		const language = getLanguage();
 
-        // If it is an exit
-        if (navigationData[currentScreenId] && cellValue.startsWith('e')) {
-            const exitId = navigationData[currentScreenId].exits[cellValue].connectsTo;
+		// If it is an exit
+		if (navigationData[currentScreenId] && cellValue.startsWith("e")) {
+			const exitId =
+				navigationData[currentScreenId].exits[cellValue].connectsTo;
 
-            if (navigationData[exitId]) {
-                return [navigationData[exitId][language], true];
-            }
-        }
+			if (navigationData[exitId]) {
+				return [navigationData[exitId][language], true];
+			}
+		}
 
-        // If it is an object
-        if (navigationData[currentScreenId] && cellValue.startsWith('o')) {
-            const objectId = cellValue.substring(1);
-            const objectName = objectData.objects[objectId]?.name[language];
-            const canHover = objectData.objects[objectId].interactable.canHover;
+		// If it is an object
+		if (navigationData[currentScreenId] && cellValue.startsWith("o")) {
+			const objectId = cellValue.substring(1);
+			const objectName = objectData.objects[objectId]?.name[language];
+			const canHover = objectData.objects[objectId].interactable.canHover;
 
-            return [objectName, canHover];
-        }
+			return [objectName, canHover];
+		}
 
-        // If it is an npc
-        if (navigationData[currentScreenId] && cellValue.startsWith('c')) {
-            const npcId = cellValue.substring(1);
-            const npcName = npcData.npcs[npcId]?.name[language];
-            const canHover = npcData.npcs[npcId]?.interactable.canHover;
+		// If it is an npc
+		if (navigationData[currentScreenId] && cellValue.startsWith("c")) {
+			const npcId = cellValue.substring(1);
+			const npcName = npcData.npcs[npcId]?.name[language];
+			const canHover = npcData.npcs[npcId]?.interactable.canHover;
 
-            return [npcName, canHover];
-        }
-    }
+			return [npcName, canHover];
+		}
+	}
 
-    return [null, null];
+	return [null, null];
 }
 
 function handleCanvasClick(event) {
-    console.log (getGameStateVariable());
-    console.log (getGameVisibleActive());
-    if (getGameStateVariable() === getGameVisibleActive()) {
-        if (getBeginGameStatus()) {
-            setBeginGameStatus(false);
-        }
-    
-        const canvas = getElements().canvas;
-        const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
-        
-        console.log(`Click Coordinates: (${clickX}, ${clickY})`);
-        
-        const clickPoint = { x: clickX, y: clickY};
-        
-        processClickPoint(clickPoint, true);
-    }
+	console.log(getGameStateVariable());
+	console.log(getGameVisibleActive());
+	if (getGameStateVariable() === getGameVisibleActive()) {
+		if (getBeginGameStatus()) {
+			setBeginGameStatus(false);
+		}
+
+		const canvas = getElements().canvas;
+		const rect = canvas.getBoundingClientRect();
+		const clickX = event.clientX - rect.left;
+		const clickY = event.clientY - rect.top;
+
+		console.log(`Click Coordinates: (${clickX}, ${clickY})`);
+
+		const clickPoint = { x: clickX, y: clickY };
+
+		processClickPoint(clickPoint, true);
+	}
 }
 
 async function setElementsLanguageText() {
-    getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage(), 'ui')}</h2>`;
-    getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage(), 'ui')}`;
-    getElements().resumeGameMenuButton.innerHTML = `${localize('resumeGame', getLanguage(), 'ui')}`;
-    getElements().loadGameButton.innerHTML = `${localize('loadGame', getLanguage(), 'ui')}`;
-    getElements().saveGameButton.innerHTML = `${localize('saveGame', getLanguage(), 'ui')}`;
-    getElements().loadStringButton.innerHTML = `${localize('loadButton', getLanguage(), 'ui')}`;
+	getElements().menuTitle.innerHTML = `<h2>${localize("menuTitle", getLanguage(), "ui")}</h2>`;
+	getElements().newGameMenuButton.innerHTML = `${localize("newGame", getLanguage(), "ui")}`;
+	getElements().resumeGameMenuButton.innerHTML = `${localize("resumeGame", getLanguage(), "ui")}`;
+	getElements().loadGameButton.innerHTML = `${localize("loadGame", getLanguage(), "ui")}`;
+	getElements().saveGameButton.innerHTML = `${localize("saveGame", getLanguage(), "ui")}`;
+	getElements().loadStringButton.innerHTML = `${localize("loadButton", getLanguage(), "ui")}`;
 }
 
 export async function handleLanguageChange(languageCode) {
-    setLanguageSelected(languageCode);
-    await setupLanguageAndLocalization();
-    setElementsLanguageText();
+	setLanguageSelected(languageCode);
+	await setupLanguageAndLocalization();
+	setElementsLanguageText();
 }
 
 async function setupLanguageAndLocalization() {
-    setLanguage(getLanguageSelected());
-    await initLocalization(getLanguage());
+	setLanguage(getLanguageSelected());
+	await initLocalization(getLanguage());
 }
 
 export function disableActivateButton(button, action, activeClass) {
-    switch (action) {
-        case 'active':
-            button.classList.remove('disabled');
-            button.classList.add(activeClass);
-            break;
-        case 'disable':
-            button.classList.remove(activeClass);
-            button.classList.add('disabled');
-            break;
-    }
+	switch (action) {
+		case "active":
+			button.classList.remove("disabled");
+			button.classList.add(activeClass);
+			break;
+		case "disable":
+			button.classList.remove(activeClass);
+			button.classList.add("disabled");
+			break;
+	}
 }
 
 export function animateTransitionAndChangeBackground() {
-    const overlay = document.getElementById('overlayCanvas');
-    getElements().overlayCanvas.style.display = 'block';
-    getElements().customCursor.classList.add('d-none');
+	const overlay = document.getElementById("overlayCanvas");
+	getElements().overlayCanvas.style.display = "block";
+	getElements().customCursor.classList.add("d-none");
 
-    requestAnimationFrame(() => {
-        getElements().overlayCanvas.classList.add('visible');
-        getElements().overlayCanvas.classList.remove('hidden');
-    });
+	requestAnimationFrame(() => {
+		getElements().overlayCanvas.classList.add("visible");
+		getElements().overlayCanvas.classList.remove("hidden");
+	});
 
-    getElements().overlayCanvas.addEventListener('transitionend', () => {
-        const newScreenId = handleRoomTransition();
-        const exit = 'e' + getExitNumberToTransitionTo();
+	getElements().overlayCanvas.addEventListener(
+		"transitionend",
+		() => {
+			const newScreenId = handleRoomTransition();
+			const exit = "e" + getExitNumberToTransitionTo();
 
-        const startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
-        const startX = startPosition.x;
-        const startY = startPosition.y;
+			const startPosition =
+				getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+			const startX = startPosition.x;
+			const startY = startPosition.y;
 
-        initializePlayerPosition(startX, startY);
-        setDisplayText('', null);
-        fadeBackToGameInTransition();
-        
-        setTransitioningNow(true);
-        canvas.style.pointerEvents = 'none';
-        processClickPoint({
-            x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.x,
-            y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.y
-        }, false);
-        setPreviousScreenId(getCurrentScreenId());
-        setCurrentScreenId(newScreenId);
-    }, { once: true });
+			initializePlayerPosition(startX, startY);
+			setDisplayText("", null);
+			fadeBackToGameInTransition();
+
+			setTransitioningNow(true);
+			canvas.style.pointerEvents = "none";
+			processClickPoint(
+				{
+					x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
+						.x,
+					y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
+						.y,
+				},
+				false,
+			);
+			setPreviousScreenId(getCurrentScreenId());
+			setCurrentScreenId(newScreenId);
+		},
+		{ once: true },
+	);
 }
 
 export function fadeBackToGameInTransition() {
-    getElements().overlayCanvas.classList.add('hidden');
-    getElements().overlayCanvas.classList.remove('visible');
+	getElements().overlayCanvas.classList.add("hidden");
+	getElements().overlayCanvas.classList.remove("visible");
 
-    requestAnimationFrame(() => {
-        getElements().overlayCanvas.classList.remove('visible');
-        getElements().overlayCanvas.classList.add('hidden');
-    });
+	requestAnimationFrame(() => {
+		getElements().overlayCanvas.classList.remove("visible");
+		getElements().overlayCanvas.classList.add("hidden");
+	});
 
-    getElements().overlayCanvas.addEventListener('transitionend', () => {
-        getElements().overlayCanvas.classList.add('hidden');
-        getElements().overlayCanvas.style.display = 'none';
-        console.log("fade transition complete!");
-    }, { once: true });
+	getElements().overlayCanvas.addEventListener(
+		"transitionend",
+		() => {
+			getElements().overlayCanvas.classList.add("hidden");
+			getElements().overlayCanvas.style.display = "none";
+			console.log("fade transition complete!");
+		},
+		{ once: true },
+	);
 }
 
 export function updateInteractionInfo(text, action) {
-    if (action) {
-        setCurrentlyMovingToAction(true);
-    }
-    const interactionInfo = getElements().interactionInfo;
-    if (interactionInfo) {
-        interactionInfo.textContent = text;
-        if (action) {
-            setUpcomingAction(interactionInfo.textContent);
-            interactionInfo.style.color = 'rgb(255, 255, 0)';
-            interactionInfo.style.fontWeight = 'bold';
-        } else {
-            interactionInfo.style.color = 'rgb(255, 255, 255)';
-            interactionInfo.style.fontWeight = 'normal';
-        }
-    } else {
-        console.error('Interaction info element not found');
-    }
+	if (action) {
+		setCurrentlyMovingToAction(true);
+	}
+	const interactionInfo = getElements().interactionInfo;
+	if (interactionInfo) {
+		interactionInfo.textContent = text;
+		if (action) {
+			setUpcomingAction(interactionInfo.textContent);
+			interactionInfo.style.color = "rgb(255, 255, 0)";
+			interactionInfo.style.fontWeight = "bold";
+		} else {
+			interactionInfo.style.color = "rgb(255, 255, 255)";
+			interactionInfo.style.fontWeight = "normal";
+		}
+	} else {
+		console.error("Interaction info element not found");
+	}
 }
 
 export function drawInventory(startIndex) {
-    const inventory = getPlayerInventory();
-    const inventoryDivs = document.querySelectorAll('.inventory-item');
+	const inventory = getPlayerInventory();
+	const inventoryDivs = document.querySelectorAll(".inventory-item");
 
-    inventoryDivs.forEach((div, index) => {
-        div.innerHTML = '';
+	inventoryDivs.forEach((div, index) => {
+		div.innerHTML = "";
 
-        const slotIndex = startIndex + index;
-        const slotKey = `slot${slotIndex + 1}`;
-        const inventorySlot = inventory[slotKey];
+		const slotIndex = startIndex + index;
+		const slotKey = `slot${slotIndex + 1}`;
+		const inventorySlot = inventory[slotKey];
 
-        if (inventorySlot) {
-            const objectId = inventorySlot.object;
-            const objectData = getObjectData().objects[objectId];
-            const imageUrl = objectData.inventoryUrl;
+		if (inventorySlot) {
+			const objectId = inventorySlot.object;
+			const objectData = getObjectData().objects[objectId];
+			const imageUrl = objectData.inventoryUrl;
 
-            const imgTag = `<img src="${imageUrl}" alt="${objectId}" style="width: 85%; height: 85%;" class="inventory-img" />`;
+			const imgTag = `<img src="${imageUrl}" alt="${objectId}" style="width: 85%; height: 85%;" class="inventory-img" />`;
 
-            div.innerHTML = imgTag;
+			div.innerHTML = imgTag;
 
-            const number = inventorySlot.quantity || null;
-            let numberSpan;
+			const number = inventorySlot.quantity || null;
+			let numberSpan;
 
-            if (number !== null) {
-                if (number > 1) {
-                    numberSpan = `<span class="inventory-number">${number}</span>`;
-                    div.classList.add('show-triangle');
-                } else {
-                    numberSpan = `<span class="inventory-number"></span>`;
-                    div.classList.remove('show-triangle');
-                }
+			if (number !== null) {
+				if (number > 1) {
+					numberSpan = `<span class="inventory-number">${number}</span>`;
+					div.classList.add("show-triangle");
+				} else {
+					numberSpan = `<span class="inventory-number"></span>`;
+					div.classList.remove("show-triangle");
+				}
 
-                div.innerHTML += numberSpan;
-            }
-        } else {
-            div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" style="width: 50%; height: 50%;" class="inventory-img" />`;
-            div.classList.remove('show-triangle');
-        }
-    });
+				div.innerHTML += numberSpan;
+			}
+		} else {
+			div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" style="width: 50%; height: 50%;" class="inventory-img" />`;
+			div.classList.remove("show-triangle");
+		}
+	});
 }
 
-export function drawTextOnCanvas(text, color, xPos = null, yPos = null, currentSpeaker) {
-    if (!text) return;
+export function drawTextOnCanvas(
+	text,
+	color,
+	xPos = null,
+	yPos = null,
+	currentSpeaker,
+) {
+	if (!text) return;
 
-    const canvas = getElements().canvas;
-    const ctx = canvas.getContext('2d');
+	const canvas = getElements().canvas;
+	const ctx = canvas.getContext("2d");
 
-    const maxWidth = getMaxTexTDisplayWidth();
-    const lineHeight = parseFloat(ctx.font) * 1.2;
+	const maxWidth = getMaxTexTDisplayWidth();
+	const lineHeight = parseFloat(ctx.font) * 1.2;
 
-    if (currentSpeaker === 'player' || !currentSpeaker) {
-        const player = getPlayerObject();
-        // If xPos and yPos aren't provided, use player's position by default
-        if (!xPos) xPos = player.xPos;
-        if (!yPos) {
-            const halfCanvasHeight = canvas.height / 2;
+	if (currentSpeaker === "player" || !currentSpeaker) {
+		const player = getPlayerObject();
+		// If xPos and yPos aren't provided, use player's position by default
+		if (!xPos) xPos = player.xPos;
+		if (!yPos) {
+			const halfCanvasHeight = canvas.height / 2;
 
-            yPos = player.yPos + player.height < halfCanvasHeight
-                ? player.yPos + player.height + 165
-                : player.yPos - 10;
-        }
-    } else {
-        xPos = getCurrentXposNpc();
-        yPos = getCurrentYposNpc();
-    }
+			yPos =
+				player.yPos + player.height < halfCanvasHeight
+					? player.yPos + player.height + 165
+					: player.yPos - 10;
+		}
+	} else {
+		xPos = getCurrentXposNpc();
+		yPos = getCurrentYposNpc();
+	}
 
-    // Ensure text is within canvas bounds probably needs adjusting and adding the condition for display it below if over half way up etc tweak as you go
-    if (yPos + 100 > canvas.height) {
-        yPos = canvas.height - 100;
-    }
+	// Ensure text is within canvas bounds probably needs adjusting and adding the condition for display it below if over half way up etc tweak as you go
+	if (yPos + 100 > canvas.height) {
+		yPos = canvas.height - 100;
+	}
 
-    if (yPos - 190 < 0) {
-        yPos += 50;
-    }
+	if (yPos - 190 < 0) {
+		yPos += 50;
+	}
 
-    if (xPos - maxWidth / 2 < 0) {
-        xPos = maxWidth / 2 + 10;
-    }
-    if (xPos + maxWidth / 2 > canvas.width) {
-        xPos = canvas.width - maxWidth / 2 - 10;
-    }
+	if (xPos - maxWidth / 2 < 0) {
+		xPos = maxWidth / 2 + 10;
+	}
+	if (xPos + maxWidth / 2 > canvas.width) {
+		xPos = canvas.width - maxWidth / 2 - 10;
+	}
 
-    const lines = wrapTextAndPosition(text, ctx, maxWidth, xPos, yPos, lineHeight);
-    drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
+	const lines = wrapTextAndPosition(
+		text,
+		ctx,
+		maxWidth,
+		xPos,
+		yPos,
+		lineHeight,
+	);
+	drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
 }
-
 
 function wrapTextAndPosition(text, ctx, maxWidth) {
-    if (!text.includes(" ")) {
-        return [text];
-    }
+	if (!text.includes(" ")) {
+		return [text];
+	}
 
-    const words = text.split(' '); 
-    const lines = [];
-    let currentLine = ''; 
+	const words = text.split(" ");
+	const lines = [];
+	let currentLine = "";
 
-    words.forEach(word => {
-        const testLine = currentLine + word + ' '; 
-        const metrics = ctx.measureText(testLine); 
-        const testWidth = metrics.width; 
+	words.forEach((word) => {
+		const testLine = currentLine + word + " ";
+		const metrics = ctx.measureText(testLine);
+		const testWidth = metrics.width;
 
-        if (testWidth > maxWidth && currentLine) {
-            lines.push(currentLine.trim()); 
-            currentLine = word + ' '; 
-        } else {
-            currentLine = testLine; 
-        }
-    });
+		if (testWidth > maxWidth && currentLine) {
+			lines.push(currentLine.trim());
+			currentLine = word + " ";
+		} else {
+			currentLine = testLine;
+		}
+	});
 
-    if (currentLine) {
-        lines.push(currentLine.trim());
-    }
+	if (currentLine) {
+		lines.push(currentLine.trim());
+	}
 
-    return lines; 
+	return lines;
 }
 
 function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
-    let adjustedY = startY - (lines.length * lineHeight);
+	let adjustedY = startY - lines.length * lineHeight;
 
-    lines.forEach(line => {
-        ctx.font = '2.4em sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.letterSpacing = '3px';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'baseline';
-        ctx.lineWidth = 1.5;
-        ctx.fillStyle = color;
-        ctx.fillText(line, x, adjustedY);
-        ctx.strokeStyle = "black"
-        ctx.strokeText(line, x, adjustedY);
+	lines.forEach((line) => {
+		ctx.font = "2.4em sans-serif";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "bottom";
+		ctx.letterSpacing = "3px";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "baseline";
+		ctx.lineWidth = 1.5;
+		ctx.fillStyle = color;
+		ctx.fillText(line, x, adjustedY);
+		ctx.strokeStyle = "black";
+		ctx.strokeText(line, x, adjustedY);
 
-        adjustedY += lineHeight;
-    });
+		adjustedY += lineHeight;
+	});
 }
 
 function processQueue() {
-    let textQueue = getTextQueue();
+	let textQueue = getTextQueue();
 
-    if (textQueue.length === 0) {
-        setIsDisplayingText(false);
-        return;
-    }
+	if (textQueue.length === 0) {
+		setIsDisplayingText(false);
+		return;
+	}
 
-    setIsDisplayingText(true);
+	setIsDisplayingText(true);
 
-    const { text, color, resolve, xPos, yPos } = textQueue.shift();
-    setCurrentXposNpc(xPos);
-    setCurrentYposNpc(yPos);
-    setDisplayText(text, color); 
-    console.log('Displaying text:', text);
+	const { text, color, resolve, xPos, yPos } = textQueue.shift();
+	setCurrentXposNpc(xPos);
+	setCurrentYposNpc(yPos);
+	setDisplayText(text, color);
+	console.log("Displaying text:", text);
 
-    if (textTimer) {
-        clearTimeout(textTimer);
-    }
+	if (textTimer) {
+		clearTimeout(textTimer);
+	}
 
-    textTimer = setTimeout(() => {
-        setDisplayText('', null);
-        if (resolve) {
-            console.log('Promise resolved!');
-            resolve();
-        }
-        processQueue();
-    }, getTextDisplayDuration());
+	textTimer = setTimeout(() => {
+		setDisplayText("", null);
+		if (resolve) {
+			console.log("Promise resolved!");
+			resolve();
+		}
+		processQueue();
+	}, getTextDisplayDuration());
 }
 
 export function showText(text, color, xPos, yPos) {
-    return new Promise((resolve) => {
-        let textQueue = getTextQueue();
-        textQueue.push({ text, color, xPos, yPos, resolve});
-        setTextQueue(textQueue);
+	return new Promise((resolve) => {
+		let textQueue = getTextQueue();
+		textQueue.push({ text, color, xPos, yPos, resolve });
+		setTextQueue(textQueue);
 
-        processQueue();
-    });
+		processQueue();
+	});
 }
 
-export function loadGameData(gridUrl, screenNavUrl, objectsUrl, dialogueUrl, npcUrl) {
-    fetch(gridUrl)
-        .then(response => response.json())
-        .then(gridData => {
-            setGridData(gridData);
-            console.log("Grid data loaded:", getGridData());
-        })
-        .catch(error => {
-            console.error("Error loading grid data:", error);
-        });
+export async function loadGameData(
+	gridUrl,
+	screenNavUrl,
+	objectsUrl,
+	dialogueUrl,
+	npcUrl
+) {
+	try {
+		// Load grid data
+		const gridResponse = await fetch(gridUrl);
+		const gridData = await gridResponse.json();
+		setGridData(gridData);
+		console.log("Grid data loaded:", getGridData());
 
-    fetch(screenNavUrl)
-        .then(response => response.json())
-        .then(navData => {
-            setNavigationData(navData);
-            console.log("Navigation data loaded:", getNavigationData());
-        })
-        .catch(error => {
-            console.error("Error loading navigation data:", error);
-        });
+		// Load navigation data
+		const navResponse = await fetch(screenNavUrl);
+		const navData = await navResponse.json();
+		setNavigationData(navData);
+		console.log("Navigation data loaded:", getNavigationData());
 
-    fetch(objectsUrl)
-        .then(response => response.json())
-        .then(objectsData => {
-            setObjectsData(objectsData);
-            console.log("Object data loaded:", getObjectData());
-        })
-        .catch(error => {
-            console.error("Error loading object data:", error);
-        });
+		// Load object data
+		const objectsResponse = await fetch(objectsUrl);
+		const objectsData = await objectsResponse.json();
+		setObjectsData(objectsData);
+		console.log("Object data loaded:", getObjectData());
 
-    fetch(dialogueUrl)
-        .then(response => response.json())
-        .then(dialogueData => {
-            setDialoguesData(dialogueData);
-            console.log("Dialogue data loaded:", getDialogueData());
-        })
-        .catch(error => {
-            console.error("Error loading dialogue data:", error);
-        });
+		// Load dialogue data
+		const dialogueResponse = await fetch(dialogueUrl);
+		const dialogueData = await dialogueResponse.json();
+		setDialoguesData(dialogueData);
+		console.log("Dialogue data loaded:", getDialogueData());
 
-    fetch(npcUrl)
-    .then(response => response.json())
-    .then(npcData => {
-        setNpcsData(npcData);
-        console.log("Npc data loaded:", getNpcData());
-    })
-    .catch(error => {
-        console.error("Error loading npc data:", error);
-    });
+		// Load NPC data
+		const npcResponse = await fetch(npcUrl);
+		const npcData = await npcResponse.json();
+		setNpcsData(npcData);
+		console.log("Npc data loaded:", getNpcData());
+
+	} catch (error) {
+		console.error("Error loading game data:", error);
+	}
 }
 
 export function resetSecondItemState() {
-    setWaitingForSecondItem(false);
-    setObjectToBeUsedWithSecondItem(null);
-    setSecondItemAlreadyHovered(null);
+	setWaitingForSecondItem(false);
+	setObjectToBeUsedWithSecondItem(null);
+	setSecondItemAlreadyHovered(null);
 }
 
 function adjustColor(color, reduction) {
-    const rgbValues = color.match(/\d+/g).map(Number);
-    const adjustedRgbValues = rgbValues.map(value => Math.max(0, value - reduction));
-    return `rgb(${adjustedRgbValues[0]}, ${adjustedRgbValues[1]}, ${adjustedRgbValues[2]})`;
+	const rgbValues = color.match(/\d+/g).map(Number);
+	const adjustedRgbValues = rgbValues.map((value) =>
+		Math.max(0, value - reduction),
+	);
+	return `rgb(${adjustedRgbValues[0]}, ${adjustedRgbValues[1]}, ${adjustedRgbValues[2]})`;
 }
 
 export function addDialogueRow(dialogueOptionText) {
-    const dialogueSection = getElements().dialogueSection;
-    
-    const newRow = document.createElement('div');
-    newRow.classList.add('row', 'dialogueRow');
-    
-    const newCol = document.createElement('div');
-    newCol.classList.add('col-12');
+	const dialogueSection = getElements().dialogueSection;
 
-    newCol.textContent = dialogueOptionText;
-    newRow.appendChild(newCol);
-    dialogueSection.appendChild(newRow);
+	const newRow = document.createElement("div");
+	newRow.classList.add("row", "dialogueRow");
+
+	const newCol = document.createElement("div");
+	newCol.classList.add("col-12");
+
+	newCol.textContent = dialogueOptionText;
+	newRow.appendChild(newCol);
+	dialogueSection.appendChild(newRow);
 }
 
 export function removeDialogueRow(rowNumber) {
-    const dialogueSection = getElements().dialogueSection;
+	const dialogueSection = getElements().dialogueSection;
 
-    if (rowNumber === 0) {
-        dialogueSection.innerHTML = "";
-        return;
-    }
+	if (rowNumber === 0) {
+		dialogueSection.innerHTML = "";
+		return;
+	}
 
-    if (rowNumber > 0 && rowNumber <= dialogueSection.children.length) {
-        const index = rowNumber - 1;
-        dialogueSection.removeChild(dialogueSection.children[index]);
-    } else {
-        console.error('Invalid row number cannot remove check code');
-    }
+	if (rowNumber > 0 && rowNumber <= dialogueSection.children.length) {
+		const index = rowNumber - 1;
+		dialogueSection.removeChild(dialogueSection.children[index]);
+	} else {
+		console.error("Invalid row number cannot remove check code");
+	}
 }
 
 export function showDialogueArrows() {
-    const upArrow = getElements().dialogueUpArrow;
-    const downArrow = getElements().dialogueDownArrow;
+	const upArrow = getElements().dialogueUpArrow;
+	const downArrow = getElements().dialogueDownArrow;
 
-    if (upArrow) {
-        upArrow.classList.remove("arrow-disabled");
-    }
+	if (upArrow) {
+		upArrow.classList.remove("arrow-disabled");
+	}
 
-    if (downArrow) {
-        downArrow.classList.remove("arrow-disabled");
-    }
+	if (downArrow) {
+		downArrow.classList.remove("arrow-disabled");
+	}
 }
 
 export function hideDialogueArrows() {
-    const upArrow = getElements().dialogueUpArrow;
-    const downArrow = getElements().dialogueDownArrow;
+	const upArrow = getElements().dialogueUpArrow;
+	const downArrow = getElements().dialogueDownArrow;
 
-    if (upArrow) {
-        upArrow.classList.add("arrow-disabled");
-    }
+	if (upArrow) {
+		upArrow.classList.add("arrow-disabled");
+	}
 
-    if (downArrow) {
-        downArrow.classList.add("arrow-disabled");
-    }
+	if (downArrow) {
+		downArrow.classList.add("arrow-disabled");
+	}
 }
 
 async function scrollDown() {
-    const currentScrollIndex = getCurrentScrollIndexDialogue();
-    const scrollReserve = getDialogueOptionsScrollReserve();
-    const canExit = getCanExitDialogueAtThisPoint();
+	const currentScrollIndex = getCurrentScrollIndexDialogue();
+	const scrollReserve = getDialogueOptionsScrollReserve();
+	const canExit = getCanExitDialogueAtThisPoint();
 
-    if (canExit) {
-        if (currentScrollIndex + 3 < scrollReserve.length) {
-            setCurrentScrollIndexDialogue(currentScrollIndex + 1);
-            updateDialogueDisplay(getCurrentExitOptionText());
-        }
-    } else {
-        if (currentScrollIndex + 4 < scrollReserve.length) {
-            setCurrentScrollIndexDialogue(currentScrollIndex + 1);
-            updateDialogueDisplay(getCurrentExitOptionText());
-        }
-    }
+	if (canExit) {
+		if (currentScrollIndex + 3 < scrollReserve.length) {
+			setCurrentScrollIndexDialogue(currentScrollIndex + 1);
+			updateDialogueDisplay(getCurrentExitOptionText());
+		}
+	} else {
+		if (currentScrollIndex + 4 < scrollReserve.length) {
+			setCurrentScrollIndexDialogue(currentScrollIndex + 1);
+			updateDialogueDisplay(getCurrentExitOptionText());
+		}
+	}
 
-    setDialogueScrollCount(getDialogueScrollCount() + 1);
-    reattachDialogueOptionListeners();
+	setDialogueScrollCount(getDialogueScrollCount() + 1);
+	reattachDialogueOptionListeners();
 }
 
 async function scrollUp() {
-    const currentScrollIndex = getCurrentScrollIndexDialogue();
-    if (currentScrollIndex > 0) {
-        setCurrentScrollIndexDialogue(currentScrollIndex - 1);
-        updateDialogueDisplay(getCurrentExitOptionText());
-    }
-    
-    setDialogueScrollCount(getDialogueScrollCount() - 1);
-    reattachDialogueOptionListeners();
+	const currentScrollIndex = getCurrentScrollIndexDialogue();
+	if (currentScrollIndex > 0) {
+		setCurrentScrollIndexDialogue(currentScrollIndex - 1);
+		updateDialogueDisplay(getCurrentExitOptionText());
+	}
+
+	setDialogueScrollCount(getDialogueScrollCount() - 1);
+	reattachDialogueOptionListeners();
 }
 
-export function setDynamicBackgroundWithOffset(canvas, imageUrl, xOffset, yOffset, screenTilesWidebgImg) {
-    // add offset as in background position +/- offsetX * getCanvasCellWidth()
-    const backgroundImage = new Image();
-    backgroundImage.src = imageUrl;
+export function setDynamicBackgroundWithOffset(
+	canvas,
+	imageUrl,
+	xOffset,
+	yOffset,
+	screenTilesWidebgImg,
+) {
+	// add offset as in background position +/- offsetX * getCanvasCellWidth()
+	const backgroundImage = new Image();
+	backgroundImage.src = imageUrl;
 
-    backgroundImage.onload = function() {
-        const imgWidth = backgroundImage.width;
-        const imgHeight = backgroundImage.height;
+	backgroundImage.onload = function () {
+		const imgWidth = backgroundImage.width;
+		const imgHeight = backgroundImage.height;
 
-        const canvasWidth = canvas.offsetWidth;
-        const canvasHeight = canvas.offsetHeight;
+		const canvasWidth = canvas.offsetWidth;
+		const canvasHeight = canvas.offsetHeight;
 
-        const scaleRatio = canvasHeight / imgHeight;
-        const scaledHeight = imgHeight * scaleRatio;
-        const scaledWidth = imgWidth * scaleRatio;
+		const scaleRatio = canvasHeight / imgHeight;
+		const scaledHeight = imgHeight * scaleRatio;
+		const scaledWidth = imgWidth * scaleRatio;
 
-        const finalWidth = canvasWidth * screenTilesWidebgImg;
-        const finalHeight = scaledHeight;
+		const finalWidth = canvasWidth * screenTilesWidebgImg;
+		const finalHeight = scaledHeight;
 
-        canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
-        canvas.style.backgroundImage = `url(${imageUrl})`;
-    };
+		canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
+		canvas.style.backgroundImage = `url(${imageUrl})`;
+	};
 
-    backgroundImage.onerror = function() {
-        console.error(`Failed to load image: ${imageUrl}`);
-    };
+	backgroundImage.onerror = function () {
+		console.error(`Failed to load image: ${imageUrl}`);
+	};
 }
 
 export function handleEdgeScroll() {
-    const player = getPlayerObject();
-    const canvasWidthInCells = 80;
-    const proximityThreshold = 3;
-    const screenData = getNavigationData()[getCurrentScreenId()];
-    const screenTilesWide = screenData.screenTilesWidebgImg;
-    const imgWidth = screenTilesWide * getCanvasCellWidth() * canvasWidthInCells;
-    const playerWalkSpeed = getWalkSpeedPlayer();
-    const scrollSpeed = playerWalkSpeed * 1.5;
+	const player = getPlayerObject();
+	const canvasWidthInCells = 80;
+	const proximityThreshold = 3;
+	const screenData = getNavigationData()[getCurrentScreenId()];
+	const screenTilesWide = screenData.screenTilesWidebgImg;
+	const imgWidth = screenTilesWide * getCanvasCellWidth() * canvasWidthInCells;
+	const playerWalkSpeed = getWalkSpeedPlayer();
+	const scrollSpeed = playerWalkSpeed * 1.5;
 
-    const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
+	const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
 
-    //console.log("Player Grid X:", playerGridX);
+	//console.log("Player Grid X:", playerGridX);
 
-    const isNearLeftEdge = playerGridX <= proximityThreshold;
-    const isNearRightEdge = playerGridX >= (canvasWidthInCells - 1 - proximityThreshold);
+	const isNearLeftEdge = playerGridX <= proximityThreshold;
+	const isNearRightEdge =
+		playerGridX >= canvasWidthInCells - 1 - proximityThreshold;
 
-    const targetX = getGridTargetX();
-    const targetY = getGridTargetY();
+	const targetX = getGridTargetX();
+	const targetY = getGridTargetY();
 
-    //console.log("Target X:", targetX, "Target Y:", targetY);
+	//console.log("Target X:", targetX, "Target Y:", targetY);
 
-    const isTargetingLeftEdge = targetX < 3 && targetY >= 0 && targetY < 60;
-    const isTargetingRightEdge = targetX > 77 && targetY >= 0 && targetY < 60;
+	const isTargetingLeftEdge = targetX < 3 && targetY >= 0 && targetY < 60;
+	const isTargetingRightEdge = targetX > 77 && targetY >= 0 && targetY < 60;
 
-    // console.log("Is Near Left Edge:", isNearLeftEdge);
-    // console.log("Is Near Right Edge:", isNearRightEdge);
-    // console.log("Is Targeting Left Edge:", isTargetingLeftEdge);
-    // console.log("Is Targeting Right Edge:", isTargetingRightEdge);
+	// console.log("Is Near Left Edge:", isNearLeftEdge);
+	// console.log("Is Near Right Edge:", isNearRightEdge);
+	// console.log("Is Targeting Left Edge:", isTargetingLeftEdge);
+	// console.log("Is Targeting Right Edge:", isTargetingRightEdge);
 
-    // Check if we're scrolling to the left or right and set scroll direction
-    if (!getTransitioningToAnotherScreen() && screenTilesWide > 1) {
-        let bgPosition = getScrollPositionX() || 0;
+	// Check if we're scrolling to the left or right and set scroll direction
+	if (!getTransitioningToAnotherScreen() && screenTilesWide > 1) {
+		let bgPosition = getScrollPositionX() || 0;
 
-        // console.log("Background Position X:", bgPosition);
+		// console.log("Background Position X:", bgPosition);
 
-        if (isNearLeftEdge && isTargetingLeftEdge) {
-            const maxScrollLeft = 0;  // Leftmost scroll limit
-            // console.log("Attempting to scroll left...");
-            if (bgPosition < maxScrollLeft) {
-                setScrollingActive(true);
-                setScrollDirection(-1); // Scroll to the left
-                // console.log("Scrolling Left: Active");
-            }
-        } 
-        else if (isNearRightEdge && isTargetingRightEdge) {
-            const maxScrollRight = -(imgWidth / 2);  // Rightmost scroll limit (50% image width)
-            // console.log("Attempting to scroll right...");
-            if (bgPosition > maxScrollRight) {
-                setScrollingActive(true);
-                setScrollDirection(1); // Scroll to the right
-                // console.log("Scrolling Right: Active");
-            }
-        }
-    }
+		if (isNearLeftEdge && isTargetingLeftEdge) {
+			const maxScrollLeft = 0; // Leftmost scroll limit
+			// console.log("Attempting to scroll left...");
+			if (bgPosition < maxScrollLeft) {
+				setScrollingActive(true);
+				setScrollDirection(-1); // Scroll to the left
+				// console.log("Scrolling Left: Active");
+			}
+		} else if (isNearRightEdge && isTargetingRightEdge) {
+			const maxScrollRight = -(imgWidth / 2); // Rightmost scroll limit (50% image width)
+			// console.log("Attempting to scroll right...");
+			if (bgPosition > maxScrollRight) {
+				setScrollingActive(true);
+				setScrollDirection(1); // Scroll to the right
+				// console.log("Scrolling Right: Active");
+			}
+		}
+	}
 
-    // Continue scrolling while the flag is active
-    if (getScrollingActive()) {
-        let bgPosition = getScrollPositionX() || 0;
+	// Continue scrolling while the flag is active
+	if (getScrollingActive()) {
+		let bgPosition = getScrollPositionX() || 0;
 
-        if (getScrollDirection() === -1) { // Scrolling left
-            const maxScrollLeft = 0;
-            bgPosition = Math.min(bgPosition + scrollSpeed, maxScrollLeft);
-            // console.log("Scrolling left... New Position X:", bgPosition);
+		if (getScrollDirection() === -1) {
+			// Scrolling left
+			const maxScrollLeft = 0;
+			bgPosition = Math.min(bgPosition + scrollSpeed, maxScrollLeft);
+			// console.log("Scrolling left... New Position X:", bgPosition);
 
-            if (bgPosition <= maxScrollLeft) {
-                setScrollingActive(false); // Stop scrolling when the boundary is reached
-                // console.log("Stopped scrolling left, reached boundary.");
-            }
-        } 
-        else if (getScrollDirection() === 1) { // Scrolling right
-            const maxScrollRight = -(imgWidth /2);
-            bgPosition = Math.max(bgPosition - scrollSpeed, maxScrollRight);
-            // console.log("Scrolling right... New Position X:", bgPosition);
+			if (bgPosition <= maxScrollLeft) {
+				setScrollingActive(false); // Stop scrolling when the boundary is reached
+				// console.log("Stopped scrolling left, reached boundary.");
+			}
+		} else if (getScrollDirection() === 1) {
+			// Scrolling right
+			const maxScrollRight = -(imgWidth / 2);
+			bgPosition = Math.max(bgPosition - scrollSpeed, maxScrollRight);
+			// console.log("Scrolling right... New Position X:", bgPosition);
 
-            if (bgPosition >= maxScrollRight) {
-                setScrollingActive(false); // Stop scrolling when the boundary is reached
-                // console.log("Stopped scrolling right, reached boundary.");
-            }
-        }
+			if (bgPosition >= maxScrollRight) {
+				setScrollingActive(false); // Stop scrolling when the boundary is reached
+				// console.log("Stopped scrolling right, reached boundary.");
+			}
+		}
 
-        // Apply the new background position and update the global scroll position
-        canvas.style.backgroundPositionX = `${bgPosition}px`;
-        setScrollPositionX(bgPosition);
-    }
+		// Apply the new background position and update the global scroll position
+		canvas.style.backgroundPositionX = `${bgPosition}px`;
+        //check if canvas is defined here
+		setScrollPositionX(bgPosition);
+	}
+}
+
+function setInitialBackgroundImage() {
+    const canvas = getElements().canvas;
+
+    const backgroundImageUrl = getInitialBackgroundUrl();
+    canvas.style.backgroundImage = `url(${backgroundImageUrl})`;
 }

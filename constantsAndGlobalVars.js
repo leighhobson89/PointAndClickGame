@@ -22,6 +22,10 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
+export const INITIAL_GAME_ID_NORMAL = 'libraryFoyer';
+export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/libraryFoyer.png';
+export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
@@ -50,7 +54,8 @@ export let playerInventory = {
 };
 
 //GLOBAL VARIABLES
-export let initialScreenId = 'libraryFoyer';
+export let initialScreenId = '';
+export let initialBackgroundValue = '';
 
 export let gameState;
 let hoverCell = { x: 0, y: 0 };
@@ -1024,6 +1029,14 @@ export function getEarlyExitFromDialogue() {
 
 export function setEarlyExitFromDialogue(value) {
     earlyExitFromDialogue = value;
+}
+
+export function getInitialBackgroundUrl() {
+    return initialBackgroundValue;
+}
+
+export function setInitialBackgroundUrl(value) {
+    initialBackgroundValue = value;
 }
 
 
