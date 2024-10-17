@@ -139,7 +139,7 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
     addItemToInventory(objectId, quantity);
 
     //DEBUG ZONE
-    addItemToInventory('objectPulleyWheel', 1);
+    //addItemToInventory('objectPulleyWheel', 1);
     // addItemToInventory('objectParrotHook', 1);
     //
 
