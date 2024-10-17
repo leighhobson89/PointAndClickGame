@@ -276,6 +276,10 @@ function makeCowNotTalkableAndPliersUseable() {
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
 }
 
+function makeMirrorGiveableToWoman() {
+    setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
+}
+
 async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectId) {
     const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;

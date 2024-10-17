@@ -139,7 +139,7 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
     addItemToInventory(objectId, quantity);
 
     //DEBUG ZONE
-    //addItemToInventory('objectMilkInBowl', 1);
+    addItemToInventory('objectParrotMirror', 1);
     // addItemToInventory('objectParrotHook', 1);
     //
 
@@ -426,7 +426,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         objectEvent = getObjectEvents(objectId1);
     } else { //npc
         object1 = npcData.npcs[objectId1];
-        if (!isObject1TrueNpcFalse && object1.interactable.canTalk) {
+        if (!isObject1TrueNpcFalse && object1.interactable.canTalk) { //dialogue window intiation
             objectEvent = 'dialogueEngine';
             executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
         } else {

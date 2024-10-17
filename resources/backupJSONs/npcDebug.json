@@ -196,8 +196,8 @@
                 "questPhase": 0,
                 "questCutOffNumber": 2,
                 "questCutOffEvents": {
-                    "2": {
-                        "event": "makeMirrorGiveableToWoman"
+                    "1": {
+                        "event": ""
                     }
                 },
                 "canUseWith": false,

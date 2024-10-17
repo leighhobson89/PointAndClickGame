@@ -1584,14 +1584,21 @@
                          "1":{
                             "phase":{
                                "0":{
-                                  "en":"Great Ok, find me that mirror then handsome!",
-                                  "es":"¡Genial! Entonces, encuéntrame ese espejo, guapo.",
-                                  "de":"Super! Finde mir dann diesen Spiegel, hübscher.",
-                                  "it":"Ottimo! Trova quel specchio per me, allora bello.",
-                                  "fr":"Super ! Trouve-moi ce miroir alors, beau gosse."
+                                "en": "Ok great!",
+                                "es": "¡Genial!",
+                                "de": "Okay, super!",
+                                "it": "Ok, ottimo!",
+                                "fr": "D'accord, super !"
+                               },
+                               "1":{
+                                "en": "See you soon I hope! ;)",
+                                "es": "¡Espero verte pronto! ;)",
+                                "de": "Ich hoffe, wir sehen uns bald! ;)",
+                                "it": "Spero di vederti presto! ;)",
+                                "fr": "J'espère te revoir bientôt ! ;)"
                                }
                             },
-                            "order":"1!"
+                            "order":"11!"
                          },
                          "2":{
                             "phase":{
@@ -1623,11 +1630,11 @@
                       "autoExitOption":{
                          "phase":{
                             "0":{
-                               "en":"",
-                               "es":"",
-                               "de":"",
-                               "it":"",
-                               "fr":""
+                                "en": "I'll do my best!",
+                                "es": "¡Haré lo mejor que pueda!",
+                                "de": "Ich werde mein Bestes tun!",
+                                "it": "Farò del mio meglio!",
+                                "fr": "Je ferai de mon mieux !"
                             }
                          },
                          "order":"0!"
