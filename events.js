@@ -266,6 +266,11 @@ function resetHookBackToTreePosition() {
     showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 
+function resizeBowlInObjectsJSON() {
+    setObjectData(`objectBowl`, `dimensions.width`, 1);
+    setObjectData(`objectBowl`, `dimensions.height`, 1);
+}
+
 function makeCowNotTalkableAndPliersUseable() {
     setNpcData(`npcCow`, `interactable.canTalk`, false);
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
@@ -320,7 +325,8 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    addObjectToEnvironment('objectBowl', 31, 16, 0, 0, 30, 20);
+    addObjectToEnvironment('objectBowl', 31, 16, 0, 0, 30, 20); //add empty bowl back in for dog having drunk it
+
     setObjectData(`objectBowl`, `dimensions.width`, 30);
     setObjectData(`objectBowl`, `dimensions.height`, 20);
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
@@ -342,8 +348,6 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setDialogueData('npcInteractions.verbLookAt.npcTownDog', '0', '1');
     setDialogueData('objectInteractions.verbLookAt.objectBowl', '0', '1');
-
-    //put empty bowl on floor and update look at and make not pickable
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

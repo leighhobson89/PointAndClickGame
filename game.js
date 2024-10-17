@@ -826,6 +826,7 @@ function getLocationName(id) {
 }
 
 export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffset = 0, width, height) {
+    setObjectData(`${objectId}`, `objectPlacementLocation`, `${getCurrentScreenId()}`);
     const objectsData = getObjectData();
     const gridData = getAllGridData();
     const cellWidth = getCanvasCellWidth();

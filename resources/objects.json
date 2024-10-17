@@ -1412,9 +1412,9 @@
                 "npcGiveTo": "",
                 "actionGive1": "",
                 "actionGive2": "",
-                "actionPickUp": ""
+                "actionPickUp": "resizeBowlInObjectsJSON"
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "house",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/objects/images/bowlWorld.png",
@@ -1444,8 +1444,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 1,
-                "height": 1
+                "width": 30,
+                "height": 20
             },
             "comment": "Bowl to combine with Milk Bottle, for giving to Dog"
         },
