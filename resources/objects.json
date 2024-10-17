@@ -1243,7 +1243,7 @@
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
-                "canHover": true,
+                "canHover": false,
                 "canPush": false,
                 "canPull": false,
                 "canPickUp": true,
@@ -1260,20 +1260,20 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "objectUseWith1": "",
                 "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
                 "actionPickUp": ""
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/boneWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/boneWorld.png"
             },
             "visualAnimatedStateOffsets": {
@@ -1288,8 +1288,8 @@
             },
             "inventoryUrl": "./resources/objects/images/boneInv.png",
             "gridPosition": {
-                "x": 48,
-                "y": 45
+                "x": 17,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1300,10 +1300,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 40
+                "width": 1,
+                "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Dog's bone, it is revealed when player gives dog objectMilkInBowl"
         },
         "objectMilkBottle": {
             "name": {
@@ -1476,13 +1476,13 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "objectUseWith1": "",
                 "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith11": "",
                 "actionUseWith12": "",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "npcGiveTo": "npcTownDog",
+                "actionGive1": "giveDogBowlOfMilk",
                 "actionGive2": "",
                 "actionPickUp": ""
             },
@@ -1519,7 +1519,7 @@
                 "width": 1,
                 "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Give this to dog and it will drop its bone"
         },
         "objectSplinterJammedInPulley": {
             "name": {
@@ -1592,78 +1592,6 @@
                 "height": 40
             },
             "comment": "Combined pulley wheel and splinter for jamming wood when hoisted"
-        },
-        "objectBoneJammedInPulley": {
-            "name": {
-                "en": "Pulley With Bone Jammed In It",
-                "es": "Polea con hueso atascado",
-                "de": "Seilrolle mit eingeklemmtem Knochen",
-                "it": "Puleggia con osso bloccato",
-                "fr": "Poulie avec os coincé"
-            },
-            "interactable": {
-                "specialNpcObjectStandIn" : false,
-                "canHover": true,
-                "canPush": false,
-                "canPull": false,
-                "canPickUp": false,
-                "canUse": false,
-                "canUseWith": false, 
-                "canGive": false,
-                "stackable": false,
-                "quantity": 1,
-                "decrementQuantityOnUse": false,
-                "activeStatus": true,
-                "alreadyUsed": false
-            },
-            "usedOn": {
-                "objectUse": "",
-                "actionUse1": "",
-                "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
-                "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
-                "actionGive2": "",
-                "actionPickUp": ""
-            },
-            "objectPlacementLocation": "debugRoom",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/objects/images/bonePulleyWorld.png",
-                "s2": "./resources/objects/images/bonePulleyWorld.png"
-            },
-            "visualAnimatedStateOffsets": {
-                "s1": {
-                    "x": 0,
-                    "y": 0
-                },
-                "s2": {
-                    "x": 0,
-                    "y": 0
-                }
-            },
-            "inventoryUrl": "",
-            "gridPosition": {
-                "x": 17,
-                "y": 44
-            },
-            "offset": {
-                "x": 0,
-                "y": 0
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 50,
-                "height": 40
-            },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
         "objectRopeAndHook": {
             "name": {

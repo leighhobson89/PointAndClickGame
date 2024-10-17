@@ -825,6 +825,54 @@ function getLocationName(id) {
     }
 }
 
+export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffset = 0, width, height) {
+    const objectsData = getObjectData();
+    const gridData = getAllGridData();
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+
+    const object = objectsData.objects[objectId]; // Fetch the object data
+    if (!object) {
+        console.warn(`Object with ID ${objectId} not found!`);
+        return;
+    }
+
+    const roomName = object.objectPlacementLocation;
+    const roomGridData = gridData[roomName];
+    
+    if (!roomGridData) {
+        console.warn(`No grid found for room: ${roomName}`);
+        return;
+    }
+
+    // Calculate the dimensions in grid cells
+    const widthInCells = Math.floor(width / cellWidth) + 1;
+    const heightInCells = Math.floor(height / cellHeight) + 1;
+
+    // Set object offset positions
+    const offsetX = xOffset * cellWidth;
+    const offsetY = yOffset * cellHeight;
+
+    // Loop to place the object in the grid
+    for (let x = xPos; x < xPos + widthInCells; x++) {
+        for (let y = yPos; y < yPos + heightInCells; y++) {
+            const originalValue = roomGridData[y][x];
+
+            // Store original value in case needed for resetting
+            setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);
+            roomGridData[y][x] = `o${objectId}`;
+        }
+    }
+
+    // Update object's visual position based on the grid and offsets
+    object.visualPosition = {
+        x: xPos * cellWidth + offsetX,
+        y: yPos * cellHeight + offsetY
+    };
+
+    console.log(`Placed object ${objectId} in room ${roomName} at grid position (${xPos}, ${yPos}) with visual position (${object.visualPosition.x}, ${object.visualPosition.y}).`);
+}
+
 export function setUpObjectsAndNpcs() { 
     const objectsData = getObjectData();
     const npcData = getNpcData();  // Fetch NPC data
