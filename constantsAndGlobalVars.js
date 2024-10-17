@@ -14,8 +14,10 @@ let oldLanguage = 'en';
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
 export const urlObjectsData = '.\\resources\\objects.json';
-export const urlDialogueData = '.\\resources\\dialogue.json';
 export const urlNpcsData = '.\\resources\\npc.json';
+export const urlObjectsDataDebug = '.\\resources\\debugJSONs\\objectsDebug.json';
+export const urlNpcsDataDebug = '.\\resources\\debugJSONs\\npcDebug.json';
+export const urlDialogueData = '.\\resources\\dialogue.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
@@ -24,7 +26,6 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
 export const INTERACTION_DIALOGUE_STATE = 'interactionDialogueState';
-export const INITIAL_SCREEN_ID = 'debugRoom'; //libraryFoyer is the start point change for debug
 export const INITIAL_PLAYER_GRID_REF = {x: 10,y: 57}; //player start location on initial screen
 export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
@@ -49,6 +50,8 @@ export let playerInventory = {
 };
 
 //GLOBAL VARIABLES
+export let initialScreenId = 'libraryFoyer';
+
 export let gameState;
 let hoverCell = { x: 0, y: 0 };
 let canvasCellWidth = 15;
@@ -62,9 +65,9 @@ let navigationData = null;
 let objectData = null;
 let dialogueData = null;
 let npcData = null;
-let currentScreenId = INITIAL_SCREEN_ID;
-let previousScreenId = INITIAL_SCREEN_ID;
-let nextScreenId = INITIAL_SCREEN_ID;
+let currentScreenId = initialScreenId;
+let previousScreenId = initialScreenId;
+let nextScreenId = initialScreenId;
 let exitNumberToTransitionTo = null;
 let zPosHover = null;
 let upcomingAction = null;
@@ -151,6 +154,7 @@ export function setElements() {
         resumeGameMenuButton: document.getElementById('resumeFromMenu'),
         loadGameButton: document.getElementById('loadGame'),
         saveGameButton: document.getElementById('saveGame'),
+        debugRoomMenuButton: document.getElementById('debugRoom'),
         saveLoadPopup: document.getElementById('loadSaveGameStringPopup'),
         loadSaveGameStringTextArea: document.getElementById('loadSaveGameStringTextArea'),
         loadStringButton: document.getElementById('loadStringButton'),
@@ -258,7 +262,11 @@ export function getNpcData() {
 }
 
 export function getInitialScreenId() {
-    return INITIAL_SCREEN_ID;
+    return initialScreenId;
+}
+
+export function setInitialScreenId(value) {
+    initialScreenId = value;
 }
 
 export function getInitialStartGridReference() {
