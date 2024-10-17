@@ -514,11 +514,11 @@
              },
              "objectKeyToDen":{
                 "0":{
-                   "en":"A small iron key, one person's trash is another's treasure I guess!",
-                   "es":"Una pequeña llave de hierro, ¡la basura de una persona es el tesoro de otra, supongo!",
-                   "de":"Ein kleiner Eisen-Schlüssel, der Müll des einen ist der Schatz des anderen, schätze ich!",
-                   "it":"Una piccola chiave di ferro, la spazzatura di una persona è un tesoro per un'altra, credo!",
-                   "fr":"Une petite clé en fer, les déchets de l'un sont le trésor de l'autre, je suppose !"
+                    "en": "A small rusty key, one person's trash is another's treasure I guess!",
+                    "es": "Una pequeña llave oxidada, ¡la basura de una persona es el tesoro de otra, supongo!",
+                    "de": "Ein kleiner rostiger Schlüssel, der Müll des einen ist der Schatz des anderen, schätze ich!",
+                    "it": "Una piccola chiave arrugginita, la spazzatura di una persona è un tesoro per un'altra, credo!",
+                    "fr": "Une petite clé rouillée, les déchets de l'un sont le trésor de l'autre, je suppose !"
                 }
              },
              "objectPitchFork":{
@@ -1590,12 +1590,12 @@
                                 "it": "Ok, ottimo!",
                                 "fr": "D'accord, super !"
                                },
-                               "1":{
-                                "en": "See you soon I hope! ;)",
-                                "es": "¡Espero verte pronto! ;)",
-                                "de": "Ich hoffe, wir sehen uns bald! ;)",
-                                "it": "Spero di vederti presto! ;)",
-                                "fr": "J'espère te revoir bientôt ! ;)"
+                               "1": {
+                                "en": "See you soon I hope, with a mirror! ;)",
+                                "es": "¡Espero verte pronto, con un espejo! ;)",
+                                "de": "Ich hoffe, wir sehen uns bald, mit einem Spiegel! ;)",
+                                "it": "Spero di vederti presto, con uno specchio! ;)",
+                                "fr": "J'espère te revoir bientôt, avec un miroir ! ;)"
                                }
                             },
                             "order":"11!"

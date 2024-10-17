@@ -280,6 +280,32 @@ function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
 }
 
+async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
+    const objectData = getObjectData().objects[objectId];
+    const npcData = getNpcData().npcs[npcId];
+    const language = getLanguage();
+
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
+
+    handleInventoryAdjustment(objectId, 1, true);
+    drawInventory(0);
+
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+    setGameState(getCutSceneState());
+
+    await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
+
+    addItemToInventory('objectKeyToDen', 1);
+    drawInventory(0);
+
+    //woman accepts mirror and speaks saying will give key to Den
+    //key to den added to inventory directly
+    //woman goes to cantTalk state with correcvt dialogue
+
+}
+
 async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectId) {
     const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;
