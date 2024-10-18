@@ -1129,6 +1129,7 @@ export function reconcileGridState() {
 
     // Set animation state to false (animation completed)
     setAnimationInProgress(false);
+    setPreAnimationGridState('clear', null, null, null);
 }
 
 

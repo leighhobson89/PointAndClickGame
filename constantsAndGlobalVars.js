@@ -806,6 +806,12 @@ export function getResizedNpcsGridState() {
 }
 
 export function setPreAnimationGridState(gridState, objectId, isObjectTrueNpcFalse) {
+    if (gridState === 'clear') {
+        preAnimationGridStates = [];
+        return;
+    }
+    
+    console.log(getPreAnimationGridState());
     const newState = {
         grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
         id: objectId,
