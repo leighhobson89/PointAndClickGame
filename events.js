@@ -315,7 +315,7 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
 }
 
 function pickUpMallet () {
-    showHideObjectAndMakeHoverable('s2', 'objectBarrelBarn', true);
+    showHideObjectAndMakeHoverable('s2', 'objectBarrelBarn', true); //workaround for putting objects on top of each other, had to draw handle on bg and then change bg to image without handle when user picks up mallet
 }
 
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
