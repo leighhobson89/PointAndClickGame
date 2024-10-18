@@ -190,7 +190,7 @@
                 "actionGive2": "",
                 "actionPickUp": ""
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/objects/images/barrelBarnClosedWorld.png",
@@ -210,7 +210,7 @@
             "inventoryUrl": "",
             "gridPosition": {
                 "x": 60,
-                "y": 10
+                "y": 20
             },
             "offset": {
                 "x": 0,
@@ -1141,7 +1141,7 @@
                 "actionGive2": "",
                 "actionPickUp": "pickUpMallet"
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/objects/images/blank.png",
