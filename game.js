@@ -209,64 +209,64 @@ export function drawGrid() {
     let showGrid = false; //DEBUG: false to hide grid
     if (showGrid) {
         const canvas = getElements().canvas;
-    const context = canvas.getContext('2d');
-    const gridSizeX = getGridSizeX();
-    const gridSizeY = getGridSizeY();
-    const cellWidth = getCanvasCellWidth();
-    const cellHeight = getCanvasCellHeight();
+        const context = canvas.getContext('2d');
+        const gridSizeX = getGridSizeX();
+        const gridSizeY = getGridSizeY();
+        const cellWidth = getCanvasCellWidth();
+        const cellHeight = getCanvasCellHeight();
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let x = 0; x < gridSizeX; x++) {
-        for (let y = 0; y < gridSizeY; y++) {
-            context.strokeStyle = '#000';
-            context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+        // Draw the grid
+        for (let x = 0; x < gridSizeX; x++) {
+            for (let y = 0; y < gridSizeY; y++) {
+                context.strokeStyle = '#000';
+                context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+            }
         }
-    }
 
-    // Draw Player position grid square
-    //const playerGridX = Math.floor(getPlayerObject().xPos / getCanvasCellWidth());
-    //const playerGridY = Math.floor(getPlayerObject().yPos / getCanvasCellHeight());
-
-    //const playerOffsetX = playerGridX + ((getPlayerObject().width / 2) / getCanvasCellWidth());
-    //const playerOffsetY = playerGridY + getPlayerObject().height / getCanvasCellHeight();
-
-    //context.fillStyle = 'rgba(255, 0, 255, 0.5)';  // Semi-transparent purple for walkable cell
-    //context.fillRect(playerOffsetX * cellWidth, playerOffsetY * cellHeight, cellWidth, cellHeight);
-
-    const hoverCell = getHoverCell();
-    const gridData = getGridData();
-    if (hoverCell) {
-        const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
+        const hoverCell = getHoverCell();
+        const gridData = getGridData();
         
-        if (cellValue.startsWith('w')) {
-            setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
-            context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`; 
-        } else if (cellValue.startsWith('e')) {
-            context.fillStyle = 'rgba(255, 255, 0, 0.5)'; //exit
-        } else if (cellValue.startsWith('o')) {
-            context.fillStyle = 'rgba(255, 0, 255, 0.5)'; //object
-        } else if (cellValue.startsWith('c')) {
-            context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
-        }if (cellValue.startsWith('b')) {
-            setZPosHover(extractWValue(gridData.gridData[hoverCell.y][hoverCell.x]));
-            context.fillStyle = `rgba(100, 0, ${getZPosHover()}, 0.5)`; 
-        } else {
-            context.fillStyle = 'rgba(255, 0, 0, 0.5)';
-        }        
-        
-        context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
-    }
+        if (hoverCell) {
+            const cellValue = gridData.gridData[hoverCell.y][hoverCell.x];
 
-    if (currentPath.length > 0) {
-        context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            // Determine the fill color based on the cell value
+            if (cellValue.startsWith('w')) {
+                setZPosHover(extractWValue(cellValue));
+                context.fillStyle = `rgba(0, ${getZPosHover()}, 0, 0.5)`; 
+            } else if (cellValue.startsWith('e')) {
+                context.fillStyle = 'rgba(255, 255, 0, 0.5)'; //exit
+            } else if (cellValue.startsWith('o')) {
+                context.fillStyle = 'rgba(255, 0, 255, 0.5)'; //object
+            } else if (cellValue.startsWith('c')) {
+                context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
+            } else if (cellValue.startsWith('b')) {
+                setZPosHover(extractWValue(cellValue));
+                context.fillStyle = `rgba(100, 0, ${getZPosHover()}, 0.5)`; 
+            } else {
+                context.fillStyle = 'rgba(255, 0, 0, 0.5)'; // default color
+            }        
 
-        for (const step of currentPath) {
-            context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
+            // Fill the hovered cell
+            context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
+
+            // Draw the cell value near the mouse pointer
+            context.fillStyle = '#FFF'; // Black color for the text
+            context.font = '16px Arial'; // Set the font size and type
+            context.fillText(cellValue, hoverCell.x * cellWidth + 5, hoverCell.y * cellHeight + 20);
         }
-    }
+
+        // Draw the current path if it exists
+        if (currentPath.length > 0) {
+            context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            for (const step of currentPath) {
+                context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
+            }
+        }
     }
 }
+
 
 export function drawPlayerNpcsAndObjects(ctx) {
     

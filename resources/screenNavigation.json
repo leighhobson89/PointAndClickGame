@@ -224,8 +224,8 @@
             "e1": {
                 "connectsTo": "seedyGuyAlley",
                 "status": "open",
-                "startPosition": { "x": 34, "y": 47 },
-                "finalPosition": { "x": 34, "y": 53 },
+                "startPosition": { "x": 45, "y": 39 },
+                "finalPosition": { "x": 42, "y": 47 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

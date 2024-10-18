@@ -193,7 +193,7 @@
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "questCutOffNumber": 0,
+                "questCutOffNumber": 2,
                 "questCutOffEvents": {
                     "1": {
                         "event": ""
@@ -259,7 +259,7 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(20, 20, 20)"
+                "dialogueColor": "rgb(34, 203, 223)"
             },
             "usedOn": {
                 "useTogetherLocation": "",

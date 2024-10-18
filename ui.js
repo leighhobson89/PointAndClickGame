@@ -1049,111 +1049,157 @@ export function drawInventory(startIndex) {
 }
 
 export function drawTextOnCanvas(
-	text,
-	color,
-	xPos = null,
-	yPos = null,
-	currentSpeaker,
+    text,
+    color,
+    xPos = null,
+    yPos = null,
+    currentSpeaker,
 ) {
-	if (!text) return;
+    if (!text) return;
 
-	const canvas = getElements().canvas;
-	const ctx = canvas.getContext("2d");
+    const canvas = getElements().canvas;
+    const ctx = canvas.getContext("2d");
 
-	const maxWidth = getMaxTexTDisplayWidth();
-	const lineHeight = parseFloat(ctx.font) * 1.2;
+    const maxWidth = getMaxTexTDisplayWidth();
+    const lineHeight = parseFloat(ctx.font) * 1.2;
 
-	if (currentSpeaker === "player" || !currentSpeaker) {
-		const player = getPlayerObject();
-		// If xPos and yPos aren't provided, use player's position by default
-		if (!xPos) xPos = player.xPos;
-		if (!yPos) {
-			const halfCanvasHeight = canvas.height / 2;
+    if (currentSpeaker === "player" || !currentSpeaker) {
+        const player = getPlayerObject();
 
-			yPos =
-				player.yPos + player.height < halfCanvasHeight
-					? player.yPos + player.height + 165
-					: player.yPos - 10;
-		}
-	} else {
-		xPos = getCurrentXposNpc();
-		yPos = getCurrentYposNpc();
-	}
+        if (!xPos) xPos = player.xPos;
+        if (!yPos) {
+            const halfCanvasHeight = canvas.height / 2;
 
-	// Ensure text is within canvas bounds probably needs adjusting and adding the condition for display it below if over half way up etc tweak as you go
-	if (yPos + 100 > canvas.height) {
-		yPos = canvas.height - 100;
-	}
+            yPos =
+                player.yPos + player.height < halfCanvasHeight
+                    ? player.yPos + player.height + 165
+                    : player.yPos - 10;
+        }
+    } else {
+        xPos = getCurrentXposNpc();
+        yPos = getCurrentYposNpc();
+    }
 
-	if (yPos - 190 < 0) {
-		yPos += 50;
-	}
+    if (yPos + 100 > canvas.height) {
+        yPos = canvas.height - 100;
+    }
 
-	if (xPos - maxWidth / 2 < 0) {
-		xPos = maxWidth / 2 + 10;
-	}
-	if (xPos + maxWidth / 2 > canvas.width) {
-		xPos = canvas.width - maxWidth / 2 - 10;
-	}
+    if (yPos - 190 < 0) {
+        yPos += 50;
+    }
 
-	const lines = wrapTextAndPosition(
-		text,
-		ctx,
-		maxWidth,
-		xPos,
-		yPos,
-		lineHeight,
-	);
-	drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
+    if (xPos - maxWidth / 2 < 0) {
+        xPos = maxWidth / 2 + 10;
+    }
+    if (xPos + maxWidth / 2 > canvas.width) {
+        xPos = canvas.width - maxWidth / 2 - 10;
+    }
+
+    const lines = wrapTextAndPosition(
+        text,
+        ctx,
+        maxWidth,
+        xPos,
+        yPos,
+        lineHeight,
+    );
+
+	const rectWidth = maxWidth;
+    const rectHeight = lines.length * lineHeight;
+
+    const adjustedY = yPos - rectHeight - (lineHeight * 0.75);
+    const cornerRadius = 20;
+
+	//const contrastingColor = getContrastingColor(color);
+
+    ctx.fillStyle = 'rgb(0, 0, 0, 0.5)';
+    drawRoundedRect(ctx, xPos - rectWidth / 2, adjustedY, rectWidth, rectHeight, cornerRadius, color);
+    ctx.fill();
+
+    ctx.strokeStyle = `${color}`; 
+    ctx.lineWidth = 1;
+    drawRoundedRect(ctx, xPos - rectWidth / 2, adjustedY, rectWidth, rectHeight, cornerRadius, color);
+    ctx.stroke();
+
+    drawWrappedText(lines, ctx, xPos, yPos, lineHeight, color);
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
 }
 
 function wrapTextAndPosition(text, ctx, maxWidth) {
-	if (!text.includes(" ")) {
-		return [text];
-	}
+    if (!text.includes(" ")) {
+        return [text];
+    }
 
-	const words = text.split(" ");
-	const lines = [];
-	let currentLine = "";
+    const words = text.split(" ");
+    const lines = [];
+    let currentLine = "";
 
-	words.forEach((word) => {
-		const testLine = currentLine + word + " ";
-		const metrics = ctx.measureText(testLine);
-		const testWidth = metrics.width;
+    words.forEach((word) => {
+        const testLine = currentLine + word + " ";
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
 
-		if (testWidth > maxWidth && currentLine) {
-			lines.push(currentLine.trim());
-			currentLine = word + " ";
-		} else {
-			currentLine = testLine;
-		}
-	});
+        if (testWidth > maxWidth && currentLine) {
+            lines.push(currentLine.trim());
+            currentLine = word + " ";
+        } else {
+            currentLine = testLine;
+        }
+    });
 
-	if (currentLine) {
-		lines.push(currentLine.trim());
-	}
+    if (currentLine) {
+        lines.push(currentLine.trim());
+    }
 
-	return lines;
+    return lines;
 }
 
 function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {
-	let adjustedY = startY - lines.length * lineHeight;
+    let adjustedY = startY - lines.length * lineHeight;
 
-	lines.forEach((line) => {
-		ctx.font = "2.4em sans-serif";
-		ctx.textAlign = "center";
-		ctx.textBaseline = "bottom";
-		ctx.letterSpacing = "3px";
-		ctx.textAlign = "center";
-		ctx.textBaseline = "baseline";
-		ctx.lineWidth = 1.5;
-		ctx.fillStyle = color;
-		ctx.fillText(line, x, adjustedY);
-		ctx.strokeStyle = "black";
-		ctx.strokeText(line, x, adjustedY);
+    lines.forEach((line) => {
+        ctx.font = "2.6em sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "baseline";
+        ctx.lineWidth = 1.5;
+        ctx.fillStyle = color;
+        ctx.fillText(line, x, adjustedY);
+        ctx.strokeStyle = "black";
+        ctx.strokeText(line, x, adjustedY);
 
-		adjustedY += lineHeight;
-	});
+        adjustedY += lineHeight;
+    });
+}
+
+function getContrastingColor(rgbString) {
+
+    const rgbValues = rgbString.match(/\d+/g).map(Number);
+    if (rgbValues.length !== 3) {
+        throw new Error("Invalid RGB string. Please provide a valid string like rgb(200,200,34).");
+    }
+    
+    const [r, g, b] = rgbValues;
+
+    const complementaryColor = {
+        r: 255 - r,
+        g: 255 - g,
+        b: 255 - b
+    };
+
+    return `rgb(${complementaryColor.r}, ${complementaryColor.g}, ${complementaryColor.b})`;
 }
 
 function processQueue() {

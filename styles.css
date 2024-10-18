@@ -289,8 +289,8 @@ canvas {
 .verbBtn  {
     position: fixed;
     display: flex;
-    font-size: 1em !important;
-    width: 8% !important;
+    font-size: 0.9em !important;
+    width: 9% !important;
     align-items: center;
     justify-content: center;
     margin-left: 20px;

@@ -37,7 +37,7 @@ export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
 export const TEXT_DISPLAY_DURATION = 1800; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
-export const COLOR_TEXT_PLAYER = 'white';
+export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 
 export let playerObject = {
     originalWidth: 30,
