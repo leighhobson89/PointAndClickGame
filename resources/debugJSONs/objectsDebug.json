@@ -194,7 +194,8 @@
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/objects/images/barrelBarnClosedWorld.png",
-                "s2": "./resources/objects/images/barrelBarnOpenWorld.png"
+                "s2": "./resources/objects/images/barrelBarnOpenWorld.png",
+                "s3": "./resources/objects/images/barrelBarnOpenHandleWorld.png"
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -1122,7 +1123,7 @@
                 "canGive": false,
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true,
+                "decrementQuantityOnUse": false,
                 "activeStatus": true,
                 "alreadyUsed": false
             },
@@ -1130,20 +1131,20 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "objectUseWith1": "objectNails",
                 "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
-                "actionUseWith12": "",
+                "actionUseWith11": "addPlankToBridge",
+                "actionUseWith12": "checkIfEnoughPlanksOnBridge",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
-                "actionPickUp": ""
+                "actionPickUp": "pickUpMallet"
             },
             "objectPlacementLocation": "debugRoom",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/malletWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/malletWorld.png"
             },
             "visualAnimatedStateOffsets": {
@@ -1158,8 +1159,8 @@
             },
             "inventoryUrl": "./resources/objects/images/malletInv.png",
             "gridPosition": {
-                "x": 38,
-                "y": 44
+                "x": 18,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1170,10 +1171,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 45
+                "width": 1,
+                "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Mallet for repairing bridge with nails"
         },
         "objectNails": {
             "name": {
