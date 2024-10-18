@@ -1,8 +1,8 @@
 import { getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { setObjectData, performCommand, constructCommand } from './handleCommands.js';
-import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground } from './ui.js';
+import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
+import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory } from './ui.js';
 
 let currentPath = [];
 let currentPathIndex = 0;
@@ -379,6 +379,10 @@ export function drawPlayerNpcsAndObjects(ctx) {
         setResizedObjectsGridState(gridData);
         setResizedNpcsGridState(gridData);
         firstDraw = false;
+
+        //DEBUG
+        addItemToInventory('objectKeyToDen', 1);
+        drawInventory(0);
     }
 
     const playerXStart = player.xPos;

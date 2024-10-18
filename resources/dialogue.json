@@ -119,14 +119,14 @@
                    }
                 }
              },
-             "objectDoorLibraryFoyerResearchRoom":{
+             "objectDoorToDen":{
                 "use":{
                    "cantUseYet":{
-                      "en":"The research room is locked.",
-                      "es":"La sala de investigación está cerrada.",
-                      "de":"Der Forschungsraum ist verschlossen.",
-                      "it":"La sala di ricerca è chiusa.",
-                      "fr":"La salle de recherche est verrouillée."
+                     "en": "It's locked, probably for a reason such as this!",
+                     "es": "Está cerrada, probablemente por una razón como esta!",
+                     "de": "Es ist verschlossen, wahrscheinlich aus gutem Grund!",
+                     "it": "È chiusa a chiave, probabilmente per una ragione come questa!",
+                     "fr": "C'est verrouillé, probablement pour une raison comme celle-ci !"
                    },
                    "alreadyUsed":{
                       "en":"",
@@ -144,14 +144,14 @@
                    }
                 }
              },
-             "objectDoorLibraryFoyerMarketStreet":{
+             "objectDoorLibraryFoyerResearchRoom":{
                 "use":{
                    "cantUseYet":{
-                      "en":"",
-                      "es":"",
-                      "de":"",
-                      "it":"",
-                      "fr":""
+                      "en":"The research room is locked.",
+                      "es":"La sala de investigación está cerrada.",
+                      "de":"Der Forschungsraum ist verschlossen.",
+                      "it":"La sala di ricerca è chiusa.",
+                      "fr":"La salle de recherche est verrouillée."
                    },
                    "alreadyUsed":{
                       "en":"",
@@ -212,6 +212,13 @@
                    "it":"Una ciotola di latte che sembra rinfrescante, yum!",
                    "fr":"Un bol de lait rafraîchissant, miam !"
                 },
+                "objectKeyToDen":{
+                  "en": "Should I really be doing this? Oh well!",
+                  "es": "¿Debería estar haciendo esto? ¡Oh bueno!",
+                  "de": "Sollte ich das wirklich tun? Na ja!",
+                  "it": "Dovrei davvero fare questo? Oh beh!",
+                  "fr": "Devrais-je vraiment faire ça ? Tant pis !"
+               },
                 "objectKeyResearchRoom":{
                    "en":"Uff, it was a stiff lock, but it's finally opened!",
                    "es":"¡Uf, era una cerradura difícil, pero finalmente se ha abierto!",
@@ -548,11 +555,11 @@
              },
              "objectKeyToDen":{
                 "0":{
-                    "en": "A small rusty key, one person's trash is another's treasure I guess!",
-                    "es": "Una pequeña llave oxidada, ¡la basura de una persona es el tesoro de otra, supongo!",
-                    "de": "Ein kleiner rostiger Schlüssel, der Müll des einen ist der Schatz des anderen, schätze ich!",
-                    "it": "Una piccola chiave arrugginita, la spazzatura di una persona è un tesoro per un'altra, credo!",
-                    "fr": "Une petite clé rouillée, les déchets de l'un sont le trésor de l'autre, je suppose !"
+                  "en": "A small rusty key, engraved with 'Den'.",
+                  "es": "Una pequeña llave oxidada, grabada con 'Guarida'.",
+                  "de": "Ein kleiner rostiger Schlüssel, graviert mit 'Höhle'.",
+                  "it": "Una piccola chiave arrugginita, incisa con 'Covo'.",
+                  "fr": "Une petite clé rouillée, gravée avec 'Tanière'."
                 }
              },
              "objectPitchFork":{
@@ -785,6 +792,15 @@
                    "fr":"Une banane parfaitement mûre. Prête à être mangée."
                 }
              },
+             "objectDoorToDen":{
+               "0":{
+                  "en": "A huge solid oak door, surely impenetrable without the key!",
+                  "es": "Una enorme puerta de roble macizo, seguramente impenetrable sin la llave!",
+                  "de": "Eine riesige massive Eichentür, ohne den Schlüssel sicher undurchdringlich!",
+                  "it": "Un'enorme porta di quercia massiccia, sicuramente impenetrabile senza la chiave!",
+                  "fr": "Une énorme porte en chêne massif, sûrement impénétrable sans la clé !"
+               }
+            },
              "objectDoorLibraryFoyerResearchRoom":{
                 "0":{
                    "en":"A wooden door that seems to lead into another room.",

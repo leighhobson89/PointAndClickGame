@@ -13,8 +13,8 @@ let oldLanguage = 'en';
 //CONSTANTS
 export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONData.json';
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
-export const urlObjectsData = '.\\resources\\objects.json';
-export const urlNpcsData = '.\\resources\\npc.json';
+export const urlObjectsData = '.\\resources\\objectsGame.json';
+export const urlNpcsData = '.\\resources\\npcGame.json';
 export const urlObjectsDataDebug = '.\\resources\\debugJSONs\\objectsDebug.json';
 export const urlNpcsDataDebug = '.\\resources\\debugJSONs\\npcDebug.json';
 export const urlDialogueData = '.\\resources\\dialogue.json';

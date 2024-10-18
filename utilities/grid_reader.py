@@ -123,12 +123,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #MAIN PC
-    #image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\marketStreet.png'
-    #output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\marketStreet.json'
+    image_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\seedyGuyAlley.png'
+    output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\seedyGuyAlley.json'
 
     #LAPTOP
-    image_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\marketStreet.png'
-    output_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\marketStreet.json'
+    #image_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\marketStreet.png'
+    #output_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\marketStreet.json'
 
     grid = process_image(image_path)
     

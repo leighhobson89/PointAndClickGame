@@ -1,0 +1,1954 @@
+{
+    "generalComments1": "generalComments are to tell the developer about some things in this file, and are not referenced in the game logic.",
+    "generalComments2": "usedOn.objectUseWith1 can be another object or the screenId that an exit leads to",
+    "generalComments3": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
+    "generalComments4": "Doors: alreadyUsed will map to whether or not a locked door is opened.  False, the door is locked, True, it is unlocked, and this should always match the status field in the navigation screen for the exit",
+    "generalComments5": "Doors: activeStatus refers to whether the state of the door is open or closed, and does not relate to whether it is locked. true is open, false is closed",
+    "generalComments6": "canHover: Can be set to false and will stop user hovering and interacting for example object in canvas but invisible until they push something or look at something etc, can make not hoverable and add a blank png and replace it when it should become visible",
+    "generalComments7": "name property of an object cannot have its last word as the same as another objects name ie one object is hook you can not use rope and hook, and check other languages too",
+    "objects": {
+        "objectKeyResearchRoom": {
+            "name": {
+                "en": "Key",
+                "es": "Llave",
+                "de": "Schlüssel",
+                "it": "Chiave",
+                "fr": "Clé"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectPileOfBooksLibraryFoyer": {
+            "name": {
+                "en": "Pile of Books",
+                "es": "Pila de libros",
+                "de": "Stapel Bücher",
+                "it": "Pila di libri",
+                "fr": "Pile de livres"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": true,
+                "canPull": true,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "moveBooksToGetResearchRoomKey",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/blank.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 19,
+                "y": 47
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 130,
+                "height": 50
+            },
+            "comment": "Pile of books you use or push or pull to get the key for the research room"
+        },
+        "objectBatteryDEBUG": {
+            "name": {
+                "en": "Battery",
+                "es": "Batería",
+                "de": "Batterie",
+                "it": "Batteria",
+                "fr": "Batterie"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true,
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectMachineDEBUG",
+                "actionUseWith11": "useBatteryDEBUGOnMachineDEBUG",
+                "actionUseWith12": "",
+                "useTogetherLocation": "debugRoom",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/battery.png",
+                "s2": "./resources/objects/images/battery.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/battery.png",
+            "gridPosition": {
+                "x": 20,
+                "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 60,
+                "height": 60
+            },
+            "comment": "Battery to power machineDEBUG"
+        },
+        "objectMachineDEBUG": {
+            "name": {
+                "en": "Machine",
+                "es": "Máquina",
+                "de": "Maschine",
+                "it": "Macchina",
+                "fr": "Machine"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false,
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": false,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "machineDEBUGActivate",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/machine.png",
+                "s2": "./resources/objects/images/machine.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 30,
+                "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 100,
+                "height": 100
+            },
+            "comment": "If used when active, (need to use batteryDEBUG with it to activate it) then it gives player objectBananaDEBUG and then deactivates"
+        },
+        "objectBananaDEBUG": {
+            "name": {
+                "en": "Banana",
+                "es": "Plátano",
+                "de": "Banane",
+                "it": "Banana",
+                "fr": "Banane"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true,
+                "canGive": false,
+                "stackable": true,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false            
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "npcMonkeyDEBUG",
+                "actionUseWith11": "giveMonkeyBanana",
+                "actionUseWith12": "",
+                "useTogetherLocation": "npcMonkeyDEBUG",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "debugRoom",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/banana.png",
+                "s2": "./resources/objects/images/banana.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/banana.png",
+            "gridPosition": {
+                "x": 40,
+                "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 70
+            },
+            "comment": "received from machineDEBUG, can be given to monkey npc"
+        },
+        "objectParrotFlyer": {
+            "name": {
+                "en": "Useless Parrot Flyer",
+                "es": "Volante de Loro Inútil",
+                "de": "Nutzloser Papageienflieger",
+                "it": "Volantino del Pappagallo Inutile",
+                "fr": "Flyer de Perroquet Inutile"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true,
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false            
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectParrotHook",
+                "actionUseWith11": "swapParrotFlyerForMirror",
+                "actionUseWith12": "",
+                "useTogetherLocation": "marketStreet",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "marketStreet",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/parrotFlyerWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/parrotFlyerInv.png",
+            "gridPosition": {
+                "x": 40,
+                "y": 15
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 70
+            },
+            "comment": "place over top of mirror and show when user takes mirror"
+        },
+        "objectDoorLibraryFoyerResearchRoom": {
+                "name": {
+                    "en": "Wooden Door",
+                    "es": "Puerta de madera",
+                    "de": "Holztür",
+                    "it": "Porta di legno",
+                    "fr": "Porte en bois"
+                },
+                "interactable": {
+                    "canHover": true,
+                    "canPush": false,
+                    "canPull": false,
+                    "canOpen": true,
+                    "canPickUp": false,
+                    "canUse": true,
+                    "canUseWith": false,
+                    "canGive": false, 
+                    "stackable": false,
+                    "quantity": 1,
+                    "decrementQuantityOnUse": false,
+                    "activeStatus": false,
+                    "alreadyUsed": false        
+                },
+                "usedOn": {
+                    "objectUse": "",
+                    "actionUse1": "openCloseGenericUnlockedDoor",
+                    "actionUse2": "",
+                    "objectUseWith1": "",
+                    "actionUseWith11": "",
+                    "actionUseWith12": "",
+                    "useTogetherLocation": "libraryFoyer",
+                    "npcGiveTo": "",
+                    "actionGive1": "",
+                    "actionGive2": ""
+                },
+                "objectPlacementLocation": "libraryFoyer",
+                "activeSpriteUrl": "s1",
+                "spriteUrl": {
+                    "s1": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
+                    "s2": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png"
+                },
+                "visualAnimatedStateOffsets": {
+                    "s1": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "s2": {
+                        "x": -60,
+                        "y": 0
+                    }
+                },
+                "inventoryUrl": "",
+                "gridPosition": {
+                    "x": 37,
+                    "y": 32
+                },
+                "offset": {
+                    "x": 0.2,
+                    "y": -0.6
+                },
+                "visualPosition": {
+                    "x": 0,
+                    "y": 0
+                },
+                "dimensions": {
+                    "width": 45,
+                    "height": 72
+                },
+                "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyResearchRoom on it"
+        },
+        "objectDoorLibraryFoyerMarketStreet": {
+            "name": {
+                "en": "Library Exit Door",
+                "es": "Puerta de Salida de la Biblioteca",
+                "de": "Bibliotheksausgangstür",
+                "it": "Porta di Uscita della Biblioteca",
+                "fr": "Porte de Sortie de la Bibliothèque"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": true,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false,
+                "canGive": false, 
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": false,
+                "alreadyUsed": true      
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "openCloseGenericUnlockedDoor",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "actionUseWith11": "",
+                "actionUseWith12": "",
+                "useTogetherLocation": "",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
+                "s2": "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 60,
+                    "y": 20
+                }
+            },
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 49,
+                "y": 32
+            },
+            "offset": {
+                "x": -0.35,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 60,
+                "height": 140
+            },
+            "comment": "door from libraryFoyer to marketStreet, can be opened and closed from the start"
+        },
+        "objectDoorToDen": {
+                "name": {
+                    "en": "Big Solid Oak Door",
+                    "es": "Gran puerta de roble maciza",
+                    "de": "Große massive Eichenholz-Tür",
+                    "it": "Grande porta di quercia massiccia",
+                    "fr": "Grande porte en chêne massif"
+                },
+                "interactable": {
+                    "canHover": true,
+                    "canPush": false,
+                    "canPull": false,
+                    "canOpen": true,
+                    "canPickUp": false,
+                    "canUse": true,
+                    "canUseWith": false,
+                    "canGive": false, 
+                    "stackable": false,
+                    "quantity": 1,
+                    "decrementQuantityOnUse": false,
+                    "activeStatus": false,
+                    "alreadyUsed": false        
+                },
+                "usedOn": {
+                    "objectUse": "",
+                    "actionUse1": "openCloseGenericUnlockedDoor",
+                    "actionUse2": "",
+                    "objectUseWith1": "",
+                    "actionUseWith11": "",
+                    "actionUseWith12": "",
+                    "useTogetherLocation": "seedyGuyAlley",
+                    "npcGiveTo": "",
+                    "actionGive1": "",
+                    "actionGive2": ""
+                },
+                "objectPlacementLocation": "seedyGuyAlley",
+                "activeSpriteUrl": "s1",
+                "spriteUrl": {
+                    "s1": "./resources/objects/images/seedyGuyAlley_Exit_DenClosed.png",
+                    "s2": "./resources/objects/images/seedyGuyAlley_Exit_DenOpen.png"
+                },
+                "visualAnimatedStateOffsets": {
+                    "s1": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "s2": {
+                        "x": -35,
+                        "y": 0
+                    }
+                },
+                "inventoryUrl": "",
+                "gridPosition": {
+                    "x": 48,
+                    "y": 29
+                },
+                "offset": {
+                    "x": -0.2,
+                    "y": 0
+                },
+                "visualPosition": {
+                    "x": 0,
+                    "y": 0
+                },
+                "dimensions": {
+                    "width": 45,
+                    "height": 31
+                },
+                "comment": "door from seedyGuyAlley to Den opens when objectKeyToDen used on it"
+        },
+        "objectParrotMirror": {
+            "name": {
+                "en": "Mirror",
+                "es": "Espejo",
+                "de": "Spiegel",
+                "it": "Specchio",
+                "fr": "Miroir"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectCarrot": {
+            "name": {
+                "en": "Carrot",
+                "es": "Zanahoria",
+                "de": "Karotte",
+                "it": "Carota",
+                "fr": "Carotte"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectParrotHook": {
+            "name": {
+                "en": "Hook",
+                "es": "Gancho",
+                "de": "Haken",
+                "it": "Gancio",
+                "fr": "Crochet"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectPulleyWheel": {
+            "name": {
+                "en": "Pulley Wheel",
+                "es": "Rueda de polea",
+                "de": "Seilrolle",
+                "it": "Ruota della puleggia",
+                "fr": "Roue de poulie"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectCrowbar": {
+            "name": {
+                "en": "Crowbar",
+                "es": "Palanca",
+                "de": "Brechstange",
+                "it": "Piede di porco",
+                "fr": "Pied-de-biche"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectIllegibleMap": {
+            "name": {
+                "en": "Illegible Map",
+                "es": "Mapa ilegible",
+                "de": "Unlesbare Karte",
+                "it": "Mappa illeggibile",
+                "fr": "Carte illisible"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectPitchFork": {
+            "name": {
+                "en": "Pitch Fork",
+                "es": "Horca",
+                "de": "Heugabel",
+                "it": "Forcone",
+                "fr": "Fourche"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectDonkeyRope": {
+            "name": {
+                "en": "Rope",
+                "es": "Cuerda",
+                "de": "Seil",
+                "it": "Corda",
+                "fr": "Corde"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectMallet": {
+            "name": {
+                "en": "Mallet",
+                "es": "Mazo",
+                "de": "Holzhammer",
+                "it": "Mazzuolo",
+                "fr": "Maillet"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectNails": {
+            "name": {
+                "en": "Nails",
+                "es": "Clavos",
+                "de": "Nägel",
+                "it": "Chiodi",
+                "fr": "Clous"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 3,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectBone": {
+            "name": {
+                "en": "Bone",
+                "es": "Hueso",
+                "de": "Knochen",
+                "it": "Osso",
+                "fr": "Os"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectMilkBottle": {
+            "name": {
+                "en": "Milk Bottle",
+                "es": "Botella de leche",
+                "de": "Milchflasche",
+                "it": "Bottiglia di latte",
+                "fr": "Bouteille de lait"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectBowl": {
+            "name": {
+                "en": "Bowl",
+                "es": "Cuenco",
+                "de": "Schüssel",
+                "it": "Ciotola",
+                "fr": "Bol"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectMilkInBowl": {
+            "name": {
+                "en": "Milk in Bowl",
+                "es": "Leche en cuenco",
+                "de": "Milch in Schüssel",
+                "it": "Latte nella ciotola",
+                "fr": "Lait dans le bol"
+            },
+            "interactable": {
+                "canHover": false,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectBoneJammedInPulley": {
+            "name": {
+                "en": "Bone Jammed in Pulley",
+                "es": "Hueso atascado en polea",
+                "de": "Knochen in der Seilrolle eingeklemmt",
+                "it": "Osso bloccato nella puleggia",
+                "fr": "Os coincé dans la poulie"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectRopeAndHook": {
+            "name": {
+                "en": "Rope and Hook",
+                "es": "Cuerda y gancho",
+                "de": "Seil und Haken",
+                "it": "Corda e gancio",
+                "fr": "Corde et crochet"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": true,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectKeyToDen": {
+            "name": {
+                "en": "Key for 'Den'",
+                "es": "Llave para 'Guarida'",
+                "de": "Schlüssel für 'Höhle'",
+                "it": "Chiave per 'Covo'",
+                "fr": "Clé pour 'Tanière'"
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : false,
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": false,
+                "canPickUp": false,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorToDen",
+                "npcUseWith1": "",
+                "actionUseWith11": "unlockDenDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "seedyGuyAlley",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
+            },
+            "objectPlacementLocation": "",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "",
+                "s2": ""
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/keyDenInv.png",
+            "gridPosition": {
+                "x": 61,
+                "y": 34
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 1,
+                "height": 1
+            },
+            "comment": "Key for unlocking door to den from seedyGuyAlley"
+        },
+        "objectPaperWithInstructionsScrawledOn": {
+            "name": {
+                "en": "Paper with instructions scrawled on",
+                "es": "Papel con instrucciones garabateadas",
+                "de": "Papier mit gekritzelten Anweisungen",
+                "it": "Foglio con istruzioni scarabocchiate",
+                "fr": "Papier avec des instructions griffonnées"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": false, 
+                "canGive": true,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": true,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        },
+        "objectPliers": {
+            "name": {
+                "en": "Pliers",
+                "es": "Alicates",
+                "de": "Zange",
+                "it": "Pinze",
+                "fr": "Pince"
+            },
+            "interactable": {
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canPickUp": true,
+                "canUse": false,
+                "canUseWith": true, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith12": "",
+                "useTogetherLocation": "libraryFoyer",
+                "npcGiveTo": "npcLibrarian1",
+                "actionGive1": "giveKeyToLibrarian",
+                "actionGive2": ""
+            },
+            "objectPlacementLocation": "libraryFoyer",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/blank.png",
+                "s2": "./resources/objects/images/goldKeyWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "gridPosition": {
+                "x": 27,
+                "y": 52
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 20
+            },
+            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+        }
+    }
+}

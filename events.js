@@ -218,11 +218,22 @@ async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
 
 function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
     const objectData = getObjectData().objects.objectDoorLibraryFoyerResearchRoom;
-    const navigationData = getNavigationData().libraryFoyer.exits.e1;
-    navigationData.status = "open";
-    setNavigationData(navigationData); //allow player to enter barn
+    const navigationData = getNavigationData();
+    navigationData.libraryFoyer.exits.e1.status = "open";
+    setNavigationData(navigationData);
     objectData.interactable.alreadyUsed = true;
     setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);
+
+    showText(dialogueString, getColorTextPlayer());
+}
+
+function unlockDenDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
+    const objectData = getObjectData().objects.objectDoorToDen;
+    const navigationData = getNavigationData();
+    navigationData.seedyGuyAlley.exits.e1.status = "open";
+    setNavigationData(navigationData);
+    objectData.interactable.alreadyUsed = true;
+    //setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);  update seedy guy to kick in
 
     showText(dialogueString, getColorTextPlayer());
 }
