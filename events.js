@@ -284,6 +284,14 @@ function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
 }
 
+function openBarrelBarn(blank, dialogueString, blank2, barrel) {
+    console.log("opening barrel");
+    //set to cant use
+    //change sprite to show open barrel
+    //move mallet into place
+    //show dialogue
+}
+
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
     const objectData = getObjectData().objects[objectId];
     const npcData = getNpcData().npcs[npcId];

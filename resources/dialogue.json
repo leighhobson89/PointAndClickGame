@@ -19,6 +19,31 @@
        },
        "objectInteractions":{
           "verbUse":{
+            "objectBarrelBarn":{
+               "use":{
+                  "cantUseYet":{
+                     "en":"",
+                     "es":"",
+                     "de":"",
+                     "it":"",
+                     "fr":""
+                  },
+                  "alreadyUsed":{
+                     "en": "The lid has broken!",
+                     "es": "¡La tapa se ha roto!",
+                     "de": "Der Deckel ist gebrochen!",
+                     "it": "Il coperchio si è rotto!",
+                     "fr": "Le couvercle est cassé !"
+                  },
+                  "canUse":{
+                     "en": "I got it open, there's an old mallet inside, and a million spiders euggh!",
+                     "es": "¡Lo abrí, hay un viejo mazo adentro, y un millón de arañas, ¡qué asco!",
+                     "de": "Ich habe es geöffnet, da ist ein alter Hammer drin, und eine Million Spinnen, igitt!",
+                     "it": "L'ho aperto, c'è un vecchio martello dentro, e un milione di ragni, che schifo!",
+                     "fr": "Je l'ai ouvert, il y a un vieux maillet dedans, et des milliers d'araignées, beurk !"
+                  }
+               }
+            },
              "objectDonkeyFake":{
                 "use":{
                    "cantUseYet":{
@@ -485,6 +510,15 @@
                    }
                 }
              },
+             "objectBarrelBarn":{
+               "0":{
+                  "en": "A dusty old barrel, with spider webs all over it!",
+                  "es": "Un viejo barril polvoriento, cubierto de telarañas!",
+                  "de": "Ein alter staubiger Fass, voller Spinnweben!",
+                  "it": "Un vecchio barile polveroso, ricoperto di ragnatele!",
+                  "fr": "Un vieux tonneau poussiéreux, recouvert de toiles d'araignée !"
+               }
+            },
              "objectSplinter":{
                 "0":{
                     "en": "A surprisingly strong looking wood splinter!",
