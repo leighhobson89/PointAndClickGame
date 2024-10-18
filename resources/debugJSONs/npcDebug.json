@@ -272,7 +272,7 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "debugRoom",
+            "npcPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/cow.png",

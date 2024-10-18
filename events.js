@@ -284,6 +284,40 @@ function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
 }
 
+function openBarrelBarn(blank, dialogueString, blank2, barrel) {    
+    const gridData = getGridData();
+
+    setObjectData(`${barrel}`, `interactable.activeStatus`, false);
+    setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
+    showHideObjectAndMakeHoverable('s3', `${barrel}`, true);
+
+    const gridPositionX = 61;
+    const gridPositionY = 20;
+
+    const offsetX = getObjectData().objects['objectMallet'].offset.x * getCanvasCellWidth();
+    const offsetY = getObjectData().objects['objectMallet'].offset.x * getCanvasCellHeight();
+
+    const offSetAdjustmentX = 0;
+    const offSetAdjustmentY = 0;
+
+    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
+    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
+
+    setAnimationInProgress(true);
+    setPreAnimationGridState(gridData, 'objectMallet', true);
+    setObjectData(`objectMallet`, `visualPosition.x`, desiredVisualPositionX);
+    setObjectData(`objectMallet`, `visualPosition.y`, desiredVisualPositionY);
+    setObjectData(`objectMallet`, `dimensions.width`, 21);
+    setObjectData(`objectMallet`, `dimensions.height`, 11);
+    showHideObjectAndMakeHoverable('s2', 'objectMallet', true);
+
+    showText(dialogueString, getColorTextPlayer());
+}
+
+function pickUpMallet () {
+    showHideObjectAndMakeHoverable('s2', 'objectBarrelBarn', true); //workaround for putting objects on top of each other, had to draw handle on bg and then change bg to image without handle when user picks up mallet
+}
+
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
     const objectData = getObjectData().objects[objectId];
     const npcData = getNpcData().npcs[npcId];
@@ -306,11 +340,6 @@ async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
 
     setDialogueData('npcInteractions.verbLookAt.npcWomanLostMirror', '0', '1');
     setNpcData(`npcWomanLostMirror`, `interactable.canTalk`, false);
-
-    //woman accepts mirror and speaks saying will give key to Den
-    //key to den added to inventory directly
-    //woman goes to cantTalk state with correcvt dialogue
-
 }
 
 async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectId) {
