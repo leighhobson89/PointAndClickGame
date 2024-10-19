@@ -482,3 +482,39 @@ canvas {
     top: 0;
     z-index:9999;
 }
+
+.wheel-menu-container {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 999999;
+}
+
+.wheel-menu {
+    overflow: hidden;
+    max-height: 150px;
+    width: 100px;
+}
+
+#wheelMenuList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.3s ease;
+}
+
+#wheelMenuList li {
+    padding: 10px;
+    cursor: pointer;
+    color: black;
+}
+
+#wheelMenuList li:hover {
+    background-color: #f0f0f0;
+}
+

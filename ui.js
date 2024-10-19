@@ -113,7 +113,7 @@ import {
 	setGameState,
 	startGame,
 } from "./game.js";
-import { constructCommand, performCommand } from "./handleCommands.js";
+import { addItemToInventory, constructCommand, performCommand } from "./handleCommands.js";
 import { initLocalization, localize } from "./localization.js";
 import {
 	copySaveStringToClipBoard,
@@ -126,6 +126,7 @@ let textTimer;
 
 document.addEventListener("DOMContentLoaded", () => {
 	setElements();
+
 	getElements().customCursor.classList.add("d-none");
 	getElements().customCursor.style.transform = "translate(-50%, -50%)";
 
@@ -165,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
+		const wheelMenu = document.querySelector('.wheel-menu-container'); // Select the first matching element
+		wheelMenu.style.display = 'block'; // Set its display property
         await loadGameData(
             urlWalkableJSONS,
             urlNavigationData,
@@ -591,7 +594,64 @@ document.addEventListener("DOMContentLoaded", () => {
 	initializeCanvasEventListener();
 	setGameState(getMenuState());
 	handleLanguageChange(getLanguageSelected());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//DEBUG WHEEL START/////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	const wheelMenuList = document.getElementById('wheelMenuList');
+    let currentScrollPosition = 0;
+    const wheelItems = wheelMenuList.querySelectorAll('li');
+
+    function getSelectedItem() {
+        const itemHeight = wheelItems[0].offsetHeight;
+        const index = Math.round(-currentScrollPosition / itemHeight);
+        return wheelItems[index].textContent;
+    }
+
+    document.getElementById('wheelMenuContainer').addEventListener('wheel', function (event) {
+        event.preventDefault();
+
+        const itemHeight = wheelItems[0].offsetHeight;
+        const maxScrollPosition = -(itemHeight * (wheelItems.length - 1));
+
+        if (event.deltaY > 0) {
+            if (currentScrollPosition > maxScrollPosition) {
+                currentScrollPosition -= itemHeight;
+            }
+        } else {
+            if (currentScrollPosition < 0) {
+                currentScrollPosition += itemHeight;
+            }
+        }
+
+        wheelMenuList.style.transform = `translateY(${currentScrollPosition}px)`;
+    });
+
+    document.getElementById('selectItemButton').addEventListener('click', function () {
+        const selectedItem = getSelectedItem();
+        addItemToInventory(selectedItem, 1);
+		drawInventory(0);
+    });
+
+    function highlightTopItem() {
+        const topIndex = Math.round(-currentScrollPosition / wheelItems[0].offsetHeight); 
+        wheelItems.forEach((item, index) => {
+            item.style.backgroundColor = index === topIndex ? '#d4edda' : '';
+        });
+    }
+
+    wheelMenuList.addEventListener('transitionend', highlightTopItem);
+    highlightTopItem();
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//DEBUG END/////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const handleInventoryUpArrowClick = () => {
 	if (getGameStateVariable() === getGameVisibleActive()) {
