@@ -390,19 +390,19 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setNpcData(`${townDog}`, `activeSpriteUrl`, 's2');
 
-    const gridPositionX = 34;
-    const gridPositionY = 18;
+    const gridPositionX = 65;
+    const gridPositionY = 54;
 
     const offsetX = getObjectData().objects['objectBone'].offset.x * getCanvasCellWidth();
     const offsetY = getObjectData().objects['objectBone'].offset.x * getCanvasCellHeight();
 
-    const offSetAdjustmentX = offsetX - (0.6 * getCanvasCellWidth()); //change these to move object with fine control
+    const offSetAdjustmentX = offsetX - (0.8 * getCanvasCellWidth()); //change these to move object with fine control
     const offSetAdjustmentY = 0; //change these to move object with fine control
 
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    addObjectToEnvironment('objectBowl', 31, 16, 0, 0, 30, 20); //add empty bowl back in for dog having drunk it
+    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 30, 20); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `dimensions.width`, 30);
     setObjectData(`objectBowl`, `dimensions.height`, 20);
@@ -425,6 +425,8 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setDialogueData('npcInteractions.verbLookAt.npcTownDog', '0', '1');
     setDialogueData('objectInteractions.verbLookAt.objectBowl', '0', '1');
+
+    setNpcData(`${townDog}`, `interactable.canTalk`, false);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

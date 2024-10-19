@@ -600,11 +600,11 @@
              },
              "objectMilkBottle":{
                 "0":{
-                   "en":"A bottle of milk from the farmer. Lovely and cold!",
-                   "es":"Una botella de leche del granjero. ¡Encantadora y fría!",
-                   "de":"Eine Flasche Milch vom Bauern. Schön und kalt!",
-                   "it":"Una bottiglia di latte del contadino. Bella e fredda!",
-                   "fr":"Une bouteille de lait du fermier. Magnifique et froide !"
+                  "en": "A bottle of milk straight from the farm. Lovely and cold!",
+                  "es": "Una botella de leche directamente de la granja. ¡Encantadora y fría!",
+                  "de": "Eine Flasche Milch direkt vom Bauernhof. Schön und kalt!",
+                  "it": "Una bottiglia di latte direttamente dalla fattoria. Bella e fredda!",
+                  "fr": "Une bouteille de lait directement de la ferme. Magnifique et froide !"
                 }
              },
              "objectBowl":{
@@ -1364,7 +1364,7 @@
                             "fr":"Grrr!"
                          }
                       },
-                      "order":"10!",
+                      "order":"1!",
                       "autoExitOption":{
                          "phase":{
                             "0":{
@@ -1381,18 +1381,11 @@
                 },
                 "cantTalkDialogue":{
                    "0":{
-                      "en":"",
-                      "es":"",
-                      "de":"",
-                      "it":"",
-                      "fr":""
-                   },
-                   "1":{
-                      "en":"Ruff...Ruff!",
-                      "es":"¡Guau...Guau!",
-                      "de":"Wuff...Wuff!",
-                      "it":"Bau...Bau!",
-                      "fr":"Ouaf...Ouaf!"
+                     "en":"Ruff...Ruff!",
+                     "es":"¡Guau...Guau!",
+                     "de":"Wuff...Wuff!",
+                     "it":"Bau...Bau!",
+                     "fr":"Ouaf...Ouaf!"
                    }
                 }
              },
