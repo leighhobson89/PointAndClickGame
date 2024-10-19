@@ -565,6 +565,76 @@
             },
             "comment": "door from libraryFoyer to marketStreet, can be opened and closed from the start"
         },
+        "objectDoorToDen": {
+                "name": {
+                    "en": "Big Solid Oak Door",
+                    "es": "Gran puerta de roble maciza",
+                    "de": "Große massive Eichenholz-Tür",
+                    "it": "Grande porta di quercia massiccia",
+                    "fr": "Grande porte en chêne massif"
+                },
+                "interactable": {
+                    "canHover": true,
+                    "canPush": false,
+                    "canPull": false,
+                    "canOpen": true,
+                    "canPickUp": false,
+                    "canUse": true,
+                    "canUseWith": false,
+                    "canGive": false, 
+                    "stackable": false,
+                    "quantity": 1,
+                    "decrementQuantityOnUse": false,
+                    "activeStatus": false,
+                    "alreadyUsed": false        
+                },
+                "usedOn": {
+                    "objectUse": "",
+                    "actionUse1": "openCloseGenericUnlockedDoor",
+                    "actionUse2": "",
+                    "objectUseWith1": "",
+                    "actionUseWith11": "",
+                    "actionUseWith12": "",
+                    "useTogetherLocation": "seedyGuyAlley",
+                    "npcGiveTo": "",
+                    "actionGive1": "",
+                    "actionGive2": ""
+                },
+                "objectPlacementLocation": "seedyGuyAlley",
+                "activeSpriteUrl": "s1",
+                "spriteUrl": {
+                    "s1": "./resources/objects/images/seedyGuyAlley_Exit_DenClosed.png",
+                    "s2": "./resources/objects/images/seedyGuyAlley_Exit_DenOpen.png"
+                },
+                "visualAnimatedStateOffsets": {
+                    "s1": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "s2": {
+                        "x": -39,
+                        "y": 0
+                    }
+                },
+                "inventoryUrl": "",
+                "gridPosition": {
+                    "x": 48,
+                    "y": 29
+                },
+                "offset": {
+                    "x": -0.2,
+                    "y": 0
+                },
+                "visualPosition": {
+                    "x": 0,
+                    "y": 0
+                },
+                "dimensions": {
+                    "width": 45,
+                    "height": 31
+                },
+                "comment": "door from seedyGuyAlley to Den opens when objectKeyToDen used on it"
+        },
         "objectParrotMirror": {
             "name": {
                 "en": "Mirror",
@@ -1671,23 +1741,25 @@
         },
         "objectKeyToDen": {
             "name": {
-                "en": "Key To Den",
-                "es": "Llave de la guarida",
-                "de": "Schlüssel zur Höhle",
-                "it": "Chiave del covo",
-                "fr": "Clé de la tanière"
+                "en": "Key for 'Den'",
+                "es": "Llave para 'Guarida'",
+                "de": "Schlüssel für 'Höhle'",
+                "it": "Chiave per 'Covo'",
+                "fr": "Clé pour 'Tanière'"
             },
             "interactable": {
-                "canHover": false,
+                "specialNpcObjectStandIn" : false,
+                "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
                 "canGive": false,
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true,
+                "decrementQuantityOnUse": false,
                 "activeStatus": true,
                 "alreadyUsed": false
             },
@@ -1695,19 +1767,21 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "objectUseWith1": "objectDoorToDen",
+                "npcUseWith1": "",
+                "actionUseWith11": "unlockDenDoor",
                 "actionUseWith12": "",
-                "useTogetherLocation": "libraryFoyer",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
-                "actionGive2": ""
+                "useTogetherLocation": "seedyGuyAlley",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
             },
-            "objectPlacementLocation": "libraryFoyer",
+            "objectPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/blank.png",
-                "s2": "./resources/objects/images/goldKeyWorld.png"
+                "s1": "",
+                "s2": ""
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -1719,10 +1793,10 @@
                     "y": 0
                 }
             },
-            "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
+            "inventoryUrl": "./resources/objects/images/keyDenInv.png",
             "gridPosition": {
-                "x": 27,
-                "y": 52
+                "x": 61,
+                "y": 34
             },
             "offset": {
                 "x": 0,
@@ -1733,10 +1807,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 30,
-                "height": 20
+                "width": 1,
+                "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Key for unlocking door to den from seedyGuyAlley"
         },
         "objectPaperWithInstructionsScrawledOn": {
             "name": {

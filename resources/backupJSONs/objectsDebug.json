@@ -81,17 +81,18 @@
         },
         "objectKeyResearchRoom": {
             "name": {
-                "en": "Key",
-                "es": "Llave",
-                "de": "Schlüssel",
-                "it": "Chiave",
-                "fr": "Clé"
+                "en": "Key For Research Room",
+                "es": "Llave para la sala de investigación",
+                "de": "Schlüssel für den Forschungsraum",
+                "it": "Chiave per la sala di ricerca",
+                "fr": "Clé pour la salle de recherche"
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -151,6 +152,80 @@
             },
             "comment": "Key for unlocking door to researchRoom from libraryFoyer"
         },
+        "objectBarrelBarn": {
+            "name": {
+                "en": "Dusty Barrel",
+                "es": "Barril polvoriento",
+                "de": "Staubiger Fass",
+                "it": "Barile polveroso",
+                "fr": "Tonneau poussiéreux"
+            },
+            "interactable": {
+                "specialNpcObjectStandIn" : false,
+                "canHover": true,
+                "canPush": false,
+                "canPull": false,
+                "canOpen": true,
+                "canPickUp": false,
+                "canUse": true,
+                "canUseWith": false, 
+                "canGive": false,
+                "stackable": false,
+                "quantity": 1,
+                "decrementQuantityOnUse": false,
+                "activeStatus": true,
+                "alreadyUsed": false
+            },
+            "usedOn": {
+                "objectUse": "",
+                "actionUse1": "",
+                "actionUse2": "",
+                "objectUseWith1": "",
+                "npcUseWith1": "",
+                "actionUseWith11": "openBarrelBarn",
+                "actionUseWith12": "",
+                "useTogetherLocation": "debugRoom",
+                "npcGiveTo": "",
+                "actionGive1": "",
+                "actionGive2": "",
+                "actionPickUp": ""
+            },
+            "objectPlacementLocation": "",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/objects/images/barrelBarnClosedWorld.png",
+                "s2": "./resources/objects/images/barrelBarnOpenWorld.png",
+                "s3": "./resources/objects/images/barrelBarnOpenHandleWorld.png"
+            },
+            "visualAnimatedStateOffsets": {
+                "s1": {
+                    "x": 0,
+                    "y": 0
+                },
+                "s2": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "inventoryUrl": "",
+            "gridPosition": {
+                "x": 60,
+                "y": 20
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 50,
+                "height": 50
+            },
+            "comment": "Barrel in Barn that you can open"
+        },
         "objectPileOfBooksLibraryFoyer": {
             "name": {
                 "en": "Pile of Books",
@@ -164,6 +239,7 @@
                 "canHover": true,
                 "canPush": true,
                 "canPull": true,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
@@ -309,6 +385,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
@@ -366,7 +443,7 @@
                 "width": 1,
                 "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Give to npcWomanLostMirror to get objectKeyToDen"
         },
         "objectCarrot": {
             "name": {
@@ -381,6 +458,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": false, 
@@ -453,6 +531,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
@@ -526,6 +605,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
@@ -598,6 +678,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
@@ -670,6 +751,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -742,6 +824,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -814,6 +897,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": false, 
@@ -886,6 +970,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -958,6 +1043,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1030,13 +1116,14 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
                 "canGive": false,
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true,
+                "decrementQuantityOnUse": false,
                 "activeStatus": true,
                 "alreadyUsed": false
             },
@@ -1044,20 +1131,20 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "objectUseWith1": "objectNails",
                 "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
-                "actionUseWith12": "",
+                "actionUseWith11": "addPlankToBridge",
+                "actionUseWith12": "checkIfEnoughPlanksOnBridge",
                 "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
-                "actionPickUp": ""
+                "actionPickUp": "pickUpMallet"
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/malletWorld.png",
+                "s1": "./resources/objects/images/blank.png",
                 "s2": "./resources/objects/images/malletWorld.png"
             },
             "visualAnimatedStateOffsets": {
@@ -1072,8 +1159,8 @@
             },
             "inventoryUrl": "./resources/objects/images/malletInv.png",
             "gridPosition": {
-                "x": 38,
-                "y": 44
+                "x": 18,
+                "y": 1
             },
             "offset": {
                 "x": 0,
@@ -1084,10 +1171,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 50,
-                "height": 45
+                "width": 1,
+                "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Mallet for repairing bridge with nails"
         },
         "objectNails": {
             "name": {
@@ -1102,6 +1189,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1174,6 +1262,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1246,6 +1335,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1318,6 +1408,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1390,6 +1481,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
@@ -1462,6 +1554,7 @@
                 "canHover": false,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": false, 
@@ -1534,6 +1627,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": false, 
@@ -1606,6 +1700,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": true,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": true,
                 "canUseWith": false, 
@@ -1667,24 +1762,25 @@
         },
         "objectKeyToDen": {
             "name": {
-                "en": "Key To Den",
-                "es": "Llave de la guarida",
-                "de": "Schlüssel zur Höhle",
-                "it": "Chiave del covo",
-                "fr": "Clé de la tanière"
+                "en": "Old Rusty Key",
+                "es": "Llave oxidada",
+                "de": "Alter rostiger Schlüssel",
+                "it": "Vecchia chiave arrugginita",
+                "fr": "Vieille clé rouillée"
             },
             "interactable": {
                 "specialNpcObjectStandIn" : false,
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": false,
                 "canUse": false,
                 "canUseWith": true, 
                 "canGive": false,
                 "stackable": false,
                 "quantity": 1,
-                "decrementQuantityOnUse": true,
+                "decrementQuantityOnUse": false,
                 "activeStatus": true,
                 "alreadyUsed": false
             },
@@ -1692,21 +1788,21 @@
                 "objectUse": "",
                 "actionUse1": "",
                 "actionUse2": "",
-                "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+                "objectUseWith1": "objectDoorSeedyGuyAlleyDen",
                 "npcUseWith1": "",
-                "actionUseWith11": "unlockResearchRoomDoor",
+                "actionUseWith11": "unlockDenDoor",
                 "actionUseWith12": "",
-                "useTogetherLocation": "debugRoom",
-                "npcGiveTo": "npcLibrarian1",
-                "actionGive1": "giveKeyToLibrarian",
+                "useTogetherLocation": "seedyGuyAlley",
+                "npcGiveTo": "",
+                "actionGive1": "",
                 "actionGive2": "",
                 "actionPickUp": ""
             },
-            "objectPlacementLocation": "debugRoom",
+            "objectPlacementLocation": "",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/objects/images/debug/keyDen.png",
-                "s2": "./resources/objects/images/debug/keyDen.png"
+                "s1": "",
+                "s2": ""
             },
             "visualAnimatedStateOffsets": {
                 "s1": {
@@ -1732,10 +1828,10 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 30,
-                "height": 20
+                "width": 1,
+                "height": 1
             },
-            "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+            "comment": "Key for unlocking door to den from seedyGuyAlley"
         },
         "objectPaperWithInstructionsScrawledOn": {
             "name": {
@@ -1750,6 +1846,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": false, 
@@ -1822,6 +1919,7 @@
                 "canHover": true,
                 "canPush": false,
                 "canPull": false,
+                "canOpen": false,
                 "canPickUp": true,
                 "canUse": false,
                 "canUseWith": true, 
