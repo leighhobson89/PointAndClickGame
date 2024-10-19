@@ -646,7 +646,7 @@ function checkEdgeCollision(player, targetX) {
 
 //-------------------------------------------------------------------------------------------------------------
 
-export function processClickPoint(event, mouseClick) {
+export function processLeftClickPoint(event, mouseClick) {
     if (getGameStateVariable() === getGameVisibleActive()) {
         const player = getPlayerObject();
         const localizationData = getLocalization();
@@ -734,6 +734,115 @@ export function processClickPoint(event, mouseClick) {
     }
 }
 
+export function processRightClickPoint(event, mouseClick) {
+    if (getGameStateVariable() === getGameVisibleActive()) {
+        const player = getPlayerObject();
+        const localizationData = getLocalization();
+        const objectData = getObjectData().objects;
+        const npcData = getNpcData().npcs;
+        const language = getLanguage();
+
+        const gridX = getHoverCell().x;
+        const gridY = getHoverCell().y;
+
+        if (mouseClick) {    
+            setGridTargetX(gridX);
+            setGridTargetY(gridY);
+            setClickPoint({x: gridX, y: (gridY)});
+        } else {
+            setGridTargetX(event.x);
+            setGridTargetY(event.y);
+        }
+
+        const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
+        let verb = getVerbButtonConstructionStatus();
+
+        if (cellValue.startsWith('o')) {
+            if (cellValue.includes('objectDoor')) {
+                if (objectData[cellValue.slice(1)].interactable.alreadyUsed) {
+                    if (!objectData[cellValue.slice(1)].interactable.activeStatus) {
+                        verb = 'interactionOpen';
+                    } else {
+                        verb = 'interactionClose';
+                    }
+                } else {
+                    verb = 'interactionLookAt';
+                }
+            } else {
+                verb = 'interactionLookAt';
+            }
+        } else if (cellValue.startsWith('c')) {
+            verb = 'interactionTalkTo';
+        }
+
+        console.log("verb is " + verb);
+
+        const action = localizationData[language].verbsActionsInteraction[verb];
+        console.log("CLICK: action = " + action);
+
+        const path = aStarPathfinding(
+            { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
+            { x: getGridTargetX(), y: getGridTargetY() },
+            action,
+        );
+
+        currentPath = path;
+        currentPathIndex = 0;
+
+        setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
+
+        if (currentPath.length > 0) {
+            setCurrentlyMoving(true);
+            if (!getTransitioningNow() && verb === 'interactionWalkTo') {
+                updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
+            }
+
+            if (cellValue && cellValue.startsWith('e') && verb === 'interactionWalkTo') {
+                const exitNumberMatch = cellValue.match(/e(\d+)/);
+                if (exitNumberMatch) {
+                    const exitNumber = exitNumberMatch[1];
+                    const exitData = getNavigationData()[getCurrentScreenId()].exits[`e${exitNumber}`];
+                    console.log("Exit number:", exitNumber);
+
+                    if (exitData.status === "open") {
+                        setTransitioningToAnotherScreen(true);
+                        setExitNumberToTransitionTo(exitNumber);
+                    }
+                    
+                    setNextScreenId(exitData.connectsTo);
+                    updateInteractionInfo(localize('interactionWalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + getLocationName(getNextScreenId()), true);
+                }
+            }
+
+            if (verb !== 'interactionWalkTo' && !getWaitingForSecondItem()) {
+                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+                const screenName = screenOrObjectNameAndHoverStatus[0];
+                if (screenOrObjectNameAndHoverStatus[1]){
+                    updateInteractionInfo(
+                        localize(verb, getLanguage(), 'verbsActionsInteraction') + 
+                        " " + (screenName ? screenName : ""),
+                        true
+                    );
+                }
+            }
+            
+            const nextStep = currentPath[0];
+            setTargetX(nextStep.x * getCanvasCellWidth());
+            setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
+        } else {
+            setCustomMouseCursor(getCustomMouseCursor('error'));
+        }
+        setVerbButtonConstructionStatus(null);
+        console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
+        if (getWaitingForSecondItem()) {
+            updateInteractionInfo(getElements().interactionInfo.textContent, true);
+            setUpcomingAction(getElements().interactionInfo.textContent);
+        }
+        
+        //console.log(`Path: ${JSON.stringify(path)}`);
+    }
+}
+
 export function checkAndChangeScreen() {
     if (!getTransitioningToAnotherScreen()) {
         return;
@@ -802,7 +911,7 @@ function swapBackgroundOnRoomTransition(newScreenId) {
     const yPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].yPosCameraEnterHere;
     const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl; // Get the new background image
     const screenTilesWidebgImg = getNavigationData()[getNextScreenId()].screenTilesWidebgImg;
-
+    //setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
     setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
     console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
 }

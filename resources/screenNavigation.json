@@ -1,47 +1,4 @@
 {
-    "libraryFoyerDebug": {
-        "en": "Library Foyer DEBUG",
-        "es": "Vestíbulo de la Biblioteca DEBUG",
-        "de": "Bibliotheksfoyer DEBUG",
-        "it": "Foyer della Biblioteca DEBUG",
-        "fr": "Foyer de la Bibliothèque DEBUG",
-        "bgUrl": "./resources/backgrounds/libraryFoyer.png",
-        "screenTilesWidebgImg": 1,
-        "exits": {
-            "e1": {
-                "connectsTo": "researchRoom",
-                "status": "open",
-                "startPosition": { "x": 33, "y": 51 },
-                "finalPosition": { "x": 33, "y": 51 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e2": {
-                "connectsTo": "libraryDesk",
-                "status": "open",
-                "startPosition": { "x": 39, "y": 59 }, 
-                "finalPosition": { "x": 39, "y": 57 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e3": {
-                "connectsTo": "marketStreet",
-                "status": "open",
-                "startPosition": { "x": 38, "y": 38 },
-                "finalPosition": { "x": 38, "y": 43 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e4": {
-                "connectsTo": "debugRoom",
-                "status": "open",
-                "startPosition": { "x": 39, "y": 59 }, 
-                "finalPosition": { "x": 39, "y": 57 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            }
-        }
-    },
     "debugRoom": {
         "en": "DEBUG",
         "es": "DEBUG",
@@ -56,33 +13,6 @@
                 "status": "locked",
                 "startPosition": { "x": 33, "y": 51 },
                 "finalPosition": { "x": 33, "y": 51 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            }
-        }
-    },
-    "libraryDesk": {
-        "en": "Library Desk",
-        "es": "Mesa de la Biblioteca",
-        "de": "Bibliotheks Schreibtisch",
-        "it": "Scrivania della Biblioteca",
-        "fr": "Bureau de la Bibliothèque",
-        "bgUrl": "./resources/backgrounds/libraryDesk.png",
-        "screenTilesWidebgImg": 1,
-        "exits": {
-            "e1": {
-                "connectsTo": "libraryFoyer",
-                "status": "open",
-                "startPosition": { "x": 29, "y": 55 },
-                "finalPosition": { "x": 29, "y": 55 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e2": {
-                "connectsTo": "libraryFoyer",
-                "status": "open",
-                "startPosition": { "x": 58, "y": 55 },
-                "finalPosition": { "x": 58, "y": 55 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

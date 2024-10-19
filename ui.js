@@ -108,7 +108,8 @@ import {
 	drawGrid,
 	handleRoomTransition,
 	initializePlayerPosition,
-	processClickPoint,
+	processLeftClickPoint,
+	processRightClickPoint,
 	setGameState,
 	startGame,
 } from "./game.js";
@@ -623,7 +624,8 @@ const handleInventoryDownArrowClick = () => {
 export function initializeCanvasEventListener() {
 	const canvas = getElements().canvas;
 
-	canvas.addEventListener("click", handleCanvasClick);
+	canvas.addEventListener("click", handleCanvasLeftClick);
+	canvas.addEventListener("contextmenu", handleCanvasRightClick);
 	canvas.addEventListener("mouseenter", enableCustomCursor);
 	canvas.addEventListener("mouseleave", disableCustomCursor);
 	canvas.addEventListener("mousemove", trackCursor);
@@ -870,7 +872,7 @@ export function returnHoveredInterestingObjectOrExitName(cellValue) {
 	return [null, null];
 }
 
-function handleCanvasClick(event) {
+function handleCanvasLeftClick(event) {
 	console.log(getGameStateVariable());
 	console.log(getGameVisibleActive());
 	if (getGameStateVariable() === getGameVisibleActive()) {
@@ -883,11 +885,32 @@ function handleCanvasClick(event) {
 		const clickX = event.clientX - rect.left;
 		const clickY = event.clientY - rect.top;
 
-		console.log(`Click Coordinates: (${clickX}, ${clickY})`);
+		console.log(`Left Click Coordinates: (${clickX}, ${clickY})`);
 
 		const clickPoint = { x: clickX, y: clickY };
 
-		processClickPoint(clickPoint, true);
+		processLeftClickPoint(clickPoint, true);
+	}
+}
+
+function handleCanvasRightClick(event) {
+	event.preventDefault();
+
+	if (getGameStateVariable() === getGameVisibleActive()) {
+		if (getBeginGameStatus()) {
+			setBeginGameStatus(false);
+		}
+
+		const canvas = getElements().canvas;
+		const rect = canvas.getBoundingClientRect();
+		const clickX = event.clientX - rect.left;
+		const clickY = event.clientY - rect.top;
+
+		console.log(`Right Click Coordinates: (${clickX}, ${clickY})`);
+
+		const clickPoint = { x: clickX, y: clickY };
+
+		processRightClickPoint(clickPoint, true);
 	}
 }
 
@@ -940,8 +963,7 @@ export function animateTransitionAndChangeBackground() {
 			const newScreenId = handleRoomTransition();
 			const exit = "e" + getExitNumberToTransitionTo();
 
-			const startPosition =
-				getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+			const startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
 			const startX = startPosition.x;
 			const startY = startPosition.y;
 
@@ -951,7 +973,7 @@ export function animateTransitionAndChangeBackground() {
 
 			setTransitioningNow(true);
 			canvas.style.pointerEvents = "none";
-			processClickPoint(
+			processLeftClickPoint(
 				{
 					x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
 						.x,
@@ -1402,8 +1424,8 @@ export function setDynamicBackgroundWithOffset(
 		const imgWidth = backgroundImage.width;
 		const imgHeight = backgroundImage.height;
 
-		const canvasWidth = canvas.offsetWidth;
-		const canvasHeight = canvas.offsetHeight;
+		const canvasWidth = canvas.clientWidth;
+		const canvasHeight = canvas.clientHeight;
 
 		const scaleRatio = canvasHeight / imgHeight;
 		const scaledHeight = imgHeight * scaleRatio;

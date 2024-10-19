@@ -567,8 +567,8 @@
           "y": 0
         },
         "s2": {
-          "x": 60,
-          "y": 20
+          "x": 55,
+          "y": 18
         }
       },
       "inventoryUrl": "",
@@ -709,17 +709,17 @@
           "y": 0
         },
         "s2": {
-          "x": -39,
+          "x": -37,
           "y": 0
         }
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 48,
+        "x": 47,
         "y": 29
       },
       "offset": {
-        "x": -0.2,
+        "x": 0.25,
         "y": 0
       },
       "visualPosition": {
@@ -728,7 +728,7 @@
       },
       "dimensions": {
         "width": 45,
-        "height": 31
+        "height": 30
       },
       "comment": "door from seedyGuyAlley to Den opens when objectKeyToDen used on it"
     },
