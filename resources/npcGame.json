@@ -39,7 +39,7 @@
                 "movesAround": false,
                 "patrolPath": ""
             },
-            "npcPlacementLocation": "marketStreet",
+            "npcPlacementLocation": "stables",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/donkeyOnRope.png",
