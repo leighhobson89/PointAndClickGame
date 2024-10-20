@@ -307,7 +307,7 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     showHideObjectAndMakeHoverable('s3', `${barrel}`, true);
 
     const gridPositionX = 51;
-    const gridPositionY = 40;
+    const gridPositionY = 45;
 
     const offsetX = getObjectData().objects['objectMallet'].offset.x * getCanvasCellWidth();
     const offsetY = getObjectData().objects['objectMallet'].offset.x * getCanvasCellHeight();
