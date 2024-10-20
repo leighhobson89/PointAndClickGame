@@ -35,7 +35,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 1800; //3500
+export const TEXT_DISPLAY_DURATION = 3500; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 
@@ -134,6 +134,7 @@ let canExitDialogueAtThisPoint = false;
 let scrollingActive = false;
 let parrotCompletedMovingToFlyer = false;
 let earlyExitFromDialogue = false;
+let drawGrid = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -1043,6 +1044,14 @@ export function getInitialBackgroundUrl() {
 
 export function setInitialBackgroundUrl(value) {
     initialBackgroundValue = value;
+}
+
+export function getDrawGrid() {
+    return drawGrid;
+}
+
+export function setDrawGrid(value) {
+    drawGrid = value;
 }
 
 

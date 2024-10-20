@@ -498,7 +498,7 @@ canvas {
 .wheel-menu {
     overflow: hidden;
     max-height: 300px;
-    width: 150px;
+    width: 200px;
 }
 
 #wheelMenuList {
@@ -516,5 +516,9 @@ canvas {
 
 #wheelMenuList li:hover {
     background-color: #f0f0f0;
+}
+
+#drawGridButton {
+    width: 120px;
 }
 

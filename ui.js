@@ -1,4 +1,6 @@
 import {
+	getDrawGrid,
+	setDrawGrid,
     getInitialBackgroundUrl,
     setInitialBackgroundUrl,
     setInitialScreenId,
@@ -654,6 +656,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wheelItems.forEach(item => {
         item.addEventListener('click', function() {
+			document.getElementById('selectItemButton').style.backgroundColor ='#0d6efd';
+			document.getElementById('selectItemButton').disabled = false;
             selectedWheelItem = item;
             highlightSelectedItem(item);
         });
@@ -669,12 +673,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+	document.getElementById('drawGridButton').addEventListener('click', function() {
+		const currentDrawGrid = getDrawGrid();
+
+		if (currentDrawGrid) {
+			document.getElementById('drawGridButton').textContent = 'Show Grid';
+		} else {
+			document.getElementById('drawGridButton').textContent = 'Hide Grid';
+		}
+
+        setDrawGrid(!currentDrawGrid);
+    });
+
     canvas.addEventListener('mousedown', function(event) {
         if (event.button === 1) {
             if (getGameStateVariable() === getGameVisibleActive()) {
                 const wheelMenu = document.querySelector('.wheel-menu-container');
                 if (wheelMenu) {
-                    wheelMenu.style.display = wheelMenu.style.display === 'block' ? 'none' : 'block';
+                    if (wheelMenu.style.display === 'block') {
+						wheelMenu.style.display = 'none';
+					} else {
+						document.getElementById('selectItemButton').style.backgroundColor ='#6c757d';
+						document.getElementById('selectItemButton').disabled = true;
+						wheelMenu.style.display = 'block';
+					}
                 }
             }
         }
@@ -774,7 +796,7 @@ export function handleMouseMove(event, ctx) {
                     `Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
                 ); //, zPos: ${getZPosHover()}
                 //DEBUG
-                drawGrid(ctx, getGridSizeX(), getGridSizeY(), hoverX, hoverY, walkable);
+                drawGrid(getDrawGrid());
                 //
             }
 

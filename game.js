@@ -1,4 +1,4 @@
-import { getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress } from './constantsAndGlobalVars.js';
+import { getDrawGrid, setDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
@@ -44,12 +44,6 @@ export function gameLoop() {
 
     ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
-    // DEBUG
-    const cellValue = getGridData().gridData[getHoverCell().y] && getGridData().gridData[getHoverCell().y][getHoverCell().x];
-    const walkable = (cellValue.startsWith('e') || cellValue.startsWith('w'));
-    drawGrid(ctx, getCanvasCellWidth(), getCanvasCellHeight(), getHoverCell().x, getHoverCell().y, walkable);
-    //
-
     if (getGameStateVariable() === getGameVisibleActive() || getGameStateVariable() === getInteractiveDialogueState()) {
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
@@ -57,6 +51,9 @@ export function gameLoop() {
         }
     }
     
+    // DEBUG
+    drawGrid(getDrawGrid());
+
     drawPlayerNpcsAndObjects(ctx);
 
     if (getDisplayText().value1) {
@@ -205,8 +202,8 @@ export function resizePlayerObject() {
     setPlayerObject('height', newHeightW);
 }
 
-export function drawGrid() {
-    let showGrid = false; //DEBUG: false to hide grid
+export function drawGrid(drawGrid) {
+    let showGrid = drawGrid;
     if (showGrid) {
         const canvas = getElements().canvas;
         const context = canvas.getContext('2d');
@@ -582,7 +579,7 @@ export function initializeCanvas() {
         setPlayerObject('yPos', player.yPos);
 
         // Redraw the grid with new cell sizes
-        drawGrid(ctx, newCellWidth, newCellHeight, getHoverCell().x, getHoverCell().y);
+        drawGrid(getDrawGrid());
 
         // Update the elements inside bottomContainer
         updateBottomContainerElements();
@@ -755,14 +752,10 @@ export function processRightClickPoint(event, mouseClick) {
 
         if (cellValue.startsWith('o')) {
             if (cellValue.includes('objectDoor')) {
-                if (objectData[cellValue.slice(1)].interactable.alreadyUsed) {
-                    if (!objectData[cellValue.slice(1)].interactable.activeStatus) {
-                        verb = 'interactionOpen';
-                    } else {
-                        verb = 'interactionClose';
-                    }
+                if (!objectData[cellValue.slice(1)].interactable.activeStatus) {
+                    verb = 'interactionOpen';
                 } else {
-                    verb = 'interactionLookAt';
+                    verb = 'interactionClose';
                 }
             } else {
                 verb = 'interactionLookAt';
