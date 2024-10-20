@@ -412,7 +412,7 @@
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "debugRoom",
+      "objectPlacementLocation": "stables",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/blank.png",
@@ -485,7 +485,7 @@
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "bigTree",
+      "objectPlacementLocation": "stables",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/blank.png",

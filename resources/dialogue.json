@@ -2206,6 +2206,13 @@
           }
        },
        "globalMessages":{
+          "cantGoThatWay": {
+            "en": "I can't go that way right now!",
+            "es": "¡No puedo ir por ese camino ahora mismo!",
+            "de": "Ich kann gerade nicht in diese Richtung gehen!",
+            "it": "Non posso andare in quella direzione adesso!",
+            "fr": "Je ne peux pas aller par là pour le moment!"
+          },
           "itemCannotBeGivenAsIsNpc":{
              "en":"How do I give them? And to who, or what?!",
              "es":"¿Cómo se lo doy? ¿Y a quién o a qué?!",

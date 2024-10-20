@@ -1,8 +1,8 @@
-import { getDrawGrid, setDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress } from './constantsAndGlobalVars.js';
+import { setCantGoThatWay, getCantGoThatWay, getDrawGrid, setDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
-import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory } from './ui.js';
+import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
 
 let currentPath = [];
 let currentPathIndex = 0;
@@ -69,6 +69,8 @@ function movePlayerTowardsTarget() {
     const player = getPlayerObject();
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
 
     const playerGridX = Math.floor(player.xPos / gridSizeX);
     const playerGridY = Math.floor(player.yPos / gridSizeY);
@@ -131,22 +133,29 @@ function movePlayerTowardsTarget() {
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
             // Logic for when the player reaches the final destination
-            let commandToPerform;
-            console.log(cellValue);
-            const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
-            const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
-
-            if (screenOrObjectNameAndHoverStatus[1]) {
-                commandToPerform = constructCommand(getUpcomingAction(), true);
+            if (getCantGoThatWay()) {
+                let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
+                showText(dialogueString, getColorTextPlayer());
+                setCantGoThatWay(false);
+                return;
             } else {
-                commandToPerform = constructCommand(getUpcomingAction(), false);
-            }
-
-            performCommand(commandToPerform, false); // Perform the command
-            setCurrentlyMovingToAction(false);
-            setCurrentlyMoving(false);
-            if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
-                updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+                let commandToPerform;
+                console.log(cellValue);
+                const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
+                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
+    
+                if (screenOrObjectNameAndHoverStatus[1]) {
+                    commandToPerform = constructCommand(getUpcomingAction(), true);
+                } else {
+                    commandToPerform = constructCommand(getUpcomingAction(), false);
+                }
+    
+                performCommand(commandToPerform, false); // Perform the command
+                setCurrentlyMovingToAction(false);
+                setCurrentlyMoving(false);
+                if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
+                    updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+                }
             }
         }
     }
@@ -688,6 +697,8 @@ export function processLeftClickPoint(event, mouseClick) {
                     if (exitData.status === "open") {
                         setTransitioningToAnotherScreen(true);
                         setExitNumberToTransitionTo(exitNumber);
+                    } else {
+                        setCantGoThatWay(true);
                     }
                     
                     setNextScreenId(exitData.connectsTo);
@@ -796,6 +807,8 @@ export function processRightClickPoint(event, mouseClick) {
                     if (exitData.status === "open") {
                         setTransitioningToAnotherScreen(true);
                         setExitNumberToTransitionTo(exitNumber);
+                    } else {
+                        setCantGoThatWay(true);
                     }
                     
                     setNextScreenId(exitData.connectsTo);

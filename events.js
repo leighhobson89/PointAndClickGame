@@ -160,6 +160,8 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
 
     const originalDonkeyX = npcData.visualPosition.x;
     const originalDonkeyY = npcData.visualPosition.y;
+    const originalDonkeyWidth = npcData.dimensions.width;
+    const originalDonkeyHeight = npcData.dimensions.height;
 
     //move real donkey and hide
     setAnimationInProgress(true);
@@ -173,6 +175,8 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
     setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); //set this number when positioned
     setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); //set this number when positioned
+    setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
+    setObjectData(`objectDonkeyFake`, `dimensions.height`, originalDonkeyHeight);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
     setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
 }

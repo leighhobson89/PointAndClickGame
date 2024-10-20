@@ -135,6 +135,7 @@ let scrollingActive = false;
 let parrotCompletedMovingToFlyer = false;
 let earlyExitFromDialogue = false;
 let drawGrid = false;
+let cantGoThatWay = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -1055,8 +1056,10 @@ export function setDrawGrid(value) {
 }
 
 
+export function getCantGoThatWay() {
+    return cantGoThatWay;
+}
 
-
-
-
-
+export function setCantGoThatWay(value) {
+    cantGoThatWay = value;
+}
