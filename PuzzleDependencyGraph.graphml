@@ -322,7 +322,7 @@ Barn<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Model
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="145.10491803278683" x="1572.7291774492862" y="93.75"/>
-          <y:Fill color="#FFFF00" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="53.00390625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="124.05859375" x="10.523162141393414" xml:space="preserve" y="25.998046875">Unblock Barn
 Door<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -796,6 +796,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.89071038251359" sy="0.0" tx="81.89071038251359" ty="-26.25">
+            <y:Point x="1682.45279630485" y="414.87399722863745"/>
             <y:Point x="1460.8384670667724" y="416.25"/>
             <y:Point x="1460.8384670667724" y="442.5"/>
           </y:Path>
