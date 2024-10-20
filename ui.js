@@ -166,8 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
-		const wheelMenu = document.querySelector('.wheel-menu-container'); // Select the first matching element
-		wheelMenu.style.display = 'block'; // Set its display property
         await loadGameData(
             urlWalkableJSONS,
             urlNavigationData,
@@ -645,6 +643,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wheelMenuList.addEventListener('transitionend', highlightTopItem);
     highlightTopItem();
+});
+
+document.addEventListener('keydown', function(event) {
+	if (getGameStateVariable() === getGameVisibleActive()) {
+		if (event.code === 'NumpadSubtract') {
+			const wheelMenu = document.querySelector('.wheel-menu-container');
+			if (wheelMenu) {
+				// Toggle display between 'block' and 'none'
+				if (wheelMenu.style.display === 'block') {
+					wheelMenu.style.display = 'none';
+				} else {
+					wheelMenu.style.display = 'block';
+				}
+			}
+		}
+	}
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1177,7 +1191,7 @@ export function drawTextOnCanvas(
         xPos = canvas.width - maxWidth / 2 - 10;
     }
 
-    const lines = wrapTextAndPosition(
+    const { lines, maxLineWidth } = wrapTextAndPosition(
         text,
         ctx,
         maxWidth,
@@ -1186,13 +1200,11 @@ export function drawTextOnCanvas(
         lineHeight,
     );
 
-	const rectWidth = maxWidth;
+	const rectWidth = maxLineWidth + 10;
     const rectHeight = lines.length * lineHeight;
 
     const adjustedY = yPos - rectHeight - (lineHeight * 0.75);
     const cornerRadius = 20;
-
-	//const contrastingColor = getContrastingColor(color);
 
     ctx.fillStyle = 'rgb(0, 0, 0, 0.5)';
     drawRoundedRect(ctx, xPos - rectWidth / 2, adjustedY, rectWidth, rectHeight, cornerRadius, color);
@@ -1221,13 +1233,19 @@ function drawRoundedRect(ctx, x, y, width, height, radius) {
 }
 
 function wrapTextAndPosition(text, ctx, maxWidth) {
+	const lines = [];
+
     if (!text.includes(" ")) {
-        return [text];
+		const metrics = ctx.measureText(text);
+        const maxLineWidth = metrics.width;
+		lines.push(text);
+        return {lines, maxLineWidth};
     }
 
     const words = text.split(" ");
-    const lines = [];
+
     let currentLine = "";
+	let maxLineWidth = 0;
 
     words.forEach((word) => {
         const testLine = currentLine + word + " ";
@@ -1236,6 +1254,8 @@ function wrapTextAndPosition(text, ctx, maxWidth) {
 
         if (testWidth > maxWidth && currentLine) {
             lines.push(currentLine.trim());
+			const currentLineWidth = ctx.measureText(currentLine.trim()).width;
+			maxLineWidth = Math.max(maxLineWidth, currentLineWidth);
             currentLine = word + " ";
         } else {
             currentLine = testLine;
@@ -1244,9 +1264,11 @@ function wrapTextAndPosition(text, ctx, maxWidth) {
 
     if (currentLine) {
         lines.push(currentLine.trim());
+		const currentLineWidth = ctx.measureText(currentLine.trim()).width;
+        maxLineWidth = Math.max(maxLineWidth, currentLineWidth);
     }
 
-    return lines;
+    return { lines, maxLineWidth };
 }
 
 function drawWrappedText(lines, ctx, x, startY, lineHeight, color) {

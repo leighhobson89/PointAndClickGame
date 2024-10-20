@@ -144,7 +144,7 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(137, 80, 0)"
+                "dialogueColor": "rgb(255, 255, 0)"
             },
             "usedOn": {
                 "useTogetherLocation": "",
