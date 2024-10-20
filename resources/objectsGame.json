@@ -39,13 +39,13 @@
         "npcUseWith1": "",
         "actionUseWith11": "openBarrelBarn",
         "actionUseWith12": "",
-        "useTogetherLocation": "debugRoom",
+        "useTogetherLocation": "",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "",
+      "objectPlacementLocation": "barn",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/barrelBarnClosedWorld.png",
@@ -64,8 +64,8 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 60,
-        "y": 20
+        "x": 50,
+        "y": 40
       },
       "offset": {
         "x": 0,

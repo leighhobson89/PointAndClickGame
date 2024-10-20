@@ -306,8 +306,8 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
     showHideObjectAndMakeHoverable('s3', `${barrel}`, true);
 
-    const gridPositionX = 61;
-    const gridPositionY = 20;
+    const gridPositionX = 51;
+    const gridPositionY = 40;
 
     const offsetX = getObjectData().objects['objectMallet'].offset.x * getCanvasCellWidth();
     const offsetY = getObjectData().objects['objectMallet'].offset.x * getCanvasCellHeight();
