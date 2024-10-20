@@ -200,8 +200,8 @@
             "e1": {
                 "connectsTo": "barn",
                 "status": "locked",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 33, "y": 44 },
+                "finalPosition": { "x": 31, "y": 50 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -243,8 +243,8 @@
             "e1": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 36, "y": 47 },
+                "finalPosition": { "x": 32, "y": 51 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
