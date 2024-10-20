@@ -135,19 +135,14 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 function pickUpItem(objectId, quantity, verb, dialogueString) {
     const objectEvent = getObjectEvents(objectId);
 
-    removeObjectFromEnvironment(objectId); //DEBUG: comment out to stop object disappearing when picked up
+    removeObjectFromEnvironment(objectId);
     addItemToInventory(objectId, quantity);
-
-    //DEBUG ZONE
-    //addItemToInventory('objectParrotMirror', 1);
-    // addItemToInventory('objectParrotHook', 1);
-    //
 
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
     drawInventory(0);
     
-    if (objectEvent.actionPickUp !== "") { //if there is an event to trigger after picking up object
+    if (objectEvent.actionPickUp !== "") {
         executeInteractionEvent(objectEvent, dialogueString, verb, objectId);
     }
 }

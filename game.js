@@ -379,10 +379,6 @@ export function drawPlayerNpcsAndObjects(ctx) {
         setResizedObjectsGridState(gridData);
         setResizedNpcsGridState(gridData);
         firstDraw = false;
-
-        //DEBUG
-        addItemToInventory('objectKeyToDen', 1);
-        drawInventory(0);
     }
 
     const playerXStart = player.xPos;
