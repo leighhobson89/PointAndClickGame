@@ -27,7 +27,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(0, 0, 0)"
+                "dialogueColor": "rgb(0, 0, 0)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -86,7 +87,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 0, 255)"
+                "dialogueColor": "rgb(255, 0, 255)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -144,7 +146,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 255, 0)"
+                "dialogueColor": "rgb(255, 255, 0)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -202,7 +205,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 180, 0)"
+                "dialogueColor": "rgb(255, 180, 0)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -260,7 +264,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(150, 150, 150)"
+                "dialogueColor": "rgb(150, 150, 150)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -318,7 +323,8 @@
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(34, 203, 223)"
+                "dialogueColor": "rgb(34, 203, 223)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
@@ -368,15 +374,16 @@
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "questCutOffNumber": 2,
+                "questCutOffNumber": 1,
                 "questCutOffEvents": {
-                    "2": {
-                        "event": ""
+                    "0": {
+                        "event": "setCarpenterSpokenToTrue"
                     }
                 },
                 "canUseWith": false,
                 "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(200, 0, 0)"
+                "dialogueColor": "rgb(200, 0, 0)",
+                "spokenToYet": false
             },
             "usedOn": {
                 "useTogetherLocation": "",
