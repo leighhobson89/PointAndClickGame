@@ -353,6 +353,64 @@
                 "height": 40
             },
             "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
+        },
+        "npcCarpenter": {
+            "name": {
+                "en": "Carpenter",
+                "es": "Carpintero",
+                "de": "Zimmermann",
+                "it": "Falegname",
+                "fr": "Charpentier"
+            },
+            "interactable": {
+                "canHover": true,
+                "canTalk": true,
+                "cantTalkDialogueNumber": 0,
+                "dialoguePhase": 0,
+                "questPhase": 0,
+                "questCutOffNumber": 2,
+                "questCutOffEvents": {
+                    "2": {
+                        "event": ""
+                    }
+                },
+                "canUseWith": false,
+                "receiveObjectScenarioId": 0,
+                "dialogueColor": "rgb(200, 0, 0)"
+            },
+            "usedOn": {
+                "useTogetherLocation": "",
+                "objectCanReceive1": "",
+                "objectCanReceive2": "",
+                "objectCanReceive3": ""
+            },
+            "behavior": {
+                "movesAround": false,
+                "patrolPath": ""
+            },
+            "npcPlacementLocation": "carpenter",
+            "activeSpriteUrl": "s1",
+            "spriteUrl": {
+                "s1": "./resources/npcs/carpenter.png",
+                "s2": "./resources/npcs/carpenter.png"
+            },
+            "gridPosition": {
+                "x": 50,
+                "y": 10
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "visualPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "dimensions": {
+                "width": 30,
+                "height": 40
+            },
+            "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
         }
     }
 }

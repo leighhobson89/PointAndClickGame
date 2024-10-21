@@ -1206,7 +1206,7 @@
         "npcGiveTo": "npcLibrarian1",
         "actionGive1": "giveKeyToLibrarian",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "checkCarpenterQuestPhase"
       },
       "objectPlacementLocation": "debugRoom",
       "activeSpriteUrl": "s1",
@@ -1717,7 +1717,7 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "checkCarpenterQuestPhase"
       },
       "objectPlacementLocation": "debugRoom",
       "activeSpriteUrl": "s1",

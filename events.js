@@ -299,6 +299,10 @@ function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
 }
 
+function checkCarpenterQuestPhase() {
+    
+}
+
 function openBarrelBarn(blank, dialogueString, blank2, barrel) {    
     const gridData = getGridData();
 
