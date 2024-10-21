@@ -391,12 +391,13 @@
             "npcPlacementLocation": "carpenter",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/npcs/carpenter.png",
-                "s2": "./resources/npcs/carpenter.png"
+                "s1": "./resources/npcs/carpenterNpcBack.png",
+                "s2": "./resources/npcs/carpenterNpcRight.png",
+                "s3": "./resources/npcs/carpenterNpcLeft.png"
             },
             "gridPosition": {
-                "x": 50,
-                "y": 10
+                "x": 37,
+                "y": 20
             },
             "offset": {
                 "x": 0,
@@ -407,8 +408,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 30,
-                "height": 40
+                "width": 120,
+                "height": 160
             },
             "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
         }

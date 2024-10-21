@@ -168,30 +168,36 @@ function movePlayerTowardsTarget() {
 
 
 export function resizePlayerObject() {
-    const player = getPlayerObject(); 
+    const player = getPlayerObject();
     const gridData = getGridData();
 
+    // Get the scaling factor for the screen
+    const scalingFactor = getNavigationData()[getCurrentScreenId()].scalingPlayerSize || 1;
+
+    // Calculate the player's grid position based on their current xPos and yPos
     const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
     const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
 
+    // Calculate the player's offset in the grid
     const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / getCanvasCellWidth()));
     const playerOffsetY = Math.floor(playerGridY + player.height / getCanvasCellHeight());
 
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];// +1 to fix reading wrong cell due to rounding
-    
+    // Get the cell value from the grid
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // +1 to fix reading wrong cell due to rounding
+
     let zPosStringW;
     let zPosW;
-    let zPosStringB;
-    let zPosB;
 
+    // If the cell value doesn't start with 'w' or 'b', return early
     if (!cellValue.startsWith('w') && !cellValue.startsWith('b')) {
         return;
     }
-    
+
+    // Extract the Z position value if the cell starts with 'w' or 'b'
     if (cellValue.startsWith('w') || cellValue.startsWith('b')) {
         zPosStringW = extractWValue(cellValue);
         zPosW = parseInt(zPosStringW, 10);
-    } 
+    }
 
     // Define size limits
     const furthestZPos = 100;
@@ -199,17 +205,31 @@ export function resizePlayerObject() {
     const originalWidth = player.originalWidth;
     const originalHeight = player.originalHeight;
 
+    // Scale the width and height based on Z position
     const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
     const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
-    const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9);
-    const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9);
+    
+    // Apply the scaling factor to calculate the new width and height
+    const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+    const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+
+    // Calculate the difference in size after scaling
     const widthDifference = newWidthW - player.width;
     const heightDifference = newHeightW - player.height;
-    setPlayerObject('xPos', player.xPos - widthDifference);
-    setPlayerObject('yPos', player.yPos - heightDifference);
+
+    // To maintain the same grid offset, adjust the player's position
+    // Ensure the player's new position keeps the offset in the same grid cell
+    const offsetX = (widthDifference / 2);  // Adjust based on half the width difference
+    const offsetY = (heightDifference);     // Adjust based on full height difference
+
+    setPlayerObject('xPos', player.xPos - offsetX); // Adjust x position
+    setPlayerObject('yPos', player.yPos - offsetY); // Adjust y position
+
+    // Update player size with the new scaled size
     setPlayerObject('width', newWidthW);
     setPlayerObject('height', newHeightW);
 }
+
 
 export function drawGrid(drawGrid) {
     let showGrid = drawGrid;
@@ -258,9 +278,10 @@ export function drawGrid(drawGrid) {
             context.fillRect(hoverCell.x * cellWidth, hoverCell.y * cellHeight, cellWidth, cellHeight);
 
             // Draw the cell value near the mouse pointer
+            const string = `${cellValue}: ${hoverCell.x}, ${hoverCell.y}, ${getCurrentScreenId()}`;
             context.fillStyle = '#FFF'; // Black color for the text
             context.font = '16px Arial'; // Set the font size and type
-            context.fillText(cellValue, hoverCell.x * cellWidth + 5, hoverCell.y * cellHeight + 20);
+            context.fillText(string, hoverCell.x * cellWidth + 5, hoverCell.y * cellHeight + 20);
         }
 
         // Draw the current path if it exists

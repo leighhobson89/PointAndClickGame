@@ -7,6 +7,7 @@
         "fr": "DEBUG",
         "bgUrl": "./resources/backgrounds/debugRoom.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyerDebug",
@@ -26,6 +27,7 @@
         "fr": "Foyer de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "researchRoom",
@@ -53,6 +55,7 @@
         "fr": "Rue du Marché",
         "bgUrl": "./resources/backgrounds/marketStreet.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
@@ -73,8 +76,8 @@
             "e3": {
                 "connectsTo": "carpenter",
                 "status": "open",
-                "startPosition": { "x": 35, "y": 58 },
-                "finalPosition": { "x": 30, "y": 52 },
+                "startPosition": { "x": 25, "y": 56 },
+                "finalPosition": { "x": 21, "y": 49 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -104,6 +107,7 @@
         "fr": "Salle de Recherche",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
@@ -123,6 +127,7 @@
         "fr": "Allée du Type Louche",
         "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "den",
@@ -150,12 +155,13 @@
         "fr": "Atelier du Charpentier",
         "bgUrl": "./resources/backgrounds/carpenter.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 2,
         "exits": {
             "e1": {
                 "connectsTo": "marketStreet",
                 "status": "open",
-                "startPosition": { "x": 38, "y": 39 },
-                "finalPosition": { "x": 36, "y": 47 },
+                "startPosition": { "x": 37, "y": 43 },
+                "finalPosition": { "x": 35, "y": 49 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -169,6 +175,7 @@
         "fr": "Cachette",
         "bgUrl": "./resources/backgrounds/den.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "seedyGuyAlley",
@@ -188,6 +195,7 @@
         "fr": "Maison",
         "bgUrl": "./resources/backgrounds/house.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "insideHouse",
@@ -215,6 +223,7 @@
         "fr": "Écurie",
         "bgUrl": "./resources/backgrounds/stables.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "barn",
@@ -258,6 +267,7 @@
         "fr": "Grange",
         "bgUrl": "./resources/backgrounds/barn.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "stables",
@@ -277,6 +287,7 @@
         "fr": "Grand Arbre",
         "bgUrl": "./resources/backgrounds/bigTree.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "enterTree",
@@ -312,6 +323,7 @@
         "fr": "Route vers la Ville",
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
@@ -355,6 +367,7 @@
         "fr": "Décharge Malodorante",
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
@@ -382,6 +395,7 @@
         "fr": "Grande Tas de Crottes",
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "stinkingDump",
@@ -401,6 +415,7 @@
         "fr": "Traversée de la Rivière",
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "map",
@@ -428,6 +443,7 @@
         "fr": "Carte",
         "bgUrl": "./resources/backgrounds/map.png",
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
