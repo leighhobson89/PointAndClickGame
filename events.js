@@ -286,6 +286,33 @@ function resizeBowlInObjectsJSON() {
     setObjectData(`objectBowl`, `dimensions.height`, 1);
 }
 
+function setCarpenterSpokenToTrue() {
+    setNpcData(`npcCarpenter`, `interactable.spokenToYet`, true);
+    console.log("spoke to carpenter now");
+}
+
+function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) {
+    const objectStartX = getObjectData().objects[objectId].gridPosition.x;
+    const objectStartY = getObjectData().objects[objectId].gridPosition.y;
+    const objectStartWidth = getObjectData().objects[objectId].dimensions.width;
+    const objectStartHeight = getObjectData().objects[objectId].dimensions.height;
+
+    const carpenterQuestPhase = getNpcData().npcs.npcCarpenter.interactable.questPhase;
+    const carpenterDialogueColor = getNpcData().npcs.npcCarpenter.interactable.dialogueColor;
+    let dialogueString;
+    if (carpenterQuestPhase === 0) {
+        dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpPliersOrNailsYet[getLanguage()];
+        addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight);
+        handleInventoryAdjustment(objectId, 1);
+        drawInventory(0);
+
+        showText(dialogueString, carpenterDialogueColor);
+    }
+}
+
+//when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the items on the table pliers and nails
+//if player attempts to pick up an item in the carpenter we have to call checkCarpenterQuestPhase and if not display a deny dialogue and
+
 function makeCowTalkableAfterSpeakingToFarmer() { //add to npcFarmer when made him so that cant talk to cow until farmer spoke to you and asked to help it
     setNpcData(`npcCow`, `interactable.canTalk`, true);
 }
@@ -297,10 +324,6 @@ function makeCowNotTalkableAndPliersUseable() {
 
 function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
-}
-
-function checkCarpenterQuestPhase() {
-    
 }
 
 function openBarrelBarn(blank, dialogueString, blank2, barrel) {    

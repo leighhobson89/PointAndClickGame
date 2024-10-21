@@ -374,7 +374,7 @@
                 "cantTalkDialogueNumber": 0,
                 "dialoguePhase": 0,
                 "questPhase": 0,
-                "questCutOffNumber": 1,
+                "questCutOffNumber": 0,
                 "questCutOffEvents": {
                     "0": {
                         "event": "setCarpenterSpokenToTrue"

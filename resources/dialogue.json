@@ -8,6 +8,15 @@
    "generalComments7": "cantTalk is set to 1 after ALL quests for an npc are done and as such can only be used before they start or after they are done, so basically when all dialogue is exhausted, 0 or 1, also it is always the npc that speaks - Note, you can still give items and trigger dialogue that way through the verbGive property",
    "generalComments8": "!!! at the end of dialogue responses ends the dialogue then and there.",
    "dialogue": {
+      "specialDialogue": {
+         "cannotPickUpPliersOrNailsYet": {
+            "en": "What do you think you are doing?? They are my tools, hands off!",
+            "es": "¿Qué crees que estás haciendo?? ¡Son mis herramientas, ¡manos fuera!",
+            "de": "Was denkst du, was du tust?? Das sind meine Werkzeuge, Hände weg!",
+            "it": "Cosa pensi di fare?? Sono i miei strumenti, mani lontane!",
+            "fr": "Que penses-tu faire?? Ce sont mes outils, ne les touche pas!"
+         }
+       },
      "postAnimationEventDialogue": {
        "animationParrotMoveToParrotFlyer": {
          "en": "It looks like he prefers the beauty on the flyer than his own reflection!",
@@ -356,6 +365,22 @@
                "fr": "La porte mène à l'Allée du Type Louche. Une clé est nécessaire."
              }
            },
+           "carpenter": {
+            "open": {
+               "en": "The door leads to the Carpenter's Workshop.",
+               "es": "La puerta conduce al Taller del Carpintero.",
+               "de": "Die Tür führt zur Tischlerei.",
+               "it": "La porta conduce al Laboratorio del Fabbro.",
+               "fr": "La porte mène à l'Atelier du Charpentier."
+             },
+             "locked": {
+               "en": "The door leads to the Carpenter's Workshop. It needs a key.",
+               "es": "La puerta conduce al Taller del Carpintero. Necesita una llave.",
+               "de": "Die Tür führt zur Tischlerei. Es wird ein Schlüssel benötigt.",
+               "it": "La porta conduce al Laboratorio del Fabbro. Serve una chiave.",
+               "fr": "La porte mène à l'Atelier du Charpentier. Une clé est nécessaire."
+            }
+          },
            "den": {
              "open": {
                "en": "The door leads to the den.",
@@ -1204,6 +1229,22 @@
              "fr": "Je ne veux pas juger, mais ce type a vraiment l'air louche!"
            }
          },
+         "npcCarpenter": {
+            "0": {
+               "en": "He looks very busy! Carpenters always are!",
+               "es": "¡Él parece muy ocupado! ¡Los carpinteros siempre lo están!",
+               "de": "Er sieht sehr beschäftigt aus! Tischler sind immer beschäftigt!",
+               "it": "Sembra molto impegnato! I falegnami lo sono sempre!",
+               "fr": "Il a l'air très occupé ! Les menuisiers le sont toujours !"
+            },
+            "1": {
+               "en": "He's weighing up the job!",
+               "es": "¡Él está evaluando el trabajo!",
+               "de": "Er wägt den Job ab!",
+               "it": "Sta valutando il lavoro!",
+               "fr": "Il évalue le travail !"
+            }
+          },
          "npcCow": {
            "0": {
              "en": "Cute cow, although she looks to be in a lot of pain!",
@@ -1418,18 +1459,18 @@
                "order": "11!",
                "dialogueOptions": {
                  "0": {
-                   "en": "I'm in a rush, what do you need? ",
-                   "es": "Estoy apurado, ¿qué necesitas? ",
-                   "de": "Ich habe es eilig, was brauchst du? ",
-                   "it": "Ho fretta, di cosa hai bisogno? ",
-                   "fr": "Je suis pressé, que veux-tu? "
+                   "en": "I'm in a rush, what do you need?\u0020",
+                   "es": "Estoy apurado, ¿qué necesitas?\u0020",
+                   "de": "Ich habe es eilig, was brauchst du?\u0020",
+                   "it": "Ho fretta, di cosa hai bisogno?\u0020",
+                   "fr": "Je suis pressé, que veux-tu?\u0020"
                  },
                  "1": {
-                   "en": "Absolutely I can help out a lady in need! What is the issue? ",
-                   "es": "¡Absolutamente puedo ayudar a una dama en apuros! ¿Cuál es el problema? ",
-                   "de": "Natürlich kann ich einer Dame in Not helfen! Was ist das Problem? ",
-                   "it": "Assolutamente posso aiutare una signora in difficoltà! Qual è il problema? ",
-                   "fr": "Bien sûr, je peux aider une dame dans le besoin ! Quel est le problème ? "
+                   "en": "Absolutely I can help out a lady in need! What is the issue?\u0020",
+                   "es": "¡Absolutamente puedo ayudar a una dama en apuros! ¿Cuál es el problema?\u0020",
+                   "de": "Natürlich kann ich einer Dame in Not helfen! Was ist das Problem?\u0020",
+                   "it": "Assolutamente posso aiutare una signora in difficoltà! Qual è il problema?\u0020",
+                   "fr": "Bien sûr, je peux aider une dame dans le besoin ! Quel est le problème ?\u0020"
                  },
                  "2": {
                    "en": "Sorry I don't want to help you.",
@@ -1557,11 +1598,11 @@
                    "fr": "Alors, que veux-tu?"
                  },
                  "1": {
-                   "en": "Ok I am ready to help you! ",
-                   "es": "¡Ok, estoy listo para ayudarte! ",
-                   "de": "Ok, ich bin bereit, dir zu helfen! ",
-                   "it": "Ok, sono pronto ad aiutarti! ",
-                   "fr": "Ok, je suis prêt à t'aider ! "
+                   "en": "Ok I am ready to help you!\u0020",
+                   "es": "¡Ok, estoy listo para ayudarte!\u0020",
+                   "de": "Ok, ich bin bereit, dir zu helfen!\u0020",
+                   "it": "Ok, sono pronto ad aiutarti!\u0020",
+                   "fr": "Ok, je suis prêt à t'aider !\u0020"
                  },
                  "2": {
                    "en": "I just remembered, I left the gas on at home.",
@@ -1602,10 +1643,10 @@
                    "phase": {
                      "0": {
                        "en": "It's silly really...",
-                       "es": "Es realmente tonto... ",
-                       "de": "Es ist wirklich albern... ",
-                       "it": "È davvero sciocco... ",
-                       "fr": "C'est vraiment idiot... "
+                       "es": "Es realmente tonto...",
+                       "de": "Es ist wirklich albern...",
+                       "it": "È davvero sciocco...",
+                       "fr": "C'est vraiment idiot..."
                      },
                      "1": {
                        "en": "I lost my mirror and I need to finish my make up.",
@@ -1730,11 +1771,11 @@
                "order": "11!",
                "dialogueOptions": {
                  "0": {
-                   "en": "I would like the key for the research room please. ",
-                   "es": "Me gustaría la llave para la sala de investigación, por favor. ",
-                   "de": "Ich hätte gerne den Schlüssel für den Forschungsraum, bitte. ",
-                   "it": "Vorrei la chiave per la stanza di ricerca, per favore. ",
-                   "fr": "Je voudrais la clé pour la salle de recherche, s'il vous plaît. "
+                   "en": "I would like the key for the research room please.\u0020",
+                   "es": "Me gustaría la llave para la sala de investigación, por favor.\u0020",
+                   "de": "Ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
+                   "it": "Vorrei la chiave per la stanza di ricerca, per favore.\u0020",
+                   "fr": "Je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
                  },
                  "1": {
                    "en": "How much did those glasses cost, I want some!",
@@ -1900,11 +1941,11 @@
                "order": "11!",
                "dialogueOptions": {
                  "0": {
-                   "en": "Just give it to me please, I have something important to check. ",
-                   "es": "Solo dámelo por favor, tengo algo importante que revisar. ",
-                   "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen. ",
-                   "it": "Dammi solo, per favore, ho qualcosa di importante da controllare. ",
-                   "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier. "
+                   "en": "Just give it to me please, I have something important to check.\u0020",
+                   "es": "Solo dámelo por favor, tengo algo importante que revisar.\u0020",
+                   "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen.\u0020",
+                   "it": "Dammi solo, per favore, ho qualcosa di importante da controllare.\u0020",
+                   "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier.\u0020"
                  },
                  "1": {
                    "en": "Yes, how much did those glasses cost, I want some!",
@@ -2066,11 +2107,11 @@
                "order": "1!",
                "dialogueOptions": {
                  "0": {
-                   "en": "Nice workshop! ",
-                   "es": "¡Buen taller! ",
-                   "de": "Schöne Werkstatt! ",
-                   "it": "Bel laboratorio! ",
-                   "fr": "Bel atelier! "
+                   "en": "Nice workshop!",
+                   "es": "¡Buen taller!",
+                   "de": "Schöne Werkstatt!",
+                   "it": "Bel laboratorio!",
+                   "fr": "Bel atelier!"
                  },
                  "1": {
                    "en": "Do you have anything for sale?",
@@ -2093,25 +2134,6 @@
                    "it": "Dove hai preso pinze come quelle?",
                    "fr": "Où as-tu trouvé des pinces comme celles-là ?"
                  }
-               },
-               "exitOption": {
-                 "phase": {
-                   "0": {
-                     "en": "I'm off exploring! Have a nice day!",
-                     "es": "¡Me voy a explorar! ¡Que tengas un buen día!",
-                     "de": "Ich gehe erkunden! Hab einen schönen Tag!",
-                     "it": "Vado a esplorare! Buona giornata!",
-                     "fr": "Je pars explorer ! Passe une bonne journée !"
-                   },
-                   "1": {
-                     "en": "Ok lad, well I will get back to business!",
-                     "es": "Está bien, amigo, volveré al trabajo.",
-                     "de": "In Ordnung, Kumpel, ich werde mich wieder der Arbeit widmen!",
-                     "it": "Va bene, amico, tornerò al lavoro!",
-                     "fr": "D'accord, mon pote, je vais reprendre le travail !"
-                   }
-                 },
-                 "order": "01!"
                },
                "responses": {
                  "0": {
@@ -2169,7 +2191,26 @@
                    },
                    "order": "1!"
                  }
-               }
+               },
+               "autoExitOption": {
+                  "phase": {
+                     "0": {
+                        "en": "I'm off exploring! Have a nice day!",
+                        "es": "¡Me voy a explorar! ¡Que tengas un buen día!",
+                        "de": "Ich gehe erkunden! Hab einen schönen Tag!",
+                        "it": "Vado a esplorare! Buona giornata!",
+                        "fr": "Je pars explorer ! Passe une bonne journée !"
+                      },
+                      "1": {
+                        "en": "Ok lad, well I will get back to business!",
+                        "es": "Está bien, amigo, volveré al trabajo.",
+                        "de": "In Ordnung, Kumpel, ich werde mich wieder der Arbeit widmen!",
+                        "it": "Va bene, amico, tornerò al lavoro!",
+                        "fr": "D'accord, mon pote, je vais reprendre le travail !"
+                      }
+                  },
+                  "order": "01!"
+                }
              },
              "1": {
                "introDialogue": {
@@ -2371,18 +2412,18 @@
                "order": "00!",
                "dialogueOptions": {
                  "0": {
-                   "en": "You seem to be in pain! Let me help you with that splinter. ",
-                   "es": "¡Pareces estar dolorido! Déjame ayudarte con esa astilla. ",
-                   "de": "Du scheinst Schmerzen zu haben! Lass mich dir mit dem Splitter helfen. ",
-                   "it": "Sembri essere in dolore! Lascia che ti aiuti con quella scheggia. ",
-                   "fr": "Tu sembles souffrir ! Laisse-moi t'aider avec cette écharde. "
+                   "en": "You seem to be in pain! Let me help you with that splinter.\u0020",
+                   "es": "¡Pareces estar dolorido! Déjame ayudarte con esa astilla.\u0020",
+                   "de": "Du scheinst Schmerzen zu haben! Lass mich dir mit dem Splitter helfen.\u0020",
+                   "it": "Sembri essere in dolore! Lascia che ti aiuti con quella scheggia.\u0020",
+                   "fr": "Tu sembles souffrir ! Laisse-moi t'aider avec cette écharde.\u0020"
                  },
                  "1": {
-                   "en": "I guess I could try to help... although I don't like getting dirty. ",
-                   "es": "Supongo que podría intentar ayudarte... pero no me gusta ensuciarme. ",
-                   "de": "Ich denke, ich könnte versuchen zu helfen... aber ich mag es nicht, schmutzig zu werden. ",
-                   "it": "Immagino che potrei provare ad aiutarti... ma non mi piace sporcarmi. ",
-                   "fr": "Je suppose que je pourrais essayer d'aider... mais je n'aime pas me salir. "
+                   "en": "I guess I could try to help... although I don't like getting dirty.\u0020",
+                   "es": "Supongo que podría intentar ayudarte... pero no me gusta ensuciarme.\u0020",
+                   "de": "Ich denke, ich könnte versuchen zu helfen... aber ich mag es nicht, schmutzig zu werden.\u0020",
+                   "it": "Immagino che potrei provare ad aiutarti... ma non mi piace sporcarmi.\u0020",
+                   "fr": "Je suppose que je pourrais essayer d'aider... mais je n'aime pas me salir.\u0020"
                  },
                  "2": {
                    "en": "Moo!",
