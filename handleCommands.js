@@ -1,4 +1,4 @@
-import { getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
+import { getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getCurrentStartIndexInventory, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js"
@@ -155,6 +155,28 @@ export function removeObjectFromEnvironment(objectId) {
     if (originalValues.hasOwnProperty(roomId)) {
         for (const [position, data] of Object.entries(originalValues[roomId])) {
             if (data.objectId === objectId) {
+                const [x, y] = position.split(',').map(Number);
+
+                if (y >= 0 && y < gridData.length && y >= 0 && x < gridData[y].length) {
+                    gridData[y][x] = data.originalValue;
+                } else {
+                    console.error(`Position out of bounds: (${x}, ${y})`);
+                }
+            }
+        }
+    } else {
+        console.error(`No original values found for roomId: ${roomId}`);
+    }
+}
+
+export function removeNpcFromEnvironment(npcId) {
+    const gridData = getGridData().gridData;
+    const roomId = getCurrentScreenId();
+    const originalValues = getOriginalValueInCellWhereNpcPlaced();
+
+    if (originalValues.hasOwnProperty(roomId)) {
+        for (const [position, data] of Object.entries(originalValues[roomId])) {
+            if (data.npcId === npcId) {
                 const [x, y] = position.split(',').map(Number);
 
                 if (y >= 0 && y < gridData.length && y >= 0 && x < gridData[y].length) {

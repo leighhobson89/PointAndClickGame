@@ -2371,7 +2371,28 @@
                   },
                   "order": "01!"
                 }
-             }
+             },
+             "3": {
+              "autoExitOption": {
+                 "phase": {
+                    "0": {
+                       "en": "I'm off exploring! Have a nice day!",
+                       "es": "¡Me voy a explorar! ¡Que tengas un buen día!",
+                       "de": "Ich gehe erkunden! Hab einen schönen Tag!",
+                       "it": "Vado a esplorare! Buona giornata!",
+                       "fr": "Je pars explorer ! Passe une bonne journée !"
+                     },
+                     "1": {
+                       "en": "Ok lad, well I will get back to business!",
+                       "es": "Está bien, amigo, volveré al trabajo.",
+                       "de": "In Ordnung, Kumpel, ich werde mich wieder der Arbeit widmen!",
+                       "it": "Va bene, amico, tornerò al lavoro!",
+                       "fr": "D'accord, mon pote, je vais reprendre le travail !"
+                     }
+                 },
+                 "order": "01!"
+               }
+            }
            },
            "cantTalkDialogue": {
             "0": {

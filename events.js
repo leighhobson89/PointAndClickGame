@@ -1,5 +1,5 @@
 import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
-import { setDialogueData, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
+import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { addObjectToEnvironment, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
@@ -291,7 +291,7 @@ function setCarpenterSpokenToTrue() {
     console.log("spoke to carpenter now");
 }
 
-function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) {
+function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this function removes the items and puts them back where they were if the player cannot pick them up yet or lets it go if they can special case for carpènter where items need to be set to canPickUp true
     const objectStartX = getObjectData().objects[objectId].gridPosition.x;
     const objectStartY = getObjectData().objects[objectId].gridPosition.y;
     const objectStartWidth = getObjectData().objects[objectId].dimensions.width;
@@ -300,19 +300,25 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) {
     const carpenterQuestPhase = getNpcData().npcs.npcCarpenter.interactable.questPhase;
     const carpenterDialogueColor = getNpcData().npcs.npcCarpenter.interactable.dialogueColor;
     let dialogueString;
-    if (carpenterQuestPhase === 0) {
+    if (carpenterQuestPhase < 2) {
         dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpPliersOrNailsYet[getLanguage()];
         addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight);
         handleInventoryAdjustment(objectId, 1);
         drawInventory(0);
 
         showText(dialogueString, carpenterDialogueColor);
+
+        //debug transfer these to the farmer when player talks to him activate these
+        setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
+        setNpcData(`npcCarpenter`, `interactable.questCutOffNumber`, 2);
     }
 }
 
-//when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the items on the table pliers and nails
-//if player attempts to pick up an item in the carpenter we have to call checkCarpenterQuestPhase and if not display a deny dialogue and
-
+//when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the pliers and nails
+function moveCarpenterToStables() {
+    console.log("carpenter gone to stables");
+    removeNpcFromEnvironment('npcCarpenter');
+}
 function makeCowTalkableAfterSpeakingToFarmer() { //add to npcFarmer when made him so that cant talk to cow until farmer spoke to you and asked to help it
     setNpcData(`npcCow`, `interactable.canTalk`, true);
 }
@@ -529,7 +535,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
 
         if (realVerbUsed === "verbPickUp") {
             try {
-                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, ${null})`);
+                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, '${special}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }

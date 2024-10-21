@@ -294,7 +294,6 @@ export function drawGrid(drawGrid) {
     }
 }
 
-
 export function drawPlayerNpcsAndObjects(ctx) {
     
     const player = getPlayerObject();

@@ -378,6 +378,9 @@
                 "questCutOffEvents": {
                     "0": {
                         "event": "setCarpenterSpokenToTrue"
+                    },
+                    "2": {
+                        "event": "moveCarpenterToStables"
                     }
                 },
                 "canUseWith": false,
