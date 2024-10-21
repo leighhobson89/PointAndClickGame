@@ -309,8 +309,8 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this funct
         showText(dialogueString, carpenterDialogueColor);
 
         //debug transfer these to the farmer when player talks to him activate these
-        setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
-        setNpcData(`npcCarpenter`, `interactable.questCutOffNumber`, 2);
+        // setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
+        // setNpcData(`npcCarpenter`, `interactable.questCutOffNumber`, 2);
     }
 }
 
