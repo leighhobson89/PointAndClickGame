@@ -50,17 +50,14 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
 
     setAnimationInProgress(true);
-    setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    removeObjectFromEnvironment('objectParrotHook');
-
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
     addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 20, 15);
+    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
 
     setPreAnimationGridState(gridData, 'objectParrotFlyer', true);
-    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', true);
 
     setDialogueData('objectInteractions.verbLookAt.objectParrotFlyer', '0', '1');
 
@@ -244,12 +241,15 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    showText("", getColorTextPlayer());
-
     addObjectToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12);
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
+    showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true); 
+
+    setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
+    
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
 }
 
 function resizeBowlInObjectsJSON() {
