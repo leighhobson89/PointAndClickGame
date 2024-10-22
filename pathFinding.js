@@ -1,4 +1,4 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, action) {
     console.log("transitioning now: " + getTransitioningNow());
@@ -48,13 +48,27 @@ export function aStarPathfinding(start, target, action) {
     const startNode = new Node(start.x, start.y, 0, heuristic(start, target), null);
     openList.push(startNode);
 
+    let npcResizedYet = false;
+
     while (openList.length > 0) {
         openList.sort((a, b) => a.f - b.f);
         const currentNode = openList.shift();
 
         const distanceToTarget = heuristic(currentNode, target);
 
-        if (action === "Talk To" || action === "Give") { //special cases where npc inaccesible due to scenery not being walkable
+        if (action === "Talk To" || action === "Give") { //special cases where npc inaccessible due to scenery not being walkable
+            if(!npcResizedYet) {
+                const cellType = gridData.gridData[target.y][target.x];
+                const baseCellHeightCoefficient = 5;
+                const npc = cellType.slice(1);
+                const npcGridPositionY = getNpcData().npcs[npc].gridPosition.y;
+                const npcHeight = getNpcData().npcs[npc].dimensions.height;
+                const cellsHeight = npcHeight / baseCellHeightCoefficient;
+
+                target.y = npcGridPositionY + cellsHeight;
+                npcResizedYet = true;
+            }
+
             if (distanceToTarget <= 13) {
                 let temp = currentNode;
                 while (temp) {
