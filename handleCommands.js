@@ -651,7 +651,7 @@ export function handlePull(verb, objectId) {
 export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
     let npcData;
 
-    if (isObjectTrueNpcFalse) {
+    if (isObjectTrueNpcFalse && !exitOrNot) {
         npcData = getObjectData().objects[npcId]; //for special cases of objects standing in for npc, code is correct dont worry
         if (!npcData.interactable.specialNpcObjectStandIn) {
             npcData = getNpcData().npcs[npcId];
@@ -664,7 +664,7 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
     const language = getLanguage();
     let dialogueString;
     
-    if ((!isObjectTrueNpcFalse && !exitOrNot) || npcData.interactable.specialNpcObjectStandIn) {
+    if ((!isObjectTrueNpcFalse && !exitOrNot) || npcData) {
         if (npcData.interactable.canTalk) {
             handleUse(npcId, null, null, null, false, 1, false, verb);
         } else {
