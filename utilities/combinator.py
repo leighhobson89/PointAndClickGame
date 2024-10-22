@@ -22,12 +22,12 @@ def combine_json_files(folder_path, output_file):
 
 if __name__ == '__main__':
     #MAIN PC
-    folder_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput'
-    output_file = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\masterJSON\\masterJSONData.json'
+    # folder_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput'
+    # output_file = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\masterJSON\\masterJSONData.json'
 
     #LAPTOP
-    #folder_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput'
-    #output_file = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\masterJSON\\masterJSONData.json'
+    folder_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput'
+    output_file = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\masterJSON\\masterJSONData.json'
 
     combine_json_files(folder_path, output_file)
     print(f"Combined JSON saved to {output_file}")

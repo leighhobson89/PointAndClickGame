@@ -1,9 +1,11 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, action) {
+    let npcResizedYet = false; //only important if user has clicked to talk or give a npc
+
     console.log("transitioning now: " + getTransitioningNow());
 
-    const gridData = getGridData();  // Fetch grid data directly
+    const gridData = getGridData();
     
     if (gridData.idType === "next") {
         console.log("Finding a path based on " + gridData.idType + " screen id = " + getNextScreenId());
@@ -54,15 +56,29 @@ export function aStarPathfinding(start, target, action) {
 
         const distanceToTarget = heuristic(currentNode, target);
 
-        if (action === "Talk To" || action === "Give") { //special cases where npc inaccesible due to scenery not being walkable
+        if (action === "Talk To" || action === "Give") {
+            if(!npcResizedYet) {
+                const cellType = gridData.gridData[target.y][target.x];
+                const baseCellHeightCoefficient = 5;
+                const npc = cellType.slice(1);
+                const npcGridPositionY = getNpcData().npcs[npc].gridPosition.y;
+                const npcHeight = getNpcData().npcs[npc].dimensions.height;
+                const cellsHeight = npcHeight / baseCellHeightCoefficient;
+
+                target.y = npcGridPositionY + cellsHeight;
+                npcResizedYet = true;
+            }
+
             if (distanceToTarget <= 13) {
                 let temp = currentNode;
                 while (temp) {
                     path.push({ x: temp.x, y: temp.y });
                     temp = temp.parent;
                 }
-    
-                return path.reverse();
+                const finalPath = removeNValuesFromPathEnd(path);
+                if (finalPath) {
+                    return finalPath.reverse();
+                }
             }
         }
 
@@ -72,7 +88,10 @@ export function aStarPathfinding(start, target, action) {
                 path.push({ x: temp.x, y: temp.y });
                 temp = temp.parent;
             }
-            return path.reverse();
+            const finalPath = removeNValuesFromPathEnd(path);
+            if (finalPath) {
+                return finalPath.reverse();
+            }
         }
 
         closedList.push(currentNode);
@@ -97,27 +116,27 @@ export function aStarPathfinding(start, target, action) {
             }
 
             const cellType = gridData.gridData[neighborY][neighborX];
-            if (cellType === 'n' || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if (cellType.startsWith('c') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }
 
             let cellCost = dir.cost;
 
-            // Adjust cost for 'w' cells near 'b' cells within 3 cells vertically
-            if (cellType.startsWith('w')) {
-                // Check for 'b' cells within 3 cells in the Y direction
+            if (cellType.startsWith('w')) { //code for making cells near b cells more costly to try and avoid them
                 for (let i = -3; i <= 3; i++) {
                     const checkY = neighborY + i;
                     if (checkY >= 0 && checkY < gridSizeY) {
                         const nearbyCell = gridData.gridData[checkY][neighborX];
                         if (nearbyCell && nearbyCell.startsWith('b')) {
-                            cellCost *= 2;  // Increase cost if near 'b' cells
-                            break;  // No need to check further
+                            cellCost *= 2;
+                            break;
                         }
                     }
                 }
             } else if (cellType.startsWith('b')) {
-                cellCost *= 2;  // Higher cost for 'b' cells directly
+                cellCost *= 2;
+            } else if (cellType === 'n') {
+                cellCost *= 10000;
             }
 
             const gScore = currentNode.g + cellCost;
@@ -151,7 +170,7 @@ export function aStarPathfinding(start, target, action) {
             { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
             action
         );
-        console.log("No path found, so walking to " + nearestWalkableCell);
+        console.log("No path found, so walking to " + nearestWalkableCell.x + ", " + nearestWalkableCell.y);
         setLookingForAlternativePathToNearestWalkable(false);
         return nearestPath;
     }
@@ -305,3 +324,20 @@ function checkAndRedirectToDoor(target) {
     return null;
 }
 
+function removeNValuesFromPathEnd(path) {
+    const gridData = getGridData();  // Fetch grid data directly for cell lookups
+    
+    while (path.length > 0) {
+        const { y, x } = path[0];  // Check the first element
+        const cellType = gridData.gridData[y][x];
+        console.log(cellType);
+        
+        if (cellType.startsWith('w')) {
+            return path;  // Stop and return the remaining path
+        } else {
+            path.shift();  // Remove the first element
+        }
+    }
+    return [];  // Return an empty array if no 'w' cell is found
+    
+}

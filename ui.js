@@ -685,22 +685,37 @@ document.addEventListener("DOMContentLoaded", () => {
         setDrawGrid(!currentDrawGrid);
     });
 
-    canvas.addEventListener('mousedown', function(event) {
-        if (event.button === 1) {
-            if (getGameStateVariable() === getGameVisibleActive()) {
-                const wheelMenu = document.querySelector('.wheel-menu-container');
-                if (wheelMenu) {
-                    if (wheelMenu.style.display === 'block') {
-						wheelMenu.style.display = 'none';
-					} else {
-						document.getElementById('selectItemButton').style.backgroundColor ='#6c757d';
-						document.getElementById('selectItemButton').disabled = true;
-						wheelMenu.style.display = 'block';
-					}
+    document.addEventListener('mousedown', function(event) {
+        showHideDebugPanel(event);
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'NumpadSubtract') {
+            showHideDebugPanel(event);
+        }
+    });
+
+    
+function showHideDebugPanel(event) {
+    // Check if the event is a middle mouse click or NumpadSubtract keypress
+    const isMiddleMouseClick = event.type === 'mousedown' && event.button === 1;
+    const isNumpadSubtract = event.type === 'keydown' && event.code === 'NumpadSubtract';
+
+    if (isMiddleMouseClick || isNumpadSubtract) {
+        if (getGameStateVariable() === getGameVisibleActive()) {
+            const wheelMenu = document.querySelector('.wheel-menu-container');
+            if (wheelMenu) {
+                if (wheelMenu.style.display === 'block') {
+                    wheelMenu.style.display = 'none';
+                } else {
+                    document.getElementById('selectItemButton').style.backgroundColor = '#6c757d';
+                    document.getElementById('selectItemButton').disabled = true;
+                    wheelMenu.style.display = 'block';
                 }
             }
         }
-    });
+    }
+}
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
