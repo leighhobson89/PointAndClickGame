@@ -320,7 +320,7 @@ function removeNValuesFromPathEnd(path) {
         const cellType = gridData.gridData[y][x];
         console.log(cellType);
         
-        if (cellType.startsWith('w') || cellType.startsWith('b')) {
+        if (cellType.startsWith('w')) {
             return path;  // Stop and return the remaining path
         } else {
             path.shift();  // Remove the first element
