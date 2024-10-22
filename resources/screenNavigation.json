@@ -32,8 +32,8 @@
             "e1": {
                 "connectsTo": "researchRoom",
                 "status": "locked",
-                "startPosition": { "x": 34, "y": 50 },
-                "finalPosition": { "x": 38, "y": 43 },
+                "startPosition": { "x": 42, "y": 56 },
+                "finalPosition": { "x": 40, "y": 50 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
