@@ -1,9 +1,11 @@
 import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, action) {
+    let npcResizedYet = false; //only important if user has clicked to talk or give a npc
+
     console.log("transitioning now: " + getTransitioningNow());
 
-    const gridData = getGridData();  // Fetch grid data directly
+    const gridData = getGridData();
     
     if (gridData.idType === "next") {
         console.log("Finding a path based on " + gridData.idType + " screen id = " + getNextScreenId());
@@ -48,15 +50,13 @@ export function aStarPathfinding(start, target, action) {
     const startNode = new Node(start.x, start.y, 0, heuristic(start, target), null);
     openList.push(startNode);
 
-    let npcResizedYet = false;
-
     while (openList.length > 0) {
         openList.sort((a, b) => a.f - b.f);
         const currentNode = openList.shift();
 
         const distanceToTarget = heuristic(currentNode, target);
 
-        if (action === "Talk To" || action === "Give") { //special cases where npc inaccessible due to scenery not being walkable
+        if (action === "Talk To" || action === "Give") {
             if(!npcResizedYet) {
                 const cellType = gridData.gridData[target.y][target.x];
                 const baseCellHeightCoefficient = 5;
@@ -122,21 +122,19 @@ export function aStarPathfinding(start, target, action) {
 
             let cellCost = dir.cost;
 
-            // Adjust cost for 'w' cells near 'b' cells within 3 cells vertically
-            if (cellType.startsWith('w')) {
-                // Check for 'b' cells within 3 cells in the Y direction
+            if (cellType.startsWith('w')) { //code for making cells near b cells more costly to try and avoid them
                 for (let i = -3; i <= 3; i++) {
                     const checkY = neighborY + i;
                     if (checkY >= 0 && checkY < gridSizeY) {
                         const nearbyCell = gridData.gridData[checkY][neighborX];
                         if (nearbyCell && nearbyCell.startsWith('b')) {
-                            cellCost *= 2;  // Increase cost if near 'b' cells
-                            break;  // No need to check further
+                            cellCost *= 2;
+                            break;
                         }
                     }
                 }
             } else if (cellType.startsWith('b')) {
-                cellCost *= 2;  // Higher cost for 'b' cells directly
+                cellCost *= 2;
             } else if (cellType === 'n') {
                 cellCost *= 10000;
             }
