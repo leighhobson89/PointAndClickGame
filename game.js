@@ -1263,10 +1263,6 @@ export function reconcileGridState() {
     setPreAnimationGridState('clear', null, null, null);
 }
 
-
-
-
-
 //-------------------------------------------------------------------------------------------------------------
 
 export function setGameState(newState) {

@@ -102,7 +102,7 @@ export function aStarPathfinding(start, target, action) {
             }
 
             const cellType = gridData.gridData[neighborY][neighborX];
-            if (cellType.startsWith('c') || cellType.startsWith('o') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if (cellType.startsWith('c') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }
 
@@ -318,8 +318,9 @@ function removeNValuesFromPathEnd(path) {
     while (path.length > 0) {
         const { y, x } = path[0];  // Check the first element
         const cellType = gridData.gridData[y][x];
+        console.log(cellType);
         
-        if (cellType.startsWith('w')) {
+        if (cellType.startsWith('w') || cellType.startsWith('b')) {
             return path;  // Stop and return the remaining path
         } else {
             path.shift();  // Remove the first element
