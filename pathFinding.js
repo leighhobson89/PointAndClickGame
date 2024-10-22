@@ -97,7 +97,7 @@ export function aStarPathfinding(start, target, action) {
             }
 
             const cellType = gridData.gridData[neighborY][neighborX];
-            if (cellType === 'n' || cellType.startsWith('c') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if (cellType === 'n' || cellType.startsWith('c') || cellType.startsWith('o') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }
 

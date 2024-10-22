@@ -1592,7 +1592,7 @@
       "inventoryUrl": "",
       "gridPosition": {
         "x": 19,
-        "y": 47
+        "y": 53
       },
       "offset": {
         "x": 0,
@@ -1604,7 +1604,7 @@
       },
       "dimensions": {
         "width": 130,
-        "height": 50
+        "height": 30
       },
       "comment": "Pile of books you use or push or pull to get the key for the research room"
     },
