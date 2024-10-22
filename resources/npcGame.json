@@ -14,6 +14,7 @@
                 "fr": "Âne"
             },
             "interactable": {
+                "turnForDialogue": false,
                 "canHover": true,
                 "canTalk": false,
                 "cantTalkDialogueNumber": 0,
@@ -74,6 +75,7 @@
                 "fr": "Bibliothécaire"
             },
             "interactable": {
+                "turnForDialogue": false,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -133,6 +135,7 @@
                 "fr": "Chien"
             },
             "interactable": {
+                "turnForDialogue": true,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -162,8 +165,10 @@
             "npcPlacementLocation": "marketStreet",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/npcs/townDog.png",
-                "s2": "./resources/npcs/townDogNoBone.png"
+                "s1": "./resources/npcs/townDogLeft.png",
+                "s2": "./resources/npcs/townDogLeft.png",
+                "s3": "./resources/npcs/townDogRight.png",
+                "s4": "./resources/npcs/townDogNoBone.png"
             },
             "gridPosition": {
                 "x": 62,
@@ -192,6 +197,7 @@
                 "fr": "Jeune Femme"
             },
             "interactable": {
+                "turnForDialogue": false,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -251,6 +257,7 @@
                 "fr": "Vache"
             },
             "interactable": {
+                "turnForDialogue": false,
                 "canHover": true,
                 "canTalk": false,
                 "cantTalkDialogueNumber": 0,
@@ -310,6 +317,7 @@
                 "fr": "Homme à l'air louche"
             },
             "interactable": {
+                "turnForDialogue": false,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -369,6 +377,7 @@
                 "fr": "Charpentier"
             },
             "interactable": {
+                "turnForDialogue": true,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -402,8 +411,8 @@
             "activeSpriteUrl": "s1",
             "spriteUrl": {
                 "s1": "./resources/npcs/carpenterNpcBack.png",
-                "s2": "./resources/npcs/carpenterNpcRight.png",
-                "s3": "./resources/npcs/carpenterNpcLeft.png"
+                "s2": "./resources/npcs/carpenterNpcLeft.png",
+                "s3": "./resources/npcs/carpenterNpcRight.png"
             },
             "gridPosition": {
                 "x": 37,

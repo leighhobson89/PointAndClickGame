@@ -2,15 +2,18 @@ import { getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActiv
 import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
-import { executeInteractionEvent } from "./events.js";
+import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
 
 // Dialogue Engine
 export async function dialogueEngine(realVerbUsed, npcId) {
+    const player = getPlayerObject();
     const language = getLanguage();
     const npcData = getNpcData().npcs[npcId];
 
     let questPhase = getQuestPhaseNpc(npcId);
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
+
+    turnNpcForDialogue(player, npcData, npcId, false);
 
     if (npcData) { //update interactionInfo
         setTransitioningToDialogueState(true);
@@ -242,6 +245,7 @@ export async function dialogueEngine(realVerbUsed, npcId) {
                     executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
                     //trigger post quest events
                 }
+                turnNpcForDialogue(player, npcData, npcId, true);
                 setCurrentSpeaker('player');
                 setDialogueScrollCount(0);
                 setCurrentScrollIndexDialogue(0);

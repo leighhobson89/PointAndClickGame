@@ -425,7 +425,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     handleInventoryAdjustment(objectId, 1, true);
     drawInventory(0);
 
-    setNpcData(`${townDog}`, `activeSpriteUrl`, 's2');
+    setNpcData(`${townDog}`, `activeSpriteUrl`, 's4');
 
     const gridPositionX = 65;
     const gridPositionY = 54;
@@ -549,6 +549,25 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
     }
+}
+
+export function turnNpcForDialogue(player, npc, npcId, originalState) {
+    const playerXPos = player.xPos;
+    const npcXPos = npc.visualPosition.x;
+
+    if (npc.interactable.turnForDialogue) {
+        if (originalState) {
+            setNpcData(`${npcId}`, 'activeSpriteUrl', 's1'); 
+            return;
+        }
+    
+        if (playerXPos <= npcXPos) {
+            setNpcData(`${npcId}`, 'activeSpriteUrl', 's2'); 
+        } else {
+            setNpcData(`${npcId}`, 'activeSpriteUrl', 's3'); 
+        }
+    }
+    
 }
 
 async function showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStartingDialogue, npcData) {
