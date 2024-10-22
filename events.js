@@ -1,4 +1,4 @@
-import { setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
+import { getPreAnimationGridState, setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
 import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { addObjectToEnvironment, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
@@ -51,31 +51,15 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 
     setAnimationInProgress(true);
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    setObjectData(`objectParrotFlyer`, `dimensions.width`, 1);
-    setObjectData(`objectParrotFlyer`, `dimensions.height`, 1);
-    setObjectData(`objectParrotHook`, `visualPosition.x`, 50);
-    setObjectData(`objectParrotHook`, `visualPosition.y`, 50);
-    showHideObjectAndMakeHoverable('s2', 'objectParrotHook', false);
+    removeObjectFromEnvironment('objectParrotHook');
+
+    setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
+    setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
+    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 20, 15);
 
     await showText(dialogueString, getColorTextPlayer());
 
-    const gridPositionX = 65;
-    const gridPositionY = 14;
-
-    const offsetX = getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellWidth();
-    const offsetY = getObjectData().objects['objectParrotFlyer'].offset.x * getCanvasCellHeight();
-
-    const offSetAdjustmentX = 0;
-    const offSetAdjustmentY = 0;
-
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
-
     setPreAnimationGridState(gridData, 'objectParrotFlyer', true);
-    setObjectData(`objectParrotFlyer`, `visualPosition.x`, desiredVisualPositionX);
-    setObjectData(`objectParrotFlyer`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
-    setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
     showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', true);
 
     setDialogueData('objectInteractions.verbLookAt.objectParrotFlyer', '0', '1');
@@ -258,26 +242,13 @@ function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerb
 
 function resetHookBackToTreePosition() {
     const gridData = getGridData();
-
-    const gridPositionX = 70; //68
-    const gridPositionY = 15;
-
-    const offsetX = getObjectData().objects['objectParrotHook'].offset.x * getCanvasCellWidth();
-    const offsetY = getObjectData().objects['objectParrotHook'].offset.x * getCanvasCellHeight();
-
-    const offSetAdjustmentX = offsetX - (0.6 * getCanvasCellWidth()); //change these to move object with fine control
-    const offSetAdjustmentY = 0; //change these to move object with fine control
-
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
-
     setAnimationInProgress(true);
+
+    showText("", getColorTextPlayer());
+
+    addObjectToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12);
+
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    setObjectData(`objectParrotHook`, `visualPosition.x`, desiredVisualPositionX);
-    setObjectData(`objectParrotHook`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectParrotHook`, `dimensions.width`, 20);
-    setObjectData(`objectParrotHook`, `dimensions.height`, 12);
-    setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
     showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true);  
 }
 

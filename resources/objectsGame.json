@@ -1372,8 +1372,8 @@
       },
       "inventoryUrl": "./resources/objects/images/parrotFlyerInv.png",
       "gridPosition": {
-        "x": 40,
-        "y": 15
+        "x": 1,
+        "y": 1
       },
       "offset": {
         "x": 0,
@@ -1384,8 +1384,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 70
+        "width": 1,
+        "height": 1
       },
       "comment": "place over top of mirror and show when user takes mirror"
     },
@@ -1421,7 +1421,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "combineRopeAndHook",
         "actionUseWith12": "",
-        "useTogetherLocation": "objectDonkeyRope",
+        "useTogetherLocation": "bigTree",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -1445,12 +1445,12 @@
       },
       "inventoryUrl": "./resources/objects/images/hookInv.png",
       "gridPosition": {
-        "x": 25,
-        "y": 25
+        "x": 47,
+        "y": 31
       },
       "offset": {
-        "x": 0.4,
-        "y": 0.5
+        "x": 0,
+        "y": 0
       },
       "visualPosition": {
         "x": 0,
@@ -1518,8 +1518,8 @@
       },
       "inventoryUrl": "./resources/objects/images/parrotMirrorInv.png",
       "gridPosition": {
-        "x": 27,
-        "y": 52
+        "x": 57,
+        "y": 36
       },
       "offset": {
         "x": 0.2,
