@@ -61,8 +61,10 @@ export function aStarPathfinding(start, target, action) {
                     path.push({ x: temp.x, y: temp.y });
                     temp = temp.parent;
                 }
-    
-                return path.reverse();
+                const finalPath = removeNValuesFromPathEnd(path);
+                if (finalPath) {
+                    return finalPath.reverse();
+                }
             }
         }
 
@@ -72,7 +74,10 @@ export function aStarPathfinding(start, target, action) {
                 path.push({ x: temp.x, y: temp.y });
                 temp = temp.parent;
             }
-            return path.reverse();
+            const finalPath = removeNValuesFromPathEnd(path);
+            if (finalPath) {
+                return finalPath.reverse();
+            }
         }
 
         closedList.push(currentNode);
@@ -97,7 +102,7 @@ export function aStarPathfinding(start, target, action) {
             }
 
             const cellType = gridData.gridData[neighborY][neighborX];
-            if (cellType === 'n' || cellType.startsWith('c') || cellType.startsWith('o') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if (cellType.startsWith('c') || cellType.startsWith('o') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }
 
@@ -118,6 +123,8 @@ export function aStarPathfinding(start, target, action) {
                 }
             } else if (cellType.startsWith('b')) {
                 cellCost *= 2;  // Higher cost for 'b' cells directly
+            } else if (cellType === 'n') {
+                cellCost *= 10000;
             }
 
             const gScore = currentNode.g + cellCost;
@@ -151,7 +158,7 @@ export function aStarPathfinding(start, target, action) {
             { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
             action
         );
-        console.log("No path found, so walking to " + nearestWalkableCell);
+        console.log("No path found, so walking to " + nearestWalkableCell.x + ", " + nearestWalkableCell.y);
         setLookingForAlternativePathToNearestWalkable(false);
         return nearestPath;
     }
@@ -305,3 +312,19 @@ function checkAndRedirectToDoor(target) {
     return null;
 }
 
+function removeNValuesFromPathEnd(path) {
+    const gridData = getGridData();  // Fetch grid data directly for cell lookups
+    
+    while (path.length > 0) {
+        const { y, x } = path[0];  // Check the first element
+        const cellType = gridData.gridData[y][x];
+        
+        if (cellType.startsWith('w')) {
+            return path;  // Stop and return the remaining path
+        } else {
+            path.shift();  // Remove the first element
+        }
+    }
+    return [];  // Return an empty array if no 'w' cell is found
+    
+}

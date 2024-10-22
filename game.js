@@ -1255,8 +1255,8 @@ export function reconcileGridState() {
     }
 
     // Console log the differences in the current grid for all objects
-    console.log(`All Differences for Pre-animation Objects:`, JSON.stringify(allDifferences, null, 2));
-    console.log(`Current Grid after resetting non-differing cells for all objects:`, JSON.stringify(currentGrid, null, 2));
+    //console.log(`All Differences for Pre-animation Objects:`, JSON.stringify(allDifferences, null, 2));
+    //console.log(`Current Grid after resetting non-differing cells for all objects:`, JSON.stringify(currentGrid, null, 2));
 
     // Set animation state to false (animation completed)
     setAnimationInProgress(false);
