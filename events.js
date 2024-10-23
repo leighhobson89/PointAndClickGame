@@ -238,7 +238,6 @@ function unlockDenDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
     navigationData.seedyGuyAlley.exits.e1.status = "open";
     setNavigationData(navigationData);
     objectData.interactable.alreadyUsed = true;
-    //setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);  update seedy guy to kick in
 
     showText(dialogueString, getColorTextPlayer());
 }
