@@ -1462,7 +1462,7 @@
       },
       "comment": "Hook for attaching parrotFlyer and can also be taken after this puzzle finishes and used with Rope"
     },
-    "objectParrot": {
+    "objectParrakeet": {
       "name": {
         "en": "Parrot",
         "es": "Loro",
@@ -1472,12 +1472,12 @@
       },
       "interactable": {
         "specialNpcObjectStandIn": true,
-        "canHover": false,
+        "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
-        "canUse": true,
+        "canUse": false,
         "canUseWith": false,
         "canGive": false,
         "stackable": false,
@@ -1485,11 +1485,11 @@
         "decrementQuantityOnUse": false,
         "activeStatus": true,
         "alreadyUsed": false,
-        "dialogueColor": "rgb(0, 0, 0)"
+        "dialogueColor": "rgb(0, 255, 0)"
       },
       "usedOn": {
         "objectUse": "",
-        "actionUse1": "donkeyMoveRopeAvailable",
+        "actionUse1": "",
         "actionUse2": "",
         "objectUseWith1": "",
         "npcUseWith1": "",
@@ -1501,11 +1501,11 @@
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "stables",
+      "objectPlacementLocation": "bigTree",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/blank.png",
-        "s2": "./resources/objects/images/donkeyOnRope.png"
+        "s1": "./resources/objects/images/parrotRight.png",
+        "s2": "./resources/objects/images/parrotLeft.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -1519,8 +1519,8 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 12,
-        "y": 1
+        "x": 55,
+        "y": 37
       },
       "offset": {
         "x": 0,
@@ -1531,8 +1531,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 1,
-        "height": 1
+        "width": 50,
+        "height": 50
       },
       "comment": "Object instance of Parrot"
     },
@@ -1866,7 +1866,7 @@
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "bigTree",
+      "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/pulleyWorld.png",

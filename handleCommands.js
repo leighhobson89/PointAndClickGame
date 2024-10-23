@@ -179,7 +179,7 @@ export function removeObjectFromEnvironment(objectId) {
                     const cell = gridData[y][x];
 
                     // Check if the cell references the objectId (assuming it starts with 'o')
-                    if (cell && typeof cell === 'string' && cell.startsWith('o') && cell.slice(1) === objectId) {
+                    if (cell.slice(1) === objectId) {
                         foundReference = true;
                         gridData[y][x] = 'n'; // This might cause problems if the object was on a w or other to start with 
                     }

@@ -964,7 +964,7 @@ function getLocationName(id) {
     }
 }
 
-export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffset = 0, width, height) {
+export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite) {
     setObjectData(`${objectId}`, `objectPlacementLocation`, `${getCurrentScreenId()}`);
     const objectsData = getObjectData();
     const gridData = getAllGridData();
@@ -1010,7 +1010,11 @@ export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffse
         y: yPos * cellHeight + offsetY
     };
 
-    console.log(`Placed object ${objectId} in room ${roomName} at grid position (${xPos}, ${yPos}) with visual position (${object.visualPosition.x}, ${object.visualPosition.y}).`);
+    if (sprite) {
+        object.activeSpriteUrl = sprite;
+    }
+
+    console.log(`Placed object ${objectId} in room ${roomName} at grid position (${xPos}, ${yPos}) with visual position (${object.visualPosition.x}, ${object.visualPosition.y}), using sprite ${sprite}`);
 }
 
 export function setUpObjectsAndNpcs() { 
@@ -1365,7 +1369,7 @@ export function setGameState(newState) {
     }
 }
 
-export function showHideObjectAndMakeHoverable(spriteUrlSNumber, objectId, showTrueHideFalse) {
+export function changeSpriteAndHoverableStatus(spriteUrlSNumber, objectId, showTrueHideFalse) {
     setObjectData(`${objectId}`, `activeSpriteUrl`, spriteUrlSNumber);
     setObjectData(`${objectId}`, `interactable.canHover`, showTrueHideFalse);
 }

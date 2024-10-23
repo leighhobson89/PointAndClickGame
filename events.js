@@ -1,7 +1,7 @@
 import { getPreAnimationGridState, setOriginalGridState, setParrotCompletedMovingToFlyer, getParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
 import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { addObjectToEnvironment, showHideObjectAndMakeHoverable, setGameState, gameLoop } from "./game.js";
+import { addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState, gameLoop } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue, dialogueEngine } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -52,10 +52,10 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     removeObjectFromEnvironment('objectParrotHook');
 
     setAnimationInProgress(true);
-    setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
-    setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);
-    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 20, 15);
-    showHideObjectAndMakeHoverable('s2', 'objectParrotFlyer', true);
+    setObjectData(`objectParrotFlyer`, `dimensions.width`, 30);
+    setObjectData(`objectParrotFlyer`, `dimensions.height`, 23);
+    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 30, 23, null);
+    changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
 
@@ -67,6 +67,8 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
         return new Promise(resolve => setTimeout(resolve, duration));
     };
 
+    await moveParrotToFlyer();
+
     await waitForTimeout(3000); //await animation function TODO
     setParrotCompletedMovingToFlyer(true);
     
@@ -75,6 +77,22 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     dialogueString = dialogueData.postAnimationEventDialogue.animationParrotMoveToParrotFlyer[language];
     await showText(dialogueString, getColorTextPlayer());
 
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
+}
+
+async function moveParrotToFlyer() {
+    let gridData = getGridData();
+    removeObjectFromEnvironment('objectParrakeet');
+
+    setObjectData(`objectParrakeet`, `dimensions.width`, 50);
+    setObjectData(`objectParrakeet`, `dimensions.height`, 50);
+    addObjectToEnvironment('objectParrakeet', 47, 34, 0, 0, 50, 50, "s2");
+
+    setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
+
+    setPreAnimationGridState(gridData, 'objectParrakeet', true);
+    
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
 }
@@ -122,7 +140,7 @@ async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank
     setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
     setObjectData(`objectPulleyWheel`, `dimensions.width`, 25);
     setObjectData(`objectPulleyWheel`, `dimensions.height`, 15);
-    showHideObjectAndMakeHoverable('s2', 'objectPulleyWheel', true);
+    changeSpriteAndHoverableStatus('s2', 'objectPulleyWheel', true);
 }
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
@@ -179,7 +197,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     navigationData.stables.exits.e1.status = "open";
     setNavigationData(navigationData); //allow player to enter barn
 
-    showHideObjectAndMakeHoverable(spriteUrlObjectToShow, objectToShowId, true);
+    changeSpriteAndHoverableStatus(spriteUrlObjectToShow, objectToShowId, true);
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
@@ -246,7 +264,7 @@ function resetHookBackToTreePosition() {
     addObjectToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12);
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
-    showHideObjectAndMakeHoverable('s1', 'objectParrotHook', true); 
+    changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
 
     setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
     
@@ -275,7 +293,7 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this funct
     let dialogueString;
     if (carpenterQuestPhase < 2) {
         dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpPliersOrNailsYet[getLanguage()];
-        addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight);
+        addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight, null);
         handleInventoryAdjustment(objectId, 1);
         drawInventory(0);
 
@@ -310,7 +328,7 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
 
     setObjectData(`${barrel}`, `interactable.activeStatus`, false);
     setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
-    showHideObjectAndMakeHoverable('s3', `${barrel}`, true);
+    changeSpriteAndHoverableStatus('s3', `${barrel}`, true);
 
     const gridPositionX = 51;
     const gridPositionY = 45;
@@ -330,13 +348,13 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     setObjectData(`objectMallet`, `visualPosition.y`, desiredVisualPositionY);
     setObjectData(`objectMallet`, `dimensions.width`, 21);
     setObjectData(`objectMallet`, `dimensions.height`, 11);
-    showHideObjectAndMakeHoverable('s2', 'objectMallet', true);
+    changeSpriteAndHoverableStatus('s2', 'objectMallet', true);
 
     showText(dialogueString, getColorTextPlayer());
 }
 
 function pickUpMallet () {
-    showHideObjectAndMakeHoverable('s2', 'objectBarrelBarn', true); //workaround for putting objects on top of each other, had to draw handle on bg and then change bg to image without handle when user picks up mallet
+    changeSpriteAndHoverableStatus('s2', 'objectBarrelBarn', true); //workaround for putting objects on top of each other, had to draw handle on bg and then change bg to image without handle when user picks up mallet
 }
 
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
@@ -412,7 +430,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 30, 20); //add empty bowl back in for dog having drunk it
+    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 30, 20, null); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `dimensions.width`, 30);
     setObjectData(`objectBowl`, `dimensions.height`, 20);
@@ -425,7 +443,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     setObjectData(`objectBone`, `dimensions.width`, 20);
     setObjectData(`objectBone`, `dimensions.height`, 12);
     setObjectData(`objectBone`, `interactable.canPickUp`, true);
-    showHideObjectAndMakeHoverable('s2', 'objectBone', true); 
+    changeSpriteAndHoverableStatus('s2', 'objectBone', true); 
     
     const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
     setCustomMouseCursor(getCustomMouseCursor('normal'));

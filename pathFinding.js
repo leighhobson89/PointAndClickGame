@@ -55,10 +55,10 @@ export function aStarPathfinding(start, target, action) {
         const currentNode = openList.shift();
 
         const distanceToTarget = heuristic(currentNode, target);
+        const cellType = gridData.gridData[target.y][target.x];
 
         if (action === "Talk To" || action === "Give") {
-            if(!npcResizedYet) {
-                const cellType = gridData.gridData[target.y][target.x];
+            if(!npcResizedYet && cellType.startsWith('c')) {
                 const baseCellHeightCoefficient = 5;
                 const npc = cellType.slice(1);
                 const npcGridPositionY = getNpcData().npcs[npc].gridPosition.y;
