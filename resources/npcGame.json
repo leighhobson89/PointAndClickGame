@@ -197,7 +197,7 @@
                 "fr": "Jeune Femme"
             },
             "interactable": {
-                "turnForDialogue": false,
+                "turnForDialogue": true,
                 "canHover": true,
                 "canTalk": true,
                 "cantTalkDialogueNumber": 0,
@@ -227,12 +227,13 @@
             "npcPlacementLocation": "marketStreet",
             "activeSpriteUrl": "s1",
             "spriteUrl": {
-                "s1": "./resources/npcs/womanLostMirror.png",
-                "s2": "./resources/npcs/womanLostMirror.png"
+                "s1": "./resources/npcs/womanLostMirrorRight.png",
+                "s2": "./resources/npcs/womanLostMirrorLeft.png",
+                "s3": "./resources/npcs/womanLostMirrorRight.png"
             },
             "gridPosition": {
-                "x": 48,
-                "y": 35
+                "x": 45,
+                "y": 40
             },
             "offset": {
                 "x": 0,
@@ -243,8 +244,8 @@
                 "y": 0
             },
             "dimensions": {
-                "width": 30,
-                "height": 39
+                "width": 45,
+                "height": 85
             },
             "comment": "Woman give Key To Den if given objectParrotMirror"
         },

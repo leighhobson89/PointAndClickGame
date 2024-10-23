@@ -107,7 +107,7 @@
         "fr": "Salle de Recherche",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 1.7,
         "exits": {
             "e1": {
                 "connectsTo": "libraryFoyer",
@@ -132,8 +132,8 @@
             "e1": {
                 "connectsTo": "den",
                 "status": "locked",
-                "startPosition": { "x": 21, "y": 50 },
-                "finalPosition": { "x": 27, "y": 50 },
+                "startPosition": { "x": 38, "y": 51 },
+                "finalPosition": { "x": 36, "y": 57 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },

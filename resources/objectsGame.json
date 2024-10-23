@@ -356,8 +356,8 @@
       },
       "inventoryUrl": "./resources/objects/images/crowBarInv.png",
       "gridPosition": {
-        "x": 23,
-        "y": 30
+        "x": 48,
+        "y": 43
       },
       "offset": {
         "x": 0,
@@ -770,7 +770,7 @@
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "den",
+      "objectPlacementLocation": "researchRoom",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/IllegibleMapWorld.png",
@@ -788,11 +788,11 @@
       },
       "inventoryUrl": "./resources/objects/images/IllegibleMapInv.png",
       "gridPosition": {
-        "x": 29,
-        "y": 45
+        "x": 25,
+        "y": 16
       },
       "offset": {
-        "x": 0,
+        "x": 0.5,
         "y": 0
       },
       "visualPosition": {
@@ -800,8 +800,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 40
+        "width": 80,
+        "height": 60
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -1241,7 +1241,7 @@
         "width": 30,
         "height": 20
       },
-      "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+      "comment": "Nails to use on bridge with Mallet"
     },
     "objectPaperWithInstructionsScrawledOn": {
       "name": {
@@ -1271,21 +1271,21 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+        "objectUseWith1": "",
         "npcUseWith1": "",
-        "actionUseWith11": "unlockResearchRoomDoor",
+        "actionUseWith11": "",
         "actionUseWith12": "",
         "useTogetherLocation": "",
-        "npcGiveTo": "npcLibrarian1",
-        "actionGive1": "giveKeyToLibrarian",
+        "npcGiveTo": "",
+        "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": ""
       },
-      "objectPlacementLocation": "researchRoom",
+      "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/debug/paperScrawledOnWorld.png",
-        "s2": "./resources/objects/images/debug/paperScrawledOnWorld.png"
+        "s1": "",
+        "s2": ""
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -1314,7 +1314,7 @@
         "width": 30,
         "height": 20
       },
-      "comment": "Key for unlocking door to researchRoom from libraryFoyer"
+      "comment": "A clue for the player for repairing the bridge"
     },
     "objectParrotFlyer": {
       "name": {
