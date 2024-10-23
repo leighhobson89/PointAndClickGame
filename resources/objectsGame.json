@@ -1462,6 +1462,80 @@
       },
       "comment": "Hook for attaching parrotFlyer and can also be taken after this puzzle finishes and used with Rope"
     },
+    "objectParrot": {
+      "name": {
+        "en": "Parrot",
+        "es": "Loro",
+        "de": "Papagei",
+        "it": "Pappagallo",
+        "fr": "Perroquet"
+      },
+      "interactable": {
+        "specialNpcObjectStandIn": true,
+        "canHover": false,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": false,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": true,
+        "alreadyUsed": false,
+        "dialogueColor": "rgb(0, 0, 0)"
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "donkeyMoveRopeAvailable",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": ""
+      },
+      "objectPlacementLocation": "stables",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png",
+        "s2": "./resources/objects/images/donkeyOnRope.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 12,
+        "y": 1
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "width": 1,
+        "height": 1
+      },
+      "comment": "Object instance of Parrot"
+    },
     "objectParrotMirror": {
       "name": {
         "en": "Mirror",
