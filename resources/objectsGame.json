@@ -1318,11 +1318,11 @@
     },
     "objectParrotFlyer": {
       "name": {
-        "en": "Useless Parrot Flyer",
-        "es": "Volante de Loro Inútil",
-        "de": "Nutzloser Papageienflieger",
-        "it": "Volantino del Pappagallo Inutile",
-        "fr": "Flyer de Perroquet Inutile"
+        "en": "Useless Flyer For Closed Down Bird Park",
+        "es": "Folleto inútil del parque de aves cerrado",
+        "de": "Nutzloser Flyer für geschlossenen Vogelpark",
+        "it": "Volantino inutile per il parco ornitologico chiuso",
+        "fr": "Flyer inutile pour un parc d'oiseaux fermé"
       },
       "interactable": {
         "specialNpcObjectStandIn": false,
