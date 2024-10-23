@@ -482,7 +482,34 @@ canvas {
     top: 0;
     z-index:9999;
 }
+/* Container for debug values, positioned to the left of the wheel menu */
+.debug-container {
+    position: absolute;
+    top: 10px;
+    right: 230px; /* Positioned to the left of wheel-menu-container */
+    width: 500;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 999999;
+}
 
+.debug-val {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    color: black;
+    font-size: 0.5rem !important;
+}
+
+label {
+    background-color: yellow !important;
+    color: white !important;
+}
+
+/* Existing styles for the wheel menu */
 .wheel-menu-container {
     display: none;
     position: absolute;
@@ -521,4 +548,3 @@ canvas {
 #drawGridButton {
     width: 120px;
 }
-

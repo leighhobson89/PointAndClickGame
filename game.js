@@ -2,7 +2,7 @@ import { setCantGoThatWay, getCantGoThatWay, getDrawGrid, setDrawGrid, getClickP
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
-import { handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
+import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
 
 let currentPath = [];
 let currentPathIndex = 0;
@@ -25,6 +25,7 @@ export function gameLoop() {
     const screenTilesWide = screenData.screenTilesWidebgImg;
 
     if (getGameStateVariable() === getInteractiveDialogueState()) {
+
         const dialogueSection = getElements().dialogueSection;
 
         if (dialogueSection) {
@@ -35,6 +36,9 @@ export function gameLoop() {
     if (screenTilesWide > 1) {
         handleEdgeScroll();
     }
+
+    //debug
+    updateDebugValues();
 
     const bottomContainer = getElements().bottomContainer;
 

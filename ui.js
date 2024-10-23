@@ -100,7 +100,12 @@ import {
     INITIAL_GAME_ID_NORMAL,
     INITIAL_GAME_ID_DEBUG,
     INITIAL_GAME_BACKGROUND_URL_NORMAL,
-    INITIAL_GAME_BACKGROUND_URL_DEBUG
+    INITIAL_GAME_BACKGROUND_URL_DEBUG,
+    getOriginalGridState,
+    getPreAnimationGridState,
+    getOriginalValueInCellWhereObjectPlaced,
+    getOriginalValueInCellWhereObjectPlacedNew,
+    getAllGridData
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -135,6 +140,7 @@ let textTimer;
 
 document.addEventListener("DOMContentLoaded", () => {
     setElements();
+    
 
     getElements().customCursor.classList.add("d-none");
     getElements().customCursor.style.transform = "translate(-50%, -50%)";
@@ -702,6 +708,7 @@ function showHideDebugPanel(event) {
     const isNumpadSubtract = event.type === 'keydown' && event.code === 'NumpadSubtract';
 
     if (isMiddleMouseClick || isNumpadSubtract) {
+        openDebugWindow();
         if (getGameStateVariable() === getGameVisibleActive()) {
             const wheelMenu = document.querySelector('.wheel-menu-container');
             if (wheelMenu) {
@@ -1702,4 +1709,112 @@ function setInitialBackgroundImage() {
 
     const backgroundImageUrl = getInitialBackgroundUrl();
     canvas.style.backgroundImage = `url(${backgroundImageUrl})`;
+}
+
+let debugWindow;
+
+function openDebugWindow() {
+    // Get the current window dimensions and position
+    const currentWindowHeight = window.outerHeight; // Height of the current window
+    const currentWindowWidth = window.outerWidth;   // Width of the current window
+    const windowX = window.screenX || window.screen.left; // X position of the current window
+    const windowY = window.screenY || window.screen.top;  // Y position of the current window
+
+    // Calculate the position for the new window
+    const newWindowX = windowX; // Same X position
+    const newWindowY = windowY + currentWindowHeight; // Position directly below the current window
+
+    // Open the new window with specified dimensions and position
+    debugWindow = window.open(
+        '',
+        '_blank',
+        `width=${currentWindowWidth},height=${window.screen.height - newWindowY},top=${newWindowY},left=${newWindowX},scrollbars=no,resizable=yes`
+    );
+
+    // Set the title and initial HTML structure for the new window
+    debugWindow.document.write(`
+        <html>
+        <head>
+            <title>Debug Values</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    margin: 0; /* Remove default margin */
+                }
+                .debug-container {
+                    width: 100%; /* Adjust width to fill the window */
+                    max-height: 90vh; /* Limit height to 90% of the viewport height */
+                    overflow-y: auto; /* Allow vertical scrolling within the container */
+                    background-color: #f8f8f8;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    padding: 10px;
+                }
+                .debug-val {
+                    margin-bottom: 10px;
+                    padding: 5px;
+                    background-color: #e0e0e0;
+                    border-radius: 4px;
+                    font-size: 0.7rem;
+                }
+                label {
+                    font-weight: bold;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="debugContainer" class="debug-container">
+                <label for="debugVal1">getPreAnimationState()</label>
+                <div id="debugVal1" class="debug-val">Debug Value 1</div>
+
+                <label for="debugVal2">getOriginalGrid()</label>
+                <div id="debugVal2" class="debug-val">Debug Value 2</div>
+
+                <label for="debugVal3">getOriginalValueInCellWhereObjectPlaced()</label>
+                <div id="debugVal3" class="debug-val">Debug Value 3</div>
+
+                <label for="debugVal4">getOriginalValueInCellWhereObjectPlacedNew()</label>
+                <div id="debugVal4" class="debug-val">Debug Value 4</div>
+
+                <label for="debugVal5">currentGrid()</label>
+                <div id="debugVal5" class="debug-val">Debug Value 5</div>
+            </div>
+        </body>
+        </html>
+    `);
+
+    // Finalize the document in the new window
+    debugWindow.document.close();
+}
+
+export function updateDebugValues() {
+    // Fetch dynamic values from relevant functions
+    const preAnimationGridState = JSON.stringify(getPreAnimationGridState());
+    const originalGrid = JSON.stringify(getOriginalGridState()[getCurrentScreenId()]);
+    const originalValueInCell = JSON.stringify(getOriginalValueInCellWhereObjectPlaced());
+    const newOriginalValueInCell = JSON.stringify(getOriginalValueInCellWhereObjectPlacedNew());
+    const currentGridState = JSON.stringify(getAllGridData()[getCurrentScreenId()]);
+
+    // Create the values object dynamically
+    const newValues = {
+        debugVal1: `${preAnimationGridState}`, // Assign the preAnimationGridState
+        debugVal2: `${originalGrid}`,          // Assign the original grid value
+        debugVal3: `${originalValueInCell}`,   // Assign the original value in cell where object was placed
+        debugVal4: `${newOriginalValueInCell}`,// Assign the new value in cell where object was placed
+        debugVal5: `${currentGridState}`       // Assign the current grid state
+    };
+
+    // Update each value in the debug window if it exists and is open
+    if (debugWindow && !debugWindow.closed) {
+        debugWindow.document.getElementById('debugVal1').textContent = newValues.debugVal1;
+        debugWindow.document.getElementById('debugVal2').textContent = newValues.debugVal2;
+        debugWindow.document.getElementById('debugVal3').textContent = newValues.debugVal3;
+        debugWindow.document.getElementById('debugVal4').textContent = newValues.debugVal4;
+        debugWindow.document.getElementById('debugVal5').textContent = newValues.debugVal5;
+    } else {
+        console.log('Debug window is closed or not opened.');
+    }
 }
