@@ -78,6 +78,31 @@
              }
            }
          },
+         "objectParrot": {
+           "use": {
+             "cantUseYet": {
+              "en": "Squawk!",
+              "es": "¡Grua!",
+              "de": "Krah!",
+              "it": "Squawk!",
+              "fr": "Cricri!"
+             },
+             "alreadyUsed": {
+               "en": "",
+               "es": "",
+               "de": "",
+               "it": "",
+               "fr": ""
+             },
+             "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+             }
+           }
+         },
          "objectPileOfBooksLibraryFoyer": {
            "use": {
              "cantUseYet": {
