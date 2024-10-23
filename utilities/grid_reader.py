@@ -127,8 +127,8 @@ if __name__ == '__main__':
     # output_path = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\barn.json'
 
     #LAPTOP
-    image_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\researchRoom.png'
-    output_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\researchRoom.json'
+    image_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\grid-assets\\bigTree.png'
+    output_path = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\jsonOutput\\bigTree.json'
 
     grid = process_image(image_path)
     

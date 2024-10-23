@@ -252,8 +252,8 @@
             "e4": {
                 "connectsTo": "bigTree",
                 "status": "open",
-                "startPosition": { "x": 3, "y": 53 },
-                "finalPosition": { "x": 13, "y": 54 },
+                "startPosition": { "x": 65, "y": 51 },
+                "finalPosition": { "x": 60, "y": 52 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -287,13 +287,13 @@
         "fr": "Grand Arbre",
         "bgUrl": "./resources/backgrounds/bigTree.png",
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 1.7,
         "exits": {
             "e1": {
-                "connectsTo": "enterTree",
+                "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 72, "y": 54 },
+                "finalPosition": { "x": 63, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -302,14 +302,6 @@
                 "status": "open",
                 "startPosition": { "x": 66, "y": 39 },
                 "finalPosition": { "x": 61, "y": 42 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e3": {
-                "connectsTo": "stables",
-                "status": "open",
-                "startPosition": { "x": 72, "y": 54 },
-                "finalPosition": { "x": 63, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -336,8 +328,8 @@
             "e2": {
                 "connectsTo": "bigTree",
                 "status": "open",
-                "startPosition": { "x": 65, "y": 51 },
-                "finalPosition": { "x": 60, "y": 52 },
+                "startPosition": { "x": 3, "y": 53 },
+                "finalPosition": { "x": 13, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },

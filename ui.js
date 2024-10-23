@@ -817,9 +817,9 @@ export function handleMouseMove(event, ctx) {
             if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
                 setHoverCell(hoverX, hoverY);
 
-                console.log(
-                    `Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
-                ); //, zPos: ${getZPosHover()}
+                // console.log(
+                //     `Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
+                // ); //, zPos: ${getZPosHover()}
                 //DEBUG
                 drawGrid(getDrawGrid());
                 //
@@ -1824,7 +1824,5 @@ export function updateDebugValues() {
         debugWindow.document.getElementById('debugVal3').textContent = newValues.debugVal3;
         debugWindow.document.getElementById('debugVal4').textContent = newValues.debugVal4;
         debugWindow.document.getElementById('debugVal5').textContent = newValues.debugVal5;
-    } else {
-        console.log('Debug window is closed or not opened.');
     }
 }
