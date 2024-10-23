@@ -691,6 +691,10 @@ document.addEventListener("DOMContentLoaded", () => {
         setDrawGrid(!currentDrawGrid);
     });
 
+    document.getElementById('debugWindowButton').addEventListener('click', function() {
+        openDebugWindow();
+    });
+
     document.addEventListener('mousedown', function(event) {
         showHideDebugPanel(event);
     });
@@ -708,7 +712,6 @@ function showHideDebugPanel(event) {
     const isNumpadSubtract = event.type === 'keydown' && event.code === 'NumpadSubtract';
 
     if (isMiddleMouseClick || isNumpadSubtract) {
-        openDebugWindow();
         if (getGameStateVariable() === getGameVisibleActive()) {
             const wheelMenu = document.querySelector('.wheel-menu-container');
             if (wheelMenu) {
@@ -1714,6 +1717,13 @@ function setInitialBackgroundImage() {
 let debugWindow;
 
 function openDebugWindow() {
+    // Check if the debug window is already open
+    if (debugWindow && !debugWindow.closed) {
+        // If it's open, focus on it
+        debugWindow.focus();
+        return; // Exit the function
+    }
+
     // Get the current window dimensions and position
     const currentWindowHeight = window.outerHeight; // Height of the current window
     const currentWindowWidth = window.outerWidth;   // Width of the current window
@@ -1750,13 +1760,13 @@ function openDebugWindow() {
                     border-radius: 8px;
                     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                     padding: 10px;
+                    font-size: 0.7em;
                 }
                 .debug-val {
                     margin-bottom: 10px;
                     padding: 5px;
                     background-color: #e0e0e0;
                     border-radius: 4px;
-                    font-size: 0.7rem;
                 }
                 label {
                     font-weight: bold;

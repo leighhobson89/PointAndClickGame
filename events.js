@@ -49,6 +49,8 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const language = getLanguage();
     let gridData = getGridData();
 
+    removeObjectFromEnvironment('objectParrotHook');
+
     setAnimationInProgress(true);
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 20);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 15);

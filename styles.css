@@ -525,7 +525,6 @@ label {
 .wheel-menu {
     overflow: hidden;
     max-height: 300px;
-    width: 200px;
 }
 
 #wheelMenuList {

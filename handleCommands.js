@@ -148,26 +148,58 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
 }
 
 export function removeObjectFromEnvironment(objectId) {
-    const gridData = getGridData().gridData;
-    const roomId = getCurrentScreenId();
-    const originalValues = getOriginalValueInCellWhereObjectPlaced();
+    const gridData = getGridData().gridData; // Get the current grid data
+    const roomId = getCurrentScreenId(); // Get the current room ID
+    const originalValues = getOriginalValueInCellWhereObjectPlaced(); // Get original values in the cells
 
     if (originalValues.hasOwnProperty(roomId)) {
+        let objectRemoved = false; // Flag to confirm if the object was removed
+
+        // Attempt to remove the object
         for (const [position, data] of Object.entries(originalValues[roomId])) {
             if (data.objectId === objectId) {
-                const [x, y] = position.split(',').map(Number);
+                const [x, y] = position.split(',').map(Number); // Parse position
 
-                if (y >= 0 && y < gridData.length && y >= 0 && x < gridData[y].length) {
+                if (y >= 0 && y < gridData.length && x >= 0 && x < gridData[y].length) {
+                    // Remove the object by restoring the original value
                     gridData[y][x] = data.originalValue;
+                    objectRemoved = true; // Set flag to true since the object is removed
                 } else {
                     console.error(`Position out of bounds: (${x}, ${y})`);
                 }
             }
         }
+
+        if (objectRemoved) {
+            // After removal, check for references to the objectId in gridData
+            let foundReference = false;
+
+            for (let y = 0; y < gridData.length; y++) {
+                for (let x = 0; x < gridData[y].length; x++) {
+                    const cell = gridData[y][x];
+
+                    // Check if the cell references the objectId (assuming it starts with 'o')
+                    if (cell && typeof cell === 'string' && cell.startsWith('o') && cell.slice(1) === objectId) {
+                        foundReference = true;
+                        gridData[y][x] = 'n'; // This might cause problems if the object was on a w or other to start with 
+                    }
+                }
+            }
+
+            if (foundReference) {
+                console.log(`Warning: Object ID ${objectId} was still referenced in gridData and has been set to 'n'.`);
+            } else {
+                console.log(`Confirmation: Object ID ${objectId} has been successfully removed, and no references were found.`);
+            }
+        } else {
+            console.log(`No objects found to remove for Object ID: ${objectId}`);
+        }
     } else {
         console.error(`No original values found for roomId: ${roomId}`);
     }
 }
+
+
 
 export function removeNpcFromEnvironment(npcId) {
     const gridData = getGridData().gridData;
