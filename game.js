@@ -1431,10 +1431,59 @@ export function initializeNonPlayerMovementsForScreen(screen) {
             const entity = entityPaths[entityId];
 
             if (entity.placementScreenId === screen) {
-                console.log(`Hello world from ${entityId} on screen ${screen}`);
+                console.log(`Starting movements for ${entityId} on screen ${screen}`);
+                populatePathForEntityMovement(entityId, 1);
             } else {
                 console.log(`${entityId} is not in ${screen}, moving along...`);
             }
         }
     }
 }
+
+export function populatePathForEntityMovement(entityId, moveSequence) {
+    let entity;
+    const entityIdPrefix = entityId.slice(0, 3);
+    
+    switch (entityIdPrefix) {
+        case "npc":
+            entity = getNpcData().npcs[entityId];
+            break;
+        case "obj":
+            entity = getObjectData().objects[entityId];
+            break;
+        default: 
+            console.error("Could not assign a JSON property to the passed entityId");
+            return;
+    }
+
+    // Read starting instructions
+    const startX = entity.gridPosition.x;
+    const startY = entity.gridPosition.y;
+
+    // Read waypoints if there are any
+    if (!entity.waypoints || Object.keys(entity.waypoints).length === 0) {
+        console.log("No waypoints available for this entity.");
+        return;
+    }
+
+    // Check if the specified moveSequence exists
+    const waypoint = entity.waypoints[moveSequence];
+    if (!waypoint) {
+        console.error(`No waypoints found for moveSequence "${moveSequence}".`);
+        return;
+    }
+
+    // Read target
+    const target = waypoint.target;
+
+    console.log(`Running pathfinder function from start (${startX}, ${startY}) to target (${target.x}, ${target.y})`);
+    
+    if (waypoint.points && waypoint.points.length > 0) {
+        const points = waypoint.points.map(point => `(${point.x}, ${point.y})`).join(", ");
+        console.log(`Waypoints: ${points}`);
+    }
+
+    // You would call your pathfinder function here, e.g.
+    // pathfinder(startX, startY, target, waypoint.points);
+}
+
