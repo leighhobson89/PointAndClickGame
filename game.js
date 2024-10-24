@@ -1,7 +1,7 @@
-import { setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setTargetXEntity, setTargetYEntity, getTargetXEntity, getTargetYEntity, setCurrentlyMovingEntity, getCurrentlyMovingEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMovingPlayer, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingPlayer, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetXPlayer, getTargetYPlayer, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { setObjectData, performCommand, constructCommand } from './handleCommands.js';
+import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
 
 let entityPaths = {};
@@ -63,6 +63,8 @@ export function gameLoop() {
         drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
     }
 
+    moveOtherEntitiesOnCurrentScreen();
+
     requestAnimationFrame(gameLoop);
 }
 
@@ -99,7 +101,7 @@ function movePlayerTowardsTarget() {
             resizePlayerObject();
             getElements().customCursor.classList.remove('d-none');
             canvas.style.pointerEvents = 'auto';
-
+            stopAllCurrentlyMovingEntities();
             initializeNonPlayerMovementsForScreen(getCurrentScreenId());
         }
     }
@@ -135,8 +137,8 @@ function movePlayerTowardsTarget() {
 
         if (entityPaths.player.currentIndex < entityPaths.player.path.length) {
             const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
-            setTargetX(nextStep.x * gridSizeX);
-            setTargetY(nextStep.y * gridSizeY - player.height);
+            setTargetXPlayer(nextStep.x * gridSizeX);
+            setTargetYPlayer(nextStep.y * gridSizeY - player.height);
         } else {
             // Logic for when the player reaches the final destination
             if (getCantGoThatWay()) {
@@ -158,7 +160,7 @@ function movePlayerTowardsTarget() {
     
                 performCommand(commandToPerform, false); // Perform the command
                 setCurrentlyMovingToAction(false);
-                setCurrentlyMoving(false);
+                setCurrentlyMovingPlayer(false);
                 if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
                     updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 }
@@ -174,109 +176,104 @@ function movePlayerTowardsTarget() {
 
 function moveOtherEntitiesOnCurrentScreen() {
     const gridData = getGridData();
+    const gridSizeX = getCanvasCellWidth();
+    const gridSizeY = getCanvasCellHeight();
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+
+    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
+    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
+
+    let entity;
+    let isObjectTrueNpcFalse;
+
+    for (const entityIdName in entityPaths) {
+        const entityIdPrefix = entityIdName.slice(0, 3);
+
+        if (entityIdPrefix !== 'pla') {
+            switch (entityIdPrefix) {
+                case "npc":
+                    entity = getNpcData().npcs[entityIdName];
+                    isObjectTrueNpcFalse = false;
+                    break;
+                case "obj":
+                    entity = getObjectData().objects[entityIdName];
+                    isObjectTrueNpcFalse = true;
+                    break;
+            }
+
+            if (entity.objectPlacementLocation === getCurrentScreenId()) {
+                setAnimationInProgress(true);
+                setPreAnimationGridState(gridData, entityIdName, isObjectTrueNpcFalse);
+                const speed = entity.waypoints[entity.activeMoveSequence].speed;
     
-    // const speed = getPlayerObject().speed;
-    // const player = getPlayerObject();
-    // const gridSizeX = getCanvasCellWidth();
-    // const gridSizeY = getCanvasCellHeight();
-    // const dialogueData = getDialogueData().dialogue;
-    // const language = getLanguage();
-
-    // const playerGridX = Math.floor(player.xPos / gridSizeX);
-    // const playerGridY = Math.floor(player.yPos / gridSizeY);
-
-    // const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / gridSizeX));
-    // const playerOffsetY = Math.floor(playerGridY + player.height / gridSizeY);
-
-    // const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // Adjust for rounding
-
-    // let targetX, targetY;
-
-    // if (getTransitioningNow()) {
-    //     const exit = 'e' + getExitNumberToTransitionTo();
-    //     const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
-    //     const tolerance = 3;
-
-    //     // Check if player has reached the final position for the transition
-    //     if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
-    //         Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
-    //         entityPaths.player.path = [];
-    //         entityPaths.player.currentIndex = 0;
-    //         setTransitioningNow(false);
-    //         resizePlayerObject();
-    //         getElements().customCursor.classList.remove('d-none');
-    //         canvas.style.pointerEvents = 'auto';
-
-    //         initializeNonPlayerMovementsForScreen(getCurrentScreenId());
-    //     }
-    // }
-
-    // // Normal movement logic
-    // if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
-    //     targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
-    //     targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
-    // } else {
-    //     return; // No target to move toward
-    // }
-
-    // let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
-    // //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
-
-    // // Move the player toward the target position
-    // if (Math.abs(player.xPos - targetX) > speed) {
-    //     player.xPos += (player.xPos < targetX) ? speed : -speed;
-    // } else {
-    //     player.xPos = targetX;
-    // }
-
-    // if (Math.abs(player.yPos - targetY) > speed) {
-    //     player.yPos += (player.yPos < targetY) ? speed : -speed;
-    // } else {
-    //     player.yPos = targetY;
-    // }
-
-    // // Check if player has reached the target position
-    // if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
-
-    //     entityPaths.player.currentIndex++;
-
-    //     if (entityPaths.player.currentIndex < entityPaths.player.path.length) {
-    //         const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
-    //         setTargetX(nextStep.x * gridSizeX);
-    //         setTargetY(nextStep.y * gridSizeY - player.height);
-    //     } else {
-    //         // Logic for when the player reaches the final destination
-    //         if (getCantGoThatWay()) {
-    //             let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
-    //             showText(dialogueString, getColorTextPlayer());
-    //             setCantGoThatWay(false);
-    //             return;
-    //         } else {
-    //             let commandToPerform;
-    //             console.log(cellValue);
-    //             const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
-    //             const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
-    
-    //             if (screenOrObjectNameAndHoverStatus[1]) {
-    //                 commandToPerform = constructCommand(getUpcomingAction(), true);
-    //             } else {
-    //                 commandToPerform = constructCommand(getUpcomingAction(), false);
-    //             }
-    
-    //             performCommand(commandToPerform, false); // Perform the command
-    //             setCurrentlyMovingToAction(false);
-    //             setCurrentlyMoving(false);
-    //             if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
-    //                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // resizePlayerObject(player);
-
-    // setPlayerObject('xPos', player.xPos);
-    // setPlayerObject('yPos', player.yPos);
+                const entityGridX = Math.floor(entity.visualPosition.x / gridSizeX);
+                const entityGridY = Math.floor(entity.visualPosition.y / gridSizeY);
+        
+                const measurePointAdjustmentX = Math.floor((entity.dimensions.width * (gridSizeX / baseCellWidth)) / 2);
+                const measurePointAdjustmentY = Math.floor(entity.dimensions.height + entity.measureMovementYOffset * (gridSizeY / baseCellHeight));
+                //console.log("Adjusting measurepoint by " + measurePointAdjustmentX + "px on X axis and " + measurePointAdjustmentY + "px on Y axis, to account for width and height of entity");
+                //console.log("Adjusting measurepoint by " + measurePointAdjustmentY + "px on Y axis, to account for height of entity");
+        
+                let targetX, targetY;
+        
+                // Normal movement logic
+                if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
+                    targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX;
+                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY - measurePointAdjustmentY; //if moving to wrong height look here
+                } else {
+                    return; // No target to move toward
+                }
+        
+                // Move the entity toward the target position
+                if (Math.abs(entity.visualPosition.x - targetX) > speed) {
+                    entity.visualPosition.x += (entity.visualPosition.x < targetX) ? speed : -speed;
+                } else {
+                    entity.visualPosition.x = targetX;
+                }
+        
+                if (Math.abs(entity.visualPosition.y - targetY) > speed) {
+                    entity.visualPosition.y += (entity.visualPosition.y < targetY) ? speed : -speed;
+                } else {
+                    entity.visualPosition.y = targetY;
+                }
+        
+                // Check if entity has reached the target position
+                if (Math.abs(entity.visualPosition.x - targetX) < speed && Math.abs(entity.visualPosition.y - targetY) < speed) {
+        
+                    entityPaths[entityIdName].currentIndex++;
+        
+                    if (entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
+                        const nextStep = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex];
+                        setTargetXEntity(entityIdName, nextStep.x * gridSizeX);
+                        setTargetXEntity(entityIdName, nextStep.y * gridSizeY - measurePointAdjustmentY);
+                    } else {
+                    // perform any actions at the waypoint to do elsewhere later TODO
+                    // perform any actions at the final destination here TODO
+                    // initialise next moving path here TODO
+                    // set flag to say not moving / reached end of movement sequence TODO
+                    setCurrentlyMovingEntity(entityIdName, false);
+                    console.log(`Entity ${entityIdName} finished moving!`);
+                    }
+                }
+            
+                // resize the npc if needed here and when implemented TODO
+        
+                switch (entityIdPrefix) {
+                    case "npc":
+                        setNpcData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
+                        setNpcData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
+                        break;
+                    case "obj":
+                        setObjectData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
+                        setObjectData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
+                        break;
+                }
+                const gridUpdateData = getAllGridData();
+                setOriginalGridState(gridUpdateData);
+            }
+        }
+    }
 }
 
 export function resizePlayerObject() {
@@ -754,8 +751,8 @@ export function initializePlayerPosition(gridX, gridY) {
     player.xPos = xPos;
     player.yPos = yPos;
 
-    setTargetX(xPos);
-    setTargetY(yPos);
+    setTargetXPlayer(xPos);
+    setTargetYPlayer(yPos);
 
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
@@ -773,8 +770,8 @@ function checkEdgeCollision(player, targetX) {
     }
 
     if (collisionOccurred) {
-        setTargetX(player.xPos);
-        setTargetY(player.yPos);
+        setTargetXPlayer(player.xPos);
+        setTargetYPlayer(player.yPos);
         entityPaths.player.path = [];
         entityPaths.player.currentIndex = 0;
         return true;
@@ -819,7 +816,7 @@ export function processLeftClickPoint(event, mouseClick) {
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
         if (entityPaths.player.path.length > 0) {
-            setCurrentlyMoving(true);
+            setCurrentlyMovingPlayer(true);
             if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
             }
@@ -859,8 +856,8 @@ export function processLeftClickPoint(event, mouseClick) {
             
 
             const nextStep = entityPaths.player.path[0];
-            setTargetX(nextStep.x * getCanvasCellWidth());
-            setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
+            setTargetXPlayer(nextStep.x * getCanvasCellWidth());
+            setTargetYPlayer(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
             setCustomMouseCursor(getCustomMouseCursor('error'));
         }
@@ -930,7 +927,7 @@ export function processRightClickPoint(event, mouseClick) {
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
         if (entityPaths.player.path.length > 0) {
-            setCurrentlyMoving(true);
+            setCurrentlyMovingPlayer(true);
             if (!getTransitioningNow() && verb === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
             }
@@ -967,8 +964,8 @@ export function processRightClickPoint(event, mouseClick) {
             }
             
             const nextStep = entityPaths.player.path[0];
-            setTargetX(nextStep.x * getCanvasCellWidth());
-            setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
+            setTargetXPlayer(nextStep.x * getCanvasCellWidth());
+            setTargetYPlayer(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
             setCustomMouseCursor(getCustomMouseCursor('error'));
         }
@@ -1010,7 +1007,7 @@ export function checkAndChangeScreen() {
                     console.log("Player is moving to another screen");
                     entityPaths.player.path = [];
                     entityPaths.player.currentIndex = 0;
-                    setCurrentlyMoving(false);
+                    setCurrentlyMovingPlayer(false);
                     setCurrentlyMovingToAction(false);
     
                     changeBackground();
@@ -1532,8 +1529,6 @@ export function initializeEntityPathsObject() {
 }
 
 export function initializeNonPlayerMovementsForScreen(screen) {
-    //clear current path for entity
-
     let path;
     for (const entityId in entityPaths) {
         if (entityPaths.hasOwnProperty(entityId) && entityId !== 'player' && entityPaths[entityId].placementScreenId === screen) {
@@ -1607,8 +1602,20 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         waypoints  // List of waypoints
     );
 
+    setCurrentlyMovingEntity(entityId, true);
+
     // Return the computed path
     return path;
+}
+
+function stopAllCurrentlyMovingEntities() {
+    const currentlyMovingEntities = getCurrentlyMovingEntity();
+
+    for (const entityId in currentlyMovingEntities) {
+        if (currentlyMovingEntities.hasOwnProperty(entityId)) {
+            setCurrentlyMovingEntity(entityId, false);
+        }
+    }
 }
 
 

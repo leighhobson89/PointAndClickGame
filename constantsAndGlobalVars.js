@@ -62,8 +62,10 @@ let canvasCellWidth = 15;
 let canvasCellHeight = 10;
 let gridTargetX = null;
 let gridTargetY = null;
-let targetX = null;
-let targetY = null;
+let targetXPlayer = null;
+let targetYPlayer = null;
+let targetXEntity = {};
+let targetYEntity = {};
 let gridData = null;
 let navigationData = null;
 let objectData = null;
@@ -117,7 +119,8 @@ let beginGameState = true;
 let gameInProgress = false;
 let transitioningToAnotherScreen = false;
 let transitioningNow = false;
-let currentlyMoving = false;
+let currentlyMovingPlayer = false;
+let currentlyMovingEntity = {};
 let currentlyMovingToAction = false;
 let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;
@@ -426,32 +429,48 @@ export function setGameInProgress(value) {
     gameInProgress = value;
 }
 
-export function setTargetX(value) {
-    targetX = value;
+export function setTargetXPlayer(value) {
+    targetXPlayer = value;
 }
 
-export function setTargetY(value) {
-    targetY = value;
+export function setTargetYPlayer(value) {
+    targetYPlayer = value;
 }
 
-export function getTargetX() {
-   return targetX;
+export function getTargetXPlayer() {
+   return targetXPlayer;
 }
 
-export function getTargetY() {
-    return targetY;
+export function getTargetYPlayer() {
+    return targetYPlayer;
+}
+
+export function setTargetXEntity(entityId, value) {
+    targetXEntity[entityId] = value;
+}
+
+export function setTargetYEntity(entityId, value) {
+    targetYEntity[entityId] = value;
+}
+
+export function getTargetXEntity(entityId) {
+    return targetXEntity[entityId];
+}
+
+export function getTargetYEntity(entityId) {
+    return targetYEntity[entityId];
 }
 
 export function setGridTargetX(value) {
     gridTargetX = value;
-}
+ }
 
 export function setGridTargetY(value) {
     gridTargetY = value;
 }
 
 export function getGridTargetX() {
-   return gridTargetX;
+    return gridTargetX;
 }
 
 export function getGridTargetY() {
@@ -522,12 +541,20 @@ export function setExitNumberToTransitionTo(value) {
     exitNumberToTransitionTo = value;
 }
 
-export function setCurrentlyMoving(value) {
-    currentlyMoving = value;
+export function setCurrentlyMovingPlayer(value) {
+    currentlyMovingPlayer = value;
 }
 
-export function getCurrentlyMoving() {
-    return currentlyMoving;
+export function getCurrentlyMovingPlayer() {
+    return currentlyMovingPlayer;
+}
+
+export function setCurrentlyMovingEntity(entityId, value) {
+    currentlyMovingEntity[entityId] = value;
+}
+
+export function getCurrentlyMovingEntity(entityId) {
+    return currentlyMovingEntity[entityId];
 }
 
 export function setCurrentlyMovingToAction(value) {
