@@ -119,7 +119,8 @@ import {
     processRightClickPoint,
     setGameState,
     startGame,
-    initializeEntityPathsObject
+    initializeEntityPathsObject,
+    initializeNonPlayerMovementsForScreen
 } from "./game.js";
 import {
     addItemToInventory,

@@ -99,6 +99,8 @@ function movePlayerTowardsTarget() {
             resizePlayerObject();
             getElements().customCursor.classList.remove('d-none');
             canvas.style.pointerEvents = 'auto';
+
+            initializeNonPlayerMovementsForScreen(getCurrentScreenId());
         }
     }
 
@@ -408,6 +410,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
     if (firstDraw) {
         setResizedObjectsGridState(gridData);
         setResizedNpcsGridState(gridData);
+        initializeNonPlayerMovementsForScreen(getCurrentScreenId());
         firstDraw = false;
 
         console.log("EntityPaths:");
@@ -1383,7 +1386,8 @@ export function initializeEntityPathsObject() {
     //always add player
     entityPaths['player'] = {
         path: [],
-        currentIndex: 0
+        currentIndex: 0,
+        placementScreenId: null
     };
 
     const objectsData = getObjectData().objects;
@@ -1396,7 +1400,8 @@ export function initializeEntityPathsObject() {
             if (object.canMove === true) {
                 entityPaths[objectName] = {
                     path: [],
-                    currentIndex: 0
+                    currentIndex: 0,
+                    placementScreenId: objectsData[objectName].objectPlacementLocation
                 };
             }
         }
@@ -1410,7 +1415,8 @@ export function initializeEntityPathsObject() {
                 
                 entityPaths[npcName] = {
                     path: [],
-                    currentIndex: 0
+                    currentIndex: 0,
+                    placementScreenId: npcsData[npcName].npcPlacementLocation
                 };
             }
         }
@@ -1419,3 +1425,16 @@ export function initializeEntityPathsObject() {
     console.log('Entity paths initialized:', entityPaths);
 }
 
+export function initializeNonPlayerMovementsForScreen(screen) {
+    for (const entityId in entityPaths) {
+        if (entityPaths.hasOwnProperty(entityId) && entityId !== 'player') {
+            const entity = entityPaths[entityId];
+
+            if (entity.placementScreenId === screen) {
+                console.log(`Hello world from ${entityId} on screen ${screen}`);
+            } else {
+                console.log(`${entityId} is not in ${screen}, moving along...`);
+            }
+        }
+    }
+}
