@@ -3,435 +3,441 @@
     "generalComments2": "usedOn.useTogetherLocation can be a screenId or an object/npc if two elements can be used together anywhere, but they must both point to each other for this to work.",
     "generalComments3": "questPhase is the current phase ie if it is 0 you can give the monkey a banana for a battery if it is 1 you cannot but may be able to do something else",
     "generalComments4": "dialoguePhase is the current dialogue phase ie if it is 0 and you talk to the monkey, you will hear that the monkey is hungry, then 1 will be here take the battery, and 2 just chatter",
-
     "npcs": {
-        "npcDonkey": {
-            "name": {
-                "en": "Donkey",
-                "es": "Burro",
-                "de": "Esel",
-                "it": "Asino",
-                "fr": "Âne"
-            },
-            "interactable": {
-                "turnForDialogue": false,
-                "canHover": true,
-                "canTalk": false,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 1,
-                "questCutOffEvents": {
-                    "1": {
-                        "event": ""
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(0, 0, 0)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "objectCarrot",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "stables",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/donkeyOnRope.png",
-                "s2": "./resources/npcs/donkeyNotOnRope.png",
-                "s3": "./resources/npcs/blank.png"
-            },
-            "gridPosition": {
-                "x": 37,
-                "y": 34
-            },
-            "offset": {
-                "x": 0,
-                "y": 0
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 150,
-                "height": 80
-            },
-            "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
+      "npcDonkey": {
+        "name": {
+          "en": "Donkey",
+          "es": "Burro",
+          "de": "Esel",
+          "it": "Asino",
+          "fr": "Âne"
         },
-        "npcLibrarian": {
-            "name": {
-                "en": "Librarian",
-                "es": "Bibliotecaria",
-                "de": "Bibliothekarin",
-                "it": "Bibliotecaria",
-                "fr": "Bibliothécaire"
-            },
-            "interactable": {
-                "turnForDialogue": false,
-                "canHover": true,
-                "canTalk": true,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 2,
-                "questCutOffEvents": {
-                    "2": {
-                        "event": "allowInteractionPileOfBooks"
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 0, 255)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "objectKeyResearchRoom",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "libraryFoyer",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/librarian.png",
-                "s2": "./resources/npcs/librarian.png"
-            },
-            "gridPosition": {
-                "x": 16,
-                "y": 35
-            },
-            "offset": {
-                "x": 1.8,
-                "y": -0.1
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 35,
-                "height": 50
-            },
-            "comment": "Librarian"
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": true,
+          "canTalk": false,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 1,
+          "questCutOffEvents": {
+            "1": {
+              "event": ""
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(0, 0, 0)",
+          "spokenToYet": false
         },
-        "npcTownDog": {
-            "name": {
-                "en": "Dog",
-                "es": "Perro",
-                "de": "Hund",
-                "it": "Cane",
-                "fr": "Chien"
-            },
-            "interactable": {
-                "turnForDialogue": true,
-                "canHover": true,
-                "canTalk": true,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 0,
-                "questCutOffEvents": {
-                    "0": {
-                        "event": ""
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 255, 0)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "objectMilkInBowl",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "marketStreet",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/townDogLeft.png",
-                "s2": "./resources/npcs/townDogLeft.png",
-                "s3": "./resources/npcs/townDogRight.png",
-                "s4": "./resources/npcs/townDogNoBone.png"
-            },
-            "gridPosition": {
-                "x": 62,
-                "y": 45
-            },
-            "offset": {
-                "x": 0,
-                "y": 0
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 60,
-                "height": 35
-            },
-            "comment": "Town Dog gives bone if given Milk In Bowl"
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "objectCarrot",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
         },
-        "npcWomanLostMirror": {
-            "name": {
-                "en": "Young Woman",
-                "es": "Joven Mujer",
-                "de": "Junge Frau",
-                "it": "Giovane Donna",
-                "fr": "Jeune Femme"
-            },
-            "interactable": {
-                "turnForDialogue": true,
-                "canHover": true,
-                "canTalk": true,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 2,
-                "questCutOffEvents": {
-                    "2": {
-                        "event": "makeMirrorGiveableToWoman"
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(255, 180, 0)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "objectParrotMirror",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "marketStreet",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/womanLostMirrorRight.png",
-                "s2": "./resources/npcs/womanLostMirrorLeft.png",
-                "s3": "./resources/npcs/womanLostMirrorRight.png"
-            },
-            "gridPosition": {
-                "x": 45,
-                "y": 40
-            },
-            "offset": {
-                "x": 0,
-                "y": 0
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 45,
-                "height": 85
-            },
-            "comment": "Woman give Key To Den if given objectParrotMirror"
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
         },
-        "npcCow": {
-            "name": {
-                "en": "Cow",
-                "es": "Vaca",
-                "de": "Kuh",
-                "it": "Mucca",
-                "fr": "Vache"
-            },
-            "interactable": {
-                "turnForDialogue": false,
-                "canHover": true,
-                "canTalk": false,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 1,
-                "questCutOffEvents": {
-                    "1": {
-                        "event": "makeCowNotTalkableAndPliersUseable"
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(150, 150, 150)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/cow.png",
-                "s2": "./resources/npcs/cow.png"
-            },
-            "gridPosition": {
-                "x": 60,
-                "y": 10
-            },
-            "offset": {
-                "x": 1.8,
-                "y": -0.1
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 90,
-                "height": 35
-            },
-            "comment": "Cow needs splinter removing with pliers so farmer appears"
+        "npcPlacementLocation": "stables",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/donkeyOnRope.png",
+          "s2": "./resources/npcs/donkeyNotOnRope.png",
+          "s3": "./resources/npcs/blank.png"
         },
-        "npcSeedyLookingGuy": {
-            "name": {
-                "en": "Seedy Looking Guy",
-                "es": "Hombre de aspecto sospechoso",
-                "de": "Zwielichtiger Typ",
-                "it": "Uomo dall'aspetto losco",
-                "fr": "Homme à l'air louche"
-            },
-            "interactable": {
-                "turnForDialogue": false,
-                "canHover": true,
-                "canTalk": true,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 2,
-                "questCutOffEvents": {
-                    "1": {
-                        "event": ""
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(34, 203, 223)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "objectKeyToDen",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "seedyGuyAlley",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/seedyGuy.png",
-                "s2": "./resources/npcs/seedyGuy.png"
-            },
-            "gridPosition": {
-                "x": 53,
-                "y": 43
-            },
-            "offset": {
-                "x": 1.8,
-                "y": -0.1
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 75,
-                "height": 75
-            },
-            "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
+        "gridPosition": {
+          "x": 37,
+          "y": 34
         },
-        "npcCarpenter": {
-            "name": {
-                "en": "Carpenter",
-                "es": "Carpintero",
-                "de": "Zimmermann",
-                "it": "Falegname",
-                "fr": "Charpentier"
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 150,
+          "height": 80
+        },
+        "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
+      },
+      "npcLibrarian": {
+        "name": {
+          "en": "Librarian",
+          "es": "Bibliotecaria",
+          "de": "Bibliothekarin",
+          "it": "Bibliotecaria",
+          "fr": "Bibliothécaire"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 2,
+          "questCutOffEvents": {
+            "2": {
+              "event": "allowInteractionPileOfBooks"
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(255, 0, 255)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "objectKeyResearchRoom",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "libraryFoyer",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/librarian.png",
+          "s2": "./resources/npcs/librarian.png"
+        },
+        "gridPosition": {
+          "x": 16,
+          "y": 35
+        },
+        "offset": {
+          "x": 1.8,
+          "y": -0.1
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 35,
+          "height": 50
+        },
+        "comment": "Librarian"
+      },
+      "npcTownDog": {
+        "name": {
+          "en": "Dog",
+          "es": "Perro",
+          "de": "Hund",
+          "it": "Cane",
+          "fr": "Chien"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": true,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 0,
+          "questCutOffEvents": {
+            "0": {
+              "event": ""
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(255, 255, 0)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "objectMilkInBowl",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "marketStreet",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/townDogLeft.png",
+          "s2": "./resources/npcs/townDogLeft.png",
+          "s3": "./resources/npcs/townDogRight.png",
+          "s4": "./resources/npcs/townDogNoBone.png"
+        },
+        "gridPosition": {
+          "x": 62,
+          "y": 45
+        },
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 60,
+          "height": 35
+        },
+        "comment": "Town Dog gives bone if given Milk In Bowl"
+      },
+      "npcWomanLostMirror": {
+        "name": {
+          "en": "Young Woman",
+          "es": "Joven Mujer",
+          "de": "Junge Frau",
+          "it": "Giovane Donna",
+          "fr": "Jeune Femme"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": true,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 2,
+          "questCutOffEvents": {
+            "2": {
+              "event": "makeMirrorGiveableToWoman"
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(255, 180, 0)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "objectParrotMirror",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "marketStreet",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/womanLostMirrorRight.png",
+          "s2": "./resources/npcs/womanLostMirrorLeft.png",
+          "s3": "./resources/npcs/womanLostMirrorRight.png"
+        },
+        "gridPosition": {
+          "x": 45,
+          "y": 40
+        },
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 45,
+          "height": 85
+        },
+        "comment": "Woman give Key To Den if given objectParrotMirror"
+      },
+      "npcCow": {
+        "name": {
+          "en": "Cow",
+          "es": "Vaca",
+          "de": "Kuh",
+          "it": "Mucca",
+          "fr": "Vache"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": true,
+          "canTalk": false,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 1,
+          "questCutOffEvents": {
+            "1": {
+              "event": "makeCowNotTalkableAndPliersUseable"
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(150, 150, 150)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/cow.png",
+          "s2": "./resources/npcs/cow.png"
+        },
+        "gridPosition": {
+          "x": 60,
+          "y": 10
+        },
+        "offset": {
+          "x": 1.8,
+          "y": -0.1
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 90,
+          "height": 35
+        },
+        "comment": "Cow needs splinter removing with pliers so farmer appears"
+      },
+      "npcSeedyLookingGuy": {
+        "name": {
+          "en": "Seedy Looking Guy",
+          "es": "Hombre de aspecto sospechoso",
+          "de": "Zwielichtiger Typ",
+          "it": "Uomo dall'aspetto losco",
+          "fr": "Homme à l'air louche"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 2,
+          "questCutOffEvents": {
+            "1": {
+              "event": ""
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(34, 203, 223)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "objectKeyToDen",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "seedyGuyAlley",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/seedyGuy.png",
+          "s2": "./resources/npcs/seedyGuy.png"
+        },
+        "gridPosition": {
+          "x": 53,
+          "y": 43
+        },
+        "offset": {
+          "x": 1.8,
+          "y": -0.1
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 75,
+          "height": 75
+        },
+        "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
+      },
+      "npcCarpenter": {
+        "name": {
+          "en": "Carpenter",
+          "es": "Carpintero",
+          "de": "Zimmermann",
+          "it": "Falegname",
+          "fr": "Charpentier"
+        },
+        "canMove": false,
+        "interactable": {
+          "turnForDialogue": true,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 0,
+          "questCutOffEvents": {
+            "0": {
+              "event": "setCarpenterSpokenToTrue"
             },
-            "interactable": {
-                "turnForDialogue": true,
-                "canHover": true,
-                "canTalk": true,
-                "cantTalkDialogueNumber": 0,
-                "dialoguePhase": 0,
-                "questPhase": 0,
-                "questCutOffNumber": 0,
-                "questCutOffEvents": {
-                    "0": {
-                        "event": "setCarpenterSpokenToTrue"
-                    },
-                    "2": {
-                        "event": "moveCarpenterToStables"
-                    }
-                },
-                "canUseWith": false,
-                "receiveObjectScenarioId": 0,
-                "dialogueColor": "rgb(200, 0, 0)",
-                "spokenToYet": false
-            },
-            "usedOn": {
-                "useTogetherLocation": "",
-                "objectCanReceive1": "",
-                "objectCanReceive2": "",
-                "objectCanReceive3": ""
-            },
-            "behavior": {
-                "movesAround": false,
-                "patrolPath": ""
-            },
-            "npcPlacementLocation": "carpenter",
-            "activeSpriteUrl": "s1",
-            "spriteUrl": {
-                "s1": "./resources/npcs/carpenterNpcBack.png",
-                "s2": "./resources/npcs/carpenterNpcLeft.png",
-                "s3": "./resources/npcs/carpenterNpcRight.png"
-            },
-            "gridPosition": {
-                "x": 37,
-                "y": 20
-            },
-            "offset": {
-                "x": 0,
-                "y": 0
-            },
-            "visualPosition": {
-                "x": 0,
-                "y": 0
-            },
-            "dimensions": {
-                "width": 120,
-                "height": 160
-            },
-            "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
-        }
+            "2": {
+              "event": "moveCarpenterToStables"
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(200, 0, 0)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "behavior": {
+          "movesAround": false,
+          "patrolPath": ""
+        },
+        "npcPlacementLocation": "carpenter",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/carpenterNpcBack.png",
+          "s2": "./resources/npcs/carpenterNpcLeft.png",
+          "s3": "./resources/npcs/carpenterNpcRight.png"
+        },
+        "gridPosition": {
+          "x": 37,
+          "y": 20
+        },
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 120,
+          "height": 160
+        },
+        "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
+      }
     }
-}
+  }

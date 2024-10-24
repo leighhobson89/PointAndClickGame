@@ -119,6 +119,7 @@ import {
     processRightClickPoint,
     setGameState,
     startGame,
+    initializeEntityPathsObject
 } from "./game.js";
 import {
     addItemToInventory,
@@ -153,6 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
             urlDialogueData,
             urlNpcsData,
         );
+
+        initializeEntityPathsObject();
 
         setInitialScreenId(INITIAL_GAME_ID_NORMAL);
         setCurrentScreenId(getInitialScreenId());

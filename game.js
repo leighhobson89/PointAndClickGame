@@ -1,11 +1,10 @@
-import { setCantGoThatWay, getCantGoThatWay, getDrawGrid, setDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, getResizedNpcsGridState, setResizedNpcsGridState,  getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, setObjectOriginalValueUpdatedYet, getObjectOriginalValueUpdatedYet, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, getWaitingForSecondItem, getDisplayText, gameState, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentlyMoving, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMoving, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetX, setTargetY, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getIsDisplayingText, getGameStateVariable, getCurrentXposNpc, getTargetX, getTargetY, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
+import { setObjectData, performCommand, constructCommand } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
 
-let currentPlayerPath = [];
-let currentPlayerPathIndex = 0;
+let entityPaths = {};
 let firstDraw = true;
 
 //--------------------------------------------------------------------------------------------------------
@@ -94,8 +93,8 @@ function movePlayerTowardsTarget() {
         // Check if player has reached the final position for the transition
         if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
             Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
-            currentPlayerPath = [];
-            currentPlayerPathIndex = 0;
+            entityPaths.player.path = [];
+            entityPaths.player.currentIndex = 0;
             setTransitioningNow(false);
             resizePlayerObject();
             getElements().customCursor.classList.remove('d-none');
@@ -104,9 +103,9 @@ function movePlayerTowardsTarget() {
     }
 
     // Normal movement logic
-    if (currentPlayerPath.length > 0 && currentPlayerPathIndex < currentPlayerPath.length) {
-        targetX = currentPlayerPath[currentPlayerPathIndex].x * gridSizeX;
-        targetY = currentPlayerPath[currentPlayerPathIndex].y * gridSizeY - player.height;
+    if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
+        targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
+        targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
     } else {
         return; // No target to move toward
     }
@@ -129,10 +128,11 @@ function movePlayerTowardsTarget() {
 
     // Check if player has reached the target position
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
-        currentPlayerPathIndex++;
 
-        if (currentPlayerPathIndex < currentPlayerPath.length) {
-            const nextStep = currentPlayerPath[currentPlayerPathIndex];
+        entityPaths.player.currentIndex++;
+
+        if (entityPaths.player.currentIndex < entityPaths.player.path.length) {
+            const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
@@ -289,9 +289,9 @@ export function drawGrid(drawGrid) {
         }
 
         // Draw the current path if it exists
-        if (currentPlayerPath.length > 0) {
+        if (entityPaths.player.path.length > 0) {
             context.fillStyle = 'rgba(0, 0, 255, 0.5)';
-            for (const step of currentPlayerPath) {
+            for (const step of entityPaths.player.path) {
                 context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
             }
         }
@@ -409,6 +409,9 @@ export function drawPlayerNpcsAndObjects(ctx) {
         setResizedObjectsGridState(gridData);
         setResizedNpcsGridState(gridData);
         firstDraw = false;
+
+        console.log("EntityPaths:");
+        console.log(entityPaths);
     }
 
     const playerXStart = player.xPos;
@@ -663,8 +666,8 @@ function checkEdgeCollision(player, targetX) {
     if (collisionOccurred) {
         setTargetX(player.xPos);
         setTargetY(player.yPos);
-        currentPlayerPath = [];
-        currentPlayerPathIndex = 0;
+        entityPaths.player.path = [];
+        entityPaths.player.currentIndex = 0;
         return true;
     }
     return false;
@@ -701,12 +704,12 @@ export function processLeftClickPoint(event, mouseClick) {
             'player'
         );
 
-        currentPlayerPath = path;
-        currentPlayerPathIndex = 0;
+        entityPaths.player.path = path;
+        entityPaths.player.currentIndex = 0;
 
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
-        if (currentPlayerPath.length > 0) {
+        if (entityPaths.player.path.length > 0) {
             setCurrentlyMoving(true);
             if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
@@ -746,7 +749,7 @@ export function processLeftClickPoint(event, mouseClick) {
             }
             
 
-            const nextStep = currentPlayerPath[0];
+            const nextStep = entityPaths.player.path[0];
             setTargetX(nextStep.x * getCanvasCellWidth());
             setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
@@ -812,12 +815,12 @@ export function processRightClickPoint(event, mouseClick) {
             'player'
         );
 
-        currentPlayerPath = path;
-        currentPlayerPathIndex = 0;
+        entityPaths.player.path = path;
+        entityPaths.player.currentIndex = 0;
 
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
-        if (currentPlayerPath.length > 0) {
+        if (entityPaths.player.path.length > 0) {
             setCurrentlyMoving(true);
             if (!getTransitioningNow() && verb === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
@@ -854,7 +857,7 @@ export function processRightClickPoint(event, mouseClick) {
                 }
             }
             
-            const nextStep = currentPlayerPath[0];
+            const nextStep = entityPaths.player.path[0];
             setTargetX(nextStep.x * getCanvasCellWidth());
             setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
@@ -896,8 +899,8 @@ export function checkAndChangeScreen() {
                 // Perform the check if within bounds
                 if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                     console.log("Player is moving to another screen");
-                    currentPlayerPath = [];
-                    currentPlayerPathIndex = 0;
+                    entityPaths.player.path = [];
+                    entityPaths.player.currentIndex = 0;
                     setCurrentlyMoving(false);
                     setCurrentlyMovingToAction(false);
     
@@ -921,8 +924,8 @@ export function handleRoomTransition() {
 
     if (screenData && screenData.exits && screenData.exits[exitNumber]) {
         const newScreenId = screenData.exits[exitNumber].connectsTo;
-        currentPlayerPath = [];
-        currentPlayerPathIndex = 0;
+        entityPaths.player.path = [];
+        entityPaths.player.currentIndex = 0;
 
         swapBackgroundOnRoomTransition(newScreenId);
         return newScreenId;
@@ -1374,5 +1377,45 @@ export function setGameState(newState) {
 export function changeSpriteAndHoverableStatus(spriteUrlSNumber, objectId, showTrueHideFalse) {
     setObjectData(`${objectId}`, `activeSpriteUrl`, spriteUrlSNumber);
     setObjectData(`${objectId}`, `interactable.canHover`, showTrueHideFalse);
+}
+
+export function initializeEntityPathsObject() {
+    //always add player
+    entityPaths['player'] = {
+        path: [],
+        currentIndex: 0
+    };
+
+    const objectsData = getObjectData().objects;
+    const npcsData = getNpcData().npcs;
+
+    for (const objectName in objectsData) {
+        if (objectsData.hasOwnProperty(objectName)) {
+            const object = objectsData[objectName];
+
+            if (object.canMove === true) {
+                entityPaths[objectName] = {
+                    path: [],
+                    currentIndex: 0
+                };
+            }
+        }
+    }
+
+    for (const npcName in npcsData) {
+        if (npcsData.hasOwnProperty(npcName)) {
+            const npc = npcsData[npcName];
+
+            if (npc.canMove === true) {
+                
+                entityPaths[npcName] = {
+                    path: [],
+                    currentIndex: 0
+                };
+            }
+        }
+    }
+
+    console.log('Entity paths initialized:', entityPaths);
 }
 

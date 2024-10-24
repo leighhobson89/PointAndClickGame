@@ -15,7 +15,9 @@
         "it": "Barile polveroso",
         "fr": "Tonneau poussiéreux"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -89,7 +91,9 @@
         "it": "Osso",
         "fr": "Os"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -162,7 +166,9 @@
         "it": "Ciotola",
         "fr": "Bol"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -235,7 +241,9 @@
         "it": "Carota",
         "fr": "Carotte"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -308,7 +316,9 @@
         "it": "Piede di porco",
         "fr": "Pied-de-biche"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -381,7 +391,9 @@
         "it": "Asino ",
         "fr": "Âne "
       },
+      "canMove": true,
       "interactable": {
+
         "specialNpcObjectStandIn": true,
         "canHover": false,
         "canPush": false,
@@ -455,7 +467,9 @@
         "it": "Corda",
         "fr": "Corde"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -528,7 +542,9 @@
         "it": "Porta di Uscita della Biblioteca",
         "fr": "Porte de Sortie de la Bibliothèque"
       },
+      "canMove": false,
       "interactable": {
+
         "canHover": true,
         "canPush": false,
         "canPull": false,
@@ -598,7 +614,9 @@
         "it": "Porta di legno",
         "fr": "Porte en bois"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -670,7 +688,9 @@
         "it": "Grande porta di quercia massiccia",
         "fr": "Grande porte en chêne massif"
       },
+      "canMove": false,
       "interactable": {
+
         "canHover": true,
         "canPush": false,
         "canPull": false,
@@ -740,7 +760,9 @@
         "it": "Mappa illeggibile",
         "fr": "Carte illisible"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -813,7 +835,9 @@
         "it": "Chiave per la sala di ricerca",
         "fr": "Clé pour la salle de recherche"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -886,7 +910,9 @@
         "it": "Chiave per 'Covo'",
         "fr": "Clé pour 'Tanière'"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -959,7 +985,9 @@
         "it": "Mazzuolo",
         "fr": "Maillet"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1032,7 +1060,9 @@
         "it": "Bottiglia di latte",
         "fr": "Bouteille de lait"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1105,7 +1135,9 @@
         "it": "Ciotola di latte",
         "fr": "Bol de lait"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -1178,7 +1210,9 @@
         "it": "Chiodi",
         "fr": "Clous"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1251,7 +1285,9 @@
         "it": "Foglio con istruzioni scarabocchiate",
         "fr": "Papier avec des instructions griffonnées"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1324,7 +1360,9 @@
         "it": "Volantino inutile per il parco ornitologico chiuso",
         "fr": "Flyer inutile pour un parc d'oiseaux fermé"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -1397,7 +1435,9 @@
         "it": "Gancio",
         "fr": "Crochet"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1470,7 +1510,9 @@
         "it": "Pappagallo",
         "fr": "Perroquet"
       },
+      "canMove": true,
       "interactable": {
+
         "specialNpcObjectStandIn": true,
         "canHover": true,
         "canPush": false,
@@ -1544,7 +1586,9 @@
         "it": "Specchio",
         "fr": "Miroir"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1617,7 +1661,9 @@
         "it": "Pila di libri",
         "fr": "Pile de livres"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": true,
@@ -1690,7 +1736,9 @@
         "it": "Forcone",
         "fr": "Fourche"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1763,7 +1811,9 @@
         "it": "Pinze",
         "fr": "Pince"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1836,7 +1886,9 @@
         "it": "Ruota della puleggia",
         "fr": "Roue de poulie"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1909,7 +1961,9 @@
         "it": "Gancio'n'Corda",
         "fr": "Crochet'n'Corde"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -1982,7 +2036,9 @@
         "it": "Scheggia di legno",
         "fr": "Écharde de bois"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -2055,7 +2111,9 @@
         "it": "Puleggia con scheggia bloccata",
         "fr": "Poulie avec écharde coincée"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -2128,7 +2186,9 @@
         "it": "Gancio robusto",
         "fr": "Crochet robuste"
       },
+      "canMove": false,
       "interactable": {
+
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
