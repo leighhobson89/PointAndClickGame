@@ -482,13 +482,10 @@ canvas {
     top: 0;
     z-index:9999;
 }
-/* Container for debug values, positioned to the left of the wheel menu */
 .debug-container {
     position: absolute;
     top: 10px;
-    right: 230px; /* Positioned to the left of wheel-menu-container */
-    width: 500;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
@@ -509,12 +506,9 @@ label {
     color: white !important;
 }
 
-/* Existing styles for the wheel menu */
 .wheel-menu-container {
     display: none;
     position: absolute;
-    top: 10px;
-    right: 10px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -522,9 +516,33 @@ label {
     z-index: 999999;
 }
 
+.close-button-container {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+    padding: 5px;
+    z-index: 1;
+}
+
+.close-button:hover {
+    color: red;
+}
+
 .wheel-menu {
-    overflow: hidden;
-    max-height: 300px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: 150px;
+    max-width: 150px;
+    white-space: nowrap;
 }
 
 #wheelMenuList {
@@ -544,6 +562,12 @@ label {
     background-color: #f0f0f0;
 }
 
-#drawGridButton {
-    width: 120px;
+.debug-bottom-button-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.debug-bottom-button-container button {
+    width: 100%;
+    box-sizing: border-box;
 }

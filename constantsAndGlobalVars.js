@@ -2,6 +2,7 @@
 export let debugFlag = false;
 export let debugOptionFlag = false;
 export let stateLoading = false;
+export let nonPlayerAnimationFunctionalityActive = false;
 
 //ELEMENTS
 let elements;
@@ -1081,11 +1082,18 @@ export function setDrawGrid(value) {
     drawGrid = value;
 }
 
-
 export function getCantGoThatWay() {
     return cantGoThatWay;
 }
 
 export function setCantGoThatWay(value) {
     cantGoThatWay = value;
+}
+
+export function getNonPlayerAnimationFunctionalityActive() {
+    return nonPlayerAnimationFunctionalityActive;
+}
+
+export function setNonPlayerAnimationFunctionalityActive(value) {
+    nonPlayerAnimationFunctionalityActive = value;
 }

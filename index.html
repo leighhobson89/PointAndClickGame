@@ -9,38 +9,49 @@
 </head>
 <body>    
 
-<div id="wheelMenuContainer" class="wheel-menu-container">
-    <div id="wheelMenu" class="wheel-menu">
-        <ul id="wheelMenuList">
-            <li>objectBone</li>
-            <li>objectBowl</li>
-            <li>objectCarrot</li>
-            <li>objectCrowbar</li>
-            <li>objectDonkeyRope</li>
-            <li>objectIllegibleMap</li>
-            <li>objectKeyResearchRoom</li>
-            <li>objectKeyToDen</li>
-            <li>objectMallet</li>
-            <li>objectMilkBottle</li>
-            <li>objectMilkInBowl</li>
-            <li>objectNails</li>
-            <li>objectPaperWithInstructionsScrawledOn</li>
-            <li>objectParrotFlyer</li>
-            <li>objectParrotHook</li>
-            <li>objectParrotMirror</li>
-            <li>objectPileOfBooksLibraryFoyer</li>
-            <li>objectPitchFork</li>
-            <li>objectPliers</li>
-            <li>objectPulleyWheel</li>
-            <li>objectRopeAndHook</li>
-            <li>objectSplinter</li>
-            <li>objectSplinterJammedInPulley</li>
-        </ul>
+    <div id="wheelMenuContainer" class="wheel-menu-container">
+        <!-- Close button container -->
+        <div class="close-button-container">
+            <span id="closeButton" class="close-button">&times;</span>
+        </div>
+        
+        <div id="wheelMenu" class="wheel-menu">
+            <ul id="wheelMenuList">
+                <li>objectBone</li>
+                <li>objectBowl</li>
+                <li>objectCarrot</li>
+                <li>objectCrowbar</li>
+                <li>objectDonkeyRope</li>
+                <li>objectIllegibleMap</li>
+                <li>objectKeyResearchRoom</li>
+                <li>objectKeyToDen</li>
+                <li>objectMallet</li>
+                <li>objectMilkBottle</li>
+                <li>objectMilkInBowl</li>
+                <li>objectNails</li>
+                <li>objectPaperWithInstructionsScrawledOn</li>
+                <li>objectParrotFlyer</li>
+                <li>objectParrotHook</li>
+                <li>objectParrotMirror</li>
+                <li>objectPileOfBooksLibraryFoyer</li>
+                <li>objectPitchFork</li>
+                <li>objectPliers</li>
+                <li>objectPulleyWheel</li>
+                <li>objectRopeAndHook</li>
+                <li>objectSplinter</li>
+                <li>objectSplinterJammedInPulley</li>
+            </ul>
+        </div>
+    
+        <!-- Buttons as before -->
+        <div class="debug-bottom-button-container">
+            <button id="selectItemButton" class="btn btn-primary mt-2">Add Item</button>
+            <button id="drawGridButton" class="btn btn-warning mt-2">Show Grid</button>
+            <button id="debugWindowButton" class="btn btn-warning mt-2">Open Debug</button>
+            <button id="toggleAnimationNonPlayer" class="btn btn-warning mt-2">Toggle Anim</button>
+        </div>
     </div>
-    <button id="selectItemButton" class="btn btn-primary mt-2">Add Item</button>
-    <button id="drawGridButton" class="btn btn-warning mt-2">Show Grid</button>
-    <button id="debugWindowButton" class="btn btn-warning mt-2">Open Debug</button>
-</div>
+    
     <div class="custom-mouse">
         <img class="custom-mouse-image" src="./resources/mouse/mouseCrosshair.png" alt="">
     </div>

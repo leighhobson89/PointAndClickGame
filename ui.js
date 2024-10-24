@@ -105,7 +105,9 @@ import {
     getPreAnimationGridState,
     getOriginalValueInCellWhereObjectPlaced,
     getOriginalValueInCellWhereObjectPlacedNew,
-    getAllGridData
+    getAllGridData,
+    getNonPlayerAnimationFunctionalityActive,
+    setNonPlayerAnimationFunctionalityActive
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -617,30 +619,64 @@ document.addEventListener("DOMContentLoaded", () => {
     //DEBUG WHEEL START/////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const container = document.getElementById('wheelMenuContainer');
+
+    const closeButton = document.getElementById('closeButton');
+    const wheelMenuContainer = document.getElementById('wheelMenuContainer');
+
+    // Close the wheel menu container when the close button is clicked
+    closeButton.addEventListener('click', function() {
+        wheelMenuContainer.style.display = 'none';
+    });
+
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    container.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        offsetX = e.clientX - container.getBoundingClientRect().left;
+        offsetY = e.clientY - container.getBoundingClientRect().top;
+        container.style.cursor = 'move';
+        wheelMenu.style.overflowX = 'hidden';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            const left = e.clientX - offsetX;
+            const top = e.clientY - offsetY;
+            container.style.left = `${left}px`;
+            container.style.top = `${top}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+        container.style.cursor = 'default';
+        wheelMenu.style.overflowX = 'auto';
+    });
+
+    function highlightSelectedItem(item) {
+        wheelItems.forEach(wheelItem => {
+            wheelItem.style.backgroundColor = '';
+        });
+        if (item) {
+            item.style.backgroundColor = '#d4edda';
+        }
+    }
 
     const wheelMenuList = document.getElementById('wheelMenuList');
     let currentScrollPosition = 0;
     let selectedWheelItem = null; // Keep track of the clicked item
     const wheelItems = wheelMenuList.querySelectorAll('li');
 
-    // Function to highlight the selected item (either by scroll or click)
-    function highlightSelectedItem(item) {
-        wheelItems.forEach(wheelItem => {
-            wheelItem.style.backgroundColor = ''; // Clear highlight from all items
-        });
-        if (item) {
-            item.style.backgroundColor = '#d4edda'; // Highlight selected item
-        }
-    }
-
-    // Get the selected item by scroll position
     function getSelectedItem() {
         const itemHeight = wheelItems[0].offsetHeight;
         const index = Math.round(-currentScrollPosition / itemHeight);
         return wheelItems[index];
     }
 
-    // Add event listener for wheel scrolling
     document.getElementById('wheelMenuContainer').addEventListener('wheel', function(event) {
         event.preventDefault();
         const itemHeight = wheelItems[0].offsetHeight;
@@ -648,12 +684,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const maxScrollPosition = -(itemHeight * (wheelItems.length - 7));
 
         if (event.deltaY > 0) {
-            // Scrolling down
             if (currentScrollPosition > maxScrollPosition) {
                 currentScrollPosition -= itemHeight;
             }
         } else {
-            // Scrolling up
             if (currentScrollPosition < 0) {
                 currentScrollPosition += itemHeight;
             }
@@ -666,7 +700,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wheelItems.forEach(item => {
         item.addEventListener('click', function() {
-			document.getElementById('selectItemButton').style.backgroundColor ='#0d6efd';
+			document.getElementById('selectItemButton').style.backgroundColor ='#28a745';
 			document.getElementById('selectItemButton').disabled = false;
             selectedWheelItem = item;
             highlightSelectedItem(item);
@@ -697,6 +731,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('debugWindowButton').addEventListener('click', function() {
         openDebugWindow();
+    });
+
+    document.getElementById('toggleAnimationNonPlayer').addEventListener('click', function() {
+        if (getNonPlayerAnimationFunctionalityActive()) {
+			document.getElementById('drawGridButton').textContent = 'Start Anim.';
+            setNonPlayerAnimationFunctionalityActive(false);
+		} else {
+			document.getElementById('drawGridButton').textContent = 'Stop Anim.';
+            setNonPlayerAnimationFunctionalityActive(true);
+		}
     });
 
     document.addEventListener('mousedown', function(event) {
