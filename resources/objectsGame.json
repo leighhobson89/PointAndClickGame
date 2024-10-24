@@ -1577,14 +1577,15 @@
           "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
           "target": { "x": 49, "y": 40, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
-            { "x": 52, "y": 39, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            { "x": 52, "y": 39, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 30, "y": 23, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
             ]
         },
         "1": {
           "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
           "target": { "x": 60, "y": 48, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
-            { "x": 52, "y": 39, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            { "x": 52, "y": 42, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
           ]
         }
       },       

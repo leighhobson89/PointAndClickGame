@@ -1433,7 +1433,7 @@ export function initializeNonPlayerMovementsForScreen(screen) {
 
             if (entity.placementScreenId === screen) {
                 console.log(`Starting movements for ${entityId} on screen ${screen}`);
-                path = populatePathForEntityMovement(entityId, 1);
+                path = populatePathForEntityMovement(entityId, 0);
 
             } else {
                 console.log(`${entityId} is not in ${screen}, moving along...`);
@@ -1448,7 +1448,7 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
     let entity;
     const entityIdPrefix = entityId.slice(0, 3);
     
-    // Get the entity based on the prefix
+    // Retrieve entity based on the ID prefix
     switch (entityIdPrefix) {
         case "npc":
             entity = getNpcData().npcs[entityId];
@@ -1457,58 +1457,48 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
             entity = getObjectData().objects[entityId];
             break;
         default: 
-            console.error("Could not assign a JSON property to the passed entityId");
+            console.error("Invalid entityId prefix. Could not assign a JSON property to the passed entityId.");
             return;
     }
 
-    // Read starting instructions
-    const startX = entity.gridPosition.x;
-    const startY = entity.gridPosition.y;
-    const start = { x: startX, y: startY };
+    // Get entity's starting position
+    const start = {
+        x: Math.floor(entity.visualPosition.x / getCanvasCellWidth()),
+        y: Math.floor(entity.visualPosition.y / getCanvasCellHeight())
+    };
 
-    // Read waypoints if there are any
+    // Check if waypoints are available for this entity
     if (!entity.waypoints || Object.keys(entity.waypoints).length === 0) {
-        console.log("No waypoints available for this entity.");
+        console.error("No waypoints available for this entity.");
         return;
     }
 
-    // Check if the specified moveSequence exists
-    const waypoint = entity.waypoints[moveSequence];
-    if (!waypoint) {
+    // Verify that the moveSequence exists
+    const waypointSequence = entity.waypoints[moveSequence];
+    if (!waypointSequence) {
         console.error(`No waypoints found for moveSequence "${moveSequence}".`);
         return;
     }
 
-    // Read target
-    const target = { x: waypoint.target.x, y: waypoint.target.y };
+    // Extract the target from the specified moveSequence
+    const target = { x: waypointSequence.target.x, y: waypointSequence.target.y };
 
-    // Collect waypoints
-    const waypoints = waypoint.points.map(point => ({ x: point.x, y: point.y }));
+    // Extract the list of waypoints (if any) in the move sequence
+    const waypoints = waypointSequence.points.map(point => ({ x: point.x, y: point.y }));
 
-    console.log(`Running pathfinder from (${start.x}, ${start.y}) to (${target.x}, ${target.y}) with waypoints`, waypoints);
+    // Logging the pathfinding details for debugging
+    console.log(`Running pathfinder from (${start.x}, ${start.y}) to (${target.x}, ${target.y}) with waypoints:`, waypoints);
 
-    switch (entityIdPrefix) {
-        case "npc":
-            path = aStarPathfinding(
-                { x: Math.floor(getNpcData().npcs[entityId].visualPosition.x / getCanvasCellWidth()), y: Math.floor(getNpcData().npcs[entityId].visualPosition.y / getCanvasCellHeight()) },
-                { x: target.x, y: target.y },
-                null,
-                entityId,
-                waypoints
-            );
-            return path;
-        case "obj":
-            path = aStarPathfinding(
-                { x: Math.floor(getObjectData().objects[entityId].visualPosition.x / getCanvasCellWidth()), y: Math.floor(getObjectData().objects[entityId].visualPosition.y / getCanvasCellHeight()) },
-                { x: target.x, y: target.y },
-                null,
-                entityId,
-                waypoints
-            );
-            return path;
-        default: 
-            console.error("Could not assign a JSON property to the passed entityId");
-            return;
-    }
+    path = aStarPathfinding(
+        start,
+        target,
+        null,  // Assuming no specific action is passed
+        entityId,  // Object ID as the subject
+        waypoints  // List of waypoints
+    );
+
+    // Return the computed path
+    return path;
 }
+
 
