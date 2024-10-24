@@ -13,6 +13,7 @@
           "fr": "Âne"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },                     
@@ -74,6 +75,7 @@
           "fr": "Bibliothécaire"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },
@@ -134,6 +136,7 @@
           "fr": "Chien"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },
@@ -196,6 +199,7 @@
           "fr": "Jeune Femme"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },
@@ -257,6 +261,7 @@
           "fr": "Vache"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },
@@ -317,6 +322,7 @@
           "fr": "Homme à l'air louche"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },
@@ -377,6 +383,7 @@
           "fr": "Charpentier"
         },
         "canMove": false,
+        "measureMovementYOffset": 0,
         "waypoints": {
 
         },

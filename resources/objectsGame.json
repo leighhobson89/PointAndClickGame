@@ -16,7 +16,8 @@
         "fr": "Tonneau poussiéreux"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -94,7 +95,8 @@
         "fr": "Os"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -171,7 +173,8 @@
         "fr": "Bol"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -248,7 +251,8 @@
         "fr": "Carotte"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -325,7 +329,8 @@
         "fr": "Pied-de-biche"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -402,7 +407,8 @@
         "fr": "Âne "
       },
       "canMove": true,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -480,7 +486,8 @@
         "fr": "Corde"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -557,7 +564,8 @@
         "fr": "Porte de Sortie de la Bibliothèque"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -631,7 +639,8 @@
         "fr": "Porte en bois"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -707,7 +716,8 @@
         "fr": "Grande porte en chêne massif"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -781,7 +791,8 @@
         "fr": "Carte illisible"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -858,7 +869,8 @@
         "fr": "Clé pour la salle de recherche"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -935,7 +947,8 @@
         "fr": "Clé pour 'Tanière'"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1012,7 +1025,8 @@
         "fr": "Maillet"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1089,7 +1103,8 @@
         "fr": "Bouteille de lait"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1166,7 +1181,8 @@
         "fr": "Bol de lait"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1243,7 +1259,8 @@
         "fr": "Clous"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1320,7 +1337,8 @@
         "fr": "Papier avec des instructions griffonnées"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1397,7 +1415,8 @@
         "fr": "Flyer inutile pour un parc d'oiseaux fermé"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1474,7 +1493,8 @@
         "fr": "Crochet"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1551,8 +1571,10 @@
         "fr": "Perroquet"
       },
       "canMove": true,
+      "measureMovementYOffset": -20,
       "waypoints": {
         "0": {
+          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
           "target": { "x": 60, "y": 45, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
             { "x": 50, "y": 32, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
@@ -1561,6 +1583,7 @@
           ]
         },
         "1": {
+          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
           "target": { "x": 60, "y": 45, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
             { "x": 50, "y": 32, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
@@ -1644,7 +1667,8 @@
         "fr": "Miroir"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1721,7 +1745,8 @@
         "fr": "Pile de livres"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1798,7 +1823,8 @@
         "fr": "Fourche"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1875,7 +1901,8 @@
         "fr": "Pince"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -1952,7 +1979,8 @@
         "fr": "Roue de poulie"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -2029,7 +2057,8 @@
         "fr": "Crochet'n'Corde"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -2106,7 +2135,8 @@
         "fr": "Écharde de bois"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -2183,7 +2213,8 @@
         "fr": "Poulie avec écharde coincée"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
@@ -2260,7 +2291,8 @@
         "fr": "Crochet robuste"
       },
       "canMove": false,
-       "waypoints": {
+      "measureMovementYOffset": 0,
+      "waypoints": {
 
        },        
        "interactable": {
