@@ -172,6 +172,112 @@ function movePlayerTowardsTarget() {
     setPlayerObject('yPos', player.yPos);
 }
 
+function moveOtherEntitiesOnCurrentScreen() {
+    const gridData = getGridData();
+    
+    // const speed = getPlayerObject().speed;
+    // const player = getPlayerObject();
+    // const gridSizeX = getCanvasCellWidth();
+    // const gridSizeY = getCanvasCellHeight();
+    // const dialogueData = getDialogueData().dialogue;
+    // const language = getLanguage();
+
+    // const playerGridX = Math.floor(player.xPos / gridSizeX);
+    // const playerGridY = Math.floor(player.yPos / gridSizeY);
+
+    // const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / gridSizeX));
+    // const playerOffsetY = Math.floor(playerGridY + player.height / gridSizeY);
+
+    // const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // Adjust for rounding
+
+    // let targetX, targetY;
+
+    // if (getTransitioningNow()) {
+    //     const exit = 'e' + getExitNumberToTransitionTo();
+    //     const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
+    //     const tolerance = 3;
+
+    //     // Check if player has reached the final position for the transition
+    //     if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
+    //         Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
+    //         entityPaths.player.path = [];
+    //         entityPaths.player.currentIndex = 0;
+    //         setTransitioningNow(false);
+    //         resizePlayerObject();
+    //         getElements().customCursor.classList.remove('d-none');
+    //         canvas.style.pointerEvents = 'auto';
+
+    //         initializeNonPlayerMovementsForScreen(getCurrentScreenId());
+    //     }
+    // }
+
+    // // Normal movement logic
+    // if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
+    //     targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
+    //     targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
+    // } else {
+    //     return; // No target to move toward
+    // }
+
+    // let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
+    // //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
+
+    // // Move the player toward the target position
+    // if (Math.abs(player.xPos - targetX) > speed) {
+    //     player.xPos += (player.xPos < targetX) ? speed : -speed;
+    // } else {
+    //     player.xPos = targetX;
+    // }
+
+    // if (Math.abs(player.yPos - targetY) > speed) {
+    //     player.yPos += (player.yPos < targetY) ? speed : -speed;
+    // } else {
+    //     player.yPos = targetY;
+    // }
+
+    // // Check if player has reached the target position
+    // if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
+
+    //     entityPaths.player.currentIndex++;
+
+    //     if (entityPaths.player.currentIndex < entityPaths.player.path.length) {
+    //         const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
+    //         setTargetX(nextStep.x * gridSizeX);
+    //         setTargetY(nextStep.y * gridSizeY - player.height);
+    //     } else {
+    //         // Logic for when the player reaches the final destination
+    //         if (getCantGoThatWay()) {
+    //             let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
+    //             showText(dialogueString, getColorTextPlayer());
+    //             setCantGoThatWay(false);
+    //             return;
+    //         } else {
+    //             let commandToPerform;
+    //             console.log(cellValue);
+    //             const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
+    //             const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
+    
+    //             if (screenOrObjectNameAndHoverStatus[1]) {
+    //                 commandToPerform = constructCommand(getUpcomingAction(), true);
+    //             } else {
+    //                 commandToPerform = constructCommand(getUpcomingAction(), false);
+    //             }
+    
+    //             performCommand(commandToPerform, false); // Perform the command
+    //             setCurrentlyMovingToAction(false);
+    //             setCurrentlyMoving(false);
+    //             if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
+    //                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+    //             }
+    //         }
+    //     }
+    // }
+
+    // resizePlayerObject(player);
+
+    // setPlayerObject('xPos', player.xPos);
+    // setPlayerObject('yPos', player.yPos);
+}
 
 export function resizePlayerObject() {
     const player = getPlayerObject();
