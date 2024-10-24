@@ -14,7 +14,7 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
     let entityDrawHeight;
 
     if (subject !== 'player') {
-        if (subject.startsWith('c')) {
+        if (subject.startsWith('n')) {
             entity = getNpcData().npcs[subject];
         } else {
             entity = getObjectData().objects[subject];
@@ -49,18 +49,32 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
             console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
             return [];
         }
-        fullPath = fullPath.concat(partialPath);
+        console.log(`Partial path found: ${JSON.stringify(partialPath)}`); // Log the partial path
+        fullPath = fullPath.concat(partialPath);  // Concatenate partial path
         currentStart = waypoint; // Move start to the last waypoint
     }
 
+    console.log(`Full path after waypoints: ${JSON.stringify(fullPath)}`); // Log fullPath after waypoints
+
     // Finally, path from the last waypoint (or start) to the final target
     const finalPath = findPathBetweenPoints(currentStart, target);
+    console.log(`Final path found: ${JSON.stringify(finalPath)}`); // Log finalPath
+    
     if (!finalPath || finalPath.length === 0) {
         console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(target)}`);
         return [];
     }
 
+    // Log fullPath and finalPath before concatenation
+    console.log(`fullPath before concatenation: ${JSON.stringify(fullPath)}`);
+    console.log(`finalPath before concatenation: ${JSON.stringify(finalPath)}`);
+
+    // Concatenate fullPath and finalPath
     fullPath = fullPath.concat(finalPath);
+
+    // Log fullPath after concatenation
+    console.log(`Full path after concatenation: ${JSON.stringify(fullPath)}`);
+
     return fullPath;
 }
 

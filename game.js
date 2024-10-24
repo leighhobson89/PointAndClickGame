@@ -1426,24 +1426,29 @@ export function initializeEntityPathsObject() {
 }
 
 export function initializeNonPlayerMovementsForScreen(screen) {
+    let path;
     for (const entityId in entityPaths) {
         if (entityPaths.hasOwnProperty(entityId) && entityId !== 'player') {
             const entity = entityPaths[entityId];
 
             if (entity.placementScreenId === screen) {
                 console.log(`Starting movements for ${entityId} on screen ${screen}`);
-                populatePathForEntityMovement(entityId, 1);
+                path = populatePathForEntityMovement(entityId, 1);
+
             } else {
                 console.log(`${entityId} is not in ${screen}, moving along...`);
             }
         }
+        console.log(`Path for ${entityId} is ${JSON.stringify(path)}`);
     }
 }
 
 export function populatePathForEntityMovement(entityId, moveSequence) {
+    let path;
     let entity;
     const entityIdPrefix = entityId.slice(0, 3);
     
+    // Get the entity based on the prefix
     switch (entityIdPrefix) {
         case "npc":
             entity = getNpcData().npcs[entityId];
@@ -1459,6 +1464,7 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
     // Read starting instructions
     const startX = entity.gridPosition.x;
     const startY = entity.gridPosition.y;
+    const start = { x: startX, y: startY };
 
     // Read waypoints if there are any
     if (!entity.waypoints || Object.keys(entity.waypoints).length === 0) {
@@ -1474,16 +1480,35 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
     }
 
     // Read target
-    const target = waypoint.target;
+    const target = { x: waypoint.target.x, y: waypoint.target.y };
 
-    console.log(`Running pathfinder function from start (${startX}, ${startY}) to target (${target.x}, ${target.y})`);
-    
-    if (waypoint.points && waypoint.points.length > 0) {
-        const points = waypoint.points.map(point => `(${point.x}, ${point.y})`).join(", ");
-        console.log(`Waypoints: ${points}`);
+    // Collect waypoints
+    const waypoints = waypoint.points.map(point => ({ x: point.x, y: point.y }));
+
+    console.log(`Running pathfinder from (${start.x}, ${start.y}) to (${target.x}, ${target.y}) with waypoints`, waypoints);
+
+    switch (entityIdPrefix) {
+        case "npc":
+            path = aStarPathfinding(
+                { x: Math.floor(getNpcData().npcs[entityId].visualPosition.x / getCanvasCellWidth()), y: Math.floor(getNpcData().npcs[entityId].visualPosition.y / getCanvasCellHeight()) },
+                { x: target.x, y: target.y },
+                null,
+                entityId,
+                waypoints
+            );
+            return path;
+        case "obj":
+            path = aStarPathfinding(
+                { x: Math.floor(getObjectData().objects[entityId].visualPosition.x / getCanvasCellWidth()), y: Math.floor(getObjectData().objects[entityId].visualPosition.y / getCanvasCellHeight()) },
+                { x: target.x, y: target.y },
+                null,
+                entityId,
+                waypoints
+            );
+            return path;
+        default: 
+            console.error("Could not assign a JSON property to the passed entityId");
+            return;
     }
-
-    // You would call your pathfinder function here, e.g.
-    // pathfinder(startX, startY, target, waypoint.points);
 }
 
