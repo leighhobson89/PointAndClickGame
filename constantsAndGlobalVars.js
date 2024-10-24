@@ -54,8 +54,7 @@ export let playerObject = {
     yPos: '0'
 };
 
-export let playerInventory = {    
-};
+export let playerInventory = {};
 
 //GLOBAL VARIABLES
 export let initialScreenId = '';
