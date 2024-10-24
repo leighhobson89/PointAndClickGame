@@ -1,6 +1,6 @@
 import {
-	getDrawGrid,
-	setDrawGrid,
+    getDrawGrid,
+    setDrawGrid,
     getInitialBackgroundUrl,
     setInitialBackgroundUrl,
     setInitialScreenId,
@@ -114,15 +114,14 @@ import {
     updateDialogueDisplay,
 } from "./dialogue.js";
 import {
-    drawGrid,
+    drawDebugGrid,
     handleRoomTransition,
     initializePlayerPosition,
     processLeftClickPoint,
     processRightClickPoint,
     setGameState,
     startGame,
-    initializeEntityPathsObject,
-    initializeNonPlayerMovementsForScreen
+    initializeEntityPathsObject
 } from "./game.js";
 import {
     addItemToInventory,
@@ -735,10 +734,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggleAnimationNonPlayer').addEventListener('click', function() {
         if (getNonPlayerAnimationFunctionalityActive()) {
-			document.getElementById('drawGridButton').textContent = 'Start Anim.';
+			document.getElementById('toggleAnimationNonPlayer').textContent = 'Start Anim.';
             setNonPlayerAnimationFunctionalityActive(false);
 		} else {
-			document.getElementById('drawGridButton').textContent = 'Stop Anim.';
+			document.getElementById('toggleAnimationNonPlayer').textContent = 'Stop Anim.';
             setNonPlayerAnimationFunctionalityActive(true);
 		}
     });
@@ -869,7 +868,7 @@ export function handleMouseMove(event, ctx) {
                 //     `Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
                 // ); //, zPos: ${getZPosHover()}
                 //DEBUG
-                drawGrid(getDrawGrid());
+                drawDebugGrid(getDrawGrid());
                 //
             }
 

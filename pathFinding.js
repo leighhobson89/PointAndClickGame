@@ -1,4 +1,4 @@
-import { getObjectData, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { getObjectData, getCanvasCellHeight, getCanvasCellWidth, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNpcData, getPlayerObject, setLookingForAlternativePathToNearestWalkable } from "./constantsAndGlobalVars.js";
 
 export function aStarPathfinding(start, target, action, subject, waypoints = []) {
     const player = getPlayerObject();
@@ -46,22 +46,22 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
     for (const waypoint of waypoints) {
         const partialPath = findPathBetweenPoints(currentStart, waypoint);
         if (!partialPath || partialPath.length === 0) {
-            console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
+            //console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
             return [];
         }
-        console.log(`Partial path found: ${JSON.stringify(partialPath)}`); // Log the partial path
+        //console.log(`Partial path found: ${JSON.stringify(partialPath)}`); // Log the partial path
         fullPath = fullPath.concat(partialPath);  // Concatenate partial path
         currentStart = waypoint; // Move start to the last waypoint
     }
 
-    console.log(`Full path after waypoints: ${JSON.stringify(fullPath)}`); // Log fullPath after waypoints
+    //console.log(`Full path after waypoints: ${JSON.stringify(fullPath)}`); // Log fullPath after waypoints
 
     // Finally, path from the last waypoint (or start) to the final target
     const finalPath = findPathBetweenPoints(currentStart, target);
-    console.log(`Final path found: ${JSON.stringify(finalPath)}`); // Log finalPath
+    //console.log(`Final path found: ${JSON.stringify(finalPath)}`); // Log finalPath
     
     if (!finalPath || finalPath.length === 0) {
-        console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(target)}`);
+        //console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(target)}`);
         return [];
     }
 

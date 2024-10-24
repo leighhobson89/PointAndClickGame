@@ -542,22 +542,6 @@ export function setExitNumberToTransitionTo(value) {
     exitNumberToTransitionTo = value;
 }
 
-export function setCurrentlyMovingPlayer(value) {
-    currentlyMovingPlayer = value;
-}
-
-export function getCurrentlyMovingPlayer() {
-    return currentlyMovingPlayer;
-}
-
-export function setCurrentlyMovingEntity(entityId, value) {
-    currentlyMovingEntity[entityId] = value;
-}
-
-export function getCurrentlyMovingEntity(entityId) {
-    return currentlyMovingEntity[entityId];
-}
-
 export function setCurrentlyMovingToAction(value) {
     currentlyMovingToAction = value;
 }
@@ -837,10 +821,10 @@ export function getResizedNpcsGridState() {
 export function setPreAnimationGridState(gridState, objectId, isObjectTrueNpcFalse) {
     if (gridState === 'clear') {
         preAnimationGridStates = [];
+        console.log("preAnimationStateGrid cleared!!");
         return;
     }
     
-    console.log(getPreAnimationGridState());
     const newState = {
         grid: JSON.parse(JSON.stringify(gridState)),  // Deep copy of the grid
         id: objectId,
