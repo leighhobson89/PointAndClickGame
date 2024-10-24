@@ -1,7 +1,3 @@
-
-
-import { updateDebugValues } from "./ui.js";
-
 //DEBUG
 export let debugFlag = false;
 export let debugOptionFlag = false;
