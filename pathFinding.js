@@ -65,15 +65,8 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
         return [];
     }
 
-    // Log fullPath and finalPath before concatenation
-    console.log(`fullPath before concatenation: ${JSON.stringify(fullPath)}`);
-    console.log(`finalPath before concatenation: ${JSON.stringify(finalPath)}`);
-
     // Concatenate fullPath and finalPath
     fullPath = fullPath.concat(finalPath);
-
-    // Log fullPath after concatenation
-    console.log(`Full path after concatenation: ${JSON.stringify(fullPath)}`);
 
     return fullPath;
 }

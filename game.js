@@ -1426,20 +1426,24 @@ export function initializeEntityPathsObject() {
 }
 
 export function initializeNonPlayerMovementsForScreen(screen) {
+    //clear current path for entity
+
     let path;
     for (const entityId in entityPaths) {
-        if (entityPaths.hasOwnProperty(entityId) && entityId !== 'player') {
+        if (entityPaths.hasOwnProperty(entityId) && entityId !== 'player' && entityPaths[entityId].placementScreenId === screen) {
             const entity = entityPaths[entityId];
 
-            if (entity.placementScreenId === screen) {
-                console.log(`Starting movements for ${entityId} on screen ${screen}`);
-                path = populatePathForEntityMovement(entityId, 0);
+            entityPaths[entityId].path = [];
+            entityPaths[entityId].currentIndex = 0;
 
-            } else {
-                console.log(`${entityId} is not in ${screen}, moving along...`);
-            }
+            console.log(`Starting movements for ${entityId} on screen ${screen}`);
+            path = populatePathForEntityMovement(entityId, 0);
+
+            entityPaths[entityId].path = path;
+            console.log(`Path for ${entityId} is ${JSON.stringify(path)}`);
+        } else {
+            console.log(`${entityId} is not in ${screen} or is player, moving along...`);
         }
-        console.log(`Path for ${entityId} is ${JSON.stringify(path)}`);
     }
 }
 
