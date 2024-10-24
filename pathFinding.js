@@ -1,34 +1,49 @@
-import { getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
+import { getObjectData, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
-export function aStarPathfinding(start, target, action) {
+export function aStarPathfinding(start, target, action, subject) {
     let npcResizedYet = false; //only important if user has clicked to talk or give a npc
-
-    console.log("transitioning now: " + getTransitioningNow());
-
     const gridData = getGridData();
-    
-    if (gridData.idType === "next") {
-        console.log("Finding a path based on " + gridData.idType + " screen id = " + getNextScreenId());
-    } else if (gridData.idType === "current") {
-        console.log("Finding a path based on " + gridData.idType + " screen id = " + getCurrentScreenId());
-    }
-
     const player = getPlayerObject();
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
-    start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
-    start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+
+    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
+    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
+
+    let entity;
+    let entityDrawWidth;
+    let entityDrawHeight;
+
+    if (subject !== 'player') {
+        if (subject.startsWith('c')) {
+            entity = getNpcData().npcs[subject];
+        } else {
+            entity = getObjectData().objects[subject];
+        }
+
+        entityDrawWidth = (entity.dimensions.width * (cellWidth / baseCellWidth));
+        entityDrawHeight = (entity.dimensions.height * (cellHeight / baseCellHeight));
+    }
+
+    if (subject === 'player') {
+        start.x = Math.floor(start.x + ((player.width / 2) / getCanvasCellWidth()));
+        start.y = Math.floor(start.y + (player.height / getCanvasCellHeight()));
+    } else {
+        start.x = Math.floor(start.x + ((entityDrawWidth / 2) / getCanvasCellWidth()));
+        start.y = Math.floor(start.y + (entityDrawHeight / getCanvasCellHeight()));
+
+        console.log(`Looking for a path for entity ` + subject + ` from ` + `${start.x}, ${start.y} to ${target.x}, ${target.y}`);
+    }
 
     const openList = [];
     const closedList = [];
     const path = [];
 
-    console.log("Start position:", start);
-    console.log("Target position:", target);
-
     const redirectedTarget = checkAndRedirectToDoor(target);
-    if (redirectedTarget) {
+    if (redirectedTarget && subject === 'player') {
         target = redirectedTarget;
     }
 
@@ -57,7 +72,7 @@ export function aStarPathfinding(start, target, action) {
         const distanceToTarget = heuristic(currentNode, target);
         const cellType = gridData.gridData[target.y][target.x];
 
-        if (action === "Talk To" || action === "Give") {
+        if (action === "Talk To" || action === "Give") { //only player
             if(!npcResizedYet && cellType.startsWith('c')) {
                 const baseCellHeightCoefficient = 5;
                 const npc = cellType.slice(1);
@@ -88,9 +103,14 @@ export function aStarPathfinding(start, target, action) {
                 path.push({ x: temp.x, y: temp.y });
                 temp = temp.parent;
             }
-            const finalPath = removeNValuesFromPathEnd(path);
-            if (finalPath) {
-                return finalPath.reverse();
+
+            if (subject === 'player') {
+                const finalPath = removeNValuesFromPathEnd(path);
+                if (finalPath) {
+                    return finalPath.reverse();
+                }
+            } else {
+                return path.reverse();
             }
         }
 
@@ -116,7 +136,7 @@ export function aStarPathfinding(start, target, action) {
             }
 
             const cellType = gridData.gridData[neighborY][neighborX];
-            if (cellType.startsWith('c') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
+            if ((cellType.startsWith('c') && subject === 'player') || closedList.some(node => node.x === neighborX && node.y === neighborY)) {
                 continue;
             }
 
@@ -157,7 +177,7 @@ export function aStarPathfinding(start, target, action) {
     }
 
     setLookingForAlternativePathToNearestWalkable(true);
-    const nearestWalkableCell = findAndMoveToNearestWalkable({ x: start.x, y: start.y }, { x: target.x, y: target.y }, false);
+    const nearestWalkableCell = findAndMoveToNearestWalkable({ x: start.x, y: start.y }, { x: target.x, y: target.y });
     if (nearestWalkableCell === null || gridData.gridData[nearestWalkableCell.y][nearestWalkableCell.x] === 'n') {
         setLookingForAlternativePathToNearestWalkable(false);
     } else {
@@ -168,7 +188,8 @@ export function aStarPathfinding(start, target, action) {
         const nearestPath = aStarPathfinding(
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
-            action
+            action, 
+            subject
         );
         console.log("No path found, so walking to " + nearestWalkableCell.x + ", " + nearestWalkableCell.y);
         setLookingForAlternativePathToNearestWalkable(false);
@@ -178,19 +199,13 @@ export function aStarPathfinding(start, target, action) {
     return [];
 }
 
-export function findAndMoveToNearestWalkable(start, target, teleport) {
+export function findAndMoveToNearestWalkable(start, target) {
     const gridData = getGridData();
-    const player = getPlayerObject();
     const gridSizeX = getGridSizeX();
     const gridSizeY = getGridSizeY();
 
     let targetX = Math.floor(target.x);
     let targetY = Math.floor(target.y);
-
-    if (teleport) {
-        targetX = Math.floor(target.x + ((player.width / 2) / getCanvasCellWidth()));
-        targetY = Math.floor(target.y + (player.height / getCanvasCellHeight()));
-    }
 
     // Calculate midpoint between start and target
     let midX = Math.floor((start.x + targetX) / 2);
@@ -238,17 +253,7 @@ export function findAndMoveToNearestWalkable(start, target, teleport) {
 
         // Skip non-walkable cells (anything marked as 'n')
         if (cellType.startsWith('w')) {
-            // Found a walkable cell, return or teleport player
-            const newPosX = Math.floor(x * getCanvasCellWidth() - player.width / 2);
-            const newPosY = Math.floor(y * getCanvasCellHeight() - player.height);
-
-            if (teleport) {
-                setPlayerObject('xPos', newPosX);
-                setPlayerObject('yPos', newPosY);
-                console.log(`Player teleported to (${Math.floor(newPosX / getCanvasCellWidth())}, ${Math.floor(newPosY / getCanvasCellHeight())})`);
-                return;
-            }
-
+            // Found a walkable cell, return entity
             return { x: x, y: y };
         }
 

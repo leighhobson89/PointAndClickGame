@@ -4,8 +4,8 @@ import { aStarPathfinding } from './pathFinding.js';
 import { addItemToInventory, setObjectData, performCommand, constructCommand } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, drawInventory, showText } from './ui.js';
 
-let currentPath = [];
-let currentPathIndex = 0;
+let currentPlayerPath = [];
+let currentPlayerPathIndex = 0;
 let firstDraw = true;
 
 //--------------------------------------------------------------------------------------------------------
@@ -94,8 +94,8 @@ function movePlayerTowardsTarget() {
         // Check if player has reached the final position for the transition
         if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
             Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
-            currentPath = [];
-            currentPathIndex = 0;
+            currentPlayerPath = [];
+            currentPlayerPathIndex = 0;
             setTransitioningNow(false);
             resizePlayerObject();
             getElements().customCursor.classList.remove('d-none');
@@ -104,9 +104,9 @@ function movePlayerTowardsTarget() {
     }
 
     // Normal movement logic
-    if (currentPath.length > 0 && currentPathIndex < currentPath.length) {
-        targetX = currentPath[currentPathIndex].x * gridSizeX;
-        targetY = currentPath[currentPathIndex].y * gridSizeY - player.height;
+    if (currentPlayerPath.length > 0 && currentPlayerPathIndex < currentPlayerPath.length) {
+        targetX = currentPlayerPath[currentPlayerPathIndex].x * gridSizeX;
+        targetY = currentPlayerPath[currentPlayerPathIndex].y * gridSizeY - player.height;
     } else {
         return; // No target to move toward
     }
@@ -129,10 +129,10 @@ function movePlayerTowardsTarget() {
 
     // Check if player has reached the target position
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
-        currentPathIndex++;
+        currentPlayerPathIndex++;
 
-        if (currentPathIndex < currentPath.length) {
-            const nextStep = currentPath[currentPathIndex];
+        if (currentPlayerPathIndex < currentPlayerPath.length) {
+            const nextStep = currentPlayerPath[currentPlayerPathIndex];
             setTargetX(nextStep.x * gridSizeX);
             setTargetY(nextStep.y * gridSizeY - player.height);
         } else {
@@ -289,9 +289,9 @@ export function drawGrid(drawGrid) {
         }
 
         // Draw the current path if it exists
-        if (currentPath.length > 0) {
+        if (currentPlayerPath.length > 0) {
             context.fillStyle = 'rgba(0, 0, 255, 0.5)';
-            for (const step of currentPath) {
+            for (const step of currentPlayerPath) {
                 context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
             }
         }
@@ -663,8 +663,8 @@ function checkEdgeCollision(player, targetX) {
     if (collisionOccurred) {
         setTargetX(player.xPos);
         setTargetY(player.yPos);
-        currentPath = [];
-        currentPathIndex = 0;
+        currentPlayerPath = [];
+        currentPlayerPathIndex = 0;
         return true;
     }
     return false;
@@ -698,14 +698,15 @@ export function processLeftClickPoint(event, mouseClick) {
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: getGridTargetX(), y: getGridTargetY() },
             action,
+            'player'
         );
 
-        currentPath = path;
-        currentPathIndex = 0;
+        currentPlayerPath = path;
+        currentPlayerPathIndex = 0;
 
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
-        if (currentPath.length > 0) {
+        if (currentPlayerPath.length > 0) {
             setCurrentlyMoving(true);
             if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
@@ -745,7 +746,7 @@ export function processLeftClickPoint(event, mouseClick) {
             }
             
 
-            const nextStep = currentPath[0];
+            const nextStep = currentPlayerPath[0];
             setTargetX(nextStep.x * getCanvasCellWidth());
             setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
@@ -808,14 +809,15 @@ export function processRightClickPoint(event, mouseClick) {
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: getGridTargetX(), y: getGridTargetY() },
             action,
+            'player'
         );
 
-        currentPath = path;
-        currentPathIndex = 0;
+        currentPlayerPath = path;
+        currentPlayerPathIndex = 0;
 
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
-        if (currentPath.length > 0) {
+        if (currentPlayerPath.length > 0) {
             setCurrentlyMoving(true);
             if (!getTransitioningNow() && verb === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
@@ -852,7 +854,7 @@ export function processRightClickPoint(event, mouseClick) {
                 }
             }
             
-            const nextStep = currentPath[0];
+            const nextStep = currentPlayerPath[0];
             setTargetX(nextStep.x * getCanvasCellWidth());
             setTargetY(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
@@ -894,8 +896,8 @@ export function checkAndChangeScreen() {
                 // Perform the check if within bounds
                 if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                     console.log("Player is moving to another screen");
-                    currentPath = [];
-                    currentPathIndex = 0;
+                    currentPlayerPath = [];
+                    currentPlayerPathIndex = 0;
                     setCurrentlyMoving(false);
                     setCurrentlyMovingToAction(false);
     
@@ -919,8 +921,8 @@ export function handleRoomTransition() {
 
     if (screenData && screenData.exits && screenData.exits[exitNumber]) {
         const newScreenId = screenData.exits[exitNumber].connectsTo;
-        currentPath = [];
-        currentPathIndex = 0;
+        currentPlayerPath = [];
+        currentPlayerPathIndex = 0;
 
         swapBackgroundOnRoomTransition(newScreenId);
         return newScreenId;
