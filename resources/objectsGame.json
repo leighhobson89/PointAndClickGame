@@ -16,7 +16,10 @@
         "fr": "Tonneau poussiéreux"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -92,7 +95,10 @@
         "fr": "Os"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -167,7 +173,10 @@
         "fr": "Bol"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -242,7 +251,10 @@
         "fr": "Carotte"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -317,7 +329,10 @@
         "fr": "Pied-de-biche"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -392,7 +407,10 @@
         "fr": "Âne "
       },
       "canMove": true,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": true,
         "canHover": false,
@@ -468,7 +486,10 @@
         "fr": "Corde"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -543,7 +564,10 @@
         "fr": "Porte de Sortie de la Bibliothèque"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "canHover": true,
         "canPush": false,
@@ -615,7 +639,10 @@
         "fr": "Porte en bois"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -689,7 +716,10 @@
         "fr": "Grande porte en chêne massif"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "canHover": true,
         "canPush": false,
@@ -761,7 +791,10 @@
         "fr": "Carte illisible"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -836,7 +869,10 @@
         "fr": "Clé pour la salle de recherche"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -911,7 +947,10 @@
         "fr": "Clé pour 'Tanière'"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -986,7 +1025,10 @@
         "fr": "Maillet"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1061,7 +1103,10 @@
         "fr": "Bouteille de lait"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1136,7 +1181,10 @@
         "fr": "Bol de lait"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -1211,7 +1259,10 @@
         "fr": "Clous"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1286,7 +1337,10 @@
         "fr": "Papier avec des instructions griffonnées"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1361,7 +1415,10 @@
         "fr": "Flyer inutile pour un parc d'oiseaux fermé"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -1436,7 +1493,10 @@
         "fr": "Crochet"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1511,7 +1571,10 @@
         "fr": "Perroquet"
       },
       "canMove": true,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": true,
         "canHover": true,
@@ -1587,7 +1650,10 @@
         "fr": "Miroir"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1662,7 +1728,10 @@
         "fr": "Pile de livres"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -1737,7 +1806,10 @@
         "fr": "Fourche"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1812,7 +1884,10 @@
         "fr": "Pince"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1887,7 +1962,10 @@
         "fr": "Roue de poulie"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -1962,7 +2040,10 @@
         "fr": "Crochet'n'Corde"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -2037,7 +2118,10 @@
         "fr": "Écharde de bois"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": false,
@@ -2112,7 +2196,10 @@
         "fr": "Poulie avec écharde coincée"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,
@@ -2187,7 +2274,10 @@
         "fr": "Crochet robuste"
       },
       "canMove": false,
-      "interactable": {
+       "waypoints": {
+
+       },        
+       "interactable": {
 
         "specialNpcObjectStandIn": false,
         "canHover": true,

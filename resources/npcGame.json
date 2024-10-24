@@ -13,6 +13,9 @@
           "fr": "Âne"
         },
         "canMove": false,
+        "waypoints": {
+
+        },                     
         "interactable": {
           "turnForDialogue": false,
           "canHover": true,
@@ -36,10 +39,6 @@
           "objectCanReceive1": "objectCarrot",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "stables",
         "activeSpriteUrl": "s1",
@@ -75,6 +74,9 @@
           "fr": "Bibliothécaire"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": false,
           "canHover": true,
@@ -98,10 +100,6 @@
           "objectCanReceive1": "objectKeyResearchRoom",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "libraryFoyer",
         "activeSpriteUrl": "s1",
@@ -136,6 +134,9 @@
           "fr": "Chien"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": true,
           "canHover": true,
@@ -159,10 +160,6 @@
           "objectCanReceive1": "objectMilkInBowl",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "marketStreet",
         "activeSpriteUrl": "s1",
@@ -199,6 +196,9 @@
           "fr": "Jeune Femme"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": true,
           "canHover": true,
@@ -222,10 +222,6 @@
           "objectCanReceive1": "objectParrotMirror",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "marketStreet",
         "activeSpriteUrl": "s1",
@@ -261,6 +257,9 @@
           "fr": "Vache"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": false,
           "canHover": true,
@@ -284,10 +283,6 @@
           "objectCanReceive1": "",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "",
         "activeSpriteUrl": "s1",
@@ -322,6 +317,9 @@
           "fr": "Homme à l'air louche"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": false,
           "canHover": true,
@@ -345,10 +343,6 @@
           "objectCanReceive1": "objectKeyToDen",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "seedyGuyAlley",
         "activeSpriteUrl": "s1",
@@ -383,6 +377,9 @@
           "fr": "Charpentier"
         },
         "canMove": false,
+        "waypoints": {
+
+        },
         "interactable": {
           "turnForDialogue": true,
           "canHover": true,
@@ -409,10 +406,6 @@
           "objectCanReceive1": "",
           "objectCanReceive2": "",
           "objectCanReceive3": ""
-        },
-        "behavior": {
-          "movesAround": false,
-          "patrolPath": ""
         },
         "npcPlacementLocation": "carpenter",
         "activeSpriteUrl": "s1",
