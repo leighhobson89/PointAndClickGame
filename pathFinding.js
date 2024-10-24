@@ -1,17 +1,13 @@
 import { getObjectData, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNextScreenId, getNpcData, getPlayerObject, getTransitioningNow, setLookingForAlternativePathToNearestWalkable, setPlayerObject } from "./constantsAndGlobalVars.js";
 
-export function aStarPathfinding(start, target, action, subject) {
-    let npcResizedYet = false; //only important if user has clicked to talk or give a npc
-    const gridData = getGridData();
+export function aStarPathfinding(start, target, action, subject, waypoints = []) {
     const player = getPlayerObject();
-    const gridSizeX = getGridSizeX();
-    const gridSizeY = getGridSizeY();
 
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
-    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
+    const baseCellWidth = 15;  
+    const baseCellHeight = 5;  
 
     let entity;
     let entityDrawWidth;
@@ -34,9 +30,46 @@ export function aStarPathfinding(start, target, action, subject) {
     } else {
         start.x = Math.floor(start.x + ((entityDrawWidth / 2) / getCanvasCellWidth()));
         start.y = Math.floor(start.y + (entityDrawHeight / getCanvasCellHeight()));
-
-        console.log(`Looking for a path for entity ` + subject + ` from ` + `${start.x}, ${start.y} to ${target.x}, ${target.y}`);
     }
+
+    let fullPath = [];
+
+    // Helper function to run pathfinding between points
+    function findPathBetweenPoints(startPoint, endPoint) {
+        // This will be the existing A* logic that finds the path between two points.
+        const path = aStarSinglePathfinding(startPoint, endPoint, action, subject);
+        return path;
+    }
+
+    // Iterate through waypoints, if any
+    let currentStart = start;
+    for (const waypoint of waypoints) {
+        const partialPath = findPathBetweenPoints(currentStart, waypoint);
+        if (!partialPath || partialPath.length === 0) {
+            console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
+            return [];
+        }
+        fullPath = fullPath.concat(partialPath);
+        currentStart = waypoint; // Move start to the last waypoint
+    }
+
+    // Finally, path from the last waypoint (or start) to the final target
+    const finalPath = findPathBetweenPoints(currentStart, target);
+    if (!finalPath || finalPath.length === 0) {
+        console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(target)}`);
+        return [];
+    }
+
+    fullPath = fullPath.concat(finalPath);
+    return fullPath;
+}
+
+function aStarSinglePathfinding(start, target, action, subject) {
+    let npcResizedYet = false;
+    const gridData = getGridData();
+    const player = getPlayerObject();
+    const gridSizeX = getGridSizeX();
+    const gridSizeY = getGridSizeY();
 
     const openList = [];
     const closedList = [];
