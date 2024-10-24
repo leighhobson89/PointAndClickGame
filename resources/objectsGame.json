@@ -20,7 +20,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -99,7 +98,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -177,7 +175,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -255,7 +252,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -333,7 +329,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -411,7 +406,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": true,
         "canHover": false,
         "canPush": false,
@@ -490,7 +484,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -568,7 +561,6 @@
 
        },        
        "interactable": {
-
         "canHover": true,
         "canPush": false,
         "canPull": false,
@@ -643,7 +635,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -720,7 +711,6 @@
 
        },        
        "interactable": {
-
         "canHover": true,
         "canPush": false,
         "canPull": false,
@@ -795,7 +785,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -873,7 +862,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -951,7 +939,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1029,7 +1016,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1107,7 +1093,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1185,7 +1170,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -1263,7 +1247,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1341,7 +1324,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1419,7 +1401,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -1497,7 +1478,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1571,11 +1551,25 @@
         "fr": "Perroquet"
       },
       "canMove": true,
-       "waypoints": {
-
-       },        
+      "waypoints": {
+        "0": {
+          "target": { "x": 60, "y": 45, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "points": [
+            { "x": 50, "y": 32, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 55, "y": 38, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 60, "y": 40, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+          ]
+        },
+        "1": {
+          "target": { "x": 60, "y": 45, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "points": [
+            { "x": 50, "y": 32, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 55, "y": 38, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 60, "y": 40, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+          ]
+        }
+      },       
        "interactable": {
-
         "specialNpcObjectStandIn": true,
         "canHover": true,
         "canPush": false,
@@ -1654,7 +1648,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1732,7 +1725,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": true,
@@ -1810,7 +1802,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1888,7 +1879,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -1966,7 +1956,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -2044,7 +2033,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -2122,7 +2110,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
@@ -2200,7 +2187,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
@@ -2278,7 +2264,6 @@
 
        },        
        "interactable": {
-
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
