@@ -62,8 +62,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 150,
-          "height": 80
+          "width": 10,
+          "height": 16
         },
         "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
       },
@@ -124,8 +124,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 35,
-          "height": 50
+          "width": 2.33,
+          "height": 10
         },
         "comment": "Librarian"
       },
@@ -188,8 +188,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 60,
-          "height": 35
+          "width": 4,
+          "height": 7
         },
         "comment": "Town Dog gives bone if given Milk In Bowl"
       },
@@ -251,8 +251,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 45,
-          "height": 85
+          "width": 3,
+          "height": 17
         },
         "comment": "Woman give Key To Den if given objectParrotMirror"
       },
@@ -313,8 +313,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 90,
-          "height": 35
+          "width": 6,
+          "height": 7
         },
         "comment": "Cow needs splinter removing with pliers so farmer appears"
       },
@@ -375,8 +375,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 75,
-          "height": 75
+          "width": 5,
+          "height": 15
         },
         "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
       },

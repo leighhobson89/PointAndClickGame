@@ -82,8 +82,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 50
+        "width": 3.33,
+        "height": 10
       },
       "comment": "Barrel in Barn that you can open"
     },
@@ -240,8 +240,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Bowl to combine with Milk Bottle, for giving to Dog"
     },
@@ -398,8 +398,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 40
+        "width": 3.33,
+        "height": 8
       },
       "comment": "Crowbar for breaking in to house placed in den"
     },
@@ -557,8 +557,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -633,8 +633,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 60,
-        "height": 140
+        "width": 4,
+        "height": 28
       },
       "comment": "door from libraryFoyer to marketStreet, can be opened and closed from the start"
     },
@@ -711,8 +711,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 45,
-        "height": 72
+        "width": 3,
+        "height": 14.4
       },
       "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyResearchRoom on it"
     },
@@ -787,8 +787,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 45,
-        "height": 30
+        "width": 3,
+        "height": 6
       },
       "comment": "door from seedyGuyAlley to Den opens when objectKeyToDen used on it"
     },
@@ -866,8 +866,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 80,
-        "height": 60
+        "width": 5.33,
+        "height": 12
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -945,8 +945,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -1182,8 +1182,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -1261,8 +1261,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Give this to dog and it will drop its bone"
     },
@@ -1340,8 +1340,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Nails to use on bridge with Mallet"
     },
@@ -1419,8 +1419,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "A clue for the player for repairing the bridge"
     },
@@ -1577,8 +1577,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 15
+        "width": 2,
+        "height": 3
       },
       "comment": "Hook for attaching parrotFlyer and can also be taken after this puzzle finishes and used with Rope"
     },
@@ -1674,8 +1674,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 50
+        "width": 3.33,
+        "height": 10
       },
       "comment": "Object instance of Parrot"
     },
@@ -1753,8 +1753,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Give to npcWomanLostMirror to get objectKeyToDen"
     },
@@ -1832,8 +1832,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 130,
-        "height": 30
+        "width": 18.6630,
+        "height": 6
       },
       "comment": "Pile of books you use or push or pull to get the key for the research room"
     },
@@ -1911,8 +1911,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 40
+        "width": 3.33,
+        "height": 8
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
@@ -1990,8 +1990,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 60,
-        "height": 40
+        "width": 4,
+        "height": 8
       },
       "comment": "Pliers for getting splinter from cow"
     },
@@ -2069,8 +2069,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Pulley for combining with sturdy anchor at river crossing"
     },
@@ -2148,8 +2148,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 30,
-        "height": 20
+        "width": 2,
+        "height": 4
       },
       "comment": "Combined result of objectParrotHook and objectDonkeyRope used with Pulley once its on the branch at riverCrossing"
     },
@@ -2306,8 +2306,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 50,
-        "height": 40
+        "width": 3.33,
+        "height": 8
       },
       "comment": "Combined pulley wheel and splinter for jamming wood when hoisted"
     },
@@ -2385,8 +2385,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 25,
-        "height": 15
+        "width": 1.66,
+        "height": 3
       },
       "comment": "Anchor for attaching pulley wheel to on river crossing tree"
     }

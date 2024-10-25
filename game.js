@@ -181,9 +181,6 @@ function moveOtherEntitiesOnCurrentScreen() {
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
 
-    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
-    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
-
     let entity;
     let isObjectTrueNpcFalse;
 
@@ -204,12 +201,9 @@ function moveOtherEntitiesOnCurrentScreen() {
 
             if (entity.objectPlacementLocation === getCurrentScreenId()) {
                 const speed = entity.waypoints[entity.activeMoveSequence].speed;
-    
-                const entityGridX = Math.floor(entity.visualPosition.x / gridSizeX);
-                const entityGridY = Math.floor(entity.visualPosition.y / gridSizeY - (entity.measureMovementYOffset / getCanvasCellHeight()));
         
-                const measurePointAdjustmentX = Math.floor((entity.dimensions.width * (gridSizeX / baseCellWidth)) / 2);
-                const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (gridSizeY / baseCellHeight));
+                const measurePointAdjustmentX = Math.floor((entity.dimensions.width * gridSizeX) / 2);
+                const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * gridSizeY);
 
                 let targetX, targetY;
         
@@ -222,7 +216,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                     targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX - measurePointAdjustmentX;
                     targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY; // - measurePointAdjustmentY;
 
-                    console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY / getCanvasCellHeight()}, so we are really at ${entityGridY - (measurePointAdjustmentY / getCanvasCellHeight())}`);
+                    //console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY / getCanvasCellHeight()}, so we are really at ${entityGridY - (measurePointAdjustmentY / getCanvasCellHeight())}`);
                     console.log(`moving towards ${targetX / getCanvasCellWidth()}, ${targetY / getCanvasCellHeight()}`);
                     console.log(JSON.stringify(entityPaths[entityIdName].path));
                 } else {
@@ -294,7 +288,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                 };
 
                 // Draw the points
-                drawCircle(entityGridX, entityGridY, 'red'); // Red for (entityGridX, entityGridY)
+                //drawCircle(entityGridX, entityGridY, 'red'); // Red for (entityGridX, entityGridY)
                 drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
                 //drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
@@ -462,9 +456,6 @@ export function drawPlayerNpcsAndObjects(ctx) {
     const drawnObjects = new Set();
     const drawnNpcs = new Set();
 
-    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
-    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
-
     // Draw objects and NPCs
     for (let y = 0; y < gridData.length; y++) {
         for (let x = 0; x < gridData[y].length; x++) {
@@ -487,8 +478,8 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     const drawX = visualPosition.x + (offset.x || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.x || 0);
                     const drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);
 
-                    const scaledWidth = (dimensions.width * (cellWidth / baseCellWidth));
-                    const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
+                    const scaledWidth = dimensions.width * cellWidth;
+                    const scaledHeight = dimensions.height * cellHeight;
 
                     const img = new Image();
                     img.src = spriteUrl[activeSpriteUrl];
@@ -530,8 +521,8 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     const drawX = visualPosition.x + (offset.x || 0);
                     const drawY = visualPosition.y + (offset.y || 0);
 
-                    const scaledWidth = (dimensions.width * (cellWidth / baseCellWidth));
-                    const scaledHeight = (dimensions.height * (cellHeight / baseCellHeight));
+                    const scaledWidth = dimensions.width * cellWidth;
+                    const scaledHeight = dimensions.height * cellHeight;
 
                     const img = new Image();
                     img.src = spriteUrl[activeSpriteUrl];
@@ -1650,9 +1641,7 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         waypoints  // List of waypoints
     );
 
-    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
-    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
-    const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (getCanvasCellHeight() / baseCellHeight));
+    const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (getCanvasCellHeight()));
 
     // Adjust the y values in the path by adding measurePointAdjustmentY
     path = path.map(step => ({

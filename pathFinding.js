@@ -114,11 +114,10 @@ function aStarSinglePathfinding(start, target, action, subject) {
 
         if (action === "Talk To" || action === "Give") { //only player
             if(!npcResizedYet && cellType.startsWith('c')) {
-                const baseCellHeightCoefficient = 5;
                 const npc = cellType.slice(1);
                 const npcGridPositionY = getNpcData().npcs[npc].gridPosition.y;
                 const npcHeight = getNpcData().npcs[npc].dimensions.height;
-                const cellsHeight = npcHeight / baseCellHeightCoefficient;
+                const cellsHeight = npcHeight;
 
                 target.y = npcGridPositionY + cellsHeight;
                 npcResizedYet = true;
