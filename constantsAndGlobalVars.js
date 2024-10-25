@@ -2,7 +2,7 @@
 export let debugFlag = false;
 export let debugOptionFlag = false;
 export let stateLoading = false;
-export let nonPlayerAnimationFunctionalityActive = false;
+export let nonPlayerAnimationFunctionalityActive = true;
 
 //ELEMENTS
 let elements;
@@ -120,8 +120,6 @@ let beginGameState = true;
 let gameInProgress = false;
 let transitioningToAnotherScreen = false;
 let transitioningNow = false;
-let currentlyMovingPlayer = false;
-let currentlyMovingEntity = {};
 let currentlyMovingToAction = false;
 let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;

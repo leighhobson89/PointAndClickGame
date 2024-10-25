@@ -277,21 +277,21 @@ function moveOtherEntitiesOnCurrentScreen() {
                         break;
                 }
 
-                // Drawing the grid references with colors at the end of the function
-                const canvas = getElements().canvas;
-                const context = canvas.getContext('2d');
+                // // Drawing the grid references with colors at the end of the function
+                // const canvas = getElements().canvas;
+                // const context = canvas.getContext('2d');
 
                 // Helper function to draw a circle
-                const drawCircle = (x, y, color) => {
-                    context.fillStyle = color;
-                    context.beginPath();
-                    context.arc((x + 0.5) * gridSizeX, (y + 0.5) * gridSizeY, 5, 0, Math.PI * 2);
-                    context.fill();
-                };
+                // const drawCircle = (x, y, color) => {
+                //     context.fillStyle = color;
+                //     context.beginPath();
+                //     context.arc((x + 0.5) * gridSizeX, (y + 0.5) * gridSizeY, 5, 0, Math.PI * 2);
+                //     context.fill();
+                // };
 
                 // Draw the points
-                drawCircle(positionToMeasureFromX / gridSizeX, positionToMeasureFromY / gridSizeY, 'red'); // Red for (entityGridX, entityGridY)
-                drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
+                //drawCircle(positionToMeasureFromX / gridSizeX, positionToMeasureFromY / gridSizeY, 'red'); // Red for (entityGridX, entityGridY)
+                //drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
                 //drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
         }
@@ -1606,19 +1606,16 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
             return;
     }
 
-    // Get entity's starting position
     const start = {
         x: Math.floor(entity.visualPosition.x / getCanvasCellWidth()),
         y: Math.floor(entity.visualPosition.y / getCanvasCellHeight())
     };
 
-    // Check if waypoints are available for this entity
     if (!entity.waypoints || Object.keys(entity.waypoints).length === 0) {
         console.error("No waypoints available for this entity.");
         return;
     }
 
-    // Verify that the moveSequence exists
     const waypointSequence = entity.waypoints[moveSequence];
     if (!waypointSequence) {
         console.error(`No waypoints found for moveSequence "${moveSequence}".`);
