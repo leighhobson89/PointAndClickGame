@@ -203,8 +203,6 @@ function moveOtherEntitiesOnCurrentScreen() {
             }
 
             if (entity.objectPlacementLocation === getCurrentScreenId()) {
-                setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, entityIdName, isObjectTrueNpcFalse);
                 const speed = entity.waypoints[entity.activeMoveSequence].speed;
     
                 const entityGridX = Math.floor(entity.visualPosition.x / gridSizeX);
@@ -217,6 +215,11 @@ function moveOtherEntitiesOnCurrentScreen() {
         
                 let targetX, targetY;
         
+                if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
+                    setAnimationInProgress(true);
+                    setPreAnimationGridState(gridData, entityIdName, isObjectTrueNpcFalse);
+                }
+
                 // Normal movement logic
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
                     targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX;
@@ -236,6 +239,23 @@ function moveOtherEntitiesOnCurrentScreen() {
                     entity.visualPosition.y += (entity.visualPosition.y < targetY) ? speed : -speed;
                 } else {
                     entity.visualPosition.y = targetY;
+                }
+
+                const widthInCells = Math.floor(entity.dimensions.width / gridSizeX) + 1;
+                const heightInCells = Math.floor(entity.dimensions.height / gridSizeY) + 1;
+                const startX = entity.gridPosition.x;
+                const startY = entity.gridPosition.y;
+        
+                const offsetX = (entity.offset.x || 0) * gridSizeX;  
+                const offsetY = (entity.offset.y || 0) * gridSizeY; 
+        
+                for (let x = startX; x < startX + widthInCells; x++) {
+                    for (let y = startY; y < startY + heightInCells; y++) {
+                        const originalValue = gridData.gridData[y][x];
+        
+                        setOriginalValueInCellWhereObjectPlaced(getCurrentScreenId(), x, y, entityIdName, originalValue);
+                        gridData.gridData[y][x] = `o${entityIdName}`;
+                    }
                 }
         
                 // Check if entity has reached the target position
