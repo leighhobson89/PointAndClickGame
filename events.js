@@ -2,7 +2,7 @@ import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotComplet
 import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
-import { getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
+import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE

@@ -441,8 +441,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 120,
-          "height": 160
+          "width": 6,
+          "height": 32
         },
         "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
       }
