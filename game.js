@@ -178,8 +178,6 @@ function moveOtherEntitiesOnCurrentScreen() {
     const gridData = getGridData();
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
-    const dialogueData = getDialogueData().dialogue;
-    const language = getLanguage();
 
     let entity;
     let isObjectTrueNpcFalse;
@@ -202,22 +200,26 @@ function moveOtherEntitiesOnCurrentScreen() {
             if (entity.objectPlacementLocation === getCurrentScreenId()) {
                 const speed = entity.waypoints[entity.activeMoveSequence].speed;
         
-                const measurePointAdjustmentX = Math.floor((entity.dimensions.width * gridSizeX) / 2);
-                const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * gridSizeY);
+                const positionToMeasureFromX = Math.floor(entity.visualPosition.x + (entity.dimensions.width / 2)); 
+                const positionToMeasureFromY = Math.floor(entity.visualPosition.y + (entity.dimensions.height + entity.measureMovementYOffset));
 
                 let targetX, targetY;
-        
+
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
                     setAnimationInProgress(true);
                     setPreAnimationGridState(gridData, entityIdName, isObjectTrueNpcFalse);
                 }
 
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
-                    targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX - measurePointAdjustmentX;
-                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY; // - measurePointAdjustmentY;
 
-                    //console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY / getCanvasCellHeight()}, so we are really at ${entityGridY - (measurePointAdjustmentY / getCanvasCellHeight())}`);
-                    console.log(`moving towards ${targetX / getCanvasCellWidth()}, ${targetY / getCanvasCellHeight()}`);
+                    const rawTargetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX;
+                    const rawTargetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY;
+
+                    targetX = rawTargetX - (entity.dimensions.width / 2);
+                    targetY = rawTargetY - (entity.dimensions.height + entity.measureMovementYOffset);
+
+                    console.log(`Currently at ${positionToMeasureFromX / gridSizeX}, ${positionToMeasureFromY / gridSizeY}`);
+                    console.log(`Moving towards ${targetX / getCanvasCellWidth()}, ${targetY / getCanvasCellHeight()}`);
                     console.log(JSON.stringify(entityPaths[entityIdName].path));
                 } else {
                     return; // No target to move toward
@@ -258,7 +260,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                     if (entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
                         const nextStep = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex];
                         setTargetXEntity(entityIdName, nextStep.x * gridSizeX);
-                        setTargetYEntity(entityIdName, nextStep.y * gridSizeY) + measurePointAdjustmentY;
+                        setTargetYEntity(entityIdName, nextStep.y * gridSizeY) + positionToMeasureFromY;
                     } else {
                         console.log(`Entity ${entityIdName} finished moving!`);
                     }
@@ -288,7 +290,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                 };
 
                 // Draw the points
-                //drawCircle(entityGridX, entityGridY, 'red'); // Red for (entityGridX, entityGridY)
+                drawCircle(positionToMeasureFromX / gridSizeX, positionToMeasureFromY / gridSizeY, 'red'); // Red for (entityGridX, entityGridY)
                 drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
                 //drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
@@ -1187,8 +1189,7 @@ export function setUpObjectsAndNpcs() {
         const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
         const startX = object.gridPosition.x;
-        const startY = Math.floor(object.gridPosition.y + (object.measureMovementYOffset < 0 ? -Math.abs(object.measureMovementYOffset) / cellHeight : object.measureMovementYOffset / cellHeight));
-        //const startY = object.gridPosition.y;
+        const startY = object.gridPosition.y;
 
         const offsetX = (object.offset.x || 0) * cellWidth;  
         const offsetY = (object.offset.y || 0) * cellHeight; 
@@ -1579,10 +1580,10 @@ export function initializeNonPlayerMovementsForScreen(screen) {
             console.log(`Starting movements for ${entityId} on screen ${screen}`);
             path = populatePathForEntityMovement(entityId, 0);
 
+            path.splice(0,3); //workaround for dodgy animation at start
+
             entityPaths[entityId].path = path;
-            //console.log(`Path for ${entityId} is ${JSON.stringify(path)}`);
         } else {
-            //console.log(`${entityId} is not in ${screen} or is player, moving along...`);
         }
     }
 }
@@ -1624,32 +1625,23 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         return;
     }
 
-    // Extract the target from the specified moveSequence
     const target = { x: waypointSequence.target.x, y: waypointSequence.target.y };
-
-    // Extract the list of waypoints (if any) in the move sequence
     const waypoints = waypointSequence.points.map(point => ({ x: point.x, y: point.y }));
-
-    // Logging the pathfinding details for debugging
     console.log(`Running pathfinder from (${start.x}, ${start.y}) to (${target.x}, ${target.y}) with waypoints:`, waypoints);
 
     path = aStarPathfinding(
         start,
         target,
-        null,  // Assuming no specific action is passed
-        entityId,  // Object ID as the subject
-        waypoints  // List of waypoints
+        null,
+        entityId,
+        waypoints
     );
 
-    const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (getCanvasCellHeight()));
-
-    // Adjust the y values in the path by adding measurePointAdjustmentY
     path = path.map(step => ({
         x: step.x,
-        y: step.y - measurePointAdjustmentY
+        y: step.y
     }));
 
-    // Return the computed path
     return path;
 }
 
