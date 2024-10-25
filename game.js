@@ -209,10 +209,8 @@ function moveOtherEntitiesOnCurrentScreen() {
                 const entityGridY = Math.floor(entity.visualPosition.y / gridSizeY);
         
                 const measurePointAdjustmentX = Math.floor((entity.dimensions.width * (gridSizeX / baseCellWidth)) / 2);
-                const measurePointAdjustmentY = Math.floor(entity.dimensions.height + entity.measureMovementYOffset * (gridSizeY / baseCellHeight));
-                //console.log("Adjusting measurepoint by " + measurePointAdjustmentX + "px on X axis and " + measurePointAdjustmentY + "px on Y axis, to account for width and height of entity");
-                //console.log("Adjusting measurepoint by " + measurePointAdjustmentY + "px on Y axis, to account for height of entity");
-        
+                const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (gridSizeY / baseCellHeight));
+
                 let targetX, targetY;
         
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
@@ -220,15 +218,17 @@ function moveOtherEntitiesOnCurrentScreen() {
                     setPreAnimationGridState(gridData, entityIdName, isObjectTrueNpcFalse);
                 }
 
-                // Normal movement logic
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
-                    targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX;
-                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY - measurePointAdjustmentY; //if moving to wrong height look here
+                    targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX - measurePointAdjustmentX;
+                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY - measurePointAdjustmentY;
+
+                    console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY}, so we are really at ${entityGridY - measurePointAdjustmentY}`);
+                    console.log(`moving towards ${targetX / getCanvasCellWidth()}, ${targetY / getCanvasCellHeight()}`);
+                    console.log(JSON.stringify(entityPaths[entityIdName].path));
                 } else {
                     return; // No target to move toward
                 }
         
-                // Move the entity toward the target position
                 if (Math.abs(entity.visualPosition.x - targetX) > speed) {
                     entity.visualPosition.x += (entity.visualPosition.x < targetX) ? speed : -speed;
                 } else {
@@ -258,9 +258,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                     }
                 }
         
-                // Check if entity has reached the target position
                 if (Math.abs(entity.visualPosition.x - targetX) < speed && Math.abs(entity.visualPosition.y - targetY) < speed) {
-        
                     entityPaths[entityIdName].currentIndex++;
         
                     if (entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
@@ -268,16 +266,10 @@ function moveOtherEntitiesOnCurrentScreen() {
                         setTargetXEntity(entityIdName, nextStep.x * gridSizeX);
                         setTargetXEntity(entityIdName, nextStep.y * gridSizeY - measurePointAdjustmentY);
                     } else {
-                    // perform any actions at the waypoint to do elsewhere later TODO
-                    // perform any actions at the final destination here TODO
-                    // initialise next moving path here TODO
-                    // set flag to say not moving / reached end of movement sequence TODO
-                    console.log(`Entity ${entityIdName} finished moving!`);
+                        console.log(`Entity ${entityIdName} finished moving!`);
                     }
                 }
-            
-                // resize the npc if needed here and when implemented TODO
-        
+
                 switch (entityIdPrefix) {
                     case "npc":
                         setNpcData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
@@ -288,10 +280,28 @@ function moveOtherEntitiesOnCurrentScreen() {
                         setObjectData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
                         break;
                 }
+
+                // Drawing the grid references with colors at the end of the function
+                const canvas = getElements().canvas;
+                const context = canvas.getContext('2d');
+
+                // Helper function to draw a circle
+                const drawCircle = (x, y, color) => {
+                    context.fillStyle = color;
+                    context.beginPath();
+                    context.arc((x + 0.5) * gridSizeX, (y + 0.5) * gridSizeY, 5, 0, Math.PI * 2);
+                    context.fill();
+                };
+
+                // Draw the points
+                drawCircle(entityGridX, entityGridY, 'red'); // Red for (entityGridX, entityGridY)
+                drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
+                drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
         }
     }
 }
+
 
 export function resizePlayerObject() {
     const player = getPlayerObject();
@@ -405,7 +415,7 @@ export function drawDebugGrid(drawGrid) {
 
             // Draw the cell value near the mouse pointer
             const string = `${cellValue}: ${hoverCell.x}, ${hoverCell.y}, ${getCurrentScreenId()}`;
-            context.fillStyle = '#FFF'; // Black color for the text
+            context.fillStyle = '#FFF'; // White color for the text
             context.font = '16px Arial'; // Set the font size and type
             context.fillText(string, hoverCell.x * cellWidth + 5, hoverCell.y * cellHeight + 20);
         }
@@ -417,8 +427,29 @@ export function drawDebugGrid(drawGrid) {
                 context.fillRect(step.x * cellWidth, step.y * cellHeight, cellWidth, cellHeight);
             }
         }
+
+        // Draw the black circles at fixed grid points
+        const circlePositions = [
+            { x: 10, y: 10 },
+            { x: 10, y: 30 },
+            { x: 30, y: 30 },
+            { x: 30, y: 10 }
+        ];
+        
+        context.fillStyle = '#000'; // Black fill color for circles
+        const circleRadius = 3; // Half of 3px diameter
+
+        for (const pos of circlePositions) {
+            const centerX = (pos.x + 0.5) * cellWidth; // Center the circle in the grid cell
+            const centerY = (pos.y + 0.5) * cellHeight;
+            
+            context.beginPath();
+            context.arc(centerX, centerY, circleRadius, 0, Math.PI * 2); // Draw circle
+            context.fill();
+        }
     }
 }
+
 
 export function drawPlayerNpcsAndObjects(ctx) {
     

@@ -1591,16 +1591,17 @@
         "fr": "Perroquet"
       },
       "canMove": true,
-      "measureMovementYOffset": -20,
+      "measureMovementYOffset": -23,
       "activeMoveSequence": 0,
       "waypoints": {
         "0": {
           "speed": 3,
           "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
-          "target": { "x": 49, "y": 40, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "target": { "x": 10, "y": 10, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
-            { "x": 10, "y": 10, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
-            { "x": 10, "y": 40, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            { "x": 30, "y": 10, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 30, "y": 30, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
+            { "x": 10, "y": 30, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
             ]
         },
         "1": {
@@ -1661,8 +1662,8 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 55,
-        "y": 37
+        "x": 10,
+        "y": 10
       },
       "offset": {
         "x": 0,
