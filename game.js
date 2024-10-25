@@ -1,10 +1,10 @@
-import { setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setParrotCompletedMovingToFlyer, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
 
-let entityPaths = {};
+export let entityPaths = {};
 let firstDraw = true;
 
 //--------------------------------------------------------------------------------------------------------
@@ -263,6 +263,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                         setTargetYEntity(entityIdName, nextStep.y * gridSizeY) + positionToMeasureFromY;
                     } else {
                         console.log(`Entity ${entityIdName} finished moving!`);
+                        checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityIdName);
                     }
                 }
 
@@ -1568,6 +1569,20 @@ export function initializeEntityPathsObject() {
     console.log('Entity paths initialized:', entityPaths);
 }
 
+export function addEntityPath(entityId, canMove, placementScreenId) {
+    if (canMove === true) {
+        entityPaths[entityId] = {
+            path: [],
+            currentIndex: 0,
+            placementScreenId: placementScreenId
+        };
+
+        console.log(`Added entity path for ${entityId}:`, entityPaths[entityId]);
+    } else {
+        console.log(`Entity ${entityId} cannot move, not added to entityPaths.`);
+    }
+}
+
 export function initializeNonPlayerMovementsForScreen(screen) {
     let path;
     for (const entityId in entityPaths) {
@@ -1584,6 +1599,7 @@ export function initializeNonPlayerMovementsForScreen(screen) {
 
             entityPaths[entityId].path = path;
         } else {
+
         }
     }
 }
@@ -1640,6 +1656,22 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
     }));
 
     return path;
+}
+
+export function getEntityPaths() {
+    return entityPaths;
+}
+
+export function setEntityPaths(entityId, key, value) {
+    entityPaths[entityId][key] = value;
+}
+
+export function checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityId) {
+    switch (entityId) {
+        case 'objectParrakeet':
+            setParrotCompletedMovingToFlyer(true); 
+            break;
+    }
 }
 
 

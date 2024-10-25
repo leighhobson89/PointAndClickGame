@@ -1,7 +1,7 @@
-import { setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
+import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
 import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
-import { addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
+import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -52,9 +52,9 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     removeObjectFromEnvironment('objectParrotHook');
 
     setAnimationInProgress(true);
-    setObjectData(`objectParrotFlyer`, `dimensions.width`, 30);
-    setObjectData(`objectParrotFlyer`, `dimensions.height`, 23);
-    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 30, 23, null);
+    setObjectData(`objectParrotFlyer`, `dimensions.width`, 2);
+    setObjectData(`objectParrotFlyer`, `dimensions.height`, 4.6);
+    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null);
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -63,38 +63,36 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 
     setDialogueData('objectInteractions.verbLookAt.objectParrotFlyer', '0', '1');
 
-    const waitForTimeout = (duration) => {
-        return new Promise(resolve => setTimeout(resolve, duration));
-    };
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
 
     await moveParrotToFlyer();
-
-    await waitForTimeout(3000); //await animation function TODO
-    setParrotCompletedMovingToFlyer(true);
-    
+    console.log('Parrot has finished moving to the flyer!');
     setObjectData(`objectParrotMirror`, `interactable.canPickUp`, true);
 
     dialogueString = dialogueData.postAnimationEventDialogue.animationParrotMoveToParrotFlyer[language];
     await showText(dialogueString, getColorTextPlayer());
-
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
 }
 
 async function moveParrotToFlyer() {
     let gridData = getGridData();
-    removeObjectFromEnvironment('objectParrakeet');
-
-    setObjectData(`objectParrakeet`, `dimensions.width`, 50);
-    setObjectData(`objectParrakeet`, `dimensions.height`, 50);
-    addObjectToEnvironment('objectParrakeet', 47, 34, 0, 0, 50, 50, "s2");
-
     setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
+    setObjectData(`objectParrakeet`, `activeSpriteUrl`, 's2');
+    setObjectData(`objectParrakeet`, `canMove`, true);
+    addEntityPath(`objectParrakeet`, getObjectData().objects['objectParrakeet'].canMove, 'bigTree');
 
-    setPreAnimationGridState(gridData, 'objectParrakeet', true);
-    
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+    const path = populatePathForEntityMovement('objectParrakeet', 0);
+    path.splice(0,3);
+    setEntityPaths('objectParrakeet', 'path', path);
+
+    console.log(getEntityPaths()['objectParrakeet'].path);
+    await waitForParrotToFinishMoving();
+}
+
+async function waitForParrotToFinishMoving() {
+    while (!getParrotCompletedMovingToFlyer()) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
 }
 
 async function combineMilkAndBowl(blank, dialogueString, blank2, blank3) {
@@ -138,8 +136,8 @@ async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank
     setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
     setObjectData(`objectPulleyWheel`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectPulleyWheel`, `dimensions.width`, 25);
-    setObjectData(`objectPulleyWheel`, `dimensions.height`, 15);
+    setObjectData(`objectPulleyWheel`, `dimensions.width`, 1.66);
+    setObjectData(`objectPulleyWheel`, `dimensions.height`, 3);
     changeSpriteAndHoverableStatus('s2', 'objectPulleyWheel', true);
 }
 
@@ -345,8 +343,8 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     setPreAnimationGridState(gridData, 'objectMallet', true);
     setObjectData(`objectMallet`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectMallet`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectMallet`, `dimensions.width`, 21);
-    setObjectData(`objectMallet`, `dimensions.height`, 11);
+    setObjectData(`objectMallet`, `dimensions.width`, 4.4);
+    setObjectData(`objectMallet`, `dimensions.height`, 2.2);
     changeSpriteAndHoverableStatus('s2', 'objectMallet', true);
 
     showText(dialogueString, getColorTextPlayer());
@@ -357,9 +355,7 @@ function pickUpMallet () {
 }
 
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
-    const objectData = getObjectData().objects[objectId];
     const npcData = getNpcData().npcs[npcId];
-    const language = getLanguage();
 
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
     const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
@@ -403,9 +399,7 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
 }
 
 async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
-    const objectData = getObjectData().objects[objectId];
     const dialogueData = getDialogueData().dialogue;
-    const language = getLanguage();
     const npcData = getNpcData().npcs[townDog];
     const gridData = getGridData();
 
@@ -429,18 +423,17 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 30, 20, null); //add empty bowl back in for dog having drunk it
+    setObjectData(`objectBowl`, `dimensions.width`, 2);
+    setObjectData(`objectBowl`, `dimensions.height`, 4);
+    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null); //add empty bowl back in for dog having drunk it
 
-    setObjectData(`objectBowl`, `dimensions.width`, 30);
-    setObjectData(`objectBowl`, `dimensions.height`, 20);
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
-
     setAnimationInProgress(true);
     setPreAnimationGridState(gridData, 'objectBone', true);
     setObjectData(`objectBone`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectBone`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectBone`, `dimensions.width`, 20);
-    setObjectData(`objectBone`, `dimensions.height`, 12);
+    setObjectData(`objectBone`, `dimensions.width`, 1.33);
+    setObjectData(`objectBone`, `dimensions.height`, 2.4);
     setObjectData(`objectBone`, `interactable.canPickUp`, true);
     changeSpriteAndHoverableStatus('s2', 'objectBone', true); 
     
