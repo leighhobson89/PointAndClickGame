@@ -1591,7 +1591,7 @@
         "fr": "Perroquet"
       },
       "canMove": true,
-      "measureMovementYOffset": -23,
+      "measureMovementYOffset": -47.5,
       "activeMoveSequence": 0,
       "waypoints": {
         "0": {
@@ -1601,7 +1601,7 @@
           "points": [
             { "x": 30, "y": 10, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
             { "x": 30, "y": 30, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null },
-            { "x": 10, "y": 30, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            { "x": 10, "y":30, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
             ]
         },
         "1": {

@@ -1,4 +1,4 @@
-import { getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
@@ -206,7 +206,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                 const speed = entity.waypoints[entity.activeMoveSequence].speed;
     
                 const entityGridX = Math.floor(entity.visualPosition.x / gridSizeX);
-                const entityGridY = Math.floor(entity.visualPosition.y / gridSizeY);
+                const entityGridY = Math.floor(entity.visualPosition.y / gridSizeY - (entity.measureMovementYOffset / getCanvasCellHeight()));
         
                 const measurePointAdjustmentX = Math.floor((entity.dimensions.width * (gridSizeX / baseCellWidth)) / 2);
                 const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (gridSizeY / baseCellHeight));
@@ -220,9 +220,9 @@ function moveOtherEntitiesOnCurrentScreen() {
 
                 if (entityPaths[entityIdName].path.length > 0 && entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
                     targetX = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].x * gridSizeX - measurePointAdjustmentX;
-                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY - measurePointAdjustmentY;
+                    targetY = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex].y * gridSizeY; // - measurePointAdjustmentY;
 
-                    console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY}, so we are really at ${entityGridY - measurePointAdjustmentY}`);
+                    console.log(`currently at ${entityGridX}, ${entityGridY}, measure adjust is ${measurePointAdjustmentY / getCanvasCellHeight()}, so we are really at ${entityGridY - (measurePointAdjustmentY / getCanvasCellHeight())}`);
                     console.log(`moving towards ${targetX / getCanvasCellWidth()}, ${targetY / getCanvasCellHeight()}`);
                     console.log(JSON.stringify(entityPaths[entityIdName].path));
                 } else {
@@ -264,7 +264,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                     if (entityPaths[entityIdName].currentIndex < entityPaths[entityIdName].path.length) {
                         const nextStep = entityPaths[entityIdName].path[entityPaths[entityIdName].currentIndex];
                         setTargetXEntity(entityIdName, nextStep.x * gridSizeX);
-                        setTargetXEntity(entityIdName, nextStep.y * gridSizeY - measurePointAdjustmentY);
+                        setTargetYEntity(entityIdName, nextStep.y * gridSizeY) + measurePointAdjustmentY;
                     } else {
                         console.log(`Entity ${entityIdName} finished moving!`);
                     }
@@ -296,7 +296,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                 // Draw the points
                 drawCircle(entityGridX, entityGridY, 'red'); // Red for (entityGridX, entityGridY)
                 drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
-                drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
+                //drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
         }
     }
@@ -1196,7 +1196,8 @@ export function setUpObjectsAndNpcs() {
         const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
         const startX = object.gridPosition.x;
-        const startY = object.gridPosition.y;
+        const startY = Math.floor(object.gridPosition.y + (object.measureMovementYOffset < 0 ? -Math.abs(object.measureMovementYOffset) / cellHeight : object.measureMovementYOffset / cellHeight));
+        //const startY = object.gridPosition.y;
 
         const offsetX = (object.offset.x || 0) * cellWidth;  
         const offsetY = (object.offset.y || 0) * cellHeight; 
@@ -1649,8 +1650,19 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         waypoints  // List of waypoints
     );
 
+    const baseCellWidth = 15;  // coefficients DO NOT TOUCH
+    const baseCellHeight = 5;  // coefficients DO NOT TOUCH
+    const measurePointAdjustmentY = Math.floor((entity.dimensions.height + entity.measureMovementYOffset) * (getCanvasCellHeight() / baseCellHeight));
+
+    // Adjust the y values in the path by adding measurePointAdjustmentY
+    path = path.map(step => ({
+        x: step.x,
+        y: step.y - measurePointAdjustmentY
+    }));
+
     // Return the computed path
     return path;
 }
+
 
 
