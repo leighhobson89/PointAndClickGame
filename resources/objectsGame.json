@@ -411,7 +411,7 @@
         "it": "Asino ",
         "fr": "Âne "
       },
-      "canMove": true,
+      "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
       "waypoints": {

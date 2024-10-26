@@ -90,10 +90,10 @@
                 "yPosCameraEnterHere": 0
             },
             "e5": {
-                "connectsTo": "stables",
+                "connectsTo": "cowPath",
                 "status": "open",
-                "startPosition": { "x": 9, "y": 52 },
-                "finalPosition": { "x": 15, "y": 53 },
+                "startPosition": { "x": 28, "y": 45 },
+                "finalPosition": { "x": 32, "y": 35 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -206,54 +206,10 @@
                 "yPosCameraEnterHere": 0
             },
             "e2": {
-                "connectsTo": "stables",
+                "connectsTo": "cowPath",
                 "status": "open",
-                "startPosition": { "x": 62, "y": 48 },
-                "finalPosition": { "x": 57, "y": 50 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            }
-        }
-    },
-    "stables": {
-        "en": "Stables",
-        "es": "Establo",
-        "de": "Stall",
-        "it": "Stalla",
-        "fr": "Écurie",
-        "bgUrl": "./resources/backgrounds/stables.png",
-        "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 1,
-        "exits": {
-            "e1": {
-                "connectsTo": "barn",
-                "status": "locked",
-                "startPosition": { "x": 33, "y": 44 },
-                "finalPosition": { "x": 31, "y": 50 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e2": {
-                "connectsTo": "house",
-                "status": "open",
-                "startPosition": { "x": 63, "y": 55 },
-                "finalPosition": { "x": 60, "y": 53 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e3": {
-                "connectsTo": "marketStreet",
-                "status": "open",
-                "startPosition": { "x": 74, "y": 46 },
-                "finalPosition": { "x": 70, "y": 42 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e4": {
-                "connectsTo": "bigTree",
-                "status": "open",
-                "startPosition": { "x": 65, "y": 51 },
-                "finalPosition": { "x": 60, "y": 52 },
+                "startPosition": { "x": 49, "y": 30 },
+                "finalPosition": { "x": 48, "y": 35 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -272,8 +228,8 @@
             "e1": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 36, "y": 47 },
-                "finalPosition": { "x": 32, "y": 51 },
+                "startPosition": { "x": 37, "y": 49 },
+                "finalPosition": { "x": 45, "y": 47 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -292,8 +248,8 @@
             "e1": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 72, "y": 54 },
-                "finalPosition": { "x": 63, "y": 54 },
+                "startPosition": { "x": 14, "y": 54 },
+                "finalPosition": { "x": 24, "y": 50 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -302,6 +258,42 @@
                 "status": "open",
                 "startPosition": { "x": 66, "y": 39 },
                 "finalPosition": { "x": 61, "y": 42 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            }
+        }
+    },
+    "cowPath": {
+        "en": "Farm Track", 
+        "es": "Camino a la Granja",
+        "de": "Weg zum Bauernhof",
+        "it": "Strada verso la Fattoria",
+        "fr": "Route vers la Ferme",
+        "bgUrl": "./resources/backgrounds/cowPathBrokenFence.png",
+        "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 0.9,
+        "exits": {
+            "e1": {
+                "connectsTo": "house",
+                "status": "open",
+                "startPosition": { "x": 73, "y": 49 },
+                "finalPosition": { "x": 64, "y": 49 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e2": {
+                "connectsTo": "stables",
+                "status": "open",
+                "startPosition": { "x": 72, "y": 54 },
+                "finalPosition": { "x": 63, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e3": {
+                "connectsTo": "marketStreet",
+                "status": "open",
+                "startPosition": { "x": 74, "y": 46 },
+                "finalPosition": { "x": 70, "y": 42 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -442,6 +434,42 @@
                 "status": "open",
                 "startPosition": { "x": 0, "y": 0 },
                 "finalPosition": { "x": 0, "y": 0 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            }
+        }
+    },
+    "stables": {
+        "en": "Stables",
+        "es": "Establo",
+        "de": "Stall",
+        "it": "Stalla",
+        "fr": "Écurie",
+        "bgUrl": "./resources/backgrounds/stables.png",
+        "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 1,
+        "exits": {
+            "e1": {
+                "connectsTo": "barn",
+                "status": "locked",
+                "startPosition": { "x": 33, "y": 44 },
+                "finalPosition": { "x": 31, "y": 50 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e2": {
+                "connectsTo": "bigTree",
+                "status": "open",
+                "startPosition": { "x": 70, "y": 52 },
+                "finalPosition": { "x": 60, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e3": {
+                "connectsTo": "cowPath",
+                "status": "open",
+                "startPosition": { "x": 36, "y": 27 },
+                "finalPosition": { "x": 48, "y": 35 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
