@@ -294,15 +294,15 @@
           "objectCanReceive2": "",
           "objectCanReceive3": ""
         },
-        "npcPlacementLocation": "",
+        "npcPlacementLocation": "cowPath",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
-          "s1": "./resources/npcs/cow.png",
-          "s2": "./resources/npcs/cow.png"
+          "s1": "./resources/npcs/cowPain.png",
+          "s2": "./resources/npcs/cowHappy.png"
         },
         "gridPosition": {
-          "x": 60,
-          "y": 10
+          "x": 13,
+          "y": 27
         },
         "offset": {
           "x": 1.8,
@@ -314,7 +314,7 @@
         },
         "dimensions": {
           "width": 6,
-          "height": 7
+          "height":14
         },
         "comment": "Cow needs splinter removing with pliers so farmer appears"
       },
@@ -443,6 +443,67 @@
         "dimensions": {
           "width": 6,
           "height": 32
+        },
+        "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
+      },
+      "npcFarmer": {
+        "name": {
+          "en": "Farmer",
+          "es": "Granjero",
+          "de": "Bauer",
+          "it": "Contadino",
+          "fr": "Fermier"
+        },
+        "canMove": false,
+        "measureMovementYOffset": 0,
+        "activeMoveSequence": 0,
+        "waypoints": {
+
+        },
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": true,
+          "canTalk": true,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 1,
+          "questCutOffEvents": {
+            "1": {
+              "event": "makeFarmerNotTalkableAfterInitialDialogue"
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(255, 168, 0)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "npcPlacementLocation": "cowPath",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/farmer.png"
+        },
+        "gridPosition": {
+          "x": 24,
+          "y": 26
+        },
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "width": 6,
+          "height": 17
         },
         "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
       }

@@ -1940,7 +1940,7 @@
         "canGive": false,
         "stackable": false,
         "quantity": 1,
-        "decrementQuantityOnUse": true,
+        "decrementQuantityOnUse": false,
         "activeStatus": false,
         "alreadyUsed": false
       },

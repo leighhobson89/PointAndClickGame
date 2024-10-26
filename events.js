@@ -1,5 +1,5 @@
 import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
-import { setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
+import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
@@ -306,6 +306,7 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this funct
 function moveCarpenterToStables() {
     console.log("carpenter gone to stables");
     removeNpcFromEnvironment('npcCarpenter');
+    setScreenJSONData('cowPath', 'bgUrl', 'cowPathRepairedFence.png');
 }
 function makeCowTalkableAfterSpeakingToFarmer() { //add to npcFarmer when made him so that cant talk to cow until farmer spoke to you and asked to help it
     setNpcData(`npcCow`, `interactable.canTalk`, true);
@@ -316,8 +317,13 @@ function makeCowNotTalkableAndPliersUseable() {
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
 }
 
+function makeFarmerNotTalkableAfterInitialDialogue() {
+    setNpcData(`npcFarmer`, `interactable.canTalk`, false);
+}
+
 function makeMirrorGiveableToWoman() {
     setObjectData(`objectParrotMirror`, `interactable.canGive`, true);
+    setNpcData(`npcWomanLostMirror`, `interactable.canTalk`, false);
 }
 
 function openBarrelBarn(blank, dialogueString, blank2, barrel) {    
@@ -373,7 +379,7 @@ async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
     drawInventory(0);
 
     setDialogueData('npcInteractions.verbLookAt.npcWomanLostMirror', '0', '1');
-    setNpcData(`npcWomanLostMirror`, `interactable.canTalk`, false);
+    setNpcData(`npcWomanLostMirror`, `interactable.cantTalkDialogueNumber`, 1);
 }
 
 async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectId) {

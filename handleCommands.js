@@ -1,4 +1,4 @@
-import { getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData } from "./constantsAndGlobalVars.js";
+import { setNavigationData,getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js";
@@ -1162,3 +1162,47 @@ function getObjectEvents(objectId) {
 
     return result;
 }
+
+export function setScreenJSONData(screenId, path, newValue) {
+    const navigationData = getNavigationData(); // Fetch the current screen data
+
+    // Split the path into its components (similar to other functions)
+    const keys = path.match(/([^[\].]+|\[\d+\])/g);
+    
+    if (!keys) {
+        console.warn("Invalid path format.");
+        return;
+    }
+
+    // Get the specific screen object based on screenId
+    let current = navigationData[screenId];
+    
+    if (!current) {
+        console.warn(`Screen ID ${screenId} does not exist in the navigation data.`);
+        return;
+    }
+
+    // Traverse through the object until we reach the last key
+    for (let i = 0; i < keys.length - 1; i++) {
+        let key = keys[i].replace(/\[|\]/g, '');
+        if (!current[key]) {
+            console.warn(`Invalid path: ${key} does not exist in the screen data.`);
+            return;
+        }
+        current = current[key];
+    }
+
+    // Get the final key to update the value
+    const finalKey = keys[keys.length - 1].replace(/\[|\]/g, '');
+    
+    if (current.hasOwnProperty(finalKey)) {
+        current[finalKey] = newValue;
+        console.log(`Updated ${path} for screen ${screenId} to`, newValue);
+    } else {
+        console.warn(`Invalid path: ${finalKey} does not exist in the screen data.`);
+    }
+
+    // Set the modified navigation data back
+    setNavigationData(navigationData);
+}
+

@@ -1286,6 +1286,29 @@
             "fr": "Il évalue le travail !"
           }
         },
+        "npcFarmer": {
+          "0": {
+            "en": "He looks pretty worried, his fence is broken and his cow looks in a lot of pain!",
+            "es": "Parece bastante preocupado, su cerca está rota y su vaca parece estar en mucho dolor.",
+            "de": "Er sieht ziemlich besorgt aus, sein Zaun ist kaputt und seine Kuh scheint große Schmerzen zu haben.",
+            "it": "Sembra piuttosto preoccupato, il suo recinto è rotto e la sua mucca sembra soffrire molto.",
+            "fr": "Il a l'air très inquiet, sa clôture est cassée et sa vache semble avoir très mal."
+          },
+          "1": {
+            "en": "His fence is fixed, but the cow is still in a lot of pain and it shows on his face!",
+            "es": "Su cerca está arreglada, pero la vaca sigue sufriendo y se nota en su rostro.",
+            "de": "Sein Zaun ist repariert, aber die Kuh hat immer noch starke Schmerzen, und das sieht man ihm an.",
+            "it": "Il suo recinto è riparato, ma la mucca soffre ancora molto e si vede sul suo volto.",
+            "fr": "Sa clôture est réparée, mais la vache a toujours très mal, et cela se voit sur son visage."
+          },
+          "2": {
+            "en": "He is happy now, or rather relieved, and with good reason!",
+            "es": "Ahora está feliz, o más bien aliviado, ¡y con razón!",
+            "de": "Er ist jetzt glücklich, oder eher erleichtert, und das aus gutem Grund!",
+            "it": "Ora è felice, o meglio sollevato, e a ragion veduta!",
+            "fr": "Il est heureux maintenant, ou plutôt soulagé, et avec raison !"
+          }
+        },
         "npcCow": {
           "0": {
             "en": "Cute cow, although she looks to be in a lot of pain!",
@@ -1775,6 +1798,13 @@
           },
           "cantTalkDialogue": {
             "0": {
+              "en": "Have you got that mirror yet?",
+              "es": "¿Tienes ese espejo ya?",
+              "de": "Hast du den Spiegel schon?",
+              "it": "Hai già preso quello specchio?",
+              "fr": "As-tu déjà ce miroir ?"
+            },
+            "1": {
               "en": "I need to finish doing my make-up, handsome!",
               "es": "¡Necesito terminar de hacerme el maquillaje, guapo!",
               "de": "Ich muss mein Make-up fertig machen, Hübscher!",
@@ -1812,11 +1842,11 @@
               "order": "11!",
               "dialogueOptions": {
                 "0": {
-                  "en": "I would like the key for the research room please. ",
-                  "es": "Me gustaría la llave para la sala de investigación, por favor. ",
-                  "de": "Ich hätte gerne den Schlüssel für den Forschungsraum, bitte. ",
-                  "it": "Vorrei la chiave per la stanza di ricerca, per favore. ",
-                  "fr": "Je voudrais la clé pour la salle de recherche, s'il vous plaît. "
+                  "en": "I would like the key for the research room please.\u0020",
+                  "es": "Me gustaría la llave para la sala de investigación, por favor.\u0020",
+                  "de": "Ich hätte gerne den Schlüssel für den Forschungsraum, bitte.\u0020",
+                  "it": "Vorrei la chiave per la stanza di ricerca, per favore.\u0020",
+                  "fr": "Je voudrais la clé pour la salle de recherche, s'il vous plaît.\u0020"
                 },
                 "1": {
                   "en": "How much did those glasses cost, I want some!",
@@ -1982,11 +2012,11 @@
               "order": "11!",
               "dialogueOptions": {
                 "0": {
-                  "en": "Just give it to me please, I have something important to check. ",
-                  "es": "Solo dámelo por favor, tengo algo importante que revisar. ",
-                  "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen. ",
-                  "it": "Dammi solo, per favore, ho qualcosa di importante da controllare. ",
-                  "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier. "
+                  "en": "Just give it to me please, I have something important to check.\u0020",
+                  "es": "Solo dámelo por favor, tengo algo importante que revisar.\u0020",
+                  "de": "Gib es mir bitte einfach, ich habe etwas Wichtiges zu überprüfen.\u0020",
+                  "it": "Dammi solo, per favore, ho qualcosa di importante da controllare.\u0020",
+                  "fr": "Donne-le-moi s'il te plaît, j'ai quelque chose d'important à vérifier.\u0020"
                 },
                 "1": {
                   "en": "Yes, how much did those glasses cost, I want some!",
@@ -2445,6 +2475,167 @@
             }
           }
         },
+        "npcFarmer": {
+          "quest": {
+            "0": {
+              "introDialogue": {
+                "en": "Hey, are you ok, you look to have quite a scenario there!",
+                "es": "¡Hola, ¿estás bien? Parece que tienes una situación complicada ahí!",
+                "de": "Hey, alles in Ordnung? Sieht aus, als hättest du da eine schwierige Situation!",
+                "it": "Ehi, stai bene? Sembra che tu abbia una bella situazione lì!",
+                "fr": "Hé, ça va ? On dirait que tu as une situation compliquée là-bas !"
+              },
+              "phase": {
+                "0": {
+                  "en": "Hey hello! I am really stuck here yes.",
+                  "es": "¡Hola! Estoy realmente atascado aquí, sí.",
+                  "de": "Hallo! Ich stecke hier wirklich fest, ja.",
+                  "it": "Ciao! Sono davvero bloccato qui, sì.",
+                  "fr": "Salut ! Je suis vraiment coincé ici, oui."
+                },
+                "1": {
+                  "en": "The wind has broken my fence.",
+                  "es": "El viento ha roto mi cerca.",
+                  "de": "Der Wind hat meinen Zaun zerstört.",
+                  "it": "Il vento ha rotto il mio recinto.",
+                  "fr": "Le vent a cassé ma clôture."
+                },
+                "2": {
+                  "en": "And to make it worse, my prize cow has stood on something and hurt her foot!",
+                  "es": "Y para empeorar las cosas, mi vaca premiada ha pisado algo y se ha lastimado el pie.",
+                  "de": "Und um es schlimmer zu machen, hat meine prächtige Kuh auf etwas gestanden und sich den Fuß verletzt!",
+                  "it": "E per rendere le cose peggiori, la mia mucca premiata è salita su qualcosa e si è ferita un piede!",
+                  "fr": "Et pour aggraver les choses, ma vache primée a marché sur quelque chose et s'est fait mal au pied!"
+                },
+                "3": {
+                  "en": "I can't leave to go and get the tools to fix it in case she escapes.",
+                  "es": "No puedo irme a buscar las herramientas para arreglarlo en caso de que ella se escape.",
+                  "de": "Ich kann nicht weggehen, um die Werkzeuge zu holen, um es zu reparieren, falls sie entkommt.",
+                  "it": "Non posso andare a prendere gli attrezzi per aggiustarlo nel caso in cui scappi.",
+                  "fr": "Je ne peux pas partir chercher les outils pour le réparer au cas où elle s'échapperait."
+                },
+                "4": {
+                  "en": "Can you run to the carpenter and ask him to come out and help me quickly? Please!",
+                  "es": "¿Puedes correr al carpintero y pedirle que salga y me ayude rápidamente? ¡Por favor!",
+                  "de": "Kannst du zum Zimmermann laufen und ihn bitten, schnell herauszukommen und mir zu helfen? Bitte!",
+                  "it": "Puoi correre dal falegname e chiedergli di uscire e aiutarmi in fretta? Per favore!",
+                  "fr": "Peux-tu courir chez le menuisier et lui demander de sortir et de m'aider rapidement ? S'il te plaît !"
+                }
+              },
+              "order": "11111!",
+              "dialogueOptions": {
+                "0": {
+                  "en": "Wait, I don’t even know where the carpenter is?!",
+                  "es": "¡Espera, ni siquiera sé dónde está el carpintero?!",
+                  "de": "Warte, ich weiß nicht einmal, wo der Zimmermann ist?!",
+                  "it": "Aspetta, non so nemmeno dove si trova il falegname?!",
+                  "fr": "Attends, je ne sais même pas où est le menuisier?!"
+                },
+                "1": {
+                  "en": "No, I won't help, it's your mess, you fix it!",
+                  "es": "No, no ayudaré, es tu problema, ¡tú lo arreglas!",
+                  "de": "Nein, ich werde nicht helfen, es ist dein Chaos, du machst es sauber!",
+                  "it": "No, non aiuterò, è un tuo problema, lo sistemi tu!",
+                  "fr": "Non, je ne vais pas aider, c'est ton désordre, c'est à toi de le réparer !"
+                },
+                "2": {
+                  "en": "Oh of course I will, what a mess you are in! Be right back!\u0020",
+                  "es": "Oh, por supuesto que lo haré, ¡qué lío tienes! ¡Vuelvo enseguida!\u0020",
+                  "de": "Oh, natürlich werde ich es tun, in welchem Durcheinander du steckst! Ich bin gleich zurück!\u0020",
+                  "it": "Oh, certo che lo farò, che pasticcio sei in! Torno subito!\u0020",
+                  "fr": "Oh, bien sûr que je vais le faire, quel désordre tu as ! Je reviens tout de suite !\u0020"
+                }
+              },
+              "exitOption": {
+                "phase": {
+                  "0": {
+                    "en": "Right I'm going!",
+                    "es": "¡Está bien, me voy!",
+                    "de": "Okay, ich gehe!",
+                    "it": "Va bene, sto andando!",
+                    "fr": "D'accord, j'y vais !"
+                  },
+                  "1": {
+                    "en": "Thanks a lot, I'm waiting here! Go, go!!",
+                    "es": "¡Muchas gracias, estoy esperando aquí! ¡Ve, ve!",
+                    "de": "Danke vielmals, ich warte hier! Geh, geh!",
+                    "it": "Grazie mille, sto aspettando qui! Vai, vai!",
+                    "fr": "Merci beaucoup, j'attends ici ! Vas-y, vas-y !!"
+                  }
+                },
+                "order": "01!"
+              },
+              "responses": {
+                "0": {
+                  "phase": {
+                    "0": {
+                      "en": "Run into town and you will find him there, please!!",
+                      "es": "Corre al pueblo y lo encontrarás allí, por favor!!",
+                      "de": "Lauf in die Stadt, und du wirst ihn dort finden, bitte!!",
+                      "it": "Corri in città e lo troverai lì, per favore!!",
+                      "fr": "Cours en ville et tu le trouveras là-bas, s'il te plaît!!"
+                    }
+                  },
+                  "order": "1!"
+                },
+                "1": {
+                  "phase": {
+                    "0": {
+                      "en": "I hope you never need help! Please, I really need the help!",
+                      "es": "¡Espero que nunca necesites ayuda! ¡Por favor, realmente necesito ayuda!",
+                      "de": "Ich hoffe, du brauchst nie Hilfe! Bitte, ich brauche wirklich Hilfe!",
+                      "it": "Spero che tu non abbia mai bisogno di aiuto! Per favore, ho davvero bisogno di aiuto!",
+                      "fr": "J'espère que tu n'auras jamais besoin d'aide! S'il te plaît, j'ai vraiment besoin d'aide!"
+                    }
+                  },
+                  "order": "1!"
+                },
+                "2": {
+                  "phase": {
+                    "0": {
+                      "en": "Thanks so much, please hurry, she might get out!",
+                      "es": "¡Muchas gracias, por favor, apúrate, podría escaparse!",
+                      "de": "Vielen Dank, bitte beeile dich, sie könnte entkommen!",
+                      "it": "Grazie mille, per favore fai in fretta, potrebbe scappare!",
+                      "fr": "Merci beaucoup, s'il te plaît dépêche-toi, elle pourrait s'échapper !"
+                    }
+                  },
+                  "order": "1!"
+                }
+              }
+            },
+            "1": {
+              "autoExitOption": {
+                "phase": {
+                  "0": {
+                    "en": "Ok, ok I'm going!",
+                    "es": "¡Ok, ok, voy!",
+                    "de": "Ok, ok, ich gehe!",
+                    "it": "Ok, ok, sto andando!",
+                    "fr": "D'accord, d'accord, j'y vais !"
+                  },
+                  "1": {
+                    "en": "Please be quick she keeps trying to barge past me!",
+                    "es": "¡Por favor, sé rápido, ella sigue intentando pasarme!",
+                    "de": "Bitte beeil dich, sie versucht immer wieder, an mir vorbeizudrängen!",
+                    "it": "Per favore, fai in fretta, continua a cercare di oltrepassarmi!",
+                    "fr": "S'il te plaît, dépêche-toi, elle essaie de me dépasser !"
+                  }
+                },
+                "order": "01!"
+              }
+            }
+          },
+          "cantTalkDialogue": {
+            "0": {
+              "en": "I don't know how much longer I can hold her back, quick!!",
+              "es": "No sé cuánto más podré contenerla, ¡rápido!",
+              "de": "Ich weiß nicht, wie lange ich sie noch zurückhalten kann, schnell!!",
+              "it": "Non so quanto a lungo posso trattenerla, veloce!!",
+              "fr": "Je ne sais pas combien de temps je peux encore la retenir, vite!!"
+            }
+          }
+        },
         "npcCow": {
           "quest": {
             "0": {
@@ -2596,11 +2787,11 @@
           },
           "cantTalkDialogue": {
             "0": {
-              "en": "Moo!",
-              "es": "¡Mugido!",
-              "de": "Muh!",
-              "it": "Muu!",
-              "fr": "Meuh!"
+              "en": "Owww Moooooo!",
+              "es": "¡Owww Muuuuuu!",
+              "de": "Owww Muhhhh!",
+              "it": "Owww Muuuuu!",
+              "fr": "Owww Meuuuuuh!"
             }
           }
         }
