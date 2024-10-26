@@ -294,11 +294,7 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this funct
         handleInventoryAdjustment(objectId, 1);
         drawInventory(0);
 
-        showText(dialogueString, carpenterDialogueColor);
-
-        //debug transfer these to the farmer when player talks to him activate these
-        // setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
-        // setNpcData(`npcCarpenter`, `interactable.questCutOffNumber`, 2);
+        showText(dialogueString, carpenterDialogueColor);        
     }
 }
 
@@ -306,9 +302,9 @@ function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this funct
 function moveCarpenterToStables() {
     console.log("carpenter gone to stables");
     removeNpcFromEnvironment('npcCarpenter');
-    setScreenJSONData('cowPath', 'bgUrl', 'cowPathRepairedFence.png');
+    setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
 }
-function makeCowTalkableAfterSpeakingToFarmer() { //add to npcFarmer when made him so that cant talk to cow until farmer spoke to you and asked to help it
+function makeCowTalkableAfterSpeakingToFarmer() {
     setNpcData(`npcCow`, `interactable.canTalk`, true);
 }
 
@@ -319,6 +315,9 @@ function makeCowNotTalkableAndPliersUseable() {
 
 function makeFarmerNotTalkableAfterInitialDialogue() {
     setNpcData(`npcFarmer`, `interactable.canTalk`, false);
+    makeCowTalkableAfterSpeakingToFarmer();
+    setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
+    setNpcData(`npcCarpenter`, `interactable.questCutOffNumber`, 2);
 }
 
 function makeMirrorGiveableToWoman() {
@@ -389,6 +388,8 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
 
     if (objectData.interactable.activeStatus && !objectData.interactable.alreadyUsed) {
         showText(dialogueString, getColorTextPlayer());
+        setNpcData(`npcCow`, `activeSpriteUrl`, `s2`);
+        setNpcData(`npcCow`, `interactable.cantTalkDialogueNumber`, 1);
         setObjectData(`objectPliers`, `interactable.alreadyUsed`, true);
         setDialogueData('npcInteractions.verbLookAt.npcCow', '0', '1');
         addItemToInventory('objectSplinter', 1);
