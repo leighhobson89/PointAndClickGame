@@ -1345,7 +1345,7 @@
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
-        "actionCanPickUpButNotYet": "checkCarpenterQuestPhase"
+        "actionCanPickUpButNotYet": "carpenterStopPlayerPickingUpItemsEarly"
       },
       "objectPlacementLocation": "carpenter",
       "activeSpriteUrl": "s1",
@@ -2045,7 +2045,7 @@
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
-        "actionCanPickUpButNotYet": "checkCarpenterQuestPhase"
+        "actionCanPickUpButNotYet": "carpenterStopPlayerPickingUpItemsEarly"
       },
       "objectPlacementLocation": "carpenter",
       "activeSpriteUrl": "s1",

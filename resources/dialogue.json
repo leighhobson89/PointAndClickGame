@@ -2317,11 +2317,11 @@
               "order": "11!",
               "dialogueOptions": {
                 "0": {
-                  "en": "Quick, the farmer needs you urgently at the stables! ",
-                  "es": "¡Rápido, el granjero te necesita urgentemente en los establos! ",
-                  "de": "Schnell, der Bauer braucht dich dringend im Stall! ",
-                  "it": "Presto, il contadino ha bisogno di te urgentemente nelle stalle! ",
-                  "fr": "Vite, le fermier a besoin de vous d'urgence dans les écuries ! "
+                  "en": "Quick, the farmer needs you urgently at the stables!\u0020",
+                  "es": "¡Rápido, el granjero te necesita urgentemente en los establos!\u0020",
+                  "de": "Schnell, der Bauer braucht dich dringend im Stall!\u0020",
+                  "it": "Presto, il contadino ha bisogno di te urgentemente nelle stalle!\u0020",
+                  "fr": "Vite, le fermier a besoin de vous d'urgence dans les écuries !\u0020"
                 },
                 "1": {
                   "en": "Do you have anything for sale?",

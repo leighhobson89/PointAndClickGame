@@ -309,20 +309,12 @@ function setCarpenterSpokenToTrue() {
     console.log("spoke to carpenter now");
 }
 
-function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this function removes the items and puts them back where they were if the player cannot pick them up yet or lets it go if they can special case for carpènter where items need to be set to canPickUp true
-    // const objectStartX = getObjectData().objects[objectId].gridPosition.x;
-    // const objectStartY = getObjectData().objects[objectId].gridPosition.y;
-    // const objectStartWidth = getObjectData().objects[objectId].dimensions.width;
-    // const objectStartHeight = getObjectData().objects[objectId].dimensions.height;
-
+function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) {
     const carpenterQuestPhase = getNpcData().npcs.npcCarpenter.interactable.questPhase;
     const carpenterDialogueColor = getNpcData().npcs.npcCarpenter.interactable.dialogueColor;
     if (carpenterQuestPhase < 2) {
         let dialogueString;
         dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpPliersOrNailsYet[getLanguage()];
-        // addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight, null);
-        // handleInventoryAdjustment(objectId, 1);
-        // drawInventory(0);
 
         showText(dialogueString, carpenterDialogueColor);        
     }
