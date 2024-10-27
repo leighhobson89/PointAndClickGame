@@ -1,6 +1,6 @@
-import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen } from "./constantsAndGlobalVars.js";
+import { getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
-import { drawInventory, showText } from "./ui.js";
+import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
@@ -164,12 +164,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const originalDonkeyWidth = npcData.dimensions.width;
     const originalDonkeyHeight = npcData.dimensions.height;
 
-    //move real donkey and hide
-    setAnimationInProgress(true);
-    setPreAnimationGridState(gridData, 'npcDonkey', false);
-    setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x - 400)); //set this number when positioned
-    setNpcData(`npcDonkey`, `activeSpriteUrl`, 's3');
-    setNpcData(`npcDonkey`, `interactable.canHover`, false);
+    removeNpcFromEnvironment('npcDonkey');
 
     setTimeout(() => {
         // Move object donkey to place of real and show
@@ -177,30 +172,38 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
         setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); // set this number when positioned
         setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); // set this number when positioned
         setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
-        setObjectData(`objectDonkeyFake`, `dimensions.height`, originalDonkeyHeight);
+        setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
+        setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 50);
         setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
         setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
     }, 50);
 }
 
+function changeCanvasBgTemp(url) {
+    const canvas = getElements().canvas;
+    const screenTilesWidebgImg = getNavigationData()[getCurrentScreenId()].screenTilesWidebgImg;
+    setDynamicBackgroundWithOffset(canvas, url, 0, 0, screenTilesWidebgImg);
+}
+
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
+    const gridData = getGridData();
     const navigationData = getNavigationData();
+
+    setTimeout(() => {
+    setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
+    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
+    addObjectToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11);
+    setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
+    }, 50);
+
     await showText(dialogueString, getColorTextPlayer());
-    setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 50);
-    setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
     moveDonkeyOffScreen();
 
     setTimeout(() => {
-
-    setObjectData(`objectDonkeyRope`, `visualPosition.x`, 515);
-
-    const objectToShowId = 'objectDonkeyRope';
-    const spriteUrlObjectToShow = 's2';
-
     navigationData.stables.exits.e1.status = "open";
     setNavigationData(navigationData); //allow player to enter barn
-
-    changeSpriteAndHoverableStatus(spriteUrlObjectToShow, objectToShowId, true);
     }, 50);
 }
 
@@ -217,6 +220,9 @@ async function moveDonkeyOffScreen() {
     setEntityPaths('objectDonkeyFake', 'path', path);
 
     await waitForAnimationToFinish(getDonkeyMovedOffScreen);
+
+    changeCanvasBgTemp('./resources/backgrounds/stables.png');
+
     removeObjectFromEnvironment('objectDonkeyFake');
     setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
 
@@ -288,7 +294,6 @@ function resetHookBackToTreePosition() {
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
-
     setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
     
     const gridUpdateData = getAllGridData();
