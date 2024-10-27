@@ -35,16 +35,16 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
     let fullPath = [];
 
     // Helper function to run pathfinding between points
-    function findPathBetweenPoints(startPoint, endPoint, overrideCellCost) {
+    function findPathBetweenPoints(startPoint, endPoint, overrideCellCost, finalTarget) {
         // This will be the existing A* logic that finds the path between two points.
-        const path = aStarSinglePathfinding(startPoint, endPoint, action, subject, waypoints, overrideCellCost);
+        const path = aStarSinglePathfinding(startPoint, endPoint, action, subject, waypoints, overrideCellCost, finalTarget);
         return path;
     }
 
     // Iterate through waypoints, if any
     let currentStart = start;
     for (const waypoint of waypoints) {
-        const partialPath = findPathBetweenPoints(currentStart, waypoint, overrideCellCost);
+        const partialPath = findPathBetweenPoints(currentStart, waypoint, overrideCellCost, target);
         if (!partialPath || partialPath.length === 0) {
             //console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
             return [];
@@ -57,7 +57,7 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
     //console.log(`Full path after waypoints: ${JSON.stringify(fullPath)}`); // Log fullPath after waypoints
 
     // Finally, path from the last waypoint (or start) to the final target
-    const finalPath = findPathBetweenPoints(currentStart, target, overrideCellCost);
+    const finalPath = findPathBetweenPoints(currentStart, target, overrideCellCost, target);
     //console.log(`Final path found: ${JSON.stringify(finalPath)}`); // Log finalPath
     
     if (!finalPath || finalPath.length === 0) {
@@ -71,7 +71,7 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
     return fullPath;
 }
 
-function aStarSinglePathfinding(start, target, action, subject, waypoints, overrideCellCost) {
+function aStarSinglePathfinding(start, target, action, subject, waypoints, overrideCellCost, finalTarget) {
     let npcResizedYet = false;
     const gridData = getGridData();
     const player = getPlayerObject();
@@ -129,7 +129,7 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
                     path.push({ x: temp.x, y: temp.y });
                     temp = temp.parent;
                 }
-                const finalPath = removeNValuesFromPathEnd(path);
+                const finalPath = removeNValuesFromPathEnd(path, finalTarget);
                 if (finalPath) {
                     return finalPath.reverse();
                 }
@@ -144,7 +144,7 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
             }
 
             if (subject === 'player') {
-                const finalPath = removeNValuesFromPathEnd(path);
+                const finalPath = removeNValuesFromPathEnd(path, finalTarget);
                 if (finalPath) {
                     return finalPath.reverse();
                 }
@@ -376,15 +376,18 @@ function checkAndRedirectToDoor(target) {
     return null;
 }
 
-function removeNValuesFromPathEnd(path) {
+function removeNValuesFromPathEnd(path, finalTarget) {
     const gridData = getGridData();  // Fetch grid data directly for cell lookups
+    const finalX = finalTarget.x;
+    const finalY = finalTarget.y;
+    const finalTargetCellValue = gridData.gridData[finalY][finalX];
     
     while (path.length > 0) {
         const { y, x } = path[0];  // Check the first element
         const cellType = gridData.gridData[y][x];
         console.log(cellType);
         
-        if (cellType.startsWith('w')) {
+        if (cellType.startsWith('w') || finalTargetCellValue !== 'n') {
             return path;  // Stop and return the remaining path
         } else {
             path.shift();  // Remove the first element
