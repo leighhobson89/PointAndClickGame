@@ -89,6 +89,17 @@ async function moveParrotToFlyer() {
     await waitForParrotToFinishMoving();
 }
 
+async function moveDonkeyOffScreen() {
+    let gridData = getGridData();
+    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
+    setObjectData(`objectDonkeyFake`, `canMove`, true);
+    addEntityPath(`objectDonkeyFake`, getObjectData().objects['objectDonkeyFake'].canMove, 'stables');
+
+    const path = populatePathForEntityMovement('objectDonkeyFake', 0);
+    path.splice(0,3);
+    setEntityPaths('objectDonkeyFake', 'path', path);
+}
+
 async function waitForParrotToFinishMoving() {
     while (!getParrotCompletedMovingToFlyer()) {
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -165,29 +176,40 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     //move real donkey and hide
     setAnimationInProgress(true);
     setPreAnimationGridState(gridData, 'npcDonkey', false);
-    setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x + 300)); //set this number when positioned
-    setNpcData(`npcDonkey`, `visualPosition.y`, (npcData.visualPosition.y + 0)); //set this number when positioned
+    setNpcData(`npcDonkey`, `visualPosition.x`, (npcData.visualPosition.x - 400)); //set this number when positioned
     setNpcData(`npcDonkey`, `activeSpriteUrl`, 's3');
     setNpcData(`npcDonkey`, `interactable.canHover`, false);
 
-    //move object donkey to place of real and show
-    setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
-    setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); //set this number when positioned
-    setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); //set this number when positioned
-    setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
-    setObjectData(`objectDonkeyFake`, `dimensions.height`, originalDonkeyHeight);
-    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
-    setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
+    setTimeout(() => {
+        // Move object donkey to place of real and show
+        setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
+        setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); // set this number when positioned
+        setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); // set this number when positioned
+        setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
+        setObjectData(`objectDonkeyFake`, `dimensions.height`, originalDonkeyHeight);
+        setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
+        setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
+    }, 50);
 }
 
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
     const navigationData = getNavigationData();
     await showText(dialogueString, getColorTextPlayer());
+    //moveDonkeyOffScreen();
 
     removeObjectFromEnvironment(objectId);
 
+    
+
+    setNpcData(`npcDonkey`, `visualPosition.x`, (getNpcData().npcs[`npcDonkey`].visualPosition.x)); //set this number when positioned
     setNpcData(`npcDonkey`, `activeSpriteUrl`, 's2');
     setNpcData(`npcDonkey`, `interactable.canHover`, true);
+
+    
+
+    setTimeout(() => {
+
+    setObjectData(`objectDonkeyRope`, `visualPosition.x`, 515);
 
     const objectToShowId = 'objectDonkeyRope';
     const spriteUrlObjectToShow = 's2';
@@ -196,6 +218,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setNavigationData(navigationData); //allow player to enter barn
 
     changeSpriteAndHoverableStatus(spriteUrlObjectToShow, objectToShowId, true);
+    }, 50);
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {

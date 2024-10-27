@@ -781,11 +781,11 @@
         },
         "objectDonkeyFake": {
           "0": {
-            "en": "He looks old and shattered, no use for nothing bless.",
-            "es": "Se ve viejo y destrozado, no sirve para nada, pobre.",
-            "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele.",
-            "it": "Sembra vecchio e distrutto, non serve a niente, poverino.",
-            "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre."
+            "en": "He looks old and shattered, no use for nothing bless, but happy!",
+            "es": "Se ve viejo y destrozado, no sirve para nada, pobre, pero feliz.",
+            "de": "Er sieht alt und erschöpft aus, nützt zu nichts, arme Seele, aber glücklich.",
+            "it": "Sembra vecchio e distrutto, non serve a niente, poverino, ma felice.",
+            "fr": "Il a l'air vieux et brisé, il ne sert à rien, pauvre, mais heureux."
           }
         },
         "objectDonkeyRope": {

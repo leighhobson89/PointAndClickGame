@@ -415,8 +415,15 @@
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
       "waypoints": {
-
-       },        
+        "0": {
+          "speed": 3,
+          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
+          "target": { "x": -20, "y": 35, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "points": [
+            { "x": 10, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            ]
+        }
+      },       
        "interactable": {
         "specialNpcObjectStandIn": true,
         "canHover": false,
@@ -452,7 +459,8 @@
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/blank.png",
-        "s2": "./resources/objects/images/donkeyOnRope.png"
+        "s2": "./resources/objects/images/donkeyOnRopeHappy.png",
+        "s3": "./resources/objects/images/donkeyNotOnRope.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -545,20 +553,20 @@
       },
       "inventoryUrl": "./resources/objects/images/ropeInv.png",
       "gridPosition": {
-        "x": 48,
-        "y": 34
+        "x": 60,
+        "y": 44
       },
       "offset": {
         "x": 0,
-        "y": 0
+        "y": -0.3
       },
       "visualPosition": {
         "x": 0,
         "y": 0
       },
       "dimensions": {
-        "width": 2,
-        "height": 4
+        "width": 6,
+        "height": 11
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },

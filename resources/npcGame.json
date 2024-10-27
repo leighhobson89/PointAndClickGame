@@ -50,11 +50,11 @@
           "s3": "./resources/npcs/blank.png"
         },
         "gridPosition": {
-          "x": 37,
-          "y": 34
+          "x": 35,
+          "y": 35
         },
         "offset": {
-          "x": 0,
+          "x": -0.3,
           "y": 0
         },
         "visualPosition": {
@@ -62,8 +62,8 @@
           "y": 0
         },
         "dimensions": {
-          "width": 10,
-          "height": 16
+          "width": 12,
+          "height": 20
         },
         "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
       },
