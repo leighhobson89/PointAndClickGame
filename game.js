@@ -1,4 +1,4 @@
-import { setParrotCompletedMovingToFlyer, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setDonkeyMovedOffScreen, setParrotCompletedMovingToFlyer, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
@@ -849,7 +849,9 @@ export function processLeftClickPoint(event, mouseClick) {
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: getGridTargetX(), y: getGridTargetY() },
             action,
-            'player'
+            'player',
+            [],
+            false
         );
 
         entityPaths.player.path = path;
@@ -959,7 +961,9 @@ export function processRightClickPoint(event, mouseClick) {
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: getGridTargetX(), y: getGridTargetY() },
             action,
-            'player'
+            'player',
+            [],
+            false
         );
 
         entityPaths.player.path = path;
@@ -1647,7 +1651,8 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         target,
         null,
         entityId,
-        waypoints
+        waypoints,
+        true
     );
 
     path = path.map(step => ({
@@ -1670,6 +1675,9 @@ export function checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityId) {
     switch (entityId) {
         case 'objectParrakeet':
             setParrotCompletedMovingToFlyer(true); 
+            break;
+        case 'objectDonkeyFake':
+            setDonkeyMovedOffScreen(true); 
             break;
     }
 }

@@ -33,7 +33,7 @@
           },
           "canUseWith": false,
           "receiveObjectScenarioId": 0,
-          "dialogueColor": "rgb(0, 0, 0)",
+          "dialogueColor": "rgb(100, 100, 100)",
           "spokenToYet": false
         },
         "usedOn": {

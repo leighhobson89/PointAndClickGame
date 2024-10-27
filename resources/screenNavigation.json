@@ -228,8 +228,8 @@
             "e1": {
                 "connectsTo": "stables",
                 "status": "open",
-                "startPosition": { "x": 37, "y": 49 },
-                "finalPosition": { "x": 45, "y": 47 },
+                "startPosition": { "x": 39, "y": 51 },
+                "finalPosition": { "x": 45, "y": 55 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

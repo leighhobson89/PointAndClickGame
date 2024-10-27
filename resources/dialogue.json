@@ -24,6 +24,13 @@
         "de": "Es sieht so aus, als würde er die Schönheit auf dem Flugblatt seinem eigenen Spiegelbild vorziehen!",
         "it": "Sembra che preferisca la bellezza sul volantino al suo stesso riflesso!",
         "fr": "On dirait qu'il préfère la beauté sur le flyer à son propre reflet !"
+      },
+      "animationDonkeyMovesOffScreen": {
+        "en": "Damn! Now I'm for it!",
+        "es": "¡Maldita sea! ¡Ahora sí que estoy en problemas!",
+        "de": "Verdammt! Jetzt bin ich dran!",
+        "it": "Accidenti! Ora sono nei guai!",
+        "fr": "Mince ! Maintenant, ça va mal pour moi !"
       }
     },
     "objectInteractions": {

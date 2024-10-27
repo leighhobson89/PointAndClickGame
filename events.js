@@ -1,4 +1,4 @@
-import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData } from "./constantsAndGlobalVars.js";
+import { getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -86,22 +86,13 @@ async function moveParrotToFlyer() {
     setEntityPaths('objectParrakeet', 'path', path);
 
     console.log(getEntityPaths()['objectParrakeet'].path);
-    await waitForParrotToFinishMoving();
+    await waitForAnimationToFinish(getParrotCompletedMovingToFlyer);
 }
 
-async function moveDonkeyOffScreen() {
-    let gridData = getGridData();
-    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
-    setObjectData(`objectDonkeyFake`, `canMove`, true);
-    addEntityPath(`objectDonkeyFake`, getObjectData().objects['objectDonkeyFake'].canMove, 'stables');
+async function waitForAnimationToFinish(animationGetterName) {
+    let animationGetter = animationGetterName;
 
-    const path = populatePathForEntityMovement('objectDonkeyFake', 0);
-    path.splice(0,3);
-    setEntityPaths('objectDonkeyFake', 'path', path);
-}
-
-async function waitForParrotToFinishMoving() {
-    while (!getParrotCompletedMovingToFlyer()) {
+    while (!animationGetter()) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 }
@@ -195,17 +186,9 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
     const navigationData = getNavigationData();
     await showText(dialogueString, getColorTextPlayer());
-    //moveDonkeyOffScreen();
-
-    removeObjectFromEnvironment(objectId);
-
-    
-
-    setNpcData(`npcDonkey`, `visualPosition.x`, (getNpcData().npcs[`npcDonkey`].visualPosition.x)); //set this number when positioned
-    setNpcData(`npcDonkey`, `activeSpriteUrl`, 's2');
-    setNpcData(`npcDonkey`, `interactable.canHover`, true);
-
-    
+    setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 50);
+    setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
+    moveDonkeyOffScreen();
 
     setTimeout(() => {
 
@@ -219,6 +202,26 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
 
     changeSpriteAndHoverableStatus(spriteUrlObjectToShow, objectToShowId, true);
     }, 50);
+}
+
+async function moveDonkeyOffScreen() {
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+
+    setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's3');
+    setObjectData(`objectDonkeyFake`, `canMove`, true);
+    addEntityPath(`objectDonkeyFake`, getObjectData().objects['objectDonkeyFake'].canMove, 'stables');
+
+    const path = populatePathForEntityMovement('objectDonkeyFake', 0);
+    path.splice(0,3);
+    setEntityPaths('objectDonkeyFake', 'path', path);
+
+    await waitForAnimationToFinish(getDonkeyMovedOffScreen);
+    removeObjectFromEnvironment('objectDonkeyFake');
+    setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
+
+    let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
+    await showText(dialogueString, getColorTextPlayer());
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {

@@ -416,11 +416,11 @@
       "activeMoveSequence": 0,
       "waypoints": {
         "0": {
-          "speed": 3,
+          "speed": 2,
           "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
-          "target": { "x": -20, "y": 35, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "target": { "x": 1, "y": 59, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
           "points": [
-            { "x": 10, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            { "x": 20, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
             ]
         }
       },       
@@ -439,7 +439,7 @@
         "decrementQuantityOnUse": false,
         "activeStatus": true,
         "alreadyUsed": false,
-        "dialogueColor": "rgb(0, 0, 0)"
+        "dialogueColor": "rgb(100, 100, 100)"
       },
       "usedOn": {
         "objectUse": "",

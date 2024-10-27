@@ -36,7 +36,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 800; //3500
+export const TEXT_DISPLAY_DURATION = 3000; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 
@@ -113,7 +113,7 @@ let scrollPositionX;
 let scrollDirection = 0;
 let swappedDialogueObject = {};
 
-//FLAGS
+//GLOBAL FLAGS
 let audioMuted;
 let languageChangedFlag;
 let beginGameState = true;
@@ -133,10 +133,13 @@ let readyToAdvanceNpcQuestPhase = false;
 let triggerQuestPhaseAdvance = false;
 let canExitDialogueAtThisPoint = false;
 let scrollingActive = false;
-let parrotCompletedMovingToFlyer = false;
 let earlyExitFromDialogue = false;
 let drawGrid = false;
 let cantGoThatWay = false;
+
+//EVENT SPECIFIC FLAGS
+let parrotCompletedMovingToFlyer = false;
+let donkeyMovedOffScreen = false;
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -1031,6 +1034,16 @@ export function getParrotCompletedMovingToFlyer() {
 export function setParrotCompletedMovingToFlyer(value) {
     parrotCompletedMovingToFlyer = value;
 }
+
+export function getDonkeyMovedOffScreen() {
+    return donkeyMovedOffScreen;
+}
+
+export function setDonkeyMovedOffScreen(value) {
+    donkeyMovedOffScreen = value;
+}
+
+setDonkeyMovedOffScreen
 
 export function getSwappedDialogueObject() {
     return swappedDialogueObject;

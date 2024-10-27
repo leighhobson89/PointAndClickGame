@@ -1,6 +1,6 @@
 import { getObjectData, getCanvasCellHeight, getCanvasCellWidth, getGridData, getGridSizeX, getGridSizeY, getLookingForAlternativePathToNearestWalkable, getNpcData, getPlayerObject, setLookingForAlternativePathToNearestWalkable } from "./constantsAndGlobalVars.js";
 
-export function aStarPathfinding(start, target, action, subject, waypoints = []) {
+export function aStarPathfinding(start, target, action, subject, waypoints = [], overrideCellCost) {
     const player = getPlayerObject();
 
     const cellWidth = getCanvasCellWidth();
@@ -35,16 +35,16 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
     let fullPath = [];
 
     // Helper function to run pathfinding between points
-    function findPathBetweenPoints(startPoint, endPoint) {
+    function findPathBetweenPoints(startPoint, endPoint, overrideCellCost) {
         // This will be the existing A* logic that finds the path between two points.
-        const path = aStarSinglePathfinding(startPoint, endPoint, action, subject);
+        const path = aStarSinglePathfinding(startPoint, endPoint, action, subject, waypoints, overrideCellCost);
         return path;
     }
 
     // Iterate through waypoints, if any
     let currentStart = start;
     for (const waypoint of waypoints) {
-        const partialPath = findPathBetweenPoints(currentStart, waypoint);
+        const partialPath = findPathBetweenPoints(currentStart, waypoint, overrideCellCost);
         if (!partialPath || partialPath.length === 0) {
             //console.log(`No path found between ${JSON.stringify(currentStart)} and ${JSON.stringify(waypoint)}`);
             return [];
@@ -57,7 +57,7 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
     //console.log(`Full path after waypoints: ${JSON.stringify(fullPath)}`); // Log fullPath after waypoints
 
     // Finally, path from the last waypoint (or start) to the final target
-    const finalPath = findPathBetweenPoints(currentStart, target);
+    const finalPath = findPathBetweenPoints(currentStart, target, overrideCellCost);
     //console.log(`Final path found: ${JSON.stringify(finalPath)}`); // Log finalPath
     
     if (!finalPath || finalPath.length === 0) {
@@ -71,7 +71,7 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [])
     return fullPath;
 }
 
-function aStarSinglePathfinding(start, target, action, subject) {
+function aStarSinglePathfinding(start, target, action, subject, waypoints, overrideCellCost) {
     let npcResizedYet = false;
     const gridData = getGridData();
     const player = getPlayerObject();
@@ -198,6 +198,10 @@ function aStarSinglePathfinding(start, target, action, subject) {
                 cellCost *= 10000;
             }
 
+            if (overrideCellCost) { //to have exact control of npcs via waypoints DEBUG maybe not good idea but we ll see
+                cellCost = 1;
+            }
+
             const gScore = currentNode.g + cellCost;
             const hScore = heuristic({ x: neighborX, y: neighborY }, target);
             const neighborNode = new Node(neighborX, neighborY, gScore, hScore, currentNode);
@@ -228,7 +232,9 @@ function aStarSinglePathfinding(start, target, action, subject) {
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
             { x: nearestWalkableCell.x, y: nearestWalkableCell.y },
             action, 
-            subject
+            subject,
+            waypoints,
+            overrideCellCost
         );
         console.log("No path found, so walking to " + nearestWalkableCell.x + ", " + nearestWalkableCell.y);
         setLookingForAlternativePathToNearestWalkable(false);
@@ -328,40 +334,42 @@ function checkAndRedirectToDoor(target) {
     const gridData = getGridData();
     const cellValue = gridData.gridData[target.y][target.x];
 
-    if (cellValue.startsWith('o') && cellValue.includes('objectDoor')) {
+    if (cellValue) {
+        if (cellValue.startsWith('o') && cellValue.includes('objectDoor')) {
 
-        let highestY = -1;
-        let candidates = [];
-
-        for (let y = 0; y < gridData.gridData.length; y++) {
-            for (let x = 0; x < gridData.gridData[y].length; x++) {
-                if (gridData.gridData[y][x] === cellValue) {
-
-                    if (y > highestY) {
-                        highestY = y;
-                        candidates = [{ x, y }];
-                    } else if (y === highestY) {
-                        candidates.push({ x, y });
+            let highestY = -1;
+            let candidates = [];
+    
+            for (let y = 0; y < gridData.gridData.length; y++) {
+                for (let x = 0; x < gridData.gridData[y].length; x++) {
+                    if (gridData.gridData[y][x] === cellValue) {
+    
+                        if (y > highestY) {
+                            highestY = y;
+                            candidates = [{ x, y }];
+                        } else if (y === highestY) {
+                            candidates.push({ x, y });
+                        }
                     }
                 }
             }
-        }
-
-        if (candidates.length > 0) {
-            let middleX = Math.floor(gridData.gridData[0].length / 2);
-            let bestCandidate = candidates[0];
-            let closestDistance = Math.abs(bestCandidate.x - middleX);
-
-            for (const candidate of candidates) {
-                let distance = Math.abs(candidate.x - middleX);
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    bestCandidate = candidate;
+    
+            if (candidates.length > 0) {
+                let middleX = Math.floor(gridData.gridData[0].length / 2);
+                let bestCandidate = candidates[0];
+                let closestDistance = Math.abs(bestCandidate.x - middleX);
+    
+                for (const candidate of candidates) {
+                    let distance = Math.abs(candidate.x - middleX);
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        bestCandidate = candidate;
+                    }
                 }
+    
+                console.log(`Setting new target to (${bestCandidate.x}, ${bestCandidate.y})`);
+                return bestCandidate;
             }
-
-            console.log(`Setting new target to (${bestCandidate.x}, ${bestCandidate.y})`);
-            return bestCandidate;
         }
     }
 
