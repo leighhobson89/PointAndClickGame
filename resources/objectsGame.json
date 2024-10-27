@@ -18,16 +18,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -49,7 +48,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "barn",
       "activeSpriteUrl": "s1",
@@ -98,16 +98,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -129,7 +128,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "marketStreet",
       "activeSpriteUrl": "s1",
@@ -177,16 +177,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -208,7 +207,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "resizeBowlInObjectsJSON"
+        "actionPickUp": "resizeBowlInObjectsJSON",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "house",
       "activeSpriteUrl": "s1",
@@ -256,16 +256,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": true,
@@ -287,7 +286,8 @@
         "npcGiveTo": "npcDonkey",
         "actionGive1": "giveCarrotToDonkey",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "bigPileOfPoo",
       "activeSpriteUrl": "s1",
@@ -335,16 +335,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -366,7 +365,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "den",
       "activeSpriteUrl": "s1",
@@ -417,20 +417,46 @@
       "waypoints": {
         "0": {
           "speed": 2,
-          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
-          "target": { "x": 1, "y": 59, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "startActions": {
+            "action1": "turnTowardsGoal",
+            "duration1": null,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
+          "target": {
+            "x": 1,
+            "y": 59,
+            "action1": "pause",
+            "duration1": 3000,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
           "points": [
-            { "x": 20, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
-            ]
+            {
+              "x": 20,
+              "y": 35,
+              "action1": "",
+              "duration1": null,
+              "action2": "",
+              "duration2": null,
+              "action3": "",
+              "duration3": null
+            }
+          ]
         }
-      },       
-       "interactable": {
+      },
+      "interactable": {
         "specialNpcObjectStandIn": true,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -453,7 +479,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "stables",
       "activeSpriteUrl": "s1",
@@ -503,16 +530,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -534,7 +560,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -581,15 +608,14 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -609,7 +635,9 @@
         "useTogetherLocation": "",
         "npcGiveTo": "",
         "actionGive1": "",
-        "actionGive2": ""
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
@@ -657,16 +685,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -687,7 +714,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
@@ -735,15 +763,14 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -763,7 +790,9 @@
         "useTogetherLocation": "seedyGuyAlley",
         "npcGiveTo": "",
         "actionGive1": "",
-        "actionGive2": ""
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "seedyGuyAlley",
       "activeSpriteUrl": "s1",
@@ -811,16 +840,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": true,
@@ -842,7 +870,8 @@
         "npcGiveTo": "npcLibrarian1",
         "actionGive1": "giveKeyToLibrarian",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "researchRoom",
       "activeSpriteUrl": "s1",
@@ -890,16 +919,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": true,
@@ -921,7 +949,8 @@
         "npcGiveTo": "npcLibrarian1",
         "actionGive1": "giveKeyToLibrarian",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
@@ -941,7 +970,7 @@
       },
       "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
       "gridPosition": {
-        "x": 27,
+        "x": 15,
         "y": 52
       },
       "offset": {
@@ -969,16 +998,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1000,7 +1028,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -1048,16 +1077,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1079,7 +1107,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "pickUpMallet"
+        "actionPickUp": "pickUpMallet",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "barn",
       "activeSpriteUrl": "s1",
@@ -1127,16 +1156,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1158,7 +1186,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "seedyGuyAlley",
       "activeSpriteUrl": "s1",
@@ -1206,16 +1235,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": true,
@@ -1237,7 +1265,8 @@
         "npcGiveTo": "npcTownDog",
         "actionGive1": "giveDogBowlOfMilk",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -1285,16 +1314,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": false,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1316,7 +1344,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "checkCarpenterQuestPhase"
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": "checkCarpenterQuestPhase"
       },
       "objectPlacementLocation": "carpenter",
       "activeSpriteUrl": "s1",
@@ -1364,16 +1393,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": true,
@@ -1395,7 +1423,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -1443,16 +1472,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1474,7 +1502,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -1522,16 +1551,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1553,7 +1581,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "bigTree",
       "activeSpriteUrl": "s1",
@@ -1604,28 +1633,79 @@
       "waypoints": {
         "0": {
           "speed": 1,
-          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
-          "target": { "x": 48, "y": 35, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "startActions": {
+            "action1": "turnTowardsGoal",
+            "duration1": null,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
+          "target": {
+            "x": 48,
+            "y": 35,
+            "action1": "pause",
+            "duration1": 3000,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
           "points": [
-            { "x": 51, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
-            ]
+            {
+              "x": 51,
+              "y": 35,
+              "action1": "",
+              "duration1": null,
+              "action2": "",
+              "duration2": null,
+              "action3": "",
+              "duration3": null
+            }
+          ]
         },
         "1": {
           "speed": 1,
-          "startActions": { "action1": "turnTowardsGoal", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null},
-          "target": { "x": 60, "y": 48, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null },
+          "startActions": {
+            "action1": "turnTowardsGoal",
+            "duration1": null,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
+          "target": {
+            "x": 60,
+            "y": 48,
+            "action1": "pause",
+            "duration1": 3000,
+            "action2": "",
+            "duration2": null,
+            "action3": "",
+            "duration3": null
+          },
           "points": [
-            { "x": 52, "y": 42, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null }
+            {
+              "x": 52,
+              "y": 42,
+              "action1": "",
+              "duration1": null,
+              "action2": "",
+              "duration2": null,
+              "action3": "",
+              "duration3": null
+            }
           ]
         }
-      },       
-       "interactable": {
+      },
+      "interactable": {
         "specialNpcObjectStandIn": true,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": false,
@@ -1648,7 +1728,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "bigTree",
       "activeSpriteUrl": "s1",
@@ -1696,16 +1777,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": true,
@@ -1727,7 +1807,8 @@
         "npcGiveTo": "npcWomanLostMirror",
         "actionGive1": "giveWomanMirror",
         "actionGive2": "",
-        "actionPickUp": "resetHookBackToTreePosition"
+        "actionPickUp": "resetHookBackToTreePosition",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "bigTree",
       "activeSpriteUrl": "s1",
@@ -1775,16 +1856,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": true,
         "canPull": true,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -1806,7 +1886,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
@@ -1838,8 +1919,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 18.6630,
-        "height": 6
+        "width": 9,
+        "height": 8
       },
       "comment": "Pile of books you use or push or pull to get the key for the research room"
     },
@@ -1854,16 +1935,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1885,7 +1965,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "house",
       "activeSpriteUrl": "s1",
@@ -1933,16 +2014,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": false,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -1964,7 +2044,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "checkCarpenterQuestPhase"
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": "checkCarpenterQuestPhase"
       },
       "objectPlacementLocation": "carpenter",
       "activeSpriteUrl": "s1",
@@ -2012,16 +2093,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": true,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -2043,7 +2123,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -2091,16 +2172,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": true,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -2122,7 +2202,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -2170,16 +2251,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -2201,7 +2281,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
@@ -2249,16 +2330,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": false,
         "canGive": false,
@@ -2280,7 +2360,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "debugRoom",
       "activeSpriteUrl": "s1",
@@ -2328,16 +2409,15 @@
       "canMove": false,
       "measureMovementYOffset": 0,
       "activeMoveSequence": 0,
-      "waypoints": {
-
-       },        
-       "interactable": {
+      "waypoints": {},
+      "interactable": {
         "specialNpcObjectStandIn": false,
         "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
         "canPickUp": false,
+        "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
         "canGive": false,
@@ -2359,7 +2439,8 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": ""
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "debugRoom",
       "activeSpriteUrl": "s1",

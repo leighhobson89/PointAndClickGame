@@ -162,7 +162,6 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const originalDonkeyX = npcData.visualPosition.x;
     const originalDonkeyY = npcData.visualPosition.y;
     const originalDonkeyWidth = npcData.dimensions.width;
-    const originalDonkeyHeight = npcData.dimensions.height;
 
     removeNpcFromEnvironment('npcDonkey');
 
@@ -311,19 +310,19 @@ function setCarpenterSpokenToTrue() {
 }
 
 function checkCarpenterQuestPhase(blank,blank2, blank3, objectId) { //this function removes the items and puts them back where they were if the player cannot pick them up yet or lets it go if they can special case for carpènter where items need to be set to canPickUp true
-    const objectStartX = getObjectData().objects[objectId].gridPosition.x;
-    const objectStartY = getObjectData().objects[objectId].gridPosition.y;
-    const objectStartWidth = getObjectData().objects[objectId].dimensions.width;
-    const objectStartHeight = getObjectData().objects[objectId].dimensions.height;
+    // const objectStartX = getObjectData().objects[objectId].gridPosition.x;
+    // const objectStartY = getObjectData().objects[objectId].gridPosition.y;
+    // const objectStartWidth = getObjectData().objects[objectId].dimensions.width;
+    // const objectStartHeight = getObjectData().objects[objectId].dimensions.height;
 
     const carpenterQuestPhase = getNpcData().npcs.npcCarpenter.interactable.questPhase;
     const carpenterDialogueColor = getNpcData().npcs.npcCarpenter.interactable.dialogueColor;
-    let dialogueString;
     if (carpenterQuestPhase < 2) {
+        let dialogueString;
         dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpPliersOrNailsYet[getLanguage()];
-        addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight, null);
-        handleInventoryAdjustment(objectId, 1);
-        drawInventory(0);
+        // addObjectToEnvironment(objectId, objectStartX, objectStartY, 0, 0, objectStartWidth, objectStartHeight, null);
+        // handleInventoryAdjustment(objectId, 1);
+        // drawInventory(0);
 
         showText(dialogueString, carpenterDialogueColor);        
     }
@@ -334,7 +333,10 @@ function moveCarpenterToStables() {
     console.log("carpenter gone to stables");
     removeNpcFromEnvironment('npcCarpenter');
     setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
+    setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
+    setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
 }
+
 function makeCowTalkableAfterSpeakingToFarmer() {
     setNpcData(`npcCow`, `interactable.canTalk`, true);
 }
@@ -554,11 +556,19 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             }
         }
 
-        if (realVerbUsed === "verbPickUp") {
+        if (realVerbUsed === "verbPickUp" && getObjectData().objects[special].interactable.canPickUpNow) {
             try {
                 eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, '${special}')`);
             } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
+                console.error(`Error executing function ${objectEvent.actionPickUp}:`, e);
+            }
+        }
+
+        if (realVerbUsed === "verbPickUp" && !getObjectData().objects[special].interactable.canPickUpNow) {
+            try {
+                eval(`${objectEvent.actionCanPickUpButNotYet}(${null}, ${null}, ${null}, '${special}')`);
+            } catch (e) {
+                console.error(`Error executing function ${objectEvent.actionCanPickUpButNotYet}:`, e);
             }
         }
 
@@ -566,7 +576,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
             try {
                 eval(`${objectEvent.dialogueEvent}(${null}, ${null}, ${null}, '${special}')`);
             } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
+                console.error(`Error executing function ${objectEvent.dialogueEvent}:`, e);
             }
         }
     }

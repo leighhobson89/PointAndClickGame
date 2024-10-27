@@ -115,7 +115,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 
     if (!exitOrNot) {
         const quantity = object.interactable.quantity;
-        if (object?.interactable?.canPickUp) {
+        if (object.interactable.canPickUp && object.interactable.canPickUpNow) {
             const dialogueString = dialogueData.dialogue.objectInteractions[verb]?.[objectId]?.[language];
             if (dialogueString) {
                 showText(dialogueString, getColorTextPlayer());
@@ -123,6 +123,12 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
                 console.warn(`No dialogue found for ${verb} and object ${objectId} in language ${language}`);
             }
             pickUpItem(objectId, quantity, verb, dialogueString);
+        } else if (!object.interactable.canPickUpNow) {
+            const objectEvent = getObjectEvents(objectId);
+
+            if (objectEvent.actionCanPickUpButNotYet !== "") {
+                executeInteractionEvent(objectEvent, "", verb, objectId);
+            }
         } else {
             handleCannotPickUpMessage(language, dialogueData);
         }
