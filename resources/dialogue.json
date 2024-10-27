@@ -2556,11 +2556,11 @@
               "exitOption": {
                 "phase": {
                   "0": {
-                    "en": "Right I'm going!",
-                    "es": "¡Está bien, me voy!",
-                    "de": "Okay, ich gehe!",
-                    "it": "Va bene, sto andando!",
-                    "fr": "D'accord, j'y vais !"
+                    "en": "Right I'm going!\u0020",
+                    "es": "¡Está bien, me voy!\u0020",
+                    "de": "Okay, ich gehe!\u0020",
+                    "it": "Va bene, sto andando!\u0020",
+                    "fr": "D'accord, j'y vais !\u0020"
                   },
                   "1": {
                     "en": "Thanks a lot, I'm waiting here! Go, go!!",

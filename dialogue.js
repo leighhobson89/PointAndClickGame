@@ -411,14 +411,24 @@ export function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase
         removedDialogueOptions.forEach(option => {
             if (option.npcId === npcId) {
                 let optionText = null;
-                if (getNpcData().npcs[npcId].interactable.questCutOffNumber === questPhase) {
+                let optionId;
+                
+                //if questoption doesnt have any dialogue options return
+                if (getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions) {
+                    optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
+                } else {
+                    return;
+                }
+
+                if (optionId) {
+                    optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
+                }
+
+                if (getNpcData().npcs[npcId].interactable.questCutOffNumber === questPhase || (typeof optionText === 'string' && optionText.endsWith(' '))) {
+                    return;
+                } else if (typeof optionText !== 'string') {
                     return;
                 } else {
-                    const optionId = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId];
-                    if (optionId) {
-                        optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
-                    }
-
                     if (dialogueStrings.includes(optionText)) {
                         console.log(`Match found for removed dialogue option ${option.optionId}: "${optionText}"`);
 
