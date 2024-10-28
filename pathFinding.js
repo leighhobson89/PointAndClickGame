@@ -6,9 +6,6 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
 
-    const baseCellWidth = 15;  
-    const baseCellHeight = 5;  
-
     let entity;
     let entityDrawWidth;
     let entityDrawHeight;
@@ -20,8 +17,8 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
             entity = getObjectData().objects[subject];
         }
 
-        entityDrawWidth = (entity.dimensions.width * (cellWidth / baseCellWidth));
-        entityDrawHeight = (entity.dimensions.height * (cellHeight / baseCellHeight));
+        entityDrawWidth = (entity.dimensions.width);
+        entityDrawHeight = (entity.dimensions.height);
     }
 
     if (subject === 'player') {

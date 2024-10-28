@@ -172,7 +172,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
         setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); // set this number when positioned
         setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
         setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
-        setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 50);
+        setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 90);
         setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
         setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
     }, 50);

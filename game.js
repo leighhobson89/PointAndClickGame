@@ -1119,6 +1119,10 @@ function getLocationName(id) {
 }
 
 export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite, isObjectTrueNpcFalse) {
+    const gridData = getAllGridData();
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+    
     let entity;
     let entityData;
     let roomName;
@@ -1136,9 +1140,6 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
     }
 
     const roomGridData = gridData[roomName];
-    const gridData = getAllGridData();
-    const cellWidth = getCanvasCellWidth();
-    const cellHeight = getCanvasCellHeight();
 
     // Calculate the dimensions in grid cells
     const widthInCells = Math.floor(width / cellWidth) + 1;

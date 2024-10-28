@@ -180,14 +180,13 @@ export function removeObjectFromEnvironment(objectId) {
             // After removal, check for references to the objectId in gridData
             let foundReference = false;
 
-            for (let y = 0; y < gridData.length; y++) {
-                for (let x = 0; x < gridData[y].length; x++) {
-                    const cell = gridData[y][x];
-
+            for (const [y, row] of gridData.entries()) {
+                for (const [x, cell] of row.entries()) {
+            
                     // Check if the cell references the objectId (assuming it starts with 'o')
                     if (cell.slice(1) === objectId) {
                         foundReference = true;
-                        gridData[y][x] = 'n'; // This might cause problems if the object was on a w or other to start with 
+                        gridData[y][x] = 'n'; // This might cause problems if the object was on a w or other to start with
                     }
                 }
             }
