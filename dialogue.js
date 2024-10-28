@@ -88,18 +88,18 @@ export async function dialogueEngine(realVerbUsed, npcId) {
                 if (dialogueOptionsTexts.length > 0 && (type === 'starting' || type === 'advancing') || type === 'looping') {
                     let scrollReserve = [];
             
-                    for (let i = 0; i < dialogueOptionsTexts.length; i++) {
-                        let dialogueOptionText = dialogueOptionsTexts[i];   
+                    for (const [i, dialogueOptionText] of dialogueOptionsTexts.entries()) {   
                         const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions;
                         
-                        for (let phaseId in dialogueData) {
+                        for (const phaseId in dialogueData) {
                             if (dialogueData[phaseId][language] === dialogueOptionText) {
                                 dialogueRowsOptionsIds[dialogueOptionsCount + 1] = phaseId;
                                 break;
                             }
                         }
+                    
                         dialogueOptionsCount++;
-                        scrollReserve.push([dialogueOptionsCount + 1, dialogueOptionText]); 
+                        scrollReserve.push([dialogueOptionsCount + 1, dialogueOptionText]);
                     }
 
                     setCurrentDialogueRowsOptionsIds(dialogueRowsOptionsIds);

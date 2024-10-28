@@ -460,9 +460,8 @@ export function drawPlayerNpcsAndObjects(ctx) {
     const drawnNpcs = new Set();
 
     // Draw objects and NPCs
-    for (let y = 0; y < gridData.length; y++) {
-        for (let x = 0; x < gridData[y].length; x++) {
-            const cellValue = gridData[y][x];
+    for (const [y, row] of gridData.entries()) {
+        for (const [x, cellValue] of row.entries()) {
 
             // Draw objects
             if (cellValue.startsWith('o')) {
@@ -496,7 +495,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     const startY = Math.floor(drawY / cellHeight);
                     const widthInCells = Math.ceil(scaledWidth / cellWidth);
                     const heightInCells = Math.ceil(scaledHeight / cellHeight);
-                    
+
                     for (let gx = startX; gx < startX + widthInCells; gx++) {
                         for (let gy = startY; gy < startY + heightInCells; gy++) {
                             if (gx >= 0 && gy >= 0 && gx < gridData[0].length && gy < gridData.length) {
@@ -551,6 +550,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
             }
         }
     }
+
 
     if (firstDraw) {
         setResizedObjectsGridState(gridData);
