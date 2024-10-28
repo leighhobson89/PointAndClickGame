@@ -69,6 +69,10 @@ export function aStarPathfinding(start, target, action, subject, waypoints = [],
 }
 
 function aStarSinglePathfinding(start, target, action, subject, waypoints, overrideCellCost, finalTarget) {
+    if (target.x === null || target.y === null) {
+        return;
+    }
+    
     let npcResizedYet = false;
     const gridData = getGridData();
     const player = getPlayerObject();
@@ -79,9 +83,11 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
     const closedList = [];
     const path = [];
 
-    const redirectedTarget = checkAndRedirectToDoor(target);
-    if (redirectedTarget && subject === 'player') {
-        target = redirectedTarget;
+    if (subject === 'player') {
+        const redirectedTarget = checkAndRedirectToDoor(target);
+        if (redirectedTarget) {
+            target = redirectedTarget;
+        }
     }
 
     function heuristic(a, b) {
@@ -374,22 +380,22 @@ function checkAndRedirectToDoor(target) {
 }
 
 function removeNValuesFromPathEnd(path, finalTarget) {
-    const gridData = getGridData();  // Fetch grid data directly for cell lookups
+    const gridData = getGridData();
     const finalX = finalTarget.x;
     const finalY = finalTarget.y;
     const finalTargetCellValue = gridData.gridData[finalY][finalX];
     
     while (path.length > 0) {
-        const { y, x } = path[0];  // Check the first element
+        const { y, x } = path[0];
         const cellType = gridData.gridData[y][x];
         console.log(cellType);
         
         if (cellType.startsWith('w') || finalTargetCellValue !== 'n') {
-            return path;  // Stop and return the remaining path
+            return path;
         } else {
-            path.shift();  // Remove the first element
+            path.shift();
         }
     }
-    return [];  // Return an empty array if no 'w' cell is found
+    return [];
     
 }

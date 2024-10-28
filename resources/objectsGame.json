@@ -1631,72 +1631,8 @@
       "measureMovementYOffset": -5,
       "activeMoveSequence": 0,
       "waypoints": {
-        "0": {
-          "speed": 1,
-          "startActions": {
-            "action1": "turnTowardsGoal",
-            "duration1": null,
-            "action2": "",
-            "duration2": null,
-            "action3": "",
-            "duration3": null
-          },
-          "target": {
-            "x": 48,
-            "y": 35,
-            "action1": "pause",
-            "duration1": 3000,
-            "action2": "",
-            "duration2": null,
-            "action3": "",
-            "duration3": null
-          },
-          "points": [
-            {
-              "x": 51,
-              "y": 35,
-              "action1": "",
-              "duration1": null,
-              "action2": "",
-              "duration2": null,
-              "action3": "",
-              "duration3": null
-            }
-          ]
-        },
-        "1": {
-          "speed": 1,
-          "startActions": {
-            "action1": "turnTowardsGoal",
-            "duration1": null,
-            "action2": "",
-            "duration2": null,
-            "action3": "",
-            "duration3": null
-          },
-          "target": {
-            "x": 60,
-            "y": 48,
-            "action1": "pause",
-            "duration1": 3000,
-            "action2": "",
-            "duration2": null,
-            "action3": "",
-            "duration3": null
-          },
-          "points": [
-            {
-              "x": 52,
-              "y": 42,
-              "action1": "",
-              "duration1": null,
-              "action2": "",
-              "duration2": null,
-              "action3": "",
-              "duration3": null
-            }
-          ]
-        }
+          "0": {"speed": 1, "startActions": {"action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}, "target": {"x": 48, "y": 35, "action1": "pause", "duration1": 3000, "action2": "", "duration2": null, "action3": "", "duration3": null}, "points": [{"x": 51, "y": 35, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}]},
+          "99": {"speed": 1, "startActions": {"action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}, "target": {"x": null, "y": null, "action1": "", "duration1": "", "action2": "", "duration2": null, "action3": "", "duration3": null}, "points": [{"x": null, "y": null, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}]}
       },
       "interactable": {
         "specialNpcObjectStandIn": true,

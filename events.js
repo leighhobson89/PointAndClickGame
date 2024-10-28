@@ -1,4 +1,4 @@
-import { getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen } from "./constantsAndGlobalVars.js";
+import { getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen, getPreAnimationGridState } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -75,18 +75,20 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 }
 
 async function moveParrotToFlyer() {
-    let gridData = getGridData();
-    setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
-    setObjectData(`objectParrakeet`, `activeSpriteUrl`, 's2');
-    setObjectData(`objectParrakeet`, `canMove`, true);
-    addEntityPath(`objectParrakeet`, getObjectData().objects['objectParrakeet'].canMove, 'bigTree');
-
-    const path = populatePathForEntityMovement('objectParrakeet', 0);
-    path.splice(0,3);
-    setEntityPaths('objectParrakeet', 'path', path);
-
-    console.log(getEntityPaths()['objectParrakeet'].path);
-    await waitForAnimationToFinish(getParrotCompletedMovingToFlyer);
+    if (!getParrotCompletedMovingToFlyer()) {
+        let gridData = getGridData();
+        setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
+        setObjectData(`objectParrakeet`, `activeSpriteUrl`, 's2');
+        setObjectData(`objectParrakeet`, `canMove`, true);
+        addEntityPath(`objectParrakeet`, getObjectData().objects['objectParrakeet'].canMove, 'bigTree');
+    
+        const path = populatePathForEntityMovement('objectParrakeet', 0);
+        path.splice(0,3);
+        setEntityPaths('objectParrakeet', 'path', path);
+    
+        console.log(getEntityPaths()['objectParrakeet'].path);
+        await waitForAnimationToFinish(getParrotCompletedMovingToFlyer);
+    }
 }
 
 async function waitForAnimationToFinish(animationGetterName) {

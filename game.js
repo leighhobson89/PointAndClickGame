@@ -89,6 +89,25 @@ function movePlayerTowardsTarget() {
 
     let targetX, targetY;
 
+    let commandToPerform;
+    let cellClickValue;
+    console.log(cellValue);
+
+    if (getClickPoint().x !== null && getClickPoint().y !== null) {
+        cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
+    } else {
+        return;
+    }
+
+    const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
+
+
+    if (screenOrObjectNameAndHoverStatus[1]) {
+        commandToPerform = constructCommand(getUpcomingAction(), true);
+    } else {
+        commandToPerform = constructCommand(getUpcomingAction(), false);
+    }
+
     if (getTransitioningNow()) {
         const exit = 'e' + getExitNumberToTransitionTo();
         const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
@@ -97,6 +116,7 @@ function movePlayerTowardsTarget() {
         // Check if player has reached the final position for the transition
         if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
             Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
+            setClickPoint({x: null, y: (null)});
             entityPaths.player.path = [];
             entityPaths.player.currentIndex = 0;
             setTransitioningNow(false);
@@ -107,13 +127,31 @@ function movePlayerTowardsTarget() {
         }
     }
 
-    // Normal movement logic
-    if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
-        targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
-        targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
-    } else {
-        return; // No target to move toward
+    if (!commandToPerform) {
+        return;
     }
+
+    // Normal movement logic
+    console.log("command to perform = " + commandToPerform.verbKey);
+    if (commandToPerform.verbKey === 'verbWalkTo' || commandToPerform.verbKey === 'interactionWalkingTo' || commandToPerform.verbKey === 'verbOpen' || commandToPerform.verbKey === 'verbClose'  || commandToPerform.verbKey === 'verbPickUp') {
+        if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
+            targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
+            targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
+        } else {
+            return; // No target to move toward
+        }
+    } else {
+        if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length - 10) {
+            targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
+            targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
+        } else if (entityPaths.player.path.length > 0) {
+            targetX = (playerGridX + 0.5) * gridSizeX;
+            targetY = (playerGridY + 0.5) * gridSizeY;
+        } else {
+            return; // No target to move toward
+        }
+    }
+
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
     //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
@@ -141,24 +179,14 @@ function movePlayerTowardsTarget() {
             setTargetXPlayer(nextStep.x * gridSizeX);
             setTargetYPlayer(nextStep.y * gridSizeY - player.height);
         } else {
+            setClickPoint({x: null, y: (null)});
             // Logic for when the player reaches the final destination
             if (getCantGoThatWay()) {
                 let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
                 showText(dialogueString, getColorTextPlayer());
                 setCantGoThatWay(false);
                 return;
-            } else {
-                let commandToPerform;
-                console.log(cellValue);
-                const cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
-                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
-    
-                if (screenOrObjectNameAndHoverStatus[1]) {
-                    commandToPerform = constructCommand(getUpcomingAction(), true);
-                } else {
-                    commandToPerform = constructCommand(getUpcomingAction(), false);
-                }
-    
+            } else {    
                 performCommand(commandToPerform, false); // Perform the command
                 setCurrentlyMovingToAction(false);
                 if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
@@ -1603,7 +1631,13 @@ export function initializeNonPlayerMovementsForScreen(screen) {
             entityPaths[entityId].currentIndex = 0;
 
             console.log(`Starting movements for ${entityId} on screen ${screen}`);
-            path = populatePathForEntityMovement(entityId, 0);
+            if (entityId.startsWith('o')) {
+                path = populatePathForEntityMovement(entityId, getObjectData().objects[entityId].activeMoveSequence);
+            }
+
+            if (entityId.startsWith('n')) {
+                path = populatePathForEntityMovement(entityId, getNpcData().npcs[entityId].activeMoveSequence);
+            }
 
             path.splice(0,3); //workaround for dodgy animation at start
 
@@ -1648,6 +1682,10 @@ export function populatePathForEntityMovement(entityId, moveSequence) {
         return;
     }
 
+    if (!waypointSequence.target) {
+        return;
+    }
+
     const target = { x: waypointSequence.target.x, y: waypointSequence.target.y };
     const waypoints = waypointSequence.points.map(point => ({ x: point.x, y: point.y }));
     console.log(`Running pathfinder from (${start.x}, ${start.y}) to (${target.x}, ${target.y}) with waypoints:`, waypoints);
@@ -1680,7 +1718,8 @@ export function setEntityPaths(entityId, key, value) {
 export function checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityId) {
     switch (entityId) {
         case 'objectParrakeet':
-            setParrotCompletedMovingToFlyer(true); 
+            setParrotCompletedMovingToFlyer(true);
+            setObjectData(`objectParrakeet`, `activeMoveSequence`, 99);
             break;
         case 'objectDonkeyFake':
             setDonkeyMovedOffScreen(true); 
