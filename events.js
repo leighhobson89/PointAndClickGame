@@ -166,6 +166,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const originalDonkeyWidth = npcData.dimensions.width;
 
     removeNpcFromEnvironment('npcDonkey');
+    setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
         // Move object donkey to place of real and show
