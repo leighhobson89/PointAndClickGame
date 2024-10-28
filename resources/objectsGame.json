@@ -1724,7 +1724,7 @@
         "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
-        "canGive": true,
+        "canGive": false,
         "stackable": false,
         "quantity": 1,
         "decrementQuantityOnUse": true,
