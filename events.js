@@ -1,7 +1,7 @@
 import { getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
-import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addObjectToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
+import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -54,7 +54,7 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     setAnimationInProgress(true);
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 2);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 4.6);
-    addObjectToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null);
+    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true);
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -191,7 +191,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setTimeout(() => {
     setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
-    addObjectToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11);
+    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true);
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
@@ -289,7 +289,7 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    addObjectToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12);
+    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true);
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
@@ -457,7 +457,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setObjectData(`objectBowl`, `dimensions.width`, 2);
     setObjectData(`objectBowl`, `dimensions.height`, 4);
-    addObjectToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null); //add empty bowl back in for dog having drunk it
+    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setAnimationInProgress(true);

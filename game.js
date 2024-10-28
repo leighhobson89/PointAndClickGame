@@ -1118,26 +1118,27 @@ function getLocationName(id) {
     }
 }
 
-export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite) {
-    setObjectData(`${objectId}`, `objectPlacementLocation`, `${getCurrentScreenId()}`);
-    const objectsData = getObjectData();
+export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite, isObjectTrueNpcFalse) {
+    let entity;
+    let entityData;
+    let roomName;
+
+    if (isObjectTrueNpcFalse) {
+        setObjectData(`${entityId}`, `objectPlacementLocation`, `${getCurrentScreenId()}`);
+        entityData = getObjectData();
+        entity = entityData.objects[entityId]; // Fetch the object data
+        roomName = entity.objectPlacementLocation;
+    } else {
+        setNpcData(`${entityId}`, `npcPlacementLocation`, `${getCurrentScreenId()}`);
+        entityData = getNpcData();
+        entity = entityData.npcs[entityId]; // Fetch the object data
+        roomName = entity.npcPlacementLocation;
+    }
+
+    const roomGridData = gridData[roomName];
     const gridData = getAllGridData();
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
-
-    const object = objectsData.objects[objectId]; // Fetch the object data
-    if (!object) {
-        console.warn(`Object with ID ${objectId} not found!`);
-        return;
-    }
-
-    const roomName = object.objectPlacementLocation;
-    const roomGridData = gridData[roomName];
-    
-    if (!roomGridData) {
-        console.warn(`No grid found for room: ${roomName}`);
-        return;
-    }
 
     // Calculate the dimensions in grid cells
     const widthInCells = Math.floor(width / cellWidth) + 1;
@@ -1152,23 +1153,27 @@ export function addObjectToEnvironment(objectId, xPos, yPos, xOffset = 0, yOffse
         for (let y = yPos; y < yPos + heightInCells; y++) {
             const originalValue = roomGridData[y][x];
 
-            // Store original value in case needed for resetting
-            setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);
-            roomGridData[y][x] = `o${objectId}`;
+            if (isObjectTrueNpcFalse) {
+                setOriginalValueInCellWhereObjectPlaced(roomName, x, y, entityId, originalValue);
+                roomGridData[y][x] = `o${entityId}`;
+            } else {
+                setOriginalValueInCellWhereNpcPlaced(roomName, x, y, entityId, originalValue);
+                roomGridData[y][x] = `c${entityId}`;
+            }
         }
     }
 
     // Update object's visual position based on the grid and offsets
-    object.visualPosition = {
+    entity.visualPosition = {
         x: xPos * cellWidth + offsetX,
         y: yPos * cellHeight + offsetY
     };
 
     if (sprite) {
-        object.activeSpriteUrl = sprite;
+        entity.activeSpriteUrl = sprite;
     }
 
-    console.log(`Placed object ${objectId} in room ${roomName} at grid position (${xPos}, ${yPos}) with visual position (${object.visualPosition.x}, ${object.visualPosition.y}), using sprite ${sprite}`);
+    console.log(`Placed entity ${entityId} in room ${roomName} at grid position (${xPos}, ${yPos}) with visual position (${entity.visualPosition.x}, ${entity.visualPosition.y}), using sprite ${sprite}`);
 }
 
 export function setUpObjectsAndNpcs() { 
