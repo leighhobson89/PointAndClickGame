@@ -1461,104 +1461,6 @@ export function reconcileGridState() {
     setPreAnimationGridState('clear', null, null, null);
 }
 
-//-------------------------------------------------------------------------------------------------------------
-
-export function setGameState(newState) {
-    console.log("Setting game state to " + newState);
-    setGameStateVariable(newState);
-
-    switch (newState) {
-        case getMenuState():
-            // Handle menu state
-            getElements().menu.classList.remove('d-none');
-            getElements().menu.classList.add('d-flex');
-            // Hide unnecessary elements
-            getElements().buttonRow.classList.add('d-none');
-            getElements().buttonRow.classList.remove('d-flex');
-            getElements().canvasContainer.classList.remove('d-flex');
-            getElements().canvasContainer.classList.add('d-none');
-            getElements().returnToMenuButton.classList.remove('d-flex');
-            getElements().returnToMenuButton.classList.add('d-none');
-            // Handle language buttons
-            const languageButtons = [getElements().btnEnglish, getElements().btnSpanish, getElements().btnGerman, getElements().btnItalian, getElements().btnFrench];
-            languageButtons.forEach(button => {
-                button.classList.remove('active');
-            });
-            const currentLanguage = getLanguage();
-            console.log("Language is " + currentLanguage);
-            switch (currentLanguage) {
-                case 'en': getElements().btnEnglish.classList.add('active'); break;
-                case 'es': getElements().btnSpanish.classList.add('active'); break;
-                case 'de': getElements().btnGerman.classList.add('active'); break;
-                case 'it': getElements().btnItalian.classList.add('active'); break;
-                case 'fr': getElements().btnFrench.classList.add('active'); break;
-            }
-
-            if (getGameInProgress()) {
-                getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage(), 'ui')}`;
-                getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage(), 'ui')}`;
-            }
-            break;
-
-        case getGameVisibleActive():
-            // Handle the active game state
-            getElements().menu.classList.remove('d-flex');
-            getElements().menu.classList.add('d-none');
-            getElements().buttonRow.classList.remove('d-none');
-            getElements().buttonRow.classList.add('d-flex');
-            getElements().canvasContainer.classList.remove('d-none');
-            getElements().canvasContainer.classList.add('d-flex');
-            getElements().returnToMenuButton.classList.remove('d-none');
-            getElements().returnToMenuButton.classList.add('d-flex');
-            // Set button labels based on game state
-            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
-            // Set verb buttons for actions
-            getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnOpen.innerHTML = `${localize('verbOpen', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnClose.innerHTML = `${localize('verbClose', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnPush.innerHTML = `${localize('verbPush', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
-            getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
-
-            // Hide the verbs and inventory container
-            getElements().verbsInventoryContainer.classList.add('d-flex');
-            getElements().verbsInventoryContainer.classList.remove('d-none');
-
-            // Show the dialogue container
-            getElements().dialogueContainer.classList.remove('d-flex');
-            getElements().dialogueContainer.classList.add('d-none');
-
-            break;
-
-            case getInteractiveDialogueState():
-            getElements().menu.classList.remove('d-flex');
-            getElements().menu.classList.add('d-none');
-            getElements().buttonRow.classList.remove('d-none');
-            getElements().buttonRow.classList.add('d-flex');
-            getElements().canvasContainer.classList.remove('d-none');
-            getElements().canvasContainer.classList.add('d-flex');
-            getElements().returnToMenuButton.classList.remove('d-none');
-            getElements().returnToMenuButton.classList.add('d-flex');
-            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
-
-            // Hide the verbs and inventory container
-            getElements().verbsInventoryContainer.classList.add('d-none');
-            getElements().verbsInventoryContainer.classList.remove('d-flex');
-
-            // Show the dialogue container
-            getElements().dialogueContainer.classList.remove('d-none');
-            getElements().dialogueContainer.classList.add('d-flex');
-            break;
-
-        default:
-            console.log("Unknown game state");
-            break;
-    }
-}
-
 export function changeSpriteAndHoverableStatus(spriteUrlSNumber, objectId, showTrueHideFalse) {
     setObjectData(`${objectId}`, `activeSpriteUrl`, spriteUrlSNumber);
     setObjectData(`${objectId}`, `interactable.canHover`, showTrueHideFalse);
@@ -1727,5 +1629,99 @@ export function checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityId) {
     }
 }
 
+//-------------------------------------------------------------------------------------------------------------
 
+export function setGameState(newState) {
+    console.log("Setting game state to " + newState);
+    setGameStateVariable(newState);
 
+    switch (newState) {
+        case getMenuState():
+            // Handle menu state
+            getElements().menu.classList.remove('d-none');
+            getElements().menu.classList.add('d-flex');
+            // Hide unnecessary elements
+            getElements().buttonRow.classList.add('d-none');
+            getElements().buttonRow.classList.remove('d-flex');
+            getElements().canvasContainer.classList.remove('d-flex');
+            getElements().canvasContainer.classList.add('d-none');
+            getElements().returnToMenuButton.classList.remove('d-flex');
+            getElements().returnToMenuButton.classList.add('d-none');
+            // Handle language buttons
+            const languageButtons = [getElements().btnEnglish, getElements().btnSpanish, getElements().btnGerman, getElements().btnItalian, getElements().btnFrench];
+            languageButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            const currentLanguage = getLanguage();
+            console.log("Language is " + currentLanguage);
+            switch (currentLanguage) {
+                case 'en': getElements().btnEnglish.classList.add('active'); break;
+                case 'es': getElements().btnSpanish.classList.add('active'); break;
+                case 'de': getElements().btnGerman.classList.add('active'); break;
+                case 'it': getElements().btnItalian.classList.add('active'); break;
+                case 'fr': getElements().btnFrench.classList.add('active'); break;
+            }
+
+            if (getGameInProgress()) {
+                getElements().copyButtonSavePopup.innerHTML = `${localize('copyButton', getLanguage(), 'ui')}`;
+                getElements().closeButtonSavePopup.innerHTML = `${localize('closeButton', getLanguage(), 'ui')}`;
+            }
+            break;
+
+        case getGameVisibleActive():
+            // Handle the active game state
+            getElements().menu.classList.remove('d-flex');
+            getElements().menu.classList.add('d-none');
+            getElements().buttonRow.classList.remove('d-none');
+            getElements().buttonRow.classList.add('d-flex');
+            getElements().canvasContainer.classList.remove('d-none');
+            getElements().canvasContainer.classList.add('d-flex');
+            getElements().returnToMenuButton.classList.remove('d-none');
+            getElements().returnToMenuButton.classList.add('d-flex');
+            // Set button labels based on game state
+            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
+            // Set verb buttons for actions
+            getElements().btnLookAt.innerHTML = `${localize('verbLookAt', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPickUp.innerHTML = `${localize('verbPickUp', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnUse.innerHTML = `${localize('verbUse', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnOpen.innerHTML = `${localize('verbOpen', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnClose.innerHTML = `${localize('verbClose', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPush.innerHTML = `${localize('verbPush', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnPull.innerHTML = `${localize('verbPull', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnTalkTo.innerHTML = `${localize('verbTalkTo', getLanguage(), 'verbsActionsInteraction')}`;
+            getElements().btnGive.innerHTML = `${localize('verbGive', getLanguage(), 'verbsActionsInteraction')}`;
+
+            // Hide the verbs and inventory container
+            getElements().verbsInventoryContainer.classList.add('d-flex');
+            getElements().verbsInventoryContainer.classList.remove('d-none');
+
+            // Show the dialogue container
+            getElements().dialogueContainer.classList.remove('d-flex');
+            getElements().dialogueContainer.classList.add('d-none');
+            break;
+
+            case getInteractiveDialogueState():
+            getElements().menu.classList.remove('d-flex');
+            getElements().menu.classList.add('d-none');
+            getElements().buttonRow.classList.remove('d-none');
+            getElements().buttonRow.classList.add('d-flex');
+            getElements().canvasContainer.classList.remove('d-none');
+            getElements().canvasContainer.classList.add('d-flex');
+            getElements().returnToMenuButton.classList.remove('d-none');
+            getElements().returnToMenuButton.classList.add('d-flex');
+            getElements().returnToMenuButton.innerHTML = `${localize('menuTitle', getLanguage(), 'ui')}`;
+
+            // Hide the verbs and inventory container
+            getElements().verbsInventoryContainer.classList.add('d-none');
+            getElements().verbsInventoryContainer.classList.remove('d-flex');
+
+            // Show the dialogue container
+            getElements().dialogueContainer.classList.remove('d-none');
+            getElements().dialogueContainer.classList.add('d-flex');
+            break;
+
+        default:
+            console.log("Unknown game state");
+            break;
+    }
+}

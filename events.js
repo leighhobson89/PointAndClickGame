@@ -8,6 +8,12 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
+
+//cutscene for carpenter
+// trigger the event when the screen changes at the right time
+// change the dialogue engine to handle situations when flag is set for cutscene dialogue between two npcs and just play the dialogue out with the order thing and then after it finishes switch the game state back
+
+
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
     const objectData = getObjectData().objects[doorId];
