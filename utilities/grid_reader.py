@@ -124,14 +124,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #MAIN PC
-    base_path_main = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\'
-    image_path = os.path.join(base_path_main, 'grid-assets', f'{args.screen_name}.png')
-    output_path = os.path.join(base_path_main, 'jsonOutput', f'{args.screen_name}.json')
+    # base_path_main = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\'
+    # image_path = os.path.join(base_path_main, 'grid-assets', f'{args.screen_name}.png')
+    # output_path = os.path.join(base_path_main, 'jsonOutput', f'{args.screen_name}.json')
 
     #LAPTOP (commented out, but follows the same dynamic path approach)
-    # base_path_laptop = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\'
-    # image_path = os.path.join(base_path_laptop, 'grid-assets', f'{args.screen_name}.png')
-    # output_path = os.path.join(base_path_laptop, 'jsonOutput', f'{args.screen_name}.json')
+    base_path_laptop = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\'
+    image_path = os.path.join(base_path_laptop, 'grid-assets', f'{args.screen_name}.png')
+    output_path = os.path.join(base_path_laptop, 'jsonOutput', f'{args.screen_name}.json')
     grid = process_image(image_path)
     
     # Identify and label exit zones
