@@ -13,6 +13,9 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 // trigger the event when the screen changes at the right time
 // change the dialogue engine to handle situations when flag is set for cutscene dialogue between two npcs and just play the dialogue out with the order thing and then after it finishes switch the game state back
 
+async function cutSceneCarpenterFarmerDialogue() {
+    console.log ("farmer and carpenter dialogue triggered");
+}
 
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
