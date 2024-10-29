@@ -1,4 +1,6 @@
 import {
+    setAnimationInProgress,
+    setPreAnimationGridState,
     getDrawGrid,
     setDrawGrid,
     getInitialBackgroundUrl,
@@ -1164,6 +1166,10 @@ export function animateTransitionAndChangeBackground() {
             initializePlayerPosition(startX, startY);
             setDisplayText("", null);
             fadeBackToGameInTransition();
+
+            setAnimationInProgress(false);
+            console.log("about to clear pre animation grid")
+            setPreAnimationGridState('clear', null, null, null);
 
             setTransitioningNow(true);
             canvas.style.pointerEvents = "none";

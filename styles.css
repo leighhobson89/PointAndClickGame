@@ -540,7 +540,7 @@ label {
 .wheel-menu {
     overflow-x: auto;
     overflow-y: hidden;
-    max-height: 150px;
+    max-height: 600px;
     max-width: 150px;
     white-space: nowrap;
 }

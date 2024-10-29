@@ -8,6 +8,15 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
+
+//cutscene for carpenter
+// trigger the event when the screen changes at the right time
+// change the dialogue engine to handle situations when flag is set for cutscene dialogue between two npcs and just play the dialogue out with the order thing and then after it finishes switch the game state back
+
+async function cutSceneCarpenterFarmerDialogue() {
+    console.log ("farmer and carpenter dialogue triggered");
+}
+
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
     const objectData = getObjectData().objects[doorId];
@@ -49,12 +58,12 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const language = getLanguage();
     let gridData = getGridData();
 
-    removeObjectFromEnvironment('objectParrotHook');
+    removeObjectFromEnvironment('objectParrotHook', 'bigTree');
 
     setAnimationInProgress(true);
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 2);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 4.6);
-    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true);
+    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true, 'bigTree');
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -119,8 +128,7 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
 
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
     let gridData = getGridData();
-    const objectSturdyAnchor = 'objectSturdyAnchor';
-    removeObjectFromEnvironment(objectSturdyAnchor);
+    removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');
 
     await showText(dialogueString, getColorTextPlayer());
 
@@ -165,7 +173,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const originalDonkeyY = npcData.visualPosition.y;
     const originalDonkeyWidth = npcData.dimensions.width;
 
-    removeNpcFromEnvironment('npcDonkey');
+    removeNpcFromEnvironment('npcDonkey', 'stables');
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
@@ -194,7 +202,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setTimeout(() => {
     setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
-    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true);
+    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true, 'stables');
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
@@ -225,7 +233,7 @@ async function moveDonkeyOffScreen() {
 
     changeCanvasBgTemp('./resources/backgrounds/stables.png');
 
-    removeObjectFromEnvironment('objectDonkeyFake');
+    removeObjectFromEnvironment('objectDonkeyFake', 'stables');
     setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
 
     let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
@@ -292,7 +300,7 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true);
+    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true, 'bigTree');
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
@@ -308,8 +316,23 @@ function resizeBowlInObjectsJSON() {
 }
 
 function setCarpenterSpokenToTrue() {
+    const allGridData = getAllGridData();
     setNpcData(`npcCarpenter`, `interactable.spokenToYet`, true);
     console.log("spoke to carpenter now");
+
+    removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
+
+    addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, 6, 14, 's1', false, 'cowPath');
+    setPreAnimationGridState(allGridData.cowPath, 'npcCow', false);
+
+    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, 10, 8, 's1', false, 'cowPath');
+    setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
+    
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
+
+    setNpcData(`npcCow`,`interactable.canHover`, true);
+    setNpcData(`npcFarmer`,`interactable.canHover`, true);
 }
 
 function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) {
@@ -325,11 +348,40 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
 
 //when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the pliers and nails
 function moveCarpenterToStables() {
+    const allGridData = getAllGridData();
     console.log("carpenter gone to stables");
-    removeNpcFromEnvironment('npcCarpenter');
-    setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
-    setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
-    setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
+    removeNpcFromEnvironment('npcCarpenter', 'carpenter');
+
+    const farmerX = getNpcData().npcs['npcFarmer'].gridPosition.x;
+    const farmerY = getNpcData().npcs['npcFarmer'].gridPosition.y;
+    const farmerWidth = getNpcData().npcs['npcFarmer'].dimensions.width;
+    const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.height;
+
+    removeNpcFromEnvironment('npcFarmer', 'cowPath');
+
+    setTimeout(() => {
+        addEntityToEnvironment('npcFarmer', 50, 26, 0, 0, farmerWidth, farmerHeight, 's1', false, 'cowPath');
+        setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
+        const gridUpdateData = getAllGridData();
+        setOriginalGridState(gridUpdateData);
+
+        setTimeout(() => {
+            setNpcData(`npcCarpenter`, `dimensions.width`, `${farmerWidth - 2}`);
+            setNpcData(`npcCarpenter`, `dimensions.height`, `${farmerHeight}`);
+            setNpcData(`npcCarpenter`, `gridPosition.x`, `${farmerX}`);
+            setNpcData(`npcCarpenter`, `gridPosition.y`, `${farmerY}`);
+            addEntityToEnvironment('npcCarpenter', farmerX, farmerY, 0, 0, farmerWidth - 2, farmerHeight, 's3', false, 'cowPath');
+            setPreAnimationGridState(allGridData.cowPath, 'npcCarpenter', false);
+            setOriginalGridState(allGridData);
+        
+            setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
+            setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
+            setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
+    
+            const gridUpdateData = getAllGridData();
+            setOriginalGridState(gridUpdateData);
+        }, 50);
+    }, 50);
 }
 
 function makeCowTalkableAfterSpeakingToFarmer() {
@@ -341,7 +393,7 @@ function makeCowNotTalkableAndPliersUseable() {
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
 }
 
-function makeFarmerNotTalkableAfterInitialDialogue() {
+function makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue() {
     setNpcData(`npcFarmer`, `interactable.canTalk`, false);
     makeCowTalkableAfterSpeakingToFarmer();
     setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);
@@ -460,7 +512,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setObjectData(`objectBowl`, `dimensions.width`, 2);
     setObjectData(`objectBowl`, `dimensions.height`, 4);
-    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true); //add empty bowl back in for dog having drunk it
+    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setAnimationInProgress(true);
@@ -482,6 +534,21 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     setDialogueData('objectInteractions.verbLookAt.objectBowl', '0', '1');
 
     setNpcData(`${townDog}`, `interactable.canTalk`, false);
+}
+
+async function showDialogueDisgustedToPickUpPoo() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.specialDialogue.disgustedToTryAndPickUpPoo[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function revealCarrot(blank, dialogueString, blank2, blank3) {
+    const language = getLanguage();
+    await showText(dialogueString, getColorTextPlayer());
+    setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
+    setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
+    setObjectData(`objectCarrot`, `interactable.canHover`, true);
+    setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

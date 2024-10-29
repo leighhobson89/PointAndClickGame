@@ -328,8 +328,8 @@
             "e3": {
                 "connectsTo": "stinkingDump",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 30, "y": 55 },
+                "finalPosition": { "x": 28, "y": 46 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -354,18 +354,18 @@
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
-                "connectsTo": "roadIntoTown",
+                "connectsTo": "largePileOfPoo",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 72, "y": 48 },
+                "finalPosition": { "x": 65, "y": 55 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
             "e2": {
-                "connectsTo": "largePileOfPoo",
+                "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 20, "y": 55 },
+                "finalPosition": { "x": 30, "y": 53 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -384,8 +384,8 @@
             "e1": {
                 "connectsTo": "stinkingDump",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 32, "y": 37 },
+                "finalPosition": { "x": 29, "y": 41 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

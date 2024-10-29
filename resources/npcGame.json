@@ -272,7 +272,7 @@
         },
         "interactable": {
           "turnForDialogue": false,
-          "canHover": true,
+          "canHover": false,
           "canTalk": false,
           "cantTalkDialogueNumber": 0,
           "dialoguePhase": 0,
@@ -294,11 +294,12 @@
           "objectCanReceive2": "",
           "objectCanReceive3": ""
         },
-        "npcPlacementLocation": "cowPath",
+        "npcPlacementLocation": "",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
           "s1": "./resources/npcs/cowPain.png",
-          "s2": "./resources/npcs/cowHappy.png"
+          "s2": "./resources/npcs/cowHappy.png",
+          "s3": "./resources/npcs/blank.png"
         },
         "gridPosition": {
           "x": 13,
@@ -314,7 +315,7 @@
         },
         "dimensions": {
           "width": 6,
-          "height":14
+          "height": 14
         },
         "comment": "Cow needs splinter removing with pliers so farmer appears"
       },
@@ -407,7 +408,7 @@
               "event": "setCarpenterSpokenToTrue"
             },
             "1": {
-              "event": "setCarpenterSpokenToTrue"
+              "event": ""
             },
             "2": {
               "event": "moveCarpenterToStables"
@@ -465,7 +466,7 @@
         },
         "interactable": {
           "turnForDialogue": false,
-          "canHover": true,
+          "canHover": false,
           "canTalk": true,
           "cantTalkDialogueNumber": 0,
           "dialoguePhase": 0,
@@ -473,7 +474,7 @@
           "questCutOffNumber": 1,
           "questCutOffEvents": {
             "1": {
-              "event": "makeFarmerNotTalkableAfterInitialDialogue"
+              "event": "makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue"
             }
           },
           "canUseWith": false,
@@ -487,10 +488,11 @@
           "objectCanReceive2": "",
           "objectCanReceive3": ""
         },
-        "npcPlacementLocation": "cowPath",
+        "npcPlacementLocation": "",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
-          "s1": "./resources/npcs/farmer.png"
+          "s1": "./resources/npcs/farmer.png",
+          "s2": "./resources/npcs/blank.png"
         },
         "gridPosition": {
           "x": 24,

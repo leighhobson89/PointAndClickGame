@@ -289,10 +289,10 @@
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "bigPileOfPoo",
+      "objectPlacementLocation": "largePileOfPoo",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/carrotWorld.png",
+        "s1": "./resources/objects/images/blank.png",
         "s2": "./resources/objects/images/carrotWorld.png"
       },
       "visualAnimatedStateOffsets": {
@@ -307,8 +307,8 @@
       },
       "inventoryUrl": "./resources/objects/images/carrotInv.png",
       "gridPosition": {
-        "x": 7,
-        "y": 1
+        "x": 33,
+        "y": 47
       },
       "offset": {
         "x": 0,
@@ -319,8 +319,8 @@
         "y": 0
       },
       "dimensions": {
-        "width": 1,
-        "height": 1
+        "width": 2,
+        "height": 8
       },
       "comment": "Give carrot to donkey in order to show objectDonkeyRope and move the donkey so can access barn"
     },
@@ -1893,11 +1893,11 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectPileOfPoo",
+        "objectUseWith1": "objectLargePileOfPoo",
         "npcUseWith1": "",
         "actionUseWith11": "revealCarrot",
         "actionUseWith12": "",
-        "useTogetherLocation": "bigPileOfPoo",
+        "useTogetherLocation": "largePileOfPoo",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2412,6 +2412,162 @@
         "height": 3
       },
       "comment": "Anchor for attaching pulley wheel to on river crossing tree"
+    },
+    "objectLargePileOfPoo": {
+      "name": {
+        "en": "Huge Pile Of Poo",
+        "es": "Montón enorme de caca",
+        "de": "Großer Haufen Kot",
+        "it": "Grande mucchio di cacca",
+        "fr": "Énorme tas de caca"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": true,
+        "canPickUpNow": false,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": "showDialogueDisgustedToPickUpPoo"
+      },
+      "objectPlacementLocation": "largePileOfPoo",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 20,
+        "y": 30
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "width": 42,
+        "height": 17
+      },
+      "comment": "Big Pile Of Poo!"
+    },
+    "objectBrokenFenceFarmTrack": {
+      "name": {
+        "en": "Broken Fence",
+        "es": "Valla Rota",
+        "de": "Gebrochener Zaun",
+        "it": "Recinto Rotto",
+        "fr": "Clôture Cassée"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "cowPath",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 15,
+        "y": 36
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "width": 10,
+        "height": 8
+      },
+      "comment": "Broken fence before farmer and cow appear"
     }
   }
 }
