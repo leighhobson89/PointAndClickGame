@@ -67,18 +67,13 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
             } else {
                 dialogueString = dialogueData[dialoguePhase][language];
-                const npcId = speakersArrayString[speaker.slice(3)][0];
+                const npcId = speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0];
                 npcData = getNpcData().npcs[npcId];
                 ({ xPos, yPos } = getTextPosition(speaker, npcData));
                 textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
             }
 
             await showText(dialogueString, textColor, xPos, yPos);
-            
-            if (!interactiveDialogue && dialoguePhase >= orderOfStartingDialogue.length - 1) {
-                console.log("non interactive dialogue finished");
-                return;
-            }
         }
 
         if (type === 'starting' || type === 'continuing' || type === 'advancing' || type === 'looping') { //just for clarity remove if block later
@@ -90,11 +85,17 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 if (type !== 'continuing') {
                     dialoguePhase = 0;
                 }
+
+                if (!interactiveDialogue) {
+                    setCurrentSpeaker('player');
+                    updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+                    setGameState(getGameVisibleActive());
+                    return;
+                }
     
                 let dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase);
                 crossReferenceDialoguesAlreadySpoken(dialogueOptionsTexts, questPhase, npcId);
                 dialogueOptionsTexts = returnDialogueOptionsForCurrentQuest(npcId, questPhase);
-
 
                 let exitOptionText = returnExitOptionForCurrentQuest(npcId, questPhase);
 
@@ -308,10 +309,8 @@ export function getTextPosition(speaker, npcData) {
         xPos = player.xPos;
         yPos = player.yPos - 20;
     } else {
-        const npcXGrid = npcData.gridPosition.x;
-        const npcYGrid = npcData.gridPosition.y;
-        xPos = npcXGrid * getCanvasCellWidth();
-        yPos = npcYGrid * getCanvasCellHeight() - 20;
+        xPos = npcData.visualPosition.x;
+        yPos = npcData.visualPosition.y - 20;
     }
 
     return { xPos, yPos };
