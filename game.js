@@ -1053,7 +1053,7 @@ export function processRightClickPoint(event, mouseClick) {
     }
 }
 
-export async function checkAndChangeScreen() {
+export function checkAndChangeScreen() {
     if (!getTransitioningToAnotherScreen()) {
         return;
     }
@@ -1087,7 +1087,7 @@ export async function checkAndChangeScreen() {
                     const pendingEvent = checkPendingEvents();
 
                     if (pendingEvent) {
-                        await triggerPendingEvent(pendingEvent);
+                        triggerPendingEvent(pendingEvent);
                         setPendingEvents(null);
                     }
 
@@ -1101,9 +1101,11 @@ export async function checkAndChangeScreen() {
     return; 
 }
 
-export async function triggerPendingEvent(pendingEvent) {
-    const eventToTrigger = pendingEvent[0];
-    executeInteractionEvent('triggeredByScreenEntryEvent', null, null, `${eventToTrigger}`, null, null, null);
+export function triggerPendingEvent(pendingEvent) {
+    setTimeout(() => { //allow time to transition
+        const eventToTrigger = pendingEvent[0];
+        executeInteractionEvent('triggeredByScreenEntryEvent', null, null, `${eventToTrigger}`, null, null, null);
+    }, 2000);
 }
 
 export function handleRoomTransition() {

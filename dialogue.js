@@ -8,47 +8,77 @@ import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
 export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, dialoguePathString, speakersArrayString, order) {
     const player = getPlayerObject();
     const language = getLanguage();
-    const npcData = getNpcData().npcs[npcId];
 
-    if (!interactiveDialogue) {
-        return;
+    let npcData;
+    let questPhase;
+    let dialogueData;
+    let orderOfStartingDialogue;
+
+    if (interactiveDialogue) {
+        npcData = getNpcData().npcs[npcId];
     }
 
-    let questPhase = getQuestPhaseNpc(npcId);
-    const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
-
-    turnNpcForDialogue(player, npcData, npcId, false);
-
-    if (npcData) { //update interactionInfo
-        setTransitioningToDialogueState(true);
-        updateInteractionInfo(localize('interactionTalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + npcData.name[language], true);
-    } else {
-        console.log("Error finding NPC data, check code");
-    }
+    if (interactiveDialogue) { //TO CODE THIS DIALOGUE ENGINE FOR NON INTERACTIVE TODO
+        questPhase = getQuestPhaseNpc(npcId);
+        dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
     
-    //play intro dialogue
-    let dialogueString = dialogueData.introDialogue[language]; //to be shown when first reaching the npc and provoking a conversation, before the opening dialogue from them to us
-    await showText(dialogueString, getColorTextPlayer());
+        turnNpcForDialogue(player, npcData, npcId, false);
+    
+        if (npcData) { //update interactionInfo
+            setTransitioningToDialogueState(true);
+            updateInteractionInfo(localize('interactionTalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + npcData.name[language], true);
+        } else {
+            console.log("Error finding NPC data, check code");
+        }
+        
+        //play intro dialogue
+        let dialogueString = dialogueData.introDialogue[language]; //to be shown when first reaching the npc and provoking a conversation, before the opening dialogue from them to us
+        await showText(dialogueString, getColorTextPlayer());
+    
+        orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting', null, true, null, null);
+    
+        console.log(orderOfStartingDialogue);
+    } else {
+        dialogueData = dialoguePathString;
+        orderOfStartingDialogue = getOrderOfDialogue(null, null, null, null, null, null, order);
+    }
 
-    const orderOfStartingDialogue = getOrderOfDialogue(npcId, questPhase, 'starting', null, true);
-
-    console.log(orderOfStartingDialogue);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getInteractiveDialogueState());
     hideDialogueArrows();
 
     const showDialogue = async (dialoguePhase, type) => { //initialise opening dialogue
-        console.log("questphase upon calling function is " + getQuestPhaseNpc(npcId));
-        const autoExitOption = dialogueData.exitOption;
+        if (interactiveDialogue) {
+            console.log("questphase upon calling function is " + getQuestPhaseNpc(npcId));
+            const autoExitOption = dialogueData.exitOption;
+        }
+
         if (type === 'starting') {
             const speaker = orderOfStartingDialogue[dialoguePhase];
             setCurrentSpeaker(speaker);
-            const dialogueString = dialogueData.phase[dialoguePhase][language];
-        
-            const { xPos, yPos } = getTextPosition(speaker, npcData);
-            const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
-        
+
+            let dialogueString;
+            let xPos, yPos;
+            let textColor;
+
+            if (interactiveDialogue) {
+                dialogueString = dialogueData.phase[dialoguePhase][language];
+                ({ xPos, yPos } = getTextPosition(speaker, npcData));
+                textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+            } else {
+                dialogueString = dialogueData[dialoguePhase][language];
+                const npcId = speakersArrayString[speaker.slice(3)][0];
+                npcData = getNpcData().npcs[npcId];
+                ({ xPos, yPos } = getTextPosition(speaker, npcData));
+                textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+            }
+
             await showText(dialogueString, textColor, xPos, yPos);
+            
+            if (!interactiveDialogue && dialoguePhase >= orderOfStartingDialogue.length - 1) {
+                console.log("non interactive dialogue finished");
+                return;
+            }
         }
 
         if (type === 'starting' || type === 'continuing' || type === 'advancing' || type === 'looping') { //just for clarity remove if block later
@@ -157,7 +187,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 if (type !== 'exiting') { //play dialogue option, response and set quest where necessary
                     setDialogueScrollCount(0);
                     setCurrentScrollIndexDialogue(0);
-                    const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()), true);
+                    const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'continuing', (getDialogueOptionClicked()), true, null, null);
                     
                     if (type !== 'continuing') {
                         dialoguePhase = 0;
@@ -218,7 +248,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
         if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting' || getEarlyExitFromDialogue()) { //exiting out of dialogue
             removeDialogueRow(0);
 
-            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null, true);
+            const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null, true, null, null);
 
             let dialogueString;
 
@@ -295,27 +325,31 @@ export function getTextColor(speaker, npcColor) {
     }
 }
 
-export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFalse, giveScenarioId) {
+export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrueGiveFalse, giveScenarioId, nonInteractiveOrder) {
     let order;
 
-    if (talkTrueGiveFalse) { //talk
-        switch (type) {
-            case 'starting':
-                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
-                break;
-            case 'exiting':
-                if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
-                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
-                } else {
-                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
-                }
-                break;
-            case 'continuing':
-                order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
-                break;
+    if (!nonInteractiveOrder) {
+        if (talkTrueGiveFalse) { //talk
+            switch (type) {
+                case 'starting':
+                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
+                    break;
+                case 'exiting':
+                    if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
+                        order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+                    } else {
+                        order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
+                    }
+                    break;
+                case 'continuing':
+                    order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
+                    break;
+            }
+        } else { //give
+            order = getDialogueData().dialogue.objectInteractions.verbGive[npcId].scenario[giveScenarioId].order;
         }
-    } else { //give
-        order = getDialogueData().dialogue.objectInteractions.verbGive[npcId].scenario[giveScenarioId].order;
+    } else {
+        order = nonInteractiveOrder;
     }
 
     const dialogueOrder = {};
@@ -330,8 +364,6 @@ export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrue
         } else {
             if (char === '0') {
                 dialogueOrder[i] = 'player';
-            } else if (char === '1') {
-                dialogueOrder[i] = 'npc';
             } else {
                 dialogueOrder[i] = `npc${parseInt(char)}`;
             }
@@ -344,6 +376,7 @@ export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrue
 
     return dialogueOrder;
 }
+
 export function returnExitOptionForCurrentQuest(npcId, questId) {
     const language = getLanguage();
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo;

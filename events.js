@@ -165,7 +165,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
     const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
 
-    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getCutSceneState());
 
@@ -254,7 +254,7 @@ async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
     const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
     const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
 
-    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getCutSceneState());
 
@@ -456,7 +456,7 @@ async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
     handleInventoryAdjustment(objectId, 1, true);
     drawInventory(0);
 
-    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getCutSceneState());
 
@@ -532,7 +532,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     setObjectData(`objectBone`, `interactable.canPickUp`, true);
     changeSpriteAndHoverableStatus('s2', 'objectBone', true); 
     
-    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId);
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
     setGameState(getCutSceneState());
 
