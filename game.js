@@ -91,7 +91,7 @@ function movePlayerTowardsTarget() {
 
     let commandToPerform;
     let cellClickValue;
-    console.log(cellValue);
+    //console.log(cellValue);
 
     if (getClickPoint().x !== null && getClickPoint().y !== null) {
         cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];

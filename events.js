@@ -484,6 +484,18 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     setNpcData(`${townDog}`, `interactable.canTalk`, false);
 }
 
+async function showDialogueDisgustedToPickUpPoo() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.specialDialogue.disgustedToTryAndPickUpPoo[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+function revealCarrot() {
+    setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
+    setObjectData(`objectCarrot`, `interactable.canHover`, true);
+    setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
+}
+
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Executor function

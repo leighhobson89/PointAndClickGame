@@ -15,6 +15,13 @@
         "de": "Was denkst du, was du tust?? Das sind meine Werkzeuge, Hände weg!",
         "it": "Cosa pensi di fare?? Sono i miei strumenti, mani lontane!",
         "fr": "Que penses-tu faire?? Ce sont mes outils, ne les touche pas!"
+      },
+      "disgustedToTryAndPickUpPoo": {
+        "en": "Why on earth would I want to pick up poo? Yuk!",
+        "es": "¿Por qué querría recoger caca? ¡Yuk!",
+        "de": "Warum zum Teufel sollte ich Kot aufheben? Igitt!",
+        "it": "Perché mai dovrei raccogliere la cacca? Yuk!",
+        "fr": "Pourquoi diable voudrais-je ramasser de la merde ? Yuk !"
       }
     },
     "postAnimationEventDialogue": {

@@ -1893,11 +1893,11 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectPileOfPoo",
+        "objectUseWith1": "objectLargePileOfPoo",
         "npcUseWith1": "",
         "actionUseWith11": "revealCarrot",
         "actionUseWith12": "",
-        "useTogetherLocation": "bigPileOfPoo",
+        "useTogetherLocation": "objectLargePileOfPoo",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2450,7 +2450,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "",
         "actionUseWith12": "",
-        "useTogetherLocation": "",
+        "useTogetherLocation": "objectPitchFork",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2472,7 +2472,7 @@
           "y": 0
         }
       },
-      "inventoryUrl": "./resources/objects/images/hookInv.png",
+      "inventoryUrl": "",
       "gridPosition": {
         "x": 20,
         "y": 30
