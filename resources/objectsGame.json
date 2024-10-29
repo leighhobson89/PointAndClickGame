@@ -1897,7 +1897,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "revealCarrot",
         "actionUseWith12": "",
-        "useTogetherLocation": "objectLargePileOfPoo",
+        "useTogetherLocation": "largePileOfPoo",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2439,7 +2439,7 @@
         "stackable": false,
         "quantity": 1,
         "decrementQuantityOnUse": true,
-        "activeStatus": true,
+        "activeStatus": false,
         "alreadyUsed": false
       },
       "usedOn": {
@@ -2450,7 +2450,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "",
         "actionUseWith12": "",
-        "useTogetherLocation": "objectPitchFork",
+        "useTogetherLocation": "",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",

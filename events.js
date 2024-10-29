@@ -490,8 +490,11 @@ async function showDialogueDisgustedToPickUpPoo() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-function revealCarrot() {
+async function revealCarrot(blank, dialogueString, blank2, blank3) {
+    const language = getLanguage();
+    await showText(dialogueString, getColorTextPlayer());
     setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
+    setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
     setObjectData(`objectCarrot`, `interactable.canHover`, true);
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
 }
