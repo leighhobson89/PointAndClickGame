@@ -30,7 +30,7 @@ Carrot<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mod
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="163.7814207650274" x="2865.1296160470474" y="997.5"/>
-          <y:Fill color="#FF6600" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="77.505859375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="114.05859375" x="24.86141350751359" xml:space="preserve" y="13.7470703125">Carrot In
 Stinking Pile
@@ -483,7 +483,7 @@ Hoisted<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="163.7814207650274" x="2220.1296160470474" y="37.5"/>
-          <y:Fill color="#FF6600" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="53.00390625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="132.955078125" x="15.41317132001359" xml:space="preserve" y="25.998046875">Player Speaks
 To Carpenter<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -508,7 +508,7 @@ Cutscene<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:M
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="105.0" width="163.7814207650274" x="2010.1296160470476" y="37.5"/>
-          <y:Fill color="#FF6600" transparent="false"/>
+          <y:Fill color="#99CC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="77.505859375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="146.275390625" x="8.753015070013817" xml:space="preserve" y="13.7470703125">Famer and Cow
 Appear On
@@ -960,7 +960,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e41" source="n9" target="n39">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-104.70274538106241" sy="-30.0" tx="81.89071038251404" ty="0.0">
@@ -974,7 +973,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e42" source="n38" target="n40">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="0.0"/>
@@ -985,7 +983,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e43" source="n40" target="n36">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.8907103825137" sy="0.0" tx="81.8907103825137" ty="-15.0">
@@ -999,7 +996,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e44" source="n39" target="n41">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.89071038251359" sy="0.0" tx="81.89071038251404" ty="0.0"/>
@@ -1010,7 +1006,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e45" source="n41" target="n4">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-81.89071038251359" sy="0.0" tx="81.89071038251382" ty="0.0"/>
@@ -1021,7 +1016,6 @@ CowPath<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:Mo
       </data>
     </edge>
     <edge id="e46" source="n9" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-111.45274538106241" sy="15.0" tx="81.89071038251404" ty="0.0">

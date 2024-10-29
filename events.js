@@ -164,7 +164,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const originalDonkeyY = npcData.visualPosition.y;
     const originalDonkeyWidth = npcData.dimensions.width;
 
-    removeNpcFromEnvironment('npcDonkey');
+    removeNpcFromEnvironment('npcDonkey', 'stables');
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
@@ -314,10 +314,10 @@ function setCarpenterSpokenToTrue() {
     removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
 
     addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, 6, 14, 's1', false, 'cowPath');
-    setPreAnimationGridState(allGridData.cowPath, 'npcCow', true);
+    setPreAnimationGridState(allGridData.cowPath, 'npcCow', false);
 
     addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, 10, 8, 's1', false, 'cowPath');
-    setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', true);
+    setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
     
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
@@ -339,11 +339,40 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
 
 //when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the pliers and nails
 function moveCarpenterToStables() {
+    const allGridData = getAllGridData();
     console.log("carpenter gone to stables");
-    removeNpcFromEnvironment('npcCarpenter');
-    setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
-    setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
-    setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
+    removeNpcFromEnvironment('npcCarpenter', 'carpenter');
+
+    const farmerX = getNpcData().npcs['npcFarmer'].gridPosition.x;
+    const farmerY = getNpcData().npcs['npcFarmer'].gridPosition.y;
+    const farmerWidth = getNpcData().npcs['npcFarmer'].dimensions.width;
+    const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.height;
+
+    removeNpcFromEnvironment('npcFarmer', 'cowPath');
+
+    setTimeout(() => {
+        addEntityToEnvironment('npcFarmer', 50, 26, 0, 0, farmerWidth, farmerHeight, 's1', false, 'cowPath');
+        setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
+        const gridUpdateData = getAllGridData();
+        setOriginalGridState(gridUpdateData);
+
+        setTimeout(() => {
+            setNpcData(`npcCarpenter`, `dimensions.width`, `${farmerWidth - 2}`);
+            setNpcData(`npcCarpenter`, `dimensions.height`, `${farmerHeight}`);
+            setNpcData(`npcCarpenter`, `gridPosition.x`, `${farmerX}`);
+            setNpcData(`npcCarpenter`, `gridPosition.y`, `${farmerY}`);
+            addEntityToEnvironment('npcCarpenter', farmerX, farmerY, 0, 0, farmerWidth - 2, farmerHeight, 's3', false, 'cowPath');
+            setPreAnimationGridState(allGridData.cowPath, 'npcCarpenter', false);
+            setOriginalGridState(allGridData);
+        
+            setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
+            setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
+            setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
+    
+            const gridUpdateData = getAllGridData();
+            setOriginalGridState(gridUpdateData);
+        }, 50);
+    }, 50);
 }
 
 function makeCowTalkableAfterSpeakingToFarmer() {
@@ -355,7 +384,7 @@ function makeCowNotTalkableAndPliersUseable() {
     setObjectData(`objectPliers`, `interactable.activeStatus`, true);
 }
 
-function makeFarmerNotTalkableAfterInitialDialogue() {
+function makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue() {
     setNpcData(`npcFarmer`, `interactable.canTalk`, false);
     makeCowTalkableAfterSpeakingToFarmer();
     setNpcData(`npcCarpenter`, `interactable.questPhase`, 1);

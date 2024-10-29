@@ -408,7 +408,7 @@
               "event": "setCarpenterSpokenToTrue"
             },
             "1": {
-              "event": "setCarpenterSpokenToTrue"
+              "event": ""
             },
             "2": {
               "event": "moveCarpenterToStables"
@@ -474,7 +474,7 @@
           "questCutOffNumber": 1,
           "questCutOffEvents": {
             "1": {
-              "event": "makeFarmerNotTalkableAfterInitialDialogue"
+              "event": "makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue"
             }
           },
           "canUseWith": false,

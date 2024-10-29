@@ -1,4 +1,4 @@
-import { setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js";
@@ -206,9 +206,9 @@ export function removeObjectFromEnvironment(objectId, placeToRemoveFrom) {
 
 
 
-export function removeNpcFromEnvironment(npcId) {
-    const gridData = getGridData().gridData;
-    const roomId = getCurrentScreenId();
+export function removeNpcFromEnvironment(npcId, placeToRemoveFrom) {
+    const gridData = getAllGridData()[placeToRemoveFrom]; // Get the current grid data
+    const roomId = placeToRemoveFrom;
     const originalValues = getOriginalValueInCellWhereNpcPlaced();
 
     if (originalValues.hasOwnProperty(roomId)) {
