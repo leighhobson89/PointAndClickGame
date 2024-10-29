@@ -1085,10 +1085,18 @@ export function checkAndChangeScreen() {
                     changeBackground();
 
                     const pendingEvent = checkPendingEvents();
+                    let pendingEvents;
 
                     if (pendingEvent) {
                         triggerPendingEvent(pendingEvent);
-                        setPendingEvents(null);
+
+                        pendingEvents = getPendingEvents();
+                        const eventIndex = pendingEvents.findIndex(event => event === pendingEvent);
+
+                        if (eventIndex > -1) {
+                            pendingEvents.splice(eventIndex, 1);
+                        }
+                        setPendingEvents(pendingEvents);
                     }
 
                     setTransitioningToAnotherScreen(false);

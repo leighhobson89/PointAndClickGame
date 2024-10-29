@@ -296,7 +296,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
         }
     };
     
-    showDialogue(0, 'starting');
+    await showDialogue(0, 'starting');
 }
 
 // Helper function to determine the position of the text based on the speaker (player or NPC)
