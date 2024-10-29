@@ -135,31 +135,6 @@
             }
           }
         },
-        "objectMachineDEBUG": {
-          "use": {
-            "cantUseYet": {
-              "en": "The machine needs power.",
-              "es": "La máquina necesita energía",
-              "de": "Die Maschine braucht Strom",
-              "it": "La macchina ha bisogno di energia",
-              "fr": "La machine a besoin d'énergie"
-            },
-            "alreadyUsed": {
-              "en": "The machine seems to have powered off permanently!",
-              "es": "¡La máquina parece haberse apagado permanentemente!",
-              "de": "Die Maschine scheint dauerhaft abgeschaltet zu sein!",
-              "it": "La macchina sembra essersi spenta definitivamente!",
-              "fr": "La machine semble s'être éteinte définitivement !"
-            },
-            "canUse": {
-              "en": "Ooo, a banana has fallen out!",
-              "es": "¡Ooo, se ha caído un plátano!",
-              "de": "Ooo, eine Banane ist herausgefallen!",
-              "it": "Ooo, una banana è caduta fuori!",
-              "fr": "Ooo, une banane est tombée !"
-            }
-          }
-        },
         "objectDoorToDen": {
           "use": {
             "cantUseYet": {
@@ -175,6 +150,31 @@
               "de": "",
               "it": "",
               "fr": ""
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
+        "objectLargePileOfPoo": {
+          "use": {
+            "cantUseYet": {
+              "en": "Yuk!  It's disgusting, I'm not touching that with my hands!",
+              "es": "¡Puaj! Es asqueroso, no voy a tocar eso con mis manos.",
+              "de": "Igitt! Es ist ekelhaft, ich fasse das nicht mit den Händen an!",
+              "it": "Che schifo! È disgustoso, non lo tocco con le mani!",
+              "fr": "Beurk ! C'est dégoûtant, je ne toucherai pas ça avec mes mains !"
+            },
+            "alreadyUsed": {
+              "en": "I have had enough of that mountain of muck!",
+              "es": "¡Ya he tenido suficiente de esa montaña de suciedad!",
+              "de": "Ich habe genug von diesem Berg Dreck!",
+              "it": "Ne ho abbastanza di quella montagna di sporcizia!",
+              "fr": "J'en ai assez de cette montagne de crasse !"
             },
             "canUse": {
               "en": "",
@@ -211,6 +211,13 @@
           }
         },
         "useWithObject1": {
+          "objectPitchFork": {
+            "en": "Yuk! Oh wait a minute, a carrot has popped out of it!",
+            "es": "¡Qué asco! Espera un momento, ¡ha salido una zanahoria de ahí!",
+            "de": "Igitt! Oh warte, eine Karotte ist herausgekommen!",
+            "it": "Che schifo! Aspetta un attimo, è uscita una carota!",
+            "fr": "Beurk ! Oh, attendez, une carotte en est sortie !"
+          },
           "objectPulleyWheel": {
             "en": "I've never seen a pulley get fixed to a hook before, maybe I am naive!",
             "es": "Nunca he visto que una polea se fije a un gancho antes, ¡tal vez soy ingenuo!",
@@ -266,103 +273,27 @@
             "de": "Uff, das war ein steifes Schloss, aber es ist endlich offen!",
             "it": "Uff, era una serratura dura, ma finalmente si è aperta!",
             "fr": "Ouf, c'était une serrure rigide, mais elle est enfin ouverte!"
-          },
-          "objectBatteryDEBUG": {
-            "en": "Ooh, that has powered it up, I can probably use it now!",
-            "es": "¡Oh, eso lo ha potenciado, probablemente pueda usarlo ahora!",
-            "de": "Oh, das hat es aufgeladen, ich kann es jetzt wahrscheinlich benutzen!",
-            "it": "Oh, questo lo ha potenziato, probabilmente posso usarlo ora!",
-            "fr": "Oh, ça l'a alimenté, je peux probablement l'utiliser maintenant !"
-          },
-          "objectBananaDEBUG": {
-            "en": "Here boy, do you want this banana?",
-            "es": "Aquí chico, ¿quieres esta banana?",
-            "de": "Hier Junge, willst du diese Banane?",
-            "it": "Ehi ragazzo, vuoi questa banana?",
-            "fr": "Tiens mon garçon, tu veux cette banane ?"
           }
         }
       },
       "verbLookAt": {
         "exits": {
-          "libraryFoyerDebug": {
-            "open": {
-              "en": "The door leads to the library's foyer (DEBUG).",
-              "es": "La puerta conduce al vestíbulo de la biblioteca (DEBUG).",
-              "de": "Die Tür führt ins Foyer der Bibliothek (DEBUG).",
-              "it": "La porta conduce al foyer della biblioteca (DEBUG).",
-              "fr": "La porte mène au foyer de la bibliothèque (DEBUG)."
-            },
-            "locked": {
-              "en": "The door leads to the library's foyer (DEBUG). It needs a key.",
-              "es": "La puerta conduce al vestíbulo de la biblioteca (DEBUG). Necesita una llave.",
-              "de": "Die Tür führt ins Foyer der Bibliothek (DEBUG). Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al foyer della biblioteca (DEBUG). Serve una chiave.",
-              "fr": "La porte mène au foyer de la bibliothèque (DEBUG). Une clé est nécessaire."
-            }
-          },
-          "debugRoom": {
-            "open": {
-              "en": "The door leads to the debug room.",
-              "es": "La puerta conduce a la sala de depuración.",
-              "de": "Die Tür führt in den Debug-Raum.",
-              "it": "La porta conduce alla stanza di debug.",
-              "fr": "La porte mène à la salle de débogage."
-            },
-            "locked": {
-              "en": "The door leads to the debug room. It needs a key.",
-              "es": "La puerta conduce a la sala de depuración. Necesita una llave.",
-              "de": "Die Tür führt in den Debug-Raum. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla stanza di debug. Serve una chiave.",
-              "fr": "La porte mène à la salle de débogage. Une clé est nécessaire."
-            }
-          },
-          "libraryDesk": {
-            "open": {
-              "en": "The door leads to the library desk.",
-              "es": "La puerta conduce a la mesa de la biblioteca.",
-              "de": "Die Tür führt zum Schreibtisch der Bibliothek.",
-              "it": "La porta conduce alla scrivania della biblioteca.",
-              "fr": "La porte mène au bureau de la bibliothèque."
-            },
-            "locked": {
-              "en": "The door leads to the library desk. It needs a key.",
-              "es": "La puerta conduce a la mesa de la biblioteca. Necesita una llave.",
-              "de": "Die Tür führt zum Schreibtisch der Bibliothek. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla scrivania della biblioteca. Serve una chiave.",
-              "fr": "La porte mène au bureau de la bibliothèque. Une clé est nécessaire."
-            }
-          },
           "libraryFoyer": {
             "open": {
-              "en": "The door leads to the library's foyer.",
+              "en": "The door leads in to the library",
               "es": "La puerta conduce al vestíbulo de la biblioteca.",
               "de": "Die Tür führt ins Foyer der Bibliothek.",
               "it": "La porta conduce al foyer della biblioteca.",
               "fr": "La porte mène au foyer de la bibliothèque."
-            },
-            "locked": {
-              "en": "The door leads to the library's foyer. It needs a key.",
-              "es": "La puerta conduce al vestíbulo de la biblioteca. Necesita una llave.",
-              "de": "Die Tür führt ins Foyer der Bibliothek. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al foyer della biblioteca. Serve una chiave.",
-              "fr": "La porte mène au foyer de la bibliothèque. Une clé est nécessaire."
             }
           },
           "marketStreet": {
             "open": {
-              "en": "The door leads to Market Street.",
-              "es": "La puerta conduce a la Calle del Mercado.",
-              "de": "Die Tür führt zur Marktstraße.",
-              "it": "La porta conduce a Via del Mercato.",
-              "fr": "La porte mène à la Rue du Marché."
-            },
-            "locked": {
-              "en": "The door leads to Market Street. It needs a key.",
-              "es": "La puerta conduce a la Calle del Mercado. Necesita una llave.",
-              "de": "Die Tür führt zur Marktstraße. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce a Via del Mercato. Serve una chiave.",
-              "fr": "La porte mène à la Rue du Marché. Une clé est nécessaire."
+              "en": "The town center.",
+              "es": "El centro de la ciudad.",
+              "de": "Das Stadtzentrum.",
+              "it": "Il centro della città.",
+              "fr": "Le centre-ville."
             }
           },
           "researchRoom": {
@@ -374,27 +305,20 @@
               "fr": "La porte mène à la salle de recherche de la bibliothèque."
             },
             "locked": {
-              "en": "The door leads to the library's research room. It needs a key.",
-              "es": "La puerta conduce a la sala de investigación de la biblioteca. Necesita una llave.",
-              "de": "Die Tür führt zum Forschungsraum der Bibliothek. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla sala di ricerca della biblioteca. Serve una chiave.",
-              "fr": "La porte mène à la salle de recherche de la bibliothèque. Une clé est nécessaire."
+              "en": "The door leads to the library's research room.",
+              "es": "La puerta conduce a la sala de investigación de la biblioteca.",
+              "de": "Die Tür führt zum Forschungsraum der Bibliothek.",
+              "it": "La porta conduce alla sala di ricerca della biblioteca.",
+              "fr": "La porte mène à la salle de recherche de la bibliothèque."
             }
           },
           "seedyGuyAlley": {
             "open": {
-              "en": "The door leads to Seedy Guy Alley.",
-              "es": "La puerta conduce a la Calle del Tipo Sórdido.",
-              "de": "Die Tür führt zur Gasse des schäbigen Mannes.",
-              "it": "La porta conduce al Vicolo del Tizio Squallido.",
-              "fr": "La porte mène à l'Allée du Type Louche."
-            },
-            "locked": {
-              "en": "The door leads to Seedy Guy Alley. It needs a key.",
-              "es": "La puerta conduce a la Calle del Tipo Sórdido. Necesita una llave.",
-              "de": "Die Tür führt zur Gasse des schäbigen Mannes. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al Vicolo del Tizio Squallido. Serve una chiave.",
-              "fr": "La porte mène à l'Allée du Type Louche. Une clé est nécessaire."
+              "en": "It looks like a back alley this way!",
+              "es": "¡Parece un callejón por aquí!",
+              "de": "Es sieht aus wie eine Gasse in diese Richtung!",
+              "it": "Sembra un vicolo da questa parte!",
+              "fr": "Ça ressemble à une ruelle par ici !"
             }
           },
           "carpenter": {
@@ -404,13 +328,15 @@
               "de": "Die Tür führt zur Tischlerei.",
               "it": "La porta conduce al Laboratorio del Fabbro.",
               "fr": "La porte mène à l'Atelier du Charpentier."
-            },
-            "locked": {
-              "en": "The door leads to the Carpenter's Workshop. It needs a key.",
-              "es": "La puerta conduce al Taller del Carpintero. Necesita una llave.",
-              "de": "Die Tür führt zur Tischlerei. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al Laboratorio del Fabbro. Serve una chiave.",
-              "fr": "La porte mène à l'Atelier du Charpentier. Une clé est nécessaire."
+            }
+          },
+          "largePileOfPoo": {
+            "open": {
+              "en": "There looks to be a huge mountain of poo this way, yuk!",
+              "es": "Parece que hay una enorme montaña de excremento por este camino, ¡qué asco!",
+              "de": "Es sieht so aus, als wäre hier ein riesiger Berg von Kot, igitt!",
+              "it": "Sembra esserci una enorme montagna di feci da questa parte, che schifo!",
+              "fr": "On dirait qu'il y a une énorme montagne de caca par ici, beurk !"
             }
           },
           "den": {
@@ -422,156 +348,121 @@
               "fr": "La porte mène à la cachette."
             },
             "locked": {
-              "en": "The door leads to the den. It needs a key.",
-              "es": "La puerta conduce a la guarida. Necesita una llave.",
-              "de": "Die Tür führt zur Höhle. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla tana. Serve una chiave.",
-              "fr": "La porte mène à la cachette. Une clé est nécessaire."
+              "en": "The door leads to the den.",
+              "es": "La puerta conduce a la guarida.",
+              "de": "Die Tür führt zur Höhle.",
+              "it": "La porta conduce alla tana.",
+              "fr": "La porte mène à la cachette."
             }
           },
           "house": {
             "open": {
-              "en": "The door leads to the house.",
+              "en": "The door leads in to the house.",
               "es": "La puerta conduce a la casa.",
               "de": "Die Tür führt zum Haus.",
               "it": "La porta conduce alla casa.",
               "fr": "La porte mène à la maison."
             },
             "locked": {
-              "en": "The door leads to the house. It needs a key.",
-              "es": "La puerta conduce a la casa. Necesita una llave.",
-              "de": "Die Tür führt zum Haus. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla casa. Serve una chiave.",
-              "fr": "La porte mène à la maison. Une clé est nécessaire."
+              "en": "The door leads in to the house.",
+              "es": "La puerta conduce a la casa.",
+              "de": "Die Tür führt zum Haus.",
+              "it": "La porta conduce alla casa.",
+              "fr": "La porte mène à la maison."
             }
           },
           "stables": {
             "open": {
-              "en": "The door leads to the stables.",
-              "es": "La puerta conduce al establo.",
-              "de": "Die Tür führt zum Stall.",
-              "it": "La porta conduce alla stalla.",
-              "fr": "La porte mène à l'écurie."
-            },
-            "locked": {
-              "en": "The door leads to the stables. It needs a key.",
-              "es": "La puerta conduce al establo. Necesita una llave.",
-              "de": "Die Tür führt zum Stall. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla stalla. Serve una chiave.",
-              "fr": "La porte mène à l'écurie. Une clé est nécessaire."
+              "en": "The stables are this way.",
+              "es": "Los establos están por aquí.",
+              "de": "Die Ställe sind hier entlang.",
+              "it": "Le stalle sono da questa parte.",
+              "fr": "Les écuries sont par ici."
             }
           },
           "barn": {
             "open": {
-              "en": "The door leads to the barn.",
-              "es": "La puerta conduce al establo.",
-              "de": "Die Tür führt zur Scheune.",
-              "it": "La porta conduce al fienile.",
-              "fr": "La porte mène à la grange."
+              "en": "In to the barn.",
+              "es": "Dentro del establo.",
+              "de": "In die Scheune.",
+              "it": "Dentro del fienile.",
+              "fr": "Dans la grange."
             },
             "locked": {
-              "en": "The door leads to the barn. It needs a key.",
-              "es": "La puerta conduce al establo. Necesita una llave.",
-              "de": "Die Tür führt zur Scheune. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al fienile. Serve una chiave.",
-              "fr": "La porte mène à la grange. Une clé est nécessaire."
+              "en": "In to the barn.",
+              "es": "Dentro del establo.",
+              "de": "In die Scheune.",
+              "it": "Dentro del fienile.",
+              "fr": "Dans la grange."
             }
           },
           "bigTree": {
             "open": {
-              "en": "The door leads to the big tree.",
-              "es": "La puerta conduce al gran árbol.",
-              "de": "Die Tür führt zum großen Baum.",
-              "it": "La porta conduce al grande albero.",
-              "fr": "La porte mène au grand arbre."
-            },
-            "locked": {
-              "en": "The door leads to the big tree. It needs a key.",
-              "es": "La puerta conduce al gran árbol. Necesita una llave.",
-              "de": "Die Tür führt zum großen Baum. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce al grande albero. Serve una chiave.",
-              "fr": "La porte mène au grand arbre. Une clé est nécessaire."
+              "en": "There's a big tree over there!",
+              "es": "¡Hay un gran árbol allí!",
+              "de": "Da drüben steht ein großer Baum!",
+              "it": "C'è un grande albero laggiù!",
+              "fr": "Il y a un grand arbre là-bas !"
             }
           },
           "roadIntoTown": {
             "open": {
-              "en": "The road leads into town.",
-              "es": "El camino lleva a la ciudad.",
-              "de": "Der Weg führt in die Stadt.",
-              "it": "La strada porta verso la città.",
-              "fr": "La route mène vers la ville."
-            },
-            "locked": {
-              "en": "The road leads into town. It needs a key.",
-              "es": "El camino lleva a la ciudad. Necesita una llave.",
-              "de": "Der Weg führt in die Stadt. Es wird ein Schlüssel benötigt.",
-              "it": "La strada porta verso la città. Serve una chiave.",
-              "fr": "La route mène vers la ville. Une clé est nécessaire."
+              "en": "The road leads into town, or out!",
+              "es": "¡El camino lleva a la ciudad o sale de ella!",
+              "de": "Der Weg führt in die Stadt oder hinaus!",
+              "it": "La strada porta in città, o fuori!",
+              "fr": "La route mène en ville, ou sort !"
             }
           },
           "stinkingDump": {
             "open": {
-              "en": "The door leads to the stinking dump.",
-              "es": "La puerta conduce al vertedero apestoso.",
-              "de": "Die Tür führt zur stinkenden Müllhalde.",
-              "it": "La porta conduce alla discarica puzzolente.",
-              "fr": "La porte mène à la décharge malodorante."
-            },
-            "locked": {
-              "en": "The door leads to the stinking dump. It needs a key.",
-              "es": "La puerta conduce al vertedero apestoso. Necesita una llave.",
-              "de": "Die Tür führt zur stinkenden Müllhalde. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla discarica puzzolente. Serve una chiave.",
-              "fr": "La porte mène à la décharge malodorante. Une clé est nécessaire."
-            }
-          },
-          "largePileOfPoo": {
-            "open": {
-              "en": "The door leads to a large pile of poo.",
-              "es": "La puerta conduce a un gran montón de excremento.",
-              "de": "Die Tür führt zu einem großen Haufen Kot.",
-              "it": "La porta conduce a una grande pila di feci.",
-              "fr": "La porte mène à un grand tas de crottes."
-            },
-            "locked": {
-              "en": "The door leads to a large pile of poo. It needs a key.",
-              "es": "La puerta conduce a un gran montón de excremento. Necesita una llave.",
-              "de": "Die Tür führt zu einem großen Haufen Kot. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce a una grande pila di feci. Serve una chiave.",
-              "fr": "La porte mène à un grand tas de crottes. Une clé est nécessaire."
+              "en": "There's a horrible smell coming from this direction!",
+              "es": "¡Hay un olor horrible que viene de esta dirección!",
+              "de": "Es kommt ein schrecklicher Geruch aus dieser Richtung!",
+              "it": "C'è un odore orribile che proviene da questa direzione!",
+              "fr": "Il y a une horrible odeur qui vient de cette direction !"
             }
           },
           "riverCrossing": {
             "open": {
-              "en": "The door leads to the river crossing.",
-              "es": "La puerta conduce al cruce de río.",
-              "de": "Die Tür führt zur Flussüberquerung.",
-              "it": "La porta conduce all'attraversamento del fiume.",
-              "fr": "La porte mène à la traversée de la rivière."
-            },
-            "locked": {
-              "en": "The door leads to the river crossing. It needs a key.",
-              "es": "La puerta conduce al cruce de río. Necesita una llave.",
-              "de": "Die Tür führt zur Flussüberquerung. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce all'attraversamento del fiume. Serve una chiave.",
-              "fr": "La porte mène à la traversée de la rivière. Une clé est nécessaire."
+              "en": "I can hear a river over in this direction!",
+              "es": "¡Puedo oír un río en esta dirección!",
+              "de": "Ich kann einen Fluss in diese Richtung hören!",
+              "it": "Posso sentire un fiume in questa direzione!",
+              "fr": "Je peux entendre une rivière dans cette direction !"
             }
           },
           "map": {
             "open": {
-              "en": "The door leads to the map.",
-              "es": "La puerta conduce al mapa.",
-              "de": "Die Tür führt zur Karte.",
-              "it": "La porta conduce alla mappa.",
-              "fr": "La porte mène à la carte."
+              "en": "Out into the world!",
+              "es": "¡Fuera al mundo!",
+              "de": "Hinaus in die Welt!",
+              "it": "Fuori nel mondo!",
+              "fr": "Hors dans le monde !"
             },
             "locked": {
-              "en": "The door leads to the map. It needs a key.",
-              "es": "La puerta conduce al mapa. Necesita una llave.",
-              "de": "Die Tür führt zur Karte. Es wird ein Schlüssel benötigt.",
-              "it": "La porta conduce alla mappa. Serve una chiave.",
-              "fr": "La porte mène à la carte. Une clé est nécessaire."
+              "en": "Out into the world!",
+              "es": "¡Fuera al mundo!",
+              "de": "Hinaus in die Welt!",
+              "it": "Fuori nel mondo!",
+              "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectLargePileOfPoo": {
+          "0": {
+            "en": "Yuk that's disgusting, steaming and warm, full of flies, and it stinks, Urgh!",
+            "es": "¡Qué asco, está hirviendo y cálido, lleno de moscas y apesta, urgh!",
+            "de": "Igitt, das ist ekelhaft, dampfend und warm, voller Fliegen, und es stinkt, urgh!",
+            "it": "Yuk, è disgustoso, fumante e caldo, pieno di mosche e puzza, urgh!",
+            "fr": "Beurk, c'est dégoûtant, fumant et chaud, plein de mouches, et ça pue, urgh !"
+          },
+          "1": {
+            "en": "I'm never going near that again, hey kids, don't play with poo!",
+            "es": "¡Nunca me acercaré a eso de nuevo, eh niños, no jueguen con caca!",
+            "de": "Ich werde nie wieder in die Nähe davon gehen, hey Kinder, spielt nicht mit Kot!",
+            "it": "Non mi avvicinerò mai più a quello, ehi bambini, non giocate con la cacca!",
+            "fr": "Je ne m'en approcherai plus jamais, hé les enfants, ne jouez pas avec de la merde !"
           }
         },
         "objectParrakeet": {
