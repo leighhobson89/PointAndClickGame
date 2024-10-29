@@ -36,7 +36,7 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 850; //3500
+export const TEXT_DISPLAY_DURATION = 200; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 
@@ -112,6 +112,7 @@ let clickPoint = null;
 let scrollPositionX;
 let scrollDirection = 0;
 let swappedDialogueObject = {};
+let pendingEvent = [];
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -1091,4 +1092,12 @@ export function getNonPlayerAnimationFunctionalityActive() {
 
 export function setNonPlayerAnimationFunctionalityActive(value) {
     nonPlayerAnimationFunctionalityActive = value;
+}
+
+export function getPendingEvents() {
+    return pendingEvent;
+}
+
+export function setPendingEvents(value) {
+    pendingEvent = value;
 }

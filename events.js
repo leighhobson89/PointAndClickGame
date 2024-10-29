@@ -1,4 +1,4 @@
-import { getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen, getPreAnimationGridState } from "./constantsAndGlobalVars.js";
+import { setPendingEvents, getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen, getPreAnimationGridState, getPendingEvents } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -14,6 +14,11 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 // change the dialogue engine to handle situations when flag is set for cutscene dialogue between two npcs and just play the dialogue out with the order thing and then after it finishes switch the game state back
 
 async function cutSceneCarpenterFarmerDialogue() {
+    const dialogueData = getDialogueData().dialogue.cutSceneDialogues.farmerAndCarpenterAfterFixingFence;
+    const speakersArray = [['npcCarpenter', 1], ['npcFarmer', 2], ['npcCow', 3]];
+    const order = dialogueData.order;
+
+    executeInteractionEvent('dialogueEngine', null, null, dialogueData, false, speakersArray, order);
     console.log ("farmer and carpenter dialogue triggered");
 }
 
@@ -346,8 +351,11 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
     }
 }
 
-//when the farmer is implemented the player will speak and one option will trigger an event that will advance the questCutOff for the CARPENTER to 2 and advance the CARPENTER questPhase to 1, this will allow the dialogue for the carpenter to give the player the option to send him away to the farmer and thus we can allow the player to pick up the pliers and nails
 function moveCarpenterToStables() {
+    const pendingEvents = getPendingEvents(); //add cutscene event for when player reaches to cowPath next time
+    pendingEvents.push(['cutSceneCarpenterFarmerDialogue', 'cowPath']);
+    setPendingEvents(pendingEvents);
+
     const allGridData = getAllGridData();
     console.log("carpenter gone to stables");
     removeNpcFromEnvironment('npcCarpenter', 'carpenter');
@@ -554,20 +562,31 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Executor function
-export function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special) {
+export function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special1, interactiveDialogue, special3, special4) {
     if (objectEvent === 'dialogueEngine') {
-        let npcId = special;
-        eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}')`);
-        return;
+        if (interactiveDialogue) {
+            let npcId = special1;
+            eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}', '${interactiveDialogue}', ${null}, ${null}, ${null})`);
+            return;
+        } else {
+            eval(`${'dialogueEngine'}(${null}, ${null}, ${interactiveDialogue}, ${JSON.stringify(special1)}, ${JSON.stringify(special3)}, '${special4}')`);
+            return;
+        }
+    } else if (objectEvent === 'triggeredByScreenEntryEvent') {
+        try {
+            eval(`${special1}()`);
+        } catch (error) {
+            console.error(`Failed to trigger event: ${eventToTrigger}`, error);
+        }
     } else {
         const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
         
         if (objectEvent.actionUse1 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
             try {
                 if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 } else {
-                    eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 }
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
@@ -577,9 +596,9 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
         if (objectEvent.actionUse2 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
             try {
                 if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 } else {
-                    eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 }
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
@@ -589,9 +608,9 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
         if (objectEvent.actionUseWith11 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 } else {
-                    eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 }
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
@@ -601,9 +620,9 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
         if (objectEvent.actionUseWith12 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
             try {
                 if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 } else {
-                    eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                    eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
                 }
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
@@ -612,23 +631,23 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
 
         if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
             try {
-                eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special}')`);
+                eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
             }
         }
 
-        if (realVerbUsed === "verbPickUp" && getObjectData().objects[special].interactable.canPickUpNow) {
+        if (realVerbUsed === "verbPickUp" && getObjectData().objects[special1].interactable.canPickUpNow) {
             try {
-                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, '${special}')`);
+                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, '${special1}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionPickUp}:`, e);
             }
         }
 
-        if (realVerbUsed === "verbPickUp" && !getObjectData().objects[special].interactable.canPickUpNow) {
+        if (realVerbUsed === "verbPickUp" && !getObjectData().objects[special1].interactable.canPickUpNow) {
             try {
-                eval(`${objectEvent.actionCanPickUpButNotYet}(${null}, ${null}, ${null}, '${special}')`);
+                eval(`${objectEvent.actionCanPickUpButNotYet}(${null}, ${null}, ${null}, '${special1}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.actionCanPickUpButNotYet}:`, e);
             }
@@ -636,7 +655,7 @@ export function executeInteractionEvent(objectEvent, dialogueString, realVerbUse
 
         if (objectEvent.dialogueEvent) {
             try {
-                eval(`${objectEvent.dialogueEvent}(${null}, ${null}, ${null}, '${special}')`);
+                eval(`${objectEvent.dialogueEvent}(${null}, ${null}, ${null}, '${special1}')`);
             } catch (e) {
                 console.error(`Error executing function ${objectEvent.dialogueEvent}:`, e);
             }

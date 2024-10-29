@@ -484,7 +484,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         object1 = npcData.npcs[objectId1];
         if (!isObject1TrueNpcFalse && object1.interactable.canTalk) { //dialogue window intiation
             objectEvent = 'dialogueEngine';
-            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1);
+            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1, true);
         } else {
             const cantTalkDialogueNumber = npcData.npcs[objectId1].interactable.cantTalkDialogueNumber;
             dialogueString = dialogueData.dialogue.npcInteractions.verbTalkTo[objectId1].cantTalkDialogue[cantTalkDialogueNumber][language];

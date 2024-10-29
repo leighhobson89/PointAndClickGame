@@ -5,10 +5,14 @@ import { setGameState } from "./game.js"
 import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
 
 // Dialogue Engine
-export async function dialogueEngine(realVerbUsed, npcId, nonInteractiveDialogue, speakersArray = []) {
+export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, dialoguePathString, speakersArrayString, order) {
     const player = getPlayerObject();
     const language = getLanguage();
     const npcData = getNpcData().npcs[npcId];
+
+    if (!interactiveDialogue) {
+        return;
+    }
 
     let questPhase = getQuestPhaseNpc(npcId);
     const dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
