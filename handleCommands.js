@@ -2,6 +2,7 @@ import { getCanvasCellHeight, setOriginalGridState, getAllGridData, setNavigatio
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js";
+import { dialogueEngine} from "./dialogue.js";
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -483,8 +484,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
     } else { //npc
         object1 = npcData.npcs[objectId1];
         if (!isObject1TrueNpcFalse && object1.interactable.canTalk) { //dialogue window intiation
-            objectEvent = 'dialogueEngine';
-            executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, objectId1, true);
+            await dialogueEngine(realVerbUsed, objectId1, true, null, null, null);
         } else {
             const cantTalkDialogueNumber = npcData.npcs[objectId1].interactable.cantTalkDialogueNumber;
             dialogueString = dialogueData.dialogue.npcInteractions.verbTalkTo[objectId1].cantTalkDialogue[cantTalkDialogueNumber][language];

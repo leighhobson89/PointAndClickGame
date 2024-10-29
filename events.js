@@ -18,7 +18,7 @@ async function cutSceneCarpenterFarmerDialogue() {
     const speakersArray = [['npcCarpenter', 1], ['npcFarmer', 2], ['npcCow', 3]];
     const order = dialogueData.order;
 
-    executeInteractionEvent('dialogueEngine', null, null, dialogueData, false, speakersArray, order);
+    await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
     console.log ("farmer and carpenter dialogue triggered");
 }
 
@@ -562,17 +562,8 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Executor function
-export function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special1, interactiveDialogue, special3, special4) {
-    if (objectEvent === 'dialogueEngine') {
-        if (interactiveDialogue) {
-            let npcId = special1;
-            eval(`${'dialogueEngine'}('${realVerbUsed}', '${npcId}', '${interactiveDialogue}', ${null}, ${null}, ${null})`);
-            return;
-        } else {
-            eval(`${'dialogueEngine'}(${null}, ${null}, ${interactiveDialogue}, ${JSON.stringify(special1)}, ${JSON.stringify(special3)}, '${special4}')`);
-            return;
-        }
-    } else if (objectEvent === 'triggeredByScreenEntryEvent') {
+export async function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special1) {
+    if (objectEvent === 'triggeredByScreenEntryEvent') {
         try {
             eval(`${special1}()`);
         } catch (error) {
