@@ -1,4 +1,4 @@
-import { setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData } from "./constantsAndGlobalVars.js";
+import { setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js";
@@ -141,7 +141,7 @@ export function handlePickUp(verb, objectId, exitOrNot, isObjectTrueNpcFalse) {
 function pickUpItem(objectId, quantity, verb, dialogueString) {
     const objectEvent = getObjectEvents(objectId);
 
-    removeObjectFromEnvironment(objectId);
+    removeObjectFromEnvironment(objectId, getCurrentScreenId());
     addItemToInventory(objectId, quantity);
 
     console.log(getPlayerInventory());
@@ -153,9 +153,9 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
     }
 }
 
-export function removeObjectFromEnvironment(objectId) {
-    const gridData = getGridData().gridData; // Get the current grid data
-    const roomId = getCurrentScreenId(); // Get the current room ID
+export function removeObjectFromEnvironment(objectId, placeToRemoveFrom) {
+    const gridData = getAllGridData()[placeToRemoveFrom]; // Get the current grid data
+    const roomId = placeToRemoveFrom;
     const originalValues = getOriginalValueInCellWhereObjectPlaced(); // Get original values in the cells
 
     if (originalValues.hasOwnProperty(roomId)) {
@@ -1121,6 +1121,13 @@ export function setObjectData(objectId, path, newValue) {
         console.warn(`Invalid path: ${finalKey} does not exist in the object.`);
     }
 
+    if (path.includes('gridPosition.x')) {
+        objectData.objects[objectId].visualPosition.x = newValue * getCanvasCellWidth();
+    }
+    if (path.includes('gridPosition.y')) {
+        objectData.objects[objectId].visualPosition.y = newValue * getCanvasCellHeight();
+    }
+
     setObjectsData(objectData);
 }
 
@@ -1152,7 +1159,15 @@ export function setNpcData(npcId, path, newValue) {
         console.warn(`Invalid path: ${finalKey} does not exist in the object.`);
     }
 
+    if (path.includes('gridPosition.x')) {
+        npcData.npcs[npcId].visualPosition.x = newValue * getCanvasCellWidth();
+    }
+    if (path.includes('gridPosition.y')) {
+        npcData.npcs[npcId].visualPosition.y = newValue * getCanvasCellHeight();
+    }
+
     setNpcsData(npcData);
+
 }
 
 function getObjectEvents(objectId) {

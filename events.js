@@ -49,12 +49,12 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const language = getLanguage();
     let gridData = getGridData();
 
-    removeObjectFromEnvironment('objectParrotHook');
+    removeObjectFromEnvironment('objectParrotHook', 'bigTree');
 
     setAnimationInProgress(true);
     setObjectData(`objectParrotFlyer`, `dimensions.width`, 2);
     setObjectData(`objectParrotFlyer`, `dimensions.height`, 4.6);
-    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true);
+    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true, 'bigTree');
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -119,8 +119,7 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
 
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
     let gridData = getGridData();
-    const objectSturdyAnchor = 'objectSturdyAnchor';
-    removeObjectFromEnvironment(objectSturdyAnchor);
+    removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');
 
     await showText(dialogueString, getColorTextPlayer());
 
@@ -194,7 +193,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setTimeout(() => {
     setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
-    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true);
+    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true, 'stables');
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
@@ -225,7 +224,7 @@ async function moveDonkeyOffScreen() {
 
     changeCanvasBgTemp('./resources/backgrounds/stables.png');
 
-    removeObjectFromEnvironment('objectDonkeyFake');
+    removeObjectFromEnvironment('objectDonkeyFake', 'stables');
     setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
 
     let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
@@ -292,7 +291,7 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true);
+    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true, 'bigTree');
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
@@ -308,8 +307,23 @@ function resizeBowlInObjectsJSON() {
 }
 
 function setCarpenterSpokenToTrue() {
+    const allGridData = getAllGridData();
     setNpcData(`npcCarpenter`, `interactable.spokenToYet`, true);
     console.log("spoke to carpenter now");
+
+    removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
+
+    addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, 6, 14, 's1', false, 'cowPath');
+    setPreAnimationGridState(allGridData.cowPath, 'npcCow', true);
+
+    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, 10, 8, 's1', false, 'cowPath');
+    setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', true);
+    
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
+
+    setNpcData(`npcCow`,`interactable.canHover`, true);
+    setNpcData(`npcFarmer`,`interactable.canHover`, true);
 }
 
 function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) {
@@ -460,7 +474,7 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setObjectData(`objectBowl`, `dimensions.width`, 2);
     setObjectData(`objectBowl`, `dimensions.height`, 4);
-    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true); //add empty bowl back in for dog having drunk it
+    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setAnimationInProgress(true);

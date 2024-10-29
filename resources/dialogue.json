@@ -92,6 +92,31 @@
             }
           }
         },
+        "objectBrokenFenceFarmTrack": {
+          "use": {
+            "cantUseYet": {
+              "en": "I will probably cut myself messing with that, so no!",
+              "es": "¡Probablemente me corte al jugar con eso, así que no!",
+              "de": "Ich werde mich wahrscheinlich schneiden, wenn ich damit herumspiele, also nein!",
+              "it": "Probabilmente mi taglierò giocando con quello, quindi no!",
+              "fr": "Je vais probablement me couper en jouant avec ça, donc non!"
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
         "objectParrakeet": {
           "use": {
             "cantUseYet": {
@@ -522,6 +547,15 @@
             "de": "\"Wirf das Seil, der Haken ist fest, heb das Brett ohne Stress!\" - Ich habe keine Ahnung, was das bedeuten soll!",
             "it": "\"Lancia la corda, il gancio è pronto, solleva la tavola senza scontro!\" - Non ho idea di cosa significhi!",
             "fr": "\"Lance la corde, le crochet est prêt, soulève cette planche sans suer!\" - Je n'ai aucune idée de ce que cela signifie!"
+          }
+        },
+        "objectBrokenFenceFarmTrack": {
+          "0": {
+            "en": "The fence is down and there are wood splinters everywhere, it must have been windy recently!",
+            "es": "La cerca está caída y hay astillas de madera por todas partes, ¡debe haber estado ventoso recientemente!",
+            "de": "Der Zaun ist umgefallen und überall liegen Holzsplitter, es muss in letzter Zeit windig gewesen sein!",
+            "it": "La recinzione è caduta e ci sono schegge di legno ovunque, deve essere stato ventoso di recente!",
+            "fr": "La clôture est tombée et il y a des éclats de bois partout, il a dû y avoir du vent récemment !"
           }
         },
         "objectKeyToDen": {

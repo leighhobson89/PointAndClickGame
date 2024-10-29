@@ -1146,7 +1146,7 @@ function getLocationName(id) {
     }
 }
 
-export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite, isObjectTrueNpcFalse) {
+export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffset = 0, width, height, sprite, isObjectTrueNpcFalse, placementLocation) {
     const gridData = getAllGridData();
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
@@ -1156,12 +1156,12 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
     let roomName;
 
     if (isObjectTrueNpcFalse) {
-        setObjectData(`${entityId}`, `objectPlacementLocation`, `${getCurrentScreenId()}`);
+        setObjectData(`${entityId}`, `objectPlacementLocation`, `${placementLocation}`);
         entityData = getObjectData();
         entity = entityData.objects[entityId]; // Fetch the object data
         roomName = entity.objectPlacementLocation;
     } else {
-        setNpcData(`${entityId}`, `npcPlacementLocation`, `${getCurrentScreenId()}`);
+        setNpcData(`${entityId}`, `npcPlacementLocation`, `${placementLocation}`);
         entityData = getNpcData();
         entity = entityData.npcs[entityId]; // Fetch the object data
         roomName = entity.npcPlacementLocation;
