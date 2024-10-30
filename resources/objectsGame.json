@@ -1135,11 +1135,10 @@
         "actionPickUp": "pickUpMallet",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "barn",
+      "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/blank.png",
-        "s2": "./resources/objects/images/malletWorld.png"
+        "s1": "./resources/objects/images/malletWorld.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -1153,8 +1152,8 @@
       },
       "inventoryUrl": "./resources/objects/images/malletInv.png",
       "gridPosition": {
-        "x": 18,
-        "y": 1
+        "x": 20,
+        "y": 35
       },
       "offset": {
         "x": 0,
@@ -1165,8 +1164,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 1,
-        "originalHeight": 1,
+        "originalWidth": 20,
+        "originalHeight": 15,
         "width": 0,
         "height": 0
       },

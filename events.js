@@ -414,25 +414,11 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
     changeSpriteAndHoverableStatus('s3', `${barrel}`, true);
 
-    const gridPositionX = 51;
-    const gridPositionY = 45;
-
-    const offsetX = getObjectData().objects['objectMallet'].offset.x * getCanvasCellWidth();
-    const offsetY = getObjectData().objects['objectMallet'].offset.x * getCanvasCellHeight();
-
-    const offSetAdjustmentX = 0;
-    const offSetAdjustmentY = 0;
-
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
-
-    setAnimationInProgress(true); //refactor with remove and add to environment TODO
+    setAnimationInProgress(true);
+    addEntityToEnvironment('objectMallet', 20, 35, 0, 0, getObjectData().objects['objectMallet'].dimensions.originalWidth, getObjectData().objects['objectMallet'].dimensions.originalHeight, null, true, 'barn');
     setPreAnimationGridState(gridData, 'objectMallet', true);
-    setObjectData(`objectMallet`, `visualPosition.x`, desiredVisualPositionX);
-    setObjectData(`objectMallet`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectMallet`, `dimensions.width`, 4.4);
-    setObjectData(`objectMallet`, `dimensions.height`, 2.2);
-    changeSpriteAndHoverableStatus('s2', 'objectMallet', true);
+
+    updateGrid();
 
     showText(dialogueString, getColorTextPlayer());
 }
@@ -502,8 +488,9 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setAnimationInProgress(true);
     addEntityToEnvironment('objectBowl', 62, 49, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet');
-    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setPreAnimationGridState(gridData, 'objectBowl', true);
+
+    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
 
     addEntityToEnvironment('objectBone', 64, 54, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
     setPreAnimationGridState(gridData, 'objectBone', true);
