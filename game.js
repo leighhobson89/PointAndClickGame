@@ -315,6 +315,7 @@ function moveOtherEntitiesOnCurrentScreen() {
 
 
 export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
+    console.log("resizing npc: " + !entityObjectTrueNpcFalse);
     const player = getPlayerObject();
     const gridData = getGridData();
 
@@ -424,14 +425,14 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
                 setObjectData(`${objectId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
                 setObjectData(`${objectId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
 
-                setObjectData(`${objectId}`,`dimensions.width`, newWidthW * getCanvasCellWidth());
-                setObjectData(`${objectId}`,`dimensions.height`, newHeightW * getCanvasCellHeight());
+                setObjectData(`${objectId}`,`dimensions.width`, newWidthW / getCanvasCellWidth());
+                setObjectData(`${objectId}`,`dimensions.height`, newHeightW / getCanvasCellHeight());
             } else { //npc
                 setNpcData(`${npcId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
                 setNpcData(`${npcId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
 
-                setNpcData(`${npcId}`,`dimensions.width`, newWidthW);
-                setNpcData(`${npcId}`,`dimensions.height`, newHeightW);
+                setNpcData(`${npcId}`,`dimensions.width`, newWidthW / getCanvasCellWidth());
+                setNpcData(`${npcId}`,`dimensions.height`, newHeightW / getCanvasCellHeight());
             }
         }
     }
