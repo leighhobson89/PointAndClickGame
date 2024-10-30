@@ -75,8 +75,7 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 
     setDialogueData('objectInteractions.verbLookAt.objectParrotFlyer', '0', '1');
 
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+    updateGrid();
 
     await moveParrotToFlyer();
     console.log('Parrot has finished moving to the flyer!');
@@ -206,8 +205,9 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
     addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, getObjectData().objects['objectDonkeyRope'].dimensions.originalWidth, getObjectData().objects['objectDonkeyRope'].dimensions.originalHeight, null, true, 'stables');
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+
+    updateGrid();
+
     }, 50);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -308,8 +308,7 @@ function resetHookBackToTreePosition() {
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
     setObjectData(`objectParrotHook`, `interactable.canPickUp`, true);
     
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+    updateGrid();
 }
 
 function resizeBowlInObjectsJSON() { //refactor with remove and add to environment TODO
@@ -330,8 +329,7 @@ function setCarpenterSpokenToTrue() {
     addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, getNpcData().npcs['npcFarmer'].dimensions.originalWidth, getObjectData().objects['npcFarmer'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
     
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+    updateGrid();
 
     setNpcData(`npcCow`,`interactable.canHover`, true);
     setNpcData(`npcFarmer`,`interactable.canHover`, true);
@@ -367,8 +365,8 @@ function moveCarpenterToStables() {
     setTimeout(() => {
         addEntityToEnvironment('npcFarmer', 50, 26, 0, 0, farmerWidth, farmerHeight, 's1', false, 'cowPath');
         setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
-        const gridUpdateData = getAllGridData();
-        setOriginalGridState(gridUpdateData);
+
+        updateGrid();
 
         setTimeout(() => {
             setNpcData(`npcCarpenter`, `dimensions.width`, `${farmerWidth - 2}`);
@@ -383,8 +381,7 @@ function moveCarpenterToStables() {
             setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
             setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
     
-            const gridUpdateData = getAllGridData();
-            setOriginalGridState(gridUpdateData);
+            updateGrid();
         }, 50);
     }, 50);
 }
@@ -503,33 +500,16 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
 
     setNpcData(`${townDog}`, `activeSpriteUrl`, 's4');
 
-    const gridPositionX = 65;
-    const gridPositionY = 54;
-
-    const offsetX = getObjectData().objects['objectBone'].offset.x * getCanvasCellWidth();
-    const offsetY = getObjectData().objects['objectBone'].offset.x * getCanvasCellHeight();
-
-    const offSetAdjustmentX = offsetX - (0.8 * getCanvasCellWidth()); //change these to move object with fine control
-    const offSetAdjustmentY = 0; //change these to move object with fine control
-
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
-
-    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
-
-    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setAnimationInProgress(true);
-    setPreAnimationGridState(gridData, 'objectBone', true); //refactor with add remove environemnt TODO
-    setObjectData(`objectBone`, `visualPosition.x`, desiredVisualPositionX);
-    setObjectData(`objectBone`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectBone`, `dimensions.width`, 1.33);
-    setObjectData(`objectBone`, `dimensions.height`, 2.4);
-    setObjectData(`objectBone`, `interactable.canPickUp`, true);
-    changeSpriteAndHoverableStatus('s2', 'objectBone', true); 
-    
+    addEntityToEnvironment('objectBowl', 62, 49, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet');
+    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
+    setPreAnimationGridState(gridData, 'objectBowl', true);
+
+    addEntityToEnvironment('objectBone', 64, 54, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
+    setPreAnimationGridState(gridData, 'objectBone', true);
+
     const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
-    setGameState(getCutSceneState());
 
     await showCutSceneDialogue(0, dialogueStringData, orderOfStartingDialogue, npcData);
 
@@ -552,6 +532,11 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
     setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
     setObjectData(`objectCarrot`, `interactable.canHover`, true);
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
+}
+
+function updateGrid() {
+    const gridUpdateData = getAllGridData();
+    setOriginalGridState(gridUpdateData);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -690,18 +675,3 @@ async function showCutSceneDialogue(dialogueIndex, dialogueData, orderOfStarting
 //--------------------------------------------------------------------------------------------------------------------------------------
 //--UNUSED EVENTS-----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------
-
-//Use objectBatteryDEBUG to activate objectMachineDEBUG
-function useBatteryDEBUGOnMachineDEBUG(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, true);
-}
-
-//Use objectMachineDEBUG to get objectBananaDEBUG
-function machineDEBUGActivate(objectToUseWith, dialogueString, realVerbUsed, special) {
-    showText(dialogueString, getColorTextPlayer());
-    addItemToInventory("objectBananaDEBUG", 3);
-    drawInventory(0);
-    setObjectData(`objectMachineDEBUG`, `interactable.alreadyUsed`, true);
-    setObjectData(`objectMachineDEBUG`, `interactable.activeStatus`, false);
-}

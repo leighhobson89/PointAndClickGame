@@ -1225,6 +1225,8 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
 
     if (isObjectTrueNpcFalse) {
         setObjectData(`${entityId}`, `objectPlacementLocation`, `${placementLocation}`);
+        setObjectData(`${entityId}`, `offset.x`, `${xOffset}`);
+        setObjectData(`${entityId}`, `offset.y`, `${yOffset}`);
         setObjectData(`${entityId}`, `dimensions.width`, `${width}`);
         setObjectData(`${entityId}`, `dimensions.height`, `${height}`);
         entityData = getObjectData();
@@ -1232,6 +1234,8 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
         roomName = entity.objectPlacementLocation;
     } else {
         setNpcData(`${entityId}`, `npcPlacementLocation`, `${placementLocation}`);
+        setNpcData(`${entityId}`, `offset.x`, `${xOffset}`);
+        setNpcData(`${entityId}`, `offset.y`, `${yOffset}`);
         setNpcData(`${entityId}`, `dimensions.width`, `${width}`);
         setNpcData(`${entityId}`, `dimensions.height`, `${height}`);
         entityData = getNpcData();

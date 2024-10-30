@@ -103,7 +103,7 @@
       "waypoints": {},
       "interactable": {
         "specialNpcObjectStandIn": false,
-        "canHover": false,
+        "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
@@ -133,11 +133,10 @@
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "marketStreet",
+      "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/blank.png",
-        "s2": "./resources/objects/images/boneWorld.png"
+        "s1": "./resources/objects/images/boneWorld.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -163,8 +162,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 1,
-        "originalHeight": 1,
+        "originalWidth": 1.33,
+        "originalHeight": 2.4,
         "width": 0,
         "height": 0
       },
