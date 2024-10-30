@@ -505,8 +505,7 @@
         "npcPlacementLocation": "",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
-          "s1": "./resources/npcs/farmer.png",
-          "s2": "./resources/npcs/blank.png"
+          "s1": "./resources/npcs/farmer.png"
         },
         "gridPosition": {
           "x": 24,

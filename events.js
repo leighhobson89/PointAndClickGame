@@ -171,23 +171,18 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     handleInventoryAdjustment(objectId, 1, false);
     drawInventory(0);
 
-    const currentNpcDonkeyX = npcData.visualPosition.x;
-    const currentNpcDonkeyY = npcData.visualPosition.y;
+    const currentNpcDonkeyX = Math.floor(npcData.visualPosition.x / getCanvasCellWidth());
+    const currentNpcDonkeyY = Math.floor(npcData.visualPosition.y / getCanvasCellHeight());
     const currentNpcDonkeyWidth = npcData.dimensions.width;
 
     removeNpcFromEnvironment('npcDonkey', 'stables');
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
-        // Move object donkey to place of real and show //update code to add remove entity TODO
-        setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
-        setObjectData(`objectDonkeyFake`, `visualPosition.x`, (currentNpcDonkeyX)); // set this number when positioned
-        setObjectData(`objectDonkeyFake`, `visualPosition.y`, (currentNpcDonkeyY)); // set this number when positioned
-        setObjectData(`objectDonkeyFake`, `dimensions.width`, currentNpcDonkeyWidth);
-        setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
+        addEntityToEnvironment('objectDonkeyFake', currentNpcDonkeyX, currentNpcDonkeyY, 0.5, 0, currentNpcDonkeyWidth, getObjectData().objects['objectDonkeyFake'].dimensions.originalHeight, 's2', true, 'stables');
         setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 90);
-        setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
-        setObjectData(`objectDonkeyFake`, `interactable.canHover`, true);
+        setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
+        updateGrid();
     }, 50);
 }
 
@@ -311,11 +306,6 @@ function resetHookBackToTreePosition() {
     updateGrid();
 }
 
-function resizeBowlInObjectsJSON() { //refactor with remove and add to environment TODO
-    setObjectData(`objectBowl`, `dimensions.width`, 1);
-    setObjectData(`objectBowl`, `dimensions.height`, 1);
-}
-
 function setCarpenterSpokenToTrue() {
     const allGridData = getAllGridData();
     setNpcData(`npcCarpenter`, `interactable.spokenToYet`, true);
@@ -323,10 +313,12 @@ function setCarpenterSpokenToTrue() {
 
     removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
 
-    addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, getNpcData().npcs['npcCow'].dimensions.originalWidth, getObjectData().objects['npcCow'].dimensions.originalHeight, 's1', false, 'cowPath');
+    addEntityToEnvironment('npcCow', 13, 27, 0, 0, getNpcData().npcs['npcCow'].dimensions.originalWidth, getNpcData().npcs['npcCow'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcCow', false);
 
-    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, getNpcData().npcs['npcFarmer'].dimensions.originalWidth, getObjectData().objects['npcFarmer'].dimensions.originalHeight, 's1', false, 'cowPath');
+    updateGrid();
+
+    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, getNpcData().npcs['npcFarmer'].dimensions.originalWidth, getNpcData().npcs['npcFarmer'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
     
     updateGrid();
@@ -361,9 +353,10 @@ function moveCarpenterToStables() {
     const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.originalHeight;
 
     removeNpcFromEnvironment('npcFarmer', 'cowPath');
+    setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
 
     setTimeout(() => {
-        addEntityToEnvironment('npcFarmer', 50, 26, 0, 0, farmerWidth, farmerHeight, 's1', false, 'cowPath');
+        addEntityToEnvironment('npcFarmer', 46, 26, 0, 0, getNpcData().npcs['npcFarmer'].dimensions.originalWidth, getNpcData().npcs['npcFarmer'].dimensions.originalHeight, 's1', false, 'cowPath');
         setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
 
         updateGrid();
@@ -375,7 +368,6 @@ function moveCarpenterToStables() {
             setNpcData(`npcCarpenter`, `gridPosition.y`, `${farmerY}`);
             addEntityToEnvironment('npcCarpenter', farmerX, farmerY, 0, 0, farmerWidth - 2, farmerHeight, 's3', false, 'cowPath');
             setPreAnimationGridState(allGridData.cowPath, 'npcCarpenter', false);
-            setOriginalGridState(allGridData);
         
             setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
             setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
@@ -521,7 +513,7 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
 }
 
-function updateGrid() {
+export function updateGrid() {
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
 }

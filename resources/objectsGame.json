@@ -210,7 +210,7 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "resizeBowlInObjectsJSON",
+        "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "house",
@@ -460,7 +460,7 @@
       },
       "interactable": {
         "specialNpcObjectStandIn": true,
-        "canHover": false,
+        "canHover": true,
         "canPush": false,
         "canPull": false,
         "canOpen": false,
@@ -491,10 +491,10 @@
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "stables",
-      "activeSpriteUrl": "s1",
+      "objectPlacementLocation": "",
+      "activeSpriteUrl": "s2",
       "spriteUrl": {
-        "s1": "./resources/objects/images/blank.png",
+        "s1": "",
         "s2": "./resources/objects/images/donkeyOnRopeHappy.png",
         "s3": "./resources/objects/images/donkeyNotOnRopeLeft.png",
         "s4": "./resources/objects/images/donkeyNotOnRopeRight.png"
@@ -683,7 +683,7 @@
       },
       "dimensions": {
         "originalWidth": 4,
-        "originalHeight": 28,
+        "originalHeight": 26,
         "width": 0,
         "height": 0
       },
@@ -1886,7 +1886,7 @@
       "inventoryUrl": "",
       "gridPosition": {
         "x": 19,
-        "y": 53
+        "y": 50
       },
       "offset": {
         "x": 0,

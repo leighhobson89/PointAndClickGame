@@ -1225,29 +1225,29 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
 
     if (isObjectTrueNpcFalse) {
         setObjectData(`${entityId}`, `objectPlacementLocation`, `${placementLocation}`);
-        setObjectData(`${entityId}`, `offset.x`, `${xOffset}`);
-        setObjectData(`${entityId}`, `offset.y`, `${yOffset}`);
-        setObjectData(`${entityId}`, `dimensions.width`, `${width}`);
-        setObjectData(`${entityId}`, `dimensions.height`, `${height}`);
+        setObjectData(`${entityId}`, `offset.x`, xOffset);
+        setObjectData(`${entityId}`, `offset.y`, yOffset);
+        setObjectData(`${entityId}`, `dimensions.width`, width);
+        setObjectData(`${entityId}`, `dimensions.height`, height);
         entityData = getObjectData();
         entity = entityData.objects[entityId]; // Fetch the object data
         roomName = entity.objectPlacementLocation;
     } else {
         setNpcData(`${entityId}`, `npcPlacementLocation`, `${placementLocation}`);
-        setNpcData(`${entityId}`, `offset.x`, `${xOffset}`);
-        setNpcData(`${entityId}`, `offset.y`, `${yOffset}`);
-        setNpcData(`${entityId}`, `dimensions.width`, `${width}`);
-        setNpcData(`${entityId}`, `dimensions.height`, `${height}`);
+        setNpcData(`${entityId}`, `offset.x`, xOffset);
+        setNpcData(`${entityId}`, `offset.y`, yOffset);
+        setNpcData(`${entityId}`, `dimensions.width`, width);
+        setNpcData(`${entityId}`, `dimensions.height`, height);
         entityData = getNpcData();
-        entity = entityData.npcs[entityId]; // Fetch the object data
+        entity = entityData.npcs[entityId]; // Fetch the npc data
         roomName = entity.npcPlacementLocation;
     }
 
     const roomGridData = gridData[roomName];
 
     // Calculate the dimensions in grid cells
-    const widthInCells = Math.floor(width / cellWidth) + 1;
-    const heightInCells = Math.floor(height / cellHeight) + 1;
+    const widthInCells = Math.floor(width) + 1;
+    const heightInCells = Math.floor(height) + 1;
 
     // Set object offset positions
     const offsetX = xOffset * cellWidth;
@@ -1304,8 +1304,8 @@ export function setUpObjectsAndNpcs() {
         object.dimensions.width = object.dimensions.originalWidth;
         object.dimensions.height = object.dimensions.originalHeight;
 
-        const widthInCells = Math.floor(object.dimensions.originalWidth / cellWidth) + 1;
-        const heightInCells = Math.floor(object.dimensions.originalHeight / cellHeight) + 1;
+        const widthInCells = Math.floor(object.dimensions.originalWidth) + 1;
+        const heightInCells = Math.floor(object.dimensions.originalHeight) + 1;
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
@@ -1314,6 +1314,7 @@ export function setUpObjectsAndNpcs() {
 
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
+                console.log(objectId);
                 const originalValue = roomGridData[y][x];
 
                 setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);

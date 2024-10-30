@@ -1,7 +1,7 @@
 import { getCanvasCellHeight, setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { executeInteractionEvent } from "./events.js";
+import { updateGrid, executeInteractionEvent } from "./events.js";
 import { dialogueEngine} from "./dialogue.js";
 
 export function performCommand(command, inventoryItem) {
@@ -184,8 +184,7 @@ export function removeObjectFromEnvironment(objectId, placeToRemoveFrom) {
             for (const [y, row] of gridData.entries()) {
                 for (const [x, cell] of row.entries()) {
             
-                    // Check if the cell references the objectId (assuming it starts with 'o')
-                    if (cell.slice(1) === objectId) {
+                    if (cell.slice(1).includes(objectId)) {
                         foundReference = true;
                         gridData[y][x] = 'n'; // This might cause problems if the object was on a w or other to start with
                     }
@@ -203,6 +202,7 @@ export function removeObjectFromEnvironment(objectId, placeToRemoveFrom) {
     } else {
         console.error(`No original values found for roomId: ${roomId}`);
     }
+    updateGrid();
 }
 
 
@@ -213,23 +213,52 @@ export function removeNpcFromEnvironment(npcId, placeToRemoveFrom) {
     const originalValues = getOriginalValueInCellWhereNpcPlaced();
 
     if (originalValues.hasOwnProperty(roomId)) {
+        let npcRemoved = false; // Flag to confirm if the NPC was removed
+
+        // Attempt to remove the NPC
         for (const [position, data] of Object.entries(originalValues[roomId])) {
             if (data.npcId === npcId) {
                 const [x, y] = position.split(',').map(Number);
 
-                if (y >= 0 && y < gridData.length && y >= 0 && x < gridData[y].length) {
+                if (y >= 0 && y < gridData.length && x >= 0 && x < gridData[y].length) {
+                    // Remove the NPC by restoring the original value
                     gridData[y][x] = data.originalValue;
+                    npcRemoved = true; // Set flag to true since the NPC is removed
                 } else {
                     console.error(`Position out of bounds: (${x}, ${y})`);
                 }
             }
         }
+
+        if (npcRemoved) {
+            // After removal, check for references to the npcId in gridData
+            let foundReference = false;
+
+            for (const [y, row] of gridData.entries()) {
+                for (const [x, cell] of row.entries()) {
+
+                    // Check if the cell references the npcId (assuming it starts with 'n')
+                    if (cell.slice(1).includes(npcId)) {
+                        foundReference = true;
+                        gridData[y][x] = 'n'; // This might cause problems if the NPC was on a w or other to start with
+                    }
+                }
+            }
+
+            if (foundReference) {
+                console.log(`Warning: NPC ID ${npcId} was still referenced in gridData and has been set to 'n'.`);
+            } else {
+                console.log(`Confirmation: NPC ID ${npcId} has been successfully removed, and no references were found.`);
+            }
+        } else {
+            console.log(`No NPCs found to remove for NPC ID: ${npcId}`);
+        }
     } else {
         console.error(`No original values found for roomId: ${roomId}`);
     }
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
+    updateGrid();
 }
+
 
 export function addItemToInventory(objectId, quantity = 1) {
     const objectData = getObjectData().objects[objectId];
