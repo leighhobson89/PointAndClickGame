@@ -1225,11 +1225,15 @@ export function addEntityToEnvironment(entityId, xPos, yPos, xOffset = 0, yOffse
 
     if (isObjectTrueNpcFalse) {
         setObjectData(`${entityId}`, `objectPlacementLocation`, `${placementLocation}`);
+        setObjectData(`${entityId}`, `dimensions.width`, `${width}`);
+        setObjectData(`${entityId}`, `dimensions.height`, `${height}`);
         entityData = getObjectData();
         entity = entityData.objects[entityId]; // Fetch the object data
         roomName = entity.objectPlacementLocation;
     } else {
         setNpcData(`${entityId}`, `npcPlacementLocation`, `${placementLocation}`);
+        setNpcData(`${entityId}`, `dimensions.width`, `${width}`);
+        setNpcData(`${entityId}`, `dimensions.height`, `${height}`);
         entityData = getNpcData();
         entity = entityData.npcs[entityId]; // Fetch the object data
         roomName = entity.npcPlacementLocation;
@@ -1293,6 +1297,9 @@ export function setUpObjectsAndNpcs() {
             continue;
         }
 
+        object.dimensions.width = object.dimensions.originalWidth;
+        object.dimensions.height = object.dimensions.originalHeight;
+
         const widthInCells = Math.floor(object.dimensions.originalWidth / cellWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.originalHeight / cellHeight) + 1;
         const startX = object.gridPosition.x;
@@ -1328,6 +1335,9 @@ export function setUpObjectsAndNpcs() {
             console.warn(`No grid found for room: ${roomName}`);
             continue;
         }
+
+        npc.dimensions.width = npc.dimensions.originalWidth;
+        npc.dimensions.height = npc.dimensions.originalHeight;
 
         const widthInCells = Math.floor(npc.dimensions.width / cellWidth) + 1;
         const heightInCells = Math.floor(npc.dimensions.height / cellHeight) + 1;

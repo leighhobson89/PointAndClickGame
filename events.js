@@ -66,8 +66,6 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     removeObjectFromEnvironment('objectParrotHook', 'bigTree');
 
     setAnimationInProgress(true);
-    setObjectData(`objectParrotFlyer`, `dimensions.originalWidth`, 2);
-    setObjectData(`objectParrotFlyer`, `dimensions.originalHeight`, 4.6);
     addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, getObjectData().objects['objectParrotFlyer'].dimensions.originalWidth, getObjectData().objects['objectParrotFlyer'].dimensions.originalHeight, null, true, 'bigTree');
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
@@ -205,7 +203,6 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     const navigationData = getNavigationData();
 
     setTimeout(() => {
-    setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
     addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, getObjectData().objects['objectDonkeyRope'].dimensions.originalWidth, getObjectData().objects['objectDonkeyRope'].dimensions.originalHeight, null, true, 'stables');
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
@@ -518,8 +515,6 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    setObjectData(`objectBowl`, `dimensions.originalWidth`, 2);
-    setObjectData(`objectBowl`, `dimensions.originalHeight`, 4);
     addEntityToEnvironment('objectBowl', 61, 51, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
