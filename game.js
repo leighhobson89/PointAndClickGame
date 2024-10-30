@@ -121,7 +121,7 @@ function movePlayerTowardsTarget() {
             entityPaths.player.path = [];
             entityPaths.player.currentIndex = 0;
             setTransitioningNow(false);
-            resizePlayerObject();
+            resizeEntity(true, null, null);
             getElements().customCursor.classList.remove('d-none');
             canvas.style.pointerEvents = 'auto';
             initializeNonPlayerMovementsForScreen(getCurrentScreenId());
@@ -197,7 +197,7 @@ function movePlayerTowardsTarget() {
         }
     }
 
-    resizePlayerObject(player);
+    resizeEntity(true, null, null);
 
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
@@ -300,52 +300,58 @@ function moveOtherEntitiesOnCurrentScreen() {
                     case "npc":
                         setNpcData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
                         setNpcData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
+                        resizeEntity(false, entityIdName, false);
                         break;
                     case "obj":
                         setObjectData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
                         setObjectData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
+                        resizeEntity(false, entityIdName, true);
                         break;
                 }
-
-                // // Drawing the grid references with colors at the end of the function
-                // const canvas = getElements().canvas;
-                // const context = canvas.getContext('2d');
-
-                // Helper function to draw a circle
-                // const drawCircle = (x, y, color) => {
-                //     context.fillStyle = color;
-                //     context.beginPath();
-                //     context.arc((x + 0.5) * gridSizeX, (y + 0.5) * gridSizeY, 5, 0, Math.PI * 2);
-                //     context.fill();
-                // };
-
-                // Draw the points
-                //drawCircle(positionToMeasureFromX / gridSizeX, positionToMeasureFromY / gridSizeY, 'red'); // Red for (entityGridX, entityGridY)
-                //drawCircle(targetX / gridSizeX, targetY / gridSizeY, 'yellow'); // Yellow for (targetX, targetY)
-                //drawCircle(targetX / gridSizeX, (targetY - measurePointAdjustmentY) / gridSizeY, 'blue'); // Blue for (targetX, targetY - measurePointAdjustmentY)
             }
         }
     }
 }
 
 
-export function resizePlayerObject() {
+export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
     const player = getPlayerObject();
     const gridData = getGridData();
+
+    let entity;
+    let objectId;
+    let npcId;
+
+    let entityGridX;
+    let entityGridY;
+    let entityOffsetX;
+    let entityOffsetY;
+
+    if (entityObjectTrueNpcFalse) {
+        entity = getObjectData().objects[entityId];
+        objectId = entityId;
+    } else if (entityObjectTrueNpcFalse !== null) {
+        entity = getNpcData().npcs[entityId];
+        npcId = entityId;
+    }
 
     // Get the scaling factor for the screen
     const scalingFactor = getNavigationData()[getCurrentScreenId()].scalingPlayerSize || 1;
 
-    // Calculate the player's grid position based on their current xPos and yPos
-    const playerGridX = Math.floor(player.xPos / getCanvasCellWidth());
-    const playerGridY = Math.floor(player.yPos / getCanvasCellHeight());
-
-    // Calculate the player's offset in the grid
-    const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / getCanvasCellWidth()));
-    const playerOffsetY = Math.floor(playerGridY + player.height / getCanvasCellHeight());
+    if (playerTrueNpcFalse) {
+        entityGridX = Math.floor(player.xPos / getCanvasCellWidth());
+        entityGridY = Math.floor(player.yPos / getCanvasCellHeight());
+        entityOffsetX = Math.floor(entityGridX + ((player.width / 2) / getCanvasCellWidth()));
+        entityOffsetY = Math.floor(entityGridY + player.height / getCanvasCellHeight());
+    } else { //npc or object
+        entityGridX = Math.floor(entity.visualPosition.x / getCanvasCellWidth());
+        entityGridY = Math.floor(entity.visualPosition.y / getCanvasCellHeight());
+        entityOffsetX = Math.floor(entityGridX + ((entity.dimensions.width / 2)));
+        entityOffsetY = Math.floor(entityGridY + entity.dimensions.height);
+    }
 
     // Get the cell value from the grid
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // +1 to fix reading wrong cell due to rounding
+    const cellValue = gridData.gridData[entityOffsetY + 1][entityOffsetX]; // +1 to fix reading wrong cell due to rounding
 
     let zPosStringW;
     let zPosW;
@@ -364,34 +370,72 @@ export function resizePlayerObject() {
     // Define size limits
     const furthestZPos = 100;
     const nearestZPos = 255;
-    const originalWidth = player.originalWidth;
-    const originalHeight = player.originalHeight;
 
-    // Scale the width and height based on Z position
-    const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
-    const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
+    let originalPlayerWidth;
+    let originalPlayerHeight;
+    let originalEntityWidth;
+    let originalEntityHeight;
+
+    if (playerTrueNpcFalse) {
+        originalPlayerWidth = player.originalWidth;
+        originalPlayerHeight = player.originalHeight;
+
+        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
+        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
+
+        const newWidthW = originalPlayerWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+        const newHeightW = originalPlayerHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+
+        const widthDifference = newWidthW - player.width;
+        const heightDifference = newHeightW - player.height;
+
+        const offsetX = (widthDifference / 2);
+        const offsetY = (heightDifference);
+
+        setPlayerObject('xPos', player.xPos - offsetX);
+        setPlayerObject('yPos', player.yPos - offsetY);
+
+        setPlayerObject('width', newWidthW);
+        setPlayerObject('height', newHeightW);
+    } else { //npc or object
+        originalEntityWidth = entity.dimensions.originalWidth;
+        originalEntityHeight = entity.dimensions.originalHeight;
+
+        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
+        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
+
+        const newWidthW = originalEntityWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+        const newHeightW = originalEntityHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+
+        const widthDifference = newWidthW - entity.dimensions.width;
+        const heightDifference = newHeightW - entity.dimensions.height;
+
+        const offsetX = (widthDifference / 2);
+        const offsetY = (heightDifference);
+
+        if (playerTrueNpcFalse) {
+            setPlayerObject('xPos', player.xPos - offsetX);
+            setPlayerObject('yPos', player.yPos - offsetY);
     
-    // Apply the scaling factor to calculate the new width and height
-    const newWidthW = originalWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
-    const newHeightW = originalHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
+            setPlayerObject('width', newWidthW);
+            setPlayerObject('height', newHeightW);
+        } else {
+            if (entityObjectTrueNpcFalse) { //object
+                setObjectData(`${objectId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
+                setObjectData(`${objectId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
 
-    // Calculate the difference in size after scaling
-    const widthDifference = newWidthW - player.width;
-    const heightDifference = newHeightW - player.height;
+                setObjectData(`${objectId}`,`dimensions.width`, newWidthW * getCanvasCellWidth());
+                setObjectData(`${objectId}`,`dimensions.height`, newHeightW * getCanvasCellHeight());
+            } else { //npc
+                setNpcData(`${npcId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
+                setNpcData(`${npcId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
 
-    // To maintain the same grid offset, adjust the player's position
-    // Ensure the player's new position keeps the offset in the same grid cell
-    const offsetX = (widthDifference / 2);  // Adjust based on half the width difference
-    const offsetY = (heightDifference);     // Adjust based on full height difference
-
-    setPlayerObject('xPos', player.xPos - offsetX); // Adjust x position
-    setPlayerObject('yPos', player.yPos - offsetY); // Adjust y position
-
-    // Update player size with the new scaled size
-    setPlayerObject('width', newWidthW);
-    setPlayerObject('height', newHeightW);
+                setNpcData(`${npcId}`,`dimensions.width`, newWidthW);
+                setNpcData(`${npcId}`,`dimensions.height`, newHeightW);
+            }
+        }
+    }
 }
-
 
 export function drawDebugGrid(drawGrid) {
     let showGrid = drawGrid;
