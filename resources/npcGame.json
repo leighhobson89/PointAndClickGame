@@ -64,8 +64,8 @@
         "dimensions": {
           "originalWidth": 12,
           "originalHeight": 20,
-          "width": 12,
-          "height": 20
+          "width": 0,
+          "height": 0
         },
         "comment": "Can give it a carrot and then you can use it to free it so it opens the barn and take the rope"
       },
@@ -128,8 +128,8 @@
         "dimensions": {
           "originalWidth": 2.33,
           "originalHeight": 10,
-          "width": 2.33,
-          "height": 10
+          "width": 0,
+          "height": 0
         },
         "comment": "Librarian"
       },
@@ -194,8 +194,8 @@
         "dimensions": {
           "originalWidth": 4,
           "originalHeight": 7,
-          "width": 4,
-          "height": 7
+          "width": 0,
+          "height": 0
         },
         "comment": "Town Dog gives bone if given Milk In Bowl"
       },
@@ -259,8 +259,8 @@
         "dimensions": {
           "originalWidth": 3,
           "originalHeight": 17,
-          "width": 3,
-          "height": 17
+          "width": 0,
+          "height": 0
         },
         "comment": "Woman give Key To Den if given objectParrotMirror"
       },
@@ -324,8 +324,8 @@
         "dimensions": {
           "originalWidth": 6,
           "originalHeight": 14,
-          "width": 6,
-          "height": 14
+          "width": 0,
+          "height": 0
         },
         "comment": "Cow needs splinter removing with pliers so farmer appears"
       },
@@ -388,8 +388,8 @@
         "dimensions": {
           "originalWidth": 5,
           "originalHeight": 15,
-          "width": 5,
-          "height": 15
+          "width": 0,
+          "height": 0
         },
         "comment": "Seedy Guy takes Illegible Map and Key To Den after player has opened it."
       },
@@ -459,8 +459,8 @@
         "dimensions": {
           "originalWidth": 6,
           "originalHeight": 32,
-          "width": 6,
-          "height": 32
+          "width": 0,
+          "height": 0
         },
         "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
       },
@@ -523,8 +523,8 @@
         "dimensions": {
           "originalWidth": 6,
           "originalHeight": 17,
-          "width": 6,
-          "height": 17
+          "width": 0,
+          "height": 0
         },
         "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
       }

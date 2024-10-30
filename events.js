@@ -66,9 +66,9 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     removeObjectFromEnvironment('objectParrotHook', 'bigTree');
 
     setAnimationInProgress(true);
-    setObjectData(`objectParrotFlyer`, `dimensions.width`, 2);
-    setObjectData(`objectParrotFlyer`, `dimensions.height`, 4.6);
-    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, 2, 4.6, null, true, 'bigTree');
+    setObjectData(`objectParrotFlyer`, `dimensions.originalWidth`, 2);
+    setObjectData(`objectParrotFlyer`, `dimensions.originalHeight`, 4.6);
+    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, getObjectData().objects['objectParrotFlyer'].dimensions.originalWidth, getObjectData().objects['objectParrotFlyer'].dimensions.originalHeight, null, true, 'bigTree');
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -149,7 +149,7 @@ async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
 
-    setAnimationInProgress(true);
+    setAnimationInProgress(true); //replace code with add remove entity TODO
     setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
     setObjectData(`objectPulleyWheel`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
@@ -174,19 +174,19 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     handleInventoryAdjustment(objectId, 1, false);
     drawInventory(0);
 
-    const originalDonkeyX = npcData.visualPosition.x;
-    const originalDonkeyY = npcData.visualPosition.y;
-    const originalDonkeyWidth = npcData.dimensions.width;
+    const currentNpcDonkeyX = npcData.visualPosition.x;
+    const currentNpcDonkeyY = npcData.visualPosition.y;
+    const currentNpcDonkeyWidth = npcData.dimensions.width;
 
     removeNpcFromEnvironment('npcDonkey', 'stables');
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
-        // Move object donkey to place of real and show
+        // Move object donkey to place of real and show //update code to add remove entity TODO
         setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
-        setObjectData(`objectDonkeyFake`, `visualPosition.x`, (originalDonkeyX)); // set this number when positioned
-        setObjectData(`objectDonkeyFake`, `visualPosition.y`, (originalDonkeyY)); // set this number when positioned
-        setObjectData(`objectDonkeyFake`, `dimensions.width`, originalDonkeyWidth);
+        setObjectData(`objectDonkeyFake`, `visualPosition.x`, (currentNpcDonkeyX)); // set this number when positioned
+        setObjectData(`objectDonkeyFake`, `visualPosition.y`, (currentNpcDonkeyY)); // set this number when positioned
+        setObjectData(`objectDonkeyFake`, `dimensions.width`, currentNpcDonkeyWidth);
         setObjectData(`objectDonkeyFake`, `dimensions.height`, 28);
         setObjectData(`objectDonkeyFake`, `visualPosition.y`, getObjectData().objects[`objectDonkeyFake`].visualPosition.y - 90);
         setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's2');
@@ -207,7 +207,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setTimeout(() => {
     setObjectData(`objectDonkeyFake`, `dimensions.width`, 8);
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
-    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, 6, 11, null, true, 'stables');
+    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, getObjectData().objects['objectDonkeyRope'].dimensions.originalWidth, getObjectData().objects['objectDonkeyRope'].dimensions.originalHeight, null, true, 'stables');
     setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
     const gridUpdateData = getAllGridData();
     setOriginalGridState(gridUpdateData);
@@ -305,7 +305,7 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, 24, 12, null, true, 'bigTree');
+    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, getObjectData().objects['objectParrotHook'].dimensions.originalWidth, getObjectData().objects['objectParrotHook'].dimensions.originalHeight, null, true, 'bigTree');
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
@@ -315,7 +315,7 @@ function resetHookBackToTreePosition() {
     setOriginalGridState(gridUpdateData);
 }
 
-function resizeBowlInObjectsJSON() {
+function resizeBowlInObjectsJSON() { //refactor with remove and add to environment TODO
     setObjectData(`objectBowl`, `dimensions.width`, 1);
     setObjectData(`objectBowl`, `dimensions.height`, 1);
 }
@@ -327,10 +327,10 @@ function setCarpenterSpokenToTrue() {
 
     removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
 
-    addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, 6, 14, 's1', false, 'cowPath');
+    addEntityToEnvironment('npcCow', 13, 27, 1.8, -0.1, getNpcData().npcs['npcCow'].dimensions.originalWidth, getObjectData().objects['npcCow'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcCow', false);
 
-    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, 10, 8, 's1', false, 'cowPath');
+    addEntityToEnvironment('npcFarmer', 24, 26, 0, 0, getNpcData().npcs['npcFarmer'].dimensions.originalWidth, getObjectData().objects['npcFarmer'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
     
     const gridUpdateData = getAllGridData();
@@ -362,8 +362,8 @@ function moveCarpenterToStables() {
 
     const farmerX = getNpcData().npcs['npcFarmer'].gridPosition.x;
     const farmerY = getNpcData().npcs['npcFarmer'].gridPosition.y;
-    const farmerWidth = getNpcData().npcs['npcFarmer'].dimensions.width;
-    const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.height;
+    const farmerWidth = getNpcData().npcs['npcFarmer'].dimensions.originalWidth;
+    const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.originalHeight;
 
     removeNpcFromEnvironment('npcFarmer', 'cowPath');
 
@@ -432,7 +432,7 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    setAnimationInProgress(true);
+    setAnimationInProgress(true); //refactor with remove and add to environment TODO
     setPreAnimationGridState(gridData, 'objectMallet', true);
     setObjectData(`objectMallet`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectMallet`, `visualPosition.y`, desiredVisualPositionY);
@@ -518,13 +518,13 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
     const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight()) + offsetY + offSetAdjustmentY;
 
-    setObjectData(`objectBowl`, `dimensions.width`, 2);
-    setObjectData(`objectBowl`, `dimensions.height`, 4);
-    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, 2, 4, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
+    setObjectData(`objectBowl`, `dimensions.originalWidth`, 2);
+    setObjectData(`objectBowl`, `dimensions.originalHeight`, 4);
+    addEntityToEnvironment('objectBowl', 61, 51, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet'); //add empty bowl back in for dog having drunk it
 
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
     setAnimationInProgress(true);
-    setPreAnimationGridState(gridData, 'objectBone', true);
+    setPreAnimationGridState(gridData, 'objectBone', true); //refactor with add remove environemnt TODO
     setObjectData(`objectBone`, `visualPosition.x`, desiredVisualPositionX);
     setObjectData(`objectBone`, `visualPosition.y`, desiredVisualPositionY);
     setObjectData(`objectBone`, `dimensions.width`, 1.33);

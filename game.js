@@ -398,8 +398,8 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
         setPlayerObject('width', newWidthW);
         setPlayerObject('height', newHeightW);
     } else { //npc or object
-        originalEntityWidth = entity.dimensions.originalWidth;
-        originalEntityHeight = entity.dimensions.originalHeight;
+        originalEntityWidth = entity.dimensions.originalWidth * getCanvasCellWidth();
+        originalEntityHeight = entity.dimensions.originalHeight * getCanvasCellHeight();
 
         const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
         const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
@@ -1293,8 +1293,8 @@ export function setUpObjectsAndNpcs() {
             continue;
         }
 
-        const widthInCells = Math.floor(object.dimensions.width / cellWidth) + 1;
-        const heightInCells = Math.floor(object.dimensions.height / cellHeight) + 1;
+        const widthInCells = Math.floor(object.dimensions.originalWidth / cellWidth) + 1;
+        const heightInCells = Math.floor(object.dimensions.originalHeight / cellHeight) + 1;
         const startX = object.gridPosition.x;
         const startY = object.gridPosition.y;
 
