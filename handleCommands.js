@@ -3,7 +3,7 @@ import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { executeInteractionEvent } from "./events.js";
 import { dialogueEngine} from "./dialogue.js";
-import { updateGrid } from "./game.js";
+import { triggerPendingEvent, checkPendingEvents, updateGrid } from "./game.js";
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
@@ -717,7 +717,7 @@ export function handlePull(verb, objectId) {
 }
 
 // Handle "Talk To" action
-export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
+export async function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
     let npcData;
 
     if (isObjectTrueNpcFalse && !exitOrNot) {
@@ -740,7 +740,14 @@ export function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse) {
             if (!npcData.interactable.specialNpcObjectStandIn) {
                 const cantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
                 dialogueString = dialogueData.npcInteractions.verbTalkTo[npcId].cantTalkDialogue[cantTalkDialogueNumber][language];
-                showText(dialogueString, npcData.interactable.dialogueColor);
+                
+                await showText(dialogueString, npcData.interactable.dialogueColor);
+                
+                const pendingEvent = checkPendingEvents();
+
+                if (pendingEvent) {
+                    triggerPendingEvent(pendingEvent);
+                }
             } else {
                 dialogueString = dialogueData.objectInteractions.verbUse[npcId].use.cantUseYet[language];
                 showText(dialogueString, npcData.interactable.dialogueColor);

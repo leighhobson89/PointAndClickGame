@@ -2626,6 +2626,20 @@
               "de": "Ich weiß nicht, wie lange ich sie noch zurückhalten kann, schnell!!",
               "it": "Non so quanto a lungo posso trattenerla, veloce!!",
               "fr": "Je ne sais pas combien de temps je peux encore la retenir, vite!!"
+            },
+            "1": {
+              "en": "At least the fence is fixed now, but Daisy is in a lot of pain!",
+              "es": "Al menos la cerca ya está arreglada, ¡pero Daisy está sufriendo mucho!",
+              "de": "Mindestens ist der Zaun jetzt repariert, aber Daisy hat große Schmerzen!",
+              "it": "Almeno la recinzione è sistemata ora, ma Daisy ha molto dolore!",
+              "fr": "Au moins, la clôture est maintenant réparée, mais Daisy a beaucoup de douleur!"
+            },
+            "2": {
+                "en": "Phew! What a day, I'm off for a strong drink! Thanks for your help!",
+                "es": "¡Uf! Qué día, ¡me voy a tomar un trago fuerte! ¡Gracias por tu ayuda!",
+                "de": "Puh! Was für ein Tag, ich gehe jetzt ein starkes Getränk nehmen! Danke für deine Hilfe!",
+                "it": "Uff! Che giornata, vado a bere un drink forte! Grazie per il tuo aiuto!",
+                "fr": "Ouf ! Quelle journée, je pars pour un bon verre ! Merci pour votre aide !"
             }
           }
         },

@@ -8,11 +8,6 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
-
-//cutscene for carpenter
-// trigger the event when the screen changes at the right time
-// change the dialogue engine to handle situations when flag is set for cutscene dialogue between two npcs and just play the dialogue out with the order thing and then after it finishes switch the game state back
-
 async function cutSceneCarpenterFarmerDialogue() {
     const dialogueData = getDialogueData().dialogue.cutSceneDialogues.farmerAndCarpenterAfterFixingFence;
     const speakersArray = [['npcCarpenter', 1], ['npcFarmer', 2], ['npcCow', 3]];
@@ -243,7 +238,7 @@ async function moveCarpenterOffScreenCowPath() {
 
     removeObjectFromEnvironment('npcCarpenter', 'cowPath');
 
-    //update quest cutoffs and questphases for farmer and carpenter
+    setNpcData(`npcFarmer`, `interactable.cantTalkDialogueNumber`, '1');
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
@@ -349,7 +344,7 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
 
 function moveCarpenterToCowPath() {
     const pendingEvents = getPendingEvents(); //add cutscene event for when player reaches to cowPath next time
-    pendingEvents.push(['cutSceneCarpenterFarmerDialogue', 'cowPath']);
+    pendingEvents.push(['cutSceneCarpenterFarmerDialogue', 'transition', 'cowPath', null, null]);
     setPendingEvents(pendingEvents);
 
     const allGridData = getAllGridData();
@@ -472,6 +467,26 @@ async function removeSplinterFromCowsHoof(blank, dialogueString, blank2, objectI
             showText(dialogueString, getColorTextPlayer());
         }
     }
+
+    const pendingEvents = getPendingEvents();
+    pendingEvents.push(['moveFarmerToHisHouse', 'cantTalkDialogue', 'npcFarmer', 2, 1]); //eventFunction, type, entity, questPhase, cantTalkDialogueNumber
+    setPendingEvents(pendingEvents);
+
+    setNpcData(`npcFarmer`, `interactable.cantTalkDialogueNumber`, 2);
+}
+
+async function moveFarmerToHisHouse() {
+    setNpcData(`npcFarmer`, `activeSpriteUrl`, 's2');
+    setNpcData(`npcFarmer`, `canMove`, true);
+    addEntityPath(`npcFarmer`, getNpcData().npcs['npcFarmer'].canMove, 'cowPath');
+
+    const path = populatePathForEntityMovement('npcFarmer', 0);
+    path.splice(0,3);
+    setEntityPaths('npcFarmer', 'path', path);
+
+    await waitForAnimationToFinish('moveFarmerToHisHouse');
+
+    removeObjectFromEnvironment('npcFarmer', 'cowPath');
 }
 
 async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
@@ -526,7 +541,7 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
 
 // Executor function
 export async function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special1) {
-    if (objectEvent === 'triggeredByScreenEntryEvent') {
+    if (objectEvent === 'triggeredEvent') {
         try {
             eval(`${special1}()`);
         } catch (error) {

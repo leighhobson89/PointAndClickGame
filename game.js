@@ -1139,18 +1139,9 @@ export function checkAndChangeScreen() {
                     changeBackground();
 
                     const pendingEvent = checkPendingEvents();
-                    let pendingEvents;
 
                     if (pendingEvent) {
                         triggerPendingEvent(pendingEvent);
-
-                        pendingEvents = getPendingEvents();
-                        const eventIndex = pendingEvents.findIndex(event => event === pendingEvent);
-
-                        if (eventIndex > -1) {
-                            pendingEvents.splice(eventIndex, 1);
-                        }
-                        setPendingEvents(pendingEvents);
                     }
 
                     setTransitioningToAnotherScreen(false);
@@ -1166,7 +1157,15 @@ export function checkAndChangeScreen() {
 export function triggerPendingEvent(pendingEvent) {
     setTimeout(() => { //allow time to transition
         const eventToTrigger = pendingEvent[0];
-        executeInteractionEvent('triggeredByScreenEntryEvent', null, null, `${eventToTrigger}`, null, null, null);
+        executeInteractionEvent('triggeredEvent', null, null, `${eventToTrigger}`, null, null, null);
+
+        let pendingEvents = getPendingEvents();
+        const eventIndex = pendingEvents.findIndex(event => event === pendingEvent);
+    
+        if (eventIndex > -1) {
+            pendingEvents.splice(eventIndex, 1);
+        }
+        setPendingEvents(pendingEvents);
     }, 2000);
 }
 
@@ -1710,17 +1709,44 @@ export function setEntityPaths(entityId, key, value) {
     entityPaths[entityId][key] = value;
 }
 
-export function checkPendingEvents() {
+export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId, condition1EGcantTalkDialogueNumber, condition2EGquestPhase
+    //may need expanding if a situation arises where more than 1 event is in the array that meets the conditions but unlikely
+    
     const pendingEvents = getPendingEvents();
 
-    for (let i = 0; i < pendingEvents.length; i++) {
-        const eventLocation = pendingEvents[i][1];
+        for (let i = 0; i < pendingEvents.length; i++) {
+            if (pendingEvents[i][1] === 'transition') {
+                const eventLocation = pendingEvents[i][2];
+    
+                if (eventLocation === getNextScreenId()) {
+                    return pendingEvents[i];
+                }
+            } else if (pendingEvents[i][1] === 'cantTalkDialogue') {
+                const gridData = getGridData();
+                let entityOnScreen = false;
+                const npcData = getNpcData().npcs[pendingEvents[i][2]];
+                const npcQuestPhase = npcData.interactable.questPhase;
+                const npcCanTalkFlag = npcData.interactable.canTalk;
+                const npcCantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
 
-        if (eventLocation === getNextScreenId()) {
-            return pendingEvents[i];
+                for (let y = 0; y < gridData.gridData.length; y++) {
+                    for (let x = 0; x < gridData.gridData[y].length; x++) {
+                        const cellValue = gridData.gridData[y][x];
+                        if (cellValue.includes(pendingEvents[i][2])) {
+                            entityOnScreen = true;
+                            break;
+                        }
+                    }
+                    if (entityOnScreen) {
+                        break;
+                    }
+                }
+
+                if (entityOnScreen && !npcCanTalkFlag && npcCantTalkDialogueNumber === pendingEvents[i][3] && npcQuestPhase === pendingEvents[i][4]) {
+                    return pendingEvents[i];
+                }
+            }
         }
-    }
-
     return null;
 }
 
@@ -1755,6 +1781,9 @@ export function checkAndUpdateAnimationFinishedStatus(entityId, screenId) {
                 animationFinished.push('carpenterMovedOffScreenCarpenter');
                 break; 
             }
+        case 'npcFarmer':
+            animationFinished.push('moveFarmerToHisHouse');
+            break;
         default: 
             return;
     }
