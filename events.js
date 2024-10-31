@@ -20,6 +20,8 @@ async function cutSceneCarpenterFarmerDialogue() {
 
     await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
     console.log ("farmer and carpenter dialogue triggered");
+    await moveCarpenterOffScreenCowPath();
+    console.log("carpenter has gone!");
 }
 
 //any door that is unlocked will be closed or opened
@@ -228,27 +230,20 @@ async function moveDonkeyOffScreen() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-async function moveCarpenterOffScreen() {
-    const dialogueData = getDialogueData().dialogue;
-    const language = getLanguage();
-
+async function moveCarpenterOffScreenCowPath() {
     setNpcData(`npcCarpenter`, `activeSpriteUrl`, 's1');
     setNpcData(`npcCarpenter`, `canMove`, true);
-    addEntityPath(`npcCarpenter`, getNpcData().npc['npcCarpenter'].canMove, 'cowPath');
+    addEntityPath(`npcCarpenter`, getNpcData().npcs['npcCarpenter'].canMove, 'cowPath');
 
     const path = populatePathForEntityMovement('npcCarpenter', 0);
     path.splice(0,3);
     setEntityPaths('npcCarpenter', 'path', path);
 
-    await waitForAnimationToFinish('carpenterMovedOffScreen');
+    await waitForAnimationToFinish('carpenterMovedOffScreenCowPath');
 
-    changeCanvasBgTemp('./resources/backgrounds/stables.png');
+    removeObjectFromEnvironment('npcCarpenter', 'cowPath');
 
-    removeObjectFromEnvironment('objectDonkeyFake', 'stables');
-    setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
-
-    let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
-    await showText(dialogueString, getColorTextPlayer());
+    //update quest cutoffs and questphases for farmer and carpenter
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
@@ -352,7 +347,7 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
     }
 }
 
-function moveCarpenterToStables() {
+function moveCarpenterToCowPath() {
     const pendingEvents = getPendingEvents(); //add cutscene event for when player reaches to cowPath next time
     pendingEvents.push(['cutSceneCarpenterFarmerDialogue', 'cowPath']);
     setPendingEvents(pendingEvents);
@@ -376,16 +371,16 @@ function moveCarpenterToStables() {
         updateGrid();
 
         setTimeout(() => {
-            setNpcData(`npcCarpenter`, `dimensions.width`, `${farmerWidth - 2}`);
-            setNpcData(`npcCarpenter`, `dimensions.height`, `${farmerHeight}`);
-            setNpcData(`npcCarpenter`, `gridPosition.x`, `${farmerX}`);
-            setNpcData(`npcCarpenter`, `gridPosition.y`, `${farmerY}`);
+            setNpcData(`npcCarpenter`, `dimensions.width`, farmerWidth - 2);
+            setNpcData(`npcCarpenter`, `dimensions.height`, farmerHeight);
+            setNpcData(`npcCarpenter`, `gridPosition.x`, farmerX);
+            setNpcData(`npcCarpenter`, `gridPosition.y`, farmerY);
             addEntityToEnvironment('npcCarpenter', farmerX, farmerY, 0, 0, farmerWidth - 2, farmerHeight, 's3', false, 'cowPath');
             setPreAnimationGridState(allGridData.cowPath, 'npcCarpenter', false);
         
             setScreenJSONData('cowPath', 'bgUrl', './resources/backgrounds/cowPathRepairedFence.png');
-            setObjectData(`objectPliers`, `interactable.canPickUpNow`, `true`);
-            setObjectData(`objectNails`, `interactable.canPickUpNow`, `true`);
+            setObjectData(`objectPliers`, `interactable.canPickUpNow`, true);
+            setObjectData(`objectNails`, `interactable.canPickUpNow`, true);
     
             updateGrid();
         }, 50);

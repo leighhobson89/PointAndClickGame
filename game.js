@@ -215,18 +215,21 @@ function moveOtherEntitiesOnCurrentScreen() {
         const entityIdPrefix = entityIdName.slice(0, 3);
 
         if (entityIdPrefix !== 'pla') {
+            let placementLocation;
             switch (entityIdPrefix) {
                 case "npc":
                     entity = getNpcData().npcs[entityIdName];
                     isObjectTrueNpcFalse = false;
+                    placementLocation = entity.npcPlacementLocation;
                     break;
                 case "obj":
                     entity = getObjectData().objects[entityIdName];
                     isObjectTrueNpcFalse = true;
+                    placementLocation = entity.objectPlacementLocation;
                     break;
             }
 
-            if (entity.objectPlacementLocation === getCurrentScreenId()) {
+            if (placementLocation === getCurrentScreenId()) {
                 const speed = entity.waypoints[entity.activeMoveSequence].speed;
         
                 const positionToMeasureFromX = Math.floor(entity.visualPosition.x + (entity.dimensions.width / 2)); 
@@ -279,7 +282,11 @@ function moveOtherEntitiesOnCurrentScreen() {
                         const originalValue = gridData.gridData[y][x];
         
                         setOriginalValueInCellWhereObjectPlaced(getCurrentScreenId(), x, y, entityIdName, originalValue);
-                        gridData.gridData[y][x] = `o${entityIdName}`;
+                        if (entityIdPrefix === 'obj') {
+                            gridData.gridData[y][x] = `o${entityIdName}`;
+                        } else if (entityIdPrefix === 'npc') {
+                            gridData.gridData[y][x] = `c${entityIdName}`;
+                        }
                     }
                 }
         
@@ -292,7 +299,7 @@ function moveOtherEntitiesOnCurrentScreen() {
                         setTargetYEntity(entityIdName, nextStep.y * gridSizeY) + positionToMeasureFromY;
                     } else {
                         console.log(`Entity ${entityIdName} finished moving!`);
-                        checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityIdName);
+                        checkAndUpdateAnimationFinishedStatus(entityIdName, getCurrentScreenId());
                     }
                 }
 
@@ -354,6 +361,10 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
     }
 
     // Get the cell value from the grid
+    if (entityOffsetX > getGridSizeX() - 1 || entityOffsetY > getGridSizeY() -1) {
+        return;
+    }
+
     const cellValue = gridData.gridData[entityOffsetY][entityOffsetX]; //correctly measures from bottom center
     let zPosStringW;
     let zPosW;
@@ -1699,24 +1710,6 @@ export function setEntityPaths(entityId, key, value) {
     entityPaths[entityId][key] = value;
 }
 
-export function checkAndUpdateGlobalFlagsAfterEntityReachesTarget(entityId) {
-    let animationFinished = getAnimationFinished();
-
-    switch (entityId) {
-        case 'objectParrakeet':
-            animationFinished.push('parrotFinishedMovingToFlyer');
-            setObjectData(`objectParrakeet`, `activeMoveSequence`, 99); //add this if object/npc staying on this screen
-            break;
-        case 'objectDonkeyFake':
-            animationFinished.push('donkeyMovedOffScreen');
-            break;
-        default: 
-            return;
-    }
-
-    setAnimationFinished(animationFinished);
-}
-
 export function checkPendingEvents() {
     const pendingEvents = getPendingEvents();
 
@@ -1741,6 +1734,32 @@ function objectShouldBeResized(objectId) {
     }
 
     return true;
+}
+
+export function checkAndUpdateAnimationFinishedStatus(entityId, screenId) {
+    let animationFinished = getAnimationFinished();
+
+    switch (entityId) {
+        case 'objectParrakeet':
+            animationFinished.push('parrotFinishedMovingToFlyer');
+            setObjectData(`objectParrakeet`, `activeMoveSequence`, 99); //add this if object/npc staying on this screen
+            break;
+        case 'objectDonkeyFake':
+            animationFinished.push('donkeyMovedOffScreen');
+            break;
+        case 'npcCarpenter':
+            if (screenId === 'cowPath') {
+                animationFinished.push('carpenterMovedOffScreenCowPath');
+                break;
+            } else if (screenId === 'carpenter') {
+                animationFinished.push('carpenterMovedOffScreenCarpenter');
+                break; 
+            }
+        default: 
+            return;
+    }
+
+    setAnimationFinished(animationFinished);
 }
 
 export async function waitForAnimationToFinish(animationGetterName) {
