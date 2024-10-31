@@ -1,4 +1,4 @@
-import { getPendingEvents, setPendingEvents, setDonkeyMovedOffScreen, setParrotCompletedMovingToFlyer, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, setDonkeyMovedOffScreen, setParrotCompletedMovingToFlyer, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
@@ -211,7 +211,7 @@ function moveOtherEntitiesOnCurrentScreen() {
     let entity;
     let isObjectTrueNpcFalse;
 
-    for (const entityIdName in entityPaths) {
+    for (const entityIdName in entityPaths) { //only going to execute based on something in entitypaths ie with instruction to move
         const entityIdPrefix = entityIdName.slice(0, 3);
 
         if (entityIdPrefix !== 'pla') {
@@ -300,12 +300,14 @@ function moveOtherEntitiesOnCurrentScreen() {
                     case "npc":
                         setNpcData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
                         setNpcData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
-                        resizeEntity(false, entityIdName, false);
+                            resizeEntity(false, entityIdName, false);
                         break;
                     case "obj":
                         setObjectData(entityIdName, 'visualPosition.x', entity.visualPosition.x);
                         setObjectData(entityIdName, 'visualPosition.y', entity.visualPosition.y);
-                        resizeEntity(false, entityIdName, true);
+                        if (objectShouldBeResized(entityIdName)) {
+                            resizeEntity(false, entityIdName, true);
+                        }
                         break;
                 }
             }
@@ -315,7 +317,7 @@ function moveOtherEntitiesOnCurrentScreen() {
 
 
 export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
-    console.log("resizing npc: " + !entityObjectTrueNpcFalse);
+    //console.log("resizing npc: " + !entityObjectTrueNpcFalse);
     const player = getPlayerObject();
     const gridData = getGridData();
 
@@ -352,20 +354,16 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
     }
 
     // Get the cell value from the grid
-    const cellValue = gridData.gridData[entityOffsetY + 1][entityOffsetX]; // +1 to fix reading wrong cell due to rounding
-
+    const cellValue = gridData.gridData[entityOffsetY][entityOffsetX]; //correctly measures from bottom center
     let zPosStringW;
     let zPosW;
-
-    // If the cell value doesn't start with 'w' or 'b', return early
-    if (!cellValue.startsWith('w') && !cellValue.startsWith('b')) {
-        return;
-    }
 
     // Extract the Z position value if the cell starts with 'w' or 'b'
     if (cellValue.startsWith('w') || cellValue.startsWith('b')) {
         zPosStringW = extractWValue(cellValue);
         zPosW = parseInt(zPosStringW, 10);
+    } else {
+        return;
     }
 
     // Define size limits
@@ -408,8 +406,8 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
         const newWidthW = originalEntityWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
         const newHeightW = originalEntityHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
 
-        const widthDifference = newWidthW - entity.dimensions.width;
-        const heightDifference = newHeightW - entity.dimensions.height;
+        const widthDifference = newWidthW - (entity.dimensions.width * getCanvasCellWidth());
+        const heightDifference = newHeightW - (entity.dimensions.height * getCanvasCellHeight());
 
         const offsetX = (widthDifference / 2);
         const offsetY = (heightDifference);
@@ -1315,7 +1313,7 @@ export function setUpObjectsAndNpcs() {
 
         for (let x = startX; x < startX + widthInCells; x++) {
             for (let y = startY; y < startY + heightInCells; y++) {
-                console.log(objectId);
+                //console.log(objectId);
                 const originalValue = roomGridData[y][x];
 
                 setOriginalValueInCellWhereObjectPlaced(roomName, x, y, objectId, originalValue);
@@ -1726,6 +1724,19 @@ export function checkPendingEvents() {
 
     return null;
 }
+
+function objectShouldBeResized(objectId) {
+    const shouldNotBeResizedArray = getShouldNotBeResizedArray();
+
+    for (const id of shouldNotBeResizedArray) {
+        if (id === objectId) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 
 //-------------------------------------------------------------------------------------------------------------
 

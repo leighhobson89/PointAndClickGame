@@ -179,7 +179,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
-        addEntityToEnvironment('objectDonkeyFake', currentNpcDonkeyX, Math.floor(currentNpcDonkeyY - (45 / getCanvasCellHeight())), 0.5, 0, currentNpcDonkeyWidth, getObjectData().objects['objectDonkeyFake'].dimensions.originalHeight, 's2', true, 'stables');
+        addEntityToEnvironment('objectDonkeyFake', currentNpcDonkeyX, Math.floor(currentNpcDonkeyY - (70 / getCanvasCellHeight())), 0.5, 0, currentNpcDonkeyWidth, getObjectData().objects['objectDonkeyFake'].dimensions.originalHeight, 's2', true, 'stables');
         setPreAnimationGridState(gridData, 'objectDonkeyFake', true);
         updateGrid();
     }, 50);
