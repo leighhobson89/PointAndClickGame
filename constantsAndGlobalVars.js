@@ -39,7 +39,7 @@ export const SLOTS_PER_ROW_IN_INVENTORY = 5;
 export const TEXT_DISPLAY_DURATION = 200; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
-export const shouldNotBeResizedArray = ['objectParrakeet']; //add any animating objects that should not be resized
+export const shouldNotBeResizedArray = ['objectParrakeet', 'objectDonkeyFake']; //add any animating objects that should not be resized
 
 export let playerObject = {
     originalWidth: 30,
