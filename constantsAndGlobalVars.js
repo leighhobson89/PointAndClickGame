@@ -23,9 +23,9 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'stables';
+export const INITIAL_GAME_ID_NORMAL = 'carpenter';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/stables.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/carpenter.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -140,8 +140,7 @@ let drawGrid = false;
 let cantGoThatWay = false;
 
 //EVENT SPECIFIC FLAGS
-let parrotCompletedMovingToFlyer = false;
-let donkeyMovedOffScreen = false;
+let animationFinishedFlag = [];
 
 //let autoSaveOn = false;
 //export let pauseAutoSaveCountdown = true;
@@ -1029,23 +1028,13 @@ export function setScrollDirection(value) {
     scrollDirection = value;
 }
 
-export function getParrotCompletedMovingToFlyer() {
-    return parrotCompletedMovingToFlyer;
+export function getAnimationFinished() {
+    return animationFinishedFlag;
 }
 
-export function setParrotCompletedMovingToFlyer(value) {
-    parrotCompletedMovingToFlyer = value;
+export function setAnimationFinished(animation, value) {
+    animationFinishedFlag[animation] = value;
 }
-
-export function getDonkeyMovedOffScreen() {
-    return donkeyMovedOffScreen;
-}
-
-export function setDonkeyMovedOffScreen(value) {
-    donkeyMovedOffScreen = value;
-}
-
-setDonkeyMovedOffScreen
 
 export function getSwappedDialogueObject() {
     return swappedDialogueObject;

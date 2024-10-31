@@ -1,7 +1,7 @@
-import { setPendingEvents, getCurrentScreenId, getElements, getParrotCompletedMovingToFlyer, setOriginalGridState, setParrotCompletedMovingToFlyer, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getDonkeyMovedOffScreen, getPreAnimationGridState, getPendingEvents } from "./constantsAndGlobalVars.js";
+import { setPendingEvents, getCurrentScreenId, getElements, setOriginalGridState, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
-import { populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
+import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -86,7 +86,7 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 }
 
 async function moveParrotToFlyer() {
-    if (!getParrotCompletedMovingToFlyer()) {
+    if (!getAnimationFinished().includes('parrotFinishedMovingToFlyer')) {
         let gridData = getGridData();
         setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
         setObjectData(`objectParrakeet`, `activeSpriteUrl`, 's2');
@@ -98,15 +98,7 @@ async function moveParrotToFlyer() {
         setEntityPaths('objectParrakeet', 'path', path);
     
         console.log(getEntityPaths()['objectParrakeet'].path);
-        await waitForAnimationToFinish(getParrotCompletedMovingToFlyer);
-    }
-}
-
-async function waitForAnimationToFinish(animationGetterName) {
-    let animationGetter = animationGetterName;
-
-    while (!animationGetter()) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitForAnimationToFinish('parrotFinishedMovingToFlyer');
     }
 }
 
@@ -225,7 +217,30 @@ async function moveDonkeyOffScreen() {
     path.splice(0,3);
     setEntityPaths('objectDonkeyFake', 'path', path);
 
-    await waitForAnimationToFinish(getDonkeyMovedOffScreen);
+    await waitForAnimationToFinish('donkeyMovedOffScreen');
+
+    changeCanvasBgTemp('./resources/backgrounds/stables.png');
+
+    removeObjectFromEnvironment('objectDonkeyFake', 'stables');
+    setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
+
+    let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function moveCarpenterOffScreen() {
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+
+    setNpcData(`npcCarpenter`, `activeSpriteUrl`, 's1');
+    setNpcData(`npcCarpenter`, `canMove`, true);
+    addEntityPath(`npcCarpenter`, getNpcData().npc['npcCarpenter'].canMove, 'cowPath');
+
+    const path = populatePathForEntityMovement('npcCarpenter', 0);
+    path.splice(0,3);
+    setEntityPaths('npcCarpenter', 'path', path);
+
+    await waitForAnimationToFinish('carpenterMovedOffScreen');
 
     changeCanvasBgTemp('./resources/backgrounds/stables.png');
 
@@ -510,11 +525,6 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
     setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
     setObjectData(`objectCarrot`, `interactable.canHover`, true);
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
-}
-
-export function updateGrid() {
-    const gridUpdateData = getAllGridData();
-    setOriginalGridState(gridUpdateData);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

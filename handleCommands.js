@@ -1,8 +1,9 @@
-import { getCanvasCellHeight, setOriginalGridState, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
+import { getCanvasCellHeight, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { updateGrid, executeInteractionEvent } from "./events.js";
+import { executeInteractionEvent } from "./events.js";
 import { dialogueEngine} from "./dialogue.js";
+import { updateGrid } from "./game.js";
 
 export function performCommand(command, inventoryItem) {
     console.log(command);
