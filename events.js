@@ -409,23 +409,28 @@ function makeMirrorGiveableToWoman() {
 }
 
 function openBarrelBarn(blank, dialogueString, blank2, barrel) {    
-    const gridData = getGridData();
-
     setObjectData(`${barrel}`, `interactable.activeStatus`, false);
     setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
-    changeSpriteAndHoverableStatus('s3', `${barrel}`, true);
-
-    setAnimationInProgress(true);
-    addEntityToEnvironment('objectMallet', 20, 35, 0, 0, getObjectData().objects['objectMallet'].dimensions.originalWidth, getObjectData().objects['objectMallet'].dimensions.originalHeight, null, true, 'barn');
-    setPreAnimationGridState(gridData, 'objectMallet', true);
-
-    updateGrid();
+    setObjectData(`${barrel}`, `interactable.canUse`, false);
+    changeSpriteAndHoverableStatus('s2', `${barrel}`, true);
+    setDialogueData('objectInteractions.verbLookAt.objectBarrelBarn', '0', '1');
 
     showText(dialogueString, getColorTextPlayer());
 }
 
-function pickUpMallet () {
-    changeSpriteAndHoverableStatus('s2', 'objectBarrelBarn', true); //workaround for putting objects on top of each other, had to draw handle on bg and then change bg to image without handle when user picks up mallet
+function addMalletToInventory() {
+    const language = getLanguage();
+    if (getObjectData().objects['objectBarrelBarn'].interactable.alreadyUsed) {
+        setObjectData(`objectBarrelBarn`, `interactable.alreadyUsed`, false);
+        setDialogueData('objectInteractions.verbLookAt.objectBarrelBarn', '0', '2');
+        addItemToInventory('objectMallet', 1);
+        drawInventory(0);
+        const dialogueString = getDialogueData().dialogue.objectInteractions.verbPickUp.objectBarrelBarn[language];
+        showText(dialogueString, getColorTextPlayer());
+    } else {
+        const dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpMalletYetBecauseBarrelNotOpened[language];
+        showText(dialogueString, getColorTextPlayer());
+    }
 }
 
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {

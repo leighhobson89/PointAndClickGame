@@ -26,7 +26,7 @@
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
-        "canPickUpNow": true,
+        "canPickUpNow": false,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -49,7 +49,7 @@
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
-        "actionCanPickUpButNotYet": ""
+        "actionCanPickUpButNotYet": "addMalletToInventory"
       },
       "objectPlacementLocation": "barn",
       "activeSpriteUrl": "s1",
@@ -1100,7 +1100,7 @@
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
-        "actionPickUp": "pickUpMallet",
+        "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "",
@@ -1120,8 +1120,8 @@
       },
       "inventoryUrl": "./resources/objects/images/malletInv.png",
       "gridPosition": {
-        "x": 20,
-        "y": 35
+        "x": 0,
+        "y": 0
       },
       "offset": {
         "x": 0,
@@ -1132,8 +1132,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 20,
-        "originalHeight": 15,
+        "originalWidth": 2,
+        "originalHeight": 2,
         "width": 0,
         "height": 0
       },
