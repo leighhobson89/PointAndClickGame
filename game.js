@@ -1141,7 +1141,7 @@ export function checkAndChangeScreen() {
                     const pendingEvent = checkPendingEvents();
 
                     if (pendingEvent) {
-                        triggerPendingEvent(pendingEvent, false, null);
+                        triggerPendingEvent(pendingEvent);
                     }
 
                     setTransitioningToAnotherScreen(false);
@@ -1154,11 +1154,9 @@ export function checkAndChangeScreen() {
     return; 
 }
 
-export function triggerPendingEvent(pendingEvent, nameOfEventAlreadySet, eventToTrigger) {
+export function triggerPendingEvent(pendingEvent) {
     const executeEvent = () => {
-        if (!nameOfEventAlreadySet) {
-            eventToTrigger = pendingEvent[0];
-        }
+        const eventToTrigger = pendingEvent[0];
         executeInteractionEvent('triggeredEvent', null, null, `${eventToTrigger}`, null, null, null);
 
         let pendingEvents = getPendingEvents();

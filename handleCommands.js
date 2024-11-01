@@ -519,7 +519,8 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
 
             if (pendingEvent) {
                 const eventToTrigger = pendingEvent[0] + 'Event' + pendingEvent[2] + pendingEvent[3]; // i.e. dialogueEventnpcFarmercowPath
-                triggerPendingEvent(pendingEvent, true, eventToTrigger);
+                pendingEvent[0] = eventToTrigger;
+                triggerPendingEvent(pendingEvent);
             }
         } else {
             const cantTalkDialogueNumber = npcData.npcs[objectId1].interactable.cantTalkDialogueNumber;
@@ -752,7 +753,7 @@ export async function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse)
                 const pendingEvent = checkPendingEvents();
 
                 if (pendingEvent) {
-                    triggerPendingEvent(pendingEvent, false, null);
+                    triggerPendingEvent(pendingEvent);
                 }
             } else {
                 dialogueString = dialogueData.objectInteractions.verbUse[npcId].use.cantUseYet[language];
