@@ -15,7 +15,7 @@ async function cutSceneCarpenterFarmerDialogue() {
 
     await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
     console.log ("farmer and carpenter dialogue triggered");
-    await moveCarpenterOffScreenCowPath();
+    await moveCarpenterOffScreen('cowPath', 1);
     console.log("carpenter has gone!");
 }
 
@@ -225,22 +225,6 @@ async function moveDonkeyOffScreen() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-async function moveCarpenterOffScreenCowPath() {
-    setNpcData(`npcCarpenter`, `activeSpriteUrl`, 's1');
-    setNpcData(`npcCarpenter`, `canMove`, true);
-    addEntityPath(`npcCarpenter`, getNpcData().npcs['npcCarpenter'].canMove, 'cowPath');
-
-    const path = populatePathForEntityMovement('npcCarpenter', 0);
-    path.splice(0,3);
-    setEntityPaths('npcCarpenter', 'path', path);
-
-    await waitForAnimationToFinish('carpenterMovedOffScreenCowPath');
-
-    removeObjectFromEnvironment('npcCarpenter', 'cowPath');
-
-    setNpcData(`npcFarmer`, `interactable.cantTalkDialogueNumber`, '1');
-}
-
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
     const language = getLanguage();
     const objectData = getObjectData().objects;
@@ -342,14 +326,13 @@ function carpenterStopPlayerPickingUpItemsEarly(blank,blank2, blank3, objectId) 
     }
 }
 
-function moveCarpenterToCowPath() {
+async function setupCarpenterAndFarmerInCowPath() {
     const pendingEvents = getPendingEvents(); //add cutscene event for when player reaches to cowPath next time
     pendingEvents.push(['cutSceneCarpenterFarmerDialogue', 'transition', 'cowPath', null, null]);
     setPendingEvents(pendingEvents);
 
     const allGridData = getAllGridData();
     console.log("carpenter gone to stables");
-    removeNpcFromEnvironment('npcCarpenter', 'carpenter');
 
     const farmerX = getNpcData().npcs['npcFarmer'].gridPosition.x;
     const farmerY = getNpcData().npcs['npcFarmer'].gridPosition.y;
@@ -380,6 +363,28 @@ function moveCarpenterToCowPath() {
             updateGrid();
         }, 50);
     }, 50);
+}
+
+async function moveCarpenterOffScreen(location, waypointSet) {
+    if (getCurrentScreenId() === location) {
+        setNpcData(`npcCarpenter`, `activeSpriteUrl`, 's1');
+        setNpcData(`npcCarpenter`, `canMove`, true);
+        addEntityPath(`npcCarpenter`, getNpcData().npcs['npcCarpenter'].canMove, location);
+    
+        const path = populatePathForEntityMovement('npcCarpenter', waypointSet);
+        path.splice(0,3);
+        setEntityPaths('npcCarpenter', 'path', path);
+    
+        if (location === 'cowPath') {
+            await waitForAnimationToFinish('carpenterMovedOffScreenCowPath');
+            setNpcData(`npcFarmer`, `interactable.cantTalkDialogueNumber`, '1');
+        } else if (location === 'carpenter') {
+            await waitForAnimationToFinish('carpenterMovedOffScreenCarpenter');
+            await setupCarpenterAndFarmerInCowPath();
+        }
+    
+        removeObjectFromEnvironment('npcCarpenter', location);
+    }
 }
 
 function makeCowTalkableAfterSpeakingToFarmer() {
@@ -537,6 +542,14 @@ async function revealCarrot(blank, dialogueString, blank2, blank3) {
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------------
+// EVENTS TRIGGERED BY DIALOGUE FUNCTION // function names are by necessity and created dynamically based on dialogue situation
+//---------------------------------------------------------------------------------------------------------------------------------------------
+
+export async function dialogueEventnpcCarpentercarpenter() {
+    console.log("triggering move carpenter off screen in workshop");
+    await moveCarpenterOffScreen('carpenter', 0);
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Executor function

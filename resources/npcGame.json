@@ -405,7 +405,8 @@
         "measureMovementYOffset": 0,
         "activeMoveSequence": 0,
         "waypoints": {
-          "0": {"speed": 2, "startActions": {"action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}, "target": {"x": 30, "y": 59, "action1": "", "duration1": "", "action2": "", "duration2": null, "action3": "", "duration3": null}, "points": [{"x": 30, "y": 50, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}]}
+          "0": {"speed": 2, "startActions": {"action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}, "target": {"x": 40, "y": 30, "action1": "", "duration1": "", "action2": "", "duration2": null, "action3": "", "duration3": null}, "points": [{"x": 40, "y": 25, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}]},
+          "1": {"speed": 2, "startActions": {"action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}, "target": {"x": 30, "y": 59, "action1": "", "duration1": "", "action2": "", "duration2": null, "action3": "", "duration3": null}, "points": [{"x": 30, "y": 50, "action1": "", "duration1": null, "action2": "", "duration2": null, "action3": "", "duration3": null}]}
         },
         "interactable": {
           "turnForDialogue": true,
@@ -423,7 +424,7 @@
               "event": ""
             },
             "2": {
-              "event": "moveCarpenterToCowPath"
+              "event": ""
             }
           },
           "canUseWith": false,

@@ -1141,7 +1141,7 @@ export function checkAndChangeScreen() {
                     const pendingEvent = checkPendingEvents();
 
                     if (pendingEvent) {
-                        triggerPendingEvent(pendingEvent);
+                        triggerPendingEvent(pendingEvent, false, null);
                     }
 
                     setTransitioningToAnotherScreen(false);
@@ -1154,9 +1154,11 @@ export function checkAndChangeScreen() {
     return; 
 }
 
-export function triggerPendingEvent(pendingEvent) {
+export function triggerPendingEvent(pendingEvent, nameOfEventAlreadySet, eventToTrigger) {
     const executeEvent = () => {
-        const eventToTrigger = pendingEvent[0];
+        if (!nameOfEventAlreadySet) {
+            eventToTrigger = pendingEvent[0];
+        }
         executeInteractionEvent('triggeredEvent', null, null, `${eventToTrigger}`, null, null, null);
 
         let pendingEvents = getPendingEvents();
@@ -1755,6 +1757,27 @@ export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId
                 if (entityOnScreen && !npcCanTalkFlag && npcCantTalkDialogueNumber === pendingEvents[i][3] && npcQuestPhase === pendingEvents[i][4]) {
                     return pendingEvents[i];
                 }
+            } else if (pendingEvents[i][1] === 'afterDialogue') {
+                //example trigger pendingEvents.push(['dialogue', 'afterDialogue', npcId, screenId, null]);
+                const gridData = getGridData();
+                let entityOnScreen = false;
+                const npcId = pendingEvents[i][2];
+
+                for (let y = 0; y < gridData.gridData.length; y++) {
+                    for (let x = 0; x < gridData.gridData[y].length; x++) {
+                        const cellValue = gridData.gridData[y][x];
+                        if (cellValue.includes(npcId)) {
+                            entityOnScreen = true;
+                            break;
+                        }
+                    }
+                    if (entityOnScreen) {
+                        break;
+                    }
+                }
+                if (entityOnScreen && getCurrentScreenId() === pendingEvents[i][3]) {
+                    return pendingEvents[i];
+                }
             }
         }
     return null;
@@ -1807,10 +1830,12 @@ export async function waitForAnimationToFinish(animationGetterName) {
         const animationFinished = getAnimationFinished();
 
         if (animationFinished.includes(animationGetterName)) {
+            console.log("animation finished: " + animationFinished);
             break;
         }
 
         await new Promise(resolve => setTimeout(resolve, 100));
+        console.log("waiting for animation to finish: " + animationFinished);
     }
 }
 

@@ -7,6 +7,7 @@
   "generalComments6": "Dialogue in npcInteractions.verbTalkTo that ends with a unicode u0020 on the LAST number of the phase tells the code to advance the questPhase by checking for space characters, the number of them indicates how many questPhases to advance by",
   "generalComments7": "cantTalk is set to 1 after ALL quests for an npc are done and as such can only be used before they start or after they are done, so basically when all dialogue is exhausted, 0 or 1, also it is always the npc that speaks - Note, you can still give items and trigger dialogue that way through the verbGive property",
   "generalComments8": "!!! at the end of dialogue responses ends the dialogue then and there.",
+  "generalComments9": "\u0020\u0020 at the end of dialogue checks for pending events and triggers them if they are there",
   "dialogue": {
     "cutSceneDialogues": {
       "farmerAndCarpenterAfterFixingFence": {
@@ -2361,11 +2362,11 @@
                       "fr": "J'espère que tu me dis la vérité, je suis très occupé !"
                     },
                     "1": {
-                      "en": "Ok I am going over there, what is wrong I wonder...",
-                      "es": "Está bien, voy para allá, me pregunto qué estará mal...",
-                      "de": "Okay, ich gehe da drüben hin, ich frage mich, was falsch ist...",
-                      "it": "Ok, vado lì, mi chiedo cosa ci sia che non va...",
-                      "fr": "D'accord, je vais là-bas, je me demande ce qui ne va pas..."
+                      "en": "Ok I am going over there, what is wrong I wonder...\u0020\u0020",
+                      "es": "Está bien, voy para allá, me pregunto qué estará mal...\u0020\u0020",
+                      "de": "Okay, ich gehe da drüben hin, ich frage mich, was falsch ist...\u0020\u0020",
+                      "it": "Ok, vado lì, mi chiedo cosa ci sia che non va...\u0020\u0020",
+                      "fr": "D'accord, je vais là-bas, je me demande ce qui ne va pas...\u0020\u0020"
                     }
                   },
                   "order": "11!"

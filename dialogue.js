@@ -1,4 +1,4 @@
-import { getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
+import { getCurrentScreenId, setPendingEvents, getPendingEvents, getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
 import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
@@ -18,7 +18,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
         npcData = getNpcData().npcs[npcId];
     }
 
-    if (interactiveDialogue) { //TO CODE THIS DIALOGUE ENGINE FOR NON INTERACTIVE TODO
+    if (interactiveDialogue) {
         questPhase = getQuestPhaseNpc(npcId);
         dialogueData = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase];
     
@@ -216,6 +216,12 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                         setCurrentSpeaker('player');
                     }
 
+                    if (dialogueString.endsWith('  ')) { //if response is terminating with two spaces then push an event, only applies to player npc dialogue, any non interactive have their own triggers
+                        const pendingEvents = getPendingEvents();
+                        pendingEvents.push(['dialogue', 'afterDialogue', npcId, getCurrentScreenId(), null]); //eventFunction, type, entity, questPhase, cantTalkDialogueNumber
+                        setPendingEvents(pendingEvents);
+                    }
+
                     if (dialogueString.endsWith('!!!')) { //if response is terminating with !!! then exit now
                         console.log('should exit here and now!');
                         type = 'exiting';
@@ -224,7 +230,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                     }
 
                     if (getDialogueTextClicked()) {
-                        if (getDialogueTextClicked().endsWith(' ')) {
+                        if (getDialogueTextClicked().endsWith(' ') && !getDialogueTextClicked().endsWith('  ')) {
                             console.log("advancing quest phase");
                             questPhase++;
                             setQuestPhaseNpc(npcId, questPhase);
@@ -460,7 +466,7 @@ export function crossReferenceDialoguesAlreadySpoken(dialogueStrings, questPhase
                     optionText = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].dialogueOptions[option.optionId][language];
                 }
 
-                if (getNpcData().npcs[npcId].interactable.questCutOffNumber === questPhase || (typeof optionText === 'string' && optionText.endsWith(' '))) {
+                if (getNpcData().npcs[npcId].interactable.questCutOffNumber === questPhase || (typeof optionText === 'string' && (optionText.endsWith(' ') && !optionText.endsWith('  ')))) {
                     return;
                 } else if (typeof optionText !== 'string') {
                     return;
