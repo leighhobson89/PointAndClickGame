@@ -1155,7 +1155,7 @@ export function checkAndChangeScreen() {
 }
 
 export function triggerPendingEvent(pendingEvent) {
-    setTimeout(() => { //allow time to transition
+    const executeEvent = () => {
         const eventToTrigger = pendingEvent[0];
         executeInteractionEvent('triggeredEvent', null, null, `${eventToTrigger}`, null, null, null);
 
@@ -1166,7 +1166,13 @@ export function triggerPendingEvent(pendingEvent) {
             pendingEvents.splice(eventIndex, 1);
         }
         setPendingEvents(pendingEvents);
-    }, 2000);
+    };
+
+    if (pendingEvent[1] === 'transition') {
+        setTimeout(executeEvent, 2000);
+    } else {
+        executeEvent();
+    }
 }
 
 export function handleRoomTransition() {
@@ -1706,7 +1712,11 @@ export function getEntityPaths() {
 }
 
 export function setEntityPaths(entityId, key, value) {
-    entityPaths[entityId][key] = value;
+    if (key === 'remove') {
+        delete entityPaths[entityId];
+    } else {
+        entityPaths[entityId][key] = value;
+    }
 }
 
 export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId, condition1EGcantTalkDialogueNumber, condition2EGquestPhase
@@ -1788,6 +1798,7 @@ export function checkAndUpdateAnimationFinishedStatus(entityId, screenId) {
             return;
     }
 
+    setEntityPaths(entityId, 'remove', null);
     setAnimationFinished(animationFinished);
 }
 

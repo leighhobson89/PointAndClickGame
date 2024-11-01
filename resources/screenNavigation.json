@@ -149,10 +149,10 @@
     },
     "carpenter": {
         "en": "Carpenter Workshop",
-        "es": "Taller del Carpintero",
+        "es": "Taller",
         "de": "Schreinerei",
-        "it": "Laboratorio del Falegname",
-        "fr": "Atelier du Charpentier",
+        "it": "Laboratorio",
+        "fr": "Atelier",
         "bgUrl": "./resources/backgrounds/carpenter.png",
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 2,
