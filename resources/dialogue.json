@@ -77,13 +77,6 @@
         "de": "Warum zum Teufel sollte ich Kot aufheben? Igitt!",
         "it": "Perché mai dovrei raccogliere la cacca? Yuk!",
         "fr": "Pourquoi diable voudrais-je ramasser de la merde ? Yuk !"
-      },
-      "cannotPickUpMalletYetBecauseBarrelNotOpened": {
-        "en": "My pockets are not big enough to pick that up!",
-        "es": "¡Mis bolsillos no son lo suficientemente grandes para recoger eso!",
-        "de": "Meine Taschen sind nicht groß genug, um das aufzuheben!",
-        "it": "Le mie tasche non sono abbastanza grandi per raccoglierlo!",
-        "fr": "Mes poches ne sont pas assez grandes pour ramasser ça!"
       }
     },
     "postAnimationEventDialogue": {
@@ -306,11 +299,18 @@
         },
         "useWithObject1": {
           "objectPitchFork": {
-            "en": "Yuk! Oh wait a minute, a carrot has popped out of it!",
-            "es": "¡Qué asco! Espera un momento, ¡ha salido una zanahoria de ahí!",
-            "de": "Igitt! Oh warte, eine Karotte ist herausgekommen!",
-            "it": "Che schifo! Aspetta un attimo, è uscita una carota!",
-            "fr": "Beurk ! Oh, attendez, une carotte en est sortie !"
+            "en": "Yuk! Oh wait a minute, a carrot and an old red glove have popped out of it!",
+            "es": "¡Qué asco! Espera un momento, ¡han salido una zanahoria y un viejo guante rojo de ahí!",
+            "de": "Igitt! Oh warte, eine Karotte und ein alter roter Handschuh sind herausgekommen!",
+            "it": "Che schifo! Aspetta un attimo, sono usciti una carota e un vecchio guanto rosso!",
+            "fr": "Beurk ! Oh, attendez, une carotte et un vieux gant rouge en sont sortis !"
+          },
+          "objectGlove": {
+            "en": "Ok, I grabbed the mallet and got the spiders and webs off it!",
+            "es": "¡Vale, agarré el mazo y le quité las arañas y las telarañas!",
+            "de": "Ok, ich habe den Hammer genommen und die Spinnen und Spinnweben entfernt!",
+            "it": "Ok, ho preso il martello e ho tolto i ragni e le ragnatele!",
+            "fr": "D'accord, j'ai pris le maillet et enlevé les araignées et les toiles !"
           },
           "objectPulleyWheel": {
             "en": "I've never seen a pulley get fixed to a hook before, maybe I am naive!",
@@ -776,6 +776,22 @@
             "fr": "Un crochet en métal solide, assemblé sur ce perchoir."
           }
         },
+        "objectGlove": {
+          "0": {
+            "en": "An old red glove, just one, and covered in dry poo!",
+            "es": "Un viejo guante rojo, solo uno, ¡y cubierto de caca seca!",
+            "de": "Ein alter roter Handschuh, nur einer, und mit trockenem Kot bedeckt!",
+            "it": "Un vecchio guanto rosso, solo uno, e coperto di cacca secca!",
+            "fr": "Un vieux gant rouge, juste un, couvert de crottes sèches!"
+        },
+        "1": {
+            "en": "An old red glove, just one, covered in dry poo, with a layer of spider webs!",
+            "es": "Un viejo guante rojo, solo uno, cubierto de caca seca y con una capa de telarañas!",
+            "de": "Ein alter roter Handschuh, nur einer, bedeckt mit trockenem Kot und einer Schicht Spinnweben!",
+            "it": "Un vecchio guanto rosso, solo uno, coperto di cacca secca e con uno strato di ragnatele!",
+            "fr": "Un vieux gant rouge, juste un, couvert de crottes sèches et d'une couche de toiles d'araignée!"
+        }
+        },
         "objectCarrot": {
           "0": {
             "en": "A carrot, past its best, but still edible...I think!",
@@ -944,13 +960,6 @@
           "it": "Perché no, forse vorrò mangiare qualcosa di pasticciato!",
           "fr": "Pourquoi pas, peut-être que je voudrais manger quelque chose de salissant !"
         },
-        "objectBarrelBarn": {
-          "en": "Yuk! It's full of spider webs, but looks pretty well built!",
-          "es": "¡Yuk! Está lleno de telarañas, pero parece bastante bien construido!",
-          "de": "Igitt! Es ist voller Spinnweben, aber sieht ziemlich gut gebaut aus!",
-          "it": "Yuk! È pieno di ragnatele, ma sembra abbastanza ben costruito!",
-          "fr": "Beurk ! C'est plein de toiles d'araignée, mais ça a l'air plutôt bien construit !"
-        },
         "objectPliers": {
           "en": "You know when you just can't grip something, these are for you!",
           "es": "Sabes cuando no puedes agarrar algo, ¡esto es para ti!",
@@ -985,6 +994,13 @@
           "de": "Das sieht stark aus, ich wette, es wird für etwas nützlich sein!",
           "it": "Questo sembra robusto, scommetto che sarà utile per qualcosa!",
           "fr": "Ça a l'air solide, je parie que ça sera utile pour quelque chose !"
+        },
+        "objectGlove": {
+          "en": "Not sure when I'll need this, but ok then!",
+          "es": "No estoy seguro de cuándo necesitaré esto, ¡pero bueno!",
+          "de": "Ich bin nicht sicher, wann ich das brauchen werde, aber na gut!",
+          "it": "Non sono sicuro di quando ne avrò bisogno, ma va bene!",
+          "fr": "Je ne sais pas quand j'en aurai besoin, mais bon !"
         },
         "objectCarrot": {
           "en": "A carrot, past its best, but still edible...I think!",

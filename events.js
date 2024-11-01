@@ -410,7 +410,6 @@ function makeMirrorGiveableToWoman() {
 
 function openBarrelBarn(blank, dialogueString, blank2, barrel) {    
     setObjectData(`${barrel}`, `interactable.activeStatus`, false);
-    setObjectData(`${barrel}`, `interactable.alreadyUsed`, true);
     setObjectData(`${barrel}`, `interactable.canUse`, false);
     changeSpriteAndHoverableStatus('s2', `${barrel}`, true);
     setDialogueData('objectInteractions.verbLookAt.objectBarrelBarn', '0', '1');
@@ -418,19 +417,22 @@ function openBarrelBarn(blank, dialogueString, blank2, barrel) {
     showText(dialogueString, getColorTextPlayer());
 }
 
-function addMalletToInventory() {
+function useGloveToAddMalletToInventory(blank, dialogueString) {
     const language = getLanguage();
-    if (getObjectData().objects['objectBarrelBarn'].interactable.alreadyUsed) {
-        setObjectData(`objectBarrelBarn`, `interactable.alreadyUsed`, false);
+
+    if (!getObjectData().objects['objectBarrelBarn'].interactable.activeStatus && !getObjectData().objects['objectBarrelBarn'].interactable.alreadyUsed) {
+        setObjectData(`objectBarrelBarn`, `interactable.alreadyUsed`, true);
         setDialogueData('objectInteractions.verbLookAt.objectBarrelBarn', '0', '2');
+        setDialogueData('objectInteractions.verbLookAt.objectGlove', '0', '1');
         addItemToInventory('objectMallet', 1);
         drawInventory(0);
-        const dialogueString = getDialogueData().dialogue.objectInteractions.verbPickUp.objectBarrelBarn[language];
         showText(dialogueString, getColorTextPlayer());
+    } else if (!getObjectData().objects['objectBarrelBarn'].interactable.alreadyUsed) {
+        dialogueString = getDialogueData().dialogue.globalMessages.activeStatusNotSet[language];
     } else {
-        const dialogueString = getDialogueData().dialogue.specialDialogue.cannotPickUpMalletYetBecauseBarrelNotOpened[language];
-        showText(dialogueString, getColorTextPlayer());
+        dialogueString = getDialogueData().dialogue.globalMessages.alreadyUsedButRetained[language];
     }
+    showText(dialogueString, getColorTextPlayer());
 }
 
 async function giveWomanMirror(npcId, dialogueString, blank, objectId) {
@@ -538,13 +540,15 @@ async function showDialogueDisgustedToPickUpPoo() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-async function revealCarrot(blank, dialogueString, blank2, blank3) {
+async function revealCarrotAndGlove(blank, dialogueString, blank2, blank3) {
     const language = getLanguage();
     await showText(dialogueString, getColorTextPlayer());
     setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
     setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
     setObjectData(`objectCarrot`, `interactable.canHover`, true);
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
+    setObjectData(`objectGlove`, `interactable.canHover`, true);
+    setObjectData(`objectGlove`, `activeSpriteUrl`, `s2`);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

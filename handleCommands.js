@@ -605,7 +605,7 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWith
         return false;
     }
 
-    if (!isObjectTrueNpcFalse) {
+    if (!isObjectTrueNpcFalse) { //npc
         const npcData = getNpcData().npcs[objectId];
     
         if (npcData && npcData.interactable) {
@@ -616,7 +616,7 @@ function checkIfItemCanBeUsedWith(objectId, isObjectTrueNpcFalse, useTrueUseWith
         }
     } 
 
-    if (useTrueUseWithFalse) {
+    if (useTrueUseWithFalse) { //use
         const objectData = getObjectData().objects[objectId];
     
         if (objectData && objectData.interactable) {

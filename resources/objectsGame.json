@@ -26,7 +26,7 @@
         "canPull": false,
         "canOpen": true,
         "canPickUp": false,
-        "canPickUpNow": false,
+        "canPickUpNow": true,
         "canUse": true,
         "canUseWith": false,
         "canGive": false,
@@ -38,18 +38,18 @@
       },
       "usedOn": {
         "objectUse": "",
-        "actionUse1": "",
+        "actionUse1": "openBarrelBarn",
         "actionUse2": "",
         "objectUseWith1": "",
         "npcUseWith1": "",
-        "actionUseWith11": "openBarrelBarn",
+        "actionUseWith11": "",
         "actionUseWith12": "",
-        "useTogetherLocation": "",
+        "useTogetherLocation": "barn",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
-        "actionCanPickUpButNotYet": "addMalletToInventory"
+        "actionCanPickUpButNotYet": ""
       },
       "objectPlacementLocation": "barn",
       "activeSpriteUrl": "s1",
@@ -88,6 +88,87 @@
         "height": 0
       },
       "comment": "Barrel in Barn that you can open"
+    },
+    "objectGlove": {
+      "name": {
+        "en": "Old Red Glove",
+        "es": "Viejo guante rojo",
+        "de": "Alter roter Handschuh",
+        "it": "Vecchio guanto rosso",
+        "fr": "Vieux gant rouge"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": false,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": true,
+        "canPickUpNow": true,
+        "canUse": false,
+        "canUseWith": true,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": true,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "objectBarrelBarn",
+        "npcUseWith1": "",
+        "actionUseWith11": "useGloveToAddMalletToInventory",
+        "actionUseWith12": "",
+        "useTogetherLocation": "barn",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "largePileOfPoo",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png",
+        "s2": "./resources/objects/images/oldGRedGloveWorld.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "./resources/objects/images/oldGRedGloveInv.png",
+      "gridPosition": {
+        "x": 30,
+        "y": 47
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 2,
+        "originalHeight": 8,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Use glove on barrel to get mallet"
     },
     "objectBone": {
       "name": {
@@ -1907,7 +1988,7 @@
         "actionUse2": "",
         "objectUseWith1": "objectLargePileOfPoo",
         "npcUseWith1": "",
-        "actionUseWith11": "revealCarrot",
+        "actionUseWith11": "revealCarrotAndGlove",
         "actionUseWith12": "",
         "useTogetherLocation": "largePileOfPoo",
         "npcGiveTo": "",
