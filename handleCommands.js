@@ -203,7 +203,6 @@ export function removeObjectFromEnvironment(objectId, placeToRemoveFrom) {
     } else {
         console.error(`No original values found for roomId: ${roomId}`);
     }
-    updateGrid();
 }
 
 
@@ -257,7 +256,6 @@ export function removeNpcFromEnvironment(npcId, placeToRemoveFrom) {
     } else {
         console.error(`No original values found for roomId: ${roomId}`);
     }
-    updateGrid();
 }
 
 

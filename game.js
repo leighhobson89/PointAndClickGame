@@ -943,10 +943,23 @@ export function processLeftClickPoint(event, mouseClick) {
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
         if (entityPaths.player.path.length > 0) {
-            if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
+
+            const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
+
+            if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
+                const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
+                const interestingEntity = screenOrObjectNameAndHoverStatus[0];
+                if (screenOrObjectNameAndHoverStatus[1]){
+                    updateInteractionInfo(
+                        localize(getVerbButtonConstructionStatus(), getLanguage(), 'verbsActionsInteraction') + 
+                        " " + (interestingEntity ? interestingEntity : ""),
+                        true
+                    );
+                }
+            } else if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 updateInteractionInfo(localize('interactionWalking', getLanguage(), 'verbsActionsInteraction'), true);
             }
-            const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
+
             if (cellValue && cellValue.startsWith('e') && getVerbButtonConstructionStatus() === 'interactionWalkTo') {
                 const exitNumberMatch = cellValue.match(/e(\d+)/);
                 if (exitNumberMatch) {

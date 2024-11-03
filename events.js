@@ -67,6 +67,7 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
 
     removeObjectFromEnvironment('objectParrotHook', 'bigTree');
+    updateGrid();
 
     setAnimationInProgress(true);
     addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, getObjectData().objects['objectParrotFlyer'].dimensions.originalWidth, getObjectData().objects['objectParrotFlyer'].dimensions.originalHeight, null, true, 'bigTree');
@@ -126,6 +127,7 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
     let gridData = getGridData();
     removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');
+    updateGrid();
 
     await showText(dialogueString, getColorTextPlayer());
 
@@ -171,6 +173,7 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const currentNpcDonkeyWidth = npcData.dimensions.width;
 
     removeNpcFromEnvironment('npcDonkey', 'stables');
+    updateGrid();
     setNpcData(`npcDonkey`, `objectPlacementLocation`, ``);
 
     setTimeout(() => {
@@ -225,6 +228,7 @@ async function moveDonkeyOffScreen() {
     changeCanvasBgTemp('./resources/backgrounds/stables.png');
 
     removeObjectFromEnvironment('objectDonkeyFake', 'stables');
+    updateGrid();
     setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
 
     let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
@@ -306,6 +310,7 @@ function setCarpenterSpokenToTrue() {
     console.log("spoke to carpenter now");
 
     removeObjectFromEnvironment('objectBrokenFenceFarmTrack', 'cowPath');
+    updateGrid();
 
     addEntityToEnvironment('npcCow', 13, 27, 0, 0, getNpcData().npcs['npcCow'].dimensions.originalWidth, getNpcData().npcs['npcCow'].dimensions.originalHeight, 's1', false, 'cowPath');
     setPreAnimationGridState(allGridData.cowPath, 'npcCow', false);
@@ -346,6 +351,7 @@ async function setupCarpenterAndFarmerInCowPath() {
     const farmerHeight = getNpcData().npcs['npcFarmer'].dimensions.originalHeight;
 
     removeNpcFromEnvironment('npcFarmer', 'cowPath');
+    updateGrid();
     setPreAnimationGridState(allGridData.cowPath, 'npcFarmer', false);
 
     setTimeout(() => {
@@ -389,7 +395,8 @@ async function moveCarpenterOffScreen(location, waypointSet) {
             await setupCarpenterAndFarmerInCowPath();
         }
     
-        removeObjectFromEnvironment('npcCarpenter', location);
+        removeNpcFromEnvironment('npcCarpenter', location);
+        updateGrid();
     }
 }
 
@@ -504,7 +511,8 @@ async function moveFarmerToHisHouse() {
 
     await waitForAnimationToFinish('moveFarmerToHisHouse');
 
-    removeObjectFromEnvironment('npcFarmer', 'cowPath');
+    removeNpcFromEnvironment('npcFarmer', 'cowPath');
+    updateGrid();
 }
 
 async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
@@ -580,6 +588,7 @@ async function useCrowBarOnManholeCover(blank, dialogueString) {
     setDialogueData('objectInteractions.verbLookAt.objectManholeCover', '0', '1');
 
     removeObjectFromEnvironment('objectManholeCover', 'house');
+    updateGrid();
     setPreAnimationGridState(allGridData.house, 'objectManholeCover', true);
 
     setTimeout(() => {
