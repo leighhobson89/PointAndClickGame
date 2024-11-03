@@ -151,8 +151,8 @@
       },
       "inventoryUrl": "./resources/objects/images/oldGRedGloveInv.png",
       "gridPosition": {
-        "x": 30,
-        "y": 47
+        "x": 31,
+        "y": 40
       },
       "offset": {
         "x": 0,
@@ -163,8 +163,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 2,
-        "originalHeight": 8,
+        "originalWidth": 3,
+        "originalHeight": 10,
         "width": 0,
         "height": 0
       },
@@ -1662,7 +1662,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "placeParrotFlyerOnHook",
         "actionUseWith12": "",
-        "useTogetherLocation": "bigTree",
+        "useTogetherLocation": "deadTree",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -1743,14 +1743,14 @@
         "npcUseWith1": "",
         "actionUseWith11": "combineRopeAndHook",
         "actionUseWith12": "",
-        "useTogetherLocation": "bigTree",
+        "useTogetherLocation": "deadTree",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "bigTree",
+      "objectPlacementLocation": "deadTree",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/hookWorld.png",
@@ -1835,7 +1835,7 @@
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "bigTree",
+      "objectPlacementLocation": "deadTree",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/parrotRight.png",
@@ -1909,14 +1909,14 @@
         "npcUseWith1": "",
         "actionUseWith11": "",
         "actionUseWith12": "",
-        "useTogetherLocation": "bigTree",
+        "useTogetherLocation": "deadTree",
         "npcGiveTo": "npcWomanLostMirror",
         "actionGive1": "giveWomanMirror",
         "actionGive2": "",
         "actionPickUp": "resetHookBackToTreePosition",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "bigTree",
+      "objectPlacementLocation": "deadTree",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/parrotMirrorWorld.png",

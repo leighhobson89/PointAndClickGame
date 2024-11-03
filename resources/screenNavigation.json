@@ -293,13 +293,13 @@
             }
         }
     },
-    "bigTree": {
-        "en": "Big Tree",
-        "es": "Gran Árbol",
-        "de": "Großer Baum",
-        "it": "Grande Albero",
-        "fr": "Grand Arbre",
-        "bgUrl": "./resources/backgrounds/bigTree.png",
+    "deadTree": {
+        "en": "Dead Tree",
+        "es": "Árbol Muerto",
+        "de": "Toter Baum",
+        "it": "Albero Morto",
+        "fr": "Arbre Mort"
+        "bgUrl": "./resources/backgrounds/deadTree.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1.7,
@@ -387,7 +387,7 @@
                 "yPosCameraEnterHere": 0
             },
             "e3": {
-                "connectsTo": "bigTree",
+                "connectsTo": "deadTree",
                 "status": "open",
                 "startPosition": { "x": 3, "y": 53 },
                 "finalPosition": { "x": 13, "y": 54 },
@@ -525,7 +525,7 @@
                 "yPosCameraEnterHere": 0
             },
             "e2": {
-                "connectsTo": "bigTree",
+                "connectsTo": "deadTree",
                 "status": "open",
                 "startPosition": { "x": 70, "y": 52 },
                 "finalPosition": { "x": 60, "y": 54 },

@@ -538,13 +538,13 @@
               "fr": "Dans la grange."
             }
           },
-          "bigTree": {
+          "deadTree": {
             "open": {
-              "en": "There's a big tree over there!",
-              "es": "¡Hay un gran árbol allí!",
-              "de": "Da drüben steht ein großer Baum!",
-              "it": "C'è un grande albero laggiù!",
-              "fr": "Il y a un grand arbre là-bas !"
+              "en": "There's a dead tree over there!",
+              "es": "¡Hay un árbol muerto allí!",
+              "de": "Da drüben steht ein toter Baum!",
+              "it": "C'è un albero morto laggiù!",
+              "fr": "Il y a un arbre mort là-bas !"
             }
           },
           "roadIntoTown": {

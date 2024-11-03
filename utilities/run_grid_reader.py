@@ -62,7 +62,7 @@ def backup_and_copy_master_json():
 if __name__ == '__main__':
     # Hardcoded array of screen names
     screen_names = ['debugRoom', 'libraryFoyer', 'marketStreet', 'researchRoom', 'seedyGuyAlley', 'carpenter', 
-                    'den', 'house', 'barn', 'bigTree', 'cowPath', 'roadIntoTown', 'stinkingDump', 
+                    'den', 'house', 'barn', 'deadTree', 'cowPath', 'roadIntoTown', 'stinkingDump', 
                     'largePileOfPoo', 'riverCrossing', 'stables', 'sewer', 'kitchen']
 
     run_grid_reader(screen_names)

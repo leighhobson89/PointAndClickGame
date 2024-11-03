@@ -66,11 +66,11 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
     const language = getLanguage();
     let gridData = getGridData();
 
-    removeObjectFromEnvironment('objectParrotHook', 'bigTree');
+    removeObjectFromEnvironment('objectParrotHook', 'deadTree');
     updateGrid();
 
     setAnimationInProgress(true);
-    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, getObjectData().objects['objectParrotFlyer'].dimensions.originalWidth, getObjectData().objects['objectParrotFlyer'].dimensions.originalHeight, null, true, 'bigTree');
+    addEntityToEnvironment('objectParrotFlyer', 47, 32, 0, 0, getObjectData().objects['objectParrotFlyer'].dimensions.originalWidth, getObjectData().objects['objectParrotFlyer'].dimensions.originalHeight, null, true, 'deadTree');
     changeSpriteAndHoverableStatus('s2', 'objectParrotFlyer', true);
 
     await showText(dialogueString, getColorTextPlayer());
@@ -95,7 +95,7 @@ async function moveParrotToFlyer() {
         setDialogueData('objectInteractions.verbLookAt.objectParrakeet', '0', '1');
         setObjectData(`objectParrakeet`, `activeSpriteUrl`, 's2');
         setObjectData(`objectParrakeet`, `canMove`, true);
-        addEntityPath(`objectParrakeet`, getObjectData().objects['objectParrakeet'].canMove, 'bigTree');
+        addEntityPath(`objectParrakeet`, getObjectData().objects['objectParrakeet'].canMove, 'deadTree');
     
         const path = populatePathForEntityMovement('objectParrakeet', 0);
         path.splice(0,3);
@@ -298,7 +298,7 @@ function resetHookBackToTreePosition() {
     const gridData = getGridData();
     setAnimationInProgress(true);
 
-    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, getObjectData().objects['objectParrotHook'].dimensions.originalWidth, getObjectData().objects['objectParrotHook'].dimensions.originalHeight, null, true, 'bigTree');
+    addEntityToEnvironment('objectParrotHook', 57, 36, 0, 0, getObjectData().objects['objectParrotHook'].dimensions.originalWidth, getObjectData().objects['objectParrotHook'].dimensions.originalHeight, null, true, 'deadTree');
 
     setPreAnimationGridState(gridData, 'objectParrotHook', true);
     changeSpriteAndHoverableStatus('s1', 'objectParrotHook', true); 
