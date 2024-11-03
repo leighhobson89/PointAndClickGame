@@ -36,11 +36,110 @@ export const GRID_SIZE_X = 80;
 export const GRID_SIZE_Y = 60;
 export const WALK_SPEED_PLAYER = 3;
 export const SLOTS_PER_ROW_IN_INVENTORY = 5; 
-export const TEXT_DISPLAY_DURATION = 3800; //3500
+export const TEXT_DISPLAY_DURATION = 200; //3500
 export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 export const shouldNotBeResizedArray = ['objectParrakeet', 'objectDonkeyFake']; //add any animating objects that should not be resized
 
+export let playerObject = {
+    originalWidth: 30,
+    originalHeight: 160,
+    width: 30,
+    height: 160,
+    speed: getWalkSpeedPlayer(),
+    color: 'rgb(0, 100, 0)',
+    xPos: '0',
+    yPos: '0'
+};
+
+export let playerInventory = {};
+
+//GLOBAL VARIABLES
+export let initialScreenId = '';
+export let initialBackgroundValue = '';
+
+export let gameState;
+let hoverCell = { x: 0, y: 0 };
+let canvasCellWidth = 15;
+let canvasCellHeight = 10;
+let gridTargetX = null;
+let gridTargetY = null;
+let targetXPlayer = null;
+let targetYPlayer = null;
+let targetXEntity = {};
+let targetYEntity = {};
+let gridData = null;
+let navigationData = null;
+let objectData = null;
+let dialogueData = null;
+let npcData = null;
+let currentScreenId = initialScreenId;
+let previousScreenId = initialScreenId;
+let nextScreenId = initialScreenId;
+let exitNumberToTransitionTo = null;
+let zPosHover = null;
+let upcomingAction = null;
+let originalValueInCellWhereObjectPlaced = {};
+let originalValueInCellWhereNpcPlaced = {};
+let originalValueInCellWhereObjectPlacedNew = {};
+let originalValueInCellWhereNpcPlacedNew = {};
+let originalGridState = {};
+let resizedObjectsGridState = {};
+let resizedNpcsGridState = {};
+let preAnimationGridStates = [];
+let currentStartIndexInventory = 0;
+let displayText = {};
+let objectToBeUsedWithSecondItem = null;
+let secondItemAlreadyHovered = null;
+let textQueue = [];
+let previousGameState = null;
+let currentXposNpc = null;
+let currentYposNpc = null;
+let currentSpeaker = null;
+let bottomContainerHeight = null;
+let currentDialogueRowsOptionsIds = {};
+let dialogueOptionsScrollReserve = [];
+let currentExitOptionRow;
+let dialogueRows = [];
+let dialogueOptionClicked;
+let dialogueTextClicked;
+let removedDialogueOptions = [];
+let currentExitOptionText = null;
+let currentScrollIndexDialogue = 0;
+let resolveDialogueOptionClick;
+let dialogueScrollCount = 0;
+let exitOptionIndex = -1;
+let clickPoint = null;
+let scrollPositionX;
+let scrollDirection = 0;
+let swappedDialogueObject = {};
+let pendingEvent = [];
+
+//GLOBAL FLAGS
+let audioMuted;
+let languageChangedFlag;
+let beginGameState = true;
+let gameInProgress = false;
+let transitioningToAnotherScreen = false;
+let transitioningNow = false;
+let currentlyMovingToAction = false;
+let hoveringInterestingObjectOrExit = false;
+let lookingForAlternativePathToNearestWalkable = false;
+let verbConstructionActive = null;
+let waitingForSecondItem = null;
+let isDisplayingText = false;
+let objectOriginalValueUpdatedYet = false;
+let animationInProgress = false;
+let transitioningToDialogueState = false;
+let readyToAdvanceNpcQuestPhase = false;
+let triggerQuestPhaseAdvance = false;
+let canExitDialogueAtThisPoint = false;
+let scrollingActive = false;
+let earlyExitFromDialogue = false;
+let drawGrid = false;
+let cantGoThatWay = false;
+
+//IMAGE URLS
 export const arrayOfGameImages = [
     //BACKGROUNDS
     "./resources/backgrounds/barn.png",
@@ -156,105 +255,6 @@ export const arrayOfGameImages = [
     "./resources/mouse/mouseHoverInteresting.png",
     "./resources/mouse/mouseNoPathFound.png"
 ];
-
-
-export let playerObject = {
-    originalWidth: 30,
-    originalHeight: 160,
-    width: 30,
-    height: 160,
-    speed: getWalkSpeedPlayer(),
-    color: 'rgb(0, 100, 0)',
-    xPos: '0',
-    yPos: '0'
-};
-
-export let playerInventory = {};
-
-//GLOBAL VARIABLES
-export let initialScreenId = '';
-export let initialBackgroundValue = '';
-
-export let gameState;
-let hoverCell = { x: 0, y: 0 };
-let canvasCellWidth = 15;
-let canvasCellHeight = 10;
-let gridTargetX = null;
-let gridTargetY = null;
-let targetXPlayer = null;
-let targetYPlayer = null;
-let targetXEntity = {};
-let targetYEntity = {};
-let gridData = null;
-let navigationData = null;
-let objectData = null;
-let dialogueData = null;
-let npcData = null;
-let currentScreenId = initialScreenId;
-let previousScreenId = initialScreenId;
-let nextScreenId = initialScreenId;
-let exitNumberToTransitionTo = null;
-let zPosHover = null;
-let upcomingAction = null;
-let originalValueInCellWhereObjectPlaced = {};
-let originalValueInCellWhereNpcPlaced = {};
-let originalValueInCellWhereObjectPlacedNew = {};
-let originalValueInCellWhereNpcPlacedNew = {};
-let originalGridState = {};
-let resizedObjectsGridState = {};
-let resizedNpcsGridState = {};
-let preAnimationGridStates = [];
-let currentStartIndexInventory = 0;
-let displayText = {};
-let objectToBeUsedWithSecondItem = null;
-let secondItemAlreadyHovered = null;
-let textQueue = [];
-let previousGameState = null;
-let currentXposNpc = null;
-let currentYposNpc = null;
-let currentSpeaker = null;
-let bottomContainerHeight = null;
-let currentDialogueRowsOptionsIds = {};
-let dialogueOptionsScrollReserve = [];
-let currentExitOptionRow;
-let dialogueRows = [];
-let dialogueOptionClicked;
-let dialogueTextClicked;
-let removedDialogueOptions = [];
-let currentExitOptionText = null;
-let currentScrollIndexDialogue = 0;
-let resolveDialogueOptionClick;
-let dialogueScrollCount = 0;
-let exitOptionIndex = -1;
-let clickPoint = null;
-let scrollPositionX;
-let scrollDirection = 0;
-let swappedDialogueObject = {};
-let pendingEvent = [];
-
-//GLOBAL FLAGS
-let audioMuted;
-let languageChangedFlag;
-let beginGameState = true;
-let gameInProgress = false;
-let transitioningToAnotherScreen = false;
-let transitioningNow = false;
-let currentlyMovingToAction = false;
-let hoveringInterestingObjectOrExit = false;
-let lookingForAlternativePathToNearestWalkable = false;
-let verbConstructionActive = null;
-let waitingForSecondItem = null;
-let isDisplayingText = false;
-let objectOriginalValueUpdatedYet = false;
-let animationInProgress = false;
-let transitioningToDialogueState = false;
-let readyToAdvanceNpcQuestPhase = false;
-let triggerQuestPhaseAdvance = false;
-let canExitDialogueAtThisPoint = false;
-let scrollingActive = false;
-let earlyExitFromDialogue = false;
-let drawGrid = false;
-let cantGoThatWay = false;
 
 //EVENT SPECIFIC FLAGS
 let animationFinishedFlag = [];
