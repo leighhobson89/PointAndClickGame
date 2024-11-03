@@ -198,10 +198,10 @@
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
-                "connectsTo": "insideHouse",
+                "connectsTo": "sewer",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 30, "y": 15 },
+                "finalPosition": { "x": 30, "y": 25 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -210,6 +210,34 @@
                 "status": "open",
                 "startPosition": { "x": 49, "y": 30 },
                 "finalPosition": { "x": 48, "y": 35 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            }
+        }
+    },
+    "sewer": {
+        "en": "Sewer",
+        "es": "Alcantarilla",
+        "de": "Kanalisation",
+        "it": "Fognatura",
+        "fr": "Égout",
+        "bgUrl": "./resources/backgrounds/sewer.png",
+        "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 2,
+        "exits": {
+            "e1": {
+                "connectsTo": "house",
+                "status": "open",
+                "startPosition": { "x": 69, "y": 54 },
+                "finalPosition": { "x": 65, "y": 54 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e2": {
+                "connectsTo": "insideHouse",
+                "status": "open",
+                "startPosition": { "x": 0, "y": 0 },
+                "finalPosition": { "x": 0, "y": 0 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -276,8 +304,8 @@
             "e1": {
                 "connectsTo": "house",
                 "status": "open",
-                "startPosition": { "x": 73, "y": 49 },
-                "finalPosition": { "x": 64, "y": 49 },
+                "startPosition": { "x": 29, "y": 57 },
+                "finalPosition": { "x": 27, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },

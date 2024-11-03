@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # Hardcoded array of screen names
     screen_names = ['debugRoom', 'libraryFoyer', 'marketStreet', 'researchRoom', 'seedyGuyAlley', 'carpenter', 
                     'den', 'house', 'barn', 'bigTree', 'cowPath', 'roadIntoTown', 'stinkingDump', 
-                    'largePileOfPoo', 'riverCrossing', 'stables']
+                    'largePileOfPoo', 'riverCrossing', 'stables', 'sewer']
 
     run_grid_reader(screen_names)
     run_combinator()
