@@ -13,7 +13,7 @@ IGNORE_LIST = [
     'package.json',
     'package-lock.json',
     '.vscode',
-    '.builds',
+    'builds',
     '.git'
 ]
 
@@ -27,12 +27,8 @@ def create_build_zip(zip_name):
     # Create a zip file
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         for root, dirs, files in os.walk(os.path.dirname(os.getcwd())):  # Walk the parent directory
-            for dir_name in dirs:
-                # Check if the directory should be ignored
-                if dir_name in IGNORE_LIST:
-                    logging.info(f"Ignoring directory: {os.path.join(root, dir_name)}")
-                    dirs.remove(dir_name)  # Remove from dirs to skip zipping it
-            
+            # Create a new list of directories to traverse
+            dirs[:] = [d for d in dirs if d not in IGNORE_LIST]
             for file_name in files:
                 # Check if the file should be ignored
                 if file_name in IGNORE_LIST:
@@ -40,6 +36,7 @@ def create_build_zip(zip_name):
                     continue
 
                 file_path = os.path.join(root, file_name)
+                logging.info(f"About to add {file_path} to zip")
                 zip_file.write(file_path, os.path.relpath(file_path, os.path.dirname(os.getcwd())))
                 logging.info(f"Added to zip: {file_path}")
 
