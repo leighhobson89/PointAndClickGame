@@ -1,7 +1,7 @@
 import { getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
-import { setNpcData, setObjectData, performCommand, constructCommand } from './handleCommands.js';
+import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
 import { executeInteractionEvent } from './events.js';
 
@@ -1132,6 +1132,7 @@ export function checkAndChangeScreen() {
                 // Perform the check if within bounds
                 if (gridData.gridData[checkY][checkX].startsWith('e') && gridData.gridData[checkY][checkX].includes(getExitNumberToTransitionTo())) {
                     console.log("Player is moving to another screen");
+                    setScreenJSONData(`${getNextScreenId()}`, `alreadyVisited`, true);
                     entityPaths.player.path = [];
                     entityPaths.player.currentIndex = 0;
                     setCurrentlyMovingToAction(false);

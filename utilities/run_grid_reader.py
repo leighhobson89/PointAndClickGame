@@ -36,6 +36,14 @@ def backup_and_copy_master_json():
     backup_json_path = os.path.abspath(backup_json_path)
     new_master_json_path = os.path.abspath(new_master_json_path)
     
+    # Delete the existing backup if it exists
+    if os.path.exists(backup_json_path):
+        try:
+            os.remove(backup_json_path)
+            print(f"Deleted existing backup: {backup_json_path}")
+        except Exception as e:
+            print(f"Error deleting existing backup: {e}")
+
     # Attempt to back up the existing master JSON file
     if os.path.exists(master_json_path):
         try:
@@ -55,7 +63,7 @@ if __name__ == '__main__':
     # Hardcoded array of screen names
     screen_names = ['debugRoom', 'libraryFoyer', 'marketStreet', 'researchRoom', 'seedyGuyAlley', 'carpenter', 
                     'den', 'house', 'barn', 'bigTree', 'cowPath', 'roadIntoTown', 'stinkingDump', 
-                    'largePileOfPoo', 'riverCrossing', 'stables', 'sewer']
+                    'largePileOfPoo', 'riverCrossing', 'stables', 'sewer', 'kitchen']
 
     run_grid_reader(screen_names)
     run_combinator()

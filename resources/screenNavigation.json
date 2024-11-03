@@ -6,6 +6,7 @@
         "it": "DEBUG",
         "fr": "DEBUG",
         "bgUrl": "./resources/backgrounds/debugRoom.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -26,6 +27,7 @@
         "it": "Foyer della Biblioteca",
         "fr": "Foyer de la Bibliothèque",
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -54,14 +56,15 @@
         "it": "Via del Mercato",
         "fr": "Rue du Marché",
         "bgUrl": "./resources/backgrounds/marketStreet.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 73, "y": 58 },
-                "finalPosition": { "x": 63, "y": 52 },
+                "startPosition": { "x": 35, "y": 55 },
+                "finalPosition": { "x": 38, "y": 45 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -106,6 +109,7 @@
         "it": "Sala di Ricerca",
         "fr": "Salle de Recherche",
         "bgUrl": "./resources/backgrounds/researchRoom.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1.7,
         "exits": {
@@ -126,6 +130,7 @@
         "it": "Vicolo del Tizio Squallido",
         "fr": "Allée du Type Louche",
         "bgUrl": "./resources/backgrounds/seedyGuyAlley.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -154,6 +159,7 @@
         "it": "Laboratorio",
         "fr": "Atelier",
         "bgUrl": "./resources/backgrounds/carpenter.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 2,
         "exits": {
@@ -174,6 +180,7 @@
         "it": "Tana",
         "fr": "Cachette",
         "bgUrl": "./resources/backgrounds/den.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -194,6 +201,7 @@
         "it": "Casa",
         "fr": "Maison",
         "bgUrl": "./resources/backgrounds/house.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -222,6 +230,7 @@
         "it": "Fognatura",
         "fr": "Égout",
         "bgUrl": "./resources/backgrounds/sewer.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 2,
         "exits": {
@@ -234,10 +243,30 @@
                 "yPosCameraEnterHere": 0
             },
             "e2": {
-                "connectsTo": "insideHouse",
+                "connectsTo": "kitchen",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 25, "y": 55 },
+                "finalPosition": { "x": 15, "y": 45 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            }
+        }
+    },"kitchen": {
+        "en": "Kitchen",
+        "es": "Cocina",
+        "de": "Küche",
+        "it": "Cucina",
+        "fr": "Cuisine",
+        "bgUrl": "./resources/backgrounds/kitchen.png",
+        "alreadyVisited": false,
+        "screenTilesWidebgImg": 1,
+        "scalingPlayerSize": 2,
+        "exits": {
+            "e1": {
+                "connectsTo": "sewer",
+                "status": "open",
+                "startPosition": { "x": 61, "y": 10 },
+                "finalPosition": { "x": 61, "y": 20 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -250,6 +279,7 @@
         "it": "Fienile",
         "fr": "Grange",
         "bgUrl": "./resources/backgrounds/barn.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -270,6 +300,7 @@
         "it": "Grande Albero",
         "fr": "Grand Arbre",
         "bgUrl": "./resources/backgrounds/bigTree.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1.7,
         "exits": {
@@ -285,7 +316,7 @@
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 66, "y": 39 },
-                "finalPosition": { "x": 61, "y": 42 },
+                "finalPosition": { "x": 57, "y": 42 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -298,6 +329,7 @@
         "it": "Strada verso la Fattoria",
         "fr": "Route vers la Ferme",
         "bgUrl": "./resources/backgrounds/cowPathBrokenFence.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 0.9,
         "exits": {
@@ -334,6 +366,7 @@
         "it": "Strada verso la Città",
         "fr": "Route vers la Ville",
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -346,18 +379,18 @@
                 "yPosCameraEnterHere": 0
             },
             "e2": {
-                "connectsTo": "bigTree",
-                "status": "open",
-                "startPosition": { "x": 3, "y": 53 },
-                "finalPosition": { "x": 13, "y": 54 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e3": {
                 "connectsTo": "stinkingDump",
                 "status": "open",
                 "startPosition": { "x": 30, "y": 55 },
                 "finalPosition": { "x": 28, "y": 46 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e3": {
+                "connectsTo": "bigTree",
+                "status": "open",
+                "startPosition": { "x": 3, "y": 53 },
+                "finalPosition": { "x": 13, "y": 54 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -371,6 +404,7 @@
             }
         }
     },
+
     "stinkingDump": {
         "en": "Stinking Dump",
         "es": "Vertedero Apestoso",
@@ -378,6 +412,7 @@
         "it": "Discarica Puzzolente",
         "fr": "Décharge Malodorante",
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -392,8 +427,8 @@
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 20, "y": 55 },
-                "finalPosition": { "x": 30, "y": 53 },
+                "startPosition": { "x": 20, "y": 40 },
+                "finalPosition": { "x": 30, "y": 38 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -406,6 +441,7 @@
         "it": "Grande Pila di Feci",
         "fr": "Grande Tas de Crottes",
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -426,6 +462,7 @@
         "it": "Attraversamento del Fiume",
         "fr": "Traversée de la Rivière",
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -440,8 +477,8 @@
             "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
-                "startPosition": { "x": 28, "y": 39 },
-                "finalPosition": { "x": 32, "y": 41 },
+                "startPosition": { "x": 45, "y": 27 },
+                "finalPosition": { "x": 42, "y": 31 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -454,6 +491,7 @@
         "it": "Mappa",
         "fr": "Carte",
         "bgUrl": "./resources/backgrounds/map.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {
@@ -474,6 +512,7 @@
         "it": "Stalla",
         "fr": "Écurie",
         "bgUrl": "./resources/backgrounds/stables.png",
+        "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
         "exits": {

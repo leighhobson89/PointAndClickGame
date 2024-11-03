@@ -10,6 +10,15 @@
   "generalComments9": "\u0020\u0020 at the end of dialogue checks for pending events and triggers them if they are there",
   "dialogue": {
     "cutSceneDialogues": {
+      "enterKitchenFirstTime": {
+        "0": {
+          "en": "What am I doing!! And why is there a huge hole in the floor down to the sewers??",
+          "es": "¡¿Qué estoy haciendo?! ¿Y por qué hay un gran agujero en el suelo que va a las alcantarillas?",
+          "de": "Was mache ich da!! Und warum gibt es ein großes Loch im Boden zu der Kanalisation??",
+          "it": "Cosa sto facendo!! E perché c'è un enorme buco nel pavimento che porta alla fognatura??",
+          "fr": "Que suis-je en train de faire !! Et pourquoi y a-t-il un énorme trou dans le sol menant aux égouts ??"
+        }
+      },
       "farmerAndCarpenterAfterFixingFence": {
         "0": {
           "en": "That does it, good as new!",

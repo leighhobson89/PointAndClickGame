@@ -19,6 +19,12 @@ async function cutSceneCarpenterFarmerDialogue() {
     console.log("carpenter has gone!");
 }
 
+async function cutSceneEnterKitchenFirstTime() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.cutSceneDialogues.enterKitchenFirstTime[0][language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
 //any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
     const objectData = getObjectData().objects[doorId];
@@ -563,6 +569,10 @@ async function showDialogueManholeWontGoBackOn() {
 }
 
 async function useCrowBarOnManholeCover(blank, dialogueString) {
+    const pendingEvents = getPendingEvents(); //add cutscene event for when player reaches to cowPath next time
+    pendingEvents.push(['cutSceneEnterKitchenFirstTime', 'transition', 'kitchen', null, null]);
+    setPendingEvents(pendingEvents);
+
     const allGridData = getAllGridData();
 
     setObjectData(`objectManholeCover`, `usedOn.actionCanPickUpButNotYet`, `showDialogueManholeWontGoBackOn`);
