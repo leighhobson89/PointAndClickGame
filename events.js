@@ -560,13 +560,20 @@ async function showDialogueDisgustedToPickUpPoo() {
 }
 
 async function revealCarrotAndGlove(blank, dialogueString, blank2, blank3) {
-    await showText(dialogueString, getColorTextPlayer());
+    const language = getLanguage();
+
+    if (getObjectData().objects['objectLargePileOfPoo'].interactable.alreadyUsed) {
+        dialogueString = getDialogueData().dialogue.globalMessages.alreadyUsedButRetained[language];
+    }
+
     setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
     setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
     setObjectData(`objectCarrot`, `interactable.canHover`, true);
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
     setObjectData(`objectGlove`, `interactable.canHover`, true);
     setObjectData(`objectGlove`, `activeSpriteUrl`, `s2`);
+
+    await showText(dialogueString, getColorTextPlayer());
 }
 
 async function showDialogueStuckFast() {

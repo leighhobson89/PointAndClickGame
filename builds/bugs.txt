@@ -2,15 +2,11 @@ cancel verb if click an item in inventory with pick up
 
 hide inventory arrows until 10 items like
 
-update text after using pitchfork that wont use again
-
 milk bottle small churn
 
 den door update grid
 
 bone and bowl not apparing on the floor
-
-light on in kitchen
 
 
 
