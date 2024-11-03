@@ -41,6 +41,123 @@ export const MAX_TEXT_DISPLAY_WIDTH = 600;
 export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 export const shouldNotBeResizedArray = ['objectParrakeet', 'objectDonkeyFake']; //add any animating objects that should not be resized
 
+export const arrayOfGameImages = [
+    //BACKGROUNDS
+    "./resources/backgrounds/barn.png",
+    "./resources/backgrounds/bigTree.png",
+    "./resources/backgrounds/carpenter.png",
+    "./resources/backgrounds/cowPathBrokenFence.png",
+    "./resources/backgrounds/cowPathRepairedFence.png",
+    "./resources/backgrounds/debugRoom.png",
+    "./resources/backgrounds/den.png",
+    "./resources/backgrounds/house.png",
+    "./resources/backgrounds/kitchen.png",
+    "./resources/backgrounds/largePileOfPoo.png",
+    "./resources/backgrounds/libraryFoyer.png",
+    "./resources/backgrounds/marketStreet.png",
+    "./resources/backgrounds/researchRoom.png",
+    "./resources/backgrounds/riverCrossing.png",
+    "./resources/backgrounds/roadIntoTown.png",
+    "./resources/backgrounds/seedyGuyAlley.png",
+    "./resources/backgrounds/sewer.png",
+    "./resources/backgrounds/stables.png",
+    "./resources/backgrounds/stablesTemp.png",
+    "./resources/backgrounds/stinkingDump.png",
+    "./resources/backgrounds/testWide.png",
+
+    //OBJECTS
+    "./resources/objects/images/banana.png",
+    "./resources/objects/images/barrelBarnClosedWorld.png",
+    "./resources/objects/images/barrelBarnOpenHandleWorld.png",
+    "./resources/objects/images/barrelBarnOpenWorld.png",
+    "./resources/objects/images/battery.png",
+    "./resources/objects/images/blank.png",
+    "./resources/objects/images/boneInv.png",
+    "./resources/objects/images/bonePulleyWorld.png",
+    "./resources/objects/images/boneWorld.png",
+    "./resources/objects/images/bowlInv.png",
+    "./resources/objects/images/bowlWorld.png",
+    "./resources/objects/images/carrotInv.png",
+    "./resources/objects/images/carrotWorld.png",
+    "./resources/objects/images/crowbarInv.png",
+    "./resources/objects/images/crowbarWorld.png",
+    "./resources/objects/images/donkeyNotOnRopeLeft.png",
+    "./resources/objects/images/donkeyNotOnRopeRight.png",
+    "./resources/objects/images/donkeyOnRopeHappy.png",
+    "./resources/objects/images/goldKeyInv.png",
+    "./resources/objects/images/goldKeyWorld.png",
+    "./resources/objects/images/hookInv.png",
+    "./resources/objects/images/hookWorld.png",
+    "./resources/objects/images/house2.png",
+    "./resources/objects/images/IllegibleMapInv.png",
+    "./resources/objects/images/IllegibleMapWorld.png",
+    "./resources/objects/images/keyDenInv.png",
+    "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
+    "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png",
+    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
+    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png",
+    "./resources/objects/images/machine.png",
+    "./resources/objects/images/malletInv.png",
+    "./resources/objects/images/malletWorld.png",
+    "./resources/objects/images/manholeCover.png",
+    "./resources/objects/images/manholeCoverFixed.png",
+    "./resources/objects/images/milkBottleInv.png",
+    "./resources/objects/images/milkBottleWorld.png",
+    "./resources/objects/images/milkInBowlInv.png",
+    "./resources/objects/images/nailsInv.png",
+    "./resources/objects/images/nailsWorld.png",
+    "./resources/objects/images/oldGRedGloveInv.png",
+    "./resources/objects/images/oldGRedGloveWorld.png",
+    "./resources/objects/images/paperScrawledOnInv.png",
+    "./resources/objects/images/parrotFlyerInv.png",
+    "./resources/objects/images/parrotFlyerWorld.png",
+    "./resources/objects/images/parrotLeft.png",
+    "./resources/objects/images/parrotMirrorInv.png",
+    "./resources/objects/images/parrotMirrorWorld.png",
+    "./resources/objects/images/parrotRight.png",
+    "./resources/objects/images/pitchForkInv.png",
+    "./resources/objects/images/pitchForkWorld.png",
+    "./resources/objects/images/pliersInv.png",
+    "./resources/objects/images/pliersWorld.png",
+    "./resources/objects/images/pulleyInv.png",
+    "./resources/objects/images/pulleyWorld.png",
+    "./resources/objects/images/ropeHookInv.png",
+    "./resources/objects/images/ropeHookWorld.png",
+    "./resources/objects/images/ropeInv.png",
+    "./resources/objects/images/ropeWorld.png",
+    "./resources/objects/images/seedyGuyAlley_Exit_DenClosed.png",
+    "./resources/objects/images/seedyGuyAlley_Exit_DenOpen.png",
+    "./resources/objects/images/splinterInv.png",
+    "./resources/objects/images/splinterPulleyWorld.png",
+
+    //NPCS
+    "./resources/npcs/blank.png",
+    "./resources/npcs/carpenterNpc.png",
+    "./resources/npcs/carpenterNpcBack.png",
+    "./resources/npcs/carpenterNpcLeft.png",
+    "./resources/npcs/carpenterNpcRight.png",
+    "./resources/npcs/cowHappy.png",
+    "./resources/npcs/cowPain.png",
+    "./resources/npcs/donkeyNotOnRope.png",
+    "./resources/npcs/donkeyOnRope.png",
+    "./resources/npcs/farmer.png",
+    "./resources/npcs/librarian.png",
+    "./resources/npcs/monkey.png",
+    "./resources/npcs/seedyGuy.png",
+    "./resources/npcs/townDogLeft.png",
+    "./resources/npcs/townDogNoBone.png",
+    "./resources/npcs/townDogRight.png",
+    "./resources/npcs/womanLostMirrorLeft.png",
+    "./resources/npcs/womanLostMirrorRight.png",
+
+    //MOUSEPOINTER
+    "./resources/mouse/mouseClickInteresting.png",
+    "./resources/mouse/mouseCrosshair.png",
+    "./resources/mouse/mouseHoverInteresting.png",
+    "./resources/mouse/mouseNoPathFound.png"
+];
+
+
 export let playerObject = {
     originalWidth: 30,
     originalHeight: 160,
@@ -1094,4 +1211,8 @@ export function setPendingEvents(value) {
 
 export function getShouldNotBeResizedArray() {
     return shouldNotBeResizedArray;
+}
+
+export function getArrayOfGameImages() {
+    return arrayOfGameImages;
 }

@@ -1,4 +1,5 @@
 import {
+    getArrayOfGameImages,
     setAnimationInProgress,
     setPreAnimationGridState,
     getDrawGrid,
@@ -145,7 +146,13 @@ let textTimer;
 
 document.addEventListener("DOMContentLoaded", () => {
     setElements();
-    
+
+    async function preLoadGameImages(arrayOfImages) {
+        await preloadImages(arrayOfImages);
+        console.log("Images preloaded, initializing game...");
+    }
+
+    preLoadGameImages(getArrayOfGameImages());
 
     getElements().customCursor.classList.add("d-none");
     getElements().customCursor.style.transform = "translate(-50%, -50%)";
@@ -1765,6 +1772,19 @@ function setInitialBackgroundImage() {
 
     const backgroundImageUrl = getInitialBackgroundUrl();
     canvas.style.backgroundImage = `url(${backgroundImageUrl})`;
+}
+
+async function preloadImages(imageUrls) {
+    const promises = imageUrls.map((url) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+    await Promise.all(promises);
+    console.log("All images preloaded");
 }
 
 let debugWindow;
