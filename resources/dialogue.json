@@ -461,7 +461,7 @@
               "fr": "La porte mène à la salle de recherche de la bibliothèque."
             }
           },
-          "seedyGuyAlley": {
+          "alley": {
             "open": {
               "en": "It looks like a back alley this way!",
               "es": "¡Parece un callejón por aquí!",
@@ -842,11 +842,11 @@
         },
         "objectParrotHook": {
           "0": {
-            "en": "A strong metal hook, cobbled together on this perch.",
-            "es": "Un fuerte gancho de metal, ensamblado en este posadero.",
-            "de": "Ein starker Metallhaken, der auf diesem Sitzplatz zusammengebaut wurde.",
-            "it": "Un forte gancio di metallo, assemblato su questo posatoio.",
-            "fr": "Un crochet en métal solide, assemblé sur ce perchoir."
+            "en": "A strong metal hook, cobbled together on this dead tree branch.",
+            "es": "Un fuerte gancho de metal, ensamblado en esta rama de árbol muerto.",
+            "de": "Ein starker Metallhaken, der auf diesem toten Baumzweig zusammengebaut wurde.",
+            "it": "Un forte gancio di metallo, assemblato su questo ramo di albero morto.",
+            "fr": "Un crochet en métal solide, assemblé sur cette branche d'arbre mort."
           }
         },
         "objectGlove": {
@@ -876,11 +876,11 @@
         },
         "objectParrotMirror": {
           "0": {
-            "en": "Cute little pocket mirror, handy for checking out your hair.",
-            "es": "Lindo espejito de bolsillo, útil para revisar tu cabello.",
-            "de": "Niedlicher kleiner Taschenspiegel, praktisch, um deine Haare zu überprüfen.",
-            "it": "Carino piccolo specchio da tasca, utile per controllare i capelli.",
-            "fr": "Mignon petit miroir de poche, pratique pour vérifier tes cheveux."
+            "en": "Cute little mirror, handy for checking out your hair.",
+            "es": "Lindo espejito, útil para revisar tu cabello.",
+            "de": "Niedlicher kleiner Spiegel, praktisch, um deine Haare zu überprüfen.",
+            "it": "Carino piccolo specchio, utile per controllare i capelli.",
+            "fr": "Mignon petit miroir, pratique pour vérifier tes cheveux."
           }
         },
         "objectDonkeyFake": {

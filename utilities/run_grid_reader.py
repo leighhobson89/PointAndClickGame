@@ -61,7 +61,7 @@ def backup_and_copy_master_json():
 
 if __name__ == '__main__':
     # Hardcoded array of screen names
-    screen_names = ['debugRoom', 'libraryFoyer', 'marketStreet', 'researchRoom', 'seedyGuyAlley', 'carpenter', 
+    screen_names = ['debugRoom', 'libraryFoyer', 'marketStreet', 'researchRoom', 'alley', 'carpenter', 
                     'den', 'house', 'barn', 'deadTree', 'cowPath', 'roadIntoTown', 'stinkingDump', 
                     'largePileOfPoo', 'riverCrossing', 'stables', 'sewer', 'kitchen']
 

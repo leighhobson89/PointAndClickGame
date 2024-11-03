@@ -23,9 +23,9 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'largePileOfPoo';
+export const INITIAL_GAME_ID_NORMAL = 'alley';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/largePileOfPoo.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/alley.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -157,7 +157,7 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/researchRoom.png",
     "./resources/backgrounds/riverCrossing.png",
     "./resources/backgrounds/roadIntoTown.png",
-    "./resources/backgrounds/seedyGuyAlley.png",
+    "./resources/backgrounds/alley.png",
     "./resources/backgrounds/sewer.png",
     "./resources/backgrounds/stables.png",
     "./resources/backgrounds/stablesTemp.png",
@@ -224,8 +224,8 @@ export const arrayOfGameImages = [
     "./resources/objects/images/ropeHookWorld.png",
     "./resources/objects/images/ropeInv.png",
     "./resources/objects/images/ropeWorld.png",
-    "./resources/objects/images/seedyGuyAlley_Exit_DenClosed.png",
-    "./resources/objects/images/seedyGuyAlley_Exit_DenOpen.png",
+    "./resources/objects/images/alley_Exit_DenClosed.png",
+    "./resources/objects/images/alley_Exit_DenOpen.png",
     "./resources/objects/images/splinterInv.png",
     "./resources/objects/images/splinterPulleyWorld.png",
 

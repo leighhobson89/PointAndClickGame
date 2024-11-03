@@ -367,7 +367,7 @@
           "objectCanReceive2": "",
           "objectCanReceive3": ""
         },
-        "npcPlacementLocation": "seedyGuyAlley",
+        "npcPlacementLocation": "alley",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
           "s1": "./resources/npcs/seedyGuy.png",

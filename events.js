@@ -87,6 +87,8 @@ async function placeParrotFlyerOnHook(blank, dialogueString, blank2, blank3) {
 
     dialogueString = dialogueData.postAnimationEventDialogue.animationParrotMoveToParrotFlyer[language];
     await showText(dialogueString, getColorTextPlayer());
+
+    setObjectData(`objectParrotHook`, `usedOn.useTogetherLocation`, `objectDonkeyRope`);
 }
 
 async function moveParrotToFlyer() {
@@ -273,7 +275,7 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
 function unlockDenDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
     const objectData = getObjectData().objects.objectDoorToDen;
     const navigationData = getNavigationData();
-    navigationData.seedyGuyAlley.exits.e1.status = "open";
+    navigationData.alley.exits.e1.status = "open";
     setNavigationData(navigationData);
     objectData.interactable.alreadyUsed = true;
 

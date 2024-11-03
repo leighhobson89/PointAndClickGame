@@ -934,18 +934,18 @@
         "objectUseWith1": "",
         "actionUseWith11": "",
         "actionUseWith12": "",
-        "useTogetherLocation": "seedyGuyAlley",
+        "useTogetherLocation": "alley",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "seedyGuyAlley",
+      "objectPlacementLocation": "alley",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/seedyGuyAlley_Exit_DenClosed.png",
-        "s2": "./resources/objects/images/seedyGuyAlley_Exit_DenOpen.png"
+        "s1": "./resources/objects/images/alley_Exit_DenClosed.png",
+        "s2": "./resources/objects/images/alley_Exit_DenOpen.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -976,7 +976,7 @@
         "width": 0,
         "height": 0
       },
-      "comment": "door from seedyGuyAlley to Den opens when objectKeyToDen used on it"
+      "comment": "door from alley to Den opens when objectKeyToDen used on it"
     },
     "objectIllegibleMap": {
       "name": {
@@ -1177,7 +1177,7 @@
         "npcUseWith1": "",
         "actionUseWith11": "unlockDenDoor",
         "actionUseWith12": "",
-        "useTogetherLocation": "seedyGuyAlley",
+        "useTogetherLocation": "alley",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -1219,7 +1219,7 @@
         "width": 0,
         "height": 0
       },
-      "comment": "Key for unlocking door to den from seedyGuyAlley"
+      "comment": "Key for unlocking door to den from alley"
     },
     "objectMallet": {
       "name": {
@@ -1345,7 +1345,7 @@
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
       },
-      "objectPlacementLocation": "seedyGuyAlley",
+      "objectPlacementLocation": "alley",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/milkBottleWorld.png",
