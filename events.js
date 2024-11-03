@@ -1,4 +1,4 @@
-import { setPendingEvents, getCurrentScreenId, getElements, setOriginalGridState, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished } from "./constantsAndGlobalVars.js";
+import { setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -195,15 +195,10 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
 
     setTimeout(() => {
     setObjectData(`objectDonkeyFake`, `activeSpriteUrl`, 's4');
-    addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, getObjectData().objects['objectDonkeyRope'].dimensions.originalWidth, getObjectData().objects['objectDonkeyRope'].dimensions.originalHeight, null, true, 'stables');
-    setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
-
-    updateGrid();
-
     }, 50);
 
     await showText(dialogueString, getColorTextPlayer());
-    moveDonkeyOffScreen();
+    moveDonkeyOffScreen(gridData);
 
     setTimeout(() => {
     navigationData.stables.exits.e1.status = "open";
@@ -211,7 +206,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     }, 50);
 }
 
-async function moveDonkeyOffScreen() {
+async function moveDonkeyOffScreen(gridData) {
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
 
@@ -226,13 +221,21 @@ async function moveDonkeyOffScreen() {
     await waitForAnimationToFinish('donkeyMovedOffScreen');
 
     changeCanvasBgTemp('./resources/backgrounds/stables.png');
-
     removeObjectFromEnvironment('objectDonkeyFake', 'stables');
     updateGrid();
-    setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
+    
+    setTimeout(() => {
 
-    let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
-    await showText(dialogueString, getColorTextPlayer());
+        setObjectData(`objectDonkeyFake`, `objectPlacementLocation`, '');
+    
+        addEntityToEnvironment('objectDonkeyRope', 40, 43, 0.5, 0, getObjectData().objects['objectDonkeyRope'].dimensions.originalWidth, getObjectData().objects['objectDonkeyRope'].dimensions.originalHeight, null, true, 'stables');
+        setPreAnimationGridState(gridData, 'objectDonkeyRope', true);
+    
+        updateGrid();
+        }, 50);
+
+        let dialogueString = dialogueData.postAnimationEventDialogue.animationDonkeyMovesOffScreen[language];
+        await showText(dialogueString, getColorTextPlayer());
 }
 
 async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {

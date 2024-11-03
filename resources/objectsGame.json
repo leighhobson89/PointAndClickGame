@@ -540,8 +540,8 @@
       "objectPlacementLocation": "den",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/crowBarWorld.png",
-        "s2": "./resources/objects/images/crowBarWorld.png"
+        "s1": "./resources/objects/images/crowbarWorld.png",
+        "s2": "./resources/objects/images/crowbarWorld.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -553,7 +553,7 @@
           "y": 0
         }
       },
-      "inventoryUrl": "./resources/objects/images/crowBarInv.png",
+      "inventoryUrl": "./resources/objects/images/crowbarInv.png",
       "gridPosition": {
         "x": 48,
         "y": 43
