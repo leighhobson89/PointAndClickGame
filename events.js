@@ -541,7 +541,6 @@ async function showDialogueDisgustedToPickUpPoo() {
 }
 
 async function revealCarrotAndGlove(blank, dialogueString, blank2, blank3) {
-    const language = getLanguage();
     await showText(dialogueString, getColorTextPlayer());
     setDialogueData('objectInteractions.verbLookAt.objectLargePileOfPoo', '0', '1');
     setObjectData(`objectLargePileOfPoo`, `interactable.alreadyUsed`, true);
@@ -549,6 +548,38 @@ async function revealCarrotAndGlove(blank, dialogueString, blank2, blank3) {
     setObjectData(`objectCarrot`, `activeSpriteUrl`, `s2`);
     setObjectData(`objectGlove`, `interactable.canHover`, true);
     setObjectData(`objectGlove`, `activeSpriteUrl`, `s2`);
+}
+
+async function showDialogueStuckFast() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.specialDialogue.manholeCoverIsStuck[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function showDialogueManholeWontGoBackOn() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.specialDialogue.manholeWontGoBackOn[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function useCrowBarOnManholeCover(blank, dialogueString) {
+    const allGridData = getAllGridData();
+
+    setObjectData(`objectManholeCover`, `usedOn.actionCanPickUpButNotYet`, `showDialogueManholeWontGoBackOn`);
+    setObjectData(`objectManholeCover`, `interactable.alreadyUsed`, true);
+    setDialogueData('objectInteractions.verbLookAt.objectManholeCover', '0', '1');
+
+    removeObjectFromEnvironment('objectManholeCover', 'house');
+    setPreAnimationGridState(allGridData.house, 'objectManholeCover', true);
+
+    setTimeout(() => {
+        addEntityToEnvironment('objectManholeCover', 65, 50, 0, 0, getObjectData().objects['objectManholeCover'].dimensions.originalWidth, getObjectData().objects['objectManholeCover'].dimensions.originalHeight, 's2', true, 'house');
+        setPreAnimationGridState(allGridData.house, 'objectManholeCover', true);
+
+        updateGrid();
+    }, 50);
+
+    await showText(dialogueString, getColorTextPlayer());
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------

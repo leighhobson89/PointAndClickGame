@@ -71,6 +71,20 @@
         "it": "Cosa pensi di fare?? Sono i miei strumenti, mani lontane!",
         "fr": "Que penses-tu faire?? Ce sont mes outils, ne les touche pas!"
       },
+      "manholeCoverIsStuck": {
+        "en": "It is stuck down, I can't move that without some kind of lever",
+        "es": "Está atascado, no puedo moverlo sin algún tipo de palanca",
+        "de": "Es ist festgeklemmt, ich kann das ohne einen Hebel nicht bewegen",
+        "it": "È bloccato, non posso spostarlo senza una leva",
+        "fr": "C'est coincé, je ne peux pas le déplacer sans un levier"
+      },
+      "manholeWontGoBackOn": {
+        "en": "It won't go back on!",
+        "es": "¡No quiere volver a ponerse!",
+        "de": "Es lässt sich nicht wieder draufsetzen!",
+        "it": "Non si rimette a posto!",
+        "fr": "Ça ne veut pas se remettre en place !"
+      },
       "disgustedToTryAndPickUpPoo": {
         "en": "Why on earth would I want to pick up poo? Yuk!",
         "es": "¿Por qué querría recoger caca? ¡Yuk!",
@@ -97,6 +111,31 @@
     },
     "objectInteractions": {
       "verbUse": {
+        "objectManholeCover": {
+          "use": {
+            "cantUseYet": {
+              "en": "It is stuck down, I can't move that without some kind of lever",
+              "es": "Está atascado, no puedo moverlo sin algún tipo de palanca",
+              "de": "Es ist festgeklemmt, ich kann das ohne einen Hebel nicht bewegen",
+              "it": "È bloccato, non posso spostarlo senza una leva",
+              "fr": "C'est coincé, je ne peux pas le déplacer sans un levier"
+            },
+            "alreadyUsed": {
+              "en": "It won't go back on!",
+              "es": "¡No quiere volver a ponerse!",
+              "de": "Es lässt sich nicht wieder draufsetzen!",
+              "it": "Non si rimette a posto!",
+              "fr": "Ça ne veut pas se remettre en place !"
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
         "objectBarrelBarn": {
           "use": {
             "cantUseYet": {
@@ -298,6 +337,13 @@
           }
         },
         "useWithObject1": {
+          "objectCrowbar": {
+            "en": "Uff, that was heavy! There seems to be a ladder leading down, and what a stink!",
+            "es": "¡Uff, eso fue pesado! Parece haber una escalera que baja, ¡y qué mal olor!",
+            "de": "Uff, das war schwer! Es scheint eine Leiter nach unten zu führen, und was für ein Gestank!",
+            "it": "Uff, era pesante! Sembra esserci una scala che scende, e che puzza!",
+            "fr": "Ouf, c'était lourd ! Il semble y avoir une échelle qui descend, et quelle puanteur !"
+          },
           "objectPitchFork": {
             "en": "Yuk! Oh wait a minute, a carrot and an old red glove have popped out of it!",
             "es": "¡Qué asco! Espera un momento, ¡han salido una zanahoria y un viejo guante rojo de ahí!",
@@ -451,18 +497,11 @@
           },
           "house": {
             "open": {
-              "en": "The door leads in to the house.",
-              "es": "La puerta conduce a la casa.",
-              "de": "Die Tür führt zum Haus.",
-              "it": "La porta conduce alla casa.",
-              "fr": "La porte mène à la maison."
-            },
-            "locked": {
-              "en": "The door leads in to the house.",
-              "es": "La puerta conduce a la casa.",
-              "de": "Die Tür führt zum Haus.",
-              "it": "La porta conduce alla casa.",
-              "fr": "La porte mène à la maison."
+              "en": "There is a house there.",
+              "es": "Hay una casa allí.",
+              "de": "Dort steht ein Haus.",
+              "it": "C'è una casa lì.",
+              "fr": "Il y a une maison là-bas."
             }
           },
           "stables": {
@@ -526,6 +565,15 @@
               "fr": "Je peux entendre une rivière dans cette direction !"
             }
           },
+          "sewer": {
+            "open": {
+              "en": "There is a ladder leading down, ugh it stinks!",
+              "es": "Hay una escalera que baja, ¡ugh, apesta!",
+              "de": "Da ist eine Leiter, die nach unten führt, ugh, es stinkt!",
+              "it": "C'è una scala che scende, ugh, che puzza!",
+              "fr": "Il y a une échelle qui descend, beurk, ça pue !"
+            }
+          },
           "map": {
             "open": {
               "en": "Out into the world!",
@@ -541,6 +589,22 @@
               "it": "Fuori nel mondo!",
               "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectManholeCover": {
+          "0": {
+            "en": "A big heavy rusted manhole cover. It has not been opened for a long time!",
+            "es": "Una gran tapa de alcantarilla oxidada y pesada. ¡No se ha abierto en mucho tiempo!",
+            "de": "Ein großer, schwerer, rostiger Kanaldeckel. Er wurde lange nicht geöffnet!",
+            "it": "Un grande e pesante coperchio del tombino arrugginito. Non è stato aperto da molto tempo!",
+            "fr": "Un grand couvercle d'égout lourd et rouillé. Il n'a pas été ouvert depuis longtemps !"
+          },
+          "1": {
+            "en": "That looks like it will never go back in that hole!",
+            "es": "¡Eso parece que nunca volverá a encajar en ese agujero!",
+            "de": "Das sieht so aus, als würde es nie wieder in das Loch passen!",
+            "it": "Sembra che non tornerà mai più in quel buco!",
+            "fr": "On dirait que ça ne rentrera plus jamais dans ce trou !"
           }
         },
         "objectLargePileOfPoo": {

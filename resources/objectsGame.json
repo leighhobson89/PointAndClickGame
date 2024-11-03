@@ -250,6 +250,87 @@
       },
       "comment": "Dog's bone, it is revealed when player gives dog objectMilkInBowl"
     },
+    "objectManholeCover": {
+      "name": {
+        "en": "Manhole Cover",
+        "es": "Tapa",
+        "de": "Kanaldeckel",
+        "it": "Coperchio del tombino",
+        "fr": "Plaque d'égout"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": false,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "objectCrowbar",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": "showDialogueStuckFast"
+      },
+      "objectPlacementLocation": "house",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/manholeCoverFixed.png",
+        "s2": "./resources/objects/images/manholeCover.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 69,
+        "y": 49
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 4.3,
+        "originalHeight": 5,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Manhole cover for access to sewer"
+    },
     "objectBowl": {
       "name": {
         "en": "Bowl",
@@ -445,11 +526,11 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "",
+        "objectUseWith1": "objectManholeCover",
         "npcUseWith1": "",
-        "actionUseWith11": "",
+        "actionUseWith11": "useCrowBarOnManholeCover",
         "actionUseWith12": "",
-        "useTogetherLocation": "house",
+        "useTogetherLocation": "objectManholeCover",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
