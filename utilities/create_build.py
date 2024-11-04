@@ -2,6 +2,7 @@ import os
 import zipfile
 import argparse
 import logging
+import subprocess  # Import subprocess to run terminal commands
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -41,6 +42,7 @@ def create_build_zip(zip_name):
                 logging.info(f"Added to zip: {file_path}")
 
     logging.info(f"Zip file created: {zip_path}")
+    return zip_path  # Return the zip path for further use
 
 def main():
     # Set up argument parsing
@@ -51,7 +53,24 @@ def main():
 
     # Construct the zip file name
     zip_file_name = f"pointAndClickGame_Build_{args.build_name}.zip"
-    create_build_zip(zip_file_name)
+    zip_path = create_build_zip(zip_file_name)  # Store the zip path
+
+    # Prompt the user if they want to push the build
+    push_response = input("Do you want to push the build? (Y/N): ").strip().upper()
+    
+    if push_response == 'Y':
+        # Construct the butler command
+        butler_command = f"butler push {zip_path} leighhobson89/pointandclickadventure:browser"
+        
+        try:
+            # Execute the butler command
+            logging.info(f"Executing command: {butler_command}")
+            result = subprocess.run(butler_command, shell=True, check=True)
+            logging.info("Build pushed successfully!")
+        except subprocess.CalledProcessError as e:
+            logging.error(f"An error occurred while pushing the build: {e}")
+    else:
+        logging.info("Build not pushed.")
 
 if __name__ == '__main__':
     main()

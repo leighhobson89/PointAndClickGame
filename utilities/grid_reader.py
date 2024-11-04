@@ -121,21 +121,13 @@ def save_to_json(screen_name, grid, output_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process a grid image and convert it to JSON.')
     parser.add_argument('screen_name', type=str, help='The name of the screen to use in the JSON output.')
+    parser.add_argument('base_path', type=str, help='Base path for the file locations.')
     args = parser.parse_args()
 
-    #MAIN PC
-    base_path_main = 'C:\\Users\\Leigh\\Desktop\\Development\\PointAndClickGame\\PointAndClickGame\\utilities\\'
-    image_path = os.path.join(base_path_main, 'grid-assets', f'{args.screen_name}.png')
-    output_path = os.path.join(base_path_main, 'jsonOutput', f'{args.screen_name}.json')
+    image_path = os.path.join(args.base_path, 'grid-assets', f'{args.screen_name}.png')
+    output_path = os.path.join(args.base_path, 'jsonOutput', f'{args.screen_name}.json')
 
-    #LAPTOP (commented out, but follows the same dynamic path approach)
-    # base_path_laptop = 'C:\\Users\\leigh\\WebstormProjects\\PointAndClickGame\\PointAndClickGame\\utilities\\'
-    # image_path = os.path.join(base_path_laptop, 'grid-assets', f'{args.screen_name}.png')
-    # output_path = os.path.join(base_path_laptop, 'jsonOutput', f'{args.screen_name}.json')
     grid = process_image(image_path)
-    
-    # Identify and label exit zones
     grid_with_zones = identify_exit_zones(grid)
-    
     save_to_json(args.screen_name, grid_with_zones, output_path)
     print("Grid saved to JSON with exit zones labeled.")
