@@ -37,10 +37,18 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         case 'verbUse':
             if (!objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId, true);
-                setObjectData(doorId, `interactable.activeStatus`, true);
-                //door opening animation in future
-                setObjectData(doorId, `activeSpriteUrl`, 's2');
+                removeObjectFromEnvironment(doorId, getCurrentScreenId());
+                updateGrid();
+
+                setTimeout(() => {
+                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.x / getCanvasCellWidth())), getObjectData().objects[doorId].gridPosition.y + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.y / getCanvasCellHeight())), getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, getObjectData().objects[doorId].dimensions.width, getObjectData().objects[doorId].dimensions.height, 's2', true, getObjectData().objects[doorId].objectPlacementLocation);
+                    setPreAnimationGridState(gridData, doorId, true);
+                    updateGrid();
+                    setTimeout(() => {
+                        setObjectData(doorId, `interactable.activeStatus`, true);
+                        // door opening animation in future
+                    }, 50)
+                }, 50);
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
                 await showText(dialogueString, getColorTextPlayer());
@@ -49,10 +57,18 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         case 'verbClose':
             if (objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
-                setPreAnimationGridState(gridData, doorId, true);
-                setObjectData(doorId, `interactable.activeStatus`, false);
-                //door closing animation in future
-                setObjectData(doorId, `activeSpriteUrl`, 's1');
+                removeObjectFromEnvironment(doorId, getCurrentScreenId());
+                updateGrid();
+
+                setTimeout(() => {
+                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x, getObjectData().objects[doorId].gridPosition.y, getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, getObjectData().objects[doorId].dimensions.width, getObjectData().objects[doorId].dimensions.height, 's1', true, getObjectData().objects[doorId].objectPlacementLocation);
+                    setPreAnimationGridState(gridData, doorId, true);
+                    updateGrid();
+                    setTimeout(() => {
+                        setObjectData(doorId, `interactable.activeStatus`, false);
+                        // door opening animation in future
+                    }, 50)
+                }, 50);
             } else {
                 const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
                 await showText(dialogueString, getColorTextPlayer());

@@ -559,9 +559,17 @@ export function drawPlayerNpcsAndObjects(ctx) {
                 if (object && object.objectPlacementLocation === getCurrentScreenId()) {
                     const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset, visualAnimatedStateOffsets } = object;
 
+                    let drawX;
+                    let drawY;
+
                     // Calculate draw positions with offsets
-                    const drawX = visualPosition.x + (offset.x || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.x || 0);
-                    const drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);
+                    if (objectId.includes('objectDoor')) {
+                        drawX = visualPosition.x + (offset.x || 0);
+                        drawY = visualPosition.y + (offset.y || 0);    
+                    } else {
+                        drawX = visualPosition.x + (offset.x || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.x || 0);
+                        drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);    
+                    }
 
                     const scaledWidth = dimensions.width * cellWidth;
                     const scaledHeight = dimensions.height * cellHeight;
