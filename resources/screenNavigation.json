@@ -461,7 +461,7 @@
         "de": "Flussüberquerung",
         "it": "Attraversamento del Fiume",
         "fr": "Traversée de la Rivière",
-        "bgUrl": "./resources/backgrounds/riverCrossingBridgeBroken.png",
+        "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSize": 1,
