@@ -56,7 +56,7 @@ def main():
     zip_path = create_build_zip(zip_file_name)  # Store the zip path
 
     # Prompt the user if they want to push the build
-    push_response = input("Do you want to push the build? (Y/N): ").strip().upper()
+    push_response = input("Do you want to push the build to itch.io right now? (Y/N): ").strip().upper()
     
     if push_response == 'Y':
         # Construct the butler command
