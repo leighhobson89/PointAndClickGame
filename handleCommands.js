@@ -513,7 +513,7 @@ export async function useItem(objectId1, objectId2, useWith, exitOrNot2, invento
         object1 = npcData.npcs[objectId1];
         if (!isObject1TrueNpcFalse && object1.interactable.canTalk) { //dialogue window intiation
             await dialogueEngine(realVerbUsed, objectId1, true, null, null, null);
-            const pendingEvent = checkPendingEvents(); //check for events triggered by two spaces end of dialogue in last response of npc ie if he is walking away
+            const pendingEvent = checkPendingEvents(objectId1); //check for events triggered by two spaces end of dialogue in last response of npc ie if he is walking away
 
             if (pendingEvent) {
                 const eventToTrigger = pendingEvent[0] + 'Event' + pendingEvent[2] + pendingEvent[3]; // i.e. dialogueEventnpcFarmercowPath
@@ -748,7 +748,7 @@ export async function handleTalkTo(verb, npcId, exitOrNot, isObjectTrueNpcFalse)
                 
                 await showText(dialogueString, npcData.interactable.dialogueColor);
                 
-                const pendingEvent = checkPendingEvents();
+                const pendingEvent = checkPendingEvents(npcId);
 
                 if (pendingEvent) {
                     triggerPendingEvent(pendingEvent);

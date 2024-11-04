@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         "verbsActionsInteraction",
                     );
 
-                    if (interactionText.includes(verbWalkTo)) {
+                    if (interactionText.includes(verbWalkTo) || interactionText.includes(verbPickUp)) {
                         setUpcomingAction(verbLookAt);
                         if (
                             getGameStateVariable() === getGameVisibleActive() &&
@@ -508,6 +508,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 getUpcomingAction() + " " + objectOrNpcName,
                                 false,
                             );
+                            if (interactionText.includes(verbPickUp)) {
+                                setVerbButtonConstructionStatus(null);
+                                setUpcomingAction(null);
+                            }
                         }
                     } else if (
                         !getWaitingForSecondItem() &&
@@ -520,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
                         const firstTwoWords = words.slice(0, 2).join(" ");
 
-                        if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
+                        //if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
 
                         if (twoWordVerbs.includes(firstTwoWords)) {
                             const verbsInteraction =
@@ -602,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 setUpcomingAction(interactionText);
             }
 
-            const command = constructCommand(getUpcomingAction(), true);
+            const command = constructCommand(getUpcomingAction(), true, true);
             console.log("command to perform: " + command);
             performCommand(command, true);
         });

@@ -1,12 +1,7 @@
-cancel verb if click an item in inventory with pick up
-
 hide inventory arrows until 10 items like
 
 milk bottle small churn
 
 den door update grid
 
-bone and bowl not apparing on the floor
-
-
-
+bone and bowl not appearing on the floor

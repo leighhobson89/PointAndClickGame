@@ -1152,7 +1152,7 @@ export function checkAndChangeScreen() {
     
                     changeBackground();
 
-                    const pendingEvent = checkPendingEvents();
+                    const pendingEvent = checkPendingEvents(null);
 
                     if (pendingEvent) {
                         triggerPendingEvent(pendingEvent);
@@ -1733,7 +1733,7 @@ export function setEntityPaths(entityId, key, value) {
     }
 }
 
-export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId, condition1EGcantTalkDialogueNumber, condition2EGquestPhase
+export function checkPendingEvents(entityId) { //eventFunction, type, entityIdOrScreenId, condition1EGcantTalkDialogueNumber, condition2EGquestPhase
     //may need expanding if a situation arises where more than 1 event is in the array that meets the conditions but unlikely
     
     const pendingEvents = getPendingEvents();
@@ -1752,6 +1752,7 @@ export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId
                 const npcQuestPhase = npcData.interactable.questPhase;
                 const npcCanTalkFlag = npcData.interactable.canTalk;
                 const npcCantTalkDialogueNumber = npcData.interactable.cantTalkDialogueNumber;
+                const npcThatPlayerCurrentlyTalkingTo = entityId;
 
                 for (let y = 0; y < gridData.gridData.length; y++) {
                     for (let x = 0; x < gridData.gridData[y].length; x++) {
@@ -1766,7 +1767,7 @@ export function checkPendingEvents() { //eventFunction, type, entityIdOrScreenId
                     }
                 }
 
-                if (entityOnScreen && !npcCanTalkFlag && npcCantTalkDialogueNumber === pendingEvents[i][3] && npcQuestPhase === pendingEvents[i][4]) {
+                if (entityOnScreen && !npcCanTalkFlag && npcThatPlayerCurrentlyTalkingTo == pendingEvents[i][2] && npcCantTalkDialogueNumber === pendingEvents[i][3] && npcQuestPhase === pendingEvents[i][4]) {
                     return pendingEvents[i];
                 }
             } else if (pendingEvents[i][1] === 'afterDialogue') {
