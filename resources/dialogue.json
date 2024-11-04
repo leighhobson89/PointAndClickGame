@@ -1787,11 +1787,11 @@
                   "fr": "Je viens de me souvenir, j'ai laissé le gaz allumé à la maison."
                 },
                 "3": {
-                  "en": "So about that date?",
-                  "es": "¿Entonces sobre esa cita?",
-                  "de": "Also, wie sieht es mit diesem Date aus?",
-                  "it": "Allora, per quanto riguarda quell'appuntamento?",
-                  "fr": "Alors, à propos de ce rendez-vous ?"
+                  "en": "Do you want to go on a date with me, you are beautiful!",
+                  "es": "¿Quieres salir conmigo, eres hermosa!",
+                  "de": "Möchtest du mit mir ausgehen, du bist schön!",
+                  "it": "Vuoi uscire con me? Sei bella!",
+                  "fr": "Veux-tu sortir avec moi, tu es belle!"
                 }
               },
               "exitOption": {
@@ -1881,11 +1881,11 @@
                 "3": {
                   "phase": {
                     "0": {
-                      "en": "I'm sure we can sort something out after you help me!",
-                      "es": "¡Estoy seguro de que podemos resolver algo después de que me ayudes!",
-                      "de": "Ich bin mir sicher, dass wir etwas klären können, nachdem du mir geholfen hast!",
-                      "it": "Sono sicuro che possiamo sistemare qualcosa dopo che mi aiuti!",
-                      "fr": "Je suis sûr que nous pouvons régler quelque chose après que tu m'aides !"
+                      "en": "I hardly know you! Maybe if you help me?",
+                      "es": "¡Apenas te conozco! ¿Tal vez si me ayudas?",
+                      "de": "Ich kenne dich kaum! Vielleicht, wenn du mir hilfst?",
+                      "it": "Ti conosco a malapena! Forse se mi aiuti?",
+                      "fr": "Je te connais à peine ! Peut-être si tu m'aides ?"
                     }
                   },
                   "order": "1!"
