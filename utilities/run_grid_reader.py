@@ -68,7 +68,7 @@ if __name__ == '__main__':
     screen_names = [
         'libraryFoyer', 'marketStreet', 'researchRoom', 'alley', 'carpenter',
         'den', 'house', 'barn', 'deadTree', 'cowPath', 'roadIntoTown', 'stinkingDump',
-        'largePileOfPoo', 'riverCrossing', 'stables', 'sewer', 'kitchen'
+        'largePileOfPoo', 'riverCrossing', 'riverCrossingBridgeHalfComplete', 'riverCrossingBridgeComplete','stables', 'sewer', 'kitchen'
     ]
 
     run_grid_reader(screen_names, base_path)
