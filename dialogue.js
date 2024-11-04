@@ -541,11 +541,11 @@ export function updateDialogueDisplay(exitOptionText) {
         addDialogueRow(scrollReserve[currentScrollIndex + 3][1]);
     }
 
-    updateArrowVisibility(currentScrollIndex, scrollReserve.length);
+    updateDialogueArrowVisibility(currentScrollIndex, scrollReserve.length);
     reattachDialogueOptionListeners(getExitOptionIndex());
 }
 
-export function updateArrowVisibility(currentScrollIndex, totalOptions) {
+export function updateDialogueArrowVisibility(currentScrollIndex, totalOptions) {
     const upArrow = getElements().dialogueUpArrow;
     const downArrow = getElements().dialogueDownArrow;
 

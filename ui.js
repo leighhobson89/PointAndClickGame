@@ -146,6 +146,9 @@ let textTimer;
 
 document.addEventListener("DOMContentLoaded", () => {
     setElements();
+    
+    getElements().inventoryUpArrow.classList.add("arrow-disabled");
+    getElements().inventoryDownArrow.classList.add("arrow-disabled");
 
     async function preLoadGameImages(arrayOfImages) {
         await preloadImages(arrayOfImages);
@@ -1280,6 +1283,23 @@ export function drawInventory(startIndex) {
             div.classList.remove("show-triangle");
         }
     });
+
+        const upArrow = getElements().inventoryUpArrow;
+        const downArrow = getElements().inventoryDownArrow;
+        const slotsPerRow = getSlotsPerRowInInventory();
+        const totalSlots = Object.keys(inventory).length;
+    
+        if (startIndex > 0) {
+            upArrow.classList.remove("arrow-disabled");
+        } else {
+            upArrow.classList.add("arrow-disabled");
+        }
+    
+        if (startIndex + slotsPerRow * 2 < totalSlots) {
+            downArrow.classList.remove("arrow-disabled");
+        } else {
+            downArrow.classList.add("arrow-disabled");
+        }
 }
 
 export function drawTextOnCanvas(
