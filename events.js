@@ -548,15 +548,19 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     drawInventory(0);
 
     setNpcData(`${townDog}`, `activeSpriteUrl`, 's4');
+    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
 
     setAnimationInProgress(true);
     addEntityToEnvironment('objectBowl', 62, 49, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet');
     setPreAnimationGridState(gridData, 'objectBowl', true);
+    updateGrid();
 
-    setObjectData(`objectBowl`, `interactable.canPickUp`, false);
+    setTimeout(() => {
+        addEntityToEnvironment('objectBone', 64, 53, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
+        setPreAnimationGridState(gridData, 'objectBone', true);
 
-    addEntityToEnvironment('objectBone', 64, 54, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
-    setPreAnimationGridState(gridData, 'objectBone', true);
+        updateGrid();
+    }, 50);
 
     const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));

@@ -231,8 +231,8 @@
       },
       "inventoryUrl": "./resources/objects/images/boneInv.png",
       "gridPosition": {
-        "x": 17,
-        "y": 1
+        "x": 0,
+        "y": 0
       },
       "offset": {
         "x": 0,
@@ -394,19 +394,19 @@
       "inventoryUrl": "./resources/objects/images/bowlInv.png",
       "gridPosition": {
         "x": 47,
-        "y": 25
+        "y": 26
       },
       "offset": {
         "x": 0,
-        "y": 0.5
+        "y": 0
       },
       "visualPosition": {
         "x": 0,
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 2.5,
-        "originalHeight": 5,
+        "originalWidth": 2,
+        "originalHeight": 4,
         "width": 0,
         "height": 0
       },
