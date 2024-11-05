@@ -152,6 +152,31 @@
             }
           }
         },
+        "objectStackOfWood": {
+          "use": {
+            "cantUseYet": {
+              "en": "It looks in great condition, strong, but I can't reach it!",
+              "es": "Parece estar en buen estado, fuerte, pero no puedo alcanzarlo!",
+              "de": "Es sieht in gutem Zustand aus, stark, aber ich kann es nicht erreichen!",
+              "it": "Sembra in ottime condizioni, robusto, ma non riesco a raggiungerlo!",
+              "fr": "Il a l'air en bon état, solide, mais je ne peux pas l'atteindre!"
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
         "objectBarrelBarn": {
           "use": {
             "cantUseYet": {
@@ -655,6 +680,15 @@
               "it": "Fuori nel mondo!",
               "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectStackOfWood": {
+          "0": {
+            "en": "It's good quality wood, strong, and in great condition!",
+            "es": "Es madera de buena calidad, fuerte y en excelente estado!",
+            "de": "Es ist Holz von guter Qualität, stark und in einwandfreiem Zustand!",
+            "it": "È legno di buona qualità, robusto e in ottime condizioni!",
+            "fr": "C'est du bois de bonne qualité, solide et en excellent état !"
           }
         },
         "objectSuspiciousFencePost": {
