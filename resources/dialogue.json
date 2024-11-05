@@ -899,11 +899,18 @@
         },
         "objectPulleyWheel": {
           "0": {
-            "en": "A pulley wheel, not really sure why it is up there!",
-            "es": "Una polea, ¡no estoy realmente seguro de por qué está ahí arriba!",
-            "de": "Ein Flaschenzugrad, ich bin mir nicht wirklich sicher, warum es dort oben ist!",
-            "it": "Una ruota di puleggia, non sono davvero sicuro del perché sia là sopra!",
-            "fr": "Une roue de poulie, je ne suis pas vraiment sûr de pourquoi elle est là-haut !"
+            "en": "A pulley wheel, useful, I guess...",
+            "es": "Una rueda de polea, útil, supongo...",
+            "de": "Ein Flaschenzugrad, nützlich, denke ich...",
+            "it": "Una ruota di puleggia, utile, immagino...",
+            "fr": "Une roue de poulie, utile, je suppose..."
+          },
+          "1": {
+              "en": "Look at that, that's some good rigging!",
+              "es": "Mira eso, ¡qué buen aparejo!",
+              "de": "Schau dir das an, das ist gutes Takelwerk!",
+              "it": "Guarda quello, è proprio un buon montaggio!",
+              "fr": "Regarde ça, c'est du bon gréement!"
           }
         },
         "objectParrotHook": {

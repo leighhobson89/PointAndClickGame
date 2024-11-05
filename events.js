@@ -142,32 +142,21 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) { //make sure to draw anchor on bg aswell!
+async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
     removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');
     updateGrid();
 
+    setTimeout(() => {
+        setAnimationInProgress(true);
+        addEntityToEnvironment('objectPulleyWheel', 36, 16, 0, 0, getObjectData().objects['objectPulleyWheel'].dimensions.originalWidth, getObjectData().objects['objectPulleyWheel'].dimensions.originalHeight, 's1', true, 'riverCrossing');
+        setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
+        updateGrid();
+    }, 50);
+
+    setDialogueData('objectInteractions.verbLookAt.objectPulleyWheel', '0', '1');
+    setObjectData(`objectPulleyWheel`, `interactable.canPickUp`, false);
     await showText(dialogueString, getColorTextPlayer());
-
-    const gridPositionX = 65;
-    const gridPositionY = 20;
-
-    const offsetX = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellWidth();
-    const offsetY = getObjectData().objects['objectPulleyWheel'].offset.x * getCanvasCellHeight();
-
-    const offSetAdjustmentX = 0;
-    const offSetAdjustmentY = 0;
-
-    const desiredVisualPositionX = Math.floor(gridPositionX * getCanvasCellWidth()) + offsetX + offSetAdjustmentX;
-    const desiredVisualPositionY = Math.floor(gridPositionY * getCanvasCellHeight())  + offsetY + offSetAdjustmentY;
-
-    setAnimationInProgress(true); //replace code with add remove entity TODO
-    setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
-    setObjectData(`objectPulleyWheel`, `visualPosition.x`, desiredVisualPositionX);
-    setObjectData(`objectPulleyWheel`, `visualPosition.y`, desiredVisualPositionY);
-    setObjectData(`objectPulleyWheel`, `dimensions.width`, 1.66);
-    setObjectData(`objectPulleyWheel`, `dimensions.height`, 3);
-    changeSpriteAndHoverableStatus('s2', 'objectPulleyWheel', true);
 }
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
