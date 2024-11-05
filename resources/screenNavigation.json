@@ -373,8 +373,8 @@
             "e1": {
                 "connectsTo": "riverCrossing",
                 "status": "open",
-                "startPosition": { "x": 73, "y": 49 },
-                "finalPosition": { "x": 64, "y": 49 },
+                "startPosition": { "x": 6, "y": 45 },
+                "finalPosition": { "x": 17, "y": 35 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -467,18 +467,18 @@
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
-                "connectsTo": "map",
-                "status": "locked",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            },
-            "e2": {
                 "connectsTo": "roadIntoTown",
                 "status": "open",
                 "startPosition": { "x": 45, "y": 27 },
                 "finalPosition": { "x": 42, "y": 31 },
+                "xPosCameraEnterHere": 0,
+                "yPosCameraEnterHere": 0
+            },
+            "e2": {
+                "connectsTo": "map",
+                "status": "locked",
+                "startPosition": { "x": 0, "y": 0 },
+                "finalPosition": { "x": 0, "y": 0 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
