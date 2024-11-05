@@ -142,6 +142,21 @@ async function combineRopeAndHook(blank, dialogueString, blank2, blank3) {
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function combineRopeAndHookWithStackOfWood(blank, dialogueString, blank2, blank3) {
+    let gridData = getGridData();
+    removeObjectFromEnvironment('objectStackOfWood', 'riverCrossing');
+    updateGrid();
+
+    setTimeout(() => {
+        setAnimationInProgress(true);
+        addEntityToEnvironment('objectRopeAndHookWithStackOfWood', 34, 23, 0, 0, getObjectData().objects['objectRopeAndHookWithStackOfWood'].dimensions.originalWidth, getObjectData().objects['objectRopeAndHookWithStackOfWood'].dimensions.originalHeight, 's1', true, 'riverCrossing');
+        setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
+        updateGrid();
+    }, 50);
+
+    await showText(dialogueString, getColorTextPlayer());
+}
+
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
     removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');

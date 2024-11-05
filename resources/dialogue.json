@@ -152,6 +152,31 @@
             }
           }
         },
+        "objectRopeAndHookWithStackOfWood": {
+          "use": {
+            "cantUseYet": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "I have fed it around the pulley wheel, I wonder if I can lift that wood...",
+              "es": "Lo he pasado alrededor de la polea, me pregunto si podré levantar esa madera...",
+              "de": "Ich habe es um das Flaschenzugrad gelegt, ich frage mich, ob ich das Holz heben kann...",
+              "it": "L'ho fatto passare attorno alla puleggia, mi chiedo se riuscirò a sollevare quella legna...",
+              "fr": "Je l'ai passé autour de la poulie, je me demande si je peux soulever ce bois..."
+            }
+          }
+        },
         "objectStackOfWood": {
           "use": {
             "cantUseYet": {
@@ -428,6 +453,13 @@
           }
         },
         "useWithObject1": {
+          "objectRopeAndHook": {
+            "en": "I'm gonna throw it, who knows...",
+            "es": "Voy a lanzarlo, quién sabe...",
+            "de": "Ich werde es werfen, wer weiß...",
+            "it": "Lo lancerò, chissà...",
+            "fr": "Je vais le lancer, qui sait..."
+          },
           "objectCrowbar": {
             "en": "Uff, that was heavy! There seems to be a ladder leading down, and what a stink!",
             "es": "¡Uff, eso fue pesado! Parece haber una escalera que baja, ¡y qué mal olor!",
@@ -680,6 +712,15 @@
               "it": "Fuori nel mondo!",
               "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectRopeAndHookWithStackOfWood": {
+          "0": {
+            "en": "The hook has sunk right into the wood, talk about a lucky throw!",
+            "es": "El gancho se ha clavado en la madera, ¡vaya tiro afortunado!",
+            "de": "Der Haken ist direkt ins Holz eingedrungen, was für ein Glückswurf!",
+            "it": "Il gancio si è infilato nel legno, che lancio fortunato!",
+            "fr": "Le crochet s'est enfoncé dans le bois, quel lancer chanceux!"
           }
         },
         "objectStackOfWood": {

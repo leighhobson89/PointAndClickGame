@@ -115,7 +115,7 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
         const distanceToTarget = heuristic(currentNode, target);
         const cellType = gridData.gridData[target.y][target.x];
 
-        if (action === "Talk To" || action === "Give") { //only player
+        if (action === "Talk To" || action === "Give" || cellType === "oobjectStackOfWood" || cellType === "oobjectRopeAndHookWithStackOfWood") { //only player //oobjectStacOfWood is a workarond to stop the plater crossing the uncompleted bridge, change in future with better logic
             if(!npcResizedYet && cellType.startsWith('c')) {
                 const npc = cellType.slice(1);
                 const npcGridPositionY = getNpcData().npcs[npc].gridPosition.y;
@@ -126,7 +126,7 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
                 npcResizedYet = true;
             }
 
-            if (distanceToTarget <= 13) {
+            if (distanceToTarget <= 13 && cellType !== "oobjectStackOfWood" || distanceToTarget <= 18 && cellType === "oobjectStackOfWood" || distanceToTarget <= 18 && cellType === "oobjectRopeAndHookWithStackOfWood") {
                 let temp = currentNode;
                 while (temp) {
                     path.push({ x: temp.x, y: temp.y });

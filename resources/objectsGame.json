@@ -2352,16 +2352,16 @@
         "specialNpcObjectStandIn": false,
         "canHover": false,
         "canPush": false,
-        "canPull": true,
+        "canPull": false,
         "canOpen": false,
         "canPickUp": false,
         "canPickUpNow": true,
-        "canUse": true,
-        "canUseWith": false,
+        "canUse": false,
+        "canUseWith": true,
         "canGive": false,
         "stackable": false,
         "quantity": 1,
-        "decrementQuantityOnUse": false,
+        "decrementQuantityOnUse": true,
         "activeStatus": true,
         "alreadyUsed": false
       },
@@ -2369,13 +2369,13 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectPulleyWheelPutCorrectOne",
+        "objectUseWith1": "objectStackOfWood",
         "objectUseWith2": "",
         "npcUseWith1": "",
-        "actionUseWith11": "actionWillBeToPutTheRopeInPlaceOnTheScreen",
+        "actionUseWith11": "combineRopeAndHookWithStackOfWood",
         "actionUseWith12": "",
         "actionUseWith21": "",    
-        "useTogetherLocation": "riverCrossing",
+        "useTogetherLocation": "objectStackOfWood",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2915,6 +2915,89 @@
       },
       "comment": "Anchor for attaching hook and rope to once its on pulley and woodhoisted up and cant move until this is done"
     },
+    "objectRopeAndHookWithStackOfWood": {
+      "name": {
+        "en": "Hook'n'Rope Attached To Wood Stack",
+        "es": "Gancho y cuerda a la madera apilada",
+        "de": "Haken und Seil am Holzstapel befestigt",
+        "it": "Gancio e corda alla legna impilata",
+        "fr": "Crochet et corde au bois empilé"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "connectRopeAndHookWithWoodToPulley",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "riverCrossing",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/stackOfWoodOnHookOnFloorWorld.png",
+        "s2": ""
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 25,
+        "originalHeight": 8.8,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Object representing Rope And Hook attached to Wood while it is on the floor"
+    },
     "objectStackOfWood": {
       "name": {
         "en": "Stack of Wood",
@@ -2965,7 +3048,7 @@
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/stackOfWoodOnBridgeWorld.png",
-        "s2": "./resources/objects/images/stackOfWoodOnHookWorld.png"
+        "s2": "."
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -2984,7 +3067,7 @@
       },
       "offset": {
         "x": 0.4,
-        "y": 0
+        "y": -0.2
       },
       "visualPosition": {
         "x": 0,
