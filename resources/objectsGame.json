@@ -2520,87 +2520,6 @@
       },
       "comment": "Combined pulley wheel and splinter for jamming wood when hoisted"
     },
-    "objectSturdyAnchor": {
-      "name": {
-        "en": "Sturdy Anchor",
-        "es": "Gancho resistente",
-        "de": "Stabiler Haken",
-        "it": "Gancio robusto",
-        "fr": "Crochet robuste"
-      },
-      "canMove": false,
-      "measureMovementYOffset": 0,
-      "activeMoveSequence": 0,
-      "waypoints": {},
-      "interactable": {
-        "specialNpcObjectStandIn": false,
-        "canHover": true,
-        "canPush": false,
-        "canPull": false,
-        "canOpen": false,
-        "canPickUp": false,
-        "canPickUpNow": true,
-        "canUse": false,
-        "canUseWith": true,
-        "canGive": false,
-        "stackable": false,
-        "quantity": 1,
-        "decrementQuantityOnUse": true,
-        "activeStatus": true,
-        "alreadyUsed": false
-      },
-      "usedOn": {
-        "objectUse": "",
-        "actionUse1": "",
-        "actionUse2": "",
-        "objectUseWith1": "",
-        "npcUseWith1": "",
-        "actionUseWith11": "",
-        "actionUseWith12": "",
-        "useTogetherLocation": "objectPulleyWheel",
-        "npcGiveTo": "",
-        "actionGive1": "",
-        "actionGive2": "",
-        "actionPickUp": "",
-        "actionCanPickUpButNotYet": ""
-      },
-      "objectPlacementLocation": "debugRoom",
-      "activeSpriteUrl": "s1",
-      "spriteUrl": {
-        "s1": "./resources/objects/images/hookWorld.png",
-        "s2": "./resources/objects/images/blank.png"
-      },
-      "visualAnimatedStateOffsets": {
-        "s1": {
-          "x": 0,
-          "y": 0
-        },
-        "s2": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "inventoryUrl": "./resources/objects/images/hookInv.png",
-      "gridPosition": {
-        "x": 66,
-        "y": 33
-      },
-      "offset": {
-        "x": 0.4,
-        "y": 0.5
-      },
-      "visualPosition": {
-        "x": 0,
-        "y": 0
-      },
-      "dimensions": {
-        "originalWidth": 1.66,
-        "originalHeight": 3,
-        "width": 0,
-        "height": 0
-      },
-      "comment": "Anchor for attaching pulley wheel to on river crossing tree"
-    },
     "objectLargePileOfPoo": {
       "name": {
         "en": "Huge Pile Of Poo",
@@ -2760,6 +2679,168 @@
         "height": 0
       },
       "comment": "Broken fence before farmer and cow appear"
+    },
+    "objectSturdyAnchor": {
+      "name": {
+        "en": "Sturdy Anchor",
+        "es": "Gancho resistente",
+        "de": "Stabiler Haken",
+        "it": "Gancio robusto",
+        "fr": "Crochet robuste"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "objectPulleyWheel",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "riverCrossing",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png",
+        "s2": ""
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 36,
+        "y": 15
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 2,
+        "originalHeight": 4,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Anchor for attaching pulley wheel to on river crossing tree"
+    },
+    "objectSuspiciousFencePost": {
+      "name": {
+        "en": "Suspicious Fencepost",
+        "es": "Poste sospechoso",
+        "de": "Verdächtiger Zaunpfahl",
+        "it": "Palo sospetto",
+        "fr": "Poteau suspect"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "canPickUp": true,
+        "canPickUpNow": false,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": false,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "useTogetherLocation": "objectRopeAndHookOnPulleyWithWood",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": "showDialogueStuckInFence"
+      },
+      "objectPlacementLocation": "riverCrossing",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png",
+        "s2": ""
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 34,
+        "y": 25
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 1.8,
+        "originalHeight": 4,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Anchor for attaching hook and rope to once its on pulley and woodhoisted up and cant move until this is done"
     }
   }
 }

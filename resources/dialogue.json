@@ -80,12 +80,19 @@
         "it": "Cosa pensi di fare?? Sono i miei strumenti, mani lontane!",
         "fr": "Que penses-tu faire?? Ce sont mes outils, ne les touche pas!"
       },
+      "metalBarStuckInFence": {
+        "en": "Ow! No, that isn't moving at all, I'd have to take the bridge with me!",
+        "es": "¡Ay! No, eso no se mueve en absoluto, ¡tendría que llevarme el puente!",
+        "de": "Aua! Nein, das bewegt sich überhaupt nicht, ich müsste die Brücke mitnehmen!",
+        "it": "Ahi! No, non si muove affatto, dovrei portarmi dietro il ponte!",
+        "fr": "Aïe! Non, ça ne bouge pas du tout, je devrais emmener le pont avec moi!"
+      },
       "manholeCoverIsStuck": {
-        "en": "It is stuck down, I can't move that without some kind of lever",
-        "es": "Está atascado, no puedo moverlo sin algún tipo de palanca",
-        "de": "Es ist festgeklemmt, ich kann das ohne einen Hebel nicht bewegen",
-        "it": "È bloccato, non posso spostarlo senza una leva",
-        "fr": "C'est coincé, je ne peux pas le déplacer sans un levier"
+        "en": "It is stuck down, I can't move that without some kind of lever.",
+        "es": "Está atascado, no puedo moverlo sin algún tipo de palanca.",
+        "de": "Es ist festgeklemmt, ich kann das ohne einen Hebel nicht bewegen.",
+        "it": "È bloccato, non posso spostarlo senza una leva.",
+        "fr": "C'est coincé, je ne peux pas le déplacer sans un levier."
       },
       "manholeWontGoBackOn": {
         "en": "It won't go back on!",
@@ -203,6 +210,56 @@
               "de": "Ich werde mich wahrscheinlich schneiden, wenn ich damit herumspiele, also nein!",
               "it": "Probabilmente mi taglierò giocando con quello, quindi no!",
               "fr": "Je vais probablement me couper en jouant avec ça, donc non!"
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
+        "objectSturdyAnchor": {
+          "use": {
+            "cantUseYet": {
+              "en": "Maybe I could use something with it, but I can't move it!",
+              "es": "Quizás podría usar algo con esto, ¡pero no puedo moverlo!",
+              "de": "Vielleicht könnte ich etwas damit benutzen, aber ich kann es nicht bewegen!",
+              "it": "Forse potrei usarlo con qualcosa, ma non riesco a muoverlo!",
+              "fr": "Peut-être que je pourrais l'utiliser avec quelque chose, mais je ne peux pas le déplacer!"
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
+        "objectSuspiciousFencePost": {
+          "use": {
+            "cantUseYet": {
+              "en": "I can't do anything with this, except maybe tie something to it...",
+              "es": "No puedo hacer nada con esto, excepto quizás atar algo a él...",
+              "de": "Ich kann damit nichts anfangen, außer vielleicht etwas daran festzubinden...",
+              "it": "Non posso farci nulla, tranne forse legarci qualcosa...",
+              "fr": "Je ne peux rien faire avec ça, sauf peut-être y attacher quelque chose..."
             },
             "alreadyUsed": {
               "en": "",
@@ -600,6 +657,24 @@
             }
           }
         },
+        "objectSuspiciousFencePost": {
+          "0": {
+            "en": "Somebody has driven a metal bar into the fence post, I can't get that out!",
+            "es": "¡Alguien ha clavado una barra de metal en el poste de la cerca, no puedo sacarla!",
+            "de": "Jemand hat eine Metallstange in den Zaunpfahl getrieben, ich bekomme sie nicht heraus!",
+            "it": "Qualcuno ha infilato una barra di metallo nel palo della recinzione, non riesco a toglierla!",
+            "fr": "Quelqu'un a enfoncé une barre métallique dans le poteau de la clôture, je n'arrive pas à la retirer!"
+          }
+        },
+        "objectSturdyAnchor": {
+          "0": {
+            "en": "It looks like something was attached here, it's clearly a very strong branch!",
+            "es": "Parece que algo estaba unido aquí, ¡es claramente una rama muy fuerte!",
+            "de": "Es sieht so aus, als wäre hier etwas befestigt gewesen, es ist eindeutig ein sehr starker Ast!",
+            "it": "Sembra che qui fosse attaccato qualcosa, è chiaramente un ramo molto forte!",
+            "fr": "On dirait que quelque chose était attaché ici, c'est clairement une branche très solide !"
+          }
+        },
         "objectManholeCover": {
           "0": {
             "en": "A big heavy rusted manhole cover. It has not been opened for a long time!",
@@ -678,15 +753,6 @@
             "de": "Ein überraschend stark aussehender Holzsplitter!",
             "it": "Una scheggia di legno sorprendentemente robusta!",
             "fr": "Une écharde de bois d'apparence étonnamment solide !"
-          }
-        },
-        "objectSturdyAnchor": {
-          "0": {
-            "en": "It looks like something was attached here, it's clearly a very strong branch!",
-            "es": "Parece que algo estaba unido aquí, ¡es claramente una rama muy fuerte!",
-            "de": "Es sieht so aus, als wäre hier etwas befestigt gewesen, es ist eindeutig ein sehr starker Ast!",
-            "it": "Sembra che qui fosse attaccato qualcosa, è chiaramente un ramo molto forte!",
-            "fr": "On dirait que quelque chose était attaché ici, c'est clairement une branche très solide !"
           }
         },
         "objectPaperWithInstructionsScrawledOn": {

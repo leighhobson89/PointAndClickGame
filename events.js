@@ -602,6 +602,12 @@ async function showDialogueStuckFast() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function showDialogueStuckInFence() {
+    const language = getLanguage();
+    const dialogueString = getDialogueData().dialogue.specialDialogue.metalBarStuckInFence[language];
+    await showText(dialogueString, getColorTextPlayer());
+}
+
 async function showDialogueManholeWontGoBackOn() {
     const language = getLanguage();
     const dialogueString = getDialogueData().dialogue.specialDialogue.manholeWontGoBackOn[language];
