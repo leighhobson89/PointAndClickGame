@@ -200,30 +200,48 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
 }
 
 async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TO TEST
-        // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
-        setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
-        setForcePlayerLocation([33, 30]);
+    let gridData = getGridData();
+    // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
+    setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
+    setForcePlayerLocation([33, 30]);
+
+    await waitForPlayerToMoveToForceLocation();
+
+    removeObjectFromEnvironment('objectRopeAndHookWithStackOfWoodOnPulley', 'riverCrossing');
+    updateGrid();
     
-        await waitForPlayerToMoveToForceLocation();
-
-        removeObjectFromEnvironment('objectRopeAndHookWithStackOfWoodOnPulley', 'riverCrossing');
+    setTimeout(() => {
+        setAnimationInProgress(true);
+        addEntityToEnvironment(
+            'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
+            33, 16, 
+            0.3, 0.5, 
+            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalWidth, 
+            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalHeight, 
+            's1', true, 'riverCrossing'
+        );
+        setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', true);
         updateGrid();
-        
-        setTimeout(() => {
-            setAnimationInProgress(true);
-            addEntityToEnvironment(
-                'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
-                34, 17, 
-                0.8, 0.4, 
-                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalWidth, 
-                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalHeight, 
-                's1', true, 'riverCrossing'
-            );
-            setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', true);
-            updateGrid();
-        }, 50);
+    }, 50);
 
-        await showText(dialogueString, getColorTextPlayer());
+    await showText(dialogueString, getColorTextPlayer());
+
+    setTimeout(() => {
+        setAnimationInProgress(true);
+        addEntityToEnvironment(
+            'objectSuspiciousFencePost', 
+            32, 26, 
+            0, 0, 
+            getObjectData().objects['objectSuspiciousFencePost'].dimensions.originalWidth, 
+            getObjectData().objects['objectSuspiciousFencePost'].dimensions.originalHeight, 
+            's1', true, 'riverCrossing'
+        );
+        setPreAnimationGridState(gridData, 'objectSuspiciousFencePost', true);
+        updateGrid();
+    }, 50);
+
+    setObjectData(`objectSuspiciousFencePost`, `interactable.canUse`, true);
+    setObjectData(`objectSuspiciousFencePost`, `interactable.activeStatus`, true);
 }
 
 async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank3) { //TODO
@@ -231,8 +249,17 @@ async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank
     setVerbsBlockedExcept([]);
     setForcePlayerLocation([]);
 
-    //explain you have let go and although its tied, it keeps slipping
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canUse`, false);
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.activeStatus`, false);
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.alreadyUsed`, false);
+
+    setDialogueData('objectInteractions.verbLookAt.objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', '0', '1');
+
+    await showText(dialogueString, getColorTextPlayer());
     //set state so pulling or using dont do anything but remind user its slipping
+    setObjectData(`objectSuspiciousFencePost`, `interactable.canUse`, true);
+    setObjectData(`objectSuspiciousFencePost`, `interactable.activeStatus`, false);
+    setObjectData(`objectSuspiciousFencePost`, `interactable.alreadyUsed`, true);
 
 }
 

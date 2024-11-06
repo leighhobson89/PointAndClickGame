@@ -162,11 +162,11 @@
         "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted": {
           "use": {
             "cantUseYet": {
-              "en": "",
-              "es": "",
-              "de": "",
-              "it": "",
-              "fr": ""
+              "en": "It's holding for now, I really need to jam something in the pulley to stop it slipping!",
+              "es": "Está aguantando por ahora, realmente necesito meter algo en la polea para que deje de deslizarse.",
+              "de": "Es hält vorerst, aber ich muss wirklich etwas in die Seilrolle klemmen, damit es nicht rutscht!",
+              "it": "Sta tenendo per ora, devo davvero bloccare qualcosa nella carrucola per fermare lo scivolamento!",
+              "fr": "Ça tient pour l'instant, mais je dois vraiment coincer quelque chose dans la poulie pour empêcher que ça glisse !"
             },
             "alreadyUsed": {
               "en": "I'm kind of already using it! I daren't let go!",
@@ -369,18 +369,18 @@
               "fr": "Je ne peux rien faire avec ça, sauf peut-être y attacher quelque chose..."
             },
             "alreadyUsed": {
-              "en": "",
-              "es": "",
-              "de": "",
-              "it": "",
-              "fr": ""
+              "en": "It's slipping, I can't do anything, I need to jam the pulley with something or I'm going to lose the wood!",
+              "es": "¡Está resbalando, no puedo hacer nada! Necesito meter algo en la polea o voy a perder la madera!",
+              "de": "Es rutscht, ich kann nichts tun! Ich muss etwas in die Seilrolle klemmen, sonst verliere ich das Holz!",
+              "it": "Sta scivolando, non posso fare nulla! Devo bloccare qualcosa nella carrucola o perderò la legna!",
+              "fr": "Ça glisse, je ne peux rien faire ! Je dois coincer quelque chose dans la poulie ou je vais perdre le bois!"
             },
             "canUse": {
-              "en": "",
-              "es": "",
-              "de": "",
-              "it": "",
-              "fr": ""
+                "en": "There! It's tied, although it's slipping slowly, quick, I need to jam something in the pulley!",
+                "es": "¡Ahí está! Está atado, aunque se desliza lentamente, rápido, necesito meter algo en la polea!",
+                "de": "Da! Es ist festgebunden, aber es rutscht langsam. Schnell, ich muss etwas in die Seilrolle klemmen!",
+                "it": "Ecco! È legato, anche se scivola lentamente. Presto, devo bloccare qualcosa nella carrucola!",
+                "fr": "Ça y est ! C'est attaché, mais ça glisse lentement. Vite, je dois coincer quelque chose dans la poulie !"
             }
           }
         },
@@ -778,6 +778,13 @@
             "de": "Ich halte es fest und kann es nicht loslassen!",
             "it": "Lo sto tenendo e non posso lasciarlo andare!",
             "fr": "Je le tiens, et je ne peux pas le lâcher!"
+          },
+          "1": {
+            "en": "It looks ok for now, but I need to jam something in the pulley to stop it slipping!",
+            "es": "Parece que está bien por ahora, pero necesito meter algo en la polea para que deje de deslizarse.",
+            "de": "Es sieht vorerst in Ordnung aus, aber ich muss etwas in die Seilrolle klemmen, um das Rutschen zu stoppen!",
+            "it": "Sembra a posto per ora, ma devo bloccare qualcosa nella carrucola per fermare lo scivolamento!",
+            "fr": "Ça a l'air de tenir pour l'instant, mais je dois coincer quelque chose dans la poulie pour empêcher que ça glisse !"
           }
         },
         "objectRopeAndHookWithStackOfWoodOnPulley": {

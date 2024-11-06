@@ -2863,7 +2863,7 @@
       },
       "usedOn": {
         "objectUse": "",
-        "actionUse1": "",
+        "actionUse1": "tieRopeToSuspiciousFencePost",
         "actionUse2": "",
         "objectUseWith1": "",
         "objectUseWith2": "",
@@ -2871,7 +2871,7 @@
         "actionUseWith11": "",
         "actionUseWith12": "",
         "actionUseWith21": "",    
-        "useTogetherLocation": "objectRopeAndHookOnPulleyWithWood",
+        "useTogetherLocation": "",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2896,7 +2896,7 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 34,
+        "x": 36,
         "y": 25
       },
       "offset": {
@@ -3145,11 +3145,11 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 0,
-        "y": 0
+        "x": 33,
+        "y": 16
       },
       "offset": {
-        "x": -0.5,
+        "x": 0.3,
         "y": 0.5
       },
       "visualPosition": {
@@ -3157,8 +3157,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 24,
-        "originalHeight": 14,
+        "originalWidth": 6,
+        "originalHeight": 15,
         "width": 0,
         "height": 0
       },
