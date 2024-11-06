@@ -199,7 +199,9 @@ async function movePlayerTowardsTarget() {
                 return;
             } else {
                 if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 ) {
-                    //setUpcomingAction(localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"));
+                    if (getUpcomingAction() === null) {
+                        return;
+                    }
                     commandToPerform = constructCommand(getUpcomingAction(), true);
                 } else {
                     performCommand(commandToPerform, false); // Perform the command
