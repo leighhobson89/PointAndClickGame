@@ -115,6 +115,7 @@ let scrollDirection = 0;
 let swappedDialogueObject = {};
 let pendingEvent = [];
 let verbsBlockedExcept = [];
+let forcePlayerLocation = [];
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -1225,3 +1226,13 @@ export function setVerbsBlockedExcept(value) {
 export function getVerbsBlockedExcept() {
     return verbsBlockedExcept;
 }
+
+export function setForcePlayerLocation(value) {
+    forcePlayerLocation = value;
+}
+
+export function getForcePlayerLocation() {
+    return forcePlayerLocation;
+}
+
+

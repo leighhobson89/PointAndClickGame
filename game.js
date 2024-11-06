@@ -1,4 +1,4 @@
-import { setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setForcePlayerLocation, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -80,10 +80,6 @@ async function movePlayerTowardsTarget() {
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
 
-    if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
-        return;
-    }
-
     const playerGridX = Math.floor(player.xPos / gridSizeX);
     const playerGridY = Math.floor(player.yPos / gridSizeY);
 
@@ -98,18 +94,19 @@ async function movePlayerTowardsTarget() {
     let cellClickValue;
     //console.log(cellValue);
 
-    if (getClickPoint().x !== null && getClickPoint().y !== null) {
+    if (getClickPoint().x !== null && getClickPoint().y !== null && getForcePlayerLocation().length === 0) {
         cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
+    } else if (getForcePlayerLocation().length > 0) {
+        cellClickValue = gridData.gridData[getForcePlayerLocation()[0]][getForcePlayerLocation()[1]];
     } else {
         return;
     }
 
     const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
 
-
-    if (screenOrObjectNameAndHoverStatus[1]) {
+    if (screenOrObjectNameAndHoverStatus[1] && getVerbsBlockedExcept().length === 0) {
         commandToPerform = constructCommand(getUpcomingAction(), true);
-    } else {
+    } else if (getVerbsBlockedExcept().length === 0) {
         commandToPerform = constructCommand(getUpcomingAction(), false);
     }
 
@@ -132,20 +129,20 @@ async function movePlayerTowardsTarget() {
         }
     }
 
-    if (!commandToPerform) {
+    if (!commandToPerform && getVerbsBlockedExcept().length === 0) {
         return;
     }
 
     // Normal movement logic
     //console.log("command to perform = " + commandToPerform.verbKey);
-    if (commandToPerform.verbKey === 'verbWalkTo' || commandToPerform.verbKey === 'interactionWalkingTo' || commandToPerform.verbKey === 'verbOpen' || commandToPerform.verbKey === 'verbClose'  || commandToPerform.verbKey === 'verbPickUp') {
+    if (getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbWalkTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'interactionWalkingTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbOpen' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbClose'  || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbPickUp') {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
             targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
         } else {
             return; // No target to move toward
         }
-    } else {
+    } else if (getVerbsBlockedExcept().length === 0) {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length - 10) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
             targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
@@ -154,6 +151,15 @@ async function movePlayerTowardsTarget() {
             targetY = (playerGridY + 0.5) * gridSizeY;
         } else {
             return; // No target to move toward
+        }
+    } else {
+        if (Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length > 0) {
+            targetX = getForcePlayerLocation()[0];
+            targetY = getForcePlayerLocation()[1];
+        }
+        
+        if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 && Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length === 0) {
+            return;
         }
     }
 
@@ -191,7 +197,11 @@ async function movePlayerTowardsTarget() {
                 showText(dialogueString, getColorTextPlayer());
                 setCantGoThatWay(false);
                 return;
-            } else {    
+            } else {
+                if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 ) {
+                    setUpcomingAction(localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"));
+                    commandToPerform = constructCommand(getUpcomingAction(), false);
+                }
                 performCommand(commandToPerform, false); // Perform the command
                 setCurrentlyMovingToAction(false);
                 if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
