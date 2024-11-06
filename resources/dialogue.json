@@ -73,6 +73,27 @@
       }
     },
     "specialDialogue": {
+      "noMalletOnBridge": {
+        "en": "I can't drive the nails in without something to whack them with!",
+        "es": "¡No puedo clavar los clavos sin algo con qué golpearlos!",
+        "de": "Ich kann die Nägel nicht einschlagen, ohne etwas, um sie zu hämmern!",
+        "it": "Non posso battere i chiodi senza qualcosa con cui colpirli!",
+        "fr": "Je ne peux pas enfoncer les clous sans quelque chose avec quoi les frapper !"
+      },
+      "buildFirstBridgeSection": {
+        "en": "Wow there we go, the bridge is looking better! Still more to do though!",
+        "es": "¡Vaya, ahí vamos! El puente se ve mejor, ¡aunque aún queda trabajo por hacer!",
+        "de": "Wow, da haben wir es! Die Brücke sieht besser aus, aber es gibt noch mehr zu tun!",
+        "it": "Wow, eccoci qua! Il ponte sembra migliore, ma c'è ancora da fare!",
+        "fr": "Waouh, voilà ! Le pont a meilleure allure, mais il reste encore du travail à faire !"
+      },
+      "buildSecondBridgeSection": {
+        "en": "The bridge is complete, that was some task!",
+        "es": "¡El puente está completo, vaya tarea que fue!",
+        "de": "Die Brücke ist fertig, das war eine Aufgabe!",
+        "it": "Il ponte è completo, è stato un bel lavoro!",
+        "fr": "Le pont est terminé, quelle tâche ça a été !"
+      },
       "cannotPickUpPliersOrNailsYet": {
         "en": "What do you think you are doing?? They are my tools, hands off!",
         "es": "¿Qué crees que estás haciendo?? ¡Son mis herramientas, ¡manos fuera!",
@@ -510,6 +531,13 @@
           }
         },
         "useWithObject1": {
+          "objectNails": {
+            "en": "Ok here we go...",
+            "es": "Bien, allá vamos...",
+            "de": "Ok, los geht's...",
+            "it": "Ok, ci siamo...",
+            "fr": "D'accord, c'est parti..."
+          },
           "objectSplinter": {
             "en": "That's it! Now it is solid, not going anywhere, let work commence!",
             "es": "¡Eso es! Ahora está sólido, no se moverá, ¡que comience el trabajo!",

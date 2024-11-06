@@ -276,17 +276,42 @@ async function addSplinterToPulley(blank, dialogueString, blank2, blank3) {
 }
 
 async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
+    const dialogueData = getDialogueData().dialogue;
+    const language = getLanguage();
+
     let bridgeState = getBridgeState();
+    const inventory = getPlayerInventory();
 
-    console.log(getPlayerInventory());
+    await showText(dialogueString, getColorTextPlayer());
 
-    if (bridgeState < 2 && getPlayerInventory()) {
+    const hasMallet = Object.values(inventory).some(slot => slot.object === "objectMallet");
 
+    if (bridgeState < 2 && hasMallet) {
+        //build bridge section
+        if (bridgeState === 0) {
+            changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeHalfComplete.png');
+            setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's2');
+
+            setObjectData(`objectNails`, `interactable.decrementQuantityOnUse`, true);
+
+            dialogueString = dialogueData.specialDialogue.buildFirstBridgeSection[language];
+            await showText(dialogueString, getColorTextPlayer());
+
+        } else if (bridgeState === 1) {
+            changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeComplete.png');
+            setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's3');
+            setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canHover`, false);
+            //change grid to allow player to walk across bridge
+            
+            dialogueString = dialogueData.specialDialogue.buildSecondBridgeSection[language];
+            await showText(dialogueString, getColorTextPlayer());
+        }
+
+        setBridgeState(bridgeState + 1);
+    } else {
+        dialogueString = dialogueData.specialDialogue.noMalletOnBridge[language];
+        await showText(dialogueString, getColorTextPlayer());
     }
-    //if state of nails can be used with wood
-    //if user has mallet
-    //build bridge section
-    //else explain to user no mallet and return
 }
 
 // Helper function to poll getCurrentlyMovingToAction() until it's false

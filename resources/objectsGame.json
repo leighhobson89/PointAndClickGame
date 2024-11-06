@@ -1527,7 +1527,7 @@
         "canGive": false,
         "stackable": false,
         "quantity": 1,
-        "decrementQuantityOnUse": true,
+        "decrementQuantityOnUse": false,
         "activeStatus": false,
         "alreadyUsed": false
       },
@@ -3048,7 +3048,8 @@
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/stackOfWoodOnHookWorld.png",
-        "s2": ""
+        "s2": "./resources/objects/images/stackOfWoodOnHookHalfCompleteWorld.png",
+        "s3": "./resources/objects/images/stackOfWoodOnHookCompleteWorld.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {

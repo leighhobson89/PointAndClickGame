@@ -1243,7 +1243,3 @@ export function setBridgeState(value) {
 export function getBridgeState() {
     return bridgeState;
 }
-
-
-
-
