@@ -199,9 +199,9 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
     }
 }
 
-async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TO TEST
+async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
-    // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
+
     setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
     setForcePlayerLocation([33, 30]);
 
@@ -244,8 +244,7 @@ async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialo
     setObjectData(`objectSuspiciousFencePost`, `interactable.activeStatus`, true);
 }
 
-async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank3) { //TODO
-    //Release player from restricted state
+async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank3) {
     setVerbsBlockedExcept([]);
     setForcePlayerLocation([]);
 
@@ -256,11 +255,10 @@ async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank
     setDialogueData('objectInteractions.verbLookAt.objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', '0', '1');
 
     await showText(dialogueString, getColorTextPlayer());
-    //set state so pulling or using dont do anything but remind user its slipping
+
     setObjectData(`objectSuspiciousFencePost`, `interactable.canUse`, true);
     setObjectData(`objectSuspiciousFencePost`, `interactable.activeStatus`, false);
     setObjectData(`objectSuspiciousFencePost`, `interactable.alreadyUsed`, true);
-
 }
 
 async function addSplinterToPulley(blank, dialogueString, blank2, blank3) { //TODO
