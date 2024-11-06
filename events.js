@@ -1,4 +1,4 @@
-import { getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation } from "./constantsAndGlobalVars.js";
+import { getBridgeState, setBridgeState, getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -267,9 +267,22 @@ async function addSplinterToPulley(blank, dialogueString, blank2, blank3) {
 
     setObjectData(`objectNails`, `interactable.activeStatus`, true);
     setDialogueData('objectInteractions.verbLookAt.objectNails', '0', '1');
+    
+    setDialogueData('objectInteractions.verbLookAt.objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', '0', '2');
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canUse`, true);
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `usedOn.useTogetherLocation`, `objectNails`);
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.activeStatus`, true);
+    setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.alreadyUsed`, false);
 }
 
-async function buildBridgeSection(blank, dialogueString, blank2, blank3) { //TODO
+async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
+    let bridgeState = getBridgeState();
+
+    console.log(getPlayerInventory());
+
+    if (bridgeState < 2 && getPlayerInventory()) {
+
+    }
     //if state of nails can be used with wood
     //if user has mallet
     //build bridge section
@@ -766,6 +779,10 @@ async function useCrowBarOnManholeCover(blank, dialogueString) {
         updateGrid();
     }, 50);
 
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function genericFunctionToJustSayCanUseTextAndDoNothingElse(blank, dialogueString) {
     await showText(dialogueString, getColorTextPlayer());
 }
 

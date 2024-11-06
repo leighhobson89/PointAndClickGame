@@ -176,11 +176,11 @@
               "fr": "Je suis déjà en train de l'utiliser ! Je n'ose pas le lâcher !"
             },
             "canUse": {
-              "en": "",
-              "es": "",
-              "de": "",
-              "it": "",
-              "fr": ""
+              "en": "I can't do much more with it, maybe I can use something with it, but wow what a gadget!",
+              "es": "No puedo hacer mucho más con esto, quizás pueda usar algo con él, ¡pero vaya invento!",
+              "de": "Ich kann nicht viel mehr damit machen, vielleicht kann ich etwas damit verwenden, aber wow, was für ein Gerät!",
+              "it": "Non posso farci molto altro, forse posso usarci qualcos'altro, ma wow, che marchingegno!",
+              "fr": "Je ne peux pas faire grand-chose de plus avec, peut-être que je peux l'utiliser avec quelque chose, mais quel gadget !"
             }
           }
         },
@@ -792,7 +792,14 @@
             "de": "Es sieht vorerst in Ordnung aus, aber ich muss etwas in die Seilrolle klemmen, um das Rutschen zu stoppen!",
             "it": "Sembra a posto per ora, ma devo bloccare qualcosa nella carrucola per fermare lo scivolamento!",
             "fr": "Ça a l'air de tenir pour l'instant, mais je dois coincer quelque chose dans la poulie pour empêcher que ça glisse !"
-          }
+          },
+          "2": {
+            "en": "That's solid as a rock, not going anywhere!",
+            "es": "Está sólido como una roca, no se moverá de ahí!",
+            "de": "Das ist felsenfest, es wird sich nicht bewegen!",
+            "it": "È solido come una roccia, non si muoverà!",
+            "fr": "C'est solide comme un roc, ça ne bougera pas !"
+        }
         },
         "objectRopeAndHookWithStackOfWoodOnPulley": {
           "0": {

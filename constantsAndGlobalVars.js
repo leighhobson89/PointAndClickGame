@@ -116,6 +116,7 @@ let swappedDialogueObject = {};
 let pendingEvent = [];
 let verbsBlockedExcept = [];
 let forcePlayerLocation = [];
+let bridgeState = 0;
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -1234,5 +1235,15 @@ export function setForcePlayerLocation(value) {
 export function getForcePlayerLocation() {
     return forcePlayerLocation;
 }
+
+export function setBridgeState(value) {
+    bridgeState = value;
+}
+
+export function getBridgeState() {
+    return bridgeState;
+}
+
+
 
 
