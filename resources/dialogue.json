@@ -159,6 +159,31 @@
             }
           }
         },
+        "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted": {
+          "use": {
+            "cantUseYet": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "alreadyUsed": {
+              "en": "I'm kind of already using it! I daren't let go!",
+              "es": "¡Ya lo estoy usando! ¡No me atrevo a soltarlo!",
+              "de": "Ich benutze es schon! Ich wage es nicht loszulassen!",
+              "it": "Lo sto già usando! Non oso lasciarlo andare!",
+              "fr": "Je suis déjà en train de l'utiliser ! Je n'ose pas le lâcher !"
+            },
+            "canUse": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            }
+          }
+        },
         "objectRopeAndHookWithStackOfWoodOnPulley": {
           "use": {
             "cantUseYet": {
@@ -744,6 +769,15 @@
               "it": "Fuori nel mondo!",
               "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted": {
+          "0": {
+            "en": "I'm holding it, and I can't let it go!",
+            "es": "Lo estoy sosteniendo, y no puedo soltarlo!",
+            "de": "Ich halte es fest und kann es nicht loslassen!",
+            "it": "Lo sto tenendo e non posso lasciarlo andare!",
+            "fr": "Je le tiens, et je ne peux pas le lâcher!"
           }
         },
         "objectRopeAndHookWithStackOfWoodOnPulley": {

@@ -3081,6 +3081,89 @@
       },
       "comment": "Object representing Rope And Hook attached to Wood while the rope is wrapped over the pulley"
     },
+    "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted": {
+      "name": {
+        "en": "Makeshift Wood Hoisting Crane With Load",
+        "es": "Grúa improvisada para levantar madera con carga",
+        "de": "Improvisierter Kran zum Heben von Holz mit Last",
+        "it": "Gru improvvisata per sollevare la legna con carico",
+        "fr": "Grue improvisée pour soulever du bois avec charge"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": true,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": true,
+        "alreadyUsed": true
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/stackOfWoodOnHookWorld.png",
+        "s2": ""
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "offset": {
+        "x": -0.5,
+        "y": 0.5
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 24,
+        "originalHeight": 14,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Object representing Rope And Hook attached to Wood hoisted and suspended"
+    },
     "objectStackOfWood": {
       "name": {
         "en": "Stack of Wood",

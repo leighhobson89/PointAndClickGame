@@ -199,17 +199,31 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
     }
 }
 
-async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TODO
+async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TO TEST
         // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
         setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
         setForcePlayerLocation([33, 30]);
     
         await waitForPlayerToMoveToForceLocation();
-        await showText(dialogueString, getColorTextPlayer());
 
-        //remove objectRopeAndHookWithStackOfWoodOnPulley
-        //add hoisted object
-        //dialogue that your stuck til you do something
+        removeObjectFromEnvironment('objectRopeAndHookWithStackOfWoodOnPulley', 'riverCrossing');
+        updateGrid();
+        
+        setTimeout(() => {
+            setAnimationInProgress(true);
+            addEntityToEnvironment(
+                'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
+                34, 17, 
+                0.8, 0.4, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalWidth, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalHeight, 
+                's1', true, 'riverCrossing'
+            );
+            setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', true);
+            updateGrid();
+        }, 50);
+
+        await showText(dialogueString, getColorTextPlayer());
 }
 
 async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank3) { //TODO
