@@ -185,7 +185,7 @@ async function movePlayerTowardsTarget() {
 
         entityPaths.player.currentIndex++;
 
-        if (entityPaths.player.currentIndex < entityPaths.player.path.length) {
+        if (entityPaths.player.currentIndex < entityPaths.player.path.length && getForcePlayerLocation().length === 0) {
             const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
             setTargetXPlayer(nextStep.x * gridSizeX);
             setTargetYPlayer(nextStep.y * gridSizeY - player.height);
@@ -199,16 +199,23 @@ async function movePlayerTowardsTarget() {
                 return;
             } else {
                 if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 ) {
-                    setUpcomingAction(localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"));
-                    commandToPerform = constructCommand(getUpcomingAction(), false);
+                    //setUpcomingAction(localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"));
+                    commandToPerform = constructCommand(getUpcomingAction(), true);
+                } else {
+                    performCommand(commandToPerform, false); // Perform the command
                 }
-                performCommand(commandToPerform, false); // Perform the command
+
                 if (getForcePlayerLocation().length === 0) {
                     setCurrentlyMovingToAction(false);
                 } else {
                     if (
                         Math.abs(playerGridX - getForcePlayerLocation()[0]) <= 1 && Math.abs(playerGridY + Math.floor(player.height / gridSizeY) - getForcePlayerLocation()[1]) <= 1) {
-                        setCurrentlyMovingToAction(false);  
+                        setCurrentlyMovingToAction(false);
+                        if (commandToPerform.verbKey !== 'verbWalkTo') {
+                            performCommand(commandToPerform, false); // Perform the command
+                            setVerbButtonConstructionStatus(null);
+                            setUpcomingAction(null);
+                        }
                     }
                 }
                 

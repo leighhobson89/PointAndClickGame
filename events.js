@@ -163,7 +163,7 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
     let gridData = getGridData();
 
     // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
-    setVerbsBlockedExcept(['interactionUse']);
+    setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
     setForcePlayerLocation([33, 30]);
 
     await waitForPlayerToMoveToForceLocation();
@@ -185,7 +185,6 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
         updateGrid();
     }, 50);
     
-    setVerbsBlockedExcept(['interactionUse']);
     await showText(dialogueString, getColorTextPlayer());
 }
 
