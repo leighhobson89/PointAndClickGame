@@ -107,6 +107,13 @@
         "de": "Warum zum Teufel sollte ich Kot aufheben? Igitt!",
         "it": "Perché mai dovrei raccogliere la cacca? Yuk!",
         "fr": "Pourquoi diable voudrais-je ramasser de la merde ? Yuk !"
+      },
+      "pulleyNotOnScreen": {
+        "en": "It keeps slipping off the hook!",
+        "es": "¡Sigue resbalándose del gancho!",
+        "de": "Es rutscht immer wieder vom Haken!",
+        "it": "Continua a scivolare dal gancio!",
+        "fr": "Il glisse sans cesse du crochet !"
       }
     },
     "postAnimationEventDialogue": {

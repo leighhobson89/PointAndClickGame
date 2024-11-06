@@ -161,27 +161,42 @@ async function combineRopeAndHookWithStackOfWood(blank, dialogueString, blank2, 
 
 async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
+    let pulleyWheelOnScreen = false;
+    let dialogueData = getDialogueData().dialogue;
+    let language = getLanguage();
 
-    //check if pulley wheel on screen else return;
+    for (const row of gridData.gridData) {
+        for (const cellValue of row) {
+            if (cellValue === 'oobjectPulleyWheel') {
+                pulleyWheelOnScreen = true;
+                break;
+            }
+        }
+    }
 
-    removeObjectFromEnvironment('objectRopeAndHookWithStackOfWood', 'riverCrossing');
-    updateGrid();
-    
-    setTimeout(() => {
-        setAnimationInProgress(true);
-        addEntityToEnvironment(
-            'objectRopeAndHookWithStackOfWoodOnPulley', 
-            34, 17, 
-            0.8, 0.4, 
-            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, 
-            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 
-            's1', true, 'riverCrossing'
-        );
-        setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulley', true);
+    if (pulleyWheelOnScreen) {
+        removeObjectFromEnvironment('objectRopeAndHookWithStackOfWood', 'riverCrossing');
         updateGrid();
-    }, 50);
-    
-    await showText(dialogueString, getColorTextPlayer());
+        
+        setTimeout(() => {
+            setAnimationInProgress(true);
+            addEntityToEnvironment(
+                'objectRopeAndHookWithStackOfWoodOnPulley', 
+                34, 17, 
+                0.8, 0.4, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 
+                's1', true, 'riverCrossing'
+            );
+            setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulley', true);
+            updateGrid();
+        }, 50);
+        
+        await showText(dialogueString, getColorTextPlayer());
+    } else {
+        dialogueString = dialogueData.specialDialogue.pulleyNotOnScreen[language];
+        await showText(dialogueString, getColorTextPlayer());
+    }
 }
 
 async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TODO
@@ -190,6 +205,7 @@ async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialo
         setForcePlayerLocation([33, 30]);
     
         await waitForPlayerToMoveToForceLocation();
+        await showText(dialogueString, getColorTextPlayer());
 
         //remove objectRopeAndHookWithStackOfWoodOnPulley
         //add hoisted object

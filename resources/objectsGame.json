@@ -3079,7 +3079,7 @@
         "width": 0,
         "height": 0
       },
-      "comment": "Object representing Rope And Hook attached to Wood while it is suspended over the bridge"
+      "comment": "Object representing Rope And Hook attached to Wood while the rope is wrapped over the pulley"
     },
     "objectStackOfWood": {
       "name": {
