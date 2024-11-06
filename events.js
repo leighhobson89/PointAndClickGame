@@ -162,11 +162,7 @@ async function combineRopeAndHookWithStackOfWood(blank, dialogueString, blank2, 
 async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2, blank3) {
     let gridData = getGridData();
 
-    // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
-    setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
-    setForcePlayerLocation([33, 30]);
-
-    await waitForPlayerToMoveToForceLocation();
+    //check if pulley wheel on screen else return;
 
     removeObjectFromEnvironment('objectRopeAndHookWithStackOfWood', 'riverCrossing');
     updateGrid();
@@ -175,8 +171,8 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
         setAnimationInProgress(true);
         addEntityToEnvironment(
             'objectRopeAndHookWithStackOfWoodOnPulley', 
-            33, 16, 
-            -0.5, 0.8, 
+            34, 17, 
+            0.8, 0.4, 
             getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, 
             getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 
             's1', true, 'riverCrossing'
@@ -186,6 +182,41 @@ async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2,
     }, 50);
     
     await showText(dialogueString, getColorTextPlayer());
+}
+
+async function hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse(blank, dialogueString, blank2, blank3) { //TODO
+        // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
+        setVerbsBlockedExcept(['interactionUse', 'interactionPull']);
+        setForcePlayerLocation([33, 30]);
+    
+        await waitForPlayerToMoveToForceLocation();
+
+        //remove objectRopeAndHookWithStackOfWoodOnPulley
+        //add hoisted object
+        //dialogue that your stuck til you do something
+}
+
+async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank3) { //TODO
+    //Release player from restricted state
+    setVerbsBlockedExcept([]);
+    setForcePlayerLocation([]);
+
+    //explain you have let go and although its tied, it keeps slipping
+    //set state so pulling or using dont do anything but remind user its slipping
+
+}
+
+async function addSplinterToPulley(blank, dialogueString, blank2, blank3) { //TODO
+
+    //explain now it is stuck fast and not going anywhere
+    //set state so nails can be used with wood which will trigger bridge rebuild
+}
+
+async function buildBridgeSection(blank, dialogueString, blank2, blank3) { //TODO
+    //if state of nails can be used with wood
+    //if user has mallet
+    //build bridge section
+    //else explain to user no mallet and return
 }
 
 // Helper function to poll getCurrentlyMovingToAction() until it's false

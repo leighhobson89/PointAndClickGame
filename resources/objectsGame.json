@@ -3047,7 +3047,7 @@
       "objectPlacementLocation": "",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/stackOfWoodOnHookWorld.png",
+        "s1": "./resources/objects/images/stackOfWoodOnHookOnFloorRiggedWorld.png",
         "s2": ""
       },
       "visualAnimatedStateOffsets": {
@@ -3062,19 +3062,19 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 33,
-        "y": 16
+        "x": 0,
+        "y": 0
       },
       "offset": {
         "x": -0.5,
-        "y": 0.8
+        "y": 0.5
       },
       "visualPosition": {
         "x": 0,
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 8,
+        "originalWidth": 24,
         "originalHeight": 14,
         "width": 0,
         "height": 0
