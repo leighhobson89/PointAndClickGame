@@ -154,8 +154,8 @@ async function movePlayerTowardsTarget() {
         }
     } else {
         if (Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length > 0) {
-            targetX = getForcePlayerLocation()[0];
-            targetY = getForcePlayerLocation()[1];
+            targetX = getForcePlayerLocation()[0] * gridSizeX;
+            targetY = getForcePlayerLocation()[1] * gridSizeY - player.height;
         }
         
         if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 && Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length === 0) {
@@ -203,7 +203,15 @@ async function movePlayerTowardsTarget() {
                     commandToPerform = constructCommand(getUpcomingAction(), false);
                 }
                 performCommand(commandToPerform, false); // Perform the command
-                setCurrentlyMovingToAction(false);
+                if (getForcePlayerLocation().length === 0) {
+                    setCurrentlyMovingToAction(false);
+                } else {
+                    if (
+                        Math.abs(playerGridX - getForcePlayerLocation()[0]) <= 1 && Math.abs(playerGridY + Math.floor(player.height / gridSizeY) - getForcePlayerLocation()[1]) <= 1) {
+                        setCurrentlyMovingToAction(false);  
+                    }
+                }
+                
                 if (getVerbButtonConstructionStatus() === 'interactionWalkTo' && !getTransitioningToDialogueState()) {
                     updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 }

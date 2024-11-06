@@ -1,4 +1,4 @@
-import { getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation } from "./constantsAndGlobalVars.js";
+import { getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -160,23 +160,40 @@ async function combineRopeAndHookWithStackOfWood(blank, dialogueString, blank2, 
 }
 
 async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2, blank3) {
-    //force player to 33,30 and block from moving and unblock it after tying to bar on bridge
+    let gridData = getGridData();
+
+    // Force player to 33,30 and block from moving, unblock after tying to bar on bridge
     setVerbsBlockedExcept(['interactionUse']);
     setForcePlayerLocation([33, 30]);
 
-    let gridData = getGridData();
+    await waitForPlayerToMoveToForceLocation();
+
     removeObjectFromEnvironment('objectRopeAndHookWithStackOfWood', 'riverCrossing');
     updateGrid();
     
     setTimeout(() => {
         setAnimationInProgress(true);
-        addEntityToEnvironment('objectRopeAndHookWithStackOfWoodOnPulley', 33, 16, -0.5, 0.8, getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 's1', true, 'riverCrossing');
+        addEntityToEnvironment(
+            'objectRopeAndHookWithStackOfWoodOnPulley', 
+            33, 16, 
+            -0.5, 0.8, 
+            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, 
+            getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 
+            's1', true, 'riverCrossing'
+        );
         setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulley', true);
         updateGrid();
     }, 50);
+    
     setVerbsBlockedExcept(['interactionUse']);
-
     await showText(dialogueString, getColorTextPlayer());
+}
+
+// Helper function to poll getCurrentlyMovingToAction() until it's false
+async function waitForPlayerToMoveToForceLocation() {
+    while (getCurrentlyMovingToAction()) {
+        await new Promise(resolve => setTimeout(resolve, 50));  // Check every 50 ms
+    }
 }
 
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) {
