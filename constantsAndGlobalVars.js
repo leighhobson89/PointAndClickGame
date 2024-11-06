@@ -114,6 +114,7 @@ let scrollPositionX;
 let scrollDirection = 0;
 let swappedDialogueObject = {};
 let pendingEvent = [];
+let verbsBlockedExcept = [];
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -1215,4 +1216,12 @@ export function getShouldNotBeResizedArray() {
 
 export function getArrayOfGameImages() {
     return arrayOfGameImages;
+}
+
+export function setVerbsBlockedExcept(value) {
+    verbsBlockedExcept = value;
+}
+
+export function getVerbsBlockedExcept() {
+    return verbsBlockedExcept;
 }

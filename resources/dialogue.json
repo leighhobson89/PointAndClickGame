@@ -152,6 +152,31 @@
             }
           }
         },
+        "objectRopeAndHookWithStackOfWoodOnPulley": {
+          "use": {
+            "cantUseYet": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "alreadyUsed": {
+              "en": "",
+              "es": "",
+              "de": "",
+              "it": "",
+              "fr": ""
+            },
+            "canUse": {
+              "en": "Ugh! Very heavy! All the wood is holding together, now I can't move, I need to tie this end of the rope to something!",
+              "es": "¡Uf! ¡Muy pesado! Toda la madera se mantiene unida, ahora no puedo moverme, ¡necesito atar este extremo de la cuerda a algo!",
+              "de": "Ugh! Sehr schwer! Das ganze Holz hält zusammen, jetzt kann ich mich nicht bewegen, ich muss dieses Ende des Seils an etwas festbinden!",
+              "it": "Ugh! Molto pesante! Tutto il legno tiene insieme, ora non posso muovermi, devo legare quest'estremità della corda a qualcosa!",
+              "fr": "Ugh! Très lourd ! Tout le bois est maintenu ensemble, maintenant je ne peux plus bouger, je dois attacher cette extrémité de la corde à quelque chose !"
+            }
+          }
+        },
         "objectRopeAndHookWithStackOfWood": {
           "use": {
             "cantUseYet": {
@@ -712,6 +737,15 @@
               "it": "Fuori nel mondo!",
               "fr": "Hors dans le monde !"
             }
+          }
+        },
+        "objectRopeAndHookWithStackOfWoodOnPulley": {
+          "0": {
+            "en": "Look at that, I have a homemade crane, I wonder if it will hold...",
+            "es": "Mira eso, tengo una grúa casera, me pregunto si aguantará...",
+            "de": "Sieh dir das an, ich habe einen selbstgebauten Kran, ich frage mich, ob er hält...",
+            "it": "Guarda, ho una gru fatta in casa, mi chiedo se reggerà...",
+            "fr": "Regarde ça, j'ai une grue faite maison, je me demande si elle va tenir..."
           }
         },
         "objectRopeAndHookWithStackOfWood": {
@@ -3078,6 +3112,13 @@
       }
     },
     "globalMessages": {
+      "verbsBlockedExcept": {
+        "en": "I can't do that at the moment!",
+        "es": "¡No puedo hacer eso en este momento!",
+        "de": "Ich kann das im Moment nicht tun!",
+        "it": "Non posso farlo in questo momento!",
+        "fr": "Je ne peux pas faire ça pour le moment !"
+      },
       "cantGoThatWay": {
         "en": "I can't go that way right now!",
         "es": "¡No puedo ir por ese camino ahora mismo!",

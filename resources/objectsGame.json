@@ -2941,7 +2941,7 @@
         "stackable": false,
         "quantity": 1,
         "decrementQuantityOnUse": true,
-        "activeStatus": false,
+        "activeStatus": true,
         "alreadyUsed": false
       },
       "usedOn": {
@@ -2997,6 +2997,89 @@
         "height": 0
       },
       "comment": "Object representing Rope And Hook attached to Wood while it is on the floor"
+    },
+    "objectRopeAndHookWithStackOfWoodOnPulley": {
+      "name": {
+        "en": "Makeshift Wood Hoisting Crane",
+        "es": "Grúa improvisada para levantar madera",
+        "de": "Improvisierter Kran zum Heben von Holz",
+        "it": "Gru improvvisata per sollevare la legna",
+        "fr": "Grue improvisée pour soulever du bois"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": true,
+        "canOpen": false,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": true,
+        "activeStatus": true,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "riverCrossing",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/stackOfWoodOnHookWorld.png",
+        "s2": ""
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 33,
+        "y": 16
+      },
+      "offset": {
+        "x": -0.5,
+        "y": 0.8
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 8,
+        "originalHeight": 14,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Object representing Rope And Hook attached to Wood while it is suspended over the bridge"
     },
     "objectStackOfWood": {
       "name": {

@@ -1,4 +1,4 @@
-import { setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished } from "./constantsAndGlobalVars.js";
+import { setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -147,12 +147,33 @@ async function combineRopeAndHookWithStackOfWood(blank, dialogueString, blank2, 
     removeObjectFromEnvironment('objectStackOfWood', 'riverCrossing');
     updateGrid();
 
+    //play animation of throwing rope
+
     setTimeout(() => {
         setAnimationInProgress(true);
         addEntityToEnvironment('objectRopeAndHookWithStackOfWood', 34, 23, 0, 0, getObjectData().objects['objectRopeAndHookWithStackOfWood'].dimensions.originalWidth, getObjectData().objects['objectRopeAndHookWithStackOfWood'].dimensions.originalHeight, 's1', true, 'riverCrossing');
         setPreAnimationGridState(gridData, 'objectPulleyWheel', true);
         updateGrid();
     }, 50);
+
+    await showText(dialogueString, getColorTextPlayer());
+}
+
+async function connectRopeAndHookWithWoodToPulley(blank, dialogueString, blank2, blank3) {
+    //force player to 33,30 and block from moving and unblock it after tying to bar on bridge
+    setVerbsBlockedExcept(['interactionUse']);
+
+    let gridData = getGridData();
+    removeObjectFromEnvironment('objectRopeAndHookWithStackOfWood', 'riverCrossing');
+    updateGrid();
+    
+    setTimeout(() => {
+        setAnimationInProgress(true);
+        addEntityToEnvironment('objectRopeAndHookWithStackOfWoodOnPulley', 33, 16, -0.5, 0.8, getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalWidth, getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulley'].dimensions.originalHeight, 's1', true, 'riverCrossing');
+        setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulley', true);
+        updateGrid();
+    }, 50);
+    setVerbsBlockedExcept(['interactionUse']);
 
     await showText(dialogueString, getColorTextPlayer());
 }

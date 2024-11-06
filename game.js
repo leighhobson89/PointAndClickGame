@@ -1,4 +1,4 @@
-import { getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
+import { setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -71,7 +71,7 @@ export function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-function movePlayerTowardsTarget() {
+async function movePlayerTowardsTarget() {
     const gridData = getGridData();
     const speed = getPlayerObject().speed;
     const player = getPlayerObject();
@@ -79,6 +79,10 @@ function movePlayerTowardsTarget() {
     const gridSizeY = getCanvasCellHeight();
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
+
+    if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
+        return;
+    }
 
     const playerGridX = Math.floor(player.xPos / gridSizeX);
     const playerGridY = Math.floor(player.yPos / gridSizeY);
@@ -914,10 +918,11 @@ function checkEdgeCollision(player, targetX) {
 
 //-------------------------------------------------------------------------------------------------------------
 
-export function processLeftClickPoint(event, mouseClick) {
+export async function processLeftClickPoint(event, mouseClick) {
     if (getGameStateVariable() === getGameVisibleActive()) {
         const player = getPlayerObject();
         const localizationData = getLocalization();
+        const dialogueData = getDialogueData().dialogue;
         const language = getLanguage();
 
         const gridX = getHoverCell().x;
@@ -935,6 +940,14 @@ export function processLeftClickPoint(event, mouseClick) {
         const verb = getVerbButtonConstructionStatus();
         const action = localizationData[language].verbsActionsInteraction[verb];
         console.log("CLICK: action = " + action);
+
+        if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
+            if (!getVerbsBlockedExcept().includes(verb)) {
+                const dialogueString = dialogueData.globalMessages.verbsBlockedExcept[language];
+                await showText(dialogueString, getColorTextPlayer());
+                return;
+            }
+        }
 
         const path = aStarPathfinding(
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
@@ -1019,12 +1032,12 @@ export function processLeftClickPoint(event, mouseClick) {
     }
 }
 
-export function processRightClickPoint(event, mouseClick) {
+export async function processRightClickPoint(event, mouseClick) {
     if (getGameStateVariable() === getGameVisibleActive()) {
         const player = getPlayerObject();
         const localizationData = getLocalization();
         const objectData = getObjectData().objects;
-        const npcData = getNpcData().npcs;
+        const dialogueData = getDialogueData().dialogue;
         const language = getLanguage();
 
         const gridX = getHoverCell().x;
@@ -1060,6 +1073,14 @@ export function processRightClickPoint(event, mouseClick) {
 
         const action = localizationData[language].verbsActionsInteraction[verb];
         console.log("CLICK: action = " + action);
+
+        if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
+            if (!getVerbsBlockedExcept().includes(verb)) {
+                const dialogueString = dialogueData.globalMessages.verbsBlockedExcept[language];
+                await showText(dialogueString, getColorTextPlayer());
+                return;
+            }
+        }
 
         const path = aStarPathfinding(
             { x: Math.floor(player.xPos / getCanvasCellWidth()), y: Math.floor(player.yPos / getCanvasCellHeight()) },
