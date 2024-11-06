@@ -1528,7 +1528,7 @@
         "stackable": false,
         "quantity": 1,
         "decrementQuantityOnUse": true,
-        "activeStatus": true,
+        "activeStatus": false,
         "alreadyUsed": false
       },
       "usedOn": {
@@ -2422,10 +2422,10 @@
     "objectSplinter": {
       "name": {
         "en": "Wood Splinter",
-        "es": "Astilla de madera",
+        "es": "Astilla",
         "de": "Holzsplitter",
-        "it": "Scheggia di legno",
-        "fr": "Écharde de bois"
+        "it": "Scheggia",
+        "fr": "Écharde"
       },
       "canMove": false,
       "measureMovementYOffset": 0,
@@ -2452,13 +2452,13 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectPulleyWheel",
+        "objectUseWith1": "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted",
         "objectUseWith2": "",
         "npcUseWith1": "",
-        "actionUseWith11": "addSplinterToJamPulley",
+        "actionUseWith11": "addSplinterToPulley",
         "actionUseWith12": "",
         "actionUseWith21": "",    
-        "useTogetherLocation": "riverCrossingOrObjectPulleyWheel",
+        "useTogetherLocation": "objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -2501,89 +2501,6 @@
         "height": 0
       },
       "comment": "Splinter stuck in cows foot that will jam the pulley wheel"
-    },
-    "objectSplinterJammedInPulley": {
-      "name": {
-        "en": "Pulley With Splinter Jammed In It",
-        "es": "Polea con astilla atascada",
-        "de": "Seilrolle mit eingeklemmtem Splitter",
-        "it": "Puleggia con scheggia bloccata",
-        "fr": "Poulie avec écharde coincée"
-      },
-      "canMove": false,
-      "measureMovementYOffset": 0,
-      "activeMoveSequence": 0,
-      "waypoints": {},
-      "interactable": {
-        "specialNpcObjectStandIn": false,
-        "canHover": true,
-        "canPush": false,
-        "canPull": false,
-        "canOpen": false,
-        "canPickUp": false,
-        "canPickUpNow": true,
-        "canUse": false,
-        "canUseWith": false,
-        "canGive": false,
-        "stackable": false,
-        "quantity": 1,
-        "decrementQuantityOnUse": false,
-        "activeStatus": true,
-        "alreadyUsed": false
-      },
-      "usedOn": {
-        "objectUse": "",
-        "actionUse1": "",
-        "actionUse2": "",
-        "objectUseWith1": "",
-        "objectUseWith2": "",
-        "npcUseWith1": "",
-        "actionUseWith11": "",
-        "actionUseWith12": "",
-        "actionUseWith21": "",    
-        "useTogetherLocation": "debugRoom",
-        "npcGiveTo": "",
-        "actionGive1": "",
-        "actionGive2": "",
-        "actionPickUp": "",
-        "actionCanPickUpButNotYet": ""
-      },
-      "objectPlacementLocation": "debugRoom",
-      "activeSpriteUrl": "s1",
-      "spriteUrl": {
-        "s1": "./resources/objects/images/splinterPulleyWorld.png",
-        "s2": "./resources/objects/images/splinterPulleyWorld.png"
-      },
-      "visualAnimatedStateOffsets": {
-        "s1": {
-          "x": 0,
-          "y": 0
-        },
-        "s2": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "inventoryUrl": "",
-      "gridPosition": {
-        "x": 17,
-        "y": 44
-      },
-      "offset": {
-        "x": 0,
-        "y": 0
-      },
-      "visualPosition": {
-        "x": 0,
-        "y": 0
-      },
-      "dimensions": {
-        "originalWidth": 3.33,
-        "originalHeight": 8,
-        "width": 0,
-        "height": 0
-      },
-      "comment": "Combined pulley wheel and splinter for jamming wood when hoisted"
     },
     "objectLargePileOfPoo": {
       "name": {

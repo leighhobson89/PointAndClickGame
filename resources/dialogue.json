@@ -510,6 +510,13 @@
           }
         },
         "useWithObject1": {
+          "objectSplinter": {
+            "en": "That's it! Now it is solid, not going anywhere, let work commence!",
+            "es": "¡Eso es! Ahora está sólido, no se moverá, ¡que comience el trabajo!",
+            "de": "Das war's! Jetzt ist es stabil und wird nicht wegrutschen, die Arbeit kann beginnen!",
+            "it": "Ecco fatto! Ora è solido, non andrà da nessuna parte, che il lavoro cominci!",
+            "fr": "Ça y est ! Maintenant c'est solide, ça ne bougera plus, que le travail commence !"
+          },
           "objectRopeAndHook": {
             "en": "I'm gonna throw it, who knows...",
             "es": "Voy a lanzarlo, quién sabe...",
@@ -964,6 +971,13 @@
             "de": "Eine Schachtel mit starken Holznägeln.",
             "it": "Una scatola di chiodi robusti per legno.",
             "fr": "Une boîte de clous solides pour bois."
+          },
+          "1": {
+            "en": "Wood, nails, I'm seeing a connection here!",
+            "es": "Madera, clavos, veo una conexión aquí!",
+            "de": "Holz, Nägel, ich sehe da eine Verbindung!",
+            "it": "Legno, chiodi, vedo una connessione qui!",
+            "fr": "Bois, clous, je vois une connexion ici !"
           }
         },
         "objectBone": {

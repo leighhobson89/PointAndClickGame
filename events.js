@@ -261,10 +261,12 @@ async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank
     setObjectData(`objectSuspiciousFencePost`, `interactable.alreadyUsed`, true);
 }
 
-async function addSplinterToPulley(blank, dialogueString, blank2, blank3) { //TODO
+async function addSplinterToPulley(blank, dialogueString, blank2, blank3) {
 
-    //explain now it is stuck fast and not going anywhere
-    //set state so nails can be used with wood which will trigger bridge rebuild
+    await showText(dialogueString, getColorTextPlayer());
+
+    setObjectData(`objectNails`, `interactable.activeStatus`, true);
+    setDialogueData('objectInteractions.verbLookAt.objectNails', '0', '1');
 }
 
 async function buildBridgeSection(blank, dialogueString, blank2, blank3) { //TODO
