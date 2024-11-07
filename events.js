@@ -9,17 +9,17 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
 export async function playCutsceneGameIntro() {
+    setAnimationInProgress(true);
     let speakersArray;
     
     await animateTransitionAndChangeBackground('largePileOfPoo', 60, 55);
     await delay(1000);
 
-    setAnimationInProgress(true);
-    addEntityToEnvironment('npcNarrator', 10, 30, 0, 0, getNpcData().npcs['npcNarrator'].dimensions.originalWidth, getNpcData().npcs['npcNarrator'].dimensions.originalHeight, null, false, 'largePileOfPoo');
+    addEntityToEnvironment('npcNarrator', 10, 20, 0, 0, getNpcData().npcs['npcNarrator'].dimensions.originalWidth, getNpcData().npcs['npcNarrator'].dimensions.originalHeight, null, false, 'largePileOfPoo');
     setPreAnimationGridState(getAllGridData().largePileOfPoo, 'npcNarrator', false);
     updateGrid();
 
-    await new Promise(async (resolve) => {
+    await new Promise(async (resolve) => { //each new scene ie changing background needs to be wrapped in a promise inside this one nesting more and more each scene
         await delay(50);
 
         if (getBeginGameStatus()) {
@@ -27,17 +27,25 @@ export async function playCutsceneGameIntro() {
             setClickPoint({x: null, y: null});
         }
 
+        //Add a block of these lines for each scene of the intro, ie when changing bg or whatever
         speakersArray = [['player', 1], ['npcNarrator', 2]]; // Adjust this if more speakers are added
         const dialogueData = getDialogueData().dialogue.cutSceneDialogues.gameIntroScene1;
         const order = dialogueData.order;
-
         await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
-
-        await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
 
         removeNpcFromEnvironment('npcNarrator', 'largePileOfPoo');
         updateGrid();
+        //comments below only apply if adding a new scene and must repeat for all scenes
+        //setBeginGameStatus(true) might be needed here to stop drawing objects in the transition
+        //await animateTransition................THE ANIMATE TRANSITION TO ANOTHER BACKGROUND
+        //await delay(1000);
+        //add narrator to new scene if necessary and if so...
+        //await new Promise with 50ms delay and then setBeginGameStatus(false) and the dialogue engine and remove narrator if necessary and update grid all inside promise
+        //resolve promise
 
+
+        //final animate to starting screen
+        await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
         resolve();
     });
 }
