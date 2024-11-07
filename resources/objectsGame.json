@@ -196,7 +196,7 @@
         "canPickUpNow": true,
         "canUse": false,
         "canUseWith": true,
-        "canGive": false,
+        "canGive": true,
         "stackable": false,
         "quantity": 1,
         "decrementQuantityOnUse": true,
@@ -214,8 +214,8 @@
         "actionUseWith12": "",
         "actionUseWith21": "",    
         "useTogetherLocation": "",
-        "npcGiveTo": "",
-        "actionGive1": "",
+        "npcGiveTo": "npcWolf",
+        "actionGive1": "giveBoneToWolf",
         "actionGive2": "",
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
@@ -254,7 +254,7 @@
         "width": 0,
         "height": 0
       },
-      "comment": "Dog's bone, it is revealed when player gives dog objectMilkInBowl"
+      "comment": "Dog's bone, it is revealed when player gives dog objectMilkInBowl and can give to npcWolf to get past to the map"
     },
     "objectManholeCover": {
       "name": {

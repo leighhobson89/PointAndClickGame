@@ -591,6 +591,70 @@
           "height": 0
         },
         "comment": "Carpenter talks to player about nothing until triggered to talk about helping farmer and will then go away allowing user to pick up nails and pliers"
+      },
+      "npcWolf": {
+      "name": {
+        "en": "Wolf",
+        "es": "Lobo",
+        "de": "Wolf",
+        "it": "Lupo",
+        "fr": "Loup"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {
+       
+      },
+      "interactable": {
+        "turnForDialogue": false,
+        "canHover": true,
+        "canTalk": true,
+        "cantTalkDialogueNumber": 0,
+        "dialoguePhase": 0,
+        "questPhase": 0,
+        "questCutOffNumber": 0,
+        "questCutOffEvents": {
+          "0": {
+            "event": ""
+          }
+        },
+        "canUseWith": false,
+        "receiveObjectScenarioId": 0,
+        "dialogueColor": "rgb(100, 100, 100)",
+        "spokenToYet": false
+      },
+      "usedOn": {
+        "useTogetherLocation": "",
+        "objectCanReceive1": "objectBone",
+        "objectCanReceive2": "",
+        "objectCanReceive3": ""
+      },
+      "npcPlacementLocation": "",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/npcs/wolf.png",
+        "s2": "./resources/npcs/wolfEatingBone.png"
+      },
+      "gridPosition": {
+        "x": 75,
+        "y": 27
+      },
+      "offset": {
+        "x": 0,
+        "y": 0.5
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions": {
+        "originalWidth": 5,
+        "originalHeight": 8,
+        "width": 5,
+        "height": 8
+      },
+      "comment": "10 16 A fierce wolf, the final obstacle blocking the player from accessing the map, give it the bone"
       }
-    }
+    }    
   }

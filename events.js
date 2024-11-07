@@ -318,6 +318,7 @@ async function addSplinterToPulley(blank, dialogueString, blank2, blank3) {
 }
 
 async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
+    const gridData = getGridData();
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
 
@@ -340,6 +341,8 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
             await showText(dialogueString, getColorTextPlayer());
 
         } else if (bridgeState === 1) {
+            setAnimationInProgress(true);
+
             changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeComplete.png');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's3');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canHover`, false);
@@ -348,6 +351,20 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
             moveGridData('riverCrossingBridgeComplete', 'riverCrossing');
             gridValueSwapper('riverCrossing', 'e1', 'e2'); //this function may or not be needed after grid rebuilds depending on the random way the utility script allocates the e1 e2 numbers to the exits which can vary seemingly randomly
             
+            addEntityToEnvironment(
+                'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
+                33, 16, 
+                0.3, 0.5, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalWidth, 
+                getObjectData().objects['objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted'].dimensions.originalHeight, 
+                's3', true, 'riverCrossing'
+            );
+            setPreAnimationGridState(gridData, 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', true);
+
+            addEntityToEnvironment('npcWolf', 75, 27, 0, 0.5, getNpcData().npcs['npcWolf'].dimensions.originalWidth, getNpcData().npcs['npcWolf'].dimensions.originalHeight, 's1', false, 'riverCrossing')
+            setPreAnimationGridState(gridData, 'npcWolf', true);
+            updateGrid();
+
             dialogueString = dialogueData.specialDialogue.buildSecondBridgeSection[language];
             await showText(dialogueString, getColorTextPlayer());
         }
@@ -367,7 +384,7 @@ async function waitForPlayerToMoveToForceLocation() {
 }
 
 async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank3) {
-    let gridData = getGridData();
+    const gridData = getGridData();
     removeObjectFromEnvironment('objectSturdyAnchor', 'riverCrossing');
     updateGrid();
 
@@ -383,6 +400,34 @@ async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank
     await showText(dialogueString, getColorTextPlayer());
 }
 
+async function giveBoneToWolf(npcAndSlot, blank, realVerbUsed, special) {
+    const language = getLanguage();
+    const objectData = getObjectData().objects;
+    const objectGiving = objectData.objectBone;
+    const objectId = 'objectBone';
+    const npcData = getNpcData().npcs.npcWolf;
+    const giveScenarioId = npcData.interactable.receiveObjectScenarioId;
+    const dialogueData = getDialogueData().dialogue.objectInteractions.verbGive[objectId].scenario[giveScenarioId].phase;
+    const navigationData = getNavigationData();
+
+    const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
+    setCustomMouseCursor(getCustomMouseCursor('normal'));
+
+    await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
+
+    handleInventoryAdjustment(objectId, 1, true);
+    drawInventory(0);
+
+    setNpcData(`npcWolf`,`activeSpriteUrl`, `s2`);
+    setDialogueData('npcInteractions.verbLookAt.npcWolf', '0', '1');
+    setNpcData('npcWolf', 'interactable.canTalk', false);
+
+    navigationData.riverCrossing.exits.e2.status = "open";
+    setNavigationData(navigationData);
+
+    //set a pending event for wolf to disappear when player has been to world map
+}
+
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     const gridData = getGridData();
     const objectId = 'objectCarrot';
@@ -392,7 +437,6 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
 
     const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
-    setGameState(getCutSceneState());
 
     await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
 
@@ -480,7 +524,6 @@ async function giveKeyToLibrarian(npcAndSlot, blank, realVerbUsed, special) {
 
     const orderOfStartingDialogue = getOrderOfDialogue(objectId, null, null, null, false, giveScenarioId, null);
     setCustomMouseCursor(getCustomMouseCursor('normal'));
-    setGameState(getCutSceneState());
 
     await showCutSceneDialogue(0, dialogueData, orderOfStartingDialogue, npcData);
     if (giveScenarioId === 1) {

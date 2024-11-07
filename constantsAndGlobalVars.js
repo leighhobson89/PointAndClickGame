@@ -191,7 +191,6 @@ export const arrayOfGameImages = [
     "./resources/objects/images/goldKeyWorld.png",
     "./resources/objects/images/hookInv.png",
     "./resources/objects/images/hookWorld.png",
-    "./resources/objects/images/house2.png",
     "./resources/objects/images/IllegibleMapInv.png",
     "./resources/objects/images/IllegibleMapWorld.png",
     "./resources/objects/images/keyDenInv.png",

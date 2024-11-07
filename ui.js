@@ -112,7 +112,8 @@ import {
     getAllGridData,
     getNonPlayerAnimationFunctionalityActive,
     setNonPlayerAnimationFunctionalityActive,
-    setNextScreenId
+    setNextScreenId,
+    setClickPoint
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -166,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     getElements().customCursor.style.transform = "translate(-50%, -50%)";
 
     getElements().newGameMenuButton.addEventListener("click", async (event) => {
-        const playIntro = true; //DEBUG: true to play the begin game intro sequence
+        const playIntro = false; //DEBUG: true to play the begin game intro sequence
 
         await loadGameData(
             urlWalkableJSONS,
@@ -184,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (playIntro) {
             setInitialBackgroundUrl(PRE_INITIAL_GAME_BACKGROUND);
         } else {
+            setClickPoint({x: null, y: null});
             setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_NORMAL);
         }
         
