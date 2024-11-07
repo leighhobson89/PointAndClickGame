@@ -1,7 +1,7 @@
 import { getBridgeState, setBridgeState, getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
-import { updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
+import { gridValueSwapper, moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -301,7 +301,10 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
             changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeComplete.png');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's3');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canHover`, false);
+            
             //change grid to allow player to walk across bridge
+            moveGridData('riverCrossingBridgeComplete', 'riverCrossing');
+            gridValueSwapper('riverCrossing', 'e1', 'e2'); //this function may or not be needed after grid rebuilds depending on the random way the utility script allocates the e1 e2 numbers to the exits which can vary seemingly randomly
             
             dialogueString = dialogueData.specialDialogue.buildSecondBridgeSection[language];
             await showText(dialogueString, getColorTextPlayer());
