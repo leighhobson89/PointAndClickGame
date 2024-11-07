@@ -102,6 +102,7 @@ import {
     urlWalkableJSONS,
     INITIAL_GAME_ID_NORMAL,
     INITIAL_GAME_ID_DEBUG,
+    PRE_INITIAL_GAME_BACKGROUND,
     INITIAL_GAME_BACKGROUND_URL_NORMAL,
     INITIAL_GAME_BACKGROUND_URL_DEBUG,
     getOriginalGridState,
@@ -110,7 +111,8 @@ import {
     getOriginalValueInCellWhereObjectPlacedNew,
     getAllGridData,
     getNonPlayerAnimationFunctionalityActive,
-    setNonPlayerAnimationFunctionalityActive
+    setNonPlayerAnimationFunctionalityActive,
+    setNextScreenId
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -119,6 +121,7 @@ import {
 import {
     drawDebugGrid,
     handleRoomTransition,
+    swapBackgroundOnRoomTransition,
     initializePlayerPosition,
     processLeftClickPoint,
     processRightClickPoint,
@@ -142,6 +145,8 @@ import {
     saveGame,
 } from "./saveLoadGame.js";
 
+import { playCutsceneGameIntro } from './events.js';
+
 let textTimer;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -161,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
     getElements().customCursor.style.transform = "translate(-50%, -50%)";
 
     getElements().newGameMenuButton.addEventListener("click", async (event) => {
+        const playIntro = false; //DEBUG: true to play the begin game intro sequence
+
         await loadGameData(
             urlWalkableJSONS,
             urlNavigationData,
@@ -173,7 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setInitialScreenId(INITIAL_GAME_ID_NORMAL);
         setCurrentScreenId(getInitialScreenId());
-        setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_NORMAL);
+
+        if (playIntro) {
+            setInitialBackgroundUrl(PRE_INITIAL_GAME_BACKGROUND);
+        } else {
+            setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_NORMAL);
+        }
+        
         setInitialBackgroundImage();
 
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
@@ -194,7 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
             "btn-primary",
         );
         setGameState(getGameVisibleActive());
-        startGame(getInitialScreenId());
+        await startGame();
+
+        if (playIntro) {
+            await playCutsceneGameIntro();
+        } else {
+            setBeginGameStatus(false);
+        }
     });
 
     getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
@@ -228,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "btn-primary",
         );
         setGameState(getGameVisibleActive());
-        startGame(getInitialScreenId());
+        await startGame();
         console.log(getCurrentScreenId());
     });
 
@@ -1080,9 +1099,6 @@ function handleCanvasLeftClick(event) {
     console.log(getGameStateVariable());
     console.log(getGameVisibleActive());
     if (getGameStateVariable() === getGameVisibleActive()) {
-        if (getBeginGameStatus()) {
-            setBeginGameStatus(false);
-        }
 
         const canvas = getElements().canvas;
         const rect = canvas.getBoundingClientRect();
@@ -1104,9 +1120,6 @@ function handleCanvasRightClick(event) {
     event.preventDefault();
 
     if (getGameStateVariable() === getGameVisibleActive()) {
-        if (getBeginGameStatus()) {
-            setBeginGameStatus(false);
-        }
 
         const canvas = getElements().canvas;
         const rect = canvas.getBoundingClientRect();
@@ -1157,8 +1170,7 @@ export function disableActivateButton(button, action, activeClass) {
     }
 }
 
-export function animateTransitionAndChangeBackground() {
-    const overlay = document.getElementById("overlayCanvas");
+export async function animateTransitionAndChangeBackground(optionalNewScreenId, optionalStartX, optionalStartY) {
     getElements().overlayCanvas.style.display = "block";
     getElements().customCursor.classList.add("d-none");
 
@@ -1170,10 +1182,22 @@ export function animateTransitionAndChangeBackground() {
     getElements().overlayCanvas.addEventListener(
         "transitionend",
         () => {
-            const newScreenId = handleRoomTransition();
+            const newScreenId = optionalNewScreenId || handleRoomTransition();
             const exit = "e" + getExitNumberToTransitionTo();
 
-            const startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+            if (optionalNewScreenId) {
+                setNextScreenId(optionalNewScreenId);
+                swapBackgroundOnRoomTransition(newScreenId, true);
+            }
+
+            let startPosition;
+
+            if (!optionalStartX && !optionalStartY) {
+                startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+            } else {
+                startPosition = { "x": optionalStartX, "y": optionalStartY };
+            }
+
             const startX = startPosition.x;
             const startY = startPosition.y;
 
@@ -1185,9 +1209,10 @@ export function animateTransitionAndChangeBackground() {
             console.log("about to clear pre animation grid")
             setPreAnimationGridState('clear', null, null, null);
 
-            setTransitioningNow(true);
-            canvas.style.pointerEvents = "none";
-            processLeftClickPoint({
+            if (!optionalStartX && !optionalStartY) {
+                setTransitioningNow(true);
+                canvas.style.pointerEvents = "none";
+                processLeftClickPoint({
                     x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
                         .x,
                     y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
@@ -1195,6 +1220,8 @@ export function animateTransitionAndChangeBackground() {
                 },
                 false,
             );
+            }
+
             setPreviousScreenId(getCurrentScreenId());
             setCurrentScreenId(newScreenId);
         }, {

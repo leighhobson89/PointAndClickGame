@@ -25,6 +25,7 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const INITIAL_GAME_ID_NORMAL = 'riverCrossing';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
+export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
 export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/riverCrossing.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';

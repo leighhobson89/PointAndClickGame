@@ -571,3 +571,12 @@ label {
     width: 100%;
     box-sizing: border-box;
 }
+
+.fade-in-intro {
+    opacity: 1;
+    transition: opacity 4s;
+}
+.fade-out-intro {
+    opacity: 0;
+    transition: opacity 6s;
+}

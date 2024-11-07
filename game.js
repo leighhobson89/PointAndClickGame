@@ -3,14 +3,14 @@ import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
 import { updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
-import { executeInteractionEvent } from './events.js';
+import { playCutsceneGameIntro, executeInteractionEvent } from './events.js';
 
 export let entityPaths = {};
 let firstDraw = true;
 
 //--------------------------------------------------------------------------------------------------------
 
-export function startGame() {
+export async function startGame() {
     initializeCanvas();
     setUpObjectsAndNpcs();
     initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
@@ -18,6 +18,7 @@ export function startGame() {
         gameLoop();
         setGameInProgress(true);
     }
+    
 }
 
 export function gameLoop() {
@@ -52,13 +53,13 @@ export function gameLoop() {
         if (!getBeginGameStatus()) {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
+            drawDebugGrid(getDrawGrid());
+            drawPlayerNpcsAndObjects(ctx);
         }
     }
     
     // DEBUG
-    drawDebugGrid(getDrawGrid());
 
-    drawPlayerNpcsAndObjects(ctx);
 
     if (getDisplayText().value1) {
         drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
@@ -884,20 +885,17 @@ export function initializeCanvas() {
         setPlayerObject('xPos', player.xPos);
         setPlayerObject('yPos', player.yPos);
 
-        // Redraw the grid with new cell sizes
         drawDebugGrid(getDrawGrid());
 
-        // Update the elements inside bottomContainer
         updateBottomContainerElements();
     }
 
     window.addEventListener('load', updateCanvasSize);
     window.addEventListener('resize', updateCanvasSize);
 
-    // Example event to handle mouse movements and interaction
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
 
-    updateCanvasSize(); // Initial setup
+    updateCanvasSize();
 }
 
 
@@ -1257,19 +1255,29 @@ export function handleRoomTransition() {
         entityPaths.player.path = [];
         entityPaths.player.currentIndex = 0;
 
-        swapBackgroundOnRoomTransition(newScreenId);
+        swapBackgroundOnRoomTransition(newScreenId, false);
         return newScreenId;
     } else {
         console.error("Exit not found for current screen and exit number:", currentScreenId, exitNumber);
     }
 }
 
-function swapBackgroundOnRoomTransition(newScreenId) {
+export function swapBackgroundOnRoomTransition(newScreenId, optional) {
     console.log("Loading background for " + newScreenId);
     const exit = 'e' + getExitNumberToTransitionTo();
     // Transition complete, update the background position here if needed
-    const xPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].xPosCameraEnterHere;
-    const yPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].yPosCameraEnterHere;
+
+    let xPosCameraEnterHere;
+    let yPosCameraEnterHere;
+
+    if (optional) {
+        xPosCameraEnterHere = 0;
+        yPosCameraEnterHere = 0;
+    } else {
+        xPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].xPosCameraEnterHere;
+        yPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].yPosCameraEnterHere;
+    }
+
     const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl; // Get the new background image
     const screenTilesWidebgImg = getNavigationData()[getNextScreenId()].screenTilesWidebgImg;
     //setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
