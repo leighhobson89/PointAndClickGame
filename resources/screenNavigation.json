@@ -72,7 +72,7 @@
                 "connectsTo": "alley",
                 "status": "open",
                 "startPosition": { "x": 40, "y": 58 },
-                "finalPosition": { "x": 46, "y": 45 },
+                "finalPosition": { "x": 38, "y": 47 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             },
@@ -203,7 +203,7 @@
         "bgUrl": "./resources/backgrounds/house.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 1.1,
         "exits": {
             "e1": {
                 "connectsTo": "sewer",

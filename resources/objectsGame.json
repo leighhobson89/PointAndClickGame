@@ -1400,8 +1400,8 @@
       },
       "inventoryUrl": "./resources/objects/images/milkBottleInv.png",
       "gridPosition": {
-        "x": 16,
-        "y": 54
+        "x": 53,
+        "y": 44
       },
       "offset": {
         "x": 0,
@@ -1412,8 +1412,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 2,
-        "originalHeight": 4,
+        "originalWidth": 1.8,
+        "originalHeight": 3,
         "width": 0,
         "height": 0
       },
@@ -2151,8 +2151,8 @@
       },
       "inventoryUrl": "./resources/objects/images/pitchForkInv.png",
       "gridPosition": {
-        "x": 27,
-        "y": 35
+        "x": 11,
+        "y": 40
       },
       "offset": {
         "x": 0,
@@ -2163,8 +2163,8 @@
         "y": 0
       },
       "dimensions": {
-        "originalWidth": 3.33,
-        "originalHeight": 8,
+        "originalWidth": 3,
+        "originalHeight": 10,
         "width": 0,
         "height": 0
       },

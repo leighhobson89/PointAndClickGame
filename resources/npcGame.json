@@ -177,19 +177,19 @@
           "s2": "./resources/npcs/librarian.png"
         },
         "gridPosition": {
-          "x": 16,
-          "y": 35
+          "x": 15,
+          "y": 34
         },
         "offset": {
           "x": 1.8,
-          "y": -0.1
+          "y": 0.4
         },
         "visualPosition": {
           "x": 0,
           "y": 0
         },
         "dimensions": {
-          "originalWidth": 2.33,
+          "originalWidth": 4.5,
           "originalHeight": 10,
           "width": 0,
           "height": 0
@@ -277,7 +277,7 @@
 
         },
         "interactable": {
-          "turnForDialogue": true,
+          "turnForDialogue": false,
           "canHover": true,
           "canTalk": true,
           "cantTalkDialogueNumber": 0,
@@ -300,7 +300,7 @@
           "objectCanReceive2": "",
           "objectCanReceive3": ""
         },
-        "npcPlacementLocation": "marketStreet",
+        "npcPlacementLocation": "roadIntoTown",
         "activeSpriteUrl": "s1",
         "spriteUrl": {
           "s1": "./resources/npcs/womanLostMirrorRight.png",
@@ -308,8 +308,8 @@
           "s3": "./resources/npcs/womanLostMirrorRight.png"
         },
         "gridPosition": {
-          "x": 45,
-          "y": 40
+          "x": 5,
+          "y": 26
         },
         "offset": {
           "x": 0,
@@ -320,8 +320,8 @@
           "y": 0
         },
         "dimensions": {
-          "originalWidth": 3,
-          "originalHeight": 17,
+          "originalWidth": 4,
+          "originalHeight": 22,
           "width": 0,
           "height": 0
         },
@@ -437,8 +437,8 @@
           "s2": "./resources/npcs/seedyGuy.png"
         },
         "gridPosition": {
-          "x": 53,
-          "y": 43
+          "x": 40,
+          "y": 34
         },
         "offset": {
           "x": 1.8,
@@ -450,7 +450,7 @@
         },
         "dimensions": {
           "originalWidth": 5,
-          "originalHeight": 15,
+          "originalHeight": 18,
           "width": 0,
           "height": 0
         },
