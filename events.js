@@ -1,4 +1,4 @@
-import { getBeginGameStatus, getBridgeState, setBridgeState, getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus } from "./constantsAndGlobalVars.js";
+import { getBeginGameStatus, getBridgeState, setBridgeState, getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { animateTransitionAndChangeBackground, setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
 import { gridValueSwapper, moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
@@ -9,19 +9,22 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
 
 export async function playCutsceneGameIntro() {
-    await animateTransitionAndChangeBackground('stables', 60, 55);
+    let speakersArray;
+    await animateTransitionAndChangeBackground('largePileOfPoo', 60, 55);
     await delay(2000);
 
-    await showText("Once upon a time in a faraway land...", "white", 100, 100);
-
-    await showText("A brave hero emerged...", "white", 100, 150);
-
-    await showText("Their journey was about to begin.", "white", 100, 200);
+    //add a block of this for each cutScene dialogue, ie if it changes screens or something
+    speakersArray = [['player', 0]]; //if other characters add this
+    //position characters for dialogue and if want narrator make player invisible and move to right place
+    const dialogueData = getDialogueData().dialogue.cutSceneDialogues.gameIntroScene1;
+    const order = dialogueData.order;
+    await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
 
     await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
     if (getBeginGameStatus()) {
         await delay(1000);
         setBeginGameStatus(false);
+        setClickPoint({x: null, y: null});
     }
 }
 

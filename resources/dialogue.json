@@ -10,6 +10,51 @@
   "generalComments9": "\u0020\u0020 at the end of dialogue checks for pending events and triggers them if they are there",
   "dialogue": {
     "cutSceneDialogues": {
+      "gameIntroScene1": {
+        "0": {
+          "en": "Once upon a time",
+          "es": "Érase una vez",
+          "de": "Es war einmal",
+          "it": "C'era una volta",
+          "fr": "Il était une fois"
+        },
+        "1": {
+            "en": "There was a young lad who hated working at the dump",
+            "es": "Había un joven que odiaba trabajar en el vertedero",
+            "de": "Es gab einen jungen Mann, der es hasste, auf der Mülldeponie zu arbeiten",
+            "it": "C'era un giovane che odiava lavorare nella discarica",
+            "fr": "Il y avait un jeune homme qui détestait travailler à la décharge"
+        },
+        "2": {
+            "en": "I've had enough of this, I want to quit!",
+            "es": "¡Ya me he hartado de esto, quiero renunciar!",
+            "de": "Ich habe genug davon, ich will kündigen!",
+            "it": "Ne ho abbastanza di questo, voglio smettere!",
+            "fr": "J'en ai marre de ça, je veux démissionner !"
+        },
+        "3": {
+            "en": "Hey get some work done you lazy bugger",
+            "es": "Oye, ponte a trabajar, holgazán",
+            "de": "Hey, mach mal was, du fauler Kerl",
+            "it": "Ehi, mettiti a lavorare, fannullone",
+            "fr": "Hé, bouge-toi un peu, feignant"
+        },
+        "4": {
+            "en": "You need to climb in the manure and check it is still warm for the farmer!",
+            "es": "Tienes que meterte en el estiércol y comprobar que sigue caliente para el granjero.",
+            "de": "Du musst in den Mist steigen und prüfen, ob er für den Bauern noch warm ist!",
+            "it": "Devi salire nel letame e controllare che sia ancora caldo per il contadino!",
+            "fr": "Tu dois plonger dans le fumier et vérifier s'il est encore chaud pour le fermier !"
+        },
+        "5": {
+            "en": "Man I am so done with this!",
+            "es": "¡Hombre, estoy tan harto de esto!",
+            "de": "Mann, ich habe die Nase voll davon!",
+            "it": "Amico, sono così stufo di questo!",
+            "fr": "Mec, j'en ai vraiment marre de ça !"
+        },
+        "order": "000000!"
+      },
       "enterKitchenFirstTime": {
         "0": {
           "en": "What am I doing!! And why is there a huge hole in the floor down to the sewers??",

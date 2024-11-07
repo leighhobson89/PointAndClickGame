@@ -67,10 +67,16 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
             } else {
                 dialogueString = dialogueData[dialoguePhase][language];
-                const npcId = speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0];
-                npcData = getNpcData().npcs[npcId];
-                ({ xPos, yPos } = getTextPosition(speaker, npcData));
-                textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+                if (speaker !== 'player') { //player just for cutscenes like intro etc for narrator
+                    const npcId = speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0];
+                    npcData = getNpcData().npcs[npcId];
+                    ({ xPos, yPos } = getTextPosition(speaker, npcData));
+                    textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+                } else {
+                    textColor = getColorTextPlayer();
+                    setEarlyExitFromDialogue(true);
+                }
+
             }
 
             await showText(dialogueString, textColor, xPos, yPos);
@@ -251,42 +257,56 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 //if there are NO options then return or trigger other event like give player item
             }
         }
-    
-        if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData.interactable.questCutOffNumber === questPhase && type === 'exiting' || getEarlyExitFromDialogue()) { //exiting out of dialogue
+    console.log(npcData);
+        if ((getDialogueOptionClicked() === getCurrentExitOptionRow() && type === 'exiting') || npcData && npcData.interactable.questCutOffNumber === questPhase && type === 'exiting' || getEarlyExitFromDialogue()) { //exiting out of dialogue
             removeDialogueRow(0);
 
             const orderOfExitDialogue = getOrderOfDialogue(npcId, questPhase, 'exiting', null, true, null, null);
 
             let dialogueString;
 
-            if (npcData.interactable.questCutOffNumber === questPhase) {
-                dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.phase[dialoguePhase][language];
-            } else {
-                dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.phase[dialoguePhase][language];
-            }
-
-            const speaker = orderOfExitDialogue[dialoguePhase];
-            setCurrentSpeaker(speaker);
-
-            const { xPos, yPos } = getTextPosition(speaker, npcData);
-            const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
-        
-            if (!getEarlyExitFromDialogue()) {
-                await showText(dialogueString, textColor, xPos, yPos);
-            }
-        
-            if (dialoguePhase < orderOfExitDialogue.end && !getEarlyExitFromDialogue()) {
-                dialoguePhase++;
-                await showDialogue(dialoguePhase, 'exiting');
-            } else {
-                dialoguePhase = 0;
+            if (npcData) {
                 if (npcData.interactable.questCutOffNumber === questPhase) {
-                    //handle if questCutOffAdvances or cantTalk in the end of questCutOffEvent not here
-                    let npcEvent = npcData.interactable.questCutOffEvents[npcData.interactable.questCutOffNumber].event;
-                    executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
-                    //trigger post quest events
+                    dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.phase[dialoguePhase][language];
+                } else {
+                    dialogueString = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.phase[dialoguePhase][language];
                 }
-                turnNpcForDialogue(player, npcData, npcId, true);
+
+                const speaker = orderOfExitDialogue[dialoguePhase];
+                setCurrentSpeaker(speaker);
+    
+                const { xPos, yPos } = getTextPosition(speaker, npcData);
+                const textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
+            
+                if (!getEarlyExitFromDialogue()) {
+                    await showText(dialogueString, textColor, xPos, yPos);
+                }
+
+                if (dialoguePhase < orderOfExitDialogue.end && !getEarlyExitFromDialogue()) {
+                    dialoguePhase++;
+                    await showDialogue(dialoguePhase, 'exiting');
+                } else {
+                    dialoguePhase = 0;
+                    if (npcData.interactable.questCutOffNumber === questPhase) {
+                        //handle if questCutOffAdvances or cantTalk in the end of questCutOffEvent not here
+                        let npcEvent = npcData.interactable.questCutOffEvents[npcData.interactable.questCutOffNumber].event;
+                        executeInteractionEvent({ "dialogueEvent": npcEvent }, '', null, '');
+                        //trigger post quest events
+                    }
+                    turnNpcForDialogue(player, npcData, npcId, true);
+                    setCurrentSpeaker('player');
+                    setDialogueScrollCount(0);
+                    setCurrentScrollIndexDialogue(0);
+                    setCurrentExitOptionRow(null);
+                    setCurrentExitOptionText(null);
+                    setTransitioningToDialogueState(false);
+                    updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+                    setGameState(getGameVisibleActive());
+                    setDialogueTextClicked(null);
+                    setEarlyExitFromDialogue(false);
+                    return;
+                }
+            } else {
                 setCurrentSpeaker('player');
                 setDialogueScrollCount(0);
                 setCurrentScrollIndexDialogue(0);
@@ -296,8 +316,7 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
                 setGameState(getGameVisibleActive());
                 setDialogueTextClicked(null);
-                setEarlyExitFromDialogue(false);
-                return;
+                setEarlyExitFromDialogue(false); 
             }
         }
     };
@@ -340,12 +359,16 @@ export function getOrderOfDialogue(npcId, questPhase, type, responseId, talkTrue
                     order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].order;
                     break;
                 case 'exiting':
-                    if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
-                        order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+                    if (getNpcData().npcs[npcId]) {
+                        if (getNpcData().npcs[npcId].interactable.questCutOffNumber > questPhase) {
+                            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].exitOption.order;
+                        } else {
+                            order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
+                        }
+                        break;
                     } else {
-                        order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].autoExitOption.order;
+                        return;
                     }
-                    break;
                 case 'continuing':
                     order = getDialogueData().dialogue.npcInteractions.verbTalkTo[npcId].quest[questPhase].responses[responseId].order;
                     break;
