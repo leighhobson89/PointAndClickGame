@@ -4,6 +4,69 @@
     "generalComments3": "questPhase is the current phase ie if it is 0 you can give the monkey a banana for a battery if it is 1 you cannot but may be able to do something else",
     "generalComments4": "dialoguePhase is the current dialogue phase ie if it is 0 and you talk to the monkey, you will hear that the monkey is hungry, then 1 will be here take the battery, and 2 just chatter",
     "npcs": {
+      "npcNarrator": {
+        "name": {
+          "en": "Narrator",
+          "es": "Narrador",
+          "de": "Erzähler",
+          "it": "Narratore",
+          "fr": "Narrateur"
+        },
+        "canMove": false,
+        "measureMovementYOffset": 0,
+        "activeMoveSequence": 0,
+        "waypoints": {
+
+        },
+        "interactable": {
+          "turnForDialogue": false,
+          "canHover": false,
+          "canTalk": false,
+          "cantTalkDialogueNumber": 0,
+          "dialoguePhase": 0,
+          "questPhase": 0,
+          "questCutOffNumber": 0,
+          "questCutOffEvents": {
+            "0": {
+              "event": ""
+            }
+          },
+          "canUseWith": false,
+          "receiveObjectScenarioId": 0,
+          "dialogueColor": "rgb(255, 255, 0)",
+          "spokenToYet": false
+        },
+        "usedOn": {
+          "useTogetherLocation": "",
+          "objectCanReceive1": "",
+          "objectCanReceive2": "",
+          "objectCanReceive3": ""
+        },
+        "npcPlacementLocation": "",
+        "activeSpriteUrl": "s1",
+        "spriteUrl": {
+          "s1": "./resources/npcs/blank.png"
+        },
+        "gridPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "visualPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "dimensions": {
+          "originalWidth": 1,
+          "originalHeight": 1,
+          "width": 0,
+          "height": 0
+        },
+        "comment": "Mock NPC to do narration on cutscenes like the game intro"
+      },
       "npcDonkey": {
         "name": {
           "en": "Donkey",

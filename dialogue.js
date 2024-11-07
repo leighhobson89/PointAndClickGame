@@ -67,13 +67,19 @@ export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, d
                 textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
             } else {
                 dialogueString = dialogueData[dialoguePhase][language];
-                if (speaker !== 'player') { //player just for cutscenes like intro etc for narrator
+                if (speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0] !== 'player' && speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0] !== 'npcNarrator') { //player just for cutscenes like intro etc for narrator
                     const npcId = speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0];
                     npcData = getNpcData().npcs[npcId];
                     ({ xPos, yPos } = getTextPosition(speaker, npcData));
                     textColor = getTextColor(speaker, npcData.interactable.dialogueColor);
                 } else {
-                    textColor = getColorTextPlayer();
+                    if (speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0] === 'player') {
+                        textColor = getColorTextPlayer();
+                        ({ xPos, yPos } = getTextPosition('player', null));
+                    } else if (speakersArrayString[(parseInt(speaker.slice(3)) - 1)][0] === 'npcNarrator') {
+                        textColor = getNpcData().npcs['npcNarrator'].interactable.dialogueColor;
+                        ({ xPos, yPos } = getTextPosition(speaker, getNpcData().npcs['npcNarrator']));
+                    }
                     setEarlyExitFromDialogue(true);
                 }
 

@@ -10,22 +10,36 @@ import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } fro
 
 export async function playCutsceneGameIntro() {
     let speakersArray;
+    
     await animateTransitionAndChangeBackground('largePileOfPoo', 60, 55);
-    await delay(2000);
+    await delay(1000);
 
-    //add a block of this for each cutScene dialogue, ie if it changes screens or something
-    speakersArray = [['player', 0]]; //if other characters add this
-    //position characters for dialogue and if want narrator make player invisible and move to right place
-    const dialogueData = getDialogueData().dialogue.cutSceneDialogues.gameIntroScene1;
-    const order = dialogueData.order;
-    await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
+    setAnimationInProgress(true);
+    addEntityToEnvironment('npcNarrator', 10, 30, 0, 0, getNpcData().npcs['npcNarrator'].dimensions.originalWidth, getNpcData().npcs['npcNarrator'].dimensions.originalHeight, null, false, 'largePileOfPoo');
+    setPreAnimationGridState(getAllGridData().largePileOfPoo, 'npcNarrator', false);
+    updateGrid();
 
-    await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
-    if (getBeginGameStatus()) {
-        await delay(1000);
-        setBeginGameStatus(false);
-        setClickPoint({x: null, y: null});
-    }
+    await new Promise(async (resolve) => {
+        await delay(50);
+
+        if (getBeginGameStatus()) {
+            setBeginGameStatus(false);
+            setClickPoint({x: null, y: null});
+        }
+
+        speakersArray = [['player', 1], ['npcNarrator', 2]]; // Adjust this if more speakers are added
+        const dialogueData = getDialogueData().dialogue.cutSceneDialogues.gameIntroScene1;
+        const order = dialogueData.order;
+
+        await dialogueEngine(null, null, false, dialogueData, speakersArray, order);
+
+        await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
+
+        removeNpcFromEnvironment('npcNarrator', 'largePileOfPoo');
+        updateGrid();
+
+        resolve();
+    });
 }
 
 async function cutSceneCarpenterFarmerDialogue() {
