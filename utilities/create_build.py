@@ -15,6 +15,7 @@ IGNORE_LIST = [
     'package-lock.json',
     '.vscode',
     'builds',
+    'pointAndClickDesktop',
     '.git'
 ]
 
