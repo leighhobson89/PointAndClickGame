@@ -2201,11 +2201,11 @@
                   "fr": "Je viens de me souvenir, j'ai laissé le gaz allumé à la maison."
                 },
                 "3": {
-                  "en": "Do you want to go on a date with me, you are beautiful!",
-                  "es": "¿Quieres salir conmigo, eres hermosa!",
-                  "de": "Möchtest du mit mir ausgehen, du bist schön!",
+                  "en": "Do you want to go on a date with me? You are beautiful!",
+                  "es": "¿Quieres salir conmigo? Eres hermosa!",
+                  "de": "Möchtest du mit mir ausgehen? Du bist schön!",
                   "it": "Vuoi uscire con me? Sei bella!",
-                  "fr": "Veux-tu sortir avec moi, tu es belle!"
+                  "fr": "Veux-tu sortir avec moi? Tu es belle!"
                 }
               },
               "exitOption": {
@@ -2271,11 +2271,11 @@
                       "fr": "D'accord, super !"
                     },
                     "1": {
-                      "en": "See you soon I hope, with a mirror! ;)",
-                      "es": "¡Espero verte pronto, con un espejo! ;)",
-                      "de": "Ich hoffe, wir sehen uns bald, mit einem Spiegel! ;)",
-                      "it": "Spero di vederti presto, con uno specchio! ;)",
-                      "fr": "J'espère te revoir bientôt, avec un miroir ! ;)"
+                      "en": "See you soon I hope, with a mirror!",
+                      "es": "¡Espero verte pronto, con un espejo!",
+                      "de": "Ich hoffe, wir sehen uns bald, mit einem Spiegel!",
+                      "it": "Spero di vederti presto, con uno specchio!",
+                      "fr": "J'espère te revoir bientôt, avec un miroir !"
                     }
                   },
                   "order": "11!"
