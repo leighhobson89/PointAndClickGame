@@ -437,7 +437,7 @@
           "s2": "./resources/npcs/seedyGuy.png"
         },
         "gridPosition": {
-          "x": 40,
+          "x": 25,
           "y": 34
         },
         "offset": {

@@ -67,59 +67,111 @@ async function cutSceneEnterKitchenFirstTime() {
     await showText(dialogueString, getColorTextPlayer());
 }
 
-//any door that is unlocked will be closed or opened
 async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, realVerbUsed, doorId) {
     const objectData = getObjectData().objects[doorId];
     const dialogueData = getDialogueData().dialogue;
     const language = getLanguage();
-    const gridData = getGridData();
+    let gridData = getAllGridData();
 
-    const reduceExpandWidthFactor = objectData.openCloseScaleFactorX;
-    const reduceExpandHeightFactor = objectData.openCloseScaleFactorY;
+    const doorToOpenCloseOnOtherSide = objectData.interactable.doorToOpenCloseOnOtherSide;
 
-    const restoreFactorWidth = 1 / reduceExpandWidthFactor;
-    const restoreFactorHeight = 1 / reduceExpandHeightFactor;
+    async function openDoor(gridDataLocation, gridData, doorId) {
+        const doorData = getObjectData().objects[doorId];
+
+        const reduceExpandWidthFactor = doorData.openCloseScaleFactorX;
+        const reduceExpandHeightFactor = doorData.openCloseScaleFactorY;
+
+        setAnimationInProgress(true);
+        removeObjectFromEnvironment(doorId, gridDataLocation);
+        updateGrid();
+
+        setTimeout(() => {
+            addEntityToEnvironment(
+                doorId,
+                doorData.gridPosition.x + Math.floor(doorData.visualAnimatedStateOffsets.s2.x / getCanvasCellWidth()),
+                doorData.gridPosition.y + Math.floor(doorData.visualAnimatedStateOffsets.s2.y / getCanvasCellHeight()),
+                doorData.offset.x,
+                doorData.offset.y,
+                doorData.dimensions.width * reduceExpandWidthFactor,
+                doorData.dimensions.height * reduceExpandHeightFactor,
+                's2',
+                true,
+                doorData.objectPlacementLocation
+            );
+            setPreAnimationGridState('clear', null, null);
+            updateGrid();
+
+            setTimeout(() => {
+                setObjectData(doorId, `interactable.activeStatus`, true);
+                // door opening animation in future
+            }, 50);
+        }, 50);
+    }
+
+    async function closeDoor(gridDataLocation, gridData, doorId) {
+        const doorData = getObjectData().objects[doorId];
+
+        const reduceExpandWidthFactor = doorData.openCloseScaleFactorX;
+        const reduceExpandHeightFactor = doorData.openCloseScaleFactorY;
+    
+        const restoreFactorWidth = 1 / reduceExpandWidthFactor;
+        const restoreFactorHeight = 1 / reduceExpandHeightFactor;
+
+        setAnimationInProgress(true);
+        removeObjectFromEnvironment(doorId, gridDataLocation);
+        updateGrid();
+
+        setTimeout(() => {
+            addEntityToEnvironment(
+                doorId,
+                doorData.gridPosition.x,
+                doorData.gridPosition.y,
+                doorData.offset.x,
+                doorData.offset.y,
+                doorData.dimensions.width * restoreFactorWidth,
+                doorData.dimensions.height * restoreFactorHeight,
+                's1',
+                true,
+                doorData.objectPlacementLocation
+            );
+            setPreAnimationGridState('clear', null, null);
+            updateGrid();
+
+            setTimeout(() => {
+                setObjectData(doorId, `interactable.activeStatus`, false);
+                // door closing animation in future
+            }, 50);
+        }, 50);
+    }
 
     switch (realVerbUsed) {
         case 'verbOpen':
         case 'verbUse':
             if (!objectData.interactable.activeStatus) {
-                setAnimationInProgress(true);
-                removeObjectFromEnvironment(doorId, getCurrentScreenId());
-                updateGrid();
-
-                setTimeout(() => {
-                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.x / getCanvasCellWidth())), getObjectData().objects[doorId].gridPosition.y + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.y / getCanvasCellHeight())), getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, (getObjectData().objects[doorId].dimensions.width * reduceExpandWidthFactor), (getObjectData().objects[doorId].dimensions.height * reduceExpandHeightFactor), 's2', true, getObjectData().objects[doorId].objectPlacementLocation);
-                    setPreAnimationGridState(gridData, doorId, true);
-                    updateGrid();
-                    setTimeout(() => {
-                        setObjectData(doorId, `interactable.activeStatus`, true);
-                        // door opening animation in future
-                    }, 50)
-                }, 50);
+                await openDoor(getCurrentScreenId(), gridData[getCurrentScreenId()], doorId);
+                if (doorToOpenCloseOnOtherSide) {
+                    const otherDoorData = getObjectData().objects[doorToOpenCloseOnOtherSide];
+                    const gridDataLocation = otherDoorData.objectPlacementLocation;
+                    gridData = gridData[otherDoorData.objectPlacementLocation];
+                    await openDoor(gridDataLocation, gridData, doorToOpenCloseOnOtherSide);
+                }
             } else {
-                const dialogueString = dialogueData.globalMessages.alreadyOpen[language];
-                await showText(dialogueString, getColorTextPlayer());
+                const alreadyOpenMessage = dialogueData.globalMessages.alreadyOpen[language];
+                await showText(alreadyOpenMessage, getColorTextPlayer());
             }
             break;
         case 'verbClose':            
             if (objectData.interactable.activeStatus) {
-                setAnimationInProgress(true);
-                removeObjectFromEnvironment(doorId, getCurrentScreenId());
-                updateGrid();
-
-                setTimeout(() => {
-                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x, getObjectData().objects[doorId].gridPosition.y, getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, (getObjectData().objects[doorId].dimensions.width * restoreFactorWidth), (getObjectData().objects[doorId].dimensions.height * restoreFactorHeight), 's1', true, getObjectData().objects[doorId].objectPlacementLocation);
-                    setPreAnimationGridState(gridData, doorId, true);
-                    updateGrid();
-                    setTimeout(() => {
-                        setObjectData(doorId, `interactable.activeStatus`, false);
-                        // door opening animation in future
-                    }, 50)
-                }, 50);
+                await closeDoor(getCurrentScreenId(), gridData[getCurrentScreenId()], doorId);
+                if (doorToOpenCloseOnOtherSide) {
+                    const otherDoorData = getObjectData().objects[doorToOpenCloseOnOtherSide];
+                    const gridDataLocation = otherDoorData.objectPlacementLocation;
+                    gridData = gridData[otherDoorData.objectPlacementLocation];
+                    await closeDoor(gridDataLocation, gridData, doorToOpenCloseOnOtherSide);
+                }
             } else {
-                const dialogueString = dialogueData.globalMessages.alreadyClosed[language];
-                await showText(dialogueString, getColorTextPlayer());
+                const alreadyClosedMessage = dialogueData.globalMessages.alreadyClosed[language];
+                await showText(alreadyClosedMessage, getColorTextPlayer());
             }
             break;
     }
