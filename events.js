@@ -75,7 +75,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
 
     const doorToOpenCloseOnOtherSide = objectData.interactable.doorToOpenCloseOnOtherSide;
 
-    async function openDoor(gridDataLocation, gridData, doorId) {
+    async function openDoor(gridDataLocation, doorId) {
         const doorData = getObjectData().objects[doorId];
 
         const reduceExpandWidthFactor = doorData.openCloseScaleFactorX;
@@ -108,7 +108,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         }, 50);
     }
 
-    async function closeDoor(gridDataLocation, gridData, doorId) {
+    async function closeDoor(gridDataLocation, doorId) {
         const doorData = getObjectData().objects[doorId];
 
         const reduceExpandWidthFactor = doorData.openCloseScaleFactorX;
@@ -148,12 +148,12 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
         case 'verbOpen':
         case 'verbUse':
             if (!objectData.interactable.activeStatus) {
-                await openDoor(getCurrentScreenId(), gridData[getCurrentScreenId()], doorId);
+                await openDoor(getCurrentScreenId(), doorId);
                 if (doorToOpenCloseOnOtherSide) {
                     const otherDoorData = getObjectData().objects[doorToOpenCloseOnOtherSide];
                     const gridDataLocation = otherDoorData.objectPlacementLocation;
                     gridData = gridData[otherDoorData.objectPlacementLocation];
-                    await openDoor(gridDataLocation, gridData, doorToOpenCloseOnOtherSide);
+                    await openDoor(gridDataLocation, doorToOpenCloseOnOtherSide);
                 }
             } else {
                 const alreadyOpenMessage = dialogueData.globalMessages.alreadyOpen[language];
@@ -162,12 +162,12 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
             break;
         case 'verbClose':            
             if (objectData.interactable.activeStatus) {
-                await closeDoor(getCurrentScreenId(), gridData[getCurrentScreenId()], doorId);
+                await closeDoor(getCurrentScreenId(), doorId);
                 if (doorToOpenCloseOnOtherSide) {
                     const otherDoorData = getObjectData().objects[doorToOpenCloseOnOtherSide];
                     const gridDataLocation = otherDoorData.objectPlacementLocation;
                     gridData = gridData[otherDoorData.objectPlacementLocation];
-                    await closeDoor(gridDataLocation, gridData, doorToOpenCloseOnOtherSide);
+                    await closeDoor(gridDataLocation, doorToOpenCloseOnOtherSide);
                 }
             } else {
                 const alreadyClosedMessage = dialogueData.globalMessages.alreadyClosed[language];
