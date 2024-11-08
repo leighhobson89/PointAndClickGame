@@ -74,6 +74,12 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
     const language = getLanguage();
     const gridData = getGridData();
 
+    const reduceExpandWidthFactor = objectData.openCloseScaleFactorX;
+    const reduceExpandHeightFactor = objectData.openCloseScaleFactorY;
+
+    const restoreFactorWidth = 1 / reduceExpandWidthFactor;
+    const restoreFactorHeight = 1 / reduceExpandHeightFactor;
+
     switch (realVerbUsed) {
         case 'verbOpen':
         case 'verbUse':
@@ -83,7 +89,7 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
                 updateGrid();
 
                 setTimeout(() => {
-                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.x / getCanvasCellWidth())), getObjectData().objects[doorId].gridPosition.y + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.y / getCanvasCellHeight())), getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, getObjectData().objects[doorId].dimensions.width, getObjectData().objects[doorId].dimensions.height, 's2', true, getObjectData().objects[doorId].objectPlacementLocation);
+                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.x / getCanvasCellWidth())), getObjectData().objects[doorId].gridPosition.y + (Math.floor(getObjectData().objects[doorId].visualAnimatedStateOffsets.s2.y / getCanvasCellHeight())), getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, (getObjectData().objects[doorId].dimensions.width * reduceExpandWidthFactor), (getObjectData().objects[doorId].dimensions.height * reduceExpandHeightFactor), 's2', true, getObjectData().objects[doorId].objectPlacementLocation);
                     setPreAnimationGridState(gridData, doorId, true);
                     updateGrid();
                     setTimeout(() => {
@@ -96,14 +102,14 @@ async function openCloseGenericUnlockedDoor(objectToUseWith, dialogueString, rea
                 await showText(dialogueString, getColorTextPlayer());
             }
             break;
-        case 'verbClose':
+        case 'verbClose':            
             if (objectData.interactable.activeStatus) {
                 setAnimationInProgress(true);
                 removeObjectFromEnvironment(doorId, getCurrentScreenId());
                 updateGrid();
 
                 setTimeout(() => {
-                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x, getObjectData().objects[doorId].gridPosition.y, getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, getObjectData().objects[doorId].dimensions.width, getObjectData().objects[doorId].dimensions.height, 's1', true, getObjectData().objects[doorId].objectPlacementLocation);
+                    addEntityToEnvironment(doorId, getObjectData().objects[doorId].gridPosition.x, getObjectData().objects[doorId].gridPosition.y, getObjectData().objects[doorId].offset.x, getObjectData().objects[doorId].offset.y, (getObjectData().objects[doorId].dimensions.width * restoreFactorWidth), (getObjectData().objects[doorId].dimensions.height * restoreFactorHeight), 's1', true, getObjectData().objects[doorId].objectPlacementLocation);
                     setPreAnimationGridState(gridData, doorId, true);
                     updateGrid();
                     setTimeout(() => {

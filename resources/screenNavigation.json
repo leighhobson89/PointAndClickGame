@@ -182,13 +182,13 @@
         "bgUrl": "./resources/backgrounds/den.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 2.5,
         "exits": {
             "e1": {
                 "connectsTo": "alley",
                 "status": "open",
                 "startPosition": { "x": 45, "y": 39 },
-                "finalPosition": { "x": 42, "y": 47 },
+                "finalPosition": { "x": 48, "y": 46 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

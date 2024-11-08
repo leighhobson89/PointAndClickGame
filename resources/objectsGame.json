@@ -83,6 +83,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 5,
         "originalHeight": 15,
@@ -166,6 +168,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3,
         "originalHeight": 10,
@@ -248,6 +252,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 1.33,
         "originalHeight": 2.4,
@@ -331,6 +337,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 4.3,
         "originalHeight": 5,
@@ -414,6 +422,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -497,6 +507,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 8,
@@ -580,6 +592,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3.33,
         "originalHeight": 8,
@@ -668,6 +682,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 8,
         "originalHeight": 28,
@@ -750,6 +766,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 6,
         "originalHeight": 11,
@@ -832,6 +850,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 4,
         "originalHeight": 27.5,
@@ -915,6 +935,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3,
         "originalHeight": 14.4,
@@ -997,13 +1019,99 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3,
         "originalHeight": 6,
         "width": 0,
         "height": 0
       },
-      "comment": "door from alley to Den opens when objectKeyToDen used on it"
+      "comment": "door from alley to Den opens when objectKeyToDen used on it, external"
+    },
+    "objectDoorDenInternal": {
+      "name": {
+        "en": "Den Exit Door",
+        "es": "Puerta de Salida de la Guarida",
+        "de": "Ausgangstür der Höhle",
+        "it": "Porta di Uscita della Tana",
+        "fr": "Porte de Sortie de la Cachette"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": true,
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": false,
+        "alreadyUsed": true
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "openCloseGenericUnlockedDoor",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "den",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/den_Exit_DenClosed.png",
+        "s2": "./resources/objects/images/den_Exit_DenOpen.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 205,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 31,
+        "y": 17
+      },
+      "offset": {
+        "x": 0.3,
+        "y": 0.3
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "openCloseScaleFactorX": 0.2,
+      "openCloseScaleFactorY": 1,
+      "dimensions": {
+        "originalWidth": 15,
+        "originalHeight": 33,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "door from den to alley, internal"
     },
     "objectIllegibleMap": {
       "name": {
@@ -1080,6 +1188,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 5.33,
         "originalHeight": 12,
@@ -1163,6 +1273,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -1246,6 +1358,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 1,
         "originalHeight": 1,
@@ -1328,6 +1442,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 2,
@@ -1411,6 +1527,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 1.8,
         "originalHeight": 3,
@@ -1494,6 +1612,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -1577,6 +1697,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -1660,6 +1782,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -1743,6 +1867,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4.6,
@@ -1826,6 +1952,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 3,
@@ -1913,6 +2041,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3.33,
         "originalHeight": 10,
@@ -1996,6 +2126,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -2079,6 +2211,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 9,
         "originalHeight": 8,
@@ -2162,6 +2296,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 3,
         "originalHeight": 10,
@@ -2245,6 +2381,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 4,
         "originalHeight": 8,
@@ -2328,6 +2466,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -2411,6 +2551,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -2494,6 +2636,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 1,
         "originalHeight": 1,
@@ -2576,6 +2720,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 42,
         "originalHeight": 17,
@@ -2658,6 +2804,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 10,
         "originalHeight": 8,
@@ -2741,6 +2889,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 2,
         "originalHeight": 4,
@@ -2824,6 +2974,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 1.8,
         "originalHeight": 4,
@@ -2907,6 +3059,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 25,
         "originalHeight": 8.8,
@@ -2990,6 +3144,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 24,
         "originalHeight": 14,
@@ -3074,6 +3230,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 6,
         "originalHeight": 15,
@@ -3157,6 +3315,8 @@
         "x": 0,
         "y": 0
       },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 7.4,
         "originalHeight": 7.5,
