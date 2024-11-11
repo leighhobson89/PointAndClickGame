@@ -1,4 +1,4 @@
-import { setGridData, setForcePlayerLocation, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
+import { setPlayerDirection, getPlayerDirection, setGridData, setForcePlayerLocation, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -54,7 +54,7 @@ export function gameLoop() {
             movePlayerTowardsTarget();
             checkAndChangeScreen();
             drawDebugGrid(getDrawGrid());
-            drawPlayerNpcsAndObjects(ctx);
+            drawObjectsAndNpcs(ctx);
             drawPlayer(ctx, getCanvasCellWidth(), getCanvasCellHeight());
         }
     }
@@ -89,16 +89,15 @@ async function movePlayerTowardsTarget() {
     const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // Adjust for rounding
 
     let targetX, targetY;
-
     let commandToPerform;
     let cellClickValue;
-    //console.log(cellValue);
 
     if (getClickPoint().x !== null && getClickPoint().y !== null && getForcePlayerLocation().length === 0) {
         cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
     } else if (getForcePlayerLocation().length > 0) {
         cellClickValue = gridData.gridData[getForcePlayerLocation()[0]][getForcePlayerLocation()[1]];
     } else {
+        console.log(`Player is stood still facing towards ${getPlayerDirection()}`);
         return;
     }
 
@@ -115,10 +114,9 @@ async function movePlayerTowardsTarget() {
         const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
         const tolerance = 3;
 
-        // Check if player has reached the final position for the transition
         if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
             Math.abs(playerOffsetY - finalPosition.y) <= tolerance) {
-            setClickPoint({x: null, y: (null)});
+            setClickPoint({x: null, y: null});
             entityPaths.player.path = [];
             entityPaths.player.currentIndex = 0;
             setTransitioningNow(false);
@@ -134,7 +132,6 @@ async function movePlayerTowardsTarget() {
     }
 
     // Normal movement logic
-    //console.log("command to perform = " + commandToPerform.verbKey);
     if (getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbWalkTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'interactionWalkingTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbOpen' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbClose'  || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbPickUp') {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
@@ -163,9 +160,21 @@ async function movePlayerTowardsTarget() {
         }
     }
 
-
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
     //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
+
+    // Determine if player is moving and the direction
+    let direction = '';
+
+    if (Math.abs(player.xPos - targetX) > 0 || Math.abs(player.yPos - targetY) > 0) {
+        if (targetX > player.xPos) direction = 'right';
+        else if (targetX < player.xPos) direction = 'left';
+        if (targetY > player.yPos) direction = 'down';
+        else if (targetY < player.yPos) direction = 'up';
+    }
+
+    setPlayerDirection(direction);
+    console.log(`Player is walking towards ${getPlayerDirection()}`);
 
     // Move the player toward the target position
     if (Math.abs(player.xPos - targetX) > speed) {
@@ -182,7 +191,6 @@ async function movePlayerTowardsTarget() {
 
     // Check if player has reached the target position
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
-
         entityPaths.player.currentIndex++;
 
         if (entityPaths.player.currentIndex < entityPaths.player.path.length && getForcePlayerLocation().length === 0) {
@@ -190,8 +198,7 @@ async function movePlayerTowardsTarget() {
             setTargetXPlayer(nextStep.x * gridSizeX);
             setTargetYPlayer(nextStep.y * gridSizeY - player.height);
         } else {
-            setClickPoint({x: null, y: (null)});
-            // Logic for when the player reaches the final destination
+            setClickPoint({x: null, y: null});
             if (getCantGoThatWay()) {
                 let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
                 showText(dialogueString, getColorTextPlayer());
@@ -210,8 +217,7 @@ async function movePlayerTowardsTarget() {
                 if (getForcePlayerLocation().length === 0) {
                     setCurrentlyMovingToAction(false);
                 } else {
-                    if (
-                        Math.abs(playerGridX - getForcePlayerLocation()[0]) <= 1 && Math.abs(playerGridY + Math.floor(player.height / gridSizeY) - getForcePlayerLocation()[1]) <= 1) {
+                    if (Math.abs(playerGridX - getForcePlayerLocation()[0]) <= 1 && Math.abs(playerGridY + Math.floor(player.height / gridSizeY) - getForcePlayerLocation()[1]) <= 1) {
                         setCurrentlyMovingToAction(false);
                         if (commandToPerform.verbKey !== 'verbWalkTo') {
                             performCommand(commandToPerform, false); // Perform the command
@@ -233,6 +239,8 @@ async function movePlayerTowardsTarget() {
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
 }
+
+
 
 function moveOtherEntitiesOnCurrentScreen() {
     const gridData = getGridData();
@@ -644,7 +652,7 @@ function drawPlayer(ctx, cellWidth, cellHeight) {
     }
 }
 
-export function drawPlayerNpcsAndObjects(ctx) {
+export function drawObjectsAndNpcs(ctx) {
     const npcsData = getNpcData().npcs;
     const objectsData = getObjectData().objects;
     const gridData = getGridData().gridData;
