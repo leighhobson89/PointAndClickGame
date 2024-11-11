@@ -212,6 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setGameState(getGameVisibleActive());
         await startGame();
 
+        setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
+        setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
+
         if (playIntro) {
             await playCutsceneGameIntro();
         } else {
@@ -251,7 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         setGameState(getGameVisibleActive());
         await startGame();
-        console.log(getCurrentScreenId());
+
+        setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
+        setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
     });
 
     getElements().resumeGameMenuButton.addEventListener("click", (event) => {
@@ -1227,6 +1232,8 @@ export async function animateTransitionAndChangeBackground(optionalNewScreenId, 
 
             setPreviousScreenId(getCurrentScreenId());
             setCurrentScreenId(newScreenId);
+            setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
+            setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
         }, {
             once: true
         },

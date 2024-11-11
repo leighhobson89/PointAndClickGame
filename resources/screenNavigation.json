@@ -8,6 +8,7 @@
         "bgUrl": "./resources/backgrounds/debugRoom.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -29,6 +30,7 @@
         "bgUrl": "./resources/backgrounds/libraryFoyer.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -58,6 +60,7 @@
         "bgUrl": "./resources/backgrounds/marketStreet.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -95,8 +98,8 @@
             "e5": {
                 "connectsTo": "cowPath",
                 "status": "open",
-                "startPosition": { "x": 28, "y": 45 },
-                "finalPosition": { "x": 32, "y": 35 },
+                "startPosition": { "x": 35, "y": 55 },
+                "finalPosition": { "x": 42, "y": 50 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -111,6 +114,7 @@
         "bgUrl": "./resources/backgrounds/researchRoom.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1.7, 
         "scalingPlayerSize": 1.7,
         "exits": {
             "e1": {
@@ -132,6 +136,7 @@
         "bgUrl": "./resources/backgrounds/alley.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -161,6 +166,7 @@
         "bgUrl": "./resources/backgrounds/carpenter.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 2, 
         "scalingPlayerSize": 2,
         "exits": {
             "e1": {
@@ -182,7 +188,8 @@
         "bgUrl": "./resources/backgrounds/den.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 2.5,
+        "scalingPlayerSpeed": 1.2, 
+        "scalingPlayerSize": 2,
         "exits": {
             "e1": {
                 "connectsTo": "alley",
@@ -203,6 +210,7 @@
         "bgUrl": "./resources/backgrounds/house.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1.1, 
         "scalingPlayerSize": 1.1,
         "exits": {
             "e1": {
@@ -232,6 +240,7 @@
         "bgUrl": "./resources/backgrounds/sewer.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 2, 
         "scalingPlayerSize": 2,
         "exits": {
             "e1": {
@@ -260,6 +269,7 @@
         "bgUrl": "./resources/backgrounds/kitchen.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 2, 
         "scalingPlayerSize": 2,
         "exits": {
             "e1": {
@@ -281,6 +291,7 @@
         "bgUrl": "./resources/backgrounds/barn.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -302,6 +313,7 @@
         "bgUrl": "./resources/backgrounds/deadTree.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1.7, 
         "scalingPlayerSize": 1.7,
         "exits": {
             "e1": {
@@ -331,7 +343,8 @@
         "bgUrl": "./resources/backgrounds/cowPathBrokenFence.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSize": 0.9,
+        "scalingPlayerSpeed": 0.8, 
+        "scalingPlayerSize": 0.8,
         "exits": {
             "e1": {
                 "connectsTo": "house",
@@ -368,6 +381,7 @@
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -414,6 +428,7 @@
         "bgUrl": "./resources/backgrounds/stinkingDump.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -443,6 +458,7 @@
         "bgUrl": "./resources/backgrounds/largePileOfPoo.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -464,6 +480,7 @@
         "bgUrl": "./resources/backgrounds/riverCrossing.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -493,6 +510,7 @@
         "bgUrl": "./resources/backgrounds/map.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {
@@ -514,6 +532,7 @@
         "bgUrl": "./resources/backgrounds/stables.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
+        "scalingPlayerSpeed": 1, 
         "scalingPlayerSize": 1,
         "exits": {
             "e1": {

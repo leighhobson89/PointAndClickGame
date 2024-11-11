@@ -43,11 +43,12 @@ export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 export const shouldNotBeResizedArray = ['objectParrakeet', 'objectDonkeyFake']; //add any animating objects that should not be resized
 
 export let playerObject = {
-    originalWidth: 30,
-    originalHeight: 160,
-    width: 30,
-    height: 160,
+    originalWidth: 50,
+    originalHeight: 140,
+    width: 50,
+    height: 140,
     speed: getWalkSpeedPlayer(),
+    baselineSpeedForRoom: getWalkSpeedPlayer(),
     xPos: 0,
     yPos: 0,
     activeSprite: "still_right",
