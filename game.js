@@ -1,4 +1,4 @@
-import { getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, setForcePlayerLocation, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
+import { getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -73,8 +73,8 @@ export function gameLoop() {
 
 async function movePlayerTowardsTarget() {
     const gridData = getGridData();
-    const speed = getPlayerObject().speed;
     const player = getPlayerObject();
+    const speed = player.speed;
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
     const dialogueData = getDialogueData().dialogue;
@@ -86,7 +86,7 @@ async function movePlayerTowardsTarget() {
     const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / gridSizeX));
     const playerOffsetY = Math.floor(playerGridY + player.height / gridSizeY);
 
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; // Adjust for rounding
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; 
 
     let targetX, targetY;
     let commandToPerform;
@@ -94,12 +94,13 @@ async function movePlayerTowardsTarget() {
 
     if (getClickPoint().x !== null && getClickPoint().y !== null && getForcePlayerLocation().length === 0) {
         cellClickValue = gridData.gridData[getClickPoint().y][getClickPoint().x];
+        setPlayerMovementStatus(['moving', `${getPlayerDirection()}`]);
     } else if (getForcePlayerLocation().length > 0) {
         cellClickValue = gridData.gridData[getForcePlayerLocation()[0]][getForcePlayerLocation()[1]];
     } else {
-        //console.log(`Player is stood still facing towards ${getPlayerDirection()}`);
         setPlayerMovementStatus(['still', `${getPlayerDirection()}`]);
-        //console.log(getPlayerMovementStatus());
+        player.activeSprite = `still_${getPlayerDirection()}`;
+        setPlayerObject('activeSprite', player.activeSprite);
         return;
     }
 
@@ -113,7 +114,7 @@ async function movePlayerTowardsTarget() {
 
     if (getTransitioningNow()) {
         const exit = 'e' + getExitNumberToTransitionTo();
-        const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;        
+        const finalPosition = getNavigationData()[getPreviousScreenId()].exits[exit].finalPosition;
         const tolerance = 3;
 
         if (Math.abs(playerOffsetX - finalPosition.x) <= tolerance && 
@@ -133,13 +134,12 @@ async function movePlayerTowardsTarget() {
         return;
     }
 
-    // Normal movement logic
     if (getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbWalkTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'interactionWalkingTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbOpen' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbClose'  || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbPickUp') {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
             targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
         } else {
-            return; // No target to move toward
+            return;
         }
     } else if (getVerbsBlockedExcept().length === 0) {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length - 10) {
@@ -149,7 +149,7 @@ async function movePlayerTowardsTarget() {
             targetX = (playerGridX + 0.5) * gridSizeX;
             targetY = (playerGridY + 0.5) * gridSizeY;
         } else {
-            return; // No target to move toward
+            return;
         }
     } else {
         if (Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length > 0) {
@@ -163,9 +163,7 @@ async function movePlayerTowardsTarget() {
     }
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
-    //if (collisionEdgeCanvas) return; // Prevent movement if there's a collision
 
-    // Determine if player is moving and the direction
     let direction = '';
 
     if (Math.abs(player.xPos - targetX) > 0 || Math.abs(player.yPos - targetY) > 0) {
@@ -176,11 +174,20 @@ async function movePlayerTowardsTarget() {
     }
 
     setPlayerDirection(direction);
-    setPlayerMovementStatus([`move`, `${getPlayerDirection()}`]);
-    //console.log(`Player is walking towards ${getPlayerDirection()}`);
-    //console.log(getPlayerMovementStatus());
 
-    // Move the player toward the target position
+    const movementStatus = getPlayerMovementStatus();
+
+    if (movementStatus[0] === 'moving') {
+        player.frameCount++;
+        setPlayerObject('frameCount', player.frameCount);
+    
+        if (player.frameCount % 10 === 0) {
+            const spriteType = player.frameCount % 20 === 0 ? "move1" : "move2";
+            player.activeSprite = `${spriteType}_${direction}`;
+            setPlayerObject('activeSprite', player.activeSprite);
+        }
+    }
+
     if (Math.abs(player.xPos - targetX) > speed) {
         player.xPos += (player.xPos < targetX) ? speed : -speed;
     } else {
@@ -193,7 +200,6 @@ async function movePlayerTowardsTarget() {
         player.yPos = targetY;
     }
 
-    // Check if player has reached the target position
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
         entityPaths.player.currentIndex++;
 
@@ -215,7 +221,7 @@ async function movePlayerTowardsTarget() {
                     }
                     commandToPerform = constructCommand(getUpcomingAction(), true);
                 } else {
-                    performCommand(commandToPerform, false); // Perform the command
+                    performCommand(commandToPerform, false);
                 }
 
                 if (getForcePlayerLocation().length === 0) {
@@ -224,7 +230,7 @@ async function movePlayerTowardsTarget() {
                     if (Math.abs(playerGridX - getForcePlayerLocation()[0]) <= 1 && Math.abs(playerGridY + Math.floor(player.height / gridSizeY) - getForcePlayerLocation()[1]) <= 1) {
                         setCurrentlyMovingToAction(false);
                         if (commandToPerform.verbKey !== 'verbWalkTo') {
-                            performCommand(commandToPerform, false); // Perform the command
+                            performCommand(commandToPerform, false);
                             setVerbButtonConstructionStatus(null);
                             setUpcomingAction(null);
                         }
@@ -242,9 +248,12 @@ async function movePlayerTowardsTarget() {
 
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
+
+    if (player.frameCount >= 1000) {
+        player.frameCount = 0;
+        setPlayerObject('frameCount', player.frameCount);
+    }
 }
-
-
 
 function moveOtherEntitiesOnCurrentScreen() {
     const gridData = getGridData();
@@ -572,88 +581,39 @@ export function drawDebugGrid(drawGrid) {
     }
 }
 
-function drawPlayer(ctx, cellWidth, cellHeight) {
+// Image cache to store loaded images
+const imageCache = {};
+
+function drawPlayer(ctx) {
     const player = getPlayerObject();
-    const gridData = getGridData().gridData;
     const playerXStart = player.xPos;
     const playerYStart = player.yPos + player.height;
     const playerWidth = player.width;
     const playerHeight = player.height;
-    const skipCells = new Set();
 
-    let playerSprite = player.playerSprite;
+    const activeSpriteKey = player.activeSprite;
+    const spriteUrl = player.sprites[activeSpriteKey];
 
-    if (!playerSprite) {
-        console.error('Player sprite is not available!');
+    if (!spriteUrl) {
+        console.error(`Sprite URL for key "${activeSpriteKey}" is not available!`);
         return;
     }
 
-    if (typeof playerSprite === 'string') {
-        playerSprite = new Image();
-        playerSprite.src = player.playerSprite;
+    let activeSpriteImage = imageCache[spriteUrl];
 
+    if (!activeSpriteImage) {
+        activeSpriteImage = new Image();
+        activeSpriteImage.src = spriteUrl;
 
-        ctx.drawImage(playerSprite, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
+        activeSpriteImage.onload = () => {
+            imageCache[spriteUrl] = activeSpriteImage;
+            ctx.drawImage(activeSpriteImage, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
+        };
+        
         return;
     }
 
-    function checkForConsecutiveBCells(gridX, gridYStart, direction) {
-        let bCount = 0;
-        for (let i = 0; i < 2; i++) {
-            const gridY = gridYStart + i * direction;
-            if (gridY >= 0 && gridY < gridData.length && gridData[gridY][gridX].startsWith('b')) {
-                bCount++;
-            } else {
-                break;
-            }
-        }
-        return bCount === 2;
-    }
-
-    const playerGridX = Math.floor(playerXStart / cellWidth);
-    const playerGridY = Math.floor(playerYStart / cellHeight);
-    let drawAllPlayer = false;
-
-    if (checkForConsecutiveBCells(playerGridX, playerGridY - 1, -1)) {
-        drawAllPlayer = true;
-    } else if (checkForConsecutiveBCells(playerGridX, playerGridY + 1, 1)) {
-        drawAllPlayer = false;
-    }
-
-    if (drawAllPlayer) {
-        ctx.drawImage(playerSprite, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
-    } else {
-        for (let py = 0; py < playerHeight; py++) {
-            const playerPixelY = playerYStart - py;
-            const gridY = Math.floor(playerPixelY / cellHeight);
-            const gridX = Math.floor(playerXStart / cellWidth);
-
-            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                if (gridData[gridY][gridX].startsWith('b')) {
-                    skipCells.add(`${gridX},${gridY}`);
-                    for (let i = 1; i <= 3; i++) {
-                        if (gridX - i >= 0) skipCells.add(`${gridX - i},${gridY}`);
-                        if (gridX + i < gridData[0].length) skipCells.add(`${gridX + i},${gridY}`);
-                    }
-                }
-            }
-        }
-
-        for (let px = 0; px < playerWidth; px++) {
-            for (let py = 0; py < playerHeight; py++) {
-                const playerPixelX = playerXStart + px;
-                const playerPixelY = playerYStart - py;
-                const gridX = Math.floor(playerPixelX / cellWidth);
-                const gridY = Math.floor(playerPixelY / cellHeight);
-
-                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                    if (!skipCells.has(`${gridX},${gridY}`)) {
-                        ctx.drawImage(playerSprite, playerPixelX, playerPixelY, 1, 1);
-                    }
-                }
-            }
-        }
-    }
+    ctx.drawImage(activeSpriteImage, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
 }
 
 export function drawObjectsAndNpcs(ctx) {

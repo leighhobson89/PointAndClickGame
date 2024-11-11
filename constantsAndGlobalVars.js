@@ -51,7 +51,22 @@ export let playerObject = {
     color: '#006400',
     xPos: 0,
     yPos: 0,
-    playerSprite: "./resources/player/playerSprite.png"
+    activeSprite: "still_right",
+    frameCount: 0,
+    sprites: {
+        "still_up": "./resources/player/still_up.png",
+        "move1_up": "./resources/player/move1_up.png",
+        "move2_up": "./resources/player/move2_up.png",
+        "still_down": "./resources/player/still_down.png",
+        "move1_down": "./resources/player/move1_down.png",
+        "move2_down": "./resources/player/move2_down.png",
+        "still_left": "./resources/player/still_left.png",
+        "move1_left": "./resources/player/move1_left.png",
+        "move2_left": "./resources/player/move2_left.png",
+        "still_right": "./resources/player/still_right.png",
+        "move1_right": "./resources/player/move1_right.png",
+        "move2_right": "./resources/player/move2_right.png"
+    }
 };
 
 export let playerInventory = {};
@@ -260,9 +275,6 @@ export const arrayOfGameImages = [
     "./resources/mouse/mouseCrosshair.png",
     "./resources/mouse/mouseHoverInteresting.png",
     "./resources/mouse/mouseNoPathFound.png",
-
-    //PLAYER
-    "./resources/player/playerSprite.png"
 ];
 
 //EVENT SPECIFIC FLAGS
@@ -1264,4 +1276,13 @@ export function setPlayerMovementStatus(value) {
 
 export function getPlayerMovementStatus() {
     return playerMovementStatus;
+}
+
+export function getActivePlayerSprite() {
+    return playerObject.sprites[playerObject.activeSprite];
+}
+
+export function setActivePlayerSprite(direction, isMoving) {
+    const movementState = isMoving ? (playerObject.activeSprite === `move1_${direction}` ? 'move2' : 'move1') : 'still';
+    playerObject.activeSprite = `${movementState}_${direction}`;
 }
