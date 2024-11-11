@@ -780,7 +780,6 @@ export function drawPlayerNpcsAndObjects(ctx) {
     }
 }
 
-
 export function initializeCanvas() {
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
