@@ -113,7 +113,8 @@ import {
     getNonPlayerAnimationFunctionalityActive,
     setNonPlayerAnimationFunctionalityActive,
     setNextScreenId,
-    setClickPoint
+    setClickPoint,
+    setPlayerObject
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,

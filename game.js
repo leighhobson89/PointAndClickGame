@@ -55,12 +55,11 @@ export function gameLoop() {
             checkAndChangeScreen();
             drawDebugGrid(getDrawGrid());
             drawPlayerNpcsAndObjects(ctx);
+            drawPlayer(ctx, getCanvasCellWidth(), getCanvasCellHeight());
         }
     }
     
     // DEBUG
-
-
     if (getDisplayText().value1) {
         drawTextOnCanvas(getDisplayText().value1, getDisplayText().value2, getCurrentXposNpc(), getCurrentYposNpc(), getCurrentSpeaker());
     }
@@ -354,7 +353,6 @@ function moveOtherEntitiesOnCurrentScreen() {
     }
 }
 
-
 export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
     //console.log("resizing npc: " + !entityObjectTrueNpcFalse);
     const player = getPlayerObject();
@@ -562,10 +560,91 @@ export function drawDebugGrid(drawGrid) {
     }
 }
 
+function drawPlayer(ctx, cellWidth, cellHeight) {
+    const player = getPlayerObject();
+    const gridData = getGridData().gridData;
+    const playerXStart = player.xPos;
+    const playerYStart = player.yPos + player.height;
+    const playerWidth = player.width;
+    const playerHeight = player.height;
+    const skipCells = new Set();
+
+    let playerSprite = player.playerSprite;
+
+    if (!playerSprite) {
+        console.error('Player sprite is not available!');
+        return;
+    }
+
+    if (typeof playerSprite === 'string') {
+        playerSprite = new Image();
+        playerSprite.src = player.playerSprite;
+
+
+        ctx.drawImage(playerSprite, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
+        return;
+    }
+
+    function checkForConsecutiveBCells(gridX, gridYStart, direction) {
+        let bCount = 0;
+        for (let i = 0; i < 2; i++) {
+            const gridY = gridYStart + i * direction;
+            if (gridY >= 0 && gridY < gridData.length && gridData[gridY][gridX].startsWith('b')) {
+                bCount++;
+            } else {
+                break;
+            }
+        }
+        return bCount === 2;
+    }
+
+    const playerGridX = Math.floor(playerXStart / cellWidth);
+    const playerGridY = Math.floor(playerYStart / cellHeight);
+    let drawAllPlayer = false;
+
+    if (checkForConsecutiveBCells(playerGridX, playerGridY - 1, -1)) {
+        drawAllPlayer = true;
+    } else if (checkForConsecutiveBCells(playerGridX, playerGridY + 1, 1)) {
+        drawAllPlayer = false;
+    }
+
+    if (drawAllPlayer) {
+        ctx.drawImage(playerSprite, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
+    } else {
+        for (let py = 0; py < playerHeight; py++) {
+            const playerPixelY = playerYStart - py;
+            const gridY = Math.floor(playerPixelY / cellHeight);
+            const gridX = Math.floor(playerXStart / cellWidth);
+
+            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
+                if (gridData[gridY][gridX].startsWith('b')) {
+                    skipCells.add(`${gridX},${gridY}`);
+                    for (let i = 1; i <= 3; i++) {
+                        if (gridX - i >= 0) skipCells.add(`${gridX - i},${gridY}`);
+                        if (gridX + i < gridData[0].length) skipCells.add(`${gridX + i},${gridY}`);
+                    }
+                }
+            }
+        }
+
+        for (let px = 0; px < playerWidth; px++) {
+            for (let py = 0; py < playerHeight; py++) {
+                const playerPixelX = playerXStart + px;
+                const playerPixelY = playerYStart - py;
+                const gridX = Math.floor(playerPixelX / cellWidth);
+                const gridY = Math.floor(playerPixelY / cellHeight);
+
+                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
+                    if (!skipCells.has(`${gridX},${gridY}`)) {
+                        ctx.drawImage(playerSprite, playerPixelX, playerPixelY, 1, 1);
+                    }
+                }
+            }
+        }
+    }
+}
 
 export function drawPlayerNpcsAndObjects(ctx) {
-    
-    const player = getPlayerObject();
     const npcsData = getNpcData().npcs;
     const objectsData = getObjectData().objects;
     const gridData = getGridData().gridData;
@@ -577,40 +656,32 @@ export function drawPlayerNpcsAndObjects(ctx) {
     // Draw objects and NPCs
     for (const [y, row] of gridData.entries()) {
         for (const [x, cellValue] of row.entries()) {
-
             // Draw objects
             if (cellValue.startsWith('o')) {
                 const objectId = cellValue.substring(1);
 
-                if (drawnObjects.has(objectId)) {
-                    continue;
-                }
+                if (drawnObjects.has(objectId)) continue;
 
                 const object = objectsData[objectId];
-
                 if (object && object.objectPlacementLocation === getCurrentScreenId()) {
                     const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset, visualAnimatedStateOffsets } = object;
-
-                    let drawX;
-                    let drawY;
+                    let drawX, drawY;
 
                     // Calculate draw positions with offsets
                     if (objectId.includes('objectDoor')) {
                         drawX = visualPosition.x + (offset.x || 0);
-                        drawY = visualPosition.y + (offset.y || 0);    
+                        drawY = visualPosition.y + (offset.y || 0);
                     } else {
                         drawX = visualPosition.x + (offset.x || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.x || 0);
-                        drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);    
+                        drawY = visualPosition.y + (offset.y || 0) + (visualAnimatedStateOffsets[activeSpriteUrl]?.y || 0);
                     }
 
                     const scaledWidth = dimensions.width * cellWidth;
                     const scaledHeight = dimensions.height * cellHeight;
-
                     const img = new Image();
                     img.src = spriteUrl[activeSpriteUrl];
 
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
-
                     drawnObjects.add(objectId);
 
                     // Update gridData to mark cells occupied by the object
@@ -622,7 +693,7 @@ export function drawPlayerNpcsAndObjects(ctx) {
                     for (let gx = startX; gx < startX + widthInCells; gx++) {
                         for (let gy = startY; gy < startY + heightInCells; gy++) {
                             if (gx >= 0 && gy >= 0 && gx < gridData[0].length && gy < gridData.length) {
-                                gridData[gy][gx] = `o${objectId}`;  // Mark grid cell as occupied by object
+                                gridData[gy][gx] = `o${objectId}`;
                             }
                         }
                     }
@@ -633,27 +704,20 @@ export function drawPlayerNpcsAndObjects(ctx) {
             if (cellValue.startsWith('c')) {
                 const npcId = cellValue.substring(1);
 
-                if (drawnNpcs.has(npcId)) {
-                    continue;
-                }
+                if (drawnNpcs.has(npcId)) continue;
 
                 const npc = npcsData[npcId];
-
                 if (npc && npc.npcPlacementLocation === getCurrentScreenId()) {
                     const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset } = npc;
-
-                    // Calculate draw positions with offsets
                     const drawX = visualPosition.x + (offset.x || 0);
                     const drawY = visualPosition.y + (offset.y || 0);
 
                     const scaledWidth = dimensions.width * cellWidth;
                     const scaledHeight = dimensions.height * cellHeight;
-
                     const img = new Image();
                     img.src = spriteUrl[activeSpriteUrl];
 
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
-
                     drawnNpcs.add(npcId);
 
                     // Update gridData to mark cells occupied by the NPC
@@ -674,135 +738,33 @@ export function drawPlayerNpcsAndObjects(ctx) {
         }
     }
 
-
     if (firstDraw) {
         setResizedObjectsGridState(gridData);
         setResizedNpcsGridState(gridData);
         initializeNonPlayerMovementsForScreen(getCurrentScreenId());
         firstDraw = false;
-
         console.log("EntityPaths:");
         console.log(entityPaths);
     }
 
-    const playerXStart = player.xPos;
-    const playerYStart = player.yPos + player.height;
-    const playerWidth = player.width;
-    const playerHeight = player.height;
-    const skipCells = new Set();
-
-    // Function to check for consecutive 'b' cells above or below the player
-    function checkForConsecutiveBCells(gridX, gridYStart, direction) {
-        let bCount = 0;
-        for (let i = 0; i < 2; i++) {  // Check two cells in a row
-            const gridY = gridYStart + i * direction;  // direction -1 for above, +1 for below
-            if (gridY >= 0 && gridY < gridData.length && gridData[gridY][gridX].startsWith('b')) {
-                bCount++;
-            } else {
-                break;  // Stop if a 'b' is not found
-            }
-        }
-        return bCount === 2;  // Return true if two consecutive 'b' cells are found
-    }
-
-    // Determine whether the player is in front or behind the object
-    const playerGridX = Math.floor(playerXStart / cellWidth);
-    const playerGridY = Math.floor(playerYStart / cellHeight);
-    let drawAllPlayer = false;
-
-    // First, check above the player
-    if (checkForConsecutiveBCells(playerGridX, playerGridY - 1, -1)) {
-        // If two 'b' cells are found above, the player is in front of the object
-        drawAllPlayer = true;
-    } else if (checkForConsecutiveBCells(playerGridX, playerGridY + 1, 1)) {
-        // If two 'b' cells are found below, the player is behind the object
-        drawAllPlayer = false;
-    }
-
-    // Drawing logic based on the result
-    if (drawAllPlayer) {
-        // Draw the entire player without skipping cells
-        for (let px = 0; px < playerWidth; px++) {
-            for (let py = 0; py < playerHeight; py++) {
-                const playerPixelX = playerXStart + px;
-                const playerPixelY = playerYStart - py;
-
-                const gridX = Math.floor(playerPixelX / cellWidth);
-                const gridY = Math.floor(playerPixelY / cellHeight);
-
-                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                    ctx.fillStyle = player.color;
-                    ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
-                }
-            }
-        }
-    } else {
-        // Apply the original skip logic if the player is behind the object
-        for (let py = 0; py < playerHeight; py++) {
-            const playerPixelY = playerYStart - py;
-            const gridY = Math.floor(playerPixelY / cellHeight);
-            const gridX = Math.floor(playerXStart / cellWidth);
-
-            if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                if (gridData[gridY][gridX].startsWith('b')) {
-                    skipCells.add(`${gridX},${gridY}`);
-                    for (let i = 1; i <= 3; i++) {
-                        if (gridX - i >= 0) {
-                            skipCells.add(`${gridX - i},${gridY}`);
-                        }
-                        if (gridX + i < gridData[0].length) {
-                            skipCells.add(`${gridX + i},${gridY}`);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Now draw the player based on the skipCells logic
-        for (let px = 0; px < playerWidth; px++) {
-            for (let py = 0; py < playerHeight; py++) {
-                const playerPixelX = playerXStart + px;
-                const playerPixelY = playerYStart - py;
-
-                const gridX = Math.floor(playerPixelX / cellWidth);
-                const gridY = Math.floor(playerPixelY / cellHeight);
-
-                if (gridY >= 0 && gridY < gridData.length && gridX >= 0 && gridX < gridData[0].length) {
-                    if (!skipCells.has(`${gridX},${gridY}`)) {
-                        ctx.fillStyle = player.color;
-                        ctx.fillRect(playerPixelX, playerPixelY, 1, 1);
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    //every frame we check to see if the grid objects have moved and then update the grid accordingly
+    // Manage object and NPC movement
     const originalValuesObject = {};
     const originalValuesNpc = {};
-    
     for (let y = 0; y < gridData.length; y++) {
         for (let x = 0; x < gridData[y].length; x++) {
             const cellValue = gridData[y][x];
-            // Record original values for occupied cells
             if (cellValue.startsWith('o')) {
                 const objectId = cellValue.substring(1);
                 setOriginalValueInCellWhereObjectPlacedNew(getCurrentScreenId(), x, y, objectId, cellValue);
-
-                // Store original values in the object JSON
                 if (!originalValuesObject[getCurrentScreenId()]) {
                     originalValuesObject[getCurrentScreenId()] = {};
                 }
                 originalValuesObject[getCurrentScreenId()][`${x},${y}`] = { objectId, originalValue: cellValue };
             }
-            
+
             if (cellValue.startsWith('c')) {
                 const npcId = cellValue.substring(1);
                 setOriginalValueInCellWhereNpcPlacedNew(getCurrentScreenId(), x, y, npcId, cellValue);
-
-                // Store original values in the npc JSON
                 if (!originalValuesNpc[getCurrentScreenId()]) {
                     originalValuesNpc[getCurrentScreenId()] = {};
                 }
@@ -816,8 +778,8 @@ export function drawPlayerNpcsAndObjects(ctx) {
     if (getAnimationInProgress()) {
         reconcileGridState();
     }
-
 }
+
 
 export function initializeCanvas() {
     const canvas = getElements().canvas;

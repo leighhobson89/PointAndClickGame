@@ -23,10 +23,10 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'barn';
+export const INITIAL_GAME_ID_NORMAL = 'den';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/barn.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/den.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -48,9 +48,10 @@ export let playerObject = {
     width: 30,
     height: 160,
     speed: getWalkSpeedPlayer(),
-    color: 'rgb(0, 100, 0)',
-    xPos: '0',
-    yPos: '0'
+    color: '#006400',
+    xPos: 0,
+    yPos: 0,
+    playerSprite: "./resources/player/playerSprite.png"
 };
 
 export let playerInventory = {};
@@ -256,7 +257,10 @@ export const arrayOfGameImages = [
     "./resources/mouse/mouseClickInteresting.png",
     "./resources/mouse/mouseCrosshair.png",
     "./resources/mouse/mouseHoverInteresting.png",
-    "./resources/mouse/mouseNoPathFound.png"
+    "./resources/mouse/mouseNoPathFound.png",
+
+    //PLAYER
+    "./resources/player/playerSprite.png"
 ];
 
 //EVENT SPECIFIC FLAGS
