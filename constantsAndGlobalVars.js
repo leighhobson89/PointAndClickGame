@@ -48,7 +48,6 @@ export let playerObject = {
     width: 30,
     height: 160,
     speed: getWalkSpeedPlayer(),
-    color: '#006400',
     xPos: 0,
     yPos: 0,
     activeSprite: "still_right",
