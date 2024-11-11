@@ -120,6 +120,7 @@ let verbsBlockedExcept = [];
 let forcePlayerLocation = [];
 let bridgeState = 0;
 let playerDirection = 'right';
+let playerMovementStatus = [];
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -1255,4 +1256,12 @@ export function setPlayerDirection(value) {
 
 export function getPlayerDirection() {
     return playerDirection;
+}
+
+export function setPlayerMovementStatus(value) {
+    playerMovementStatus = value;
+}
+
+export function getPlayerMovementStatus() {
+    return playerMovementStatus;
 }
