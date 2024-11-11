@@ -184,24 +184,15 @@ function aStarSinglePathfinding(start, target, action, subject, waypoints, overr
 
             let cellCost = dir.cost;
 
-            if (cellType.startsWith('w')) { //code for making cells near b cells more costly to try and avoid them
-                for (let i = -3; i <= 3; i++) {
-                    const checkY = neighborY + i;
-                    if (checkY >= 0 && checkY < gridSizeY) {
-                        const nearbyCell = gridData.gridData[checkY][neighborX];
-                        if (nearbyCell && nearbyCell.startsWith('b')) {
-                            cellCost *= 2;
-                            break;
-                        }
-                    }
-                }
-            } else if (cellType.startsWith('b')) {
-                cellCost *= 2;
-            } else if (cellType === 'n') {
+            if (cellType === 'n') {
                 cellCost *= 10000;
+            } else if (cellType.startsWith('o')) {
+                if (!getObjectData().objects[cellType.slice(1)].interactable.canHover) {
+                    cellCost *= 20000
+                }
             }
 
-            if (overrideCellCost) { //to have exact control of npcs via waypoints DEBUG maybe not good idea but we ll see
+            if (overrideCellCost) {
                 cellCost = 1;
             }
 

@@ -31,7 +31,7 @@
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSpeed": 1, 
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 1.5,
         "exits": {
             "e1": {
                 "connectsTo": "researchRoom",
@@ -61,7 +61,7 @@
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSpeed": 1, 
-        "scalingPlayerSize": 1,
+        "scalingPlayerSize": 0.7,
         "exits": {
             "e1": {
                 "connectsTo": "roadIntoTown",

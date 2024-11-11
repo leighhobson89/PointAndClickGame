@@ -433,7 +433,7 @@ export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFa
     let zPosW;
 
     // Extract the Z position value if the cell starts with 'w' or 'b'
-    if (cellValue.startsWith('w') || cellValue.startsWith('b')) {
+    if (cellValue.startsWith('w')) {
         zPosStringW = extractWValue(cellValue);
         zPosW = parseInt(zPosStringW, 10);
     } else {
@@ -546,9 +546,6 @@ export function drawDebugGrid(drawGrid) {
                 context.fillStyle = 'rgba(255, 0, 255, 0.5)'; //object
             } else if (cellValue.startsWith('c')) {
                 context.fillStyle = 'rgba(0, 0, 255, 0.5)'; //npc
-            } else if (cellValue.startsWith('b')) {
-                setZPosHover(extractWValue(cellValue));
-                context.fillStyle = `rgba(100, 0, ${getZPosHover()}, 0.5)`; 
             } else {
                 context.fillStyle = 'rgba(255, 0, 0, 0.5)'; // default color
             }        
@@ -1223,7 +1220,7 @@ export function swapBackgroundOnRoomTransition(newScreenId, optional) {
         yPosCameraEnterHere = getNavigationData()[getCurrentScreenId()].exits[exit].yPosCameraEnterHere;
     }
 
-    const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl; // Get the new background image
+    const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl;
     const screenTilesWidebgImg = getNavigationData()[getNextScreenId()].screenTilesWidebgImg;
     //setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
     setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
@@ -1231,8 +1228,7 @@ export function swapBackgroundOnRoomTransition(newScreenId, optional) {
 }
 
 export function extractWValue(value) {
-
-    if (typeof value === 'string' && (value.startsWith('w') || value.startsWith('b'))) {
+    if (typeof value === 'string' && value.startsWith('w')) {
         const matches = value.match(/[wb](\d{1,3})/);
         if (matches && matches[1]) {
             return matches[1];
