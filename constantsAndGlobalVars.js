@@ -160,6 +160,7 @@ let scrollingActive = false;
 let earlyExitFromDialogue = false;
 let drawGrid = false;
 let cantGoThatWay = false;
+let currentScreenHasForegroundItems = true;
 
 //IMAGE URLS
 export const arrayOfGameImages = [
@@ -288,6 +289,17 @@ export const arrayOfGameImages = [
     "./resources/mouse/mouseHoverInteresting.png",
     "./resources/mouse/mouseNoPathFound.png",
 ];
+
+const foregroundsList = [
+    "libraryFoyer.png",
+    "marketStreet.png",
+    "riverCrossing.png",
+    "riverCrossingBridgeHalfComplete.png",
+    "riverCrossingBridgeComplete.png",
+    "sewer.png",
+    "stables.png",
+    "stablesTemp.png",
+]
 
 //EVENT SPECIFIC FLAGS
 let animationFinishedFlag = [];
@@ -1297,4 +1309,16 @@ export function getActivePlayerSprite() {
 export function setActivePlayerSprite(direction, isMoving) {
     const movementState = isMoving ? (playerObject.activeSprite === `move1_${direction}` ? 'move2' : 'move1') : 'still';
     playerObject.activeSprite = `${movementState}_${direction}`;
+}
+
+export function getForegroundsList() {
+    return foregroundsList;
+}
+
+export function setCurrentScreenHasForegroundItems(value) {
+    currentScreenHasForegroundItems = value;
+}
+
+export function getCurrentScreenHasForegroundItems() {
+    return currentScreenHasForegroundItems;
 }

@@ -1,4 +1,6 @@
 import {
+    setCurrentScreenHasForegroundItems,
+    getForegroundsList,
     getArrayOfGameImages,
     setAnimationInProgress,
     setPreAnimationGridState,
@@ -1734,6 +1736,16 @@ export function setDynamicBackgroundWithOffset(
 
         canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
         canvas.style.backgroundImage = `url(${imageUrl})`;
+
+        const bgFilename = canvas.style.backgroundImage.split('/').pop().split('\\').pop().replace(/['")]/g, "");
+    
+        if (getForegroundsList().includes(bgFilename)) {
+            setCurrentScreenHasForegroundItems(true);
+            console.log("New screen has foreground items, flag set to true");
+        } else {
+            setCurrentScreenHasForegroundItems(false);
+            console.log("New screen doesnt have foreground items, flag set to false");
+        }
     };
 
     backgroundImage.onerror = function() {
@@ -1846,6 +1858,27 @@ async function preloadImages(imageUrls) {
     });
     await Promise.all(promises);
     console.log("All images preloaded");
+}
+
+export function drawForegroundImageForCurrentScreen() {
+    const ctx = canvas.getContext("2d");
+    const screenId = `foregrounds/${getCurrentScreenId()}.png`;
+    const imagesArray = getArrayOfGameImages();
+    const foregroundUrl = imagesArray.find((url) => url.includes(screenId));
+    
+    if (!foregroundUrl) {
+        console.warn("No foreground image found for the current screen.");
+        return;
+    }
+
+    const foregroundImage = new Image();
+    foregroundImage.src = foregroundUrl;
+
+    ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
+
+    foregroundImage.onerror = () => {
+        console.error("Failed to load foreground image:", foregroundUrl);
+    };
 }
 
 let debugWindow;
