@@ -51,15 +51,28 @@ export function gameLoop() {
     ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
 
     if (getGameStateVariable() === getGameVisibleActive() || getGameStateVariable() === getInteractiveDialogueState()) {
+        let updatedTrackingGrid = false;
         if (!getBeginGameStatus()) {
+            updatedTrackingGrid = updateTrackingGrid();
             movePlayerTowardsTarget();
             checkAndChangeScreen();
             drawDebugGrid(getDrawGrid());
             drawObjectsAndNpcs(ctx);
-            drawPlayer(ctx, getCanvasCellWidth(), getCanvasCellHeight());
+            
+            let drawingOrder = null;
+            if (updatedTrackingGrid && getCurrentScreenHasForegroundItems()) {
+                drawingOrder = decideDrawingOrder();
+            }
 
-            if (getCurrentScreenHasForegroundItems()) {
+            if (!drawingOrder) {
+                drawPlayer(ctx, getCanvasCellWidth(), getCanvasCellHeight());
+
+                if (getCurrentScreenHasForegroundItems()) {
+                    drawForegroundImageForCurrentScreen();
+                }
+            } else {
                 drawForegroundImageForCurrentScreen();
+                drawPlayer(ctx, getCanvasCellWidth(), getCanvasCellHeight());
             }
         }
     }
@@ -224,8 +237,7 @@ async function movePlayerTowardsTarget() {
         if (entityPaths.player.currentIndex < entityPaths.player.path.length && getForcePlayerLocation().length === 0) {
             const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
             setTargetXPlayer(nextStep.x * gridSizeX);
-            setTargetYPlayer(nextStep.y * gridSizeY - player.height);      
-            updateTrackingGrid();
+            setTargetYPlayer(nextStep.y * gridSizeY - player.height);
         
         } else {
             setClickPoint({x: null, y: null});
@@ -1922,7 +1934,7 @@ function updateTrackingGrid() {
     for (let x = playerXStart; x <= playerXEnd; x++) {
         for (let y = playerYStart; y <= playerYEnd; y++) {
             // If the foreground grid has an "f" and the player is near it, trigger the update
-            if (foregroundData[y][x] === "f") {
+            if (foregroundData[y][x].startsWith('f')) {
                 // Check the distance from the current player cell to the foreground "f" cell
                 const distance = Math.abs(player.xPos - x * getCanvasCellWidth()) + Math.abs(player.yPos - y * getCanvasCellHeight());
                 if (distance <= distanceThreshold * getCanvasCellWidth()) {
@@ -1936,7 +1948,7 @@ function updateTrackingGrid() {
 
     // If the player is not near a foreground "f" cell, don't update the grid
     if (!shouldUpdate) {
-        return;
+        return false;
     }
 
     let updated = false; // Flag to track if any cell was updated
@@ -1985,6 +1997,7 @@ function updateTrackingGrid() {
         console.log("Tracking Grid:");
         console.log(JSON.stringify(getTrackingGrid('all'))); // Log the updated tracking grid using the getter
     }
+    return true;
 }
 
 
@@ -2025,6 +2038,75 @@ function isPlayerCellOpaque(playerImage, cellX, cellY) {
     return false;
 }
 
+function decideDrawingOrder() {
+
+    const trackingGrid = getTrackingGrid('all');
+    const foregroundGrid = getForegroundsData()[getCurrentScreenId()];
+    let nearestForegroundObject = null;
+    let selectedFNumber = '';
+    
+    let playerPosition = null;
+
+    let highestPlayerRow = -1;
+    for (let y = 0; y < trackingGrid.length; y++) {
+        for (let x = 0; x < trackingGrid[y].length; x++) {
+            if (trackingGrid[y][x] === 'p') {
+                if (y > highestPlayerRow) {
+                    playerPosition = { x, y };
+                    highestPlayerRow = y;
+                }
+            }
+        }
+    }
+
+    if (!playerPosition) {
+        return false;
+    }
+
+    let highestForegroundRow = -1;
+    for (let y = 0; y < foregroundGrid.length; y++) {
+        for (let x = 0; x < foregroundGrid[y].length; x++) {
+            const cellValue = foregroundGrid[y][x];
+            
+            if (cellValue.startsWith('f')) {
+                if (y > highestForegroundRow) {
+                    nearestForegroundObject = { fNumber: cellValue, x, y };
+                    selectedFNumber = cellValue;
+                    highestForegroundRow = y;
+                }
+            }
+        }
+    }
+
+    if (!nearestForegroundObject) {
+        console.log("No foreground objects found.");
+        return false;
+    }
+
+    let highestRow = -1;
+    let highestRowColumn = -1;
+
+    for (let y = 0; y < foregroundGrid.length; y++) {
+        for (let x = 0; x < foregroundGrid[y].length; x++) {
+            if (foregroundGrid[y][x] === selectedFNumber) {
+                if (y > highestRow) {
+                    highestRow = y;
+                    highestRowColumn = x;
+                }
+            }
+        }
+    }
+
+    console.log("Highest row for foreground object " + selectedFNumber + ": Row " + highestRow + ", Column " + highestRowColumn);
+
+    if (highestPlayerRow > highestRow) {
+        console.log("Player's row is higher than the foreground object's row.");
+        return true;
+    } else {
+        console.log("Foreground object's row is higher than or equal to the player's row.");
+        return false;
+    }
+}
 
 //-------------------------------------------------------------------------------------------------------------
 
