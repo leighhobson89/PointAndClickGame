@@ -1920,6 +1920,10 @@ function updateTrackingGrid() {
     const playerImage = getCurrentPlayerImage();
     const foregroundData = getForegroundsData()[getCurrentScreenId()]; // Get the foreground grid data
 
+    if (!foregroundData) {
+        return false;
+    }
+    
     // Calculate player's current bounding grid coordinates
     const playerXStart = Math.max(0, Math.floor(player.xPos / getCanvasCellWidth()));
     const playerYStart = Math.max(0, Math.floor(player.yPos / getCanvasCellHeight()));
