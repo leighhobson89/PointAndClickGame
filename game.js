@@ -1,4 +1,4 @@
-import { setCurrentScreenHasForegroundItems, getCurrentScreenHasForegroundItems, getForegroundsList, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
+import { getTrackingGrid, setTrackingGrid, getForegroundsData, setCurrentPlayerImage, getCurrentPlayerImage, getCurrentScreenHasForegroundItems, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -7,6 +7,8 @@ import { executeInteractionEvent } from './events.js';
 
 export let entityPaths = {};
 let firstDraw = true;
+let lastUpdatedCells = new Set();
+let lastPlayerPosition = { xStart: 0, yStart: 0, xEnd: 0, yEnd: 0 };
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -222,7 +224,9 @@ async function movePlayerTowardsTarget() {
         if (entityPaths.player.currentIndex < entityPaths.player.path.length && getForcePlayerLocation().length === 0) {
             const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
             setTargetXPlayer(nextStep.x * gridSizeX);
-            setTargetYPlayer(nextStep.y * gridSizeY - player.height);
+            setTargetYPlayer(nextStep.y * gridSizeY - player.height);      
+            updateTrackingGrid();
+        
         } else {
             setClickPoint({x: null, y: null});
             if (getCantGoThatWay()) {
@@ -613,6 +617,7 @@ function drawPlayer(ctx) {
     }
 
     let activeSpriteImage = imageCache[spriteUrl];
+    setCurrentPlayerImage(activeSpriteImage);
 
     if (!activeSpriteImage) {
         activeSpriteImage = new Image();
@@ -1898,6 +1903,127 @@ export function gridValueSwapper(grid, value1, value2) {
     setGridData(allGridData);
 }
 
+function updateTrackingGrid() {
+    const player = getPlayerObject();
+    const playerImage = getCurrentPlayerImage();
+    const foregroundData = getForegroundsData()[getCurrentScreenId()]; // Get the foreground grid data
+
+    // Calculate player's current bounding grid coordinates
+    const playerXStart = Math.max(0, Math.floor(player.xPos / getCanvasCellWidth()));
+    const playerYStart = Math.max(0, Math.floor(player.yPos / getCanvasCellHeight()));
+    const playerXEnd = Math.min(getGridSizeX() - 1, Math.floor((player.xPos + player.width) / getCanvasCellWidth()));
+    const playerYEnd = Math.min(getGridSizeY() - 1, Math.floor((player.yPos + player.height) / getCanvasCellHeight()));
+
+    // Add a check to see if the player is near a cell with "f" in the foreground grid
+    let shouldUpdate = false;
+    const distanceThreshold = 2; // The distance within which we will run the update
+
+    // Check if any of the player's current grid cells are within distance of a foreground "f" cell
+    for (let x = playerXStart; x <= playerXEnd; x++) {
+        for (let y = playerYStart; y <= playerYEnd; y++) {
+            // If the foreground grid has an "f" and the player is near it, trigger the update
+            if (foregroundData[y][x] === "f") {
+                // Check the distance from the current player cell to the foreground "f" cell
+                const distance = Math.abs(player.xPos - x * getCanvasCellWidth()) + Math.abs(player.yPos - y * getCanvasCellHeight());
+                if (distance <= distanceThreshold * getCanvasCellWidth()) {
+                    shouldUpdate = true; // Trigger the update if within distance
+                    break;
+                }
+            }
+        }
+        if (shouldUpdate) break; // Break early if we found a nearby "f" cell
+    }
+
+    // If the player is not near a foreground "f" cell, don't update the grid
+    if (!shouldUpdate) {
+        return;
+    }
+
+    let updated = false; // Flag to track if any cell was updated
+
+    // Reset the old player position in the grid (if it changed)
+    if (
+        lastPlayerPosition.xStart !== playerXStart ||
+        lastPlayerPosition.yStart !== playerYStart ||
+        lastPlayerPosition.xEnd !== playerXEnd ||
+        lastPlayerPosition.yEnd !== playerYEnd
+    ) {
+        // Reset the previous player area
+        for (let x = lastPlayerPosition.xStart; x <= lastPlayerPosition.xEnd; x++) {
+            for (let y = lastPlayerPosition.yStart; y <= lastPlayerPosition.yEnd; y++) {
+                setTrackingGrid(x, y, "-"); // Reset old position using setter
+                lastUpdatedCells.add(`${x}-${y}`); // Track this reset
+            }
+        }
+    }
+
+    // Now update the player's new position on the tracking grid
+    for (let x = playerXStart; x <= playerXEnd; x++) {
+        for (let y = playerYStart; y <= playerYEnd; y++) {
+            // Only mark if the cell is empty ("-") and is opaque
+            if (getTrackingGrid(x, y) === "-" && isPlayerCellOpaque(playerImage, x, y)) {
+                setTrackingGrid(x, y, "p"); // Mark this cell as part of the player using setter
+                updated = true; // Mark as updated
+                lastUpdatedCells.add(`${x}-${y}`); // Track this update
+            }
+        }
+    }
+
+    // Update last player position after the update
+    lastPlayerPosition = {
+        xStart: playerXStart,
+        yStart: playerYStart,
+        xEnd: playerXEnd,
+        yEnd: playerYEnd
+    };
+
+    // Clear the cache after updating
+    lastUpdatedCells.clear();
+
+    // Log the grid only if it was updated
+    if (updated) {
+        console.log("Tracking Grid:");
+        console.log(JSON.stringify(getTrackingGrid('all'))); // Log the updated tracking grid using the getter
+    }
+}
+
+
+function isCellOpaque(image, pixelX, pixelY, cellWidth, cellHeight) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+    ctx.drawImage(image, 0, 0);
+
+    const centerX = Math.floor(pixelX + cellWidth / 2);
+    const centerY = Math.floor(pixelY + cellHeight / 2);
+
+    const pixelData = ctx.getImageData(centerX, centerY, 1, 1).data;
+    return pixelData[3] > 0;  // Check if alpha channel is > 0 (opaque)
+}
+
+function isPlayerCellOpaque(playerImage, cellX, cellY) {
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+
+    const pixelX = cellX * cellWidth;
+    const pixelY = cellY * cellHeight;
+
+    const playerX = getPlayerObject().xPos;
+    const playerY = getPlayerObject().yPos;
+
+    const relativeX = pixelX - playerX;
+    const relativeY = pixelY - playerY;
+
+    if (playerImage) {
+        if (relativeX >= 0 && relativeX < playerImage.width && relativeY >= 0 && relativeY < playerImage.height) {
+            return isCellOpaque(playerImage, relativeX, relativeY, cellWidth, cellHeight);
+        }
+    }
+
+    return false;
+}
 
 
 //-------------------------------------------------------------------------------------------------------------

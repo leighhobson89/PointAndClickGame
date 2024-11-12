@@ -1,4 +1,7 @@
 import {
+    getForegroundsData, 
+    setForegroundsData, 
+    setForegroundGridProcessed,
     setCurrentScreenHasForegroundItems,
     getForegroundsList,
     getArrayOfGameImages,
@@ -6,6 +9,7 @@ import {
     setPreAnimationGridState,
     getDrawGrid,
     setDrawGrid,
+    urlForegroundData,
     getInitialBackgroundUrl,
     setInitialBackgroundUrl,
     setInitialScreenId,
@@ -116,7 +120,8 @@ import {
     setNonPlayerAnimationFunctionalityActive,
     setNextScreenId,
     setClickPoint,
-    setPlayerObject
+    setPlayerObject,
+    setCurrentForegroundImage
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -178,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
             urlObjectsData,
             urlDialogueData,
             urlNpcsData,
+            urlForegroundData
         );
 
         initializeEntityPathsObject();
@@ -231,6 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
             urlObjectsDataDebug,
             urlDialogueData,
             urlNpcsDataDebug,
+            urlForegroundData
         );
         setInitialScreenId(INITIAL_GAME_ID_DEBUG);
         setCurrentScreenId(getInitialScreenId());
@@ -1236,6 +1243,7 @@ export async function animateTransitionAndChangeBackground(optionalNewScreenId, 
             setCurrentScreenId(newScreenId);
             setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
             setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
+            setForegroundGridProcessed(false);
         }, {
             once: true
         },
@@ -1569,7 +1577,8 @@ export async function loadGameData(
     screenNavUrl,
     objectsUrl,
     dialogueUrl,
-    npcUrl
+    npcUrl,
+    gridForegroundsUrl // New URL for the foreground grid data
 ) {
     try {
         // Load grid data
@@ -1601,6 +1610,12 @@ export async function loadGameData(
         const npcData = await npcResponse.json();
         setNpcsData(npcData);
         console.log("Npc data loaded:", getNpcData());
+
+        // Load foreground grid data
+        const foregroundResponse = await fetch(gridForegroundsUrl);
+        const foregroundData = await foregroundResponse.json();
+        setForegroundsData(foregroundData); // Assuming you have this setter function
+        console.log("Foreground grid data loaded:", getForegroundsData());
 
     } catch (error) {
         console.error("Error loading game data:", error);
@@ -1868,11 +1883,13 @@ export function drawForegroundImageForCurrentScreen() {
     
     if (!foregroundUrl) {
         console.warn("No foreground image found for the current screen.");
+        setCurrentForegroundImage(null);
         return;
     }
 
     const foregroundImage = new Image();
     foregroundImage.src = foregroundUrl;
+    setCurrentForegroundImage(foregroundImage);
 
     ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
 

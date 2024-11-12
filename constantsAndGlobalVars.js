@@ -19,14 +19,15 @@ export const urlNpcsData = '.\\resources\\npcGame.json';
 export const urlObjectsDataDebug = '.\\resources\\debugJSONs\\objectsDebug.json';
 export const urlNpcsDataDebug = '.\\resources\\debugJSONs\\npcDebug.json';
 export const urlDialogueData = '.\\resources\\dialogue.json';
+export const urlForegroundData = '..\\resources\\screenWalkableJSONS\\masterForegroundData.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'den';
+export const INITIAL_GAME_ID_NORMAL = 'libraryFoyer';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/den.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/libraryFoyer.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -90,6 +91,7 @@ let navigationData = null;
 let objectData = null;
 let dialogueData = null;
 let npcData = null;
+let foregroundsData = null;
 let currentScreenId = initialScreenId;
 let previousScreenId = initialScreenId;
 let nextScreenId = initialScreenId;
@@ -136,6 +138,9 @@ let forcePlayerLocation = [];
 let bridgeState = 0;
 let playerDirection = 'right';
 let playerMovementStatus = [];
+let currentForegroundImage = null;
+let currentPlayerImage = null;
+let trackingGrid = Array.from({ length: getGridSizeY() }, () => Array(getGridSizeX()).fill("-"));
 
 //GLOBAL FLAGS
 let audioMuted;
@@ -161,6 +166,7 @@ let earlyExitFromDialogue = false;
 let drawGrid = false;
 let cantGoThatWay = false;
 let currentScreenHasForegroundItems = true;
+let foregroundGridProcessed = false;
 
 //IMAGE URLS
 export const arrayOfGameImages = [
@@ -429,6 +435,14 @@ export function getDialogueData() {
 
 export function setNpcsData(value) {
     npcData = value;
+}
+
+export function getForegroundsData() {
+    return foregroundsData;
+}
+
+export function setForegroundsData(value) {
+    foregroundsData = value;
 }
 
 export function getNpcData() {
@@ -1321,4 +1335,52 @@ export function setCurrentScreenHasForegroundItems(value) {
 
 export function getCurrentScreenHasForegroundItems() {
     return currentScreenHasForegroundItems;
+}
+
+export function setCurrentForegroundImage(value) {
+    currentForegroundImage = value;
+}
+
+export function getCurrentForegroundImage() {
+    return currentForegroundImage;
+}
+
+export function setCurrentPlayerImage(value) {
+    currentPlayerImage = value;
+}
+
+export function getCurrentPlayerImage() {
+    return currentPlayerImage;
+}
+
+export function setForegroundGridProcessed(value) {
+    foregroundGridProcessed = value;
+}
+
+export function getForegroundGridProcessed() {
+    return foregroundGridProcessed;
+}
+
+export function getTrackingGrid(x, y) {
+    // Check if 'x' is equal to 'all' which means we want the entire grid
+    if (x === 'all') {
+        return trackingGrid;  // Return the entire grid
+    }
+
+    // Validate the coordinates for normal access
+    if (y >= 0 && y < trackingGrid.length && x >= 0 && x < trackingGrid[0].length) {
+        return trackingGrid[y][x];  // Return the specific cell if within bounds
+    } else {
+        console.warn(`Attempted to access trackingGrid at invalid coordinates (${x}, ${y})`);
+        return "-";  // Return a default value when out of bounds
+    }
+}
+
+// Setter function to set a value in a specific cell in the tracking grid
+export function setTrackingGrid(x, y, value) {
+    if (y >= 0 && y < trackingGrid.length && x >= 0 && x < trackingGrid[0].length) {
+        trackingGrid[y][x] = value;
+    } else {
+        console.error(`Attempted to set trackingGrid at invalid coordinates (${x}, ${y})`);
+    }
 }
