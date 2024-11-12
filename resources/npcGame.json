@@ -243,8 +243,8 @@
           "s4": "./resources/npcs/townDogNoBone.png"
         },
         "gridPosition": {
-          "x": 65,
-          "y": 45
+          "x": 40,
+          "y": 50
         },
         "offset": {
           "x": 0,

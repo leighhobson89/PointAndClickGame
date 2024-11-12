@@ -865,12 +865,12 @@ async function giveDogBowlOfMilk(townDog, dialogueString, blank2, objectId) {
     setObjectData(`objectBowl`, `interactable.canPickUp`, false);
 
     setAnimationInProgress(true);
-    addEntityToEnvironment('objectBowl', 62, 49, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet');
+    addEntityToEnvironment('objectBowl', 37, 52, 0, 0, getObjectData().objects['objectBowl'].dimensions.originalWidth, getObjectData().objects['objectBowl'].dimensions.originalHeight, null, true, 'marketStreet');
     setPreAnimationGridState(gridData, 'objectBowl', true);
     updateGrid();
 
     setTimeout(() => {
-        addEntityToEnvironment('objectBone', 64, 53, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
+        addEntityToEnvironment('objectBone', 39, 56, 0, 0, getObjectData().objects['objectBone'].dimensions.originalWidth, getObjectData().objects['objectBone'].dimensions.originalHeight, null, true, 'marketStreet');
         setPreAnimationGridState(gridData, 'objectBone', true);
 
         updateGrid();

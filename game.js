@@ -53,12 +53,12 @@ export function gameLoop() {
     if (getGameStateVariable() === getGameVisibleActive() || getGameStateVariable() === getInteractiveDialogueState()) {
         let updatedTrackingGrid = false;
         if (!getBeginGameStatus()) {
-            updatedTrackingGrid = updateTrackingGrid();
-            movePlayerTowardsTarget();
+            updatedTrackingGrid = movePlayerTowardsTarget();
             checkAndChangeScreen();
             drawDebugGrid(getDrawGrid());
-            drawObjectsAndNpcs(ctx);
-            
+            drawObjectsAndNpcs(ctx, true); //objects
+            drawObjectsAndNpcs(ctx, false); //npcs
+
             let drawingOrder = null;
             if (updatedTrackingGrid && getCurrentScreenHasForegroundItems()) {
                 drawingOrder = decideDrawingOrder();
@@ -90,6 +90,8 @@ export function gameLoop() {
 }
 
 async function movePlayerTowardsTarget() {
+    let updatedTrackingGrid = false;
+
     const gridData = getGridData();
     const player = getPlayerObject();
     const speed = player.speed;
@@ -131,7 +133,7 @@ async function movePlayerTowardsTarget() {
         setPlayerMovementStatus(['still', `${getPlayerDirection()}`]);
         player.activeSprite = `still_${getPlayerDirection()}`;
         setPlayerObject('activeSprite', player.activeSprite);
-        return;
+        return false;
     }
 
     const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellClickValue);
@@ -161,25 +163,28 @@ async function movePlayerTowardsTarget() {
     }
 
     if (!commandToPerform && getVerbsBlockedExcept().length === 0) {
-        return;
+        return false;
     }
 
     if (getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbWalkTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'interactionWalkingTo' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbOpen' || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbClose'  || getForcePlayerLocation().length === 0 && commandToPerform.verbKey !== null && commandToPerform.verbKey === 'verbPickUp') {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
             targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
+            //updatedTrackingGrid = updateTrackingGrid(); //code for sorting player on top of foreground object if in front, not working very well
         } else {
-            return;
+            return false;
         }
     } else if (getVerbsBlockedExcept().length === 0) {
         if (entityPaths.player.path.length > 0 && entityPaths.player.currentIndex < entityPaths.player.path.length - 10) {
             targetX = entityPaths.player.path[entityPaths.player.currentIndex].x * gridSizeX;
             targetY = entityPaths.player.path[entityPaths.player.currentIndex].y * gridSizeY - player.height;
+            //updatedTrackingGrid = updateTrackingGrid();
         } else if (entityPaths.player.path.length > 0) {
             targetX = (playerGridX + 0.5) * gridSizeX;
             targetY = (playerGridY + 0.5) * gridSizeY;
+            //updatedTrackingGrid = updateTrackingGrid(); 
         } else {
-            return;
+            return false;
         }
     } else {
         if (Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length > 0) {
@@ -188,7 +193,7 @@ async function movePlayerTowardsTarget() {
         }
         
         if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 && Array.isArray(getForcePlayerLocation()) && getForcePlayerLocation().length === 0) {
-            return;
+            return false;
         }
     }
 
@@ -237,15 +242,14 @@ async function movePlayerTowardsTarget() {
         if (entityPaths.player.currentIndex < entityPaths.player.path.length && getForcePlayerLocation().length === 0) {
             const nextStep = entityPaths.player.path[entityPaths.player.currentIndex];
             setTargetXPlayer(nextStep.x * gridSizeX);
-            setTargetYPlayer(nextStep.y * gridSizeY - player.height);
-        
+            setTargetYPlayer(nextStep.y * gridSizeY - player.height);    
         } else {
             setClickPoint({x: null, y: null});
             if (getCantGoThatWay()) {
                 let dialogueString = dialogueData.globalMessages.cantGoThatWay[language];
                 showText(dialogueString, getColorTextPlayer());
                 setCantGoThatWay(false);
-                return;
+                return false;
             } else {
                 if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0 ) {
                     if (getUpcomingAction() === null) {
@@ -285,6 +289,8 @@ async function movePlayerTowardsTarget() {
         player.frameCount = 0;
         setPlayerObject('frameCount', player.frameCount);
     }
+
+    return updatedTrackingGrid;
 }
 
 function moveOtherEntitiesOnCurrentScreen() {
@@ -646,19 +652,15 @@ function drawPlayer(ctx) {
     ctx.drawImage(activeSpriteImage, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
 }
 
-export function drawObjectsAndNpcs(ctx) {
-    const npcsData = getNpcData().npcs;
+export function drawObjects(ctx) {
     const objectsData = getObjectData().objects;
     const gridData = getGridData().gridData;
     const cellWidth = getCanvasCellWidth();
     const cellHeight = getCanvasCellHeight();
     const drawnObjects = new Set();
-    const drawnNpcs = new Set();
 
-    // Draw objects and NPCs
     for (const [y, row] of gridData.entries()) {
         for (const [x, cellValue] of row.entries()) {
-            // Draw objects
             if (cellValue.startsWith('o')) {
                 const objectId = cellValue.substring(1);
 
@@ -669,7 +671,6 @@ export function drawObjectsAndNpcs(ctx) {
                     const { visualPosition, dimensions, activeSpriteUrl, spriteUrl, offset, visualAnimatedStateOffsets } = object;
                     let drawX, drawY;
 
-                    // Calculate draw positions with offsets
                     if (objectId.includes('objectDoor')) {
                         drawX = visualPosition.x + (offset.x || 0);
                         drawY = visualPosition.y + (offset.y || 0);
@@ -686,7 +687,6 @@ export function drawObjectsAndNpcs(ctx) {
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
                     drawnObjects.add(objectId);
 
-                    // Update gridData to mark cells occupied by the object
                     const startX = Math.floor(drawX / cellWidth);
                     const startY = Math.floor(drawY / cellHeight);
                     const widthInCells = Math.ceil(scaledWidth / cellWidth);
@@ -701,8 +701,19 @@ export function drawObjectsAndNpcs(ctx) {
                     }
                 }
             }
+        }
+    }
+}
 
-            // Draw NPCs
+export function drawNpcs(ctx) {
+    const npcsData = getNpcData().npcs;
+    const gridData = getGridData().gridData;
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
+    const drawnNpcs = new Set();
+
+    for (const [y, row] of gridData.entries()) {
+        for (const [x, cellValue] of row.entries()) {
             if (cellValue.startsWith('c')) {
                 const npcId = cellValue.substring(1);
 
@@ -722,7 +733,6 @@ export function drawObjectsAndNpcs(ctx) {
                     ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
                     drawnNpcs.add(npcId);
 
-                    // Update gridData to mark cells occupied by the NPC
                     const startX = Math.floor(drawX / cellWidth);
                     const startY = Math.floor(drawY / cellHeight);
                     const widthInCells = Math.ceil(scaledWidth / cellWidth);
@@ -739,6 +749,16 @@ export function drawObjectsAndNpcs(ctx) {
             }
         }
     }
+}
+
+export function drawObjectsAndNpcs(ctx, objectTrueNpcFalse) {
+    const gridData = getGridData().gridData;
+
+    if (objectTrueNpcFalse) {
+        drawObjects(ctx);
+    } else {
+        drawNpcs(ctx);
+    }
 
     if (firstDraw) {
         setResizedObjectsGridState(gridData);
@@ -749,7 +769,6 @@ export function drawObjectsAndNpcs(ctx) {
         console.log(entityPaths);
     }
 
-    // Manage object and NPC movement
     const originalValuesObject = {};
     const originalValuesNpc = {};
     for (let y = 0; y < gridData.length; y++) {
