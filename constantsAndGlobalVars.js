@@ -178,6 +178,8 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/marketStreet.png",
     "./resources/backgrounds/researchRoom.png",
     "./resources/backgrounds/riverCrossing.png",
+    "./resources/backgrounds/riverCrossingBridgeHalfComplete.png",
+    "./resources/backgrounds/riverCrossingBridgeComplete.png",
     "./resources/backgrounds/roadIntoTown.png",
     "./resources/backgrounds/alley.png",
     "./resources/backgrounds/sewer.png",
@@ -185,6 +187,16 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/stablesTemp.png",
     "./resources/backgrounds/stinkingDump.png",
     "./resources/backgrounds/testWide.png",
+
+    //FOREGROUNDS
+    "./resources/foregrounds/libraryFoyer.png",
+    "./resources/foregrounds/marketStreet.png",
+    "./resources/foregrounds/riverCrossing.png",
+    "./resources/foregrounds/riverCrossingBridgeHalfComplete.png",
+    "./resources/foregrounds/riverCrossingBridgeComplete.png",
+    "./resources/foregrounds/sewer.png",
+    "./resources/foregrounds/stables.png",
+    "./resources/foregrounds/stablesTemp.png",
 
     //OBJECTS
     "./resources/objects/images/banana.png",
