@@ -2063,16 +2063,20 @@ function decideDrawingOrder() {
         return false;
     }
 
-    let highestForegroundRow = -1;
+    let nearestDistance = Infinity;
+
+    // Find the nearest 'f' zone to the player
     for (let y = 0; y < foregroundGrid.length; y++) {
         for (let x = 0; x < foregroundGrid[y].length; x++) {
             const cellValue = foregroundGrid[y][x];
             
             if (cellValue.startsWith('f')) {
-                if (y > highestForegroundRow) {
-                    nearestForegroundObject = { fNumber: cellValue, x, y };
+                const distance = Math.sqrt(Math.pow(playerPosition.x - x, 2) + Math.pow(playerPosition.y - y, 2));
+                
+                if (distance < nearestDistance) {
                     selectedFNumber = cellValue;
-                    highestForegroundRow = y;
+                    nearestDistance = distance;
+                    nearestForegroundObject = { fNumber: cellValue, x, y };
                 }
             }
         }
@@ -2083,12 +2087,16 @@ function decideDrawingOrder() {
         return false;
     }
 
+    console.log("Nearest foreground object: ", selectedFNumber);
+
+    // Now, we will find the highest row for only the selected foreground object (nearest one)
     let highestRow = -1;
     let highestRowColumn = -1;
 
     for (let y = 0; y < foregroundGrid.length; y++) {
         for (let x = 0; x < foregroundGrid[y].length; x++) {
             if (foregroundGrid[y][x] === selectedFNumber) {
+                // Only consider the rows for the selected foreground object
                 if (y > highestRow) {
                     highestRow = y;
                     highestRowColumn = x;
@@ -2099,14 +2107,16 @@ function decideDrawingOrder() {
 
     console.log("Highest row for foreground object " + selectedFNumber + ": Row " + highestRow + ", Column " + highestRowColumn);
 
+    // Compare the player's row to the highest row of the nearest foreground object
     if (highestPlayerRow > highestRow) {
         console.log("Player's row is higher than the foreground object's row.");
-        return true;
+        return true; // Player drawn on top of the foreground
     } else {
         console.log("Foreground object's row is higher than or equal to the player's row.");
-        return false;
+        return false; // Foreground drawn on top of the player
     }
 }
+
 
 //-------------------------------------------------------------------------------------------------------------
 
