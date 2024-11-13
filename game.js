@@ -108,15 +108,11 @@ async function movePlayerTowardsTarget() {
 
     const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; 
 
+    //change speed as moves further away
     if (cellValue.startsWith('w')) {
-        const roughness = parseInt(cellValue.slice(1));  // Extract the 100-255 value
-        //console.log("w value: " + roughness);
-    
+        const roughness = parseInt(cellValue.slice(1));
         const factor = 0.4 + ((roughness - 100) / 155) * 0.4;
-    
         const adjustedSpeed = getPlayerObject().baselineSpeedForRoom * factor;
-    
-        //console.log("Adjusted Speed:", adjustedSpeed);
         setPlayerObject('speed', adjustedSpeed);
     }    
 
@@ -212,13 +208,14 @@ async function movePlayerTowardsTarget() {
 
     const movementStatus = getPlayerMovementStatus();
 
+    //animation sprite swap functionality
     if (movementStatus[0] === 'moving') {
         player.frameCount++;
-        //console.log(player.frameCount);
         setPlayerObject('frameCount', player.frameCount);
     
         if (player.frameCount % 10 === 0) {
-            const spriteType = player.frameCount % 40 === 0 ? "move1" : "move2";
+            const spriteFrame = (Math.floor(player.frameCount / 20) % 2) + 1;// /20 is the speed, larger = slower and % 2 is the number of animation states per cycle
+            const spriteType = `move${spriteFrame}`;
             player.activeSprite = `${spriteType}_${direction}`;
             setPlayerObject('activeSprite', player.activeSprite);
         }
@@ -2062,7 +2059,6 @@ function isPlayerCellOpaque(playerImage, cellX, cellY) {
 }
 
 function decideDrawingOrder() {
-
     const trackingGrid = getTrackingGrid('all');
     const foregroundGrid = getForegroundsData()[getCurrentScreenId()];
     let nearestForegroundObject = null;
