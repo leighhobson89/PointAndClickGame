@@ -24,11 +24,11 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'den';
+export const INITIAL_GAME_ID_NORMAL = 'roadIntoTown';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/den.png';
-export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/den.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/roadIntoTown.png';
+export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
@@ -44,9 +44,9 @@ export const COLOR_TEXT_PLAYER = 'rgb(255,255,255)';
 export const shouldNotBeResizedArray = ['objectParrakeet', 'objectDonkeyFake']; //add any animating objects that should not be resized
 
 export let playerObject = {
-    originalWidth: 50,
+    originalWidth: 65,
     originalHeight: 140,
-    width: 50,
+    width: 65,
     height: 140,
     speed: getWalkSpeedPlayer(),
     baselineSpeedForRoom: getWalkSpeedPlayer(),

@@ -381,8 +381,8 @@
         "bgUrl": "./resources/backgrounds/roadIntoTown.png",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
-        "scalingPlayerSpeed": 1, 
-        "scalingPlayerSize": 1,
+        "scalingPlayerSpeed": 1.5, 
+        "scalingPlayerSize": 2,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
