@@ -43,7 +43,6 @@ export async function playCutsceneGameIntro() {
         //await new Promise with 50ms delay and then setBeginGameStatus(false) and the dialogue engine and remove narrator if necessary and update grid all inside promise
         //resolve promise
 
-
         //final animate to starting screen
         await animateTransitionAndChangeBackground(getInitialScreenId(), getInitialStartGridReference().x, getInitialStartGridReference().y);
         resolve();

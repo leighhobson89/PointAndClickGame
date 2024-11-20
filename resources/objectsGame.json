@@ -785,6 +785,91 @@
       },
       "comment": "Key for unlocking door to researchRoom from libraryFoyer"
     },
+    "objectDoorMarketStreetLibraryFoyer": {
+      "name": {
+        "en": "Library Entrance Door",
+        "es": "Puerta de Entrada de la Biblioteca",
+        "de": "Bibliothekseingangstür",
+        "it": "Porta di Ingresso della Biblioteca",
+        "fr": "Porte d'Entrée de la Bibliothèque"
+    },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": true,
+        "doorToOpenCloseOnOtherSide": "objectDoorLibraryFoyerMarketStreet",
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": false,
+        "alreadyUsed": true
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "openCloseGenericUnlockedDoor",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "marketStreet",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/marketStreet_Exit_LibraryFoyerClosed.png",
+        "s2": "./resources/objects/images/marketStreet_Exit_LibraryFoyerOpen.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 19,
+        "y": 40
+      },
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "openCloseScaleFactorX": 0.2,
+      "openCloseScaleFactorY": 1,
+      "dimensions": {
+        "originalWidth": 3.5,
+        "originalHeight": 10,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "door from marketStreet to libraryFoyer, can be opened and closed from the start"
+    },
     "objectDoorLibraryFoyerMarketStreet": {
       "name": {
         "en": "Library Exit Door",
@@ -802,7 +887,7 @@
         "canPush": false,
         "canPull": false,
         "canOpen": true,
-        "doorToOpenCloseOnOtherSide": "",
+        "doorToOpenCloseOnOtherSide": "objectDoorMarketStreetLibraryFoyer",
         "canPickUp": false,
         "canPickUpNow": true,
         "canUse": true,
@@ -955,6 +1040,91 @@
         "height": 0
       },
       "comment": "door from libraryFoyer to researchRoom, opened by using objectKeyResearchRoom on it"
+    },
+    "objectDoorMarketStreetCarpenter": {
+      "name": {
+          "en": "Carpenter Workshop Entrance Door",
+          "es": "Puerta de Entrada del Taller de Carpintería",
+          "de": "Eingangstür der Tischlerwerkstatt",
+          "it": "Porta di Ingresso della Falegnameria",
+          "fr": "Porte d'Entrée de l'Atelier de Menuiserie"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": true,
+        "doorToOpenCloseOnOtherSide": "",
+        "canPickUp": false,
+        "canPickUpNow": true,
+        "canUse": true,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": false,
+        "alreadyUsed": true
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "openCloseGenericUnlockedDoor",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",    
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "marketStreet",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/marketStreet_Exit_CarpenterClosed.png",
+        "s2": "./resources/objects/images/marketStreet_Exit_CarpenterOpen.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": {
+          "x": 0,
+          "y": 0
+        },
+        "s2": {
+          "x": 26.1,
+          "y": 0
+        }
+      },
+      "inventoryUrl": "",
+      "gridPosition": {
+        "x": 38,
+        "y": 35
+      },
+      "offset": {
+        "x": -0.3,
+        "y": 0
+      },
+      "visualPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
+      "dimensions": {
+        "originalWidth": 2,
+        "originalHeight": 5,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "door from marketStreet to carpenter workshop, can be opened and closed from the start"
     },
     "objectDoorToDen": {
       "name": {

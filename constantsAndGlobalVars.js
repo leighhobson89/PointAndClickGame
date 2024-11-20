@@ -24,10 +24,10 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'roadIntoTown';
+export const INITIAL_GAME_ID_NORMAL = 'marketStreet';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/roadIntoTown.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/marketStreet.png';
 export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
@@ -247,6 +247,8 @@ export const arrayOfGameImages = [
     "./resources/objects/images/keyDenInv.png",
     "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
     "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png",
+    "./resources/objects/images/marketStreet_Exit_LibraryFoyerClosed.png",
+    "./resources/objects/images/marketStreet_Exit_LibraryFoyerOpen.png",
     "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
     "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png",
     "./resources/objects/images/machine.png",
@@ -302,6 +304,34 @@ export const arrayOfGameImages = [
     "./resources/npcs/townDogRight.png",
     "./resources/npcs/womanLostMirrorLeft.png",
     "./resources/npcs/womanLostMirrorRight.png",
+
+    //PLAYER
+    "./resources/player/still_up.png",
+    "./resources/player/move1_up.png",
+    "./resources/player/move2_up.png",
+    "./resources/player/still_down.png",
+    "./resources/player/move1_down.png",
+    "./resources/player/move2_down.png",
+    "./resources/player/still_left.png",
+    "./resources/player/move1_left.png",
+    "./resources/player/move2_left.png",
+    "./resources/player/move3_left.png",
+    "./resources/player/move4_left.png",
+    "./resources/player/move5_left.png",
+    "./resources/player/move6_left.png",
+    "./resources/player/move7_left.png",
+    "./resources/player/move8_left.png",
+    "./resources/player/move9_left.png",
+    "./resources/player/still_right.png",
+    "./resources/player/move1_right.png",
+    "./resources/player/move2_right.png",
+    "./resources/player/move3_right.png",
+    "./resources/player/move4_right.png",
+    "./resources/player/move5_right.png",
+    "./resources/player/move6_right.png",
+    "./resources/player/move7_right.png",
+    "./resources/player/move8_right.png",
+    "./resources/player/move9_right.png",
 
     //MOUSEPOINTER
     "./resources/mouse/mouseClickInteresting.png",
