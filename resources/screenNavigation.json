@@ -189,7 +189,7 @@
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSpeed": 1.2, 
-        "scalingPlayerSize": 2,
+        "scalingPlayerSize": 3,
         "exits": {
             "e1": {
                 "connectsTo": "alley",

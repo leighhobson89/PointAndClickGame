@@ -24,11 +24,11 @@ export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png'
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
-export const INITIAL_GAME_ID_NORMAL = 'marketStreet';
+export const INITIAL_GAME_ID_NORMAL = 'den';
 export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/marketStreet.png';
-export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/den.png';
+export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/den.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
@@ -66,7 +66,14 @@ export let playerObject = {
         "move2_left": "./resources/player/move2_left.png",
         "still_right": "./resources/player/still_right.png",
         "move1_right": "./resources/player/move1_right.png",
-        "move2_right": "./resources/player/move2_right.png"
+        "move2_right": "./resources/player/move2_right.png",
+        "move3_right": "./resources/player/move3_right.png",
+        "move4_right": "./resources/player/move4_right.png",
+        "move5_right": "./resources/player/move5_right.png",
+        "move6_right": "./resources/player/move6_right.png",
+        "move7_right": "./resources/player/move7_right.png",
+        "move8_right": "./resources/player/move8_right.png",
+        "move9_right": "./resources/player/move9_right.png"
     }
 };
 

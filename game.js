@@ -214,7 +214,7 @@ async function movePlayerTowardsTarget() {
         setPlayerObject('frameCount', player.frameCount);
     
         if (player.frameCount % 10 === 0) {
-            const spriteFrame = (Math.floor(player.frameCount / 20) % 2) + 1;// /20 is the speed, larger = slower and % 2 is the number of animation states per cycle
+            const spriteFrame = (Math.floor(player.frameCount / 8) % 9) + 1;// /20 is the speed, larger = slower and % 2 is the number of animation states per cycle
             const spriteType = `move${spriteFrame}`;
             player.activeSprite = `${spriteType}_${direction}`;
             setPlayerObject('activeSprite', player.activeSprite);
