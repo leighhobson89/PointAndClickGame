@@ -10,8 +10,6 @@ import {
     getDrawGrid,
     setDrawGrid,
     urlForegroundData,
-    getInitialBackgroundUrl,
-    setInitialBackgroundUrl,
     setInitialScreenId,
     urlNpcsDataDebug,
     urlObjectsDataDebug,
@@ -192,13 +190,11 @@ document.addEventListener("DOMContentLoaded", () => {
         setCurrentScreenId(getInitialScreenId());
 
         if (playIntro) {
-            setInitialBackgroundUrl(PRE_INITIAL_GAME_BACKGROUND);
+            changeCanvasBg(PRE_INITIAL_GAME_BACKGROUND);
         } else {
             setClickPoint({x: null, y: null});
-            setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_NORMAL);
+            changeCanvasBg(INITIAL_GAME_BACKGROUND_URL_NORMAL);
         }
-        
-        setInitialBackgroundImage();
 
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
         resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
@@ -241,8 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         setInitialScreenId(INITIAL_GAME_ID_DEBUG);
         setCurrentScreenId(getInitialScreenId());
-        setInitialBackgroundUrl(INITIAL_GAME_BACKGROUND_URL_DEBUG);
-        setInitialBackgroundImage();
+        changeCanvasBg(INITIAL_GAME_BACKGROUND_URL_DEBUG);
 
         getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
         resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
@@ -1768,6 +1763,12 @@ export function setDynamicBackgroundWithOffset(
     };
 }
 
+export function changeCanvasBg(url) {
+    const canvas = getElements().canvas;
+    const screenTilesWidebgImg = getNavigationData()[getCurrentScreenId()].screenTilesWidebgImg;
+    setDynamicBackgroundWithOffset(canvas, url, 0, 0, screenTilesWidebgImg);
+}
+
 export function handleEdgeScroll() {
     const player = getPlayerObject();
     const canvasWidthInCells = 80;
@@ -1853,13 +1854,6 @@ export function handleEdgeScroll() {
         canvas.style.backgroundPositionX = `${bgPosition}px`;
         setScrollPositionX(bgPosition);
     }
-}
-
-function setInitialBackgroundImage() {
-    const canvas = getElements().canvas;
-
-    const backgroundImageUrl = getInitialBackgroundUrl();
-    canvas.style.backgroundImage = `url(${backgroundImageUrl})`;
 }
 
 async function preloadImages(imageUrls) {

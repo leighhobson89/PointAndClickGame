@@ -1,6 +1,6 @@
-import { getBeginGameStatus, getBridgeState, setBridgeState, getCurrentlyMovingToAction, getForcePlayerLocation, setVerbsBlockedExcept, getVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getElements, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
+import { getBeginGameStatus, getBridgeState, setBridgeState, getCurrentlyMovingToAction, setVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
-import { animateTransitionAndChangeBackground, setDynamicBackgroundWithOffset, drawInventory, showText } from "./ui.js";
+import { changeCanvasBg, animateTransitionAndChangeBackground, drawInventory, showText } from "./ui.js";
 import { gridValueSwapper, moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
@@ -389,7 +389,7 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
     if (bridgeState < 2 && hasMallet) {
         //build bridge section
         if (bridgeState === 0) {
-            changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeHalfComplete.png');
+            changeCanvasBg('./resources/backgrounds/riverCrossingBridgeHalfComplete.png');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's2');
 
             setObjectData(`objectNails`, `interactable.decrementQuantityOnUse`, true);
@@ -400,7 +400,7 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
         } else if (bridgeState === 1) {
             setAnimationInProgress(true);
 
-            changeCanvasBgTemp('./resources/backgrounds/riverCrossingBridgeComplete.png');
+            changeCanvasBg('./resources/backgrounds/riverCrossingBridgeComplete.png');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `activeSpriteUrl`, 's3');
             setObjectData(`objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted`, `interactable.canHover`, false);
             
@@ -515,12 +515,6 @@ async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
     }, 50);
 }
 
-function changeCanvasBgTemp(url) {
-    const canvas = getElements().canvas;
-    const screenTilesWidebgImg = getNavigationData()[getCurrentScreenId()].screenTilesWidebgImg;
-    setDynamicBackgroundWithOffset(canvas, url, 0, 0, screenTilesWidebgImg);
-}
-
 async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, objectId) {
     const gridData = getGridData();
     const navigationData = getNavigationData();
@@ -552,7 +546,7 @@ async function moveDonkeyOffScreen(gridData) {
 
     await waitForAnimationToFinish('donkeyMovedOffScreen');
 
-    changeCanvasBgTemp('./resources/backgrounds/stables.png');
+    changeCanvasBg('./resources/backgrounds/stables.png');
     removeObjectFromEnvironment('objectDonkeyFake', 'stables');
     updateGrid();
     

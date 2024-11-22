@@ -88,12 +88,11 @@ export let playerInventory = {};
 
 //GLOBAL VARIABLES
 export let initialScreenId = '';
-export let initialBackgroundValue = '';
 
 export let gameState;
 let hoverCell = { x: 0, y: 0 };
-let canvasCellWidth = 15;
-let canvasCellHeight = 10;
+let canvasCellWidth = null;
+let canvasCellHeight = null;
 let gridTargetX = null;
 let gridTargetY = null;
 let targetXPlayer = null;
@@ -129,6 +128,7 @@ let previousGameState = null;
 let currentXposNpc = null;
 let currentYposNpc = null;
 let currentSpeaker = null;
+let bottomContainerWidth = null;
 let bottomContainerHeight = null;
 let currentDialogueRowsOptionsIds = {};
 let dialogueOptionsScrollReserve = [];
@@ -1270,14 +1270,6 @@ export function getEarlyExitFromDialogue() {
 
 export function setEarlyExitFromDialogue(value) {
     earlyExitFromDialogue = value;
-}
-
-export function getInitialBackgroundUrl() {
-    return initialBackgroundValue;
-}
-
-export function setInitialBackgroundUrl(value) {
-    initialBackgroundValue = value;
 }
 
 export function getDrawGrid() {

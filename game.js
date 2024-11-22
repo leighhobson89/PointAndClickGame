@@ -898,6 +898,66 @@ export function initializeCanvas() {
     updateCanvasSize();
 }
 
+// export function initializeCanvas() {
+//     const canvas = getElements().canvas;
+//     const ctx = canvas.getContext('2d');
+//     const container = getElements().canvasContainer;
+
+//     // Utility function to adjust sizes and positions of child elements inside bottomContainer
+//     function updateBottomContainerElements() {
+//         const bottomContainer = getElements().bottomContainer;
+//         const dialogueContainer = getElements().dialogueContainer;
+//         const verbsInventoryContainer = getElements().verbsInventoryContainer;
+        
+//         // Adjust dialogue container's height to match bottom container
+//         dialogueContainer.style.height = `${bottomContainer.offsetHeight * 0.4}px`;
+
+//         // Adjust verbs and inventory container
+//         verbsInventoryContainer.style.height = `${bottomContainer.offsetHeight * 0.6}px`;
+
+//         // Dynamically adjust button sizes or other content
+//         const buttons = bottomContainer.querySelectorAll('.btn');
+//         buttons.forEach(button => {
+//             button.style.height = `${bottomContainer.offsetHeight * 0.15}px`;
+//             button.style.fontSize = `${bottomContainer.offsetHeight * 0.05}px`;
+//         });
+
+//         // Adjust inventory items size to fit the container dynamically
+//         const inventoryItems = bottomContainer.querySelectorAll('.inventory-item img');
+//         inventoryItems.forEach(item => {
+//             item.style.width = `${bottomContainer.offsetHeight * 0.1}px`;
+//             item.style.height = `${bottomContainer.offsetHeight * 0.1}px`;
+//         });
+//     }
+
+//     function updateCanvasSize() {
+//         const bottomContainerHeight = getElements().bottomContainer.offsetHeight;
+
+//         setBottomContainerHeight(bottomContainerHeight - 10);
+
+//         canvas.width = 1280; //1280
+//         canvas.height = 720; //720
+
+//         container.style.width = '100%';
+//         container.style.height = `${canvas.height}px`;
+
+//         setCanvasCellWidth(canvas.width / getGridSizeX());
+//         setCanvasCellHeight(canvas.height / getGridSizeY());
+
+//         canvas.style.backgroundSize = `${canvas.width}px ${canvas.height}px`;
+
+//         drawDebugGrid(getDrawGrid());
+
+//         updateBottomContainerElements();
+//     }
+
+//     window.addEventListener('load', updateCanvasSize);
+
+//     canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
+
+//     updateCanvasSize();
+// }
+
 
 export function initializePlayerPosition(gridX, gridY) {
     const player = getPlayerObject();
