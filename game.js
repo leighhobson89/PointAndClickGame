@@ -213,7 +213,7 @@ async function movePlayerTowardsTarget() {
         setPlayerObject('frameCount', player.frameCount);
     
         const isHorizontal = direction === 'right' || direction === 'left';
-        const frameCount = isHorizontal ? 9 : 2;
+        const frameCount = isHorizontal ? 9 : 3;
         let frameSpeed = isHorizontal ? 4 : 12;
 
         const totalFrames = (frameCount * 2) - 2;
@@ -222,10 +222,6 @@ async function movePlayerTowardsTarget() {
         const spriteFrame = isReversed
             ? frameCount - (animationIndex - frameCount + 1)
             : animationIndex + 1;
-    
-        if (!isHorizontal) {
-            frameSpeed *= 2;
-        }
     
         if (spriteFrame === 3 || spriteFrame === 5 || spriteFrame === 7) { // make player movement a bit slower in places to simulate walking movement
             player.speed = player.speed - 0.3;

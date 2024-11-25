@@ -382,7 +382,7 @@
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSpeed": 1, 
-        "scalingPlayerSize": 1.4,
+        "scalingPlayerSize": 1.8,
         "exits": {
             "e1": {
                 "connectsTo": "riverCrossing",
