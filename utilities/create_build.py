@@ -35,25 +35,13 @@ def copy_files_to_temp(src_dir, temp_dir):
             shutil.copy2(src_path, dest_path)
             logging.info(f"Copied: {src_path} -> {dest_path}")
 
-def obfuscate_js(file_path):
-    """Obfuscate JavaScript file by renaming functions and variables."""
-    try:
-        logging.info(f"Obfuscating JavaScript: {file_path}")
-        subprocess.run(f"npx javascript-obfuscator {file_path} --output {file_path} --compact true --control-flow-flattening true", shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Error obfuscating JavaScript: {e}")
-
 def minify_files(root_dir):
-    """Obfuscate and minify JS and HTML files in the temp directory."""
+    """Minify and obfuscate JS and HTML files in the temp directory."""
     for root, dirs, files in os.walk(root_dir):
         for file_name in files:
             file_path = os.path.join(root, file_name)
 
             if file_name.endswith('.js'):
-                # Obfuscate JS before minifying
-                obfuscate_js(file_path)
-                
-                # Then minify the JS file
                 logging.info(f"Minifying JavaScript: {file_path}")
                 try:
                     subprocess.run(f"npx terser {file_path} -o {file_path} --compress --mangle", shell=True, check=True)
@@ -98,8 +86,8 @@ def main():
         logging.info(f"Copying files to temporary directory: {temp_dir}")
         copy_files_to_temp(project_root, temp_dir)
 
-        # Obfuscate and minify files in the temporary directory
-        logging.info("Obfuscating and minifying files in temporary directory...")
+        # Minify files in the temporary directory
+        logging.info("Minifying files in temporary directory...")
         minify_files(temp_dir)
 
         # Create the zip from the temporary directory

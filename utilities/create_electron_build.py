@@ -58,9 +58,30 @@ def copy_files_to_desktop(src_dir, dest_dir):
             logging.info(f"Copying {src_file_path} to {dest_file_path}")
             shutil.copy2(src_file_path, dest_file_path)  # This will overwrite if it exists
 
-import os
-import subprocess
-import logging
+def minify_files(root_dir):
+    """Minify JavaScript and HTML files in the specified directory, excluding files in IGNORE_LIST."""
+    for root, dirs, files in os.walk(root_dir):
+        for file_name in files:
+            # Skip files that are in the IGNORE_LIST
+            if file_name in IGNORE_LIST:
+                logging.info(f"Ignoring file for minification: {os.path.join(root, file_name)}")
+                continue
+
+            file_path = os.path.join(root, file_name)
+
+            if file_name.endswith('.js'):
+                logging.info(f"Minifying JavaScript: {file_path}")
+                try:
+                    subprocess.run(f"npx terser {file_path} -o {file_path} --compress --mangle", shell=True, check=True)
+                except subprocess.CalledProcessError as e:
+                    logging.error(f"Error minifying JavaScript: {e}")
+
+            elif file_name.endswith('.html'):
+                logging.info(f"Minifying HTML: {file_path}")
+                try:
+                    subprocess.run(f"npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o {file_path} {file_path}", shell=True, check=True)
+                except subprocess.CalledProcessError as e:
+                    logging.error(f"Error minifying HTML: {e}")
 
 def run_npm_build(project_dir):
     """Run npm build in the specified project directory."""
@@ -84,7 +105,6 @@ def run_npm_build(project_dir):
     except FileNotFoundError:
         logging.error("npm is not found. Please ensure that Node.js is installed and added to your PATH.")
 
-
 def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(description='Build the Electron application.')
@@ -103,6 +123,9 @@ def main():
 
     # Copy files to the Electron project directory
     copy_files_to_desktop(src_dir, dest_dir)
+
+    # # Minify files in the destination directory
+    # minify_files(dest_dir)   NOT WORKING BECAUSE IT MINIFIES EVERYTHING EVEN NODE FILES
 
     # Run npm build
     run_npm_build(dest_dir)
