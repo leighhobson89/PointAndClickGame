@@ -4,16 +4,12 @@ import {
     setLanguage,
     setLocalization,
 } from './constantsAndGlobalVars.js';
+import { loadJsonResource, validateObjectRoot } from './src/application/readiness.mjs';
 
 let localizationData = {};
 
 async function fetchLocalization() {
-    try {
-        const response = await fetch('localization.json');
-        localizationData = await response.json();
-    } catch (error) {
-        console.error('Error loading localization:', error);
-    }
+    localizationData = await loadJsonResource(fetch, 'localization.json', 'Localisation data', validateObjectRoot);
     return localizationData;
 }
 

@@ -1,3 +1,6 @@
+import { createInitialGameState, assertValidGameState } from './src/state/game-state.mjs';
+import { createGameStore, gameActions } from './src/state/store.mjs';
+
 //DEBUG
 export let debugFlag = false;
 export let debugOptionFlag = false;
@@ -87,6 +90,14 @@ export let playerObject = {
 };
 
 export let playerInventory = {};
+
+const initialPlayerTemplate = JSON.parse(JSON.stringify(playerObject));
+export const gameStore = createGameStore(createInitialGameState({
+    player: initialPlayerTemplate,
+    roomId: INITIAL_GAME_ID_NORMAL,
+}));
+playerObject = gameStore.getState().player;
+playerInventory = gameStore.getState().inventory;
 
 //GLOBAL VARIABLES
 export let initialScreenId = '';
@@ -416,6 +427,7 @@ export function getCurrentScreenId() {
 
 export function setCurrentScreenId(value) {
     currentScreenId = value;
+    gameStore.dispatch(gameActions.setLocation('currentRoomId', value));
 }
 
 export function getPreviousScreenId() {
@@ -424,6 +436,7 @@ export function getPreviousScreenId() {
 
 export function setPreviousScreenId(value) {
     previousScreenId = value;
+    gameStore.dispatch(gameActions.setLocation('previousRoomId', value));
 }
 
 export function getNextScreenId() {
@@ -432,6 +445,7 @@ export function getNextScreenId() {
 
 export function setNextScreenId(value) {
     nextScreenId = value;
+    gameStore.dispatch(gameActions.setLocation('nextRoomId', value));
 }
 
 export function getGridData() {
@@ -453,6 +467,7 @@ export function getAllGridData() {
 
 export function setGridData(value) {
     gridData = value;
+    gameStore.dispatch(gameActions.setContent('grids', value));
 }
 
 export function getNavigationData() {
@@ -461,6 +476,7 @@ export function getNavigationData() {
 
 export function setNavigationData(value) {
     navigationData = value;
+    gameStore.dispatch(gameActions.setContent('navigation', value));
 }
 
 export function getObjectData() {
@@ -469,10 +485,12 @@ export function getObjectData() {
 
 export function setObjectsData(value) { // purposely spelt this way because we have a 'pre' setter called setObjectData(value) in handleCommands.js that provides an easier interface for setting thevalues faster
     objectData = value;
+    gameStore.dispatch(gameActions.setContent('objects', value));
 }
 
 export function setDialoguesData(value) {
     dialogueData = value;
+    gameStore.dispatch(gameActions.setContent('dialogue', value));
 }
 
 export function getDialogueData() {
@@ -481,6 +499,7 @@ export function getDialogueData() {
 
 export function setNpcsData(value) {
     npcData = value;
+    gameStore.dispatch(gameActions.setContent('npcs', value));
 }
 
 export function getForegroundsData() {
@@ -489,6 +508,7 @@ export function getForegroundsData() {
 
 export function setForegroundsData(value) {
     foregroundsData = value;
+    gameStore.dispatch(gameActions.setContent('foregrounds', value));
 }
 
 export function getNpcData() {
@@ -501,6 +521,7 @@ export function getInitialScreenId() {
 
 export function setInitialScreenId(value) {
     initialScreenId = value;
+    gameStore.dispatch(gameActions.setLocation('initialRoomId', value));
 }
 
 export function getInitialStartGridReference() {
@@ -508,15 +529,17 @@ export function getInitialStartGridReference() {
 }
 
 export function getPlayerObject() {
-    return playerObject;
+    return gameStore.getState().player;
 }
 
 export function setPlayerObject(property, value) {
-    playerObject[property] = value;
+    gameStore.dispatch(gameActions.setPlayer(property, value));
+    playerObject = gameStore.getState().player;
 }
 
 export function setGameStateVariable(value) {
     gameState = value;
+    gameStore.dispatch(gameActions.setPresentationMode(value));
 }
 
 export function getGameStateVariable() {
@@ -536,32 +559,145 @@ export function setLanguageChangedFlag(value) {
 }
 
 export function resetAllVariables() {
+    const currentState = gameStore.getState();
+    const nextState = createInitialGameState({
+        generation: currentState.session.generation,
+        roomId: initialScreenId || INITIAL_GAME_ID_NORMAL,
+        player: initialPlayerTemplate,
+        language,
+        selectedLanguage: languageSelected,
+        oldLanguage,
+        audioMuted: Boolean(audioMuted),
+        content: currentState.content,
+    });
+    gameStore.dispatch(gameActions.replace(nextState));
 
+    playerObject = gameStore.getState().player;
+    playerInventory = gameStore.getState().inventory;
+    gridData = nextState.content.grids;
+    navigationData = nextState.content.navigation;
+    objectData = nextState.content.objects;
+    dialogueData = nextState.content.dialogue;
+    npcData = nextState.content.npcs;
+    foregroundsData = nextState.content.foregrounds;
+    currentScreenId = nextState.location.currentRoomId;
+    previousScreenId = nextState.location.previousRoomId;
+    nextScreenId = nextState.location.nextRoomId;
+    gameState = nextState.presentation.mode;
+
+    hoverCell = { x: 0, y: 0 };
+    canvasCellWidth = null;
+    canvasCellHeight = null;
+    gridTargetX = null;
+    gridTargetY = null;
+    targetXPlayer = null;
+    targetYPlayer = null;
+    targetXEntity = {};
+    targetYEntity = {};
+    exitNumberToTransitionTo = null;
+    zPosHover = null;
+    upcomingAction = null;
+    originalValueInCellWhereObjectPlaced = {};
+    originalValueInCellWhereNpcPlaced = {};
+    originalValueInCellWhereObjectPlacedNew = {};
+    originalValueInCellWhereNpcPlacedNew = {};
+    originalGridState = {};
+    resizedObjectsGridState = {};
+    resizedNpcsGridState = {};
+    preAnimationGridStates = [];
+    currentStartIndexInventory = 0;
+    displayText = {};
+    objectToBeUsedWithSecondItem = null;
+    secondItemAlreadyHovered = null;
+    textQueue = [];
+    previousGameState = null;
+    currentXposNpc = null;
+    currentYposNpc = null;
+    currentSpeaker = null;
+    bottomContainerWidth = null;
+    bottomContainerHeight = null;
+    currentDialogueRowsOptionsIds = {};
+    dialogueOptionsScrollReserve = [];
+    currentExitOptionRow = undefined;
+    dialogueRows = [];
+    dialogueOptionClicked = undefined;
+    dialogueTextClicked = undefined;
+    removedDialogueOptions = [];
+    currentExitOptionText = null;
+    currentScrollIndexDialogue = 0;
+    resolveDialogueOptionClick = undefined;
+    dialogueScrollCount = 0;
+    exitOptionIndex = -1;
+    clickPoint = null;
+    scrollPositionX = undefined;
+    scrollDirection = 0;
+    swappedDialogueObject = {};
+    pendingEvent = [];
+    verbsBlockedExcept = [];
+    forcePlayerLocation = [];
+    bridgeState = 0;
+    playerDirection = 'right';
+    playerMovementStatus = [];
+    currentForegroundImage = null;
+    currentPlayerImage = null;
+    trackingGrid = Array.from({ length: getGridSizeY() }, () => Array(getGridSizeX()).fill('-'));
+
+    languageChangedFlag = false;
+    beginGameState = true;
+    gameInProgress = false;
+    transitioningToAnotherScreen = false;
+    transitioningNow = false;
+    currentlyMovingToAction = false;
+    hoveringInterestingObjectOrExit = false;
+    lookingForAlternativePathToNearestWalkable = false;
+    verbConstructionActive = null;
+    waitingForSecondItem = false;
+    isDisplayingText = false;
+    objectOriginalValueUpdatedYet = false;
+    animationInProgress = false;
+    transitioningToDialogueState = false;
+    readyToAdvanceNpcQuestPhase = false;
+    triggerQuestPhaseAdvance = false;
+    canExitDialogueAtThisPoint = false;
+    scrollingActive = false;
+    earlyExitFromDialogue = false;
+    drawGrid = false;
+    cantGoThatWay = false;
+    currentScreenHasForegroundItems = true;
+    foregroundGridProcessed = false;
+    animationFinishedFlag = [];
+
+    return gameStore.getSnapshot();
 }
 
 export function captureGameStatusForSaving() {
-    let gameState = {};
-
-    // Game variables
-
-    // Flags
-
-    // UI elements
-
-    gameState.language = getLanguage();
-
-    return gameState;
+    return gameStore.getSnapshot();
 }
 export function restoreGameStatus(gameState) {
     return new Promise((resolve, reject) => {
         try {
-            // Game variables
-
-            // Flags
-
-            // UI elements
-
-            setLanguage(gameState.language);
+            assertValidGameState(gameState);
+            gameStore.dispatch(gameActions.replace(gameState));
+            const restored = gameStore.getState();
+            playerObject = restored.player;
+            playerInventory = restored.inventory;
+            initialScreenId = restored.location.initialRoomId;
+            currentScreenId = restored.location.currentRoomId;
+            previousScreenId = restored.location.previousRoomId;
+            nextScreenId = restored.location.nextRoomId;
+            gridData = restored.content.grids;
+            navigationData = restored.content.navigation;
+            objectData = restored.content.objects;
+            dialogueData = restored.content.dialogue;
+            npcData = restored.content.npcs;
+            foregroundsData = restored.content.foregrounds;
+            language = restored.settings.language;
+            languageSelected = restored.settings.selectedLanguage;
+            oldLanguage = restored.settings.oldLanguage;
+            audioMuted = restored.settings.audioMuted;
+            gameState = restored.presentation.mode;
+            bridgeState = restored.quests.bridgeState;
+            removedDialogueOptions = restored.dialogue.removedOptions;
 
             resolve();
         } catch (error) {
@@ -580,6 +716,7 @@ export function getLocalization() {
 
 export function setLanguage(value) {
     language = value;
+    gameStore.dispatch(gameActions.setSetting('language', value));
 }
 
 export function getLanguage() {
@@ -588,6 +725,7 @@ export function getLanguage() {
 
 export function setOldLanguage(value) {
     oldLanguage = value;
+    gameStore.dispatch(gameActions.setSetting('oldLanguage', value));
 }
 
 export function getOldLanguage() {
@@ -596,6 +734,7 @@ export function getOldLanguage() {
 
 export function setAudioMuted(value) {
     audioMuted = value;
+    gameStore.dispatch(gameActions.setSetting('audioMuted', value));
 }
 
 export function getAudioMuted() {
@@ -636,6 +775,7 @@ export function getLanguageSelected() {
 
 export function setLanguageSelected(value) {
     languageSelected = value;
+    gameStore.dispatch(gameActions.setSetting('selectedLanguage', value));
 }
 
 export function getBeginGameStatus() {
@@ -908,6 +1048,8 @@ export function setOriginalValueInCellWhereNpcPlacedNew(roomId, gridX, gridY, np
 
 export function setPlayerInventory(value) {
     playerInventory = value;
+    gameStore.dispatch(gameActions.setInventory(value));
+    playerInventory = gameStore.getState().inventory;
 }
 
 export function getPlayerInventory() {
@@ -1167,11 +1309,13 @@ export function getQuestPhaseNpc(npcId) {
 }
 
 export function setRemovedDialogueOptions(npcId, questPhase, optionId) {
-    removedDialogueOptions.push({
+    const removedOption = {
         npcId: npcId,
         questPhase: questPhase,
         optionId: optionId
-    });
+    };
+    removedDialogueOptions.push(removedOption);
+    gameStore.dispatch(gameActions.addRemovedDialogueOption(removedOption));
 }
 
 export function getRemovedDialogueOptions() {
@@ -1332,6 +1476,7 @@ export function getForcePlayerLocation() {
 
 export function setBridgeState(value) {
     bridgeState = value;
+    gameStore.dispatch(gameActions.setBridgeState(value));
 }
 
 export function getBridgeState() {
@@ -1355,12 +1500,31 @@ export function getPlayerMovementStatus() {
 }
 
 export function getActivePlayerSprite() {
-    return playerObject.sprites[playerObject.activeSprite];
+    const player = getPlayerObject();
+    return player.sprites[player.activeSprite];
 }
 
 export function setActivePlayerSprite(direction, isMoving) {
-    const movementState = isMoving ? (playerObject.activeSprite === `move1_${direction}` ? 'move2' : 'move1') : 'still';
-    playerObject.activeSprite = `${movementState}_${direction}`;
+    const player = getPlayerObject();
+    const movementState = isMoving ? (player.activeSprite === `move1_${direction}` ? 'move2' : 'move1') : 'still';
+    setPlayerObject('activeSprite', `${movementState}_${direction}`);
+}
+
+export function startCanonicalSession() {
+    gameStore.dispatch(gameActions.startSession());
+    document?.body?.setAttribute('data-session-generation', String(gameStore.getState().session.generation));
+}
+
+export function disposeCanonicalSession() {
+    gameStore.dispatch(gameActions.disposeSession());
+}
+
+export function getCanonicalGameState() {
+    return gameStore.getSnapshot();
+}
+
+export function subscribeToGameState(subscriber) {
+    return gameStore.subscribe(subscriber);
 }
 
 export function getForegroundsList() {

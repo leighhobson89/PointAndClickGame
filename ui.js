@@ -153,21 +153,27 @@ import {
 } from "./saveLoadGame.js";
 
 import { playCutsceneGameIntro } from './events.js';
+import {
+    hasExplicitCoordinates,
+    loadJsonResource,
+    validateGridData,
+    validateNavigationData,
+    validateObjectRoot,
+    validatePropertyRoot,
+    waitForTransition,
+} from './src/application/readiness.mjs';
 
 let textTimer;
+let assetsReadyPromise = Promise.resolve();
+let localizationReadyPromise = Promise.resolve();
 
-document.addEventListener("DOMContentLoaded", () => {
+export function bootApplication() {
     setElements();
     
     getElements().inventoryUpArrow.classList.add("arrow-disabled");
     getElements().inventoryDownArrow.classList.add("arrow-disabled");
 
-    async function preLoadGameImages(arrayOfImages) {
-        await preloadImages(arrayOfImages);
-        console.log("Images preloaded, initializing game...");
-    }
-
-    preLoadGameImages(getArrayOfGameImages());
+    assetsReadyPromise = preloadImages(getArrayOfGameImages());
 
     getElements().customCursor.classList.add("d-none");
     getElements().customCursor.style.transform = "translate(-50%, -50%)";
@@ -175,14 +181,27 @@ document.addEventListener("DOMContentLoaded", () => {
     getElements().newGameMenuButton.addEventListener("click", async (event) => {
         const playIntro = true; //DEBUG: true to play the begin game intro sequence
 
-        await loadGameData(
-            urlWalkableJSONS,
-            urlNavigationData,
-            urlObjectsData,
-            urlDialogueData,
-            urlNpcsData,
-            urlForegroundData
-        );
+        clearFatalLoadError();
+        setNewGameLoading(true);
+        try {
+            await Promise.all([
+                loadGameData(
+                    urlWalkableJSONS,
+                    urlNavigationData,
+                    urlObjectsData,
+                    urlDialogueData,
+                    urlNpcsData,
+                    urlForegroundData
+                ),
+                assetsReadyPromise,
+                localizationReadyPromise,
+            ]);
+        } catch (error) {
+            showFatalLoadError(error);
+            return;
+        } finally {
+            setNewGameLoading(false);
+        }
 
         initializeEntityPathsObject();
 
@@ -227,14 +246,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
-        await loadGameData(
-            urlWalkableJSONS,
-            urlNavigationData,
-            urlObjectsDataDebug,
-            urlDialogueData,
-            urlNpcsDataDebug,
-            urlForegroundData
-        );
+        clearFatalLoadError();
+        setNewGameLoading(true);
+        try {
+            await Promise.all([
+                loadGameData(
+                    urlWalkableJSONS,
+                    urlNavigationData,
+                    urlObjectsDataDebug,
+                    urlDialogueData,
+                    urlNpcsDataDebug,
+                    urlForegroundData
+                ),
+                assetsReadyPromise,
+                localizationReadyPromise,
+            ]);
+        } catch (error) {
+            showFatalLoadError(error);
+            return;
+        } finally {
+            setNewGameLoading(false);
+        }
         setInitialScreenId(INITIAL_GAME_ID_DEBUG);
         setCurrentScreenId(getInitialScreenId());
         changeCanvasBg(INITIAL_GAME_BACKGROUND_URL_DEBUG);
@@ -278,27 +310,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     getElements().btnEnglish.addEventListener("click", () => {
-        handleLanguageChange("en");
+        beginLanguageChange("en");
         setGameState(getMenuState());
     });
 
     getElements().btnSpanish.addEventListener("click", () => {
-        handleLanguageChange("es");
+        beginLanguageChange("es");
         setGameState(getMenuState());
     });
 
     getElements().btnGerman.addEventListener("click", () => {
-        handleLanguageChange("de");
+        beginLanguageChange("de");
         setGameState(getMenuState());
     });
 
     getElements().btnItalian.addEventListener("click", () => {
-        handleLanguageChange("it");
+        beginLanguageChange("it");
         setGameState(getMenuState());
     });
 
     getElements().btnFrench.addEventListener("click", () => {
-        handleLanguageChange("fr");
+        beginLanguageChange("fr");
         setGameState(getMenuState());
     });
 
@@ -658,7 +690,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize canvas event listener and set the initial game state
     initializeCanvasEventListener();
     setGameState(getMenuState());
-    handleLanguageChange(getLanguageSelected());
+    beginLanguageChange(getLanguageSelected());
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -820,7 +852,9 @@ function showHideDebugPanel(event) {
         }
     }
 }
-});
+}
+
+document.addEventListener("DOMContentLoaded", bootApplication, { once: true });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1191,61 +1225,57 @@ export async function animateTransitionAndChangeBackground(optionalNewScreenId, 
         getElements().overlayCanvas.classList.remove("hidden");
     });
 
-    getElements().overlayCanvas.addEventListener(
-        "transitionend",
-        () => {
-            const newScreenId = optionalNewScreenId || handleRoomTransition();
-            const exit = "e" + getExitNumberToTransitionTo();
+    await waitForTransition(getElements().overlayCanvas);
+    const newScreenId = optionalNewScreenId || handleRoomTransition();
+    const exit = "e" + getExitNumberToTransitionTo();
 
-            if (optionalNewScreenId) {
-                setNextScreenId(optionalNewScreenId);
-                swapBackgroundOnRoomTransition(newScreenId, true);
-            }
+    if (optionalNewScreenId) {
+        setNextScreenId(optionalNewScreenId);
+        swapBackgroundOnRoomTransition(newScreenId, true);
+    }
 
-            let startPosition;
+    let startPosition;
 
-            if (!optionalStartX && !optionalStartY) {
-                startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
-            } else {
-                startPosition = { "x": optionalStartX, "y": optionalStartY };
-            }
+    if (hasExplicitCoordinates(optionalStartX, optionalStartY)) {
+        startPosition = { "x": optionalStartX, "y": optionalStartY };
+    } else {
+        startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+    }
 
-            const startX = startPosition.x;
-            const startY = startPosition.y;
+    if (!startPosition) throw new Error(`No transition start position is defined for ${getCurrentScreenId()} ${exit}`);
+    const startX = startPosition.x;
+    const startY = startPosition.y;
 
-            initializePlayerPosition(startX, startY);
-            setDisplayText("", null);
-            fadeBackToGameInTransition();
+    initializePlayerPosition(startX, startY);
+    setDisplayText("", null);
+    await fadeBackToGameInTransition();
 
-            setAnimationInProgress(false);
-            console.log("about to clear pre animation grid")
-            setPreAnimationGridState('clear', null, null, null);
+    setAnimationInProgress(false);
+    setPreAnimationGridState('clear', null, null, null);
 
-            if (!optionalStartX && !optionalStartY) {
-                setTransitioningNow(true);
-                canvas.style.pointerEvents = "none";
-                processLeftClickPoint({
-                    x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
-                        .x,
-                    y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition
-                        .y,
-                },
-                false,
-            );
-            }
+    if (!hasExplicitCoordinates(optionalStartX, optionalStartY)) {
+        setTransitioningNow(true);
+        getElements().canvas.style.pointerEvents = "none";
+        processLeftClickPoint({
+            x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.x,
+            y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.y,
+        }, false);
+    }
 
-            setPreviousScreenId(getCurrentScreenId());
-            setCurrentScreenId(newScreenId);
-            setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
-            setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
-            setForegroundGridProcessed(false);
-        }, {
-            once: true
-        },
-    );
+    setPreviousScreenId(getCurrentScreenId());
+    setCurrentScreenId(newScreenId);
+    setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
+    setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
+    setForegroundGridProcessed(false);
 }
 
-export function fadeBackToGameInTransition() {
+function beginLanguageChange(languageCode) {
+    localizationReadyPromise = handleLanguageChange(languageCode);
+    localizationReadyPromise.catch(showFatalLoadError);
+    return localizationReadyPromise;
+}
+
+export async function fadeBackToGameInTransition() {
     getElements().overlayCanvas.classList.add("hidden");
     getElements().overlayCanvas.classList.remove("visible");
 
@@ -1254,16 +1284,9 @@ export function fadeBackToGameInTransition() {
         getElements().overlayCanvas.classList.add("hidden");
     });
 
-    getElements().overlayCanvas.addEventListener(
-        "transitionend",
-        () => {
-            getElements().overlayCanvas.classList.add("hidden");
-            getElements().overlayCanvas.style.display = "none";
-            console.log("fade transition complete!");
-        }, {
-            once: true
-        },
-    );
+    await waitForTransition(getElements().overlayCanvas);
+    getElements().overlayCanvas.classList.add("hidden");
+    getElements().overlayCanvas.style.display = "none";
 }
 
 export function updateInteractionInfo(text, action) {
@@ -1575,46 +1598,24 @@ export async function loadGameData(
     npcUrl,
     gridForegroundsUrl // New URL for the foreground grid data
 ) {
-    try {
-        // Load grid data
-        const gridResponse = await fetch(gridUrl);
-        const gridData = await gridResponse.json();
-        setGridData(gridData);
-        console.log("Grid data loaded:", getGridData());
+    const [gridData, navData, objectsData, dialogueData, npcData, foregroundData] = await Promise.all([
+        loadJsonResource(fetch, gridUrl, 'Walk-grid data', validateGridData),
+        loadJsonResource(fetch, screenNavUrl, 'Navigation data', validateNavigationData),
+        loadJsonResource(fetch, objectsUrl, 'Object data', validatePropertyRoot('objects')),
+        loadJsonResource(fetch, dialogueUrl, 'Dialogue data', validatePropertyRoot('dialogue')),
+        loadJsonResource(fetch, npcUrl, 'NPC data', validatePropertyRoot('npcs')),
+        loadJsonResource(fetch, gridForegroundsUrl, 'Foreground-grid data', validateObjectRoot),
+    ]);
 
-        // Load navigation data
-        const navResponse = await fetch(screenNavUrl);
-        const navData = await navResponse.json();
-        setNavigationData(navData);
-        console.log("Navigation data loaded:", getNavigationData());
+    // Commit only after every resource has loaded and passed its startup contract.
+    setGridData(gridData);
+    setNavigationData(navData);
+    setObjectsData(objectsData);
+    setDialoguesData(dialogueData);
+    setNpcsData(npcData);
+    setForegroundsData(foregroundData);
 
-        // Load object data
-        const objectsResponse = await fetch(objectsUrl);
-        const objectsData = await objectsResponse.json();
-        setObjectsData(objectsData);
-        console.log("Object data loaded:", getObjectData());
-
-        // Load dialogue data
-        const dialogueResponse = await fetch(dialogueUrl);
-        const dialogueData = await dialogueResponse.json();
-        setDialoguesData(dialogueData);
-        console.log("Dialogue data loaded:", getDialogueData());
-
-        // Load NPC data
-        const npcResponse = await fetch(npcUrl);
-        const npcData = await npcResponse.json();
-        setNpcsData(npcData);
-        console.log("Npc data loaded:", getNpcData());
-
-        // Load foreground grid data
-        const foregroundResponse = await fetch(gridForegroundsUrl);
-        const foregroundData = await foregroundResponse.json();
-        setForegroundsData(foregroundData); // Assuming you have this setter function
-        console.log("Foreground grid data loaded:", getForegroundsData());
-
-    } catch (error) {
-        console.error("Error loading game data:", error);
-    }
+    return { gridData, navData, objectsData, dialogueData, npcData, foregroundData };
 }
 
 export function resetSecondItemState() {
@@ -1729,6 +1730,9 @@ export function setDynamicBackgroundWithOffset(
     // add offset as in background position +/- offsetX * getCanvasCellWidth()
     const backgroundImage = new Image();
     backgroundImage.src = imageUrl;
+    // Data/image readiness is awaited before play; update the selected URL
+    // immediately so an older image's late onload cannot overwrite a newer room.
+    canvas.style.backgroundImage = `url(${imageUrl})`;
 
     backgroundImage.onload = function() {
         const imgWidth = backgroundImage.width;
@@ -1745,8 +1749,6 @@ export function setDynamicBackgroundWithOffset(
         const finalHeight = scaledHeight;
 
         canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
-        canvas.style.backgroundImage = `url(${imageUrl})`;
-
         const bgFilename = canvas.style.backgroundImage.split('/').pop().split('\\').pop().replace(/['")]/g, "");
     
         if (getForegroundsList().includes(bgFilename)) {
@@ -1862,11 +1864,31 @@ async function preloadImages(imageUrls) {
             const img = new Image();
             img.src = url;
             img.onload = resolve;
-            img.onerror = reject;
+            img.onerror = () => reject(new Error(`Required image failed to load: ${url}`));
         });
     });
     await Promise.all(promises);
     console.log("All images preloaded");
+}
+
+function setNewGameLoading(isLoading) {
+    const button = getElements().newGameMenuButton;
+    button.disabled = isLoading;
+    button.setAttribute('aria-busy', String(isLoading));
+}
+
+function clearFatalLoadError() {
+    const fatalError = document.getElementById('fatalLoadError');
+    fatalError.textContent = '';
+    fatalError.classList.add('d-none');
+}
+
+function showFatalLoadError(error) {
+    console.error('Unable to start the game:', error);
+    const fatalError = document.getElementById('fatalLoadError');
+    fatalError.textContent = `The game could not start. ${error.message || error}`;
+    fatalError.classList.remove('d-none');
+    setGameState(getMenuState());
 }
 
 export function drawForegroundImageForCurrentScreen() {

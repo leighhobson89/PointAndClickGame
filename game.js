@@ -4,26 +4,31 @@ import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
 import { drawForegroundImageForCurrentScreen, updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
 import { executeInteractionEvent } from './events.js';
+import { disposeCanonicalSession, startCanonicalSession } from './constantsAndGlobalVars.js';
 
 export let entityPaths = {};
 let firstDraw = true;
 let lastUpdatedCells = new Set();
 let lastPlayerPosition = { xStart: 0, yStart: 0, xEnd: 0, yEnd: 0 };
+let animationFrameId = null;
+let canvasLifecycleDisposer = null;
+let gameLoopActive = false;
 
 //--------------------------------------------------------------------------------------------------------
 
 export async function startGame() {
+    disposeGame();
     initializeCanvas();
     setUpObjectsAndNpcs();
     initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
-    if (!getGameInProgress()) {
-        gameLoop();
-        setGameInProgress(true);
-    }
-    
+    gameLoopActive = true;
+    setGameInProgress(true);
+    startCanonicalSession();
+    gameLoop();
 }
 
 export function gameLoop() {
+    if (!gameLoopActive) return;
     const screenData = getNavigationData()[getCurrentScreenId()];
     const screenTilesWide = screenData.screenTilesWidebgImg;
     if (getGameStateVariable() === getInteractiveDialogueState()) {
@@ -86,7 +91,21 @@ export function gameLoop() {
         moveOtherEntitiesOnCurrentScreen();
     }
 
-    requestAnimationFrame(gameLoop);
+    animationFrameId = requestAnimationFrame(gameLoop);
+}
+
+export function disposeGame() {
+    gameLoopActive = false;
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    if (canvasLifecycleDisposer) {
+        canvasLifecycleDisposer();
+        canvasLifecycleDisposer = null;
+    }
+    setGameInProgress(false);
+    disposeCanonicalSession();
 }
 
 async function movePlayerTowardsTarget() {
@@ -816,6 +835,8 @@ export function drawObjectsAndNpcs(ctx, objectTrueNpcFalse) {
 }
 
 export function initializeCanvas() {
+    if (canvasLifecycleDisposer) canvasLifecycleDisposer();
+
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
     const container = getElements().canvasContainer;
@@ -875,8 +896,12 @@ export function initializeCanvas() {
 
         // Update player position based on new cell size
         const player = getPlayerObject();
-        player.xPos = (player.xPos / oldCellWidth) * newCellWidth;
-        player.yPos = (player.yPos / oldCellHeight) * newCellHeight;
+        player.xPos = Number.isFinite(oldCellWidth) && oldCellWidth > 0
+            ? (player.xPos / oldCellWidth) * newCellWidth
+            : player.xPos;
+        player.yPos = Number.isFinite(oldCellHeight) && oldCellHeight > 0
+            ? (player.yPos / oldCellHeight) * newCellHeight
+            : player.yPos;
 
         setPlayerObject('xPos', player.xPos);
         setPlayerObject('yPos', player.yPos);
@@ -886,12 +911,17 @@ export function initializeCanvas() {
         updateBottomContainerElements();
     }
 
-    window.addEventListener('load', updateCanvasSize);
     window.addEventListener('resize', updateCanvasSize);
 
-    canvas.addEventListener('mousemove', (event) => handleMouseMove(event, ctx));
+    const onMouseMove = (event) => handleMouseMove(event, ctx);
+    canvas.addEventListener('mousemove', onMouseMove);
 
     updateCanvasSize();
+
+    canvasLifecycleDisposer = () => {
+        window.removeEventListener('resize', updateCanvasSize);
+        canvas.removeEventListener('mousemove', onMouseMove);
+    };
 }
 
 // export function initializeCanvas() {

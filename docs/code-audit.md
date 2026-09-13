@@ -6,6 +6,8 @@ The project is a genuine playable prototype with unusually substantial authored 
 
 The right strategy is an incremental extraction around the existing game, not a rewrite. First make state observable and testable, then separate pure rules from canvas/DOM effects, validate content, fix persistence, and modernise presentation on top of stable behaviour.
 
+Foundation update (2026-09-13): a versioned serialisable state factory/store now provides the canonical lifecycle snapshot behind the legacy accessors. New sessions replace state, own and dispose their animation frame and session listeners, await validated data/localisation/image readiness, and fail into a visible alert. The remaining legacy modules still require the staged domain extraction described below.
+
 ## Repository snapshot
 
 - Runtime: browser ES modules, HTML canvas, CSS, Bootstrap/jQuery/Popper and LZString from CDNs.

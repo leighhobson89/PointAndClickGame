@@ -19,6 +19,8 @@ The full suite is allowed only if there is no prior full-run record or the lates
 
 The implemented `startup/new-game.spec.cjs` opens the served app in Chromium, selects English, clicks New Game, verifies that the menu closes and the gameplay canvas/action UI appears, and fails on page errors or failed local requests. The initial full run passed in approximately 2.104 seconds of runner time, establishing a valid under-180-second baseline. This is proof of harness operation, not broad product coverage.
 
+The deterministic-state pass adds seven Node unit tests for the state factory/store, live player identity, coordinate handling, transitions, and load failures. Browser coverage now also proves a visible fatal-load path, delayed-image readiness, reduced-motion intro sequencing, real click-to-walk movement, and stable listener counts/session generations across five New Game cycles.
+
 ## Test pyramid
 
 ### Unit tests

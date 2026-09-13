@@ -5,7 +5,8 @@
     "scripts": {
         "start": "node server.js",
         "test": "node tests all",
-        "test:e2e": "node tests all"
+        "test:e2e": "node tests all",
+        "test:unit": "node --test test/unit/*.test.mjs"
     },
     "dependencies": {
         "electron": "^33.0.2",

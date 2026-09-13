@@ -30,6 +30,8 @@ Outcome: one explicit game session can start, reset, save, restore, and dispose.
 
 Exit criteria: five consecutive new sessions have one listener set and identical starting state; a representative mid-puzzle save round-trips.
 
+Implementation status (2026-09-13): the canonical serialisable state factory/store and explicit boot/start/dispose/reset lifecycle are in place. Startup data and image readiness are awaited, session listeners/animation frames are disposed, and five-start E2E coverage passes. Full mid-puzzle persistence and migrations remain Phase 5 work in the master checklist.
+
 ## Phase 2 — Extract pure domain modules
 
 Outcome: game rules can be tested without a browser.
