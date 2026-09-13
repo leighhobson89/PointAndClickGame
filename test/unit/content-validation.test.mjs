@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { buildMapGrid } from '../../src/content/map-grid.mjs';
 import { validateSaveSchema, validateScenarioSchema } from '../../src/content/schemas.mjs';
 import { validateContentBundle } from '../../src/content/validate-content.mjs';
+import { createSaveEnvelope } from '../../src/domain/save/save-format.mjs';
+import { createInitialGameState } from '../../src/state/game-state.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const readJson = (relativePath) => JSON.parse(fs.readFileSync(path.join(root, relativePath), 'utf8'));
@@ -77,6 +79,6 @@ test('content validation rejects broken references, grids, locales, overlaps, an
 test('scenario and save boundaries reject malformed versions and accept their minimal schemas', () => {
     assert.deepEqual(validateScenarioSchema({ schemaVersion: 1, id: 'chapter1.map', seed: 7, facts: {} }), []);
     assert.ok(validateScenarioSchema({ schemaVersion: 2, id: 'bad id', seed: 1.5, facts: [] }).length >= 4);
-    assert.deepEqual(validateSaveSchema({ schemaVersion: 1, state: {} }), []);
-    assert.ok(validateSaveSchema({ schemaVersion: 9, state: null }).length >= 2);
+    assert.deepEqual(validateSaveSchema(createSaveEnvelope({ state: createInitialGameState() })), []);
+    assert.ok(validateSaveSchema({ schemaVersion: 9, payload: null }).length >= 2);
 });

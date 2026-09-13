@@ -119,6 +119,7 @@ let npcData = null;
 let foregroundsData = null;
 let contentContract = null;
 let mapRoomData = null;
+let pristineContent = null;
 let currentScreenId = initialScreenId;
 let previousScreenId = initialScreenId;
 let nextScreenId = initialScreenId;
@@ -390,6 +391,9 @@ export function setElements() {
         menu: document.getElementById('menu'),
         menuTitle: document.getElementById('menuTitle'),
         newGameMenuButton:  document.getElementById('newGame'),
+        continueGameMenuButton: document.getElementById('continueGame'),
+        continueGameDetail: document.getElementById('continueGameDetail'),
+        saveStatus: document.getElementById('saveStatus'),
         resumeGameMenuButton: document.getElementById('resumeFromMenu'),
         loadGameButton: document.getElementById('loadGame'),
         saveGameButton: document.getElementById('saveGame'),
@@ -524,6 +528,31 @@ export function setContentContract(value) {
 export function setMapRoomData(value) {
     mapRoomData = value;
     gameStore.dispatch(gameActions.setContent('mapRoom', value));
+}
+
+/**
+ * The shipped content exactly as validated at load, before the running game
+ * places entities or a puzzle rewrites anything. Saves are stored as a patch
+ * against this, and a restore rebuilds from it, so no save has to carry a copy
+ * of the content bundle.
+ */
+export function setPristineContent(value) {
+    pristineContent = Object.freeze(JSON.parse(JSON.stringify(value)));
+    return pristineContent;
+}
+
+export function getPristineContent() {
+    return pristineContent;
+}
+
+/**
+ * The authored walk-grid value hidden underneath a placed object or NPC, used
+ * when a save records authored grid changes without the placement stamps.
+ */
+export function getUnderlyingCellValue(roomId, gridX, gridY) {
+    const cellKey = `${gridX},${gridY}`;
+    return originalValueInCellWhereObjectPlaced[roomId]?.[cellKey]?.originalValue
+        ?? originalValueInCellWhereNpcPlaced[roomId]?.[cellKey]?.originalValue;
 }
 
 export function getQuestFacts() {

@@ -47,9 +47,15 @@ The Section 3 extraction adds 13 pure-rule and four adapter/application tests, b
 
 The Section 4 debug-reachability pass adds nine Node tests for the scenario schema, registry, fact-effect integrity, fact-derived mutations, checksum determinism, the seeded generator, the critical-path frontier, and the idle tracker, bringing the Node suite to 33. Browser coverage adds the scenario controls themselves: same-seed checksum reproduction, all fourteen fixtures loading cleanly in under a second each, rejection of invalid scenarios before rendering, a real canvas click from `chapter1.map-entry` into the Map, idle probes during a slow walk, teleport validation, inventory presets and structured intents, milestone apply and refusal, repository save/load with simulated storage failure, locale and presentation toggles, the reproduction bundle, the DEBUG panel driving the same controller, a scenario-arranged research-room unlock performed with real clicks, milestone revert to an identical checksum, dialogue node inspection, and deterministic text speed and skipping. A dedicated release-server test proves the tools are absent from production.
 
-Latest full proof (2026-09-13): `node tests all` passed 38/38 browser tests in 78.772 seconds; log `e2e/logs/2026-09-13T17-10-11-980Z-all.log`. The run retained every established startup, navigation, dialogue, save-load, and animation case alongside the new debug-reachability coverage, and stays well inside the 180-second gate.
+The Section 5 save pass adds eleven Node tests for the save format, JSON and grid patching, migration and legacy finalisation, validation, and save policy, bringing the Node suite to 44. Browser coverage adds the player-facing journeys: six milestone save-and-resume round trips through a full page reload, a mid-chapter Continue that proves derived state was rebuilt, a clean new game claiming the resume slot, a milestone checkpointing itself after a real unlock, a declared legacy save migrating, a manual save string moving a game into a fresh session, and three failure paths — corrupt data, an unsupported version, and a storage failure — each asserting that the running session is bit-for-bit unchanged.
 
-Previous full proof (2026-09-13): `node tests all` passed 18/18 browser tests in 35.914 seconds.
+A regression test for BUG-033 samples every animation frame of a real room change and asserts that the displayed background, the current room, and the has-foreground-items flag always agree. It has to run with real motion and real timers: under the reduced-motion startup the fade resolves immediately and the defect's window has no frames in it. The test was verified against the unfixed code, where it reports 23 disagreeing frames.
+
+Latest full proof (2026-09-13): `node tests all` passed 53/53 browser tests in 135.017 seconds; log `e2e/logs/2026-09-13T21-48-29-181Z-all.log`. The run retained every established startup, navigation, dialogue, debug-reachability, and animation case alongside the new save-load coverage.
+
+The margin under the 180-second gate is now the number to watch. It was 101 seconds after Section 4 and is 44 seconds after Section 5, because save journeys are slow by nature — several reload the page. Future browser tests that need a milestone state should arrange it with `setMovementSpeed('instant')` and a scenario rather than by replaying a journey another test already covers.
+
+Previous full proofs (2026-09-13): 38/38 in 78.772 seconds; 18/18 in 35.914 seconds.
 
 ## Test pyramid
 
@@ -65,6 +71,7 @@ Fast Node tests for pure rules:
 - Dialogue node traversal, option conditions, and actions.
 - Localisation interpolation/fallback without `eval`.
 - Initial-state creation, reducers/actions, save serialisation, validation, and migrations.
+- Save patching against shipped content, walk-grid authored deltas, legacy finalisation, and save policy (blocked reasons, milestone checkpoints, autosave rate limiting, storage failure).
 
 Target: hundreds of cases in seconds, with no browser, canvas, remote network, timeouts, or mutable shared fixtures.
 
@@ -98,7 +105,7 @@ Functional area ownership:
 | `inventory` | Add, select, scroll, combine, remove, restore |
 | `verbs` | All nine verbs, two-target flows, cancel/error feedback |
 | `puzzles` | Milestones, prerequisites, alternate paths, no soft-lock |
-| `save-load` | Autosave/manual/export/import/migration/corruption |
+| `save-load` | Autosave/manual/export/import/migration/corruption — implemented in Section 5 |
 | `game-state` | New-game reset, reload, deterministic scenarios |
 | `animation-cutscenes` | Sequencing, skip, transition completion, reduced motion |
 | `rendering-layout` | Stage scaling, layers, representative screenshots/locales |
@@ -123,7 +130,11 @@ Rules for scenario use:
 - Perform the behaviour under test through the ordinary interface.
 - Assert on stable IDs from `inspectSummary()` or on `data-*` attributes, never on translated display text.
 - Prefer `waitForIdle()` to fixed waits; a timeout then names the busy subsystem.
-- `restoreNativeTimers(page)` puts real time back when a test must observe a duration.
+- `restoreNativeTimers(page)` puts real time back when a test must observe a duration. Pair it with `page.emulateMedia({ reducedMotion: 'no-preference' })` when the behaviour under test only exists while an animation is actually animating.
+
+Section 5 added four more helpers to the same file. `canonicalChecksum(page)` digests canonical progress without scenario context, so it can be compared across a page reload; note that the digest includes the presentation mode, so take both readings in the same mode. `derivedRenderState(page)` reports what the renderer rebuilt rather than what a save carried. `returnToMenu(page)` opens the menu the way a player does, and `readSaveSlot`/`clearSaveSlots` inspect and reset stored saves.
+
+One behaviour is worth knowing before writing a save test: loading a scenario commits its facts through the canonical store, and declared milestones checkpoint themselves, so a scenario legitimately writes save slots. Clear the slots after arranging, not before.
 
 The full scenario catalogue and the coverage map live in `debug-test-controls.md` and `e2e/README.md`.
 
@@ -151,7 +162,7 @@ Use stable `data-testid` only where roles/text/stable domain identifiers are ins
 
 ## CI tiers
 
-- Pull request: validation + unit + affected functional areas. The `debug-reachability-browser` job runs `node tests game-state puzzles dialogue --video=retain-on-failure` and uploads `test-reports/` on failure, so a CI failure arrives with its own video and Playwright report.
+- Pull request: validation + unit + affected functional areas. The `debug-reachability-browser` job runs `node tests game-state puzzles dialogue --video=retain-on-failure`, and `save-and-transitions-browser` runs `node tests save-load animation-cutscenes startup --video=retain-on-failure`. Both upload `test-reports/` on failure, so a CI failure arrives with its own video and Playwright report. Save journeys are on every push because progress loss is the one failure a player cannot recover from.
 - Main branch/nightly while full suite remains under 180 seconds: `node tests all`.
 - Release: all automated tiers plus approved manual art/audio/accessibility checklist.
 - Quarantine is temporary, owner/date-bound, and never counts as coverage.

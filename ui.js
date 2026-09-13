@@ -3,6 +3,7 @@ import {
     setForegroundsData, 
     setContentContract,
     setMapRoomData,
+    setPristineContent,
     setForegroundGridProcessed,
     setCurrentScreenHasForegroundItems,
     getForegroundsList,
@@ -143,9 +144,15 @@ import {
     localize
 } from "./localization.js";
 import {
+    continueFromLocalSave,
     copySaveStringToClipBoard,
+    describeResumableSave,
+    hasResumableSave,
+    initialiseSaveSystem,
     loadGame,
     loadGameOption,
+    noteNewGameStarted,
+    noteRoomChangeForAutosave,
     saveGame,
 } from "./saveLoadGame.js";
 
@@ -171,7 +178,10 @@ let debugToolsSession = null;
 
 export function bootApplication() {
     setElements();
-    
+
+    initialiseSaveSystem();
+    refreshContinueAvailability();
+
     getElements().inventoryUpArrow.classList.add("arrow-disabled");
     getElements().inventoryDownArrow.classList.add("arrow-disabled");
 
@@ -186,18 +196,7 @@ export function bootApplication() {
         clearFatalLoadError();
         setNewGameLoading(true);
         try {
-            await Promise.all([
-                loadGameData(
-                    urlWalkableJSONS,
-                    urlNavigationData,
-                    urlObjectsData,
-                    urlDialogueData,
-                    urlNpcsData,
-                    urlForegroundData
-                ),
-                assetsReadyPromise,
-                localizationReadyPromise,
-            ]);
+            await ensureGameDataLoaded();
         } catch (error) {
             showFatalLoadError(error);
             return;
@@ -240,11 +239,40 @@ export function bootApplication() {
         setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
         setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
 
+        noteNewGameStarted();
+
         if (playIntro) {
             await playCutsceneGameIntro();
         } else {
             setBeginGameStatus(false);
         }
+    });
+
+    getElements().continueGameMenuButton.addEventListener("click", async (event) => {
+        if (getElements().continueGameMenuButton.classList.contains("disabled")) return;
+
+        clearFatalLoadError();
+        setNewGameLoading(true);
+        try {
+            // The stored save carries progress, not content, so the shipped
+            // bundle has to be loaded and validated before it can be applied.
+            await ensureGameDataLoaded();
+        } catch (error) {
+            showFatalLoadError(error);
+            return;
+        } finally {
+            setNewGameLoading(false);
+        }
+
+        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+        const continued = await continueFromLocalSave();
+        if (!continued) {
+            refreshContinueAvailability();
+            return;
+        }
+
+        disableActivateButton(getElements().resumeGameMenuButton, "active", "btn-primary");
+        disableActivateButton(getElements().saveGameButton, "active", "btn-primary");
     });
 
     getElements().resumeGameMenuButton.addEventListener("click", (event) => {
@@ -259,6 +287,7 @@ export function bootApplication() {
     getElements().returnToMenuButton.addEventListener("click", () => {
         setPreviousGameState(getGameStateVariable());
         setGameState(getMenuState());
+        refreshContinueAvailability();
     });
 
     getElements().btnEnglish.addEventListener("click", () => {
@@ -305,17 +334,21 @@ export function bootApplication() {
         getElements().overlay.classList.add("d-none");
     });
 
-    getElements().loadStringButton.addEventListener("click", function() {
-        loadGame(true)
-            .then(() => {
-                setElements();
-                getElements().saveLoadPopup.classList.add("d-none");
-                document.getElementById("overlay").classList.add("d-none");
-                setGameState(getMenuState());
-            })
-            .catch((error) => {
-                console.error("Error loading game:", error);
-            });
+    getElements().loadStringButton.addEventListener("click", async function() {
+        try {
+            // An import can arrive from a cold menu, so the shipped content the
+            // save patches has to be present before the save is applied.
+            await ensureGameDataLoaded();
+            await loadGame(true);
+            getElements().saveLoadPopup.classList.add("d-none");
+            document.getElementById("overlay").classList.add("d-none");
+            disableActivateButton(getElements().resumeGameMenuButton, "active", "btn-primary");
+            disableActivateButton(getElements().saveGameButton, "active", "btn-primary");
+        } catch (error) {
+            // The save system has already reported the failure on the status
+            // line; the running session was never touched.
+            console.error("Error loading game:", error);
+        }
     });
 
     //------------------------------------------------------------------------------------------------------
@@ -770,10 +803,12 @@ function handleCanvasRightClick(event) {
 async function setElementsLanguageText() {
     getElements().menuTitle.innerHTML = `<h2>${localize("menuTitle", getLanguage(), "ui")}</h2>`;
     getElements().newGameMenuButton.innerHTML = `${localize("newGame", getLanguage(), "ui")}`;
+    getElements().continueGameMenuButton.innerHTML = `${localize("continueGame", getLanguage(), "ui")}`;
     getElements().resumeGameMenuButton.innerHTML = `${localize("resumeGame", getLanguage(), "ui")}`;
     getElements().loadGameButton.innerHTML = `${localize("loadGame", getLanguage(), "ui")}`;
     getElements().saveGameButton.innerHTML = `${localize("saveGame", getLanguage(), "ui")}`;
     getElements().loadStringButton.innerHTML = `${localize("loadButton", getLanguage(), "ui")}`;
+    refreshContinueAvailability();
 }
 
 export async function handleLanguageChange(languageCode) {
@@ -813,20 +848,37 @@ export async function animateTransitionAndChangeBackground(optionalNewScreenId, 
     const newScreenId = optionalNewScreenId || handleRoomTransition();
     const exit = "e" + getExitNumberToTransitionTo();
 
+    // The departing room's exit record holds the start and final positions for
+    // the arrival walk. Read them before the room identity moves on, because
+    // the identity now moves as soon as the background does.
+    const departingScreenId = getCurrentScreenId();
+    const departingExit = getNavigationData()[departingScreenId]?.exits?.[exit];
+
     if (optionalNewScreenId) {
         setNextScreenId(optionalNewScreenId);
         swapBackgroundOnRoomTransition(newScreenId, true);
     }
+
+    // BUG-033: the canvas already shows the new room by this point, so the room
+    // identity has to change with it. Committing it after the fade-back left
+    // getCurrentScreenId() pointing at the room the player had just left for
+    // the whole fade, which drew that room's foreground items over the new
+    // background. The overlay is still opaque here, so the swap is unseen.
+    setPreviousScreenId(departingScreenId);
+    setCurrentScreenId(newScreenId);
+    setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
+    setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
+    setForegroundGridProcessed(false);
 
     let startPosition;
 
     if (hasExplicitCoordinates(optionalStartX, optionalStartY)) {
         startPosition = { "x": optionalStartX, "y": optionalStartY };
     } else {
-        startPosition = getNavigationData()[getCurrentScreenId()]?.exits[exit]?.startPosition;
+        startPosition = departingExit?.startPosition;
     }
 
-    if (!startPosition) throw new Error(`No transition start position is defined for ${getCurrentScreenId()} ${exit}`);
+    if (!startPosition) throw new Error(`No transition start position is defined for ${departingScreenId} ${exit}`);
     const startX = startPosition.x;
     const startY = startPosition.y;
 
@@ -841,16 +893,12 @@ export async function animateTransitionAndChangeBackground(optionalNewScreenId, 
         setTransitioningNow(true);
         getElements().canvas.style.pointerEvents = "none";
         processLeftClickPoint({
-            x: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.x,
-            y: getNavigationData()[getCurrentScreenId()].exits[exit].finalPosition.y,
+            x: departingExit.finalPosition.x,
+            y: departingExit.finalPosition.y,
         }, false);
     }
 
-    setPreviousScreenId(getCurrentScreenId());
-    setCurrentScreenId(newScreenId);
-    setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
-    setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
-    setForegroundGridProcessed(false);
+    noteRoomChangeForAutosave();
 }
 
 function beginLanguageChange(languageCode) {
@@ -1197,6 +1245,26 @@ export function showText(text, color, xPos, yPos) {
     });
 }
 
+/**
+ * Load and validate the shipped content bundle once. Continue and import both
+ * need it, and both can be reached from a cold menu where New Game has never
+ * run, so the work is shared rather than repeated per entry point.
+ */
+export async function ensureGameDataLoaded() {
+    await Promise.all([
+        loadGameData(
+            urlWalkableJSONS,
+            urlNavigationData,
+            urlObjectsData,
+            urlDialogueData,
+            urlNpcsData,
+            urlForegroundData,
+        ),
+        assetsReadyPromise,
+        localizationReadyPromise,
+    ]);
+}
+
 export async function loadGameData(
     gridUrl,
     screenNavUrl,
@@ -1227,6 +1295,17 @@ export async function loadGameData(
         foregrounds: foregroundData,
         localization: localizationData,
         mapRoom,
+    });
+
+    // Keep the bundle exactly as shipped before the running game places
+    // entities or a puzzle rewrites anything. Saves are a patch against this.
+    setPristineContent({
+        grids: validated.grids,
+        navigation: navData,
+        objects: objectsData,
+        npcs: npcData,
+        dialogue: dialogueData,
+        foregrounds: foregroundData,
     });
 
     // Commit only after every resource has loaded and passed its startup contract.
@@ -1359,6 +1438,13 @@ export function setDynamicBackgroundWithOffset(
     // immediately so an older image's late onload cannot overwrite a newer room.
     canvas.style.backgroundImage = `url(${imageUrl})`;
 
+    // BUG-033: whether a room has foreground items is a property of the room's
+    // background file, so it is decided here, synchronously, from the URL being
+    // applied. Deciding it inside onload left the previous room's answer in
+    // place for every frame drawn before the new image finished decoding.
+    const bgFilename = imageUrl.split('/').pop().split('\\').pop().replace(/['")]/g, "");
+    setCurrentScreenHasForegroundItems(getForegroundsList().includes(bgFilename));
+
     backgroundImage.onload = function() {
         const imgWidth = backgroundImage.width;
         const imgHeight = backgroundImage.height;
@@ -1374,15 +1460,6 @@ export function setDynamicBackgroundWithOffset(
         const finalHeight = scaledHeight;
 
         canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
-        const bgFilename = canvas.style.backgroundImage.split('/').pop().split('\\').pop().replace(/['")]/g, "");
-    
-        if (getForegroundsList().includes(bgFilename)) {
-            setCurrentScreenHasForegroundItems(true);
-            console.log("New screen has foreground items, flag set to true");
-        } else {
-            setCurrentScreenHasForegroundItems(false);
-            console.log("New screen doesnt have foreground items, flag set to false");
-        }
     };
 
     backgroundImage.onerror = function() {
@@ -1503,6 +1580,32 @@ function setNewGameLoading(isLoading) {
     button.setAttribute('aria-busy', String(isLoading));
 }
 
+/**
+ * Enable Continue only when a stored save can actually be read, and publish
+ * what it holds as stable IDs on the detail element so a test or an assistive
+ * reader can see the room and the time without parsing translated copy.
+ */
+export function refreshContinueAvailability() {
+    const button = getElements().continueGameMenuButton;
+    const detail = getElements().continueGameDetail;
+    if (!button) return null;
+
+    const describe = hasResumableSave() ? describeResumableSave() : null;
+    disableActivateButton(button, describe ? "active" : "disable", "btn-primary");
+    button.dataset.hasSave = String(Boolean(describe));
+
+    if (detail) {
+        detail.dataset.continueRoom = describe?.roomId ?? '';
+        detail.dataset.continueSavedAt = describe?.savedAt ?? '';
+        detail.dataset.continueFacts = String(describe?.factIds.length ?? 0);
+        detail.textContent = describe
+            ? `${localize('continueDetail', getLanguage(), 'ui')} ${getNavigationData()?.[describe.roomId]?.[getLanguage()] ?? describe.roomId}`
+            : '';
+    }
+
+    return describe;
+}
+
 function clearFatalLoadError() {
     const fatalError = document.getElementById('fatalLoadError');
     fatalError.textContent = '';
@@ -1517,28 +1620,41 @@ function showFatalLoadError(error) {
     setGameState(getMenuState());
 }
 
+// Foreground images are drawn every frame. Building a fresh Image each time
+// allocated one per frame and could not draw until that copy had decoded, so a
+// newly entered room showed nothing where its foreground belonged. One decoded
+// image per URL is kept instead.
+const foregroundImageCache = new Map();
+
+function foregroundImageFor(url) {
+    let image = foregroundImageCache.get(url);
+    if (!image) {
+        image = new Image();
+        image.onerror = () => console.error("Failed to load foreground image:", url);
+        image.src = url;
+        foregroundImageCache.set(url, image);
+    }
+    return image;
+}
+
 export function drawForegroundImageForCurrentScreen() {
     const canvas = getElements().canvas;
     const ctx = canvas.getContext("2d");
     const screenId = `foregrounds/${getCurrentScreenId()}.png`;
     const imagesArray = getArrayOfGameImages();
     const foregroundUrl = imagesArray.find((url) => url.includes(screenId));
-    
+
     if (!foregroundUrl) {
-        console.warn("No foreground image found for the current screen.");
         setCurrentForegroundImage(null);
         return;
     }
 
-    const foregroundImage = new Image();
-    foregroundImage.src = foregroundUrl;
+    const foregroundImage = foregroundImageFor(foregroundUrl);
     setCurrentForegroundImage(foregroundImage);
 
-    ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
-
-    foregroundImage.onerror = () => {
-        console.error("Failed to load foreground image:", foregroundUrl);
-    };
+    if (foregroundImage.complete && foregroundImage.naturalWidth > 0) {
+        ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
+    }
 }
 
 let debugWindow;

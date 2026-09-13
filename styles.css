@@ -530,3 +530,37 @@ label {
     background: #4b1111;
     color: #fff;
 }
+
+/* Menu detail under the Continue button: where the stored save left off. */
+.menu-detail {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: #cfcfcf;
+    min-height: 1.2em;
+    text-align: center;
+}
+
+/*
+    Save feedback. It sits out of the way in a corner, states one thing, and
+    leaves again; only a failure raises its voice, because only a failure puts
+    the player's progress at risk.
+*/
+.save-status {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1200;
+    max-width: 24rem;
+    padding: 0.5rem 0.85rem;
+    border: 1px solid #5c5c5c;
+    border-radius: 0.25rem;
+    background: rgba(20, 20, 20, 0.92);
+    color: #f2f2f2;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.save-status.save-status-error {
+    border-color: #ff8a8a;
+    background: #4b1111;
+}

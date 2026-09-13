@@ -9,7 +9,9 @@ import { addInventoryItem, combineInventoryItems, inventoryQuantity, removeInven
 import { interpolateNamedTokens, resolveLocalizedValue } from '../../src/domain/localisation/localisation.mjs';
 import { findNearestWalkable, findPath, findPathWithFallback, movementCost, pointerToWorld, resolveCellTarget, resolveHotspot, resolveInteractionAnchor, worldToGrid } from '../../src/domain/navigation/navigation.mjs';
 import { applyPuzzleAction, whyGateUnavailable, whyUnavailable } from '../../src/domain/puzzles/puzzles.mjs';
-import { migrateSave } from '../../src/domain/save/migrations.mjs';
+import { finaliseLegacyWorld, migrateSave } from '../../src/domain/save/migrations.mjs';
+import { createSaveEnvelope } from '../../src/domain/save/save-format.mjs';
+import { createInitialGameState } from '../../src/state/game-state.mjs';
 import { libraryDialogueGraph } from '../../src/content/library-dialogue.mjs';
 
 test('all nine verbs produce stable intents without translated text', () => {
@@ -108,8 +110,25 @@ test('path rules cover costs, boundaries, fallback, pointer transforms, and sema
 });
 
 test('save migrations accept current and declared legacy saves only', () => {
-    const current = { schemaVersion: 1, state: { room: 'libraryFoyer' } };
+    const current = createSaveEnvelope({ state: createInitialGameState(), savedAt: '2026-09-13T00:00:00.000Z' });
     assert.deepEqual(migrateSave(current), current);
-    assert.deepEqual(migrateSave({ schemaVersion: 0, state: {} }).state.quests, { facts: {}, bridgeState: 0 });
+
+    // A version 1 save carried the whole canonical state, content bundle and
+    // all. Migration keeps its progress and parks the bundle for the caller to
+    // turn into a patch once the shipped content is known.
+    const legacy = { schemaVersion: 1, state: { ...createInitialGameState(), content: { navigation: { libraryFoyer: { alreadyVisited: true } } } } };
+    const migrated = migrateSave(legacy);
+    assert.equal(migrated.schemaVersion, 2);
+    assert.equal(migrated.migratedFrom, 1);
+    assert.deepEqual(migrated.payload.quests, { facts: {}, bridgeState: 0 });
+    assert.deepEqual(migrated.payload.legacyContent.navigation.libraryFoyer, { alreadyVisited: true });
+
+    assert.deepEqual(migrateSave({ schemaVersion: 0, state: {} }).payload.quests, { facts: {}, bridgeState: 0 });
     assert.throws(() => migrateSave({ schemaVersion: 99, state: {} }), /Unsupported/);
+
+    const finalised = finaliseLegacyWorld(migrated, { navigation: { libraryFoyer: { alreadyVisited: false } } });
+    assert.equal(finalised.payload.legacyContent, undefined);
+    assert.deepEqual(finalised.payload.world.patches.navigation, [
+        { op: 'set', path: ['libraryFoyer', 'alreadyVisited'], value: true },
+    ]);
 });

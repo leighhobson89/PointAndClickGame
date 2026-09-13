@@ -30,7 +30,9 @@ Outcome: one explicit game session can start, reset, save, restore, and dispose.
 
 Exit criteria: five consecutive new sessions have one listener set and identical starting state; a representative mid-puzzle save round-trips.
 
-Implementation status (2026-09-13): the canonical serialisable state factory/store and explicit boot/start/dispose/reset lifecycle are in place. Startup data and image readiness are awaited, session listeners/animation frames are disposed, and five-start E2E coverage passes. Full mid-puzzle persistence and migrations remain Phase 5 work in the master checklist.
+Implementation status (2026-09-13): complete. The canonical serialisable state factory/store and explicit boot/start/dispose/reset lifecycle are in place. Startup data and image readiness are awaited, session listeners/animation frames are disposed, and five-start E2E coverage passes. Section 5 closed the remaining half: the versioned save schema and migration boundary now serve the player-facing path, and mid-puzzle round trips are proven at six milestones through a full page reload. `startGame(startCell)` takes an optional start cell so a restored session begins where the save left the player.
+
+One Section 1 regression surfaced while the transition path was revisited and is now fixed: making transitions awaitable had moved the `currentScreenId` commit to after the fade, leaving the game's idea of the current room behind the background actually on screen (BUG-033).
 
 ## Phase 2 — Extract pure domain modules
 

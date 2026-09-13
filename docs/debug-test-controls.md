@@ -146,6 +146,8 @@ Validate, then reject or proceed. A rejected scenario changes nothing, including
 
 `e2e/README.md` maps each scenario to the functional area that owns it.
 
+Loading a scenario commits its facts through the canonical store, so any declared Chapter 1 milestone among them checkpoints itself into the save slots. That is intended — a milestone cannot be committed without being checkpointed — but it means a save test should clear the slots after arranging a scenario, not before.
+
 ## Debug panel
 
 The panel is built in JavaScript, never present in `index.html`, and carries a sticky `DEBUG BUILD — NOT FOR PLAY` watermark that also serves as its drag handle. Middle mouse click or NumpadSubtract toggles it, preserving the retired wheel menu's shortcuts. Every control has a stable `data-debug-control` ID.
@@ -158,7 +160,7 @@ Sections and controls:
 - **Inventory and verbs** — add/remove one item, inventory presets, list inventory, select verb, select target, cancel, show current structured intent, reset a consumed or moved entity.
 - **Dialogue and characters** — start a conversation, show node choices with their conditions and actions, text speed, skip line, reset conversation, inspect NPC room/visibility/pose/facts.
 - **Puzzles and quests** — list facts by satisfied and mandatory status, apply a milestone transaction, explain why an action or gate is unavailable, validate facts for conflicts, show the critical-path frontier, revert by reloading a scenario.
-- **Save, localisation, presentation** — save/load through the real repository, migration fixture select, locale switch, missing-key simulation, viewport presets, high contrast, reduced motion, text scale, input mode, simulated asset and storage failures.
+- **Save, localisation, presentation** — save/load through the real repository, migration fixture select, locale switch, missing-key simulation, viewport presets, high contrast, reduced motion, text scale, input mode, simulated asset and storage failures. Since Section 5 the scenario repository writes the same versioned envelope the player's saves use, so a debug round trip exercises the shipping save path rather than a parallel one; the format is documented in `save-format.md`.
 - **Diagnostics** — current state summary, wait for idle, structured action log, clear log, reproduction bundle.
 
 ## Reproduction bundle

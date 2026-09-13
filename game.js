@@ -40,11 +40,18 @@ export function getFrameTimeSummary() {
 
 //--------------------------------------------------------------------------------------------------------
 
-export async function startGame() {
+/**
+ * Start a session. `startCell` lets a restored game begin where the save left
+ * the player instead of at the chapter's opening reference; everything else —
+ * canvas metrics, entity placement, the owned animation frame — is rebuilt
+ * identically either way.
+ */
+export async function startGame(startCell = null) {
+    const start = startCell ?? getInitialStartGridReference();
     disposeGame();
     initializeCanvas();
     setUpObjectsAndNpcs();
-    initializePlayerPosition(getInitialStartGridReference().x, getInitialStartGridReference().y);
+    initializePlayerPosition(start.x, start.y);
     gameLoopActive = true;
     setGameInProgress(true);
     startCanonicalSession();

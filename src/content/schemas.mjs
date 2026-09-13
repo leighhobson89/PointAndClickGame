@@ -1,8 +1,8 @@
 import { SCENARIO_SCHEMA_VERSION } from '../domain/scenarios/scenarios.mjs';
+import { SAVE_SCHEMA_VERSION, validateSaveEnvelope } from '../domain/save/save-format.mjs';
 
 export const CONTENT_SCHEMA_VERSION = 1;
-export const SAVE_SCHEMA_VERSION = 1;
-export { SCENARIO_SCHEMA_VERSION };
+export { SAVE_SCHEMA_VERSION, SCENARIO_SCHEMA_VERSION };
 
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const isId = (value) => typeof value === 'string' && /^[a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9-]+)*$/.test(value);
@@ -19,8 +19,10 @@ export const contentSchemas = Object.freeze({
     dialogueGraph: Object.freeze({ required: ['id', 'startNodeId', 'nodes'] }),
     localisation: Object.freeze({ locales: ['en', 'es', 'de', 'it', 'fr'] }),
     puzzleAction: Object.freeze({ required: ['id', 'requires', 'effects'] }),
+    // The save shape is not listed here: it is owned by
+    // domain/save/save-format.mjs, and a second copy of its required keys would
+    // be a duplicate that could drift.
     scenario: Object.freeze({ required: ['schemaVersion', 'id', 'seed', 'facts'] }),
-    save: Object.freeze({ required: ['schemaVersion', 'state'] }),
 });
 
 function validateRequiredObject(value, required, label) {
@@ -46,11 +48,12 @@ export function validateScenarioSchema(value) {
     return errors;
 }
 
+/**
+ * The save shape is owned by `domain/save/save-format.mjs`; this stays as the
+ * content-validation entry point so one command still checks every schema.
+ */
 export function validateSaveSchema(value) {
-    const errors = validateRequiredObject(value, contentSchemas.save.required, 'save');
-    if (value?.schemaVersion !== SAVE_SCHEMA_VERSION) errors.push(`save.schemaVersion must be ${SAVE_SCHEMA_VERSION}`);
-    if (!isObject(value?.state)) errors.push('save.state must be an object');
-    return errors;
+    return validateSaveEnvelope(value).errors;
 }
 
 export function validatePuzzleActionSchema(value, label = 'puzzle action') {

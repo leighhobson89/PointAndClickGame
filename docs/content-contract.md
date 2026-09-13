@@ -26,7 +26,9 @@ The map room is now complete enough to ship as the Chapter 1 destination:
 
 ## Schemas and validation
 
-src/content/schemas.mjs defines runtime boundaries for navigation rooms, 80 x 60 grids and codes, entities, dialogue/localisation, puzzle actions, scenarios, and saves. src/content/validate-content.mjs validates the combined content atomically.
+src/content/schemas.mjs defines runtime boundaries for navigation rooms, 80 x 60 grids and codes, entities, dialogue/localisation, puzzle actions, scenarios, and saves. src/content/validate-content.mjs validates the combined content atomically. The save shape itself is owned by src/domain/save/save-format.mjs and documented in save-format.md; schemas.mjs delegates to it so one command still checks every schema.
+
+The contract's puzzle.mandatoryFacts list has a second job since Section 5: it is the milestone list that drives save checkpoints. Adding a mandatory fact therefore makes it checkpoint itself.
 
 The validator checks:
 

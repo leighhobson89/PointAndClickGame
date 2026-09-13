@@ -40,11 +40,21 @@
             </div>
         </div>
         <button id="newGame" class="btn btn-primary mb-2">New Game Placeholder</button>
+        <!--
+            Two different ideas, kept as two different controls. "Resume"
+            returns to the session already running; "Continue" reopens the
+            locally stored save and is enabled only when one can be read.
+        -->
+        <button id="continueGame" class="btn disabled mb-2" aria-describedby="continueGameDetail">Continue Placeholder</button>
+        <div id="continueGameDetail" class="menu-detail" data-continue-room=""></div>
         <button id="resumeFromMenu" class="btn disabled mb-2">Resume Game Placeholder</button>
         <button id="loadGame" class="btn btn-primary mb-2">Load Game Placeholder</button>
         <button id="saveGame" class="btn disabled">Save Game Placeholder</button>
         <div id="fatalLoadError" class="fatal-load-error d-none" role="alert" aria-live="assertive"></div>
     </div>
+
+    <!-- Unobtrusive save/restore feedback. Successes are polite, failures assertive. -->
+    <div id="saveStatus" class="save-status d-none" role="status" aria-live="polite"></div>
 
     <!-- Save Load Game Input Field -->
     <div id="loadSaveGameStringPopup" class="save-load-popup-container bg-dark p-4 rounded shadow-lg d-none">

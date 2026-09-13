@@ -47,7 +47,11 @@ expect((await summary(page)).facts).toContain('bridge.repaired');
 
 Setup may skip prerequisites. The behaviour under test must still be performed through ordinary input, and assertions use stable IDs rather than translated display text.
 
-`restoreNativeTimers(page)` puts real time back after startup, for tests that need to observe a duration such as text speed.
+`restoreNativeTimers(page)` puts real time back after startup, for tests that need to observe a duration such as text speed. Pair it with `page.emulateMedia({ reducedMotion: 'no-preference' })` when the behaviour under test only exists while an animation is actually animating — under reduced motion a fade resolves immediately and its frames never happen.
+
+Section 5 added four more helpers: `canonicalChecksum(page)` digests canonical progress without scenario context so it survives a page reload (it includes the presentation mode, so take both readings in the same mode); `derivedRenderState(page)` reports what the renderer rebuilt rather than what a save carried; `returnToMenu(page)` opens the menu the way a player does; and `readSaveSlot`/`clearSaveSlots` inspect and reset stored saves.
+
+Note that loading a scenario commits its facts through the canonical store, and declared milestones checkpoint themselves, so arranging a state legitimately writes save slots. Clear them after `loadScenario`, not before.
 
 ## Scenario coverage map
 
@@ -55,14 +59,14 @@ Setup may skip prerequisites. The behaviour under test must still be performed t
 | --- | --- | --- |
 | `chapter1.new-game` | `game-state` | Reset baseline, critical-path frontier, locked-gate explanations |
 | `chapter1.library-riddle` | `dialogue` | Librarian node/choice inspection and the real-click riddle consequence |
-| `chapter1.research-unlock-ready` | `puzzles` | Use-key-on-door unlock performed with real clicks |
-| `chapter1.town-open` | `navigation` | Idle probes, teleport validation, overlays and diagnostics |
-| `chapter1.den-unlock-ready` | `puzzles` | Milestone apply, scenario revert, checksum stability |
+| `chapter1.research-unlock-ready` | `puzzles` | Use-key-on-door unlock performed with real clicks; the self-checkpointing milestone |
+| `chapter1.town-open` | `navigation` | Idle probes, teleport validation, overlays and diagnostics; the library milestone resume journey, the save failure paths, and the BUG-033 transition regression |
+| `chapter1.den-unlock-ready` | `puzzles` | Milestone apply, scenario revert, checksum stability; the legacy-save migration journey |
 | `chapter1.barn-unblock-ready` | `puzzles` | Donkey/carrot prerequisites for the barn gate |
-| `chapter1.rigging-ready` | `save-load` | Repository save/load round trip at a mid-chapter milestone |
-| `chapter1.bridge-ready` | `game-state` | Same-seed checksum reproduction |
-| `chapter1.wolf-ready` | `puzzles` | Final obstacle prerequisites |
-| `chapter1.map-entry` | `navigation` | Real canvas click through the opened river gate into the Map |
+| `chapter1.rigging-ready` | `save-load` | Repository save/load round trip; the den milestone resume journey |
+| `chapter1.bridge-ready` | `game-state` | Same-seed checksum reproduction; the rigging milestone resume journey |
+| `chapter1.wolf-ready` | `puzzles` | Final obstacle prerequisites; the bridge milestone resume journey and the manual-string transfer |
+| `chapter1.map-entry` | `navigation` | Real canvas click through the opened river gate into the Map; the wolf and Map milestone resume journeys |
 | `system.inventory-full` | `inventory` | Twelve carried items, presets, overflow layout |
 | `system.long-localisation` | `localisation` | German locale plus slow text and the skip control |
 | `system.corrupt-save` | `save-load` | Migration fixture selection and storage failure |
@@ -73,3 +77,5 @@ The fixtures themselves live in `src/content/scenario-registry.mjs` and are vali
 ## Implementation status
 
 Startup, game-state, navigation, dialogue, animation-cutscenes, puzzles, and save-load contain implemented tests. The remaining folders are deliberate coverage boundaries, not claims of finished coverage.
+
+The full suite now takes about 136 seconds against a 180-second gate, so the margin matters. Arrange a milestone state with a scenario and `setMovementSpeed('instant')` rather than replaying a journey another test already covers.

@@ -73,6 +73,63 @@ async function summary(page) {
 }
 
 /**
+ * A viewport-independent digest of canonical progress, computed without any
+ * scenario context so it can be compared across a page reload. Use it to prove
+ * that a restored session is the same game, not merely a similar-looking one.
+ */
+async function canonicalChecksum(page) {
+    return page.evaluate(async () => {
+        const { stateChecksum } = await import('/src/domain/scenarios/scenarios.mjs');
+        const { getCanonicalGameState } = await import('/constantsAndGlobalVars.js');
+        return stateChecksum(getCanonicalGameState());
+    });
+}
+
+/**
+ * What the renderer rebuilt, as opposed to what the save carried: the room's
+ * background, the walk-grid placement stamps, and one entity's recomputed
+ * pixel geometry. A save deliberately stores none of these.
+ */
+async function derivedRenderState(page) {
+    return page.evaluate(async () => {
+        const state = await import('/constantsAndGlobalVars.js');
+        const grid = state.getGridData().gridData ?? [];
+        let placementCells = 0;
+        for (const row of grid) for (const cell of row) if (/^[oc][A-Za-z]/.test(cell)) placementCells += 1;
+        const objects = state.getObjectData().objects;
+        const placed = Object.values(objects).find((object) => object.visualPosition);
+        return {
+            backgroundImage: document.getElementById('canvas').style.backgroundImage,
+            cellWidth: state.getCanvasCellWidth(),
+            placementCells,
+            hasVisualPosition: Boolean(placed && Number.isFinite(placed.visualPosition.x)),
+            foregroundFlag: state.getCurrentScreenHasForegroundItems(),
+        };
+    });
+}
+
+/** Open the menu from a running game the way a player does. */
+async function returnToMenu(page) {
+    await page.locator('#returnToMenu').click();
+    await expect(page.locator('#menu')).toBeVisible();
+}
+
+async function readSaveSlot(page, slot = 'resume') {
+    return page.evaluate((selected) => {
+        const raw = localStorage.getItem(`pointAndClick.save.${selected}`);
+        return raw === null ? null : JSON.parse(raw);
+    }, slot);
+}
+
+async function clearSaveSlots(page) {
+    await page.evaluate(() => {
+        for (const key of Object.keys(localStorage)) {
+            if (key.startsWith('pointAndClick.save.')) localStorage.removeItem(key);
+        }
+    });
+}
+
+/**
  * Click the centre of a named grid cell value through the real canvas, the way
  * a player would. Returns the cell that was clicked.
  */
@@ -127,15 +184,20 @@ async function clickFurthestWalkableCell(page) {
 
 module.exports = {
     DEBUG_BASE_URL,
+    canonicalChecksum,
+    clearSaveSlots,
     clickFurthestWalkableCell,
+    derivedRenderState,
     RELEASE_BASE_URL,
     LANGUAGE_BUTTONS,
     clickGridCell,
     debugUrl,
     loadScenario,
     openDebugGame,
+    readSaveSlot,
     releaseUrl,
     restoreNativeTimers,
+    returnToMenu,
     summary,
     waitForIdle,
 };

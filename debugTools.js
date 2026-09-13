@@ -33,6 +33,7 @@ import {
     getObjectData,
     getPlayerInventory,
     getPlayerObject,
+    getPristineContent,
     getQuestFacts,
     getTextQueue,
     getTransitioningNow,
@@ -121,6 +122,9 @@ export async function installDebugTools({ config = {} } = {}) {
     window.addEventListener('error', onWindowError);
     window.addEventListener('unhandledrejection', onRejection);
 
+    // The scenario repository writes the same versioned envelope the player's
+    // saves use, so a debug round trip exercises the shipping save path rather
+    // than a parallel one.
     const repository = createStorageRepository({
         getItem: (key) => {
             if (storageFailureEnabled) throw new Error('Simulated storage read failure');
@@ -130,6 +134,10 @@ export async function installDebugTools({ config = {} } = {}) {
             if (storageFailureEnabled) throw new Error('Simulated storage write failure');
             localStorage.setItem(key, value);
         },
+        removeItem: (key) => localStorage.removeItem(key),
+    }, {
+        getPristineContent: () => getPristineContent(),
+        getBaseState: () => gameStore.getSnapshot(),
     });
 
     const idle = createIdleTracker({

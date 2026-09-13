@@ -147,16 +147,36 @@ A content validator now checks IDs, files, grid dimensions/codes, reciprocal exi
 
 ## Save and load
 
-Corrected 2026-09-13. The original audit said capture/restore persisted language only. That has not been true since the canonical store landed: `captureGameStatusForSaving()` returns the full canonical snapshot and `restoreGameStatus()` validates and replaces state from it, so room, player position, inventory, quest facts, dialogue removals, bridge state, settings, and the mutated content bundle all round-trip through the save string.
+Rewritten 2026-09-13 by Section 5. The full contract is in
+[save-format.md](save-format.md); this section records what changed and what is
+left.
 
-The real remaining gaps, which still block a full chapter, are:
+The original audit said capture/restore persisted language only. That stopped
+being true when the canonical store landed, and the corrected note that replaced
+it listed four real gaps. All four are now closed:
 
-- **No version envelope on the player-facing path.** `saveLoadGame.js` compresses the raw state object. The versioned `{ schemaVersion, state }` envelope and migration boundary exist in `src/adapters/storage.mjs` and `src/domain/save/migrations.mjs`, but the save/load UI does not use them, so an older save cannot be migrated or clearly rejected.
-- **Derived state is not rebuilt after restore.** Images, entity paths, canvas cell metrics, foreground processing, and render caches are left as they were. A restore into a running session can therefore present stale visuals.
-- **The whole content bundle is inside the snapshot.** That is why world mutations survive, but it makes saves large and couples a save to the shipped content of the day. Saving stable facts and re-deriving entity/exit state, the way the debug scenarios already do, is the better shape.
-- **No local Resume, autosave, or checkpoint.** The menu's Resume only restores the previous presentation mode within the session.
+- **A version envelope on the player-facing path.** Every save the player can
+  produce is a `{ format, schemaVersion: 2, savedAt, payload }` envelope, and
+  every save entering the game passes through `migrateSave()` first. Declared
+  versions 0 and 1 migrate; anything else is refused with a stable error code
+  instead of being half-applied.
+- **Derived state is rebuilt after restore.** Committing a restored state clears
+  the old session, then rebuilds canvas metrics, entity placement and the
+  walk-grid stamps, `visualPosition` and pixel dimensions, the background and
+  foreground images, entity paths, and the inventory strip.
+- **The content bundle is no longer inside the snapshot.** A save stores
+  authored progress plus a patch against the shipped content. The E2E assertion
+  is blunt: the stored JSON must not contain an asset path.
+- **Local Resume, autosave, and checkpoints exist.** A `Continue` control in the
+  menu is enabled only when a stored save can actually be read. The resume slot
+  is written on New Game, at each declared milestone, on a rate-limited room
+  change, and on manual save; a separate checkpoint slot holds the last
+  milestone only.
 
-Section 5 owns this work: use a versioned plain state object, validate before applying, migrate older schemas, persist locally for Resume, and support explicit export/import. Save only stable facts; derive render caches and transient animations after load.
+Two limits are recorded rather than hidden. The compact export string still uses
+the CDN-hosted LZString (BUG-013), though import also accepts plain JSON; and a
+save taken mid-conversation resumes in the room rather than in the conversation,
+which is a consequence of BUG-011 rather than a save defect.
 
 ## Localisation
 

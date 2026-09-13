@@ -28,8 +28,8 @@ The best version of this project should provide:
 | Interaction | Classic verb/inventory UI works with mouse | Context-aware but classic-feeling input, full keyboard/touch/a11y support, strong feedback |
 | Visuals | Memorable assets with major style, scale, and finish variation | One intentional art bible, consistent character scale, lighting, perspective, and export standards |
 | Audio | Described in the GDD but not implemented | Music, ambience, spatial cues, and responsive interaction SFX |
-| Save/load | The full canonical snapshot round-trips, but with no version envelope, no derived-state rebuild after restore, and no local Resume | Versioned complete state, autosave/checkpoints, migration, and corrupt-save recovery |
-| Quality | 33 Node tests and 38 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
+| Save/load | Versioned envelope, single migration boundary, world stored as a patch, milestone checkpoints, autosave, menu `Continue`, and a restore that changes nothing when a save cannot be trusted | Cloud saves, only once local saves, privacy, identity, and conflict policy are explicit |
+| Quality | 44 Node tests and 53 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
 
 ## Experience principles
 

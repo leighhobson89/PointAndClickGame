@@ -28,6 +28,27 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: node tests navigation
 
+  save-and-transitions-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Progress ownership is the one thing a player cannot recover from if it
+      # breaks, so the save journeys run on every push alongside the room
+      # transition regression that shares their startup path.
+      - run: node tests save-load animation-cutscenes startup --video=retain-on-failure
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: save-and-transitions-recording
+          path: test-reports/
+          retention-days: 7
+
   debug-reachability-browser:
     runs-on: ubuntu-latest
     steps:

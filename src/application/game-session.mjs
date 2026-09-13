@@ -12,7 +12,9 @@ export function createGameSession({ store, renderer, assetLoader, storage } = {}
             return store.getState();
         },
         async restore(key) {
-            const state = await storage?.load(key);
+            // The stored save holds progress only, so the live state supplies
+            // the shipped content the restore is rebuilt against.
+            const state = await storage?.load(key, store.getSnapshot());
             if (state) store.dispatch({ type: 'state/replace', payload: state });
             renderer.render(store.getState());
             return store.getState();

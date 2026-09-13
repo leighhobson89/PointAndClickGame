@@ -91,17 +91,21 @@ Acceptance: every important state is reachable quickly and reproducibly without 
 
 Implementation note (2026-09-13): enablement needs two independent gates — a server that advertises `/debug-capability` and refuses to serve the debug modules otherwise, plus an explicit `?debug=1` or test bootstrap. The E2E harness runs a release server and a debug server side by side so production absence is proven against a real release build. The always-available legacy debug wheel was removed from `index.html`, `styles.css`, and `ui.js`; its capabilities now live behind the gated panel. Two limits are recorded rather than hidden: legacy conversation phases cannot be rewound by `resetConversation` (BUG-031, a consequence of BUG-011), and simulated asset failure records the asset without intercepting the request (BUG-032).
 
-## 5. Complete safe save, resume, and progress ownership
+## 5. Complete safe save, resume, and progress ownership — implemented
 
-- [ ] Define the versioned save format and migration boundary using stable canonical facts only.
-- [ ] Persist room/position, inventory, world mutations, quest facts, dialogue/choices, gates, locale/settings, and only required timing state.
-- [ ] Rebuild images, paths, DOM/canvas references, render caches, transient animations, and other derived state after restore.
-- [ ] Validate before apply, restore atomically, preserve the current session on failure, and recover clearly from corrupt/unsupported saves.
-- [ ] Implement local Resume, checkpoints/autosave, manual export/import, and unobtrusive save/error feedback.
-- [ ] Test clean initial snapshots, representative mid-puzzle round trips, legacy migrations, corrupt data, storage failure, and changed-language restore.
-- [ ] E2E-save/reload at library, den, rigging, bridge, wolf, and Map milestones and compare canonical plus derived visible state.
+- [x] Define the versioned save format and migration boundary using stable canonical facts only.
+- [x] Persist room/position, inventory, world mutations, quest facts, dialogue/choices, gates, locale/settings, and only required timing state.
+- [x] Rebuild images, paths, DOM/canvas references, render caches, transient animations, and other derived state after restore.
+- [x] Validate before apply, restore atomically, preserve the current session on failure, and recover clearly from corrupt/unsupported saves.
+- [x] Implement local Resume, checkpoints/autosave, manual export/import, and unobtrusive save/error feedback.
+- [x] Test clean initial snapshots, representative mid-puzzle round trips, legacy migrations, corrupt data, storage failure, and changed-language restore.
+- [x] E2E-save/reload at library, den, rigging, bridge, wolf, and Map milestones and compare canonical plus derived visible state.
 
 Acceptance: progress is never partially applied or silently discarded and remains compatible across declared schema versions.
+
+Implementation note (2026-09-13): the format is documented in `save-format.md`. Two decisions are worth carrying forward. A save stores authored progress plus a *patch* against shipped content, never a copy of it, and position travels as a walk-grid cell rather than pixels, so a save is independent of the viewport that wrote it. Restoring is two-phase — read, migrate, validate and build a candidate state, and only then clear the session and rebuild the derived half — which is what makes a corrupt or unsupported save change nothing at all. "Resume" and "Continue" are kept as two separate menu controls because they are two different ideas: Resume returns to the session already running, Continue reopens the stored save. `dialogue.activeNodeId` is deliberately never persisted while BUG-011 stands, so a restore lands in the room rather than part-way through a conversation nobody can rewind.
+
+Fixed alongside (BUG-033): a room change drew the previous room's foreground items over the new room's background, a regression introduced when Section 1 made transitions awaitable.
 
 ## 6. Complete and validate the Chapter 1 vertical slice
 
@@ -189,6 +193,7 @@ Acceptance: a reproducible release works offline, protects saves, has an explici
 | Source document | Checklist coverage |
 | --- | --- |
 | `product-vision.md` | Sections 3, 5–9 |
+| `save-format.md` | Section 5, plus the save compatibility gate in Section 9 |
 | `code-audit.md` and `bugs.md` | Sections 1–3 and 7–9 |
 | `world-and-puzzles.md` | Sections 2, 3, and 6 |
 | `refactor-plan.md` | Sections 1–3, 7, and 8 |
