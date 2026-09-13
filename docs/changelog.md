@@ -1,5 +1,28 @@
 # Living documentation changelog
 
+## 2026-09-14 — Documentation split into a done side and a to-do side
+
+- Added `docs/archive/`, the done side of the living documentation. Each live document now has one archive file holding the parts already implemented, so a live document can be read as a to-do list rather than a mixture of history and plan.
+- Archived the completed material: checklist sections 0 to 5 and the finished items of section 6; refactor phases 0 to 3 and the debug half of phase 4; every delivered roadmap feature; the resolved audit findings and the audit-accuracy review; the per-pass test-proof history and the full-run timing records; the resolved bug register; and the debug-control acceptance evidence.
+- Rewrote the live documents to carry only what is outstanding or currently true. The checklist keeps its stable section numbers so "Section 7" still means the same thing everywhere; the bug register holds open rows only; the testing strategy now leads with where the suite stands and what each functional area still owes; the audit keeps only open findings; and the roadmap lists missing features rather than struck-through delivered ones.
+- Removed every reference from a live document to completed work, so no live text depends on the archive beyond a single link to its own archive file. Verified mechanically: all 40 internal documentation links resolve.
+- Two refactor items that were listed under a completed phase but never delivered — performance budgets, and linting after a no-functional-change baseline — were carried forward rather than archived with the phase. A new Phase 6 collects the work to retire the legacy global bridge, which was previously implied across several documents but never stated as a phase.
+- Recorded the archive convention in `AGENTS.md` and `docs/README.md`: when work completes, remove it from the live document, add it to the matching archive file, and append the dated changelog entry. Resolved bug rows move to `archive/bugs-resolved.md` rather than staying in the active register, and are still never deleted.
+
+`docs/changelog.md` and `docs/hotspot-report.md` deliberately stay in the live set: the changelog is the running ledger, and the hotspot report is regenerated from current geometry.
+
+## 2026-09-14 — Librarian research-key conversation repaired (BUG-037)
+
+- Fixed the reported defect in the librarian conversation: asking for the research room key showed no player line, and the librarian greeted the player again part way through the same exchange. Both faults were introduced when the tutorial moved onto the explicit dialogue graph.
+- The chosen option is now spoken through the same speaker path as every other line. It previously went to `showText` without claiming the player as speaker and without coordinates, so it was drawn at the departed speaker's position — or at no position at all, which is invisible rather than merely misplaced.
+- Rerouted `library.librarian.q0.keyResponse1` to the phase-1 choices instead of the phase-1 introduction. The greeting belongs to a conversation that *starts* at that phase; routing through it mid-exchange is what produced "Oh hello, you're back!" immediately after the key request. This restores the behaviour the legacy engine had, where advancing a quest phase mid-conversation went straight to the new options.
+- Made the librarian's phase change durable. Asking for the key now emits a `library.askedForResearchKey` consequence that records quest phase 1, and the conversation enters the graph at the phase the librarian is actually in, so a player who walks away and returns is greeted with "you're back" rather than replaying the introduction. Consequences now run for line and choice nodes, not only end nodes.
+- `createDialogueState` accepts an explicit stable entry node, and rejects an unknown one, so re-entry points are addressed by ID rather than by position.
+- Restored the "Talking to <name>" interaction label for the duration of the conversation, which the migrated path had dropped.
+- Recorded BUG-038: the migrated path adds every choice as a row at once, so the seven phase-0 options are squeezed into a panel sized for four, instead of scrolling three-plus-exit as the legacy path does.
+
+Test evidence: `npm.cmd run check` passed dependency boundaries, content validation, and all 60 Node tests — two of them new, covering the continued conversation and the resume point. `node tests all` passed 61/61 browser tests in 154.365 seconds; log `e2e/logs/2026-09-13T22-57-44-719Z-all.log`. The new `e2e/dialogue/librarian-key-journey.spec.cjs` was verified against the unfixed code three times, once per fault: it reported the player line queued as speaker `npc1`, the greeting "Oh hello, you're back!" spoken mid-conversation, and the phase-1 choices missing when the player returned.
+
 ## 2026-09-13 — Chapter 1 vertical slice, journal, and hints (Section 6)
 
 - Replaced the 11-action puzzle spine with the full authored Chapter 1 graph: 44 named actions over 56 facts, covering the library, parrot/mirror/den-key, den/crowbar/paper, poo/carrot/glove, donkey/barn/barrel/mallet, carpenter/farmer/cow/pliers/splinter, drain/bowl/milk/dog/bone, rigging/wood/pulley/hoist, bridge, wolf, and Map chains. Every action declares its chain, and the content validator now rejects an unreachable action, a prerequisite no action produces, an undeclared chain, and an objective pointing at a fact that does not exist.

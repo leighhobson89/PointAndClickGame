@@ -29,7 +29,7 @@ The best version of this project should provide:
 | Visuals | Memorable assets with major style, scale, and finish variation | One intentional art bible, consistent character scale, lighting, perspective, and export standards |
 | Audio | Described in the GDD but not implemented | Music, ambience, spatial cues, and responsive interaction SFX |
 | Save/load | Versioned envelope, single migration boundary, world stored as a patch, milestone checkpoints, autosave, menu `Continue`, and a restore that changes nothing when a save cannot be trusted | Cloud saves, only once local saves, privacy, identity, and conflict policy are explicit |
-| Quality | 44 Node tests and 53 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
+| Quality | 60 Node tests and 61 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
 
 ## Experience principles
 

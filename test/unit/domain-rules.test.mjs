@@ -12,7 +12,7 @@ import { applyPuzzleAction, whyGateUnavailable, whyUnavailable } from '../../src
 import { finaliseLegacyWorld, migrateSave } from '../../src/domain/save/migrations.mjs';
 import { createSaveEnvelope } from '../../src/domain/save/save-format.mjs';
 import { createInitialGameState } from '../../src/state/game-state.mjs';
-import { libraryDialogueGraph } from '../../src/content/library-dialogue.mjs';
+import { libraryDialogueGraph, libraryDialogueStartNodeId } from '../../src/content/library-dialogue.mjs';
 
 test('all nine verbs produce stable intents without translated text', () => {
     assert.equal(VERB_IDS.length, 9);
@@ -66,17 +66,61 @@ test('localisation has explicit fallback, missing-key, and allow-listed interpol
     assert.throws(() => interpolateNamedTokens('${playerName.toUpperCase()}', {}, []), /invalid interpolation/);
 });
 
-test('library dialogue graph traverses stable choices to a stable consequence', () => {
-    assert.deepEqual(validateDialogueGraph(libraryDialogueGraph), []);
-    let state = createDialogueState(libraryDialogueGraph);
+function walkLibraryDialogue({ startNodeId = undefined, choose = () => null } = {}) {
+    let state = createDialogueState(libraryDialogueGraph, { startNodeId });
+    const visitedNodeIds = [];
     for (let guard = 0; guard < 20 && !state.ended; guard += 1) {
         const node = getDialogueNode(libraryDialogueGraph, state);
-        const choiceId = node.id === 'library.librarian.q0.choices' ? 'library.librarian.askResearchKey'
-            : node.id === 'library.librarian.q1.choices' ? 'library.librarian.pressForResearchKey' : null;
-        state = advanceDialogue(libraryDialogueGraph, state, { choiceId }).state;
+        visitedNodeIds.push(node.id);
+        state = advanceDialogue(libraryDialogueGraph, state, { choiceId: choose(node) }).state;
     }
+    return { state, visitedNodeIds };
+}
+
+const chooseKeyBranch = (node) => node.id === 'library.librarian.q0.choices' ? 'library.librarian.askResearchKey'
+    : node.id === 'library.librarian.q1.choices' ? 'library.librarian.pressForResearchKey' : null;
+
+test('library dialogue graph traverses stable choices to a stable consequence', () => {
+    assert.deepEqual(validateDialogueGraph(libraryDialogueGraph), []);
+    const { state } = walkLibraryDialogue({ choose: chooseKeyBranch });
     assert.equal(state.ended, true);
-    assert.deepEqual(state.consequenceIds, ['library.learnRiddle']);
+    assert.deepEqual(state.consequenceIds, ['library.askedForResearchKey', 'library.learnRiddle']);
+});
+
+test('asking the librarian for the key continues the same conversation instead of greeting the player again', () => {
+    const { visitedNodeIds } = walkLibraryDialogue({ choose: chooseKeyBranch });
+    // The phase-1 greeting belongs to a conversation that starts there. Reaching
+    // it straight after the key request made the librarian say hello mid-exchange.
+    assert.equal(visitedNodeIds.includes('library.librarian.q1.intro'), false);
+    assert.equal(visitedNodeIds.includes('library.librarian.q1.opening0'), false);
+    assert.deepEqual(visitedNodeIds.slice(visitedNodeIds.indexOf('library.librarian.q0.choices')), [
+        'library.librarian.q0.choices',
+        'library.librarian.q0.keyResponse0',
+        'library.librarian.q0.keyResponse1',
+        'library.librarian.q1.choices',
+        'library.librarian.q1.keyResponse0',
+        'library.librarian.q1.keyResponse1',
+        'library.librarian.q2.playerExit',
+        'library.librarian.q2.librarianExit',
+        'library.librarian.end.riddleKnown',
+    ]);
+});
+
+test('the librarian conversation resumes at the quest phase the player left her in', () => {
+    assert.equal(libraryDialogueStartNodeId(0), libraryDialogueGraph.startNodeId);
+    assert.equal(libraryDialogueStartNodeId(1), 'library.librarian.q1.intro');
+    assert.equal(libraryDialogueStartNodeId(99), libraryDialogueGraph.startNodeId);
+
+    // Leaving after the key request records the phase change, so the next
+    // conversation opens on "you're back" rather than the introduction.
+    const asked = walkLibraryDialogue({ choose: (node) => node.id === 'library.librarian.q0.choices' ? 'library.librarian.askResearchKey' : node.id === 'library.librarian.q1.choices' ? 'library.librarian.q1.exit' : null });
+    assert.deepEqual(asked.state.consequenceIds, ['library.askedForResearchKey']);
+
+    const resumed = walkLibraryDialogue({ startNodeId: libraryDialogueStartNodeId(1), choose: chooseKeyBranch });
+    assert.equal(resumed.visitedNodeIds[0], 'library.librarian.q1.intro');
+    assert.equal(resumed.visitedNodeIds.includes('library.librarian.q0.choices'), false);
+    assert.deepEqual(resumed.state.consequenceIds, ['library.learnRiddle']);
+    assert.throws(() => createDialogueState(libraryDialogueGraph, { startNodeId: 'library.librarian.q9.nowhere' }), /Unknown dialogue start node/);
 });
 
 test('puzzle prerequisites explain gates and effects are idempotent with convergent facts', () => {

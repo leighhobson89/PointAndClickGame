@@ -10,7 +10,7 @@ resources/content-contract.json is the machine-readable authority for shipped Ch
 
 - The canonical world contains 18 playable rooms, from libraryFoyer to the Chapter 1 payoff room map.
 - Market Street intentionally has five exits: Road Into Town, Back Alley, Carpenter Workshop, Library Foyer, and Cow Path. The four-exit Market Street brief is a superseded concept reference.
-- Debug Room is intentionally removed from shipped navigation and UI. Its old background is retained only as historical source material. Section 4 delivered its replacement: development-only scenarios, a gated DEBUG panel, and the `__GAME_TEST__` API reach any Chapter 1 state without a production room.
+- Debug Room is intentionally removed from shipped navigation and UI. Its old background is retained only as historical source material. Development-only scenarios, a gated DEBUG panel, and the `__GAME_TEST__` API reach any Chapter 1 state without a production room.
 - The supplied world-map diagram remains a historical design source. Its Embassy/Farm Track/Large Tree/Inside naming is superseded by the versioned runtime IDs in the content contract.
 - Files containing LastOneBackup, utilities/masterJSON/, utilities/jsonOutput/, and grid-reader outputs are authoring history, not runtime authority.
 
@@ -28,9 +28,9 @@ The map room is now complete enough to ship as the Chapter 1 destination:
 
 src/content/schemas.mjs defines runtime boundaries for navigation rooms, 80 x 60 grids and codes, entities, dialogue/localisation, puzzle actions, scenarios, and saves. src/content/validate-content.mjs validates the combined content atomically. The save shape itself is owned by src/domain/save/save-format.mjs and documented in save-format.md; schemas.mjs delegates to it so one command still checks every schema.
 
-The contract's puzzle.mandatoryFacts list has a second job since Section 5: it is the milestone list that drives save checkpoints. Adding a mandatory fact therefore makes it checkpoint itself. This is why Section 6 added 33 new facts without adding any mandatory ones: the fine detail of each chain drives the journal and the soft-lock check, while the eleven room gates and chapter milestones remain the things worth checkpointing.
+The contract's puzzle.mandatoryFacts list has a second job: it is the milestone list that drives save checkpoints. Adding a mandatory fact therefore makes it checkpoint itself. That is why the fine detail of each chain is declared as ordinary facts — they drive the journal and the soft-lock check — while the eleven room gates and chapter milestones remain the things worth checkpointing.
 
-Since Section 6 the puzzle section also carries:
+The puzzle section also carries:
 
 - `chains` — the named threads of Chapter 1, each owning one player-facing objective.
 - `objectives` — what the journal renders. Each declares `revealedBy` (when the player has met the puzzle) separately from `completedBy` (when it is solved), which is what keeps the journal spoiler-safe, plus how many hint tiers it offers. Titles and hints live in the `journal` section of `localization.json`, keyed `<objectiveId>.title` and `<objectiveId>.hintN`.
@@ -56,6 +56,8 @@ Commands:
 
 Startup fetches the contract and Map definition with the other required data, validates the complete bundle before committing any content, and uses the existing visible fatal-load alert on failure.
 
-## Current report boundary
+## Outstanding against this contract
 
-The hotspot report records eight legacy exit shapes below the 3 x 3 authoring target. They remain usable wide strips or door-aligned shapes and are explicitly visible as Section 7 input; missing labels, out-of-bounds geometry, and undeclared overlaps are blocking errors now.
+- The hotspot report records eight legacy exit shapes below the 3 x 3 authoring target. They remain usable wide strips or door-aligned shapes and are visible as input to the input/UI work (BUG-029); missing labels, out-of-bounds geometry, and undeclared overlaps are blocking errors already.
+- `objectPulleyWheel` is declared without an authored source, so `rigging.assemble` cannot yet state its real prerequisite (BUG-035).
+- The dialogue half of the contract validates links and reachability for the authored JSON, but only one conversation is declared as an explicit graph. The rest cannot be checked for choice reachability until they are migrated (BUG-011).

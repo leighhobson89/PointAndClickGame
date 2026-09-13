@@ -1,5 +1,5 @@
 const line = (id, textKey, nextNodeId, speaker = 'npcLibrarian', actions = []) => ({ id, type: 'line', textKey, speaker, nextNodeId, actions });
-const response = (id, textKey, nextNodeId) => line(id, textKey, nextNodeId);
+const response = (id, textKey, nextNodeId, actions = []) => line(id, textKey, nextNodeId, 'npcLibrarian', actions);
 
 export const libraryDialogueGraph = Object.freeze({
     id: 'library.librarianTutorial',
@@ -16,7 +16,12 @@ export const libraryDialogueGraph = Object.freeze({
             ],
         },
         'library.librarian.q0.keyResponse0': response('library.librarian.q0.keyResponse0', 'library.librarian.q0.response0.0', 'library.librarian.q0.keyResponse1'),
-        'library.librarian.q0.keyResponse1': response('library.librarian.q0.keyResponse1', 'library.librarian.q0.response0.1', 'library.librarian.q1.intro'),
+        // Asking for the key moves the librarian on to her second phase, but the
+        // player has not gone anywhere: the conversation continues straight into
+        // the new choices. Her phase-1 greeting belongs to a conversation that
+        // *starts* there, so routing through it here would make her say hello
+        // again in the middle of the same exchange.
+        'library.librarian.q0.keyResponse1': response('library.librarian.q0.keyResponse1', 'library.librarian.q0.response0.1', 'library.librarian.q1.choices', [{ id: 'library.askedForResearchKey' }]),
         ...Object.fromEntries([1, 2, 3, 4, 5].map((choice) => [`library.librarian.q0.asideResponse${choice}`, response(`library.librarian.q0.asideResponse${choice}`, `library.librarian.q0.response${choice}.0`, 'library.librarian.q0.choices')])),
         'library.librarian.q0.exitResponse': line('library.librarian.q0.exitResponse', 'library.librarian.q0.exit1', 'library.librarian.end.noConsequence'),
         'library.librarian.q1.intro': line('library.librarian.q1.intro', 'library.librarian.q1.intro', 'library.librarian.q1.opening0', 'player'),
@@ -39,6 +44,18 @@ export const libraryDialogueGraph = Object.freeze({
         'library.librarian.end.noConsequence': { id: 'library.librarian.end.noConsequence', type: 'end', actions: [] },
     }),
 });
+
+// Where a fresh conversation with the librarian starts, by the quest phase she
+// is actually in. A player who asked for the key and then walked away is met
+// with "you're back" rather than the whole introduction again.
+const LIBRARY_START_NODE_IDS = Object.freeze({
+    0: 'library.librarian.q0.intro',
+    1: 'library.librarian.q1.intro',
+});
+
+export function libraryDialogueStartNodeId(questPhase) {
+    return LIBRARY_START_NODE_IDS[questPhase] ?? libraryDialogueGraph.startNodeId;
+}
 
 export function resolveLibraryDialogueText(dialogueRoot, textKey, locale) {
     const match = /^library\.librarian\.q(\d+)\.(intro|opening\d+|choice\d+|response\d+\.\d+|exit\d+)$/.exec(textKey);

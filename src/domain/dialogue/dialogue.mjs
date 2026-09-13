@@ -18,10 +18,16 @@ export function validateDialogueGraph(graph) {
     return errors;
 }
 
-export function createDialogueState(graph) {
+// A conversation can be entered again later at a different point in the graph:
+// an NPC whose quest phase has moved on greets the player from that phase
+// instead of replaying the introduction. The entry point is a stable node id,
+// never an index, so authored content can be reordered without breaking saves.
+export function createDialogueState(graph, { startNodeId } = {}) {
     const errors = validateDialogueGraph(graph);
     if (errors.length) throw new TypeError(`Invalid dialogue graph: ${errors.join('; ')}`);
-    return Object.freeze({ graphId: graph.id, nodeId: graph.startNodeId, visitedChoiceIds: [], consequenceIds: [], ended: false });
+    const entryNodeId = startNodeId ?? graph.startNodeId;
+    if (!graph.nodes[entryNodeId]) throw new TypeError(`Unknown dialogue start node '${entryNodeId}'`);
+    return Object.freeze({ graphId: graph.id, nodeId: entryNodeId, visitedChoiceIds: [], consequenceIds: [], ended: false });
 }
 
 export function getDialogueNode(graph, state, facts = {}) {

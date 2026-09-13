@@ -2,7 +2,9 @@
 
 ## Sources and authority
 
-This model reconciles the supplied world-map diagram, Chapter 1 and full puzzle-dependency diagrams, Puzzle Design Document, pulley rigging flow, and current navigation/event data. The implemented chapter1-world-v1 contract in resources/content-contract.json is authoritative. The earlier diagrams remain historical intent where they differ; see content-contract.md for the decisions and validation boundary.
+This model reconciles the supplied world-map diagram, Chapter 1 and full puzzle-dependency diagrams, Puzzle Design Document, pulley rigging flow, and current navigation/event data. The implemented chapter1-world-v1 contract in resources/content-contract.json is authoritative; see content-contract.md for the schemas and validation boundary.
+
+The design questions this model has already settled — how the runtime topology differs from the supplied map, and what became of the original puzzle risks — are recorded in [archive/world-and-puzzles-resolved.md](archive/world-and-puzzles-resolved.md).
 
 ## Current runtime room graph
 
@@ -28,10 +30,6 @@ flowchart LR
 ```
 
 Arrows are simplified; every canonical connection has a validated return exit. Debug Room is intentionally absent from shipped content, and the Map room now has background art, a generated walk grid, payoff interaction, and a return path.
-
-## Design-map reconciliation
-
-The supplied map also names Embassy, Farm Track, Large Tree, Inside Barn, and Inside House. Those names and the four-exit Market Street brief are superseded historical references. The canonical contract uses Cow Path, Dead Tree, Barn, House, Sewer, Kitchen, no Embassy, and five Market Street exits.
 
 ## Chapter 1 critical path
 
@@ -87,28 +85,11 @@ flowchart TD
     Wolf --> Map[Reach the map]
 ```
 
-The full source diagram also connects pitchfork to glove/barrel access, hook-and-mirror to rope, cow help to a splinter/jam branch, and multiple rigging interactions. These should become named puzzle-state facts rather than implicit object mutations.
-
-## Puzzle design assessment
-
-Strengths:
-
-- Dependencies cross several locations and characters, encouraging exploration.
-- Chains combine dialogue, inventory, environmental change, and comedy props.
-- Multiple branches converge, giving Chapter 1 a satisfying macro-structure.
-- The library opening provides a smaller tutorial puzzle before the wider map.
-
-Risks:
-
-- The graph is large enough that one missed flag or unavailable response can soft-lock progression.
-- Long dependency chains need intermediate acknowledgement and an optional journal/hint system.
-- Several designed destinations/assets do not match the runnable data.
-- Event logic currently mutates global object/navigation state directly, making graph reachability hard to prove.
-- Item combinations and interaction anchors need clear feedback to avoid brute-force verb use.
+The full source diagram also connects pitchfork to glove/barrel access, hook-and-mirror to rope, cow help to a splinter/jam branch, and multiple rigging interactions. All of these are named puzzle-state facts in the shipped contract rather than implicit object mutations.
 
 ## Implemented puzzle representation
 
-Since Section 6 the model above is the shipped model. `resources/content-contract.json` declares **44 named actions over 56 facts**, which is the whole dependency diagram rather than a summary of it. Each action declares `id`, `chain`, `requires`, and `effects`, and each fact is represented exactly once.
+The model above is the shipped model. `resources/content-contract.json` declares **44 named actions over 56 facts**, which is the whole dependency diagram rather than a summary of it. Each action declares `id`, `chain`, `requires`, and `effects`, and each fact is represented exactly once.
 
 The eleven facts that gate rooms or mark chapter milestones stay declared as `mandatoryFacts`, because those are what the save service checkpoints:
 

@@ -2,42 +2,35 @@
 
 ## Release target: polished Chapter 1 vertical slice
 
-The first meaningful product milestone should be the complete journey from Library Foyer to obtaining the Map, not a larger collection of unfinished rooms.
+The first meaningful product milestone is the complete journey from Library Foyer to obtaining the Map, not a larger collection of unfinished rooms.
+
+This document lists the features that are still missing, in implementation order. Features already shipped are recorded in [archive/feature-roadmap-delivered.md](archive/feature-roadmap-delivered.md).
 
 ## Foundation features
 
-1. **Complete save/resume** — delivered 2026-09-13. A versioned envelope, a single migration boundary, milestone checkpoints, rate-limited autosave, a menu `Continue`, manual export/import, and a two-phase restore that leaves the running session untouched when a save cannot be trusted. Contract in `save-format.md`.
-2. **Canonical quest state and journal** — delivered 2026-09-13. 44 named actions over 56 facts, an objective model derived from those facts with no state of its own, three-tier opt-in hints in five locales, gate and action explanations expressed by objective, recorded choice variants, a chapter-completion summary, and a validator-enforced no-soft-lock guarantee. Model in `world-and-puzzles.md`.
-3. **Content validation** — fail fast on missing assets, grids, destinations, IDs, dialogue links, and translations.
-4. **Debug/test state controls** — delivered 2026-09-13. Fourteen deterministic scenarios, milestone transactions, overlays, and the gated DEBUG panel and `__GAME_TEST__` API described in `debug-test-controls.md`.
-5. **Settings** — locale, text speed, volume groups, subtitles, reduced motion, hotspot assistance, and input preferences.
+1. **Settings** — locale, text speed, volume groups, subtitles, reduced motion, hotspot assistance, and input preferences, persisted across sessions.
+2. **Offline delivery** — bundle or remove the CDN scripts so the game boots under a strict CSP with no runtime network dependency.
 
 ## Chapter 1 completion
 
-- ~~Finalise the library tutorial~~ — delivered; stable nodes, choices, and consequence.
-- ~~Reconcile room topology with the maintained world design~~ — delivered in Section 2.
-- ~~Implement and validate every prerequisite on the dependency graph~~ — delivered in Section 6; the validator now rejects an unreachable action or an unproducible prerequisite.
-- ~~Complete Map destination assets/data and Chapter 1 payoff~~ — delivered in Section 2, with the completion summary added in Section 6.
-- ~~Ensure every object supports a useful or entertaining Look response~~ — delivered; all 42 objects answer Look in five locales.
-- ~~Add hint/journal entries at major puzzle facts without revealing solutions prematurely~~ — delivered; objectives stay hidden until met and hints are opt-in, one tier at a time.
-- ~~Audit soft-locks~~ — delivered; detection is enforced per step across the whole chapter and across every scenario fixture.
-- Remaining: play each dependency chain end-to-end in a browser, author the missing rigging props (BUG-035), and add optional examine variants and character barks.
+- Play each dependency chain end-to-end in a browser, rather than at fact level.
+- Author the missing rigging props so the pulley has a real source (BUG-035).
+- Add optional examine variants and character barks that reward exploration without gating progress.
+- Manual review of narrative continuity, humour, pacing, discoverability, and puzzle fairness. This is Leigh's pass.
 
 ## Interaction improvements
 
 - Contextual default click, with the full verb panel retained as an optional/classic interaction mode.
 - Hotspot highlight/reveal with accessible names and adjustable intensity.
 - Double-click or explicit fast-walk, plus skip for previously seen skippable animations.
-- Clear two-item action state: first target, expected second target, cancel, and invalid combination response.
 - Keyboard focus traversal, verb shortcuts, inventory navigation, dialogue selection, and Escape/back behaviour.
 - Touch layout with large targets and no hover dependency.
 
 ## Narrative and replayability
 
-- Explicit dialogue choices with stable node IDs and consequence facts.
+- Move the remaining conversations onto explicit dialogue graphs with stable node IDs and consequence facts (BUG-011). Until then a mid-conversation save cannot resume in the conversation, and a conversation cannot be rewound for testing.
 - Optional examine responses and character barks to reward exploration.
 - Hidden interactions/achievements only after the critical path is robust.
-- Record choice variants in saves and expose a chapter-completion summary. Removed dialogue options already persist; the remaining work is Section 6's, once the non-library conversations move to explicit graphs and a mid-conversation save becomes meaningful.
 - Defer large branching routes until the core graph and state migrations are proven.
 
 ## Presentation and audio
@@ -46,7 +39,7 @@ The first meaningful product milestone should be the complete journey from Libra
 - Character/dialogue cues that do not conflict with text readability.
 - Music transitions tied to locations and milestones.
 - Subtitle/caption support for all meaningful audio.
-- Art pipeline and UI upgrade described in `ui-and-art-direction.md`.
+- Art pipeline and UI upgrade described in [ui-and-art-direction.md](ui-and-art-direction.md).
 
 ## Later releases
 
@@ -57,4 +50,4 @@ The first meaningful product milestone should be the complete journey from Libra
 
 ## Feature definition of done
 
-A feature is complete when its player behaviour, failure states, localisation, accessibility, save/load effect, debug reachability, automated coverage, and living documentation are all addressed.
+A feature is complete when its player behaviour, failure states, localisation, accessibility, save/load effect, debug reachability, automated coverage, and living documentation are all addressed. At that point it moves to the delivered archive rather than staying here as a struck-through line.

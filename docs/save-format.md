@@ -1,10 +1,11 @@
 # Save format and progress ownership
 
-Status: **implemented** 2026-09-13 (Section 5).
+Status: **implemented**.
 
 This document is the contract for player progress. It describes what a save
 contains, what it deliberately leaves out, how an older save is brought
-forward, and the rules that keep progress from being partially applied.
+forward, and the rules that keep progress from being partially applied. The
+outstanding work against it is in **Known limits** at the end.
 
 ## The shape of a save
 

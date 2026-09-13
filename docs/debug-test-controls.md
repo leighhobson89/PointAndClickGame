@@ -1,6 +1,6 @@
 # Debug and test controls
 
-Status: **implemented (2026-09-13)**. This document now describes shipped behaviour. Anything still planned is marked as such.
+Status: **implemented**. This document describes the shipped surface: how to enable it, what it offers, and what it still owes at the end. What the tools changed in the runtime when they landed, and the acceptance evidence, are in [archive/debug-test-controls-delivered.md](archive/debug-test-controls-delivered.md).
 
 ## Goal
 
@@ -83,7 +83,7 @@ window.__GAME_TEST__ = {
 
 ### Chapter progress
 
-The seven progress calls added in Section 6 are the same derivation the player's journal renders, exposed so a browser test can assert progress by stable ID instead of by reading translated copy:
+The seven progress calls are the same derivation the player's journal renders, exposed so a browser test can assert progress by stable ID instead of by reading translated copy:
 
 - `journal()` and `objectives()` return objective status (`hidden`, `active`, `done`), the chain each belongs to, and the actions available next within that chain.
 - `explainObjectiveForAction(actionId)` and `explainGateObjective(gateFactId)` answer "why can I not do this yet" as the objective that owns the missing fact, rather than as a raw fact ID.
@@ -175,7 +175,7 @@ Sections and controls:
 - **Inventory and verbs** — add/remove one item, inventory presets, list inventory, select verb, select target, cancel, show current structured intent, reset a consumed or moved entity.
 - **Dialogue and characters** — start a conversation, show node choices with their conditions and actions, text speed, skip line, reset conversation, inspect NPC room/visibility/pose/facts.
 - **Puzzles and quests** — list facts by satisfied and mandatory status, apply a milestone transaction, explain why an action or gate is unavailable, validate facts for conflicts, show the critical-path frontier, revert by reloading a scenario.
-- **Save, localisation, presentation** — save/load through the real repository, migration fixture select, locale switch, missing-key simulation, viewport presets, high contrast, reduced motion, text scale, input mode, simulated asset and storage failures. Since Section 5 the scenario repository writes the same versioned envelope the player's saves use, so a debug round trip exercises the shipping save path rather than a parallel one; the format is documented in `save-format.md`.
+- **Save, localisation, presentation** — save/load through the real repository, migration fixture select, locale switch, missing-key simulation, viewport presets, high contrast, reduced motion, text scale, input mode, simulated asset and storage failures. The scenario repository writes the same versioned envelope the player's saves use, so a debug round trip exercises the shipping save path rather than a parallel one; the format is documented in `save-format.md`.
 - **Diagnostics** — current state summary, wait for idle, structured action log, clear log, reproduction bundle.
 
 ## Reproduction bundle
@@ -186,27 +186,10 @@ Sections and controls:
 
 `e2e/game-state/debug-absent-in-production.spec.cjs` runs against a real release server started without debug tools and asserts that `/debug-capability` reports disabled, every debug module returns HTTP 404, `window.__GAME_TEST__` and `#debugPanel` are absent, no `[data-debug-control]` element exists, the retired always-on debug wheel and its middle-click shortcut are gone, and that `?debug=1` combined with a test bootstrap still enables nothing.
 
-## What changed in the runtime
-
-- The always-available debug wheel markup, styles, and handlers were removed from `index.html`, `styles.css`, and `ui.js`. Nothing was lost: all four of its capabilities moved into the gated panel. Add item became the Inventory section's item select and presets; Show Grid became **Legacy grid view** alongside the richer additive overlays; Open Debug became **Open value window**; and Toggle Anim became **Toggle NPC animation**. The middle-click and NumpadSubtract shortcuts still open the panel.
-- `updateDebugValues()` now returns immediately unless the legacy debug window is open, instead of serialising the whole grid every frame.
-- Frame-time sampling and overlay drawing only run when a development build has installed the overlay renderer, so production frame cost is unchanged.
-- `getTextDisplayDuration()` now applies a text-speed scale that only the debug controls change and that a new session resets to 1.
-
-## Acceptance criteria
-
-| Criterion | Evidence |
-| --- | --- |
-| Every Chapter 1 puzzle milestone, every room, the migrated librarian dialogue branch, inventory layout limits, and the declared error states are reachable through a named scenario plus normal input | `game-state/debug-scenarios.spec.cjs`, `puzzles/scenario-milestones.spec.cjs`, `dialogue/scenario-dialogue.spec.cjs`, `navigation/content-contract.spec.cjs`. Branches inside the unmigrated legacy conversations are not yet individually addressable (BUG-011). |
-| Scenario load takes less than one second after app readiness | All fourteen fixtures are timed and asserted under 1000 ms |
-| Loading the same scenario and seed twice produces the same checksum and visible state | Same-seed reproduction test, plus the revert-and-replay checksum test |
-| Invalid state is rejected before rendering | Unknown room, unknown scenario, and impossible-fact cases leave room and checksum unchanged |
-| Production confirms `window.__GAME_TEST__` and the panel are absent | `debug-absent-in-production.spec.cjs` against the release server |
-| Scenario IDs and coverage mappings are documented in the relevant functional-area README | `e2e/README.md` and the area READMEs |
-
-## Still planned
+## Still owed
 
 - Major animation and cutscene branches do not yet have their own scenarios; `animation-cutscenes` still starts from a normal New Game.
 - `resetConversation(npcId)` restores the NPC record but cannot rewind a legacy conversation's internal phase, because the non-library conversations are still on the legacy representation (BUG-011).
 - Simulated asset failure records the declared URL for assertion; it does not yet intercept the network request.
-- Controller support for touch and keyboard input modes sets the document state that Section 7 will consume; it does not yet change input handling.
+- Controller support for touch and keyboard input modes sets the document state only; it does not yet change input handling. The input work in Section 7 of the checklist consumes it.
+- The dialogue inspector always describes the graph from its declared start node, so it cannot yet describe a conversation from the phase an NPC is actually in.

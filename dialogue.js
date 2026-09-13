@@ -5,25 +5,50 @@ import { setGameState } from "./game.js"
 import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
 import { advanceDialogue, createDialogueState, getDialogueNode } from './src/domain/dialogue/dialogue.mjs';
 import { choiceFactId } from './src/domain/progress/journal.mjs';
-import { libraryDialogueGraph, resolveLibraryDialogueText } from './src/content/library-dialogue.mjs';
+import { libraryDialogueGraph, libraryDialogueStartNodeId, resolveLibraryDialogueText } from './src/content/library-dialogue.mjs';
 
 async function runLibraryDialogue(npcId) {
     const player = getPlayerObject();
     const npc = getNpcData().npcs[npcId];
-    let state = createDialogueState(libraryDialogueGraph);
+    // Enter the graph at the phase the librarian is in, so walking away
+    // mid-conversation and coming back resumes instead of starting over.
+    let state = createDialogueState(libraryDialogueGraph, { startNodeId: libraryDialogueStartNodeId(getQuestPhaseNpc(npcId)) });
     turnNpcForDialogue(player, npc, npcId, false);
     setTransitioningToDialogueState(true);
+    updateInteractionInfo(localize('interactionTalkingTo', getLanguage(), 'verbsActionsInteraction') + " " + npc.name[getLanguage()], true);
     setGameState(getInteractiveDialogueState());
     hideDialogueArrows();
+
+    // Every line goes through one speaker path, the player's chosen line
+    // included. Text is drawn at the current speaker's position, so a line
+    // shown without claiming its speaker is drawn at the previous speaker's
+    // coordinates, or at none at all.
+    const speakLine = async (speaker, text) => {
+        const role = speaker === 'player' ? 'player' : 'npc1';
+        setCurrentSpeaker(role);
+        const { xPos, yPos } = getTextPosition(role, npc);
+        await showText(text, getTextColor(role, npc.interactable.dialogueColor), xPos, yPos);
+    };
+
+    const applyDialogueActions = async (actions) => {
+        for (const action of actions) {
+            if (action.id === 'library.askedForResearchKey') {
+                setQuestPhaseNpc(npcId, 1);
+            }
+            if (action.id === 'library.learnRiddle') {
+                setQuestPhaseNpc(npcId, 2);
+                await executeInteractionEvent({ dialogueEvent: 'allowInteractionPileOfBooks' }, '', null, npcId);
+            }
+        }
+    };
 
     while (!state.ended) {
         const node = getDialogueNode(libraryDialogueGraph, state);
         if (node.type === 'line') {
-            setCurrentSpeaker(node.speaker);
-            const text = resolveLibraryDialogueText(getDialogueData(), node.textKey, getLanguage());
-            const { xPos, yPos } = getTextPosition(node.speaker === 'player' ? 'player' : 'npc1', npc);
-            await showText(text, getTextColor(node.speaker === 'player' ? 'player' : 'npc1', npc.interactable.dialogueColor), xPos, yPos);
-            state = advanceDialogue(libraryDialogueGraph, state).state;
+            await speakLine(node.speaker, resolveLibraryDialogueText(getDialogueData(), node.textKey, getLanguage()));
+            const advanced = advanceDialogue(libraryDialogueGraph, state);
+            await applyDialogueActions(advanced.actions);
+            state = advanced.state;
             continue;
         }
         if (node.type === 'choice') {
@@ -36,22 +61,18 @@ async function runLibraryDialogue(npcId) {
                 }
             });
             removeDialogueRow(0);
-            await showText(resolveLibraryDialogueText(getDialogueData(), choice.textKey, getLanguage()), getColorTextPlayer());
+            await speakLine('player', resolveLibraryDialogueText(getDialogueData(), choice.textKey, getLanguage()));
             const advanced = advanceDialogue(libraryDialogueGraph, state, { choiceId: choice.id });
             // Stable choice variants are canonical progress: they are recorded
             // as facts so they survive a save and reach the chapter summary.
             if (advanced.recordedChoiceId) setQuestFact(choiceFactId(advanced.recordedChoiceId), true);
+            await applyDialogueActions(advanced.actions);
             state = advanced.state;
             continue;
         }
         const result = advanceDialogue(libraryDialogueGraph, state);
         state = result.state;
-        for (const action of result.actions) {
-            if (action.id === 'library.learnRiddle') {
-                setQuestPhaseNpc(npcId, 2);
-                await executeInteractionEvent({ dialogueEvent: 'allowInteractionPileOfBooks' }, '', null, npcId);
-            }
-        }
+        await applyDialogueActions(result.actions);
     }
 
     removeDialogueRow(0);

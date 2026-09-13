@@ -5,8 +5,9 @@ This repository belongs to Leigh. Address Leigh by name when it is natural and u
 ## Living documentation
 
 - Treat `docs/` as part of the product, not an afterthought.
-- After each completed prompt that changes code, data, tests, design, or known behaviour, update the relevant documents and append a short dated entry to `docs/changelog.md`.
-- Record newly discovered defects in `docs/bugs.md`; do not silently bury them in a plan or test.
+- The documentation is split into a done side and a to-do side. The live documents in `docs/` hold only outstanding work and currently-true reference; everything finished lives in `docs/archive/`, one archive file per live document. A live document must not refer to completed items, beyond the single link to its own archive file.
+- After each completed prompt that changes code, data, tests, design, or known behaviour: remove what is now done from the live document, add it to the matching archive file, and append a short dated entry to `docs/changelog.md`.
+- Record newly discovered defects in `docs/bugs.md`; do not silently bury them in a plan or test. Move a row to `docs/archive/bugs-resolved.md` only once its evidence passes; never delete a resolved row, and never leave one in the active register.
 - Keep claims evidence-based. Mark planned behaviour separately from implemented behaviour.
 
 ## Editing and repository care
