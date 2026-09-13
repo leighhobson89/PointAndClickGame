@@ -1,9 +1,10 @@
-import { getCurrentScreenId, setPendingEvents, getPendingEvents, getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
+import { setQuestFact, getCurrentScreenId, setPendingEvents, getPendingEvents, getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
 import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
 import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
 import { advanceDialogue, createDialogueState, getDialogueNode } from './src/domain/dialogue/dialogue.mjs';
+import { choiceFactId } from './src/domain/progress/journal.mjs';
 import { libraryDialogueGraph, resolveLibraryDialogueText } from './src/content/library-dialogue.mjs';
 
 async function runLibraryDialogue(npcId) {
@@ -36,7 +37,11 @@ async function runLibraryDialogue(npcId) {
             });
             removeDialogueRow(0);
             await showText(resolveLibraryDialogueText(getDialogueData(), choice.textKey, getLanguage()), getColorTextPlayer());
-            state = advanceDialogue(libraryDialogueGraph, state, { choiceId: choice.id }).state;
+            const advanced = advanceDialogue(libraryDialogueGraph, state, { choiceId: choice.id });
+            // Stable choice variants are canonical progress: they are recorded
+            // as facts so they survive a save and reach the chapter summary.
+            if (advanced.recordedChoiceId) setQuestFact(choiceFactId(advanced.recordedChoiceId), true);
+            state = advanced.state;
             continue;
         }
         const result = advanceDialogue(libraryDialogueGraph, state);

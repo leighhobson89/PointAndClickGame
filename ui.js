@@ -118,7 +118,10 @@ import {
     setNextScreenId,
     setClickPoint,
     setPlayerObject,
-    setCurrentForegroundImage
+    setCurrentForegroundImage,
+    getContentContract,
+    getQuestFacts,
+    subscribeToGameState
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -167,6 +170,7 @@ import {
     waitForTransition,
 } from './src/application/readiness.mjs';
 import { assertValidContentBundle } from './src/content/validate-content.mjs';
+import { createJournalPanel } from './src/adapters/journal-panel.mjs';
 import { createCommandIntent, toLocalisationKey } from './src/domain/commands/commands.mjs';
 import { pointerToWorld, resolveCellTarget, worldToGrid } from './src/domain/navigation/navigation.mjs';
 
@@ -808,7 +812,73 @@ async function setElementsLanguageText() {
     getElements().loadGameButton.innerHTML = `${localize("loadGame", getLanguage(), "ui")}`;
     getElements().saveGameButton.innerHTML = `${localize("saveGame", getLanguage(), "ui")}`;
     getElements().loadStringButton.innerHTML = `${localize("loadButton", getLanguage(), "ui")}`;
+    getElements().openJournalButton.innerHTML = `${localize("openButton", getLanguage(), "journal")}`;
+    getJournalPanel()?.refreshIfOpen();
     refreshContinueAvailability();
+}
+
+// --- journal ---------------------------------------------------------------
+
+let journalPanel = null;
+let journalUnsubscribe = null;
+
+export function getJournalPanel() {
+    return journalPanel;
+}
+
+/** Stable summary of the recorded facts, used to detect real progress. */
+function factsSignature() {
+    const facts = getQuestFacts() ?? {};
+    return Object.keys(facts).filter((factId) => facts[factId] === true).sort().join('|');
+}
+
+/**
+ * Build the journal once per session. The panel reads canonical facts on every
+ * render, so it needs no subscription of its own beyond a refresh whenever the
+ * player changes something while it is open.
+ */
+export function initialiseJournalPanel() {
+    if (journalPanel) return journalPanel;
+    const elements = getElements();
+    if (!elements.journalPanel) return null;
+
+    journalPanel = createJournalPanel({
+        elements: {
+            panel: elements.journalPanel,
+            body: elements.journalBody,
+            title: elements.journalTitle,
+            progress: elements.journalProgress,
+            openButton: elements.openJournalButton,
+            closeButton: elements.closeJournalButton,
+        },
+        translate: (key, tokens = {}) => localize(key, getLanguage(), 'journal', tokens),
+        getContract: () => getContentContract(),
+        getFacts: () => getQuestFacts(),
+    });
+    // Facts are the journal's only input, so one store subscription keeps an
+    // open journal correct no matter which puzzle recorded the change. The
+    // store also publishes per-frame movement, so the signature check is not
+    // an optimisation: re-rendering on every notification would rebuild the
+    // hint controls under the player's cursor between press and release.
+    let lastFactsSignature = factsSignature();
+    journalUnsubscribe = subscribeToGameState(() => {
+        const signature = factsSignature();
+        if (signature === lastFactsSignature) return;
+        lastFactsSignature = signature;
+        journalPanel?.refreshIfOpen();
+    });
+    return journalPanel;
+}
+
+export function disposeJournalPanel() {
+    journalUnsubscribe?.();
+    journalUnsubscribe = null;
+    journalPanel?.dispose();
+    journalPanel = null;
+}
+
+export function refreshJournal() {
+    journalPanel?.refreshIfOpen();
 }
 
 export async function handleLanguageChange(languageCode) {

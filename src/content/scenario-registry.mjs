@@ -57,6 +57,25 @@ export const FACT_EFFECTS = Object.freeze({
 
 const facts = (...factIds) => Object.fromEntries([['chapter1.started', true], ...factIds.map((factId) => [factId, true])]);
 
+// Named groups of facts, so a fixture reads as the state a tester wants rather
+// than as a wall of prerequisites. Each group is the full chain up to and
+// including the named step; `test/unit/scenario-rules.test.mjs` checks every
+// fixture against the contract, so a graph change fails the suite here rather
+// than producing a fixture the real game could never be in.
+const LIBRARY_DONE = ['library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked'];
+const MAP_CLUE_DONE = [...LIBRARY_DONE, 'research.mapClueFound'];
+const DEN_KEY_IN_HAND = [...MAP_CLUE_DONE, 'library.flyerObtained', 'parrot.flyerPlaced', 'parrot.mirrorAvailable', 'parrot.mirrorObtained', 'woman.mirrorOffered', 'woman.mirrorGiven', 'den.keyObtained'];
+const DEN_DONE = [...DEN_KEY_IN_HAND, 'den.unlocked', 'den.crowbarObtained', 'den.paperFound'];
+const CARROT_IN_HAND = ['poo.pitchforkObtained', 'poo.searched', 'donkey.carrotAvailable', 'barn.gloveAvailable', 'donkey.carrotObtained'];
+const BARN_DONE = [...CARROT_IN_HAND, 'donkey.fed', 'barn.unblocked', 'rigging.ropeAvailable', 'rigging.ropeObtained', 'barn.gloveObtained', 'barn.barrelOpened', 'bridge.malletObtained'];
+const CARPENTER_DONE = ['carpenter.spokenTo', 'farmer.spokenTo', 'cow.talkable', 'cow.spokenTo', 'cow.pliersAvailable', 'cow.pliersObtained', 'cow.splinterRemoved', 'rigging.splinterObtained'];
+const DOG_DONE = ['house.drainOpened', 'kitchen.bowlObtained', 'kitchen.milkObtained', 'kitchen.milkBowlReady', 'dog.distracted', 'river.boneAvailable', 'river.boneObtained'];
+const RIGGING_ASSEMBLED = [...DEN_DONE, ...BARN_DONE, 'rigging.assembled', 'rigging.pulleyMounted'];
+const RIGGING_DONE = [...RIGGING_ASSEMBLED, 'rigging.ropeAndHookCombined', 'rigging.woodAttached', 'rigging.woodConnected', 'rigging.woodHoisted'];
+const BRIDGE_READY = [...RIGGING_DONE, ...CARPENTER_DONE, 'bridge.repairMaterialsReady', 'rigging.pulleyJammed', 'bridge.nailsAvailable', 'bridge.nailsObtained'];
+const BRIDGE_DONE = [...BRIDGE_READY, 'bridge.repaired'];
+const WOLF_DONE = [...BRIDGE_DONE, ...DOG_DONE, 'river.wolfResolved'];
+
 const FIXTURES = [
     createScenario({
         id: 'chapter1.new-game',
@@ -84,21 +103,21 @@ const FIXTURES = [
         description: 'Library tutorial complete; town exploration available.',
         seed: 1004,
         roomId: 'marketStreet',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound'),
+        facts: facts(...MAP_CLUE_DONE),
     }),
     createScenario({
         id: 'chapter1.den-unlock-ready',
-        description: 'Den key available in the alley; the player performs the gate interaction.',
+        description: 'Den key in hand in the alley; the player performs the gate interaction.',
         seed: 1005,
         roomId: 'alley',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound'),
+        facts: facts(...DEN_KEY_IN_HAND),
     }),
     createScenario({
         id: 'chapter1.barn-unblock-ready',
-        description: 'Donkey and carrot prerequisites positioned for the tested action.',
+        description: 'Carrot in hand at the stables; the player feeds the donkey and clears the barn.',
         seed: 1006,
         roomId: 'stables',
-        facts: facts(),
+        facts: facts(...CARROT_IN_HAND),
         inventory: ['objectCarrot'],
     }),
     createScenario({
@@ -106,21 +125,21 @@ const FIXTURES = [
         description: 'Rope, pulley, and anchor prerequisites prepared at the river crossing.',
         seed: 1007,
         roomId: 'riverCrossing',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound', 'den.unlocked', 'barn.unblocked'),
+        facts: facts(...RIGGING_ASSEMBLED),
     }),
     createScenario({
         id: 'chapter1.bridge-ready',
-        description: 'Materials and puzzle facts ready; the player repairs the bridge.',
+        description: 'Materials, mallet, and nails ready; the player repairs the bridge.',
         seed: 1008,
         roomId: 'riverCrossing',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound', 'den.unlocked', 'barn.unblocked', 'rigging.assembled', 'bridge.repairMaterialsReady'),
+        facts: facts(...BRIDGE_READY),
     }),
     createScenario({
         id: 'chapter1.wolf-ready',
-        description: 'Bridge repaired; the player performs the final obstacle resolution.',
+        description: 'Bridge repaired and bone carried; the player performs the final obstacle resolution.',
         seed: 1009,
         roomId: 'riverCrossing',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound', 'den.unlocked', 'barn.unblocked', 'rigging.assembled', 'bridge.repairMaterialsReady', 'bridge.repaired'),
+        facts: facts(...BRIDGE_DONE, ...DOG_DONE),
         inventory: ['objectBone'],
     }),
     createScenario({
@@ -128,7 +147,7 @@ const FIXTURES = [
         description: 'River gate resolved; the player walks into the Map overlook.',
         seed: 1010,
         roomId: 'riverCrossing',
-        facts: facts('library.riddleKnown', 'library.researchKeyFound', 'library.researchRoomUnlocked', 'research.mapClueFound', 'den.unlocked', 'barn.unblocked', 'rigging.assembled', 'bridge.repairMaterialsReady', 'bridge.repaired', 'river.wolfResolved'),
+        facts: facts(...WOLF_DONE),
     }),
     createScenario({
         id: 'system.inventory-full',

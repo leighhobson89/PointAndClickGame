@@ -41,6 +41,37 @@ test('the release build serves no debug module, panel, API, or capability', asyn
     expect(runtimeErrors).toEqual([]);
 });
 
+test('the journal is a player feature and works on a release build', async ({ page }) => {
+    const runtimeErrors = [];
+    page.on('pageerror', (error) => runtimeErrors.push(error.message));
+
+    // The journal reads canonical facts and is not a debug affordance, so it
+    // must work with no debug module served and no __GAME_TEST__ present.
+    await page.goto(releaseUrl('/index.html'));
+    await page.locator('#btnEnglish').click();
+    await page.locator('#newGame').click();
+    await expect(page.locator('#canvasContainer')).toBeVisible();
+
+    await page.locator('#openJournal').click();
+    await expect(page.locator('#journalPanel')).toBeVisible();
+
+    const library = page.locator('.journal-objective[data-objective-id="objective.libraryAccess"]');
+    await expect(library).toHaveAttribute('data-objective-status', 'active');
+    await expect(page.locator('.journal-objective[data-objective-id="objective.wolf"]')).toHaveCount(0);
+
+    // Hints work without any test API, and still arrive one tier at a time.
+    const hints = page.locator('.journal-hints[data-objective-id="objective.libraryAccess"] .journal-hint');
+    await expect(hints).toHaveCount(0);
+    await page.locator('.journal-hint-button[data-objective-id="objective.libraryAccess"]').click();
+    await expect(hints).toHaveCount(1);
+
+    expect(await page.evaluate(() => typeof window.__GAME_TEST__)).toBe('undefined');
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#journalPanel')).toBeHidden();
+    expect(runtimeErrors).toEqual([]);
+});
+
 test('a debug query string alone cannot enable the tools on a release build', async ({ page }) => {
     await page.addInitScript(() => {
         window.__GAME_TEST_CONFIG__ = { enabled: true, seed: 1 };

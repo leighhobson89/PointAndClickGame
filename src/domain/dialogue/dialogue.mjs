@@ -35,22 +35,30 @@ export function getDialogueNode(graph, state, facts = {}) {
 }
 
 export function advanceDialogue(graph, state, { choiceId = null, facts = {} } = {}) {
-    if (state.ended) return Object.freeze({ state, actions: [], reason: 'already-ended' });
+    if (state.ended) return Object.freeze({ state, actions: [], recordedChoiceId: null, reason: 'already-ended' });
     const node = getDialogueNode(graph, state, facts);
     let nextNodeId = node.nextNodeId;
     let visitedChoiceIds = state.visitedChoiceIds;
     if (node.type === 'choice') {
         const choice = node.choices.find((item) => item.id === choiceId);
-        if (!choice) return Object.freeze({ state, actions: [], reason: 'choice-unavailable' });
+        if (!choice) return Object.freeze({ state, actions: [], recordedChoiceId: null, reason: 'choice-unavailable' });
         nextNodeId = choice.nextNodeId;
         visitedChoiceIds = [...visitedChoiceIds, choice.id];
     }
     const actions = node.actions ?? [];
     const consequenceIds = [...new Set([...state.consequenceIds, ...actions.map((action) => action.id)])];
     const ended = node.type === 'end' || !nextNodeId;
+    // A choice marked `recordsChoice` is a stable variant worth remembering
+    // after the conversation ends: the chapter summary reports how the player
+    // handled people, and that has to survive a save, so the caller records it
+    // as a canonical `choice.*` fact rather than keeping it in dialogue state.
+    const recordedChoiceId = node.type === 'choice'
+        ? (node.choices.find((item) => item.id === choiceId)?.recordsChoice === true ? choiceId : null)
+        : null;
     return Object.freeze({
         state: Object.freeze({ ...state, nodeId: ended ? state.nodeId : nextNodeId, visitedChoiceIds, consequenceIds, ended }),
         actions,
+        recordedChoiceId,
         reason: null,
     });
 }

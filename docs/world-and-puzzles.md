@@ -106,21 +106,39 @@ Risks:
 - Event logic currently mutates global object/navigation state directly, making graph reachability hard to prove.
 - Item combinations and interaction anchors need clear feedback to avoid brute-force verb use.
 
-## Target puzzle representation
+## Implemented puzzle representation
 
-Represent each fact once in a quest-state store, for example:
+Since Section 6 the model above is the shipped model. `resources/content-contract.json` declares **44 named actions over 56 facts**, which is the whole dependency diagram rather than a summary of it. Each action declares `id`, `chain`, `requires`, and `effects`, and each fact is represented exactly once.
 
-- `library.riddleKnown`
-- `library.researchRoomUnlocked`
-- `den.unlocked`
-- `barn.unblocked`
-- `rigging.assembled`
-- `bridge.repairMaterialsReady`
-- `bridge.repaired`
-- `river.wolfResolved`
-- `chapter1.mapReached`
+The eleven facts that gate rooms or mark chapter milestones stay declared as `mandatoryFacts`, because those are what the save service checkpoints:
 
-Each event declares prerequisites, effects, presentation, and idempotency. The validator determines unreachable facts, and since Section 4 tests create a state through named scenarios and `__GAME_TEST__` commands rather than replaying hours of prerequisites. Every milestone in the chain below has a fixture, and `criticalPathFrontier()` reports which actions are available but unfinished from any state.
+- `library.riddleKnown`, `library.researchKeyFound`, `library.researchRoomUnlocked`
+- `research.mapClueFound`
+- `den.unlocked`, `barn.unblocked`
+- `rigging.assembled`, `bridge.repairMaterialsReady`, `bridge.repaired`
+- `river.wolfResolved`, `chapter1.mapReached`
+
+The other 45 facts are the detail of the chains — `parrot.mirrorObtained`, `cow.splinterRemoved`, `kitchen.milkBowlReady`, `rigging.woodHoisted` and so on. They drive the journal, the gate explanations and the soft-lock check without adding checkpoint traffic.
+
+### How a fact gets recorded
+
+Three routes, all data-driven:
+
+| Route | Mechanism |
+| --- | --- |
+| A legacy event | `CANONICAL_ACTION_BY_EVENT` in `events.js` maps the event function to its canonical action. |
+| Picking something up | `puzzle.runtimePickupActions` in the contract maps an object ID to its action. |
+| A dialogue choice | A choice marked `recordsChoice` records a `choice.*` fact. |
+
+### What is enforced, and where
+
+- The **content validator** rejects an unreachable action, a required fact no action produces, an undeclared chain, an objective pointing at a fact that does not exist, and a pickup mapping naming an unknown action or object.
+- A **unit test** walks all 44 actions from a clean start and asserts after every step that no mandatory fact has become unreachable — the chapter's no-soft-lock guarantee. No Chapter 1 action consumes a fact, so "still reachable" is exactly "still achievable".
+- `criticalPathFrontier()` reports which actions are available but unfinished from any state. From a clean start it names five actions, not one, because the chapter genuinely opens five independent threads.
+
+### Known content gap
+
+`objectPulleyWheel` has no authored source: no placement room and no pickup, created in the world by the event that mounts it. `rigging.assemble` therefore declares only `chapter1.started` where it should declare "carrying a pulley". `pulleyRiggingFlow.txt` records "3 more objects to make", so this is unfinished authoring, tracked as BUG-035.
 
 ## Authoring rules
 

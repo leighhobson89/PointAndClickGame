@@ -107,21 +107,32 @@ Implementation note (2026-09-13): the format is documented in `save-format.md`. 
 
 Fixed alongside (BUG-033): a room change drew the previous room's foreground items over the new room's background, a regression introduced when Section 1 made transitions awaitable.
 
-## 6. Complete and validate the Chapter 1 vertical slice
+## 6. Complete and validate the Chapter 1 vertical slice — partially implemented
 
-- [ ] Finalise the library tutorial: librarian, riddle, books/key, research-room access, and clear town exit.
-- [ ] Implement every named Chapter 1 dependency, prerequisite, effect, acknowledgement, and availability explanation from the puzzle model.
-- [ ] Complete the hook/mirror/rope, den/paper, donkey/barn/barrel/mallet, carpenter/cow/bench/nails, drain/bowl/milk/dog/bone, rigging/wood/bridge, wolf, and Map chains.
-- [ ] Keep required clues/items available until solved, make default effects idempotent, review irreversible actions, and remove all known soft-locks.
-- [ ] Give every meaningful object an authored/entertaining Look response and sensible invalid-action feedback.
+- [x] Finalise the library tutorial: librarian, riddle, books/key, research-room access, and clear town exit.
+- [x] Implement every named Chapter 1 dependency, prerequisite, effect, acknowledgement, and availability explanation from the puzzle model.
+- [x] Complete the hook/mirror/rope, den/paper, donkey/barn/barrel/mallet, carpenter/cow/bench/nails, drain/bowl/milk/dog/bone, rigging/wood/bridge, wolf, and Map chains **as canonical facts**; every chain is modelled, wired to its runtime events and pickups, and proven reachable.
+  - [ ] Prove each chain end-to-end with real clicks in a browser. Only the library, den-gate, bridge, wolf, and Map steps are covered that way today; the rest are covered by the fact-level walk and by scenarios.
+  - [ ] Author the missing rigging props so the pulley has a real source (BUG-035).
+- [x] Keep required clues/items available until solved, make default effects idempotent, review irreversible actions, and remove all known soft-locks.
+- [x] Give every meaningful object an authored/entertaining Look response and sensible invalid-action feedback.
 - [ ] Add optional examine variants and character barks that reward exploration without gating progress.
-- [ ] Add a journal/objective model derived from facts plus spoiler-safe tiered hints at major milestones.
-- [ ] Record stable choice variants and add a chapter-completion summary.
-- [ ] Defer large branching routes until the canonical graph and state migrations are proven.
-- [ ] E2E the critical path, alternate solutions/orderings, milestone gates, recoverability, and Map payoff.
-- [ ] Manually review narrative continuity, humour, pacing, discoverability, puzzle fairness, and the bridge into later chapters.
+- [x] Add a journal/objective model derived from facts plus spoiler-safe tiered hints at major milestones.
+- [x] Record stable choice variants and add a chapter-completion summary.
+- [x] Defer large branching routes until the canonical graph and state migrations are proven.
+- [x] E2E the critical path, alternate solutions/orderings, milestone gates, recoverability, and Map payoff.
+  - The critical path is walked action by action as a unit test, which asserts after every one of the 44 steps that the chapter is still finishable. Milestone gates, gate explanations, recoverability, and the Map payoff are covered in the browser.
+- [ ] Manually review narrative continuity, humour, pacing, discoverability, puzzle fairness, and the bridge into later chapters. **Leigh's review; automation cannot close this.**
 
-Acceptance: a new player can progress from the Library Foyer to the Map without a soft-lock and with clear, funny feedback.
+Acceptance: a new player can progress from the Library Foyer to the Map without a soft-lock and with clear, funny feedback. The no-soft-lock half is now enforced by the content validator and by tests; the "clear and funny" half needs the manual review above.
+
+Implementation note (2026-09-13): the canonical puzzle graph went from an 11-action spine to 44 named actions over 56 facts, which is the whole of the Chapter 1 dependency diagram rather than a summary of it. Three decisions are worth carrying forward.
+
+The runtime gate was deliberately **not** widened along with the graph. `executeAllowedAction` still refuses to re-run an event whose effects are already recorded, and the nine originally wired events keep their blocking prerequisite check, but the twenty-two mappings added here record their action and log a diagnostic instead of refusing to run. A blocking gate across a 44-action graph has exactly one failure mode — stranding the player behind a fact the runtime forgot to record — and that is the opposite of this section's goal. The graph is still enforced, in the validator, in the fact-level critical-path walk, and in `getProgressDiagnostics()`; it simply cannot brick a save. BUG-036 tracks promoting mappings back to blocking gates per chain, once each chain has browser coverage of its real ordering.
+
+The journal holds no state. Objectives, hints, gate explanations, and the completion summary are all derived from facts on every render, so restoring a save restores the journal exactly and there is no second progress model to keep in step. The one thing the journal does own is how many hint tiers the player has asked to see, which is per-session and deliberately not saved: a hint is something you asked for once, not progress you earned.
+
+Objectives stay hidden until the player has met the puzzle. That is what makes the journal spoiler-safe — it never names the wolf to someone who has not reached the river — and it is why an objective declares `revealedBy` separately from `completedBy`.
 
 ## 7. Modernise input, UI, responsiveness, and accessibility
 

@@ -81,6 +81,19 @@
   },
   "puzzle": {
     "initialFacts": ["chapter1.started"],
+    "milestoneFacts": [
+      "library.riddleKnown",
+      "library.researchKeyFound",
+      "library.researchRoomUnlocked",
+      "research.mapClueFound",
+      "den.unlocked",
+      "barn.unblocked",
+      "rigging.assembled",
+      "bridge.repairMaterialsReady",
+      "bridge.repaired",
+      "river.wolfResolved",
+      "chapter1.mapReached"
+    ],
     "mandatoryFacts": [
       "library.riddleKnown",
       "library.researchKeyFound",
@@ -94,19 +107,101 @@
       "river.wolfResolved",
       "chapter1.mapReached"
     ],
+    "chains": [
+      { "id": "library", "objectiveId": "objective.libraryAccess" },
+      { "id": "research", "objectiveId": "objective.mapClue" },
+      { "id": "parrot", "objectiveId": "objective.denKey" },
+      { "id": "den", "objectiveId": "objective.denAccess" },
+      { "id": "donkey", "objectiveId": "objective.barnAccess" },
+      { "id": "carpenter", "objectiveId": "objective.carpenterTools" },
+      { "id": "drain", "objectiveId": "objective.townDog" },
+      { "id": "rigging", "objectiveId": "objective.rigging" },
+      { "id": "bridge", "objectiveId": "objective.bridge" },
+      { "id": "river", "objectiveId": "objective.wolf" },
+      { "id": "chapter", "objectiveId": "objective.map" }
+    ],
     "actions": [
-      { "id": "library.learnRiddle", "requires": ["chapter1.started"], "effects": ["library.riddleKnown"] },
-      { "id": "library.findResearchKey", "requires": ["library.riddleKnown"], "effects": ["library.researchKeyFound"] },
-      { "id": "library.unlockResearchRoom", "requires": ["library.researchKeyFound"], "effects": ["library.researchRoomUnlocked"] },
-      { "id": "research.collectMapClue", "requires": ["library.researchRoomUnlocked"], "effects": ["research.mapClueFound"] },
-      { "id": "den.unlock", "requires": ["research.mapClueFound"], "effects": ["den.unlocked"] },
-      { "id": "barn.unblock", "requires": ["chapter1.started"], "effects": ["barn.unblocked"] },
-      { "id": "rigging.assemble", "requires": ["den.unlocked", "barn.unblocked"], "effects": ["rigging.assembled"] },
-      { "id": "bridge.prepareMaterials", "requires": ["rigging.assembled"], "effects": ["bridge.repairMaterialsReady"] },
-      { "id": "bridge.repair", "requires": ["bridge.repairMaterialsReady"], "effects": ["bridge.repaired"] },
-      { "id": "river.resolveWolf", "requires": ["bridge.repaired"], "effects": ["river.wolfResolved"] },
-      { "id": "chapter1.claimMap", "requires": ["river.wolfResolved"], "effects": ["chapter1.mapReached"] }
-    ]
+      { "id": "library.learnRiddle", "chain": "library", "requires": ["chapter1.started"], "effects": ["library.riddleKnown"] },
+      { "id": "library.findResearchKey", "chain": "library", "requires": ["library.riddleKnown"], "effects": ["library.researchKeyFound"] },
+      { "id": "library.unlockResearchRoom", "chain": "library", "requires": ["library.researchKeyFound"], "effects": ["library.researchRoomUnlocked"] },
+      { "id": "library.collectFlyer", "chain": "parrot", "requires": ["library.researchRoomUnlocked"], "effects": ["library.flyerObtained"] },
+      { "id": "research.collectMapClue", "chain": "research", "requires": ["library.researchRoomUnlocked"], "effects": ["research.mapClueFound"] },
+
+      { "id": "parrot.placeFlyer", "chain": "parrot", "requires": ["library.flyerObtained"], "effects": ["parrot.flyerPlaced", "parrot.mirrorAvailable"] },
+      { "id": "parrot.takeMirror", "chain": "parrot", "requires": ["parrot.mirrorAvailable"], "effects": ["parrot.mirrorObtained"] },
+      { "id": "woman.offerMirror", "chain": "parrot", "requires": ["parrot.mirrorObtained"], "effects": ["woman.mirrorOffered"] },
+      { "id": "woman.giveMirror", "chain": "parrot", "requires": ["woman.mirrorOffered"], "effects": ["woman.mirrorGiven", "den.keyObtained"] },
+
+      { "id": "den.unlock", "chain": "den", "requires": ["den.keyObtained"], "effects": ["den.unlocked"] },
+      { "id": "den.takeCrowbar", "chain": "den", "requires": ["den.unlocked"], "effects": ["den.crowbarObtained"] },
+      { "id": "den.takePaper", "chain": "den", "requires": ["den.unlocked"], "effects": ["den.paperFound"] },
+
+      { "id": "house.takePitchfork", "chain": "donkey", "requires": ["chapter1.started"], "effects": ["poo.pitchforkObtained"] },
+      { "id": "poo.search", "chain": "donkey", "requires": ["poo.pitchforkObtained"], "effects": ["poo.searched", "donkey.carrotAvailable", "barn.gloveAvailable"] },
+      { "id": "donkey.takeCarrot", "chain": "donkey", "requires": ["donkey.carrotAvailable"], "effects": ["donkey.carrotObtained"] },
+      { "id": "barn.takeGlove", "chain": "donkey", "requires": ["barn.gloveAvailable"], "effects": ["barn.gloveObtained"] },
+      { "id": "donkey.feed", "chain": "donkey", "requires": ["donkey.carrotObtained"], "effects": ["donkey.fed"] },
+      { "id": "barn.unblock", "chain": "donkey", "requires": ["donkey.fed"], "effects": ["barn.unblocked", "rigging.ropeAvailable"] },
+      { "id": "barn.openBarrel", "chain": "donkey", "requires": ["barn.unblocked"], "effects": ["barn.barrelOpened"] },
+      { "id": "bridge.takeMallet", "chain": "donkey", "requires": ["barn.barrelOpened", "barn.gloveObtained"], "effects": ["bridge.malletObtained"] },
+
+      { "id": "carpenter.speakTo", "chain": "carpenter", "requires": ["chapter1.started"], "effects": ["carpenter.spokenTo"] },
+      { "id": "farmer.speakTo", "chain": "carpenter", "requires": ["carpenter.spokenTo"], "effects": ["farmer.spokenTo", "cow.talkable"] },
+      { "id": "cow.speakTo", "chain": "carpenter", "requires": ["cow.talkable"], "effects": ["cow.spokenTo", "cow.pliersAvailable"] },
+      { "id": "cow.takePliers", "chain": "carpenter", "requires": ["cow.pliersAvailable"], "effects": ["cow.pliersObtained"] },
+      { "id": "cow.removeSplinter", "chain": "carpenter", "requires": ["cow.pliersObtained"], "effects": ["cow.splinterRemoved", "rigging.splinterObtained"] },
+      { "id": "farmer.goHome", "chain": "carpenter", "requires": ["cow.splinterRemoved"], "effects": ["farmer.wentHome"] },
+
+      { "id": "house.openDrain", "chain": "drain", "requires": ["den.crowbarObtained"], "effects": ["house.drainOpened"] },
+      { "id": "kitchen.takeBowl", "chain": "drain", "requires": ["house.drainOpened"], "effects": ["kitchen.bowlObtained"] },
+      { "id": "kitchen.takeMilk", "chain": "drain", "requires": ["chapter1.started"], "effects": ["kitchen.milkObtained"] },
+      { "id": "kitchen.fillBowl", "chain": "drain", "requires": ["kitchen.bowlObtained", "kitchen.milkObtained"], "effects": ["kitchen.milkBowlReady"] },
+      { "id": "dog.giveMilk", "chain": "drain", "requires": ["kitchen.milkBowlReady"], "effects": ["dog.distracted", "river.boneAvailable"] },
+      { "id": "river.takeBone", "chain": "drain", "requires": ["river.boneAvailable"], "effects": ["river.boneObtained"] },
+
+      { "id": "rigging.assemble", "chain": "rigging", "requires": ["chapter1.started"], "effects": ["rigging.assembled", "rigging.pulleyMounted"] },
+      { "id": "rigging.takeRope", "chain": "rigging", "requires": ["rigging.ropeAvailable"], "effects": ["rigging.ropeObtained"] },
+      { "id": "rigging.combineRopeAndHook", "chain": "rigging", "requires": ["rigging.ropeObtained", "parrot.flyerPlaced"], "effects": ["rigging.ropeAndHookCombined"] },
+      { "id": "rigging.attachWood", "chain": "rigging", "requires": ["rigging.ropeAndHookCombined"], "effects": ["rigging.woodAttached"] },
+      { "id": "rigging.connectToPulley", "chain": "rigging", "requires": ["rigging.woodAttached", "rigging.pulleyMounted"], "effects": ["rigging.woodConnected"] },
+      { "id": "rigging.hoistWood", "chain": "rigging", "requires": ["rigging.woodConnected", "den.paperFound"], "effects": ["rigging.woodHoisted"] },
+
+      { "id": "bridge.prepareMaterials", "chain": "bridge", "requires": ["rigging.woodHoisted"], "effects": ["bridge.repairMaterialsReady"] },
+      { "id": "rigging.jamPulley", "chain": "bridge", "requires": ["bridge.repairMaterialsReady", "rigging.splinterObtained"], "effects": ["rigging.pulleyJammed", "bridge.nailsAvailable"] },
+      { "id": "bridge.takeNails", "chain": "bridge", "requires": ["bridge.nailsAvailable"], "effects": ["bridge.nailsObtained"] },
+      { "id": "bridge.repair", "chain": "bridge", "requires": ["bridge.repairMaterialsReady", "bridge.malletObtained", "bridge.nailsObtained"], "effects": ["bridge.repaired"] },
+
+      { "id": "river.resolveWolf", "chain": "river", "requires": ["bridge.repaired", "river.boneObtained"], "effects": ["river.wolfResolved"] },
+      { "id": "chapter1.claimMap", "chain": "chapter", "requires": ["river.wolfResolved"], "effects": ["chapter1.mapReached"] }
+    ],
+    "objectives": [
+      { "id": "objective.libraryAccess", "chain": "library", "revealedBy": "chapter1.started", "completedBy": "library.researchRoomUnlocked", "hintTiers": 3 },
+      { "id": "objective.mapClue", "chain": "research", "revealedBy": "library.researchRoomUnlocked", "completedBy": "research.mapClueFound", "hintTiers": 3 },
+      { "id": "objective.denKey", "chain": "parrot", "revealedBy": "library.flyerObtained", "completedBy": "den.keyObtained", "hintTiers": 3 },
+      { "id": "objective.denAccess", "chain": "den", "revealedBy": "den.keyObtained", "completedBy": "den.unlocked", "hintTiers": 3 },
+      { "id": "objective.barnAccess", "chain": "donkey", "revealedBy": "poo.pitchforkObtained", "completedBy": "barn.unblocked", "hintTiers": 3 },
+      { "id": "objective.carpenterTools", "chain": "carpenter", "revealedBy": "carpenter.spokenTo", "completedBy": "cow.splinterRemoved", "hintTiers": 3 },
+      { "id": "objective.townDog", "chain": "drain", "revealedBy": "den.crowbarObtained", "completedBy": "river.boneObtained", "hintTiers": 3 },
+      { "id": "objective.rigging", "chain": "rigging", "revealedBy": "rigging.ropeAvailable", "completedBy": "rigging.woodHoisted", "hintTiers": 3 },
+      { "id": "objective.bridge", "chain": "bridge", "revealedBy": "bridge.repairMaterialsReady", "completedBy": "bridge.repaired", "hintTiers": 3 },
+      { "id": "objective.wolf", "chain": "river", "revealedBy": "bridge.repaired", "completedBy": "river.wolfResolved", "hintTiers": 3 },
+      { "id": "objective.map", "chain": "chapter", "revealedBy": "river.wolfResolved", "completedBy": "chapter1.mapReached", "hintTiers": 3 }
+    ],
+    "runtimePickupActions": {
+      "objectIllegibleMap": "research.collectMapClue",
+      "objectParrotMirror": "parrot.takeMirror",
+      "objectCrowbar": "den.takeCrowbar",
+      "objectPaperWithInstructionsScrawledOn": "den.takePaper",
+      "objectPitchFork": "house.takePitchfork",
+      "objectCarrot": "donkey.takeCarrot",
+      "objectGlove": "barn.takeGlove",
+      "objectDonkeyRope": "rigging.takeRope",
+      "objectPliers": "cow.takePliers",
+      "objectBowl": "kitchen.takeBowl",
+      "objectMilkBottle": "kitchen.takeMilk",
+      "objectBone": "river.takeBone",
+      "objectNails": "bridge.takeNails"
+    }
   },
   "runtimeActionIds": [
     "addSplinterToPulley",

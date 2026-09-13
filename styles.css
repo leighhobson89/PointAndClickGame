@@ -129,11 +129,20 @@ button.disabled {
 #buttonRow button {
     width: 75px;
     height: 20px;
-    margin-left: 82%;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/*
+    The row is pushed to the right once, on the first control, rather than by
+    giving every button the same large left margin. The old rule assumed the
+    row would only ever hold one button, so a second one was pushed off the
+    right-hand edge of the viewport entirely.
+*/
+#buttonRow button:first-child {
+    margin-left: auto;
 }
 
 #canvasContainer {
@@ -563,4 +572,99 @@ label {
 .save-status.save-status-error {
     border-color: #ff8a8a;
     background: #4b1111;
+}
+
+/*
+    The journal. It is a reference the player opens on purpose, so it sits over
+    the scene rather than stealing space from it, and it closes on Escape.
+    Hints are opt-in: nothing here reveals a solution until it is asked for.
+*/
+.journal-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1300;
+    width: min(38rem, calc(100vw - 2rem));
+    max-height: min(34rem, calc(100vh - 4rem));
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    transform: translate(-50%, -50%);
+    border: 1px solid #6d6d6d;
+    border-radius: 0.4rem;
+    background: rgba(18, 18, 18, 0.97);
+    color: #f2f2f2;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.55);
+}
+
+.journal-panel:focus {
+    outline: 2px solid #9ad0ff;
+    outline-offset: 2px;
+}
+
+.journal-title {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.journal-progress {
+    font-size: 0.85rem;
+    color: #c9c9c9;
+}
+
+.journal-header {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #444;
+}
+
+.journal-section-heading {
+    margin: 1rem 0 0.4rem;
+    font-size: 1rem;
+    color: #9ad0ff;
+}
+
+.journal-list {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.journal-objective {
+    margin-bottom: 0.6rem;
+}
+
+.journal-objective-done {
+    color: #a8a8a8;
+    text-decoration: line-through;
+}
+
+.journal-objective-title {
+    display: block;
+    font-weight: 600;
+}
+
+.journal-hints {
+    margin: 0.35rem 0;
+    padding-left: 1.1rem;
+    color: #d8d8d8;
+    font-size: 0.9rem;
+}
+
+.journal-hint {
+    margin-bottom: 0.2rem;
+}
+
+.journal-hint-button {
+    margin-top: 0.2rem;
+}
+
+.journal-summary {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #7a6a2f;
+    border-radius: 0.3rem;
+    background: #2b2512;
+}
+
+.journal-paragraph {
+    margin-bottom: 0.35rem;
 }

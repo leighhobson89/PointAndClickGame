@@ -84,6 +84,7 @@ import {
 } from './ui.js';
 import { addItemToInventory, constructCommand, handleInventoryAdjustment, performCommand } from './handleCommands.js';
 import { dialogueEngine } from './dialogue.js';
+import { clearProgressDiagnostics, getProgressDiagnostics } from './events.js';
 import { createDebugController } from './src/application/debug-controller.mjs';
 import { createIdleTracker } from './src/application/idle.mjs';
 import { createDebugPanel } from './src/adapters/debug-panel.mjs';
@@ -481,6 +482,17 @@ export async function installDebugTools({ config = {} } = {}) {
         applyMilestone: (actionId) => controller.applyMilestone(actionId),
         criticalPathFrontier: () => controller.criticalPathFrontier(),
         factConflicts: () => controller.factConflicts(),
+        journal: () => controller.journal(),
+        objectives: () => controller.objectives(),
+        explainObjectiveForAction: (actionId) => controller.explainObjectiveForAction(actionId),
+        explainGateObjective: (gateFactId) => controller.explainGateObjective(gateFactId),
+        softLocks: () => controller.softLocks(),
+        chapterSummary: () => controller.chapterSummary(),
+        recordedChoices: () => controller.recordedChoices(),
+        // Actions that ran while the canonical graph said their prerequisites
+        // were unmet. Empty is the healthy state; see BUG-036.
+        progressDiagnostics: () => getProgressDiagnostics(),
+        clearProgressDiagnostics: () => clearProgressDiagnostics(),
         saveScenario: (key) => controller.saveScenario(key),
         loadSavedScenario: (key) => controller.loadSavedScenario(key),
         selectMigrationFixture: (fixtureId) => controller.selectMigrationFixture(fixtureId),

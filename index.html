@@ -76,6 +76,23 @@
         <!-- Button Row -->
         <div id="buttonRow" class="d-flex ml-2">
             <button id="returnToMenu" class="btn btn-secondary mr-2">Return to Menu</button>
+            <!--
+                The journal is derived entirely from canonical quest facts, so
+                it holds no state of its own and a restored save restores it
+                exactly. Its contents are built at runtime by
+                src/adapters/journal-panel.mjs.
+            -->
+            <button id="openJournal" class="btn btn-secondary mr-2" aria-haspopup="dialog" aria-expanded="false" aria-controls="journalPanel">Journal</button>
+        </div>
+        <div id="journalPanel" class="journal-panel d-none" role="dialog" aria-modal="true" aria-labelledby="journalTitle" tabindex="-1">
+            <div class="journal-header d-flex justify-content-between align-items-center">
+                <h2 id="journalTitle" class="journal-title"></h2>
+                <div class="d-flex align-items-center">
+                    <span id="journalProgress" class="journal-progress mr-3" data-milestones-reached="0" data-milestones-total="0"></span>
+                    <button id="closeJournal" class="btn btn-danger btn-sm">Close</button>
+                </div>
+            </div>
+            <div id="journalBody" class="journal-body"></div>
         </div>
         <div class="canvas-wrapper">
             <div id="overlayCanvas" class="overlay-canvas"></div>

@@ -1,5 +1,6 @@
 import { buildMapGrid } from './map-grid.mjs';
 import { validateDialogueGraph } from '../domain/dialogue/dialogue.mjs';
+import { JOURNAL_SECTION, objectiveHintKey, objectiveTitleKey } from '../domain/progress/journal.mjs';
 import { libraryDialogueGraph } from './library-dialogue.mjs';
 import {
     CONTENT_SCHEMA_VERSION,
@@ -192,6 +193,103 @@ function validatePuzzle(contract, errors) {
     }
     for (const fact of contract.puzzle?.mandatoryFacts ?? []) {
         if (!facts.has(fact)) errors.push(`mandatory puzzle fact '${fact}' is orphaned or unreachable`);
+    }
+    for (const fact of contract.puzzle?.milestoneFacts ?? []) {
+        if (!facts.has(fact)) errors.push(`milestone puzzle fact '${fact}' is orphaned or unreachable`);
+    }
+
+    // Every action must be performable. An action nothing can reach is either
+    // dead content or a missing dependency, and both hide as silent gaps.
+    const reachableActions = new Set();
+    let reachedMore = true;
+    const reached = new Set(contract.puzzle?.initialFacts ?? []);
+    while (reachedMore) {
+        reachedMore = false;
+        for (const action of actions) {
+            if (!(action.requires ?? []).every((fact) => reached.has(fact))) continue;
+            if (!reachableActions.has(action.id)) {
+                reachableActions.add(action.id);
+                reachedMore = true;
+            }
+            for (const effect of action.effects ?? []) {
+                if (!reached.has(effect)) {
+                    reached.add(effect);
+                    reachedMore = true;
+                }
+            }
+        }
+    }
+    for (const action of actions) {
+        if (!reachableActions.has(action.id)) errors.push(`puzzle action '${action.id}' is unreachable from the initial facts`);
+        if (action.chain && !(contract.puzzle?.chains ?? []).some((chain) => chain.id === action.chain)) {
+            errors.push(`puzzle action '${action.id}' names undeclared chain '${action.chain}'`);
+        }
+    }
+
+    // A fact required by an action but produced by nothing can never be
+    // satisfied, which is the shape every soft-lock in this chapter would take.
+    const producedFacts = new Set(actions.flatMap((action) => action.effects ?? []));
+    for (const action of actions) {
+        for (const required of action.requires ?? []) {
+            if (!producedFacts.has(required) && !(contract.puzzle?.initialFacts ?? []).includes(required)) {
+                errors.push(`puzzle action '${action.id}' requires '${required}', which no action produces`);
+            }
+        }
+    }
+
+    validateObjectives(contract, producedFacts, errors);
+    validatePickupActions(contract, actionIds, errors);
+}
+
+function validateObjectives(contract, producedFacts, errors) {
+    const objectiveIds = new Set();
+    const chainIds = new Set((contract.puzzle?.chains ?? []).map((chain) => chain.id));
+    const initialFacts = new Set(contract.puzzle?.initialFacts ?? []);
+    const known = (fact) => producedFacts.has(fact) || initialFacts.has(fact);
+
+    for (const objective of contract.puzzle?.objectives ?? []) {
+        if (objectiveIds.has(objective.id)) errors.push(`duplicate objective ID '${objective.id}'`);
+        objectiveIds.add(objective.id);
+        if (!chainIds.has(objective.chain)) errors.push(`objective '${objective.id}' names undeclared chain '${objective.chain}'`);
+        if (!known(objective.completedBy)) errors.push(`objective '${objective.id}' completes on unknown fact '${objective.completedBy}'`);
+        if (!known(objective.revealedBy)) errors.push(`objective '${objective.id}' is revealed by unknown fact '${objective.revealedBy}'`);
+        if (!Number.isInteger(objective.hintTiers) || objective.hintTiers < 1) {
+            errors.push(`objective '${objective.id}' must declare at least one hint tier`);
+        }
+    }
+
+    for (const chain of contract.puzzle?.chains ?? []) {
+        if (!objectiveIds.has(chain.objectiveId)) errors.push(`chain '${chain.id}' names unknown objective '${chain.objectiveId}'`);
+    }
+}
+
+function validatePickupActions(contract, actionIds, errors) {
+    for (const [objectId, actionId] of Object.entries(contract.puzzle?.runtimePickupActions ?? {})) {
+        if (!actionIds.has(actionId)) errors.push(`pickup mapping for '${objectId}' names unknown puzzle action '${actionId}'`);
+    }
+}
+
+/**
+ * Every objective needs a title and a full set of hint tiers in every locale,
+ * and every pickup mapping needs a real object. A journal entry that falls
+ * back to its key would read as a bug to the player, so it fails validation
+ * rather than shipping.
+ */
+function validateJournalContent(contract, localization, objects, locales, errors) {
+    const section = (locale) => localization?.[locale]?.[JOURNAL_SECTION] ?? {};
+    for (const objective of contract?.puzzle?.objectives ?? []) {
+        const keys = [objectiveTitleKey(objective.id)];
+        for (let tier = 1; tier <= (objective.hintTiers ?? 0); tier += 1) keys.push(objectiveHintKey(objective.id, tier));
+        for (const locale of locales) {
+            for (const key of keys) {
+                const value = section(locale)[key];
+                if (typeof value !== 'string' || value.trim() === '') errors.push(`localization.${locale}.${JOURNAL_SECTION}.${key} must be a non-empty string`);
+            }
+        }
+    }
+
+    for (const objectId of Object.keys(contract?.puzzle?.runtimePickupActions ?? {})) {
+        if (!objects?.[objectId]) errors.push(`pickup mapping references unknown object '${objectId}'`);
     }
 }
 
@@ -400,6 +498,7 @@ export function validateContentBundle(bundle) {
     }
 
     validatePuzzle(contract, errors);
+    validateJournalContent(contract, localization, objects, locales, errors);
     return { valid: errors.length === 0, errors, warnings, grids, hotspots: [...rectangles, ...exitHotspots] };
 }
 

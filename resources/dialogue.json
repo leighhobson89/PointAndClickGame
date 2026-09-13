@@ -1285,6 +1285,33 @@
             "it": "È una porta insignificante che conduce all'esterno.",
             "fr": "C'est une porte banale qui mène à l'extérieur."
           }
+        },
+        "objectDoorMarketStreetLibraryFoyer": {
+          "0": {
+            "en": "The library door, from the outside this time. Somebody has polished the handle and ignored the rest.",
+            "es": "La puerta de la biblioteca, esta vez desde fuera. Alguien ha pulido el picaporte y ha ignorado todo lo demás.",
+            "de": "Die Bibliothekstür, diesmal von außen. Jemand hat die Klinke poliert und den Rest ignoriert.",
+            "it": "La porta della biblioteca, stavolta da fuori. Qualcuno ha lucidato la maniglia e ignorato tutto il resto.",
+            "fr": "La porte de la bibliothèque, vue de l'extérieur cette fois. Quelqu'un a astiqué la poignée et ignoré tout le reste."
+          }
+        },
+        "objectDoorMarketStreetCarpenter": {
+          "0": {
+            "en": "The carpenter's door. You would think a carpenter's own door would hang straight, but no.",
+            "es": "La puerta del carpintero. Uno pensaría que la puerta de un carpintero estaría bien colgada, pues no.",
+            "de": "Die Tür des Schreiners. Man sollte meinen, ausgerechnet seine eigene Tür hinge gerade, aber nein.",
+            "it": "La porta del falegname. Verrebbe da pensare che la porta di un falegname stia dritta, e invece no.",
+            "fr": "La porte du menuisier. On croirait que la porte d'un menuisier serait droite, eh bien non."
+          }
+        },
+        "objectDoorDenInternal": {
+          "0": {
+            "en": "The way back out of the den. I am keeping an eye on it, thanks.",
+            "es": "La salida de la guarida. La estoy vigilando, gracias.",
+            "de": "Der Weg aus der Höhle hinaus. Ich behalte ihn im Auge, danke.",
+            "it": "La via d'uscita dalla tana. La tengo d'occhio, grazie.",
+            "fr": "La sortie de la tanière. Je la garde à l'œil, merci."
+          }
         }
       },
       "verbPickUp": {

@@ -2,7 +2,7 @@ import { getWalkSpeedPlayer, getTrackingGrid, setTrackingGrid, getForegroundsDat
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
-import { drawForegroundImageForCurrentScreen, updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
+import { drawForegroundImageForCurrentScreen, updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText, initialiseJournalPanel, disposeJournalPanel } from './ui.js';
 import { executeInteractionEvent } from './events.js';
 import { disposeCanonicalSession, startCanonicalSession } from './constantsAndGlobalVars.js';
 import { contextualVerbForTarget, createCommandIntent } from './src/domain/commands/commands.mjs';
@@ -55,6 +55,7 @@ export async function startGame(startCell = null) {
     gameLoopActive = true;
     setGameInProgress(true);
     startCanonicalSession();
+    initialiseJournalPanel();
     gameLoop();
 }
 
@@ -176,6 +177,7 @@ export function disposeGame() {
     frameTimeSamples = [];
     lastFrameStartedAt = null;
     setGameInProgress(false);
+    disposeJournalPanel();
     disposeCanonicalSession();
 }
 

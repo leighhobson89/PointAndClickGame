@@ -60,7 +60,13 @@ test('scenario facts are internally consistent and never assert an unreachable s
         const consistency = validateFactConsistency(scenario.facts, contract.puzzle.actions);
         assert.deepEqual(consistency.conflicts, [], `${scenario.id} asserts facts whose prerequisites are missing`);
     }
-    assert.equal(closeFactsOverPrerequisites({ 'bridge.repaired': true }, contract.puzzle.actions)['rigging.assembled'], true);
+    // Closing over prerequisites walks the whole chapter backwards: repairing
+    // the bridge is only reachable once the wood is hoisted, which reaches back
+    // through the rigging, the barn, the den and the library to the start.
+    const closed = closeFactsOverPrerequisites({ 'bridge.repaired': true }, contract.puzzle.actions);
+    for (const factId of ['rigging.woodHoisted', 'rigging.pulleyMounted', 'barn.unblocked', 'den.unlocked', 'library.riddleKnown', 'chapter1.started']) {
+        assert.equal(closed[factId], true, `closing bridge.repaired should require ${factId}`);
+    }
 });
 
 test('every fact effect targets a property that exists in shipped content', () => {
@@ -175,8 +181,18 @@ test('the seeded generator is reproducible and seed-sensitive', () => {
 });
 
 test('the critical-path frontier reports only actions that are available and unfinished', () => {
+    // From a clean start the chapter opens on five independent threads: the
+    // library tutorial, the carpenter, the pitchfork, the milk bottle, and the
+    // river rigging. That breadth is the point of the chapter, so the frontier
+    // naming all five is the assertion, not an accident of ordering.
     const frontier = criticalPathFrontier(contract.puzzle.actions, { 'chapter1.started': true });
-    assert.deepEqual(frontier.map((entry) => entry.actionId).sort(), ['barn.unblock', 'library.learnRiddle']);
+    assert.deepEqual(frontier.map((entry) => entry.actionId).sort(), [
+        'carpenter.speakTo',
+        'house.takePitchfork',
+        'kitchen.takeMilk',
+        'library.learnRiddle',
+        'rigging.assemble',
+    ]);
 
     const finished = Object.fromEntries(contract.puzzle.actions.flatMap((action) => action.effects).map((factId) => [factId, true]));
     assert.deepEqual(criticalPathFrontier(contract.puzzle.actions, { ...finished, 'chapter1.started': true }), []);

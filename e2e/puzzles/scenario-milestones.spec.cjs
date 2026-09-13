@@ -35,6 +35,10 @@ test('a scenario arranges the research-room prerequisites and the player perform
     expect(await page.evaluate(() => window.__GAME_TEST__.explainGate('libraryFoyer', 'e1')))
         .toMatchObject({ available: true });
 
+    // A real interaction performed in the right order must record its canonical
+    // action cleanly, with no out-of-order anomaly logged against the graph.
+    expect(await page.evaluate(() => window.__GAME_TEST__.progressDiagnostics())).toEqual([]);
+
     expect(runtimeErrors).toEqual([]);
 });
 
@@ -57,21 +61,35 @@ test('a milestone scenario can be reverted and replayed to the same checksum', a
 test('every chapter milestone scenario is reachable and leaves a consistent critical path', async ({ page }) => {
     await openDebugGame(page);
 
+    // Chapter 1 runs several threads at once, so the frontier is a set rather
+    // than a single next step. What each scenario must guarantee is that the
+    // milestone it exists to test is genuinely performable from it, that every
+    // action offered is really available and unfinished, and that the state is
+    // one the real game could be in.
     const ordered = [
-        ['chapter1.new-game', ['barn.unblock', 'library.learnRiddle']],
-        ['chapter1.research-unlock-ready', ['barn.unblock', 'library.unlockResearchRoom']],
-        ['chapter1.town-open', ['barn.unblock', 'den.unlock']],
-        ['chapter1.rigging-ready', ['rigging.assemble']],
-        ['chapter1.bridge-ready', ['bridge.repair']],
-        ['chapter1.wolf-ready', ['river.resolveWolf']],
-        ['chapter1.map-entry', ['chapter1.claimMap']],
+        ['chapter1.new-game', 'library.learnRiddle'],
+        ['chapter1.research-unlock-ready', 'library.unlockResearchRoom'],
+        ['chapter1.town-open', 'library.collectFlyer'],
+        ['chapter1.den-unlock-ready', 'den.unlock'],
+        ['chapter1.barn-unblock-ready', 'donkey.feed'],
+        ['chapter1.rigging-ready', 'rigging.combineRopeAndHook'],
+        ['chapter1.bridge-ready', 'bridge.repair'],
+        ['chapter1.wolf-ready', 'river.resolveWolf'],
+        ['chapter1.map-entry', 'chapter1.claimMap'],
     ];
 
-    for (const [scenarioId, expectedFrontier] of ordered) {
+    for (const [scenarioId, expectedMilestone] of ordered) {
         await loadScenario(page, scenarioId);
         const frontier = await page.evaluate(() => window.__GAME_TEST__.criticalPathFrontier().map((entry) => entry.actionId).sort());
-        expect(frontier, `${scenarioId} frontier`).toEqual([...expectedFrontier].sort());
+        expect(frontier, `${scenarioId} frontier`).toContain(expectedMilestone);
+
+        for (const actionId of frontier) {
+            expect(await page.evaluate((id) => window.__GAME_TEST__.explainAction(id), actionId), `${scenarioId}: ${actionId}`)
+                .toMatchObject({ available: true, missingFactIds: [] });
+        }
         expect(await page.evaluate(() => window.__GAME_TEST__.factConflicts()), `${scenarioId} conflicts`).toMatchObject({ valid: true });
+        expect(await page.evaluate(() => window.__GAME_TEST__.softLocks()), `${scenarioId} soft locks`)
+            .toMatchObject({ softLocked: false, unreachableMandatoryFactIds: [] });
         await waitForIdle(page);
     }
 });

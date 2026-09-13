@@ -24,6 +24,15 @@ import {
     validateScenario,
 } from '../domain/scenarios/scenarios.mjs';
 import { whyGateUnavailable, whyUnavailable } from '../domain/puzzles/puzzles.mjs';
+import {
+    chapterSummary,
+    deriveJournal,
+    deriveObjectives,
+    detectSoftLocks,
+    explainActionAvailability,
+    explainGate,
+    recordedChoiceIds,
+} from '../domain/progress/journal.mjs';
 import { SAVE_MIGRATION_FIXTURES, INVENTORY_PRESETS, getScenario, listScenarios } from '../content/scenario-registry.mjs';
 import { GAME_STATE_SCHEMA_VERSION, validateGameState } from '../state/game-state.mjs';
 import { gameActions } from '../state/store.mjs';
@@ -515,6 +524,17 @@ export function createDebugController(ports = {}) {
         revertToScenario: (scenarioId) => api.loadScenario(scenarioId),
         criticalPathFrontier: () => criticalPathFrontier(puzzleActions(), store.getState().quests.facts),
         factConflicts: () => validateFactConsistency(store.getState().quests.facts, puzzleActions()),
+
+        // --- chapter progress ---------------------------------------------------
+        // The same derivation the player's journal renders, exposed so tests can
+        // assert progress by stable ID instead of by reading translated copy.
+        journal: () => deriveJournal(contract(), store.getState().quests.facts),
+        objectives: () => deriveObjectives(contract(), store.getState().quests.facts),
+        explainObjectiveForAction: (actionId) => explainActionAvailability(contract(), store.getState().quests.facts, actionId),
+        explainGateObjective: (gateFactId) => explainGate(contract(), store.getState().quests.facts, gateFactId),
+        softLocks: () => detectSoftLocks(contract(), store.getState().quests.facts),
+        chapterSummary: () => chapterSummary(contract(), store.getState().quests.facts),
+        recordedChoices: () => recordedChoiceIds(store.getState().quests.facts),
 
         // --- saves, localisation, presentation ----------------------------------
         listMigrationFixtures: () => Object.keys(SAVE_MIGRATION_FIXTURES),

@@ -10,7 +10,7 @@ export const libraryDialogueGraph = Object.freeze({
         'library.librarian.q0.opening1': line('library.librarian.q0.opening1', 'library.librarian.q0.opening1', 'library.librarian.q0.choices'),
         'library.librarian.q0.choices': {
             id: 'library.librarian.q0.choices', type: 'choice', choices: [
-                { id: 'library.librarian.askResearchKey', textKey: 'library.librarian.q0.choice0', nextNodeId: 'library.librarian.q0.keyResponse0' },
+                { id: 'library.librarian.askResearchKey', textKey: 'library.librarian.q0.choice0', nextNodeId: 'library.librarian.q0.keyResponse0', recordsChoice: true },
                 ...[1, 2, 3, 4, 5].map((choice) => ({ id: `library.librarian.q0.aside${choice}`, textKey: `library.librarian.q0.choice${choice}`, nextNodeId: `library.librarian.q0.asideResponse${choice}` })),
                 { id: 'library.librarian.q0.exit', textKey: 'library.librarian.q0.exit0', nextNodeId: 'library.librarian.q0.exitResponse' },
             ],
@@ -24,7 +24,7 @@ export const libraryDialogueGraph = Object.freeze({
         'library.librarian.q1.opening1': line('library.librarian.q1.opening1', 'library.librarian.q1.opening1', 'library.librarian.q1.choices'),
         'library.librarian.q1.choices': {
             id: 'library.librarian.q1.choices', type: 'choice', choices: [
-                { id: 'library.librarian.pressForResearchKey', textKey: 'library.librarian.q1.choice0', nextNodeId: 'library.librarian.q1.keyResponse0' },
+                { id: 'library.librarian.pressForResearchKey', textKey: 'library.librarian.q1.choice0', nextNodeId: 'library.librarian.q1.keyResponse0', recordsChoice: true },
                 ...[1, 2, 3].map((choice) => ({ id: `library.librarian.q1.aside${choice}`, textKey: `library.librarian.q1.choice${choice}`, nextNodeId: `library.librarian.q1.asideResponse${choice}` })),
                 { id: 'library.librarian.q1.exit', textKey: 'library.librarian.q1.exit0', nextNodeId: 'library.librarian.q1.exitResponse' },
             ],

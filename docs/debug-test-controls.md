@@ -68,6 +68,9 @@ window.__GAME_TEST__ = {
     describeDialogue(npcId, nodeId), setTextSpeed(id), skipDialogueLine(), resetConversation(npcId), inspectNpc(npcId),
     listFacts(), explainAction(actionId), explainGate(roomId, exitId), applyMilestone(actionId),
     criticalPathFrontier(), factConflicts(),
+    journal(), objectives(), explainObjectiveForAction(actionId), explainGateObjective(gateFactId),
+    softLocks(), chapterSummary(), recordedChoices(),
+    progressDiagnostics(), clearProgressDiagnostics(),
     saveScenario(key), loadSavedScenario(key), selectMigrationFixture(id),
     simulateStorageFailure(enabled), simulateAssetFailure(url), simulateMissingKey(key),
     setLocale(locale), setViewportPreset(id), setAccessibilityOption(id, value), setInputMode(id),
@@ -77,6 +80,18 @@ window.__GAME_TEST__ = {
 ```
 
 `inspectSummary()` returns IDs, facts, and readiness — never mutable internal object references.
+
+### Chapter progress
+
+The seven progress calls added in Section 6 are the same derivation the player's journal renders, exposed so a browser test can assert progress by stable ID instead of by reading translated copy:
+
+- `journal()` and `objectives()` return objective status (`hidden`, `active`, `done`), the chain each belongs to, and the actions available next within that chain.
+- `explainObjectiveForAction(actionId)` and `explainGateObjective(gateFactId)` answer "why can I not do this yet" as the objective that owns the missing fact, rather than as a raw fact ID.
+- `softLocks()` returns `{ softLocked, unreachableMandatoryFactIds }` by walking every action still performable from the current facts. An empty list is the chapter's no-soft-lock guarantee, and it is asserted across scenarios in the browser and after every step of the critical path in a unit test.
+- `chapterSummary()` and `recordedChoices()` report the end-of-chapter state, including which stable choice variants the player took.
+- `progressDiagnostics()` lists actions that ran while the graph said their prerequisites were unmet, which is how the richer graph stays enforced without a gate that could strand the player. An empty list is the healthy state; see BUG-036.
+
+Apart from `clearProgressDiagnostics()`, these read the canonical store and mutate nothing, so they are safe to call at any point in a test.
 
 ### Idle probes
 

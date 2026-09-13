@@ -3,13 +3,61 @@ import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObj
 import { changeCanvasBg, animateTransitionAndChangeBackground, drawInventory, showText } from "./ui.js";
 import { moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
-import { applyActionById } from './src/domain/puzzles/puzzles.mjs';
+import { applyActionById, whyUnavailable } from './src/domain/puzzles/puzzles.mjs';
 
-export function commitCanonicalAction(actionId) {
-    const result = applyActionById(getQuestFacts(), getContentContract()?.puzzle?.actions ?? [], actionId);
-    if (!result.available || !result.changed) return result;
-    for (const [factId, value] of Object.entries(result.facts)) if (value === true) setQuestFact(factId, true);
-    return result;
+// Progress anomalies: an action that ran while the canonical graph said its
+// prerequisites were unmet. These are recorded rather than blocked, because a
+// blocking gate on a 44-action graph can only fail one way — by stranding the
+// player. Tests and the debug panel read the record; the player never does.
+const progressDiagnostics = [];
+
+export function getProgressDiagnostics() {
+    return progressDiagnostics.map((entry) => ({ ...entry }));
+}
+
+export function clearProgressDiagnostics() {
+    progressDiagnostics.length = 0;
+}
+
+function recordProgressDiagnostic(entry) {
+    progressDiagnostics.push({ ...entry, at: progressDiagnostics.length });
+    if (progressDiagnostics.length > 100) progressDiagnostics.shift();
+}
+
+function canonicalActions() {
+    return getContentContract()?.puzzle?.actions ?? [];
+}
+
+function findCanonicalAction(actionId) {
+    return canonicalActions().find((action) => action.id === actionId) ?? null;
+}
+
+function isActionAlreadyApplied(actionId, facts) {
+    const action = findCanonicalAction(actionId);
+    if (!action) return false;
+    return (action.effects ?? []).every((factId) => facts[factId] === true);
+}
+
+/**
+ * Record a canonical puzzle action's effects. `force` writes the effects even
+ * when a prerequisite was never recorded, so the journal always reflects what
+ * the player actually did; the missing prerequisite is kept as a diagnostic.
+ */
+export function commitCanonicalAction(actionId, { force = false } = {}) {
+    const facts = getQuestFacts();
+    const result = applyActionById(facts, canonicalActions(), actionId);
+    if (result.available) {
+        if (!result.changed) return result;
+        for (const [factId, value] of Object.entries(result.facts)) if (value === true) setQuestFact(factId, true);
+        return result;
+    }
+
+    recordProgressDiagnostic({ actionId, reason: result.reason, missingFactIds: [...result.missingFactIds], forced: force });
+    if (!force) return result;
+
+    const action = findCanonicalAction(actionId);
+    for (const factId of action?.effects ?? []) setQuestFact(factId, true);
+    return { ...result, changed: true, forced: true };
 }
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
@@ -1001,28 +1049,81 @@ const ALLOWED_EVENT_ACTIONS = Object.freeze({
     dialogueEventnpcCarpentercarpenter, moveFarmerToHisHouse,
 });
 
+// Every legacy event that advances Chapter 1, mapped to the canonical action
+// it represents.
+//
+// `commit: 'internal'` means the event function already calls
+// commitCanonicalAction itself, usually because it commits part-way through a
+// multi-step interaction; buildBridgeSection is the clearest case, since it
+// only records bridge.repaired on the second section. `commit: 'auto'` means
+// the dispatcher records the action once the event has finished.
+//
+// Only the nine originally wired events keep a blocking prerequisite gate.
+// Widening that gate to the whole graph would let one unrecorded fact strand
+// the player, so the new mappings record the action and report anomalies
+// instead of refusing to run.
 const CANONICAL_ACTION_BY_EVENT = Object.freeze({
-    allowInteractionPileOfBooks: 'library.learnRiddle',
-    moveBooksToGetResearchRoomKey: 'library.findResearchKey',
-    unlockResearchRoomDoor: 'library.unlockResearchRoom',
-    unlockDenDoor: 'den.unlock',
-    donkeyMoveRopeAvailable: 'barn.unblock',
-    combinePulleyAndSturdyAnchor: 'rigging.assemble',
-    tieRopeToSuspiciousFencePost: 'bridge.prepareMaterials',
-    giveBoneToWolf: 'river.resolveWolf',
-    completeChapterOne: 'chapter1.claimMap',
+    allowInteractionPileOfBooks: { actionId: 'library.learnRiddle', commit: 'internal', gate: true },
+    moveBooksToGetResearchRoomKey: { actionId: 'library.findResearchKey', commit: 'internal', gate: true },
+    unlockResearchRoomDoor: { actionId: 'library.unlockResearchRoom', commit: 'internal', gate: true },
+    unlockDenDoor: { actionId: 'den.unlock', commit: 'internal', gate: true },
+    donkeyMoveRopeAvailable: { actionId: 'barn.unblock', commit: 'internal', gate: true },
+    combinePulleyAndSturdyAnchor: { actionId: 'rigging.assemble', commit: 'internal', gate: true },
+    tieRopeToSuspiciousFencePost: { actionId: 'bridge.prepareMaterials', commit: 'internal', gate: true },
+    giveBoneToWolf: { actionId: 'river.resolveWolf', commit: 'internal', gate: true },
+    completeChapterOne: { actionId: 'chapter1.claimMap', commit: 'internal', gate: true },
+
+    giveKeyToLibrarian: { actionId: 'library.collectFlyer', commit: 'auto', gate: false },
+    placeParrotFlyerOnHook: { actionId: 'parrot.placeFlyer', commit: 'auto', gate: false },
+    makeMirrorGiveableToWoman: { actionId: 'woman.offerMirror', commit: 'auto', gate: false },
+    giveWomanMirror: { actionId: 'woman.giveMirror', commit: 'auto', gate: false },
+    revealCarrotAndGlove: { actionId: 'poo.search', commit: 'auto', gate: false },
+    giveCarrotToDonkey: { actionId: 'donkey.feed', commit: 'auto', gate: false },
+    openBarrelBarn: { actionId: 'barn.openBarrel', commit: 'auto', gate: false },
+    useGloveToAddMalletToInventory: { actionId: 'bridge.takeMallet', commit: 'auto', gate: false },
+    setCarpenterSpokenToTrue: { actionId: 'carpenter.speakTo', commit: 'auto', gate: false },
+    makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue: { actionId: 'farmer.speakTo', commit: 'auto', gate: false },
+    makeCowNotTalkableAndPliersUseable: { actionId: 'cow.speakTo', commit: 'auto', gate: false },
+    removeSplinterFromCowsHoof: { actionId: 'cow.removeSplinter', commit: 'auto', gate: false },
+    moveFarmerToHisHouse: { actionId: 'farmer.goHome', commit: 'auto', gate: false },
+    useCrowBarOnManholeCover: { actionId: 'house.openDrain', commit: 'auto', gate: false },
+    combineMilkAndBowl: { actionId: 'kitchen.fillBowl', commit: 'auto', gate: false },
+    giveDogBowlOfMilk: { actionId: 'dog.giveMilk', commit: 'auto', gate: false },
+    combineRopeAndHook: { actionId: 'rigging.combineRopeAndHook', commit: 'auto', gate: false },
+    combineRopeAndHookWithStackOfWood: { actionId: 'rigging.attachWood', commit: 'auto', gate: false },
+    connectRopeAndHookWithWoodToPulley: { actionId: 'rigging.connectToPulley', commit: 'auto', gate: false },
+    hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse: { actionId: 'rigging.hoistWood', commit: 'auto', gate: false },
+    addSplinterToPulley: { actionId: 'rigging.jamPulley', commit: 'auto', gate: false },
+    buildBridgeSection: { actionId: 'bridge.repair', commit: 'internal', gate: false },
 });
+
+export function canonicalActionForEvent(eventId) {
+    return CANONICAL_ACTION_BY_EVENT[eventId]?.actionId ?? null;
+}
 
 async function executeAllowedAction(actionId, args = []) {
     if (!actionId) return;
     const action = ALLOWED_EVENT_ACTIONS[actionId];
     if (!action) throw new ReferenceError(`Event action '${actionId}' is not allow-listed`);
-    const canonicalActionId = CANONICAL_ACTION_BY_EVENT[actionId];
-    if (canonicalActionId) {
-        const result = applyActionById(getQuestFacts(), getContentContract()?.puzzle?.actions ?? [], canonicalActionId);
-        if (!result.available || result.reason === 'already-applied') return result;
+
+    const mapping = CANONICAL_ACTION_BY_EVENT[actionId];
+    if (mapping) {
+        const facts = getQuestFacts();
+        // Idempotency, unchanged: an event whose whole effect is already
+        // recorded does not run its world mutations a second time.
+        if (isActionAlreadyApplied(mapping.actionId, facts)) {
+            return { actionId: mapping.actionId, available: true, changed: false, reason: 'already-applied' };
+        }
+        const availability = whyUnavailable(findCanonicalAction(mapping.actionId), facts);
+        if (!availability.available) {
+            if (mapping.gate) return availability;
+            recordProgressDiagnostic({ actionId: mapping.actionId, eventId: actionId, reason: availability.reason, missingFactIds: [...availability.missingFactIds], forced: true });
+        }
     }
-    return action(...args);
+
+    const outcome = await action(...args);
+    if (mapping && mapping.commit === 'auto') commitCanonicalAction(mapping.actionId, { force: true });
+    return outcome;
 }
 
 // Content may select only named, allow-listed actions. No translated text or

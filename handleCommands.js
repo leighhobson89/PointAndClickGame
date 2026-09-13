@@ -1,4 +1,4 @@
-import { getCanvasCellHeight, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth, getForcePlayerLocation, getInteractiveDialogueState } from "./constantsAndGlobalVars.js";
+import { getContentContract, getCanvasCellHeight, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth, getForcePlayerLocation, getInteractiveDialogueState } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
 import { commitCanonicalAction, executeInteractionEvent } from "./events.js";
@@ -147,7 +147,12 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
 
     removeObjectFromEnvironment(objectId, getCurrentScreenId());
     addItemToInventory(objectId, quantity);
-    if (objectId === 'objectIllegibleMap') commitCanonicalAction('research.collectMapClue');
+    // Picking an item up is a Chapter 1 step in its own right. The mapping
+    // lives in the content contract so a new collectable needs no code change,
+    // and it is forced because a pickup has already happened in the world by
+    // the time we get here: refusing to record it would only lose progress.
+    const pickupActionId = getContentContract()?.puzzle?.runtimePickupActions?.[objectId];
+    if (pickupActionId) commitCanonicalAction(pickupActionId, { force: true });
 
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);

@@ -48,6 +48,18 @@ test('a dialogue scenario reaches the riddle consequence through real clicks', a
     await expect.poll(async () => (await summary(page)).facts, { timeout: 20_000 }).toContain('library.riddleKnown');
     await expect.poll(async () => page.evaluate(() => window.__GAME_TEST__.inspectNpc('npcLibrarian').canTalk), { timeout: 20_000 }).toBe(false);
 
+    // Both choices are stable recorded variants, so how the player handled the
+    // librarian is canonical progress that survives a save and reaches the
+    // chapter summary rather than living only in dialogue state.
+    expect(await page.evaluate(() => window.__GAME_TEST__.recordedChoices())).toEqual([
+        'library.librarian.askResearchKey',
+        'library.librarian.pressForResearchKey',
+    ]);
+    expect(await page.evaluate(() => window.__GAME_TEST__.chapterSummary())).toMatchObject({
+        chapterComplete: false,
+        choiceIds: ['library.librarian.askResearchKey', 'library.librarian.pressForResearchKey'],
+    });
+
     await waitForIdle(page);
     expect((await summary(page)).presentationMode).toBe('gameVisibleActive');
     expect(runtimeErrors).toEqual([]);

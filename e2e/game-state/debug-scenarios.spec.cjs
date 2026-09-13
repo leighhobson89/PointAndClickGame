@@ -162,8 +162,10 @@ test('puzzle facts, milestones, and the critical-path frontier stay debug-only a
     await openDebugGame(page);
     await loadScenario(page, 'chapter1.new-game');
 
+    // A clean start opens five independent threads; the library tutorial is
+    // the one the opening room points the player at.
     expect(await page.evaluate(() => window.__GAME_TEST__.criticalPathFrontier().map((entry) => entry.actionId).sort()))
-        .toEqual(['barn.unblock', 'library.learnRiddle']);
+        .toEqual(['carpenter.speakTo', 'house.takePitchfork', 'kitchen.takeMilk', 'library.learnRiddle', 'rigging.assemble']);
 
     expect(await page.evaluate(() => window.__GAME_TEST__.explainAction('bridge.repair'))).toMatchObject({
         available: false,
