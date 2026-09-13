@@ -1,13 +1,18 @@
 {
-    "name": "my-app",
+    "name": "point-and-click-game",
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js"
+        "start": "node server.js",
+        "test": "node tests all",
+        "test:e2e": "node tests all"
     },
     "dependencies": {
         "electron": "^33.0.2",
         "electron-builder": "^25.1.8",
         "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.55.0"
     }
 }

@@ -1,0 +1,119 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const { spawnSync } = require('child_process');
+
+const ROOT = __dirname;
+const E2E_ROOT = path.join(ROOT, 'e2e');
+const LOG_ROOT = path.join(E2E_ROOT, 'logs');
+const FULL_SUITE_LIMIT_MS = 180_000;
+const MAX_TARGETED_AREAS = 3;
+const IGNORED_DIRECTORIES = new Set(['_support', 'logs']);
+
+function availableAreas() {
+    return fs.readdirSync(E2E_ROOT, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && !IGNORED_DIRECTORIES.has(entry.name))
+        .map((entry) => entry.name)
+        .sort();
+}
+
+function fail(message, code = 1) {
+    console.error(message);
+    process.exit(code);
+}
+
+function readLatestFullRun() {
+    const file = path.join(LOG_ROOT, 'latest-full-suite.json');
+    if (!fs.existsSync(file)) return null;
+
+    try {
+        return JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (error) {
+        fail(`Cannot read ${path.relative(ROOT, file)}: ${error.message}`);
+    }
+}
+
+function safeTimestamp(date) {
+    return date.toISOString().replace(/[:.]/g, '-');
+}
+
+const args = process.argv.slice(2);
+const areas = availableAreas();
+
+if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+    console.log('Usage: node tests all | node tests <functionalArea> [functionalArea2 functionalArea3]');
+    console.log(`Functional areas: ${areas.join(', ')}`);
+    process.exit(args.length === 0 ? 1 : 0);
+}
+
+const isFullSuite = args.length === 1 && args[0] === 'all';
+let selectedAreas;
+
+if (isFullSuite) {
+    const lastRun = readLatestFullRun();
+    if (lastRun && Number(lastRun.durationMs) >= FULL_SUITE_LIMIT_MS) {
+        fail(
+            `Full suite blocked: the last full run took ${lastRun.durationSeconds}s ` +
+            `(limit: ${FULL_SUITE_LIMIT_MS / 1000}s). Run up to ${MAX_TARGETED_AREAS} named areas instead.`,
+            2,
+        );
+    }
+    selectedAreas = areas;
+} else {
+    if (args.length > MAX_TARGETED_AREAS) {
+        fail(`Choose at most ${MAX_TARGETED_AREAS} functional areas per targeted run.`, 2);
+    }
+
+    const unknown = args.filter((area) => !areas.includes(area));
+    if (unknown.length > 0) {
+        fail(`Unknown functional area(s): ${unknown.join(', ')}. Available: ${areas.join(', ')}`, 2);
+    }
+    selectedAreas = args;
+}
+
+fs.mkdirSync(LOG_ROOT, { recursive: true });
+
+const startedAt = new Date();
+const targets = selectedAreas.map((area) => area.replaceAll('\\', '/'));
+const playwrightCli = require.resolve('@playwright/test/cli');
+const result = spawnSync(process.execPath, [playwrightCli, 'test', ...targets], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    env: { ...process.env, FORCE_COLOR: '0' },
+});
+const endedAt = new Date();
+const durationMs = endedAt.getTime() - startedAt.getTime();
+const exitCode = Number.isInteger(result.status) ? result.status : 1;
+const status = exitCode === 0 ? 'passed' : 'failed';
+const scope = isFullSuite ? 'all' : selectedAreas.join('+');
+const logName = `${safeTimestamp(startedAt)}-${scope}.log`;
+const logPath = path.join(LOG_ROOT, logName);
+const combinedOutput = [result.stdout, result.stderr].filter(Boolean).join('\n');
+
+process.stdout.write(result.stdout || '');
+process.stderr.write(result.stderr || '');
+
+const summary = {
+    schemaVersion: 1,
+    scope,
+    areas: selectedAreas,
+    startedAt: startedAt.toISOString(),
+    endedAt: endedAt.toISOString(),
+    durationMs,
+    durationSeconds: Number((durationMs / 1000).toFixed(3)),
+    fullSuiteLimitSeconds: FULL_SUITE_LIMIT_MS / 1000,
+    status,
+    exitCode,
+    logFile: path.relative(ROOT, logPath).replaceAll('\\', '/'),
+};
+
+fs.writeFileSync(logPath, `${JSON.stringify(summary, null, 2)}\n\n${combinedOutput}`, 'utf8');
+fs.writeFileSync(
+    path.join(LOG_ROOT, isFullSuite ? 'latest-full-suite.json' : 'latest-targeted-run.json'),
+    `${JSON.stringify(summary, null, 2)}\n`,
+    'utf8',
+);
+
+console.log(`\n${status.toUpperCase()} in ${summary.durationSeconds}s. Log: ${summary.logFile}`);
+process.exit(exitCode);
