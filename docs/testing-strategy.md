@@ -23,6 +23,10 @@ The deterministic-state pass adds seven Node unit tests for the state factory/st
 
 The content-contract pass adds four Node tests covering valid shipped content, Map-grid generation, reference/grid/locale/overlap/orphan failures, and minimal scenario/save schemas. Navigation browser coverage validates and decodes all 18 rooms, performs normal canvas entry and return clicks across every canonical connection with content-only starting-state arrangement, and proves all four gates refuse entry while locked.
 
+The Section 3 extraction adds 13 pure-rule and four adapter/application tests, bringing the Node suite to 24 tests. They cover all nine stable verbs, two-target states, inventory idempotency, localisation fallback/interpolation, explicit librarian dialogue traversal, canonical puzzle facts and reasons, A*/fallback/pointer/hotspot rules, save migrations, dependency direction, DOM-to-store dispatch, draw order, session lifecycle, and readiness failures. Browser coverage drives the librarian through real Talk To and stable choice controls in `en`, `es`, `de`, `it`, and `fr`; a separate browser integration test round-trips canonical state through `localStorage`.
+
+Latest full proof (2026-09-13): `node tests all` passed 18/18 browser tests in 35.914 seconds. The run retained every established navigation case, including locked gates, and made no navigation/content edits for the sidelined Map room.
+
 ## Test pyramid
 
 ### Unit tests

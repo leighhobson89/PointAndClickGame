@@ -68,6 +68,8 @@ src/
 
 Exit criteria: navigation, inventory combinations, dialogue transitions, puzzle prerequisites/effects, save migration, and pathfinding have fast unit tests.
 
+Implementation status (2026-09-13): complete for the Section 3 seam. Browser-independent command, inventory, localisation, dialogue, puzzle, navigation, and save-migration rules now live under `src/domain`; orchestration, renderer/DOM/assets/storage adapters, and content loading are separated by dependency direction. `npm run check:dependencies` rejects upward imports, browser globals in domain code, and cycles in the extracted module graph. The runtime now sends stable command intents, uses an allow-listed event registry, records canonical Chapter 1 facts, and runs the librarian tutorial through explicit nodes and choice IDs. Remaining non-library dialogue and the large legacy global adapter are tracked as incremental migration debt rather than hidden inside this completed seam.
+
 ## Phase 3 — Stabilise content contracts
 
 Outcome: data errors are caught before a player encounters them.

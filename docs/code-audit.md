@@ -88,7 +88,7 @@ Recommended evolution: retain the grid for walking, introduce named polygon/rect
 
 Nine classic verbs are represented: Look, Pick Up, Use, Open, Close, Push, Pull, Talk To, and Give. Two-stage verbs combine inventory/world targets. This preserves a deliberate old-school vocabulary and supports joke responses.
 
-At present, the command layer maps localised display strings back to semantic IDs. Some dialogue flow is encoded in trailing spaces, exclamation marks, and compact order strings. This is brittle: translators can accidentally change program flow and duplicate/overlapping labels can resolve incorrectly. Commands should be structured objects such as `{ verbId, primaryTargetId, secondaryTargetId }`; dialogue should use explicit node and action fields.
+Section 3 replaced runtime command reconstruction with `{ verbId, primaryTargetId, secondaryTargetId }` intents. Buttons, inventory items, canvas targets, and dialogue choices carry stable IDs; translated text is presentation only. Contextual default clicks and two-target Use/Give flows are governed by pure command-state rules. The remaining legacy non-library dialogue representation is still migration debt, but it no longer participates in command identification.
 
 ## Dialogue and narrative state
 
@@ -106,7 +106,7 @@ The engine is expressive but its representation obscures intent. Replace encoded
 }
 ```
 
-This makes choice reachability, missing translations, and quest effects statically testable.
+This makes choice reachability, missing translations, and quest effects statically testable. The librarian tutorial is now the first migrated graph: its lines, choices, links, and `library.learnRiddle` consequence are explicit and content-validated, with real browser traversal in all five locales. Other NPC conversations remain behind the legacy dialogue adapter and are tracked in BUG-011 for later graph migration.
 
 ## Content and data integrity
 
@@ -135,7 +135,7 @@ Use a versioned plain state object, validate it before applying, migrate older s
 
 ## Localisation
 
-Five locales are a strong foundation. However, using `eval` for expressions from localisation data is a security and maintenance hazard and prevents a strict Content Security Policy. Replace it with named interpolation tokens resolved from a controlled dictionary. Add layout tests for longest strings, diacritics, missing keys, and locale switching in the middle of dialogue.
+Five locales are a strong foundation. Section 3 removed localisation `eval`: lookup now has explicit locale/English fallback, a visible missing-key result, and interpolation restricted to supplied `${token}` names. The five-locale librarian journey proves that translated wording does not select actions or dialogue branches. Layout, text-expansion, mid-dialogue switching, and a strict CSP remain later presentation/security coverage.
 
 ## Rendering, performance, and assets
 

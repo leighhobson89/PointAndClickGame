@@ -1,5 +1,6 @@
 import { createInitialGameState, assertValidGameState } from './src/state/game-state.mjs';
 import { createGameStore, gameActions } from './src/state/store.mjs';
+import { DEFAULT_VERB_ID, fromLocalisationKey, toLocalisationKey } from './src/domain/commands/commands.mjs';
 
 //DEBUG
 export let debugFlag = false;
@@ -116,6 +117,8 @@ let objectData = null;
 let dialogueData = null;
 let npcData = null;
 let foregroundsData = null;
+let contentContract = null;
+let mapRoomData = null;
 let currentScreenId = initialScreenId;
 let previousScreenId = initialScreenId;
 let nextScreenId = initialScreenId;
@@ -177,7 +180,7 @@ let transitioningNow = false;
 let currentlyMovingToAction = false;
 let hoveringInterestingObjectOrExit = false;
 let lookingForAlternativePathToNearestWalkable = false;
-let verbConstructionActive = null;
+let verbConstructionActive = DEFAULT_VERB_ID;
 let waitingForSecondItem = null;
 let isDisplayingText = false;
 let objectOriginalValueUpdatedYet = false;
@@ -508,6 +511,24 @@ export function setForegroundsData(value) {
     gameStore.dispatch(gameActions.setContent('foregrounds', value));
 }
 
+export function getContentContract() {
+    return contentContract;
+}
+
+export function setContentContract(value) {
+    contentContract = value;
+    gameStore.dispatch(gameActions.setContent('contract', value));
+}
+
+export function setMapRoomData(value) {
+    mapRoomData = value;
+    gameStore.dispatch(gameActions.setContent('mapRoom', value));
+}
+
+export function getQuestFacts() {
+    return gameStore.getState().quests.facts;
+}
+
 export function getNpcData() {
     return npcData;
 }
@@ -577,6 +598,8 @@ export function resetAllVariables() {
     dialogueData = nextState.content.dialogue;
     npcData = nextState.content.npcs;
     foregroundsData = nextState.content.foregrounds;
+    contentContract = nextState.content.contract;
+    mapRoomData = nextState.content.mapRoom;
     currentScreenId = nextState.location.currentRoomId;
     previousScreenId = nextState.location.previousRoomId;
     nextScreenId = nextState.location.nextRoomId;
@@ -647,7 +670,7 @@ export function resetAllVariables() {
     currentlyMovingToAction = false;
     hoveringInterestingObjectOrExit = false;
     lookingForAlternativePathToNearestWalkable = false;
-    verbConstructionActive = null;
+    verbConstructionActive = DEFAULT_VERB_ID;
     waitingForSecondItem = false;
     isDisplayingText = false;
     objectOriginalValueUpdatedYet = false;
@@ -688,6 +711,8 @@ export function restoreGameStatus(gameState) {
             dialogueData = restored.content.dialogue;
             npcData = restored.content.npcs;
             foregroundsData = restored.content.foregrounds;
+            contentContract = restored.content.contract;
+            mapRoomData = restored.content.mapRoom;
             language = restored.settings.language;
             languageSelected = restored.settings.selectedLanguage;
             oldLanguage = restored.settings.oldLanguage;
@@ -947,32 +972,23 @@ export function getCustomMouseCursor(value) {
 }
 
 export function setVerbButtonConstructionStatus(value) {
-    verbConstructionActive = value;
+    if (value === null || value === undefined) {
+        verbConstructionActive = DEFAULT_VERB_ID;
+        return;
+    }
+    if (typeof value === 'string') {
+        verbConstructionActive = fromLocalisationKey(value) ?? value;
+        return;
+    }
+    verbConstructionActive = value.dataset?.verbId ?? DEFAULT_VERB_ID;
 }
 
 export function getVerbButtonConstructionStatus() {
-    switch(verbConstructionActive) {
-        case null:
-            return 'interactionWalkTo';
-        case btnLookAt:
-            return 'interactionLookAt';
-        case btnPickUp:
-            return 'interactionPickUp';
-        case btnUse:
-            return 'interactionUse';
-        case btnOpen:
-            return 'interactionOpen';
-        case btnClose:
-            return 'interactionClose';
-        case btnPush:
-            return 'interactionPush';
-        case btnPull:
-            return 'interactionPull';
-        case btnTalkTo:
-            return 'interactionTalkTo';
-        case btnGive:
-            return 'interactionGive';
-    }
+    return toLocalisationKey(verbConstructionActive);
+}
+
+export function getSelectedVerbId() {
+    return verbConstructionActive;
 }
 
 export function setUpcomingAction(value) {

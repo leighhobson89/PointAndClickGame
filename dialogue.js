@@ -3,9 +3,63 @@ import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow,
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
 import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
+import { advanceDialogue, createDialogueState, getDialogueNode } from './src/domain/dialogue/dialogue.mjs';
+import { libraryDialogueGraph, resolveLibraryDialogueText } from './src/content/library-dialogue.mjs';
+
+async function runLibraryDialogue(npcId) {
+    const player = getPlayerObject();
+    const npc = getNpcData().npcs[npcId];
+    let state = createDialogueState(libraryDialogueGraph);
+    turnNpcForDialogue(player, npc, npcId, false);
+    setTransitioningToDialogueState(true);
+    setGameState(getInteractiveDialogueState());
+    hideDialogueArrows();
+
+    while (!state.ended) {
+        const node = getDialogueNode(libraryDialogueGraph, state);
+        if (node.type === 'line') {
+            setCurrentSpeaker(node.speaker);
+            const text = resolveLibraryDialogueText(getDialogueData(), node.textKey, getLanguage());
+            const { xPos, yPos } = getTextPosition(node.speaker === 'player' ? 'player' : 'npc1', npc);
+            await showText(text, getTextColor(node.speaker === 'player' ? 'player' : 'npc1', npc.interactable.dialogueColor), xPos, yPos);
+            state = advanceDialogue(libraryDialogueGraph, state).state;
+            continue;
+        }
+        if (node.type === 'choice') {
+            removeDialogueRow(0);
+            const choice = await new Promise((resolve) => {
+                for (const option of node.choices) {
+                    addDialogueRow(resolveLibraryDialogueText(getDialogueData(), option.textKey, getLanguage()), option.id);
+                    const row = getElements().dialogueSection.lastElementChild;
+                    row.onclick = () => resolve(option);
+                }
+            });
+            removeDialogueRow(0);
+            await showText(resolveLibraryDialogueText(getDialogueData(), choice.textKey, getLanguage()), getColorTextPlayer());
+            state = advanceDialogue(libraryDialogueGraph, state, { choiceId: choice.id }).state;
+            continue;
+        }
+        const result = advanceDialogue(libraryDialogueGraph, state);
+        state = result.state;
+        for (const action of result.actions) {
+            if (action.id === 'library.learnRiddle') {
+                setQuestPhaseNpc(npcId, 2);
+                await executeInteractionEvent({ dialogueEvent: 'allowInteractionPileOfBooks' }, '', null, npcId);
+            }
+        }
+    }
+
+    removeDialogueRow(0);
+    turnNpcForDialogue(player, npc, npcId, true);
+    setCurrentSpeaker('player');
+    setTransitioningToDialogueState(false);
+    updateInteractionInfo(localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction'), false);
+    setGameState(getGameVisibleActive());
+}
 
 // Dialogue Engine
 export async function dialogueEngine(realVerbUsed, npcId, interactiveDialogue, dialoguePathString, speakersArrayString, order) {
+    if (interactiveDialogue && npcId === 'npcLibrarian') return runLibraryDialogue(npcId);
     const player = getPlayerObject();
     const language = getLanguage();
 

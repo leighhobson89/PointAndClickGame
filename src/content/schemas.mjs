@@ -14,6 +14,7 @@ export const contentSchemas = Object.freeze({
         required: ['name', 'interactable', 'activeSpriteUrl', 'spriteUrl', 'gridPosition', 'dimensions'],
     }),
     dialogue: Object.freeze({ root: 'dialogue' }),
+    dialogueGraph: Object.freeze({ required: ['id', 'startNodeId', 'nodes'] }),
     localisation: Object.freeze({ locales: ['en', 'es', 'de', 'it', 'fr'] }),
     puzzleAction: Object.freeze({ required: ['id', 'requires', 'effects'] }),
     scenario: Object.freeze({ required: ['schemaVersion', 'id', 'seed', 'facts'] }),

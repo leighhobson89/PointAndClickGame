@@ -51,20 +51,22 @@ Acceptance: one command validates all shipped content, the maintained map and ru
 
 ## 3. Extract explicit, browser-independent game rules
 
-- [ ] Establish `domain`, `application`, `adapter`, and `content` module boundaries; prohibit domain imports of DOM, canvas, file paths, translated copy, or mutable globals.
-- [ ] Add a dependency rule, break existing circular imports as modules migrate, and remove reliance on the browser-created global `canvas` name.
-- [ ] Replace translated-sentence reconstruction with `{ verbId, primaryTargetId, secondaryTargetId }` command intents.
-- [ ] Implement and test all nine verbs, contextual default click, two-target state/cancel/error rules, and inventory add/remove/combine/use idempotency.
-- [ ] Replace localisation `eval` with allow-listed named interpolation tokens and explicit fallback/missing-key handling.
-- [ ] Define explicit dialogue nodes, choices, conditions, actions, and stable consequence IDs; migrate and characterise the library conversations first.
-- [ ] Convert event mutations into idempotent prerequisite/effect actions and one canonical set of Chapter 1 facts.
-- [ ] Add `whyUnavailable`/gate-reason selectors and make alternate solutions converge on shared facts.
-- [ ] Extract A*, costs, unreachable fallbacks, pointer-to-world transforms, walk-grid resolution, and semantic hotspot/anchor resolution as pure functions.
-- [ ] Add fast unit coverage for path boundaries/costs, navigation, inventory, commands, dialogue traversal, localisation, puzzle effects/reachability, save migrations, and pointer transforms.
-- [ ] Add integration coverage for session lifecycle with fake renderer/storage, renderer draw order with a recording context, DOM-to-store actions/rendering, asset readiness/errors, and browser storage.
-- [ ] E2E-test the library tutorial vertical slice in all five locales without locating actions by translated sentence fragments.
+- [x] Establish `domain`, `application`, `adapter`, and `content` module boundaries; prohibit domain imports of DOM, canvas, file paths, translated copy, or mutable globals.
+- [x] Add a dependency rule, break existing circular imports as modules migrate, and remove reliance on the browser-created global `canvas` name.
+- [x] Replace translated-sentence reconstruction with `{ verbId, primaryTargetId, secondaryTargetId }` command intents.
+- [x] Implement and test all nine verbs, contextual default click, two-target state/cancel/error rules, and inventory add/remove/combine/use idempotency.
+- [x] Replace localisation `eval` with allow-listed named interpolation tokens and explicit fallback/missing-key handling.
+- [x] Define explicit dialogue nodes, choices, conditions, actions, and stable consequence IDs; migrate and characterise the library conversations first.
+- [x] Convert event mutations into idempotent prerequisite/effect actions and one canonical set of Chapter 1 facts.
+- [x] Add `whyUnavailable`/gate-reason selectors and make alternate solutions converge on shared facts.
+- [x] Extract A*, costs, unreachable fallbacks, pointer-to-world transforms, walk-grid resolution, and semantic hotspot/anchor resolution as pure functions.
+- [x] Add fast unit coverage for path boundaries/costs, navigation, inventory, commands, dialogue traversal, localisation, puzzle effects/reachability, save migrations, and pointer transforms.
+- [x] Add integration coverage for session lifecycle with fake renderer/storage, renderer draw order with a recording context, DOM-to-store actions/rendering, asset readiness/errors, and browser storage.
+- [x] E2E-test the library tutorial vertical slice in all five locales without locating actions by translated sentence fragments.
 
 Acceptance: core rules run under Node without a browser, stable IDs drive behaviour, and punctuation/translation cannot execute control flow.
+
+Implementation note (2026-09-13): Section 3 deliberately leaves the Map room artifacts and all authored room connections unchanged. Runtime navigation remains the source of truth; this extraction does not connect, disconnect, or otherwise reinterpret the sidelined Map room.
 
 ## 4. Build deterministic debug and test reachability
 

@@ -1,9 +1,11 @@
 import { getCanvasCellHeight, getAllGridData, setNavigationData, getOriginalValueInCellWhereNpcPlaced, getSwappedDialogueObject, setSwappedDialogueObject, setDialoguesData, setNpcsData, getColorTextPlayer, getWaitingForSecondItem, getSecondItemAlreadyHovered, getObjectToBeUsedWithSecondItem, setWaitingForSecondItem, setObjectToBeUsedWithSecondItem, setObjectsData, setVerbButtonConstructionStatus, getNavigationData, getCurrentScreenId, getDialogueData, getLanguage, getObjectData, getPlayerInventory, setCurrentStartIndexInventory, getGridData, getOriginalValueInCellWhereObjectPlaced, setPlayerInventory, getLocalization, getElements, getNpcData, getCanvasCellWidth, getForcePlayerLocation, getInteractiveDialogueState } from "./constantsAndGlobalVars.js";
 import { localize } from "./localization.js";
 import { drawInventory, resetSecondItemState, showText, updateInteractionInfo } from "./ui.js";
-import { executeInteractionEvent } from "./events.js";
+import { commitCanonicalAction, executeInteractionEvent } from "./events.js";
 import { dialogueEngine} from "./dialogue.js";
 import { triggerPendingEvent, checkPendingEvents, updateGrid } from "./game.js";
+import { createCommandIntent, toLegacyVerbKey } from './src/domain/commands/commands.mjs';
+import { addInventoryItem, removeInventoryItem } from './src/domain/inventory/inventory.mjs';
 
 export function performCommand(command, inventoryItem) {
     //console.log(command);
@@ -145,6 +147,7 @@ function pickUpItem(objectId, quantity, verb, dialogueString) {
 
     removeObjectFromEnvironment(objectId, getCurrentScreenId());
     addItemToInventory(objectId, quantity);
+    if (objectId === 'objectIllegibleMap') commitCanonicalAction('research.collectMapClue');
 
     console.log(getPlayerInventory());
     setCurrentStartIndexInventory(0);
@@ -259,84 +262,17 @@ export function removeNpcFromEnvironment(npcId, placeToRemoveFrom) {
 }
 
 
-export function addItemToInventory(objectId, quantity = 1) {
+export function addItemToInventory(objectId, quantity = 1, operationId = null) {
     const objectData = getObjectData().objects[objectId];
     const isStackable = objectData.interactable.stackable;
-    const inventory = getPlayerInventory();
-
-    if (!inventory.slot1) {
-        inventory.slot1 = {
-            object: objectId,
-            quantity: isStackable ? quantity : 1,
-            stackable: isStackable ? "true" : "false"
-        };
-        setPlayerInventory(inventory);
-        return;
-    }
-
-    for (let slot in inventory) {
-        if (inventory[slot] && inventory[slot].object === objectId) {
-            if (isStackable) {
-                inventory[slot].quantity += quantity;
-                setPlayerInventory(inventory);
-                return;
-            }
-        }
-    }
-
-    const slots = Object.keys(inventory);
-
-    for (let i = slots.length - 1; i >= 0; i--) {
-        const currentSlot = slots[i];
-        const previousSlot = `slot${i + 2}`;
-
-        if (inventory[currentSlot]) {
-            inventory[previousSlot] = inventory[currentSlot];
-        }
-    }
-
-    inventory.slot1 = {
-        object: objectId,
-        quantity: isStackable ? quantity : 1,
-        stackable: isStackable ? "true" : "false"
-    };
-
-    setPlayerInventory(inventory);
+    setPlayerInventory(addInventoryItem(getPlayerInventory(), { objectId, quantity, stackable: isStackable, operationId }));
 }
 
 export function handleInventoryAdjustment(objectId, quantity, overrideDecrementFalse) {
-    const inventory = getPlayerInventory();
     const objectData = getObjectData().objects[objectId];
 
     if (objectData.interactable && (objectData.interactable.decrementQuantityOnUse || overrideDecrementFalse)) {
-        for (let slot in inventory) {
-            if (inventory[slot] && inventory[slot].object === objectId) {
-                if (inventory[slot].quantity >= quantity) {
-                    inventory[slot].quantity -= quantity;
-
-                    if (inventory[slot].quantity === 0) {
-                        let currentSlot = slot;
-
-                        while (inventory[`slot${parseInt(currentSlot.replace('slot', '')) + 1}`]) {
-                            const nextSlot = `slot${parseInt(currentSlot.replace('slot', '')) + 1}`;
-                            inventory[currentSlot] = inventory[nextSlot];
-                            currentSlot = nextSlot;
-                        }
-
-                        delete inventory[currentSlot];
-                        console.log(getPlayerInventory());
-                        console.log(`Removed ${objectId} from inventory. Slots shifted down.`);
-                    } else {
-                        console.log(`Decreased quantity of ${objectId} by ${quantity}. New quantity: ${inventory[slot].quantity}`);
-                    }
-                } else {
-                    console.warn(`Not enough quantity to decrement. Current quantity: ${inventory[slot].quantity}.`);
-                }
-                setPlayerInventory(inventory);
-                return;
-            }
-        }
-        console.warn(`Object ID ${objectId} not found in inventory.`);
+        setPlayerInventory(removeInventoryItem(getPlayerInventory(), { objectId, quantity }));
     }
 }
 
@@ -890,207 +826,27 @@ function extractNpcFromTheObjectsNpcGiveToValue(objectId) {
     return result;
 }
 
-export function constructCommand(userCommand, canHover) {
-    const objectData = getObjectData().objects;
-    const npcData = getNpcData().npcs;
-    const language = getLanguage();
-    const localization = getLocalization()[language]['verbsActionsInteraction'];
-    const navigationData = getNavigationData();
-    
-    const waitingForSecondItem = getWaitingForSecondItem();
-    
-    let objectMatch1 = null;
-    let objectMatch2 = null;
-    let isObject1TrueNpcFalse = true;
-    let isObject2TrueNpcFalse = true;
-    let objectName = '';
-    let verbPart = '';
-    let exitOrNot1 = false;
-    let exitOrNot2 = false;
-    let quantity = 1;
-
-    if (!canHover) {
-        userCommand = localize('interactionWalkTo', getLanguage(), 'verbsActionsInteraction');
-
-        let verbKey = 'verbWalkTo';
-
-        return {
-            objectId1: objectMatch1,
-            objectId2: objectMatch2,
-            isObjectTrueNpcFalse: isObject2TrueNpcFalse,
-            verbKey: verbKey,
-            exitOrNot1: "",
-            exitOrNot2: exitOrNot2,
-            quantity: quantity
-        }
-    }
-
-    let commandParts = userCommand.split(' ');
-
-    // Handle the case where we are waiting for the second item
-    if (waitingForSecondItem) {
-        // Extract the first object from getObjectToBeUsedWithSecondItem()
-        const item1 = objectData[getObjectToBeUsedWithSecondItem()].name[language];
-        // Extract the second object from getSecondItemAlreadyHovered()
-        const item2 = getSecondItemAlreadyHovered();
-
-        // Find the object IDs for object1 and object2 in the objectData
-        for (const objectId in objectData) {
-            if (objectData[objectId].name[language] === item1) {
-                objectMatch1 = objectId;
-            }
-            if (objectData[objectId].name[language] === item2) {
-                objectMatch2 = objectId;
-            }
-        }
-
-        // The verb should be the first word in the commandParts array
-        verbPart = commandParts[0];
-
-        // Check if verbPart matches any in localization
-        let verbKey = null;
-        for (const key in localization) {
-            if (localization[key] === verbPart) {
-                verbKey = key;
-                break;
-            }
-        }
-
-        if (!verbKey) {
-            console.warn('No verb match found for the command:', verbPart);
-            return null;
-        }
-
-        if (!objectMatch2) { //check for npc only match2 as cant use npc with something
-            for (const npcId in npcData) {
-                if (npcData[npcId].name[language] === item2) {
-                    objectMatch2 = npcId;
-                    isObject2TrueNpcFalse = false;
-                }
-            }
-        }
-
-        // Now check if object2 (second item) is an exit (room) if not object or npc
-        if (!objectMatch2) {
-            for (const roomId in navigationData) {
-                const roomName = navigationData[roomId][language];
-
-                for (let i = commandParts.length - 1; i >= 0; i--) {
-                    const roomCommandName = commandParts.slice(i).join(' ');
-                    if (roomCommandName === roomName) {
-                        objectMatch2 = roomId;
-                        exitOrNot2 = true;
-                        break;
-                    }
-                }
-                if (objectMatch2) {
-                    break;
-                }
-            }
-        }
-
-        return {
-            objectId1: objectMatch1,  // First object ID (from getObjectToBeUsedWithSecondItem())
-            objectId2: objectMatch2,  // Second object ID (from getSecondItemAlreadyHovered() or a room)
-            isObjectTrueNpcFalse: isObject2TrueNpcFalse, //Return if the object is an NPC
-            verbKey: verbKey,         // The verb/action
-            exitOrNot1: "",           // No exit for the first item when waiting for the second item
-            exitOrNot2: exitOrNot2,   // Exit status for the second item
-            quantity: quantity        // Keep the current quantity logic
-        };
-
-    } else {
-        // Handle the case where we're NOT waiting for a second item
-        for (let i = commandParts.length - 1; i >= 0; i--) {
-            objectName = commandParts.slice(i).join(' ');
-
-            const firstWord = objectName.split(' ')[0];
-
-            if (!isNaN(firstWord)) {
-                quantity = parseInt(firstWord);
-            }
-
-            for (const objectId in objectData) {
-                if (objectData[objectId].name[language] === objectName) {
-                    objectMatch1 = objectId;
-                    verbPart = commandParts.slice(0, i).join(' ');
-                    isObject1TrueNpcFalse = true;
-                    break;
-                }
-            }
-
-            if (objectMatch1) {
-                exitOrNot1 = false;
-                break;
-            }
-        }
-
-        if (!objectMatch1) {
-            for (const npcId in npcData) {
-                const npcName = npcData[npcId].name[language];
-
-                for (let i = commandParts.length - 1; i >= 0; i--) {
-                    const npcCommandName = commandParts.slice(i).join(' ');
-                    if (npcCommandName === npcName) {
-                        objectMatch1 = npcId;
-                        verbPart = commandParts.slice(0, i).join(' ');
-                        isObject1TrueNpcFalse = false;
-                        break;
-                    }
-                }
-                if (objectMatch1) {
-                    break;
-                }
-            }
-        }
-
-        if (!objectMatch1) {
-            for (const roomId in navigationData) {
-                const roomName = navigationData[roomId][language];
-
-                for (let i = commandParts.length - 1; i >= 0; i--) {
-                    const roomCommandName = commandParts.slice(i).join(' ');
-                    if (roomCommandName === roomName) {
-                        objectMatch1 = roomId;
-                        verbPart = commandParts.slice(0, i).join(' ');
-                        exitOrNot1 = true;
-                        break;
-                    }
-                }
-                if (objectMatch1) {
-                    break;
-                }
-            }
-        }
-
-        if (!objectMatch1) {
-            console.warn('No object or room match found for the command:', userCommand);
-            return null;
-        }
-
-        let verbKey = null;
-        for (const key in localization) {
-            if (localization[key] === verbPart) {
-                verbKey = key;
-                break;
-            }
-        }
-
-        if (!verbKey) {
-            console.warn('No verb match found for the command:', verbPart);
-            return null;
-        }
-
-        return {
-            objectId1: objectMatch1,  // Object or room ID from current logic
-            objectId2: null,          // No second object when getWaitingForSecondItem() is false
-            isObjectTrueNpcFalse: isObject1TrueNpcFalse,  //Return if the object is an NPC
-            verbKey: verbKey,         // The verb/action
-            exitOrNot1: exitOrNot1,   // Exit status for the first object
-            exitOrNot2: "",           // No second exit when getWaitingForSecondItem() is false
-            quantity: quantity        // Quantity remains unchanged
-        };
-    }
+export function constructCommand(intent) {
+    if (!intent || typeof intent !== 'object') return null;
+    const semanticIntent = createCommandIntent(intent);
+    const objects = getObjectData()?.objects ?? {};
+    const npcs = getNpcData()?.npcs ?? {};
+    const classify = (targetId) => ({
+        isExit: Boolean(targetId && !objects[targetId] && !npcs[targetId] && getNavigationData()?.[targetId]),
+        isObject: Boolean(!targetId || objects[targetId] || (!npcs[targetId] && !getNavigationData()?.[targetId])),
+    });
+    const primary = classify(semanticIntent.primaryTargetId);
+    const secondary = classify(semanticIntent.secondaryTargetId);
+    return {
+        intent: semanticIntent,
+        objectId1: semanticIntent.primaryTargetId,
+        objectId2: semanticIntent.secondaryTargetId,
+        isObjectTrueNpcFalse: semanticIntent.secondaryTargetId ? secondary.isObject : primary.isObject,
+        verbKey: toLegacyVerbKey(semanticIntent.verbId),
+        exitOrNot1: primary.isExit,
+        exitOrNot2: secondary.isExit,
+        quantity: 1,
+    };
 }
 
 export function setDialogueData(path, dialogueSetToReplace, dialogueSetNewSource) {

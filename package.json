@@ -9,7 +9,8 @@
         "test:unit": "node --test test/unit/*.test.mjs",
         "validate:content": "node scripts/validate-content.mjs",
         "report:hotspots": "node scripts/validate-content.mjs --report-hotspots",
-        "check": "npm run validate:content && npm run test:unit",
+        "check:dependencies": "node scripts/check-dependencies.mjs",
+        "check": "npm run check:dependencies && npm run validate:content && npm run test:unit",
         "pretest": "npm run validate:content"
     },
     "dependencies": {

@@ -5,6 +5,7 @@ import {
     setLocalization,
 } from './constantsAndGlobalVars.js';
 import { loadJsonResource, validateObjectRoot } from './src/application/readiness.mjs';
+import { resolveLocalizedValue } from './src/domain/localisation/localisation.mjs';
 
 let localizationData = {};
 
@@ -19,31 +20,13 @@ export async function initLocalization(language) {
     setLanguage(getLanguage());
 }
 
-function localize(key, language, section) {
-    const localizedString = getLocalization()[language][section][key];
-    if (!localizedString) return key;
-
-    if (localizedString.includes('${')) {
-        try {
-            return interpolateTemplateLiteral(localizedString);
-        } catch (e) {
-            console.error(`Error evaluating template literal in localized string for key '${key}':`, e);
-            return localizedString;
-        }
-    } else {
-        return localizedString;
-    }
-}
-
-function interpolateTemplateLiteral(template) {
-    return template.replace(/\${(.*?)}/g, (match, expression) => {
-        try {
-            const value = eval(expression);
-            return String(value);
-        } catch (e) {
-            console.error(`Error evaluating expression '${expression}' in template literal:`, e);
-            return match;
-        }
+function localize(key, language, section, tokens = {}, allowedTokens = Object.keys(tokens)) {
+    return resolveLocalizedValue(getLocalization(), {
+        locale: language,
+        section,
+        key,
+        tokens,
+        allowedTokens,
     });
 }
 

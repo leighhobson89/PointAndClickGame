@@ -1,5 +1,19 @@
 # Living documentation changelog
 
+## 2026-09-13 — Browser-independent rules and stable interaction IDs
+
+- Added dependency-enforced `domain`, `application`, `adapters`, and `content` boundaries without changing any room connection or Map-room content file.
+- Replaced translated command reconstruction with stable semantic intents for all nine verbs, contextual clicks, and deterministic two-target Use/Give selection; made inventory add/remove/combine/use rules immutable and idempotent.
+- Removed localisation `eval` in favour of explicit fallback, missing-key reporting, and allow-listed named interpolation.
+- Added explicit dialogue graph/state rules and migrated the librarian tutorial to stable nodes, choices, and the `library.learnRiddle` consequence.
+- Added canonical, prerequisite-aware Chapter 1 puzzle effects plus `whyUnavailable` and gate-reason selectors; adapted key runtime events to commit shared facts.
+- Extracted pure A*, movement costs, unreachable fallback, pointer transforms, walk-grid target resolution, and semantic hotspot/anchor rules.
+- Added session, renderer, DOM, asset, storage, and content adapters with Node integration coverage and real-browser `localStorage` coverage.
+- Fixed BUG-030 found during verification: session reset now restores the stable `walkTo` default, retaining existing click movement and navigation behaviour.
+- Updated BUG-009 to verify, resolved BUG-010 and BUG-022, and kept remaining legacy dialogue/import-cycle debt explicit in BUG-011 and BUG-021.
+
+Test evidence: `npm.cmd run check` passed dependency/content validation and all 24 Node tests. `node tests all` passed all 18 browser tests in 35.914 seconds, including all five librarian locales, browser storage, click movement, every established open/locked navigation case, startup, reset, and reduced-motion sequencing; log: `e2e/logs/2026-09-13T16-10-10-625Z-all.log`.
+
 ## 2026-09-13 — Authoritative Chapter 1 content contract
 
 - Added the versioned chapter1-world-v1 contract for 18 rooms, five locales, reciprocal topology, four gate facts, grid variants/transforms, hotspot policy, puzzle reachability, and legacy runtime actions.

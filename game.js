@@ -1,10 +1,12 @@
-import { getWalkSpeedPlayer, getTrackingGrid, setTrackingGrid, getForegroundsData, setCurrentPlayerImage, getCurrentPlayerImage, getCurrentScreenHasForegroundItems, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
+import { getWalkSpeedPlayer, getTrackingGrid, setTrackingGrid, getForegroundsData, setCurrentPlayerImage, getCurrentPlayerImage, getCurrentScreenHasForegroundItems, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getObjectToBeUsedWithSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getSelectedVerbId, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
 import { drawForegroundImageForCurrentScreen, updateDebugValues, handleEdgeScroll, setDynamicBackgroundWithOffset, handleMouseMove, returnHoveredInterestingObjectOrExitName, updateInteractionInfo, drawTextOnCanvas, animateTransitionAndChangeBackground as changeBackground, showText } from './ui.js';
 import { executeInteractionEvent } from './events.js';
 import { disposeCanonicalSession, startCanonicalSession } from './constantsAndGlobalVars.js';
+import { contextualVerbForTarget, createCommandIntent } from './src/domain/commands/commands.mjs';
+import { resolveCellTarget } from './src/domain/navigation/navigation.mjs';
 
 export let entityPaths = {};
 let firstDraw = true;
@@ -172,7 +174,7 @@ async function movePlayerTowardsTarget() {
             setTransitioningNow(false);
             resizeEntity(true, null, null);
             getElements().customCursor.classList.remove('d-none');
-            canvas.style.pointerEvents = 'auto';
+            getElements().canvas.style.pointerEvents = 'auto';
             initializeNonPlayerMovementsForScreen(getCurrentScreenId());
         }
     }
@@ -1009,6 +1011,7 @@ export function initializePlayerPosition(gridX, gridY) {
 }
 
 function checkEdgeCollision(player, targetX) {
+    const canvas = getElements().canvas;
     const newXPos = player.xPos + ((player.xPos < targetX) ? player.speed : - player.speed);
     let collisionOccurred = false;
 
@@ -1049,7 +1052,18 @@ export async function processLeftClickPoint(event, mouseClick) {
         }
 
         const verb = getVerbButtonConstructionStatus();
-        const action = localizationData[language].verbsActionsInteraction[verb];
+        const cellValue = getGridData().gridData[getGridTargetY()]?.[getGridTargetX()];
+        const target = resolveCellTarget(cellValue, {
+            roomId: getCurrentScreenId(), navigation: getNavigationData(), objects: getObjectData().objects, npcs: getNpcData().npcs,
+        });
+        const verbId = target ? getSelectedVerbId() : 'walkTo';
+        const intent = createCommandIntent({
+            verbId,
+            primaryTargetId: getWaitingForSecondItem() ? getObjectToBeUsedWithSecondItem() : target?.id ?? null,
+            secondaryTargetId: getWaitingForSecondItem() ? target?.id ?? null : null,
+        });
+        setUpcomingAction(intent);
+        const action = verbId;
         console.log("CLICK: action = " + action);
 
         if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
@@ -1075,8 +1089,6 @@ export async function processLeftClickPoint(event, mouseClick) {
         setCustomMouseCursor(getCustomMouseCursor('clickInteresting'));
 
         if (entityPaths.player.path.length > 0) {
-
-            const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
 
             if (!getTransitioningNow() && getVerbButtonConstructionStatus() === 'interactionWalkTo' && getHoveringInterestingObjectOrExit()) {
                 const screenOrObjectNameAndHoverStatus = returnHoveredInterestingObjectOrExitName(cellValue);
@@ -1136,7 +1148,7 @@ export async function processLeftClickPoint(event, mouseClick) {
         console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
         if (getWaitingForSecondItem()) {
             updateInteractionInfo(getElements().interactionInfo.textContent, true);
-            setUpcomingAction(getElements().interactionInfo.textContent);
+            setUpcomingAction(intent);
         }
         
         //console.log(`Path: ${JSON.stringify(path)}`);
@@ -1146,7 +1158,6 @@ export async function processLeftClickPoint(event, mouseClick) {
 export async function processRightClickPoint(event, mouseClick) {
     if (getGameStateVariable() === getGameVisibleActive()) {
         const player = getPlayerObject();
-        const localizationData = getLocalization();
         const objectData = getObjectData().objects;
         const dialogueData = getDialogueData().dialogue;
         const language = getLanguage();
@@ -1182,7 +1193,13 @@ export async function processRightClickPoint(event, mouseClick) {
 
         console.log("verb is " + verb);
 
-        const action = localizationData[language].verbsActionsInteraction[verb];
+        const target = resolveCellTarget(cellValue, {
+            roomId: getCurrentScreenId(), navigation: getNavigationData(), objects: objectData, npcs: getNpcData().npcs,
+        });
+        const verbId = contextualVerbForTarget(target ?? {});
+        const intent = createCommandIntent({ verbId, primaryTargetId: target?.id ?? null });
+        setUpcomingAction(intent);
+        const action = verbId;
         console.log("CLICK: action = " + action);
 
         if (Array.isArray(getVerbsBlockedExcept()) && getVerbsBlockedExcept().length > 0) {
@@ -1253,7 +1270,7 @@ export async function processRightClickPoint(event, mouseClick) {
         console.log("getHoveringInterestingObjectOrExit: " + getHoveringInterestingObjectOrExit());
         if (getWaitingForSecondItem()) {
             updateInteractionInfo(getElements().interactionInfo.textContent, true);
-            setUpcomingAction(getElements().interactionInfo.textContent);
+            setUpcomingAction(intent);
         }
         
         //console.log(`Path: ${JSON.stringify(path)}`);

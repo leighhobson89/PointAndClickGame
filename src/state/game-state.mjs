@@ -42,6 +42,8 @@ export function createInitialGameState(options = {}) {
             dialogue: clone(options.content?.dialogue ?? null),
             npcs: clone(options.content?.npcs ?? null),
             foregrounds: clone(options.content?.foregrounds ?? null),
+            contract: clone(options.content?.contract ?? null),
+            mapRoom: clone(options.content?.mapRoom ?? null),
         },
         dialogue: {
             activeNodeId: null,

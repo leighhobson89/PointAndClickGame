@@ -1,6 +1,8 @@
 import {
     getForegroundsData, 
     setForegroundsData, 
+    setContentContract,
+    setMapRoomData,
     setForegroundGridProcessed,
     setCurrentScreenHasForegroundItems,
     getForegroundsList,
@@ -65,6 +67,7 @@ import {
     getTransitioningToAnotherScreen,
     getTransitioningToDialogueState,
     getUpcomingAction,
+    getSelectedVerbId,
     getVerbButtonConstructionStatus,
     getWaitingForSecondItem,
     getWalkSpeedPlayer,
@@ -161,6 +164,8 @@ import {
     waitForTransition,
 } from './src/application/readiness.mjs';
 import { assertValidContentBundle } from './src/content/validate-content.mjs';
+import { createCommandIntent, toLocalisationKey } from './src/domain/commands/commands.mjs';
+import { pointerToWorld, resolveCellTarget, worldToGrid } from './src/domain/navigation/navigation.mjs';
 
 let textTimer;
 let assetsReadyPromise = Promise.resolve();
@@ -473,142 +478,24 @@ export function bootApplication() {
         document.querySelectorAll(".inventory-item"),
     );
 
-    // Adding mouseover event listener for each inventory item
+    // Inventory presentation reads stable semantic IDs. Translated copy is never
+    // parsed to reconstruct command meaning.
     inventoryItems.forEach(function(item) {
         item.addEventListener("mouseover", function() {
             const imgElement = item.querySelector("img");
-            const interactionText = getElements().interactionInfo.textContent;
-
-            if (imgElement) {
-                const objectId = imgElement.alt;
-                if (objectId !== "empty") {
-                    const objectOrNpcName =
-                        getObjectData().objects[objectId].name[getLanguage()];
-                    console.log(objectOrNpcName);
-
-                    // Extract the verbs
-                    const verbLookAt = localize(
-                        "interactionLookAt",
-                        getLanguage(),
-                        "verbsActionsInteraction",
-                    );
-                    const verbWalkTo = localize(
-                        "interactionWalkTo",
-                        getLanguage(),
-                        "verbsActionsInteraction",
-                    );
-                    const verbWalking = localize(
-                        "interactionWalking",
-                        getLanguage(),
-                        "verbsActionsInteraction",
-                    );
-                    const verbTalkTo = localize(
-                        "interactionTalkTo",
-                        getLanguage(),
-                        "verbsActionsInteraction",
-                    );
-                    const verbPickUp = localize(
-                        "interactionPickUp",
-                        getLanguage(),
-                        "verbsActionsInteraction",
-                    );
-
-                    if (interactionText.includes(verbWalkTo) || interactionText.includes(verbPickUp)) {
-                        setUpcomingAction(verbLookAt);
-                        if (
-                            getGameStateVariable() === getGameVisibleActive() &&
-                            !getTransitioningToDialogueState()
-                        ) {
-                            updateInteractionInfo(
-                                getUpcomingAction() + " " + objectOrNpcName,
-                                false,
-                            );
-                            if (interactionText.includes(verbPickUp)) {
-                                setVerbButtonConstructionStatus(null);
-                                setUpcomingAction(null);
-                            }
-                        }
-                    } else if (
-                        !getWaitingForSecondItem() &&
-                        interactionText !== verbWalking &&
-                        interactionText !== verbWalkTo
-                    ) {
-                        let words = interactionText.split(" ");
-                        let verbKey = null;
-
-                        const twoWordVerbs = [verbLookAt, verbTalkTo, verbPickUp];
-                        const firstTwoWords = words.slice(0, 2).join(" ");
-
-                        //if (firstTwoWords === verbPickUp) return; // Prevent duplicate items in inventory using pickup
-
-                        if (twoWordVerbs.includes(firstTwoWords)) {
-                            const verbsInteraction =
-                                getLocalization()[getLanguage()]["verbsActionsInteraction"];
-                            for (const [key, value] of Object.entries(verbsInteraction)) {
-                                if (value === firstTwoWords) {
-                                    verbKey = key;
-                                    break;
-                                }
-                            }
-                        } else {
-                            const verbsInteraction =
-                                getLocalization()[getLanguage()]["verbsActionsInteraction"];
-                            for (const [key, value] of Object.entries(verbsInteraction)) {
-                                if (value === words[0]) {
-                                    verbKey = key;
-                                    break;
-                                }
-                            }
-                        }
-                        if (
-                            getGameStateVariable() === getGameVisibleActive() &&
-                            !getTransitioningToDialogueState()
-                        ) {
-                            updateInteractionInfo(
-                                localize(verbKey, getLanguage(), "verbsActionsInteraction") +
-                                " " +
-                                objectOrNpcName,
-                                false,
-                            );
-                        }
-                    }
-
-                    if (getWaitingForSecondItem()) {
-                        if (!getSecondItemAlreadyHovered()) {
-                            if (
-                                objectOrNpcName !==
-                                getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
-                                    getLanguage()
-                                ]
-                            ) {
-                                updateInteractionInfo(
-                                    interactionText + " " + objectOrNpcName,
-                                    false,
-                                );
-                                setSecondItemAlreadyHovered(objectOrNpcName);
-                            }
-                        } else if (
-                            objectOrNpcName !==
-                            getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
-                                getLanguage()
-                            ]
-                        ) {
-                            let updatedText = interactionText.replace(
-                                new RegExp(getSecondItemAlreadyHovered()),
-                                objectOrNpcName,
-                            );
-                            updateInteractionInfo(updatedText, false);
-                            setSecondItemAlreadyHovered(objectOrNpcName);
-                        } else if (
-                            objectOrNpcName ===
-                            getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[
-                                getLanguage()
-                            ]
-                        ) {
-                            return;
-                        }
-                    }
-                }
+            const objectId = imgElement?.alt;
+            if (!objectId || objectId === 'empty') return;
+            item.dataset.targetId = objectId;
+            const verbId = getSelectedVerbId() === 'walkTo' || getSelectedVerbId() === 'pickUp' ? 'lookAt' : getSelectedVerbId();
+            const verbText = localize(toLocalisationKey(verbId), getLanguage(), 'verbsActionsInteraction');
+            const targetName = getObjectData().objects[objectId].name[getLanguage()];
+            if (getWaitingForSecondItem()) {
+                const primaryName = getObjectData().objects[getObjectToBeUsedWithSecondItem()].name[getLanguage()];
+                const connector = localize(verbId === 'give' ? 'interactionTo' : 'interactionWith', getLanguage(), 'verbsActionsInteraction');
+                updateInteractionInfo(`${verbText} ${primaryName} ${connector} ${targetName}`, false);
+                setSecondItemAlreadyHovered(objectId);
+            } else {
+                updateInteractionInfo(`${verbText} ${targetName}`, false);
             }
         });
     });
@@ -616,13 +503,17 @@ export function bootApplication() {
     // Adding click event listener for each inventory item
     inventoryItems.some(function(item) {
         item.addEventListener("click", function() {
-            const interactionText = getElements().interactionInfo.textContent;
-            if (!getSecondItemAlreadyHovered()) {
-                setUpcomingAction(interactionText);
-            }
-
-            const command = constructCommand(getUpcomingAction(), true, true);
-            console.log("command to perform: " + command);
+            const objectId = item.querySelector('img')?.alt;
+            if (!objectId || objectId === 'empty') return;
+            let verbId = getSelectedVerbId();
+            if (verbId === 'walkTo' || verbId === 'pickUp') verbId = 'lookAt';
+            const intent = createCommandIntent({
+                verbId,
+                primaryTargetId: getWaitingForSecondItem() ? getObjectToBeUsedWithSecondItem() : objectId,
+                secondaryTargetId: getWaitingForSecondItem() ? objectId : null,
+            });
+            setUpcomingAction(intent);
+            const command = constructCommand(intent);
             performCommand(command, true);
         });
 
@@ -868,179 +759,44 @@ function disableCustomCursor() {
 export function handleMouseMove(event, ctx) {
     const canvas = getElements().canvas;
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
     const gridData = getGridData();
-    let interactionText = getElements().interactionInfo.textContent;
+    const world = pointerToWorld(event, rect, { width: canvas.width, height: canvas.height });
+    const pointer = worldToGrid(world, {
+        cellWidth: getCanvasCellWidth(), cellHeight: getCanvasCellHeight(), width: getGridSizeX(), height: getGridSizeY(),
+    });
+    const hoverX = pointer.x;
+    const hoverY = pointer.y;
 
-    const hoverX = Math.floor(mouseX / getCanvasCellWidth());
-    const hoverY = Math.floor(mouseY / getCanvasCellHeight());
-
-    if (
-        hoverX >= 0 &&
-        hoverX < getGridSizeX() &&
-        hoverY >= 0 &&
-        hoverY < getGridSizeY()
-    ) {
+    if (pointer.inBounds) {
         if (
             getGameStateVariable() === getGameVisibleActive() &&
             !getTransitioningToDialogueState()
         ) {
             const cellValue =
                 gridData.gridData[hoverY] && gridData.gridData[hoverY][hoverX];
-
-            const walkable = cellValue.startsWith("e") || cellValue.startsWith("w");
-
             if (getHoverCell().x !== hoverX || getHoverCell().y !== hoverY) {
                 setHoverCell(hoverX, hoverY);
-
-                // console.log(
-                //     `Hovered Grid Position: (${getHoverCell().x}, ${getHoverCell().y}), Walkable: ${walkable}`,
-                // ); //, zPos: ${getZPosHover()}
-                //DEBUG
                 drawDebugGrid(getDrawGrid());
-                //
             }
-
-            setHoveringInterestingObjectOrExit(
-                cellValue.startsWith("e") ||
-                cellValue.startsWith("o") ||
-                cellValue.startsWith("c"),
-            );
-
-            if (
-                !getWaitingForSecondItem() &&
-                getHoveringInterestingObjectOrExit() &&
-                !getCurrentlyMovingToAction() &&
-                getVerbButtonConstructionStatus() === "interactionWalkTo"
-            ) {
-                const screenOrObjectNameAndHoverStatus =
-                    returnHoveredInterestingObjectOrExitName(cellValue);
-                const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
-                if (screenOrObjectNameAndHoverStatus[1]) {
-                    updateInteractionInfo(
-                        localize(
-                            "interactionWalkTo",
-                            getLanguage(),
-                            "verbsActionsInteraction",
-                        ) +
-                        " " +
-                        screenOrObjectName,
-                        false,
-                    );
-                }
-            } else {
-                if (
-                    !getWaitingForSecondItem() &&
-                    !getHoveringInterestingObjectOrExit() &&
-                    !getCurrentlyMovingToAction() &&
-                    getVerbButtonConstructionStatus() === "interactionWalkTo"
-                ) {
-                    updateInteractionInfo(
-                        localize(
-                            "interactionWalkTo",
-                            getLanguage(),
-                            "verbsActionsInteraction",
-                        ),
-                        false,
-                    );
-                }
-                if (
-                    !getWaitingForSecondItem() &&
-                    getVerbButtonConstructionStatus() !== "interactionWalkTo"
-                ) {
-                    updateInteractionInfo(
-                        localize(
-                            getVerbButtonConstructionStatus(),
-                            getLanguage(),
-                            "verbsActionsInteraction",
-                        ),
-                        false,
-                    );
-                }
-                if (
-                    !getWaitingForSecondItem() &&
-                    !getCurrentlyMovingToAction() &&
-                    getVerbButtonConstructionStatus() !== "interactionWalkTo" &&
-                    getHoveringInterestingObjectOrExit()
-                ) {
-                    const screenOrObjectNameAndHoverStatus =
-                        returnHoveredInterestingObjectOrExitName(cellValue);
-                    const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
-                    if (screenOrObjectNameAndHoverStatus[1]) {
-                        updateInteractionInfo(
-                            localize(
-                                getVerbButtonConstructionStatus(),
-                                getLanguage(),
-                                "verbsActionsInteraction",
-                            ) +
-                            " " +
-                            screenOrObjectName,
-                            false,
-                        );
-                    }
+            const target = resolveCellTarget(cellValue, {
+                roomId: getCurrentScreenId(), navigation: getNavigationData(), objects: getObjectData().objects, npcs: getNpcData().npcs,
+            });
+            const interesting = Boolean(target?.canHover);
+            setHoveringInterestingObjectOrExit(interesting);
+            if (!getCurrentlyMovingToAction()) {
+                const verbId = getSelectedVerbId();
+                const verbText = localize(toLocalisationKey(verbId), getLanguage(), 'verbsActionsInteraction');
+                const targetName = returnHoveredInterestingObjectOrExitName(cellValue)[0];
+                if (getWaitingForSecondItem() && interesting && targetName) {
+                    const primaryName = getObjectData().objects[getObjectToBeUsedWithSecondItem()]?.name[getLanguage()] ?? getObjectToBeUsedWithSecondItem();
+                    const connector = localize(verbId === 'give' ? 'interactionTo' : 'interactionWith', getLanguage(), 'verbsActionsInteraction');
+                    updateInteractionInfo(`${verbText} ${primaryName} ${connector} ${targetName}`, false);
+                    setSecondItemAlreadyHovered(target.id);
+                } else if (!getWaitingForSecondItem()) {
+                    updateInteractionInfo(interesting && targetName ? `${verbText} ${targetName}` : verbText, false);
                 }
             }
-
-            if (getWaitingForSecondItem() && getHoveringInterestingObjectOrExit()) {
-                const screenOrObjectNameAndHoverStatus =
-                    returnHoveredInterestingObjectOrExitName(cellValue);
-                const screenObjectOrNpcName = screenOrObjectNameAndHoverStatus[0];
-                if (
-                    screenOrObjectNameAndHoverStatus[1] &&
-                    !getCurrentlyMovingToAction()
-                ) {
-                    if (getSecondItemAlreadyHovered() !== screenObjectOrNpcName) {
-                        console.log(interactionText);
-                        console.log(interactionText + " " + screenObjectOrNpcName);
-
-                        const oldItem = getSecondItemAlreadyHovered();
-
-                        if (interactionText.includes(oldItem)) {
-                            const index = interactionText.indexOf(oldItem);
-                            interactionText = interactionText.substring(0, index);
-                        }
-
-                        updateInteractionInfo(
-                            interactionText + " " + screenObjectOrNpcName,
-                            false,
-                        );
-                        setSecondItemAlreadyHovered(screenObjectOrNpcName);
-                    }
-                }
-            }
-
-            if (getWaitingForSecondItem() && !getHoveringInterestingObjectOrExit()) {
-                const screenOrObjectNameAndHoverStatus =
-                    returnHoveredInterestingObjectOrExitName(cellValue);
-                const screenOrObjectName = screenOrObjectNameAndHoverStatus[0];
-
-                if (screenOrObjectNameAndHoverStatus[1]) {
-                    if (
-                        getSecondItemAlreadyHovered() !== screenOrObjectName &&
-                        !getCurrentlyMovingToAction()
-                    ) {
-                        const updatedText = interactionText.replace(
-                            new RegExp("\\s" + getSecondItemAlreadyHovered()),
-                            "",
-                        );
-                        updateInteractionInfo(updatedText, false);
-                        setSecondItemAlreadyHovered(null);
-                    }
-                }
-            }
-
-            if (getHoveringInterestingObjectOrExit()) {
-                const screenOrObjectNameAndHoverStatus =
-                    returnHoveredInterestingObjectOrExitName(cellValue);
-                if (screenOrObjectNameAndHoverStatus[1]) {
-                    setCustomMouseCursor(getCustomMouseCursor("hoveringInteresting"));
-                } else {
-                    setCustomMouseCursor(getCustomMouseCursor("normal"));
-                }
-            } else {
-                setCustomMouseCursor(getCustomMouseCursor("normal"));
-            }
+            setCustomMouseCursor(getCustomMouseCursor(interesting ? 'hoveringInteresting' : 'normal'));
         }
     }
 }
@@ -1097,8 +853,9 @@ function handleCanvasLeftClick(event) {
 
         const canvas = getElements().canvas;
         const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+        const world = pointerToWorld(event, rect, { width: canvas.width, height: canvas.height });
+        const clickX = world.x;
+        const clickY = world.y;
 
         console.log(`Left Click Coordinates: (${clickX}, ${clickY})`);
 
@@ -1118,8 +875,9 @@ function handleCanvasRightClick(event) {
 
         const canvas = getElements().canvas;
         const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+        const world = pointerToWorld(event, rect, { width: canvas.width, height: canvas.height });
+        const clickX = world.x;
+        const clickY = world.y;
 
         console.log(`Right Click Coordinates: (${clickX}, ${clickY})`);
 
@@ -1246,7 +1004,6 @@ export function updateInteractionInfo(text, action) {
     if (interactionInfo) {
         interactionInfo.textContent = text;
         if (action) {
-            setUpcomingAction(interactionInfo.textContent);
             interactionInfo.style.color = "rgb(255, 255, 0)";
             interactionInfo.style.fontWeight = "bold";
         } else {
@@ -1277,6 +1034,7 @@ export function drawInventory(startIndex) {
             const imgTag = `<img src="${imageUrl}" alt="${objectId}" style="width: 85%; height: 85%;" class="inventory-img" />`;
 
             div.innerHTML = imgTag;
+            div.dataset.targetId = objectId;
 
             const number = inventorySlot.quantity || null;
             let numberSpan;
@@ -1294,6 +1052,7 @@ export function drawInventory(startIndex) {
             }
         } else {
             div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" style="width: 50%; height: 50%;" class="inventory-img" />`;
+            delete div.dataset.targetId;
             div.classList.remove("show-triangle");
         }
     });
@@ -1578,6 +1337,8 @@ export async function loadGameData(
     setDialoguesData(dialogueData);
     setNpcsData(npcData);
     setForegroundsData(foregroundData);
+    setContentContract(contract);
+    setMapRoomData(mapRoom);
 
     return { gridData: validated.grids, navData, objectsData, dialogueData, npcData, foregroundData, contract, mapRoom };
 }
@@ -1596,11 +1357,12 @@ function adjustColor(color, reduction) {
     return `rgb(${adjustedRgbValues[0]}, ${adjustedRgbValues[1]}, ${adjustedRgbValues[2]})`;
 }
 
-export function addDialogueRow(dialogueOptionText) {
+export function addDialogueRow(dialogueOptionText, choiceId = null) {
     const dialogueSection = getElements().dialogueSection;
 
     const newRow = document.createElement("div");
     newRow.classList.add("row", "dialogueRow");
+    if (choiceId) newRow.dataset.choiceId = choiceId;
 
     const newCol = document.createElement("div");
     newCol.classList.add("col-12");
@@ -1737,6 +1499,7 @@ export function changeCanvasBg(url) {
 
 export function handleEdgeScroll() {
     const player = getPlayerObject();
+    const canvas = getElements().canvas;
     const canvasWidthInCells = 80;
     const proximityThreshold = 3;
     const screenData = getNavigationData()[getCurrentScreenId()];
@@ -1856,6 +1619,7 @@ function showFatalLoadError(error) {
 }
 
 export function drawForegroundImageForCurrentScreen() {
+    const canvas = getElements().canvas;
     const ctx = canvas.getContext("2d");
     const screenId = `foregrounds/${getCurrentScreenId()}.png`;
     const imagesArray = getArrayOfGameImages();

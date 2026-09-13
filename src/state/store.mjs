@@ -1,4 +1,5 @@
 import { assertValidGameState, cloneGameState, createInitialGameState } from './game-state.mjs';
+import { whyGateUnavailable, whyUnavailable } from '../domain/puzzles/puzzles.mjs';
 
 export const gameActions = Object.freeze({
     replace: (state) => ({ type: 'state/replace', payload: state }),
@@ -20,7 +21,11 @@ export function gameReducer(state, action) {
         case 'state/replace':
             return assertValidGameState(action.payload);
         case 'session/start':
-            return { ...state, session: { generation: state.session.generation + 1, status: 'running' } };
+            return {
+                ...state,
+                session: { generation: state.session.generation + 1, status: 'running' },
+                quests: { ...state.quests, facts: { ...state.quests.facts, 'chapter1.started': true } },
+            };
         case 'session/dispose':
             return { ...state, session: { ...state.session, status: 'disposed' } };
         case 'location/set':
@@ -89,4 +94,6 @@ export const gameSelectors = Object.freeze({
     currentRoomId: (state) => state.location.currentRoomId,
     language: (state) => state.settings.language,
     isRunning: (state) => state.session.status === 'running',
+    whyUnavailable: (state, actions, actionId) => whyUnavailable(actions.find((action) => action.id === actionId), state.quests.facts),
+    whyGateUnavailable: (state, connection) => whyGateUnavailable(connection, state.quests.facts),
 });

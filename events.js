@@ -1,8 +1,16 @@
-import { getBeginGameStatus, getBridgeState, setBridgeState, setQuestFact, getCurrentlyMovingToAction, setVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
+import { getBeginGameStatus, getBridgeState, setBridgeState, setQuestFact, getQuestFacts, getContentContract, getCurrentlyMovingToAction, setVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { changeCanvasBg, animateTransitionAndChangeBackground, drawInventory, showText } from "./ui.js";
 import { moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
+import { applyActionById } from './src/domain/puzzles/puzzles.mjs';
+
+export function commitCanonicalAction(actionId) {
+    const result = applyActionById(getQuestFacts(), getContentContract()?.puzzle?.actions ?? [], actionId);
+    if (!result.available || !result.changed) return result;
+    for (const [factId, value] of Object.entries(result.facts)) if (value === true) setQuestFact(factId, true);
+    return result;
+}
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
@@ -362,6 +370,7 @@ async function tieRopeToSuspiciousFencePost(blank, dialogueString, blank2, blank
     setObjectData(`objectSuspiciousFencePost`, `interactable.canUse`, true);
     setObjectData(`objectSuspiciousFencePost`, `interactable.activeStatus`, false);
     setObjectData(`objectSuspiciousFencePost`, `interactable.alreadyUsed`, true);
+    commitCanonicalAction('bridge.prepareMaterials');
 }
 
 async function addSplinterToPulley(blank, dialogueString, blank2, blank3) {
@@ -410,6 +419,7 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
             
             //change grid to allow player to walk across bridge
             moveGridData('riverCrossingBridgeComplete', 'riverCrossing');
+            commitCanonicalAction('bridge.repair');
             
             addEntityToEnvironment(
                 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
@@ -457,6 +467,7 @@ async function combinePulleyAndSturdyAnchor(blank, dialogueString, blank2, blank
 
     setDialogueData('objectInteractions.verbLookAt.objectPulleyWheel', '0', '1');
     setObjectData(`objectPulleyWheel`, `interactable.canPickUp`, false);
+    commitCanonicalAction('rigging.assemble');
     await showText(dialogueString, getColorTextPlayer());
 }
 
@@ -484,12 +495,13 @@ async function giveBoneToWolf(npcAndSlot, blank, realVerbUsed, special) {
 
     navigationData.riverCrossing.exits.e2.status = "open";
     setNavigationData(navigationData);
+    commitCanonicalAction('river.resolveWolf');
 
     //set a pending event for wolf to disappear when player has been to world map
 }
 
 function completeChapterOne() {
-    setQuestFact('chapter1.mapReached', true);
+    commitCanonicalAction('chapter1.claimMap');
 }
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {
@@ -536,6 +548,7 @@ async function donkeyMoveRopeAvailable(blank, dialogueString, realVerbUsed, obje
     setTimeout(() => {
     navigationData.stables.exits.e1.status = "open";
     setNavigationData(navigationData); //allow player to enter barn
+    commitCanonicalAction('barn.unblock');
     }, 50);
 }
 
@@ -598,6 +611,7 @@ function unlockResearchRoomDoor(objectToUseWith, dialogueString, realVerbUsed, s
     setNavigationData(navigationData);
     objectData.interactable.alreadyUsed = true;
     setNpcData(`npcLibrarian`, `interactable.receiveObjectScenarioId`, 1);
+    commitCanonicalAction('library.unlockResearchRoom');
 
     showText(dialogueString, getColorTextPlayer());
 }
@@ -608,6 +622,7 @@ function unlockDenDoor(objectToUseWith, dialogueString, realVerbUsed, special) {
     navigationData.alley.exits.e1.status = "open";
     setNavigationData(navigationData);
     objectData.interactable.alreadyUsed = true;
+    commitCanonicalAction('den.unlock');
 
     showText(dialogueString, getColorTextPlayer());
 }
@@ -616,6 +631,7 @@ function allowInteractionPileOfBooks(objectToUseWith, dialogueString, realVerbUs
     setNpcData(`npcLibrarian`, `interactable.canTalk`, false);
     setNpcData(`npcLibrarian`, `interactable.cantTalkDialogueNumber`, 1);
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.canHover`, true);
+    commitCanonicalAction('library.learnRiddle');
 }
 
 function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerbUsed, special) {
@@ -624,6 +640,7 @@ function moveBooksToGetResearchRoomKey(objectToUseWith, dialogueString, realVerb
     setObjectData(`objectKeyResearchRoom`, `activeSpriteUrl`, 's2');
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.alreadyUsed`, true);
     setObjectData(`objectPileOfBooksLibraryFoyer`, `interactable.activeStatus`, false);
+    commitCanonicalAction('library.findResearchKey');
 }
 
 function resetHookBackToTreePosition() {
@@ -967,96 +984,71 @@ export async function dialogueEventnpcCarpentercarpenter() {
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
-// Executor function
-export async function executeInteractionEvent(objectEvent, dialogueString, realVerbUsed, special1) {
-    if (objectEvent === 'triggeredEvent') {
-        try {
-            eval(`${special1}()`);
-        } catch (error) {
-            console.error(`Failed to trigger event: ${eventToTrigger}`, error);
-        }
-    } else {
-        const safeDialogueString = `'${dialogueString.replace(/'/g, "\\'")}'`;
-        
-        if (objectEvent.actionUse1 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
-            try {
-                if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse1}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                } else {
-                    eval(`${objectEvent.actionUse1}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUse1}:`, e);
-            }
-        }
+const ALLOWED_EVENT_ACTIONS = Object.freeze({
+    changeCanvasBgTemp, cutSceneCarpenterFarmerDialogue, cutSceneEnterKitchenFirstTime,
+    openCloseGenericUnlockedDoor, placeParrotFlyerOnHook, combineMilkAndBowl, combineRopeAndHook,
+    combineRopeAndHookWithStackOfWood, connectRopeAndHookWithWoodToPulley,
+    hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse, tieRopeToSuspiciousFencePost,
+    addSplinterToPulley, buildBridgeSection, combinePulleyAndSturdyAnchor, giveBoneToWolf,
+    completeChapterOne, giveCarrotToDonkey, donkeyMoveRopeAvailable, giveKeyToLibrarian,
+    unlockResearchRoomDoor, unlockDenDoor, allowInteractionPileOfBooks, moveBooksToGetResearchRoomKey,
+    resetHookBackToTreePosition, setCarpenterSpokenToTrue, carpenterStopPlayerPickingUpItemsEarly,
+    makeCowNotTalkableAndPliersUseable, makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue,
+    makeMirrorGiveableToWoman, openBarrelBarn, useGloveToAddMalletToInventory, giveWomanMirror,
+    removeSplinterFromCowsHoof, giveDogBowlOfMilk, showDialogueDisgustedToPickUpPoo,
+    revealCarrotAndGlove, showDialogueStuckFast, showDialogueStuckInFence, showDialogueManholeWontGoBackOn,
+    useCrowBarOnManholeCover, genericFunctionToJustSayCanUseTextAndDoNothingElse,
+    dialogueEventnpcCarpentercarpenter, moveFarmerToHisHouse,
+});
 
-        if (objectEvent.actionUse2 && (realVerbUsed === 'verbUse' || realVerbUsed === 'verbOpen' || realVerbUsed === 'verbClose' || realVerbUsed === 'verbPush' || realVerbUsed === 'verbPull')) {
-            try {
-                if (objectEvent.objectUse) {
-                    eval(`${objectEvent.actionUse2}('${objectEvent.objectUse}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                } else {
-                    eval(`${objectEvent.actionUse2}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUse2}:`, e);
-            }
-        }
+const CANONICAL_ACTION_BY_EVENT = Object.freeze({
+    allowInteractionPileOfBooks: 'library.learnRiddle',
+    moveBooksToGetResearchRoomKey: 'library.findResearchKey',
+    unlockResearchRoomDoor: 'library.unlockResearchRoom',
+    unlockDenDoor: 'den.unlock',
+    donkeyMoveRopeAvailable: 'barn.unblock',
+    combinePulleyAndSturdyAnchor: 'rigging.assemble',
+    tieRopeToSuspiciousFencePost: 'bridge.prepareMaterials',
+    giveBoneToWolf: 'river.resolveWolf',
+    completeChapterOne: 'chapter1.claimMap',
+});
 
-        if (objectEvent.actionUseWith11 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
-            try {
-                if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith11}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                } else {
-                    eval(`${objectEvent.actionUseWith11}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUseWith11}:`, e);
-            }
-        }
+async function executeAllowedAction(actionId, args = []) {
+    if (!actionId) return;
+    const action = ALLOWED_EVENT_ACTIONS[actionId];
+    if (!action) throw new ReferenceError(`Event action '${actionId}' is not allow-listed`);
+    const canonicalActionId = CANONICAL_ACTION_BY_EVENT[actionId];
+    if (canonicalActionId) {
+        const result = applyActionById(getQuestFacts(), getContentContract()?.puzzle?.actions ?? [], canonicalActionId);
+        if (!result.available || result.reason === 'already-applied') return result;
+    }
+    return action(...args);
+}
 
-        if (objectEvent.actionUseWith12 && (realVerbUsed === "verbUse" || realVerbUsed === "verbOpen" || realVerbUsed === "verbPush" || realVerbUsed === "verbPull")) {
-            try {
-                if (objectEvent.objectUseWith1) {
-                    eval(`${objectEvent.actionUseWith12}('${objectEvent.objectUseWith1}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                } else {
-                    eval(`${objectEvent.actionUseWith12}(${null}, ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-                }
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionUseWith12}:`, e);
-            }
+// Content may select only named, allow-listed actions. No translated text or
+// content string is evaluated as JavaScript.
+export async function executeInteractionEvent(objectEvent, dialogueString = '', realVerbUsed, special1) {
+    try {
+        if (objectEvent === 'triggeredEvent') return await executeAllowedAction(special1);
+        const useVerbs = ['verbUse', 'verbOpen', 'verbClose', 'verbPush', 'verbPull'];
+        if (useVerbs.includes(realVerbUsed)) {
+            await executeAllowedAction(objectEvent.actionUse1, [objectEvent.objectUse || null, dialogueString, realVerbUsed, special1]);
+            await executeAllowedAction(objectEvent.actionUse2, [objectEvent.objectUse || null, dialogueString, realVerbUsed, special1]);
         }
-
-        if (objectEvent.actionGive1 && realVerbUsed === "verbGive") {
-            try {
-                eval(`${objectEvent.actionGive1}('${objectEvent.npcGiveTo}', ${safeDialogueString}, '${realVerbUsed}', '${special1}')`);
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionGive1}:`, e);
-            }
+        if (['verbUse', 'verbOpen', 'verbPush', 'verbPull'].includes(realVerbUsed)) {
+            await executeAllowedAction(objectEvent.actionUseWith11, [objectEvent.objectUseWith1 || null, dialogueString, realVerbUsed, special1]);
+            await executeAllowedAction(objectEvent.actionUseWith12, [objectEvent.objectUseWith1 || null, dialogueString, realVerbUsed, special1]);
         }
-
-        if (realVerbUsed === "verbPickUp" && getObjectData().objects[special1].interactable.canPickUpNow) {
-            try {
-                eval(`${objectEvent.actionPickUp}(${null}, ${null}, ${null}, '${special1}')`);
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionPickUp}:`, e);
-            }
+        if (realVerbUsed === 'verbGive') {
+            await executeAllowedAction(objectEvent.actionGive1, [objectEvent.npcGiveTo, dialogueString, realVerbUsed, special1]);
         }
-
-        if (realVerbUsed === "verbPickUp" && !getObjectData().objects[special1].interactable.canPickUpNow) {
-            try {
-                eval(`${objectEvent.actionCanPickUpButNotYet}(${null}, ${null}, ${null}, '${special1}')`);
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.actionCanPickUpButNotYet}:`, e);
-            }
+        if (realVerbUsed === 'verbPickUp') {
+            const canPickUpNow = getObjectData().objects[special1]?.interactable?.canPickUpNow;
+            await executeAllowedAction(canPickUpNow ? objectEvent.actionPickUp : objectEvent.actionCanPickUpButNotYet, [null, null, null, special1]);
         }
-
-        if (objectEvent.dialogueEvent) {
-            try {
-                eval(`${objectEvent.dialogueEvent}(${null}, ${null}, ${null}, '${special1}')`);
-            } catch (e) {
-                console.error(`Error executing function ${objectEvent.dialogueEvent}:`, e);
-            }
-        }
+        await executeAllowedAction(objectEvent.dialogueEvent, [null, null, null, special1]);
+    } catch (error) {
+        console.error('Unable to execute interaction event:', error);
     }
 }
 

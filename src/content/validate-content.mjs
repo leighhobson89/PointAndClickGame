@@ -1,4 +1,6 @@
 import { buildMapGrid } from './map-grid.mjs';
+import { validateDialogueGraph } from '../domain/dialogue/dialogue.mjs';
+import { libraryDialogueGraph } from './library-dialogue.mjs';
 import {
     CONTENT_SCHEMA_VERSION,
     contentSchemas,
@@ -198,6 +200,7 @@ export function validateContentBundle(bundle) {
     const warnings = [];
     const { contract, navigation, objects: objectRoot, npcs: npcRoot, dialogue, localization, mapRoom, foregrounds } = bundle;
     const grids = { ...(bundle.grids ?? {}) };
+    errors.push(...validateDialogueGraph(libraryDialogueGraph).map((error) => `library dialogue: ${error}`));
 
     if (contract?.schemaVersion !== CONTENT_SCHEMA_VERSION) errors.push(`content contract schemaVersion must be ${CONTENT_SCHEMA_VERSION}`);
     errors.push(...validateMapRoomSchema(mapRoom));
