@@ -23,13 +23,13 @@ The best version of this project should provide:
 | Area | Current reality | Target |
 | --- | --- | --- |
 | Story | Chapter 1 content and events are substantially encoded, but the experience is incomplete and fragile | A polished chapter with a clear opening, puzzle escalation, payoff, and bridge to later chapters |
-| World | 19 navigation records plus debug content; several rooms and gates are incomplete | A coherent, validated room graph matching the maintained world design |
+| World | 18 validated navigation records with reciprocal exits and four declared gates; Debug Room removed and the Map completed | A coherent, validated room graph matching the maintained world design |
 | Puzzles | Large dependency chain exists across data and event code | Explicit quest/puzzle state with hints, diagnostics, and test coverage |
 | Interaction | Classic verb/inventory UI works with mouse | Context-aware but classic-feeling input, full keyboard/touch/a11y support, strong feedback |
 | Visuals | Memorable assets with major style, scale, and finish variation | One intentional art bible, consistent character scale, lighting, perspective, and export standards |
 | Audio | Described in the GDD but not implemented | Music, ambience, spatial cues, and responsive interaction SFX |
-| Save/load | UI exists, but only language is persisted | Versioned complete state, autosave/checkpoints, migration, and corrupt-save recovery |
-| Quality | No prior automated suite; debug path is broken | Unit/component tests plus deterministic real-click Playwright journeys |
+| Save/load | The full canonical snapshot round-trips, but with no version envelope, no derived-state rebuild after restore, and no local Resume | Versioned complete state, autosave/checkpoints, migration, and corrupt-save recovery |
+| Quality | 33 Node tests and 38 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
 
 ## Experience principles
 

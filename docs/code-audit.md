@@ -8,13 +8,27 @@ The right strategy is an incremental extraction around the existing game, not a 
 
 Foundation update (2026-09-13): a versioned serialisable state factory/store now provides the canonical lifecycle snapshot behind the legacy accessors. New sessions replace state, own and dispose their animation frame and session listeners, await validated data/localisation/image readiness, and fail into a visible alert. The remaining legacy modules still require the staged domain extraction described below.
 
+Reachability update (2026-09-13): Section 4 added gated debug and test controls. Fourteen reviewed scenarios arrange canonical facts, derive every exit/entity/grid mutation from the content contract, and reach a validated state with a reproducible checksum in under a second. The always-available debug wheel was removed from the shipped page in favour of a build-gated DEBUG panel and a narrow versioned `__GAME_TEST__` API. See `debug-test-controls.md`.
+
+### Audit accuracy review (2026-09-13)
+
+The following statements in earlier revisions of this document were re-checked against the current source and were wrong or stale. They are corrected in place below, and the affected bug rows were updated.
+
+| Earlier claim | Finding |
+| --- | --- |
+| "19 navigation records" and "`debugRoom` … points to nonexistent `libraryFoyerDebug`"; "`map` … background and grid are absent" | Stale. `resources/screenNavigation.json` now holds 18 rooms, Debug Room was intentionally removed, and the Map has art, a generated polygon grid, and reciprocal navigation. |
+| "Market Street … five connections; the scene brief asked for four … needs an explicit design decision" | Stale. The contract declares `marketStreetExitCount: 5` and the validator enforces it. |
+| "the current state capture/restore only persists language" | **Wrong.** `captureGameStatusForSaving()` returns the whole canonical snapshot and `restoreGameStatus()` replaces state from it, so room, position, inventory, quest facts, dialogue state, and world mutations are all persisted today. The real remaining gaps are different and are recorded against BUG-003. |
+| BUG-022 recorded as resolved: "the edge-scroll named-global dependency was removed" | **Incomplete when written.** `game.js` still passed the browser-created global `canvas` to `setDynamicBackgroundWithOffset` inside `swapBackgroundOnRoomTransition`. That call now uses `getElements().canvas`; the claim is true as of this pass. |
+| BUG-023: "exposed Debug option" not suitable for release | Half resolved. The debug entry now requires explicit development enablement. The placeholder product title remains open. |
+
 ## Repository snapshot
 
 - Runtime: browser ES modules, HTML canvas, CSS, Bootstrap/jQuery/Popper and LZString from CDNs.
 - Server: local Express static server, now available through `npm start`.
 - Automated browser testing: Playwright with Chromium, now scaffolded by functional area.
 - Content: JSON navigation, grids, objects, NPCs, localisation, and dialogue.
-- World model: 19 navigation records, 41 objects, 10 NPCs, 19 room-grid variants, and 7 foreground room layers observed in the audit.
+- World model: 18 navigation records, 42 objects, 10 NPCs, and 7 foreground room layers as validated by `npm run validate:content`. The original audit counted 19 rooms and 41 objects, before Debug Room was removed and the Map payoff object was added.
 - Locales: English, Spanish, German, Italian, and French key sets are present and complete for the inspected localisation/dialogue records.
 - Assets inspected: 253 PNG, 64 JPG, 5 PSD, 4 GIF, plus design documents and diagrams in the available project resources.
 - Core code is roughly ten thousand physical lines, led by `game.js`, `ui.js`, `constantsAndGlobalVars.js`, `handleCommands.js`, and `events.js`.
@@ -77,12 +91,16 @@ Strengths:
 Weaknesses:
 
 - Rectangle-only zones are imprecise for irregular art and promote accidental overlaps.
-- Grid codes mix navigation, identity, and cost in compact strings without a schema validator.
-- There is no visible hotspot authoring/validation tool, overlap report, or minimum-target-size rule.
 - Resizing and CSS scaling must remain perfectly consistent with canvas coordinate mapping.
-- The current player can still be asked to infer invisible boundaries; an optional hotspot reveal mode is needed.
+- The current *player* can still be asked to infer invisible boundaries; an optional in-game hotspot reveal mode is still needed and belongs to Section 7.
 
-Recommended evolution: retain the grid for walking, introduce named polygon/rectangle hotspots in room data, associate each with an interaction anchor and accessible label, and add a debug overlay for walkability, footprints, anchors, exits, and computed paths.
+Addressed since the original audit:
+
+- Grid codes are validated against a schema, and undeclared overlaps and out-of-bounds hotspots are validation errors rather than report-only warnings.
+- `npm run report:hotspots` generates `hotspot-report.md` with bounds, anchors, accessible labels, and minimum-target-size warnings. Eight undersized legacy exits are recorded as BUG-029.
+- The debug panel's overlay layer draws walkability, movement costs, blocked cells, exits, hotspots, entity footprints, anchors, the computed path, and the player cell additively over a live frame. That is a developer tool, not the player-facing reveal.
+
+Remaining evolution: retain the grid for walking and introduce named polygon/rectangle hotspots in room data, each with its own interaction anchor and accessible label.
 
 ## Interaction and verbs
 
@@ -117,21 +135,28 @@ Positive findings:
 - Referenced object and NPC sprites were found.
 - The five-language key sets inspected are structurally complete.
 
-Material gaps:
+Material gaps recorded in the original audit, and their current state:
 
-- `debugRoom` has no usable matching grid/data set and points to nonexistent `libraryFoyerDebug`.
-- `map` is referenced by navigation but its background and grid are absent.
-- Debug object/NPC JSON paths referenced by code are absent.
-- The current runtime topology differs from the supplied world map. The map contains an Embassy, while the runtime adds sewer/kitchen and uses separate barn/house interiors. This may reflect later design evolution, but there is no canonical version declaration.
-- Market Street currently exposes five connections; the scene brief asked for four. The difference needs an explicit design decision rather than accidental drift.
+- `debugRoom` had no usable matching grid/data set and pointed to a nonexistent `libraryFoyerDebug`. **Resolved:** it was intentionally removed from shipped content, and the validator rejects its reintroduction. Its development purpose is now served by the gated debug controls.
+- `map` was referenced by navigation but had no background or grid. **Resolved:** the Map now has art, a deterministic polygon walk grid, reciprocal navigation, a stable payoff object, and the `chapter1.mapReached` fact.
+- Debug object/NPC JSON paths referenced by code were absent. **Resolved:** those references were removed with Debug Room.
+- The runtime topology differs from the supplied world map, which contains an Embassy while the runtime adds sewer/kitchen and separate barn/house interiors. **Resolved by declaration:** `chapter1-world-v1` makes the 18-room runtime topology authoritative and labels the diagram historical.
+- Market Street exposed five connections while the scene brief asked for four. **Resolved by decision:** the contract declares five and the validator enforces exactly that.
 
-Add a content validator that checks IDs, files, grid dimensions/codes, reciprocal exits, spawn points, hotspot bounds, dialogue links, item references, localisation keys, and puzzle reachability before the game starts or in CI.
+A content validator now checks IDs, files, grid dimensions/codes, reciprocal exits, spawn points, hotspot bounds, dialogue links, item references, localisation keys, and puzzle reachability. It runs as `npm run validate:content`, in CI, and at startup, where invalid shipped content fails into the visible fatal alert.
 
 ## Save and load
 
-The menu and compression/export UI imply a real save system, but the current state capture/restore only persists language. Player position, room, inventory, object/NPC mutations, puzzle flags, dialogue progress, exits, and active animations are lost. This is a blocker for a full chapter.
+Corrected 2026-09-13. The original audit said capture/restore persisted language only. That has not been true since the canonical store landed: `captureGameStatusForSaving()` returns the full canonical snapshot and `restoreGameStatus()` validates and replaces state from it, so room, player position, inventory, quest facts, dialogue removals, bridge state, settings, and the mutated content bundle all round-trip through the save string.
 
-Use a versioned plain state object, validate it before applying, migrate older schemas, persist locally for Resume, and support explicit export/import. Save only stable facts; derive render caches and transient animations after load.
+The real remaining gaps, which still block a full chapter, are:
+
+- **No version envelope on the player-facing path.** `saveLoadGame.js` compresses the raw state object. The versioned `{ schemaVersion, state }` envelope and migration boundary exist in `src/adapters/storage.mjs` and `src/domain/save/migrations.mjs`, but the save/load UI does not use them, so an older save cannot be migrated or clearly rejected.
+- **Derived state is not rebuilt after restore.** Images, entity paths, canvas cell metrics, foreground processing, and render caches are left as they were. A restore into a running session can therefore present stale visuals.
+- **The whole content bundle is inside the snapshot.** That is why world mutations survive, but it makes saves large and couples a save to the shipped content of the day. Saving stable facts and re-deriving entity/exit state, the way the debug scenarios already do, is the better shape.
+- **No local Resume, autosave, or checkpoint.** The menu's Resume only restores the previous presentation mode within the session.
+
+Section 5 owns this work: use a versioned plain state object, validate before applying, migrate older schemas, persist locally for Resume, and support explicit export/import. Save only stable facts; derive render caches and transient animations after load.
 
 ## Localisation
 
@@ -139,7 +164,7 @@ Five locales are a strong foundation. Section 3 removed localisation `eval`: loo
 
 ## Rendering, performance, and assets
 
-The world renderer handles backgrounds, foreground layers, sprites, movement frames, and transitions. Risks include unawaited preloading, very large source images decoded at runtime, per-frame debug work/logging, inconsistent dimensions, and no declared asset budget.
+The world renderer handles backgrounds, foreground layers, sprites, movement frames, and transitions. Risks include very large source images decoded at runtime, inconsistent dimensions, and no declared asset budget. Unawaited preloading was fixed in Section 1. The worst per-frame debug work was fixed in Section 4: `updateDebugValues()` no longer serialises the whole grid every frame unless the legacy debug window is open, and frame sampling and overlays only run in a development build. Console logging in the movement, placement, and transition paths is still noisy and remains part of BUG-016.
 
 Examples from visual and metadata inspection:
 

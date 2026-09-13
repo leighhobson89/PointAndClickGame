@@ -20,7 +20,7 @@ This folder is the maintained source of truth for the current game, its intended
 | [feature roadmap](feature-roadmap.md) | Missing features and implementation order |
 | [UI and art direction](ui-and-art-direction.md) | Modern interaction, accessibility, and coherent visual direction |
 | [testing strategy](testing-strategy.md) | Unit, integration, visual, accessibility, and simulated-user E2E plan |
-| [debug and test controls](debug-test-controls.md) | Safe state-building tools for reaching every experience quickly |
+| [debug and test controls](debug-test-controls.md) | Implemented scenario, panel, and `__GAME_TEST__` tools for reaching every experience quickly |
 | [master checklist](master-checklist.md) | Ordered, per-task execution and acceptance checklist |
 | [changelog](changelog.md) | Dated documentation and delivery record |
 

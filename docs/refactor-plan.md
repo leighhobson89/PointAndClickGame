@@ -10,7 +10,7 @@ Outcome: current behaviour can be observed and reproduced.
 
 - Keep the Playwright startup proof green.
 - Add content validation as a standalone Node command.
-- Capture a canonical clean initial-state fixture and a few Chapter 1 milestone fixtures.
+- Capture a canonical clean initial-state fixture and a few Chapter 1 milestone fixtures. **Done in Section 4:** fourteen reviewed fixtures live in `src/content/scenario-registry.mjs`, validated against shipped content.
 - Add error boundaries/fatal-load presentation and structured logging.
 - Define performance budgets for startup, frame time, image decode, and suite duration.
 - Establish linting/formatting only after a no-functional-change baseline.
@@ -95,6 +95,8 @@ Outcome: display and input can change without changing puzzle rules.
 - Mirror hotspots into semantic DOM controls for keyboard and assistive access.
 
 Exit criteria: the same domain actions work through pointer, keyboard, touch, and debug/test APIs.
+
+Implementation status (2026-09-13): the debug/test API half is done. `window.__GAME_TEST__` drives structured verb/target intents, validated teleports, movement and text speed, inventory, dialogue inspection, and puzzle milestones without touching translated copy, and the debug panel is a second presentation of the same controller. Pointer input is unchanged; keyboard and touch parity remain Section 7 work.
 
 ## Phase 5 — UI/art/audio modernisation
 

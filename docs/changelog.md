@@ -1,5 +1,22 @@
 # Living documentation changelog
 
+## 2026-09-13 — Deterministic debug and test reachability (Section 4)
+
+- Added a versioned scenario schema, seeded generator, viewport-independent state checksum, fact-consistency and prerequisite-closure rules, and a debug-only critical-path frontier as pure domain code.
+- Added fourteen reviewed `chapter1.*` and `system.*` fixtures. Exit statuses are derived from the content contract's gate facts and entity/grid/inventory changes from a small reviewed fact-effect table, so no fixture copies a world-state blob.
+- Added the debug controller, named idle probes with `waitForIdle()`, the additive canvas overlay layer, the DEBUG-watermarked panel, and the narrow versioned `window.__GAME_TEST__` surface. The panel and the API are two presentations of one controller.
+- Gated enablement behind two independent checks: a server that advertises `/debug-capability` and returns HTTP 404 for every debug module otherwise, plus an explicit `?debug=1` or test bootstrap. Added `npm run start:debug`.
+- Removed the always-available debug wheel menu from `index.html`, `styles.css`, and `ui.js`. All four of its tools moved into the gated panel — add item, legacy grid view, open value window, and toggle NPC animation — and its middle-click and NumpadSubtract shortcuts still open the panel. Resolved the debug half of BUG-023.
+- Added optional video recording to the test runner: `node tests <scope> --video`, or `--video=<mode>` for a Playwright video mode. A recorded run gets its own report and artefacts under `test-reports/`, which is separate from `playwright-report/` and `test-results/` precisely because Playwright clears both at the start of every run. `test-reports/history.html` lists the last fifty recorded runs newest-first with status, duration, links to that run's Playwright report and runner log, and an inline player for each video. Added `npm run test:video`.
+- Stopped `updateDebugValues()` serialising the whole grid every frame unless the legacy debug window is open, and kept frame sampling and overlays out of production builds; recorded the remaining console noise against BUG-016.
+- Fixed the browser-created global `canvas` that Section 3 missed in `swapBackgroundOnRoomTransition`, and made text display speed a resettable scale with a supported skip path that still resolves queued promises.
+- Corrected the code audit: room/object counts, the resolved Debug Room, Map, topology, and Market Street gaps, the hotspot tooling that now exists, and above all the save/load section, which wrongly claimed only language was persisted. BUG-003 now records the real defects: no version envelope on the player-facing save path, no derived-state rebuild after restore, the whole content bundle embedded in the save, and no local Resume.
+- Split the E2E harness into a release server and a debug server so production absence is proven against a real release build; added `e2e/_support/debug-session.cjs` helpers and mapped every scenario to its owning functional-area README.
+- Recorded two new defects found while building the controls: BUG-031 (legacy conversation phases cannot be rewound by `resetConversation`) and BUG-032 (simulated asset failure records the asset without intercepting the request).
+- Added a `debug-reachability-browser` CI job running the game-state, puzzles, and dialogue areas with failure recording, and uploading `test-reports/` when it fails.
+
+Test evidence: `npm run check` passed dependency boundaries, content validation, and all 33 Node tests. `node tests all` passed 38/38 browser tests in 78.772 seconds; log `e2e/logs/2026-09-13T17-10-11-980Z-all.log`. Video recording was verified by two recorded runs followed by an ordinary run, confirming the recordings and their reports survive. The new browser coverage includes same-seed checksum reproduction, all fourteen fixtures loading under one second each, invalid-scenario rejection before rendering, a real canvas click from `chapter1.map-entry` into the Map, a scenario-arranged research-room unlock performed with real clicks, milestone revert to an identical checksum, and the release-build absence of every debug symbol, module, and panel.
+
 ## 2026-09-13 — Browser-independent rules and stable interaction IDs
 
 - Added dependency-enforced `domain`, `application`, `adapters`, and `content` boundaries without changing any room connection or Map-room content file.

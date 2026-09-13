@@ -4,8 +4,10 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
+        "start:debug": "node scripts/start-debug.cjs",
         "test": "node tests all",
         "test:e2e": "node tests all",
+        "test:video": "node tests all --video",
         "test:unit": "node --test test/unit/*.test.mjs",
         "validate:content": "node scripts/validate-content.mjs",
         "report:hotspots": "node scripts/validate-content.mjs --report-hotspots",

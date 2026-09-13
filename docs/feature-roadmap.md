@@ -9,7 +9,7 @@ The first meaningful product milestone should be the complete journey from Libra
 1. **Complete save/resume** — versioned state, autosave checkpoint, manual export/import, corrupt-save handling, and migrations.
 2. **Canonical quest state and journal** — player-facing objectives/clues derived from facts, with spoiler-safe optional hints.
 3. **Content validation** — fail fast on missing assets, grids, destinations, IDs, dialogue links, and translations.
-4. **Debug/test state controls** — deterministic scenarios and milestone jumps described in `debug-test-controls.md`.
+4. **Debug/test state controls** — delivered 2026-09-13. Fourteen deterministic scenarios, milestone transactions, overlays, and the gated DEBUG panel and `__GAME_TEST__` API described in `debug-test-controls.md`.
 5. **Settings** — locale, text speed, volume groups, subtitles, reduced motion, hotspot assistance, and input preferences.
 
 ## Chapter 1 completion

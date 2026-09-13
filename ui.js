@@ -10,7 +10,6 @@ import {
     setAnimationInProgress,
     setPreAnimationGridState,
     getDrawGrid,
-    setDrawGrid,
     urlForegroundData,
     urlContentContract,
     urlMapRoomData,
@@ -115,8 +114,6 @@ import {
     getOriginalValueInCellWhereObjectPlaced,
     getOriginalValueInCellWhereObjectPlacedNew,
     getAllGridData,
-    getNonPlayerAnimationFunctionalityActive,
-    setNonPlayerAnimationFunctionalityActive,
     setNextScreenId,
     setClickPoint,
     setPlayerObject,
@@ -138,7 +135,6 @@ import {
     initializeEntityPathsObject
 } from "./game.js";
 import {
-    addItemToInventory,
     constructCommand,
     performCommand
 } from "./handleCommands.js";
@@ -168,8 +164,10 @@ import { createCommandIntent, toLocalisationKey } from './src/domain/commands/co
 import { pointerToWorld, resolveCellTarget, worldToGrid } from './src/domain/navigation/navigation.mjs';
 
 let textTimer;
+let activeTextResolve = null;
 let assetsReadyPromise = Promise.resolve();
 let localizationReadyPromise = Promise.resolve();
+let debugToolsSession = null;
 
 export function bootApplication() {
     setElements();
@@ -532,166 +530,45 @@ export function bootApplication() {
     setGameState(getMenuState());
     beginLanguageChange(getLanguageSelected());
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //DEBUG WHEEL START/////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const container = document.getElementById('wheelMenuContainer');
-
-    const closeButton = document.getElementById('closeButton');
-    const wheelMenuContainer = document.getElementById('wheelMenuContainer');
-
-    // Close the wheel menu container when the close button is clicked
-    closeButton.addEventListener('click', function() {
-        wheelMenuContainer.style.display = 'none';
-    });
-
-
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    container.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        offsetX = e.clientX - container.getBoundingClientRect().left;
-        offsetY = e.clientY - container.getBoundingClientRect().top;
-        container.style.cursor = 'move';
-        wheelMenu.style.overflowX = 'hidden';
-    });
-
-    document.addEventListener('mousemove', function(e) {
-        if (isDragging) {
-            const left = e.clientX - offsetX;
-            const top = e.clientY - offsetY;
-            container.style.left = `${left}px`;
-            container.style.top = `${top}px`;
-        }
-    });
-
-    document.addEventListener('mouseup', function() {
-        isDragging = false;
-        container.style.cursor = 'default';
-        wheelMenu.style.overflowX = 'auto';
-    });
-
-    function highlightSelectedItem(item) {
-        wheelItems.forEach(wheelItem => {
-            wheelItem.style.backgroundColor = '';
-        });
-        if (item) {
-            item.style.backgroundColor = '#d4edda';
-        }
-    }
-
-    const wheelMenuList = document.getElementById('wheelMenuList');
-    let currentScrollPosition = 0;
-    let selectedWheelItem = null; // Keep track of the clicked item
-    const wheelItems = wheelMenuList.querySelectorAll('li');
-
-    function getSelectedItem() {
-        const itemHeight = wheelItems[0].offsetHeight;
-        const index = Math.round(-currentScrollPosition / itemHeight);
-        return wheelItems[index];
-    }
-
-    document.getElementById('wheelMenuContainer').addEventListener('wheel', function(event) {
-        event.preventDefault();
-        const itemHeight = wheelItems[0].offsetHeight;
-
-        const maxScrollPosition = -(itemHeight * (wheelItems.length - 7));
-
-        if (event.deltaY > 0) {
-            if (currentScrollPosition > maxScrollPosition) {
-                currentScrollPosition -= itemHeight;
-            }
-        } else {
-            if (currentScrollPosition < 0) {
-                currentScrollPosition += itemHeight;
-            }
-        }
-
-        wheelMenuList.style.transform = `translateY(${currentScrollPosition}px)`;
-        selectedWheelItem = getSelectedItem();
-        highlightSelectedItem(selectedWheelItem);
-    });
-
-    wheelItems.forEach(item => {
-        item.addEventListener('click', function() {
-			document.getElementById('selectItemButton').style.backgroundColor ='#28a745';
-			document.getElementById('selectItemButton').disabled = false;
-            selectedWheelItem = item;
-            highlightSelectedItem(item);
-        });
-    });
-
-    document.getElementById('selectItemButton').addEventListener('click', function() {
-        if (selectedWheelItem) {
-            const selectedItem = selectedWheelItem.textContent;
-            addItemToInventory(selectedItem, 1);
-            drawInventory(0);
-        } else {
-            console.log('No item selected.');
-        }
-    });
-
-	document.getElementById('drawGridButton').addEventListener('click', function() {
-		const currentDrawGrid = getDrawGrid();
-
-		if (currentDrawGrid) {
-			document.getElementById('drawGridButton').textContent = 'Show Grid';
-		} else {
-			document.getElementById('drawGridButton').textContent = 'Hide Grid';
-		}
-
-        setDrawGrid(!currentDrawGrid);
-    });
-
-    document.getElementById('debugWindowButton').addEventListener('click', function() {
-        openDebugWindow();
-    });
-
-    document.getElementById('toggleAnimationNonPlayer').addEventListener('click', function() {
-        if (getNonPlayerAnimationFunctionalityActive()) {
-			document.getElementById('toggleAnimationNonPlayer').textContent = 'Start Anim.';
-            setNonPlayerAnimationFunctionalityActive(false);
-		} else {
-			document.getElementById('toggleAnimationNonPlayer').textContent = 'Stop Anim.';
-            setNonPlayerAnimationFunctionalityActive(true);
-		}
-    });
-
-    document.addEventListener('mousedown', function(event) {
-        showHideDebugPanel(event);
-    });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.code === 'NumpadSubtract') {
-            showHideDebugPanel(event);
-        }
-    });
-
-    
-function showHideDebugPanel(event) {
-    // Check if the event is a middle mouse click or NumpadSubtract keypress
-    const isMiddleMouseClick = event.type === 'mousedown' && event.button === 1;
-    const isNumpadSubtract = event.type === 'keydown' && event.code === 'NumpadSubtract';
-
-    if (isMiddleMouseClick || isNumpadSubtract) {
-        if (getGameStateVariable() === getGameVisibleActive()) {
-            const wheelMenu = document.querySelector('.wheel-menu-container');
-            if (wheelMenu) {
-                if (wheelMenu.style.display === 'block') {
-                    wheelMenu.style.display = 'none';
-                } else {
-                    document.getElementById('selectItemButton').style.backgroundColor = '#6c757d';
-                    document.getElementById('selectItemButton').disabled = true;
-                    wheelMenu.style.display = 'block';
-                }
-            }
-        }
-    }
+    // Development-only debug and test controls. Nothing is created here: the
+    // panel, overlays, and __GAME_TEST__ surface all live behind
+    // installDebugTools(), which refuses to run unless the served build
+    // advertises the capability *and* the session explicitly asks for it.
+    installDebugTools().catch((error) => console.warn('Debug tools unavailable:', error.message));
 }
+
+/**
+ * Enablement has two independent gates, both required:
+ *  1. the served build advertises `/debug-capability` (a development server or
+ *     an explicitly enabled desktop build); and
+ *  2. this session asked for the tools with `?debug=1` or a test bootstrap
+ *     that set `window.__GAME_TEST_CONFIG__.enabled`.
+ *
+ * A query string alone can therefore never expose debug tools in production.
+ */
+export async function installDebugTools() {
+    if (debugToolsSession) return debugToolsSession;
+
+    const testConfig = typeof window !== 'undefined' ? window.__GAME_TEST_CONFIG__ : null;
+    const requested = testConfig?.enabled === true
+        || new URLSearchParams(window.location.search).get('debug') === '1';
+    if (!requested) return null;
+
+    let capability;
+    try {
+        const response = await fetch('./debug-capability', { cache: 'no-store' });
+        capability = response.ok ? await response.json() : { enabled: false };
+    } catch (error) {
+        capability = { enabled: false, reason: error.message };
+    }
+    if (capability.enabled !== true) {
+        console.warn('Debug tools requested but this build does not provide them.');
+        return null;
+    }
+
+    const { installDebugTools: install } = await import('./debugTools.js');
+    debugToolsSession = await install({ config: testConfig ?? {} });
+    return debugToolsSession;
 }
 
 document.addEventListener("DOMContentLoaded", bootApplication, { once: true });
@@ -1250,6 +1127,7 @@ function processQueue() {
     let textQueue = getTextQueue();
 
     if (textQueue.length === 0) {
+        activeTextResolve = null;
         setIsDisplayingText(false);
         return;
     }
@@ -1272,14 +1150,35 @@ function processQueue() {
         clearTimeout(textTimer);
     }
 
+    activeTextResolve = resolve ?? null;
+
     textTimer = setTimeout(() => {
-        setDisplayText("", null);
-        if (resolve) {
-            console.log("Promise resolved!");
-            resolve();
-        }
-        processQueue();
+        textTimer = null;
+        finishActiveLine();
     }, getTextDisplayDuration());
+}
+
+function finishActiveLine() {
+    setDisplayText("", null);
+    const resolve = activeTextResolve;
+    activeTextResolve = null;
+    if (resolve) {
+        console.log("Promise resolved!");
+        resolve();
+    }
+    processQueue();
+}
+
+/**
+ * Development-only: finish the line being displayed immediately through the
+ * same completion path a timer would take, so queued promises still resolve.
+ */
+export function skipCurrentText() {
+    if (!textTimer && !activeTextResolve) return { skipped: false, reason: 'no-active-line' };
+    clearTimeout(textTimer);
+    textTimer = null;
+    finishActiveLine();
+    return { skipped: true, remaining: getTextQueue().length };
 }
 
 export function showText(text, color, xPos, yPos) {
@@ -1644,7 +1543,7 @@ export function drawForegroundImageForCurrentScreen() {
 
 let debugWindow;
 
-function openDebugWindow() {
+export function openDebugWindow() {
     // Check if the debug window is already open
     if (debugWindow && !debugWindow.closed) {
         // If it's open, focus on it
@@ -1729,6 +1628,10 @@ function openDebugWindow() {
 }
 
 export function updateDebugValues() {
+    // The grid serialisation below is expensive. Normal play never opens the
+    // debug window, so leave the frame budget alone unless it is actually open.
+    if (!debugWindow || debugWindow.closed) return;
+
     // Fetch dynamic values from relevant functions
     const preAnimationGridState = JSON.stringify(getPreAnimationGridState());
     const originalGrid = JSON.stringify(getOriginalGridState()[getCurrentScreenId()]);

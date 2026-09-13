@@ -195,6 +195,7 @@ let drawGrid = false;
 let cantGoThatWay = false;
 let currentScreenHasForegroundItems = true;
 let foregroundGridProcessed = false;
+let textDisplayScale = 1;
 
 //IMAGE URLS
 export const arrayOfGameImages = [
@@ -686,6 +687,7 @@ export function resetAllVariables() {
     currentScreenHasForegroundItems = true;
     foregroundGridProcessed = false;
     animationFinishedFlag = [];
+    textDisplayScale = 1;
 
     return gameStore.getSnapshot();
 }
@@ -1090,7 +1092,18 @@ export function getDisplayText() {
 }
 
 export function getTextDisplayDuration() {
-    return TEXT_DISPLAY_DURATION;
+    return Math.round(TEXT_DISPLAY_DURATION * textDisplayScale);
+}
+
+// Text speed is a presentation concern. Normal play always uses 1; only the
+// development-only debug controls change it, and a new session restores it.
+export function getTextDisplayScale() {
+    return textDisplayScale;
+}
+
+export function setTextDisplayScale(value) {
+    if (!Number.isFinite(value) || value < 0) throw new TypeError('text display scale must be a non-negative number');
+    textDisplayScale = value;
 }
 
 export function getMaxTexTDisplayWidth() {

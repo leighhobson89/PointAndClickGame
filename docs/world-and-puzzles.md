@@ -120,7 +120,7 @@ Represent each fact once in a quest-state store, for example:
 - `river.wolfResolved`
 - `chapter1.mapReached`
 
-Each event declares prerequisites, effects, presentation, and idempotency. A validator can then determine unreachable facts and tests can create a state through public debug commands without replaying hours of prerequisites.
+Each event declares prerequisites, effects, presentation, and idempotency. The validator determines unreachable facts, and since Section 4 tests create a state through named scenarios and `__GAME_TEST__` commands rather than replaying hours of prerequisites. Every milestone in the chain below has a fixture, and `criticalPathFrontier()` reports which actions are available but unfinished from any state.
 
 ## Authoring rules
 

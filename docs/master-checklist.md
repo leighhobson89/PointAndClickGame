@@ -68,26 +68,28 @@ Acceptance: core rules run under Node without a browser, stable IDs drive behavi
 
 Implementation note (2026-09-13): Section 3 deliberately leaves the Map room artifacts and all authored room connections unchanged. Runtime navigation remains the source of truth; this extraction does not connect, disconnect, or otherwise reinterpret the sidelined Map room.
 
-## 4. Build deterministic debug and test reachability
+## 4. Build deterministic debug and test reachability — implemented
 
-- [ ] Create a versioned scenario schema, registry, minimal builder, deterministic seed, validation, and state checksum.
-- [ ] Add reviewed fixtures for every `chapter1.*` and `system.*` scenario in `debug-test-controls.md`.
-- [ ] Derive object/NPC/exit mutations from facts instead of copying large world-state blobs.
-- [ ] Add development/test-only bootstrap and the narrow versioned `__GAME_TEST__` API.
-- [ ] Implement `waitForIdle()` across assets, movement, dialogue, transitions, animation/cutscenes, and save queues.
-- [ ] Build DEBUG-watermarked session controls for new/load/reset/pause/resume, seed, snapshot import/export, schema version, and checksum.
-- [ ] Add validated room/anchor/coordinate teleport, complete/cancel path, and slow/normal/fast/instant movement controls.
-- [ ] Add inventory presets/add/remove, structured verb/target selection, consumed/moved-object reset, and selected-response diagnostics.
-- [ ] Add dialogue-node selection, choice condition/action inspection, instant/text-speed/skip, conversation reset, and NPC room/visibility/pose/fact inspection.
-- [ ] Add puzzle fact/prerequisite listing, milestone transactions, scenario-based revert, conflict validation, gate explanations, and a debug-only critical-path frontier.
-- [ ] Add real-repository scenario save/load, migration-fixture selection, locale/missing-key simulation, viewport/accessibility/input toggles, and deterministic asset/storage failures.
-- [ ] Add walk grid/cost, blocked cell, exit, hotspot, footprint, anchor, path, player-cell, overlap, and unreachable overlays.
-- [ ] Add structured action/error logging, current-state diagnostics, prerequisite/conflict explanations, asset readiness, and frame-time summary.
-- [ ] Add a reproduction-bundle export containing version, scenario, seed, actions, checksum, and errors.
-- [ ] Map scenarios to functional-area READMEs; prove same seed/state gives the same checksum and visible result in under one second after readiness.
-- [ ] Reject invalid scenarios before rendering and E2E-assert all debug symbols, APIs, panels, and query-only enablement are absent from production.
+- [x] Create a versioned scenario schema, registry, minimal builder, deterministic seed, validation, and state checksum.
+- [x] Add reviewed fixtures for every `chapter1.*` and `system.*` scenario in `debug-test-controls.md`.
+- [x] Derive object/NPC/exit mutations from facts instead of copying large world-state blobs.
+- [x] Add development/test-only bootstrap and the narrow versioned `__GAME_TEST__` API.
+- [x] Implement `waitForIdle()` across assets, movement, dialogue, transitions, animation/cutscenes, and save queues.
+- [x] Build DEBUG-watermarked session controls for new/load/reset/pause/resume, seed, snapshot import/export, schema version, and checksum.
+- [x] Add validated room/anchor/coordinate teleport, complete/cancel path, and slow/normal/fast/instant movement controls.
+- [x] Add inventory presets/add/remove, structured verb/target selection, consumed/moved-object reset, and selected-response diagnostics.
+- [x] Add dialogue-node selection, choice condition/action inspection, instant/text-speed/skip, conversation reset, and NPC room/visibility/pose/fact inspection.
+- [x] Add puzzle fact/prerequisite listing, milestone transactions, scenario-based revert, conflict validation, gate explanations, and a debug-only critical-path frontier.
+- [x] Add real-repository scenario save/load, migration-fixture selection, locale/missing-key simulation, viewport/accessibility/input toggles, and deterministic asset/storage failures.
+- [x] Add walk grid/cost, blocked cell, exit, hotspot, footprint, anchor, path, player-cell, overlap, and unreachable overlays.
+- [x] Add structured action/error logging, current-state diagnostics, prerequisite/conflict explanations, asset readiness, and frame-time summary.
+- [x] Add a reproduction-bundle export containing version, scenario, seed, actions, checksum, and errors.
+- [x] Map scenarios to functional-area READMEs; prove same seed/state gives the same checksum and visible result in under one second after readiness.
+- [x] Reject invalid scenarios before rendering and E2E-assert all debug symbols, APIs, panels, and query-only enablement are absent from production.
 
 Acceptance: every important state is reachable quickly and reproducibly without creating a second state model or weakening release builds.
+
+Implementation note (2026-09-13): enablement needs two independent gates — a server that advertises `/debug-capability` and refuses to serve the debug modules otherwise, plus an explicit `?debug=1` or test bootstrap. The E2E harness runs a release server and a debug server side by side so production absence is proven against a real release build. The always-available legacy debug wheel was removed from `index.html`, `styles.css`, and `ui.js`; its capabilities now live behind the gated panel. Two limits are recorded rather than hidden: legacy conversation phases cannot be rewound by `resetConversation` (BUG-031, a consequence of BUG-011), and simulated asset failure records the asset without intercepting the request (BUG-032).
 
 ## 5. Complete safe save, resume, and progress ownership
 
@@ -160,7 +162,7 @@ Acceptance: assets and sound feel intentionally related, meet budgets, preserve 
 - [ ] Establish formatting/linting after a no-functional-change baseline and prevent new dependency cycles/named globals.
 - [ ] Define measurable startup, frame-time, image decode/transfer, memory, and test-suite budgets and enforce them at suitable CI tiers.
 - [ ] Add validation/unit/affected-area PR CI, under-180-second nightly/full CI, release automation, failure screenshots/traces, and intentional artefact retention.
-- [ ] Keep E2E isolated in fresh contexts with controlled randomness/clocks/storage, locally served assets, and no test-order/save dependency; enable video only for targeted diagnosis.
+- [ ] Keep E2E isolated in fresh contexts with controlled randomness/clocks/storage, locally served assets, and no test-order/save dependency; enable video only for targeted diagnosis. (The video half landed in Section 4: `node tests <scope> --video` records a run into its own `test-reports/` folder and lists it in `test-reports/history.html`. Recording stays off by default.)
 - [ ] Make any quarantine temporary, owner/date-bound, visible, and excluded from coverage claims.
 - [ ] Decide Git LFS or external source-art storage and reduce binary history through a separately approved, recoverable migration.
 - [ ] Define release versioning, save compatibility, distribution artefacts, signing, updates, rollback, and platform smoke tests.

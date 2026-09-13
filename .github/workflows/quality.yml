@@ -27,3 +27,23 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: node tests navigation
+
+  debug-reachability-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Scenario reachability plus the release-build absence of every debug
+      # symbol, module, and panel. Recorded on failure so the run is reviewable.
+      - run: node tests game-state puzzles dialogue --video=retain-on-failure
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: debug-reachability-recording
+          path: test-reports/
+          retention-days: 7

@@ -10,7 +10,7 @@ resources/content-contract.json is the machine-readable authority for shipped Ch
 
 - The canonical world contains 18 playable rooms, from libraryFoyer to the Chapter 1 payoff room map.
 - Market Street intentionally has five exits: Road Into Town, Back Alley, Carpenter Workshop, Library Foyer, and Cow Path. The four-exit Market Street brief is a superseded concept reference.
-- Debug Room is intentionally removed from shipped navigation and UI. Its old background is retained only as historical source material; Section 4 replaces it with development/test-only controls rather than a production room.
+- Debug Room is intentionally removed from shipped navigation and UI. Its old background is retained only as historical source material. Section 4 delivered its replacement: development-only scenarios, a gated DEBUG panel, and the `__GAME_TEST__` API reach any Chapter 1 state without a production room.
 - The supplied world-map diagram remains a historical design source. Its Embassy/Farm Track/Large Tree/Inside naming is superseded by the versioned runtime IDs in the content contract.
 - Files containing LastOneBackup, utilities/masterJSON/, utilities/jsonOutput/, and grid-reader outputs are authoring history, not runtime authority.
 

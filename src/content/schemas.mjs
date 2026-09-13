@@ -1,9 +1,11 @@
+import { SCENARIO_SCHEMA_VERSION } from '../domain/scenarios/scenarios.mjs';
+
 export const CONTENT_SCHEMA_VERSION = 1;
 export const SAVE_SCHEMA_VERSION = 1;
-export const SCENARIO_SCHEMA_VERSION = 1;
+export { SCENARIO_SCHEMA_VERSION };
 
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
-const isId = (value) => typeof value === 'string' && /^[a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9]+)*$/.test(value);
+const isId = (value) => typeof value === 'string' && /^[a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9-]+)*$/.test(value);
 
 export const contentSchemas = Object.freeze({
     navigationRoom: Object.freeze({
@@ -30,6 +32,11 @@ function validateRequiredObject(value, required, label) {
     return errors;
 }
 
+/**
+ * Minimal transport envelope for a scenario. The complete fixture rules,
+ * including room/fact/inventory/presentation checks, live in
+ * `src/domain/scenarios/scenarios.mjs` and share this version constant.
+ */
 export function validateScenarioSchema(value) {
     const errors = validateRequiredObject(value, contentSchemas.scenario.required, 'scenario');
     if (value?.schemaVersion !== SCENARIO_SCHEMA_VERSION) errors.push(`scenario.schemaVersion must be ${SCENARIO_SCHEMA_VERSION}`);

@@ -21,6 +21,7 @@ This repository belongs to Leigh. Address Leigh by name when it is natural and u
 - Run all browser tests with `node tests all`.
 - Run targeted functional areas with `node tests <area>`; at most three named areas may be run together without further permission.
 - The runner must time and log every run.
+- Append `--video` (or `--video=retain-on-failure`) to record a run. Recorded runs keep their own report and artefacts under `test-reports/` and are listed newest-first in `test-reports/history.html`.
 - A full run is allowed only when no previous full-run record exists or the previous full run completed in under 180 seconds. If the last full run reached 180 seconds or more, run up to three relevant areas instead.
 - Do not bypass the timing gate. Keep `e2e/README.md` and `docs/testing-strategy.md` current when the harness changes.
 

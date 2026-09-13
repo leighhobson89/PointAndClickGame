@@ -506,71 +506,11 @@ label {
     color: white !important;
 }
 
-.wheel-menu-container {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    z-index: 999999;
-}
-
-.close-button-container {
-    position: relative;
-    padding-bottom: 20px;
-}
-
-.close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    color: black;
-    padding: 5px;
-    z-index: 1;
-}
-
-.close-button:hover {
-    color: red;
-}
-
-.wheel-menu {
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-height: 400px;
-    max-width: 150px;
-    white-space: nowrap;
-}
-
-#wheelMenuList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    transition: transform 0.3s ease;
-}
-
-#wheelMenuList li {
-    padding: 10px;
-    cursor: pointer;
-    color: black;
-}
-
-#wheelMenuList li:hover {
-    background-color: #f0f0f0;
-}
-
-.debug-bottom-button-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.debug-bottom-button-container button {
-    width: 100%;
-    box-sizing: border-box;
-}
+/*
+ * Debug panel styling lives in src/adapters/debug-panel.mjs and is injected
+ * only when the development-only tools are installed, so the shipped
+ * stylesheet contains no debug rules.
+ */
 
 .fade-in-intro {
     opacity: 1;

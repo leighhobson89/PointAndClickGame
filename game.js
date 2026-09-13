@@ -15,6 +15,28 @@ let lastPlayerPosition = { xStart: 0, yStart: 0, xEnd: 0, yEnd: 0 };
 let animationFrameId = null;
 let canvasLifecycleDisposer = null;
 let gameLoopActive = false;
+let debugOverlayRenderer = null;
+let frameTimeSamples = [];
+let lastFrameStartedAt = null;
+
+/**
+ * Development-only hook. `debugTools.js` installs an additive overlay renderer
+ * here; production never calls this, so the loop keeps its normal frame cost.
+ */
+export function setDebugOverlayRenderer(renderer) {
+    debugOverlayRenderer = typeof renderer === 'function' ? renderer : null;
+    return debugOverlayRenderer !== null;
+}
+
+export function getFrameTimeSummary() {
+    if (frameTimeSamples.length === 0) return { samples: 0, averageMs: null, worstMs: null };
+    const total = frameTimeSamples.reduce((sum, sample) => sum + sample, 0);
+    return {
+        samples: frameTimeSamples.length,
+        averageMs: Number((total / frameTimeSamples.length).toFixed(2)),
+        worstMs: Number(Math.max(...frameTimeSamples).toFixed(2)),
+    };
+}
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -93,7 +115,45 @@ export function gameLoop() {
         moveOtherEntitiesOnCurrentScreen();
     }
 
+    // Debug overlays and frame sampling only run when a development build has
+    // installed the renderer, so production keeps its normal per-frame cost.
+    if (debugOverlayRenderer) {
+        debugOverlayRenderer(ctx);
+        const startedAt = performance.now();
+        if (lastFrameStartedAt !== null) {
+            frameTimeSamples.push(startedAt - lastFrameStartedAt);
+            if (frameTimeSamples.length > 120) frameTimeSamples.shift();
+        }
+        lastFrameStartedAt = startedAt;
+    }
+
     animationFrameId = requestAnimationFrame(gameLoop);
+}
+
+/**
+ * Development-only: stop advancing the simulation without disposing the
+ * session, so a tester can inspect a frozen frame and then continue.
+ */
+export function pauseGameLoop() {
+    if (!gameLoopActive) return false;
+    gameLoopActive = false;
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    return true;
+}
+
+export function resumeGameLoop() {
+    if (gameLoopActive || !getGameInProgress()) return false;
+    gameLoopActive = true;
+    lastFrameStartedAt = null;
+    gameLoop();
+    return true;
+}
+
+export function isGameLoopActive() {
+    return gameLoopActive;
 }
 
 export function disposeGame() {
@@ -106,6 +166,8 @@ export function disposeGame() {
         canvasLifecycleDisposer();
         canvasLifecycleDisposer = null;
     }
+    frameTimeSamples = [];
+    lastFrameStartedAt = null;
     setGameInProgress(false);
     disposeCanonicalSession();
 }
@@ -1383,8 +1445,7 @@ export function swapBackgroundOnRoomTransition(newScreenId, optional) {
 
     const newBackgroundImage = getNavigationData()[getNextScreenId()].bgUrl;
     const screenTilesWidebgImg = getNavigationData()[getNextScreenId()].screenTilesWidebgImg;
-    //setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
-    setDynamicBackgroundWithOffset(canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
+    setDynamicBackgroundWithOffset(getElements().canvas, newBackgroundImage, xPosCameraEnterHere, yPosCameraEnterHere, screenTilesWidebgImg);
         
     console.log("reached final position end of transition, transitioningNow: " + getTransitioningNow());
 }
