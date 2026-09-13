@@ -11,6 +11,7 @@ export const gameActions = Object.freeze({
     setSetting: (setting, value) => ({ type: 'settings/set', payload: { setting, value } }),
     setPresentationMode: (mode) => ({ type: 'presentation/set-mode', payload: mode }),
     setBridgeState: (value) => ({ type: 'quests/set-bridge', payload: value }),
+    setQuestFact: (factId, value = true) => ({ type: 'quests/set-fact', payload: { factId, value } }),
     addRemovedDialogueOption: (value) => ({ type: 'dialogue/remove-option', payload: value }),
 });
 
@@ -40,6 +41,14 @@ export function gameReducer(state, action) {
             return { ...state, presentation: { ...state.presentation, mode: action.payload } };
         case 'quests/set-bridge':
             return { ...state, quests: { ...state.quests, bridgeState: action.payload } };
+        case 'quests/set-fact':
+            return {
+                ...state,
+                quests: {
+                    ...state.quests,
+                    facts: { ...state.quests.facts, [action.payload.factId]: action.payload.value },
+                },
+            };
         case 'dialogue/remove-option':
             return {
                 ...state,

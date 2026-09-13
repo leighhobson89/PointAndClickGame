@@ -6,8 +6,8 @@ Severity: **P0** data loss/security/release blocker, **P1** major journey blocke
 
 | ID | Sev | Status | Finding and evidence | Required verification |
 | --- | --- | --- | --- | --- |
-| BUG-001 | P1 | open | Debug Room is not runnable: referenced debug object/NPC JSON and grid are absent, and its exit targets nonexistent `libraryFoyerDebug`. | Debug room loads, all overlays validate, and its return exit works in E2E. |
-| BUG-002 | P1 | open | The `map` destination is referenced and gated, but its background and room grid are absent. Unlocking/reaching it can fail at the Chapter 1 payoff. | Content validator passes and an E2E journey enters Map without page/runtime errors. |
+| BUG-001 | P1 | resolved | Debug Room was intentionally removed from shipped navigation/UI/content; Section 4 owns its development-only replacement. The validator rejects its reintroduction into production content. | Content validation and startup/navigation browser tests pass. |
+| BUG-002 | P1 | resolved | The Map now has generated room art, polygon grid, reciprocal navigation, a stable payoff hotspot/action, five-locale copy, and canonical completion fact. | Content/unit validation passes; navigation E2E enters and returns from Map in locked/open gate states. |
 | BUG-003 | P0 | open | Save/export captures and restores language only. Room, position, inventory, puzzle flags, dialogue, and world mutations are discarded. | Round-trip a mid-puzzle snapshot and assert every canonical state field plus derived rendering. |
 | BUG-004 | P1 | resolved | `resetAllVariables()` now replaces canonical and transient state from a fresh factory. Fresh-state unit tests and five repeated browser starts pass. | Covered by `game-state.test.mjs` and `game-state/new-game-reset.spec.cjs`. |
 | BUG-005 | P2 | resolved | The active animation frame and session resize/canvas listeners now have explicit ownership and disposal. Counts remain stable across five starts. | Covered by `game-state/new-game-reset.spec.cjs`. |
@@ -24,12 +24,13 @@ Severity: **P0** data loss/security/release blocker, **P1** major journey blocke
 | BUG-016 | P2 | open | Per-frame debug work and extensive console output can waste frame budget and obscure real faults. | Production mode has no debug spam and meets defined frame-time budgets. |
 | BUG-017 | P2 | open | Source assets have inconsistent resolution, scale, crop, finish, and file weight; duplicate assets inflate delivery/history. | Asset validator/report passes the approved art/export budget. |
 | BUG-018 | P1 | open | Dependency audit reported 34 known vulnerabilities (4 low, 3 moderate, 25 high, 2 critical) in the installed tree, especially the legacy packaging/server chain. | Review upgrades, retest browser/desktop targets, and record an accepted zero/exception baseline. |
-| BUG-019 | P2 | open | Runtime room topology and naming diverge from the supplied world map; the Embassy is absent, while sewer/kitchen and alternate interior names appear. | A versioned canonical world spec is approved and data/diagram validation agrees. |
-| BUG-020 | P2 | open | Market Street has five runtime connections while its authored scene brief specifies four. | Design decision recorded and both art hotspot geometry and navigation data match it. |
+| BUG-019 | P2 | resolved | chapter1-world-v1 makes the 18-room runtime topology authoritative and labels the divergent diagram/names as historical. Reciprocal graph and grid coverage are validated. | Content validation and 18-room browser traversal pass. |
+| BUG-020 | P2 | resolved | Market Street intentionally retains five established connections; the four-exit brief is labelled superseded and the undeclared e6 grid cell was removed. | Validator enforces exactly five exits; all five are covered by browser traversal. |
 | BUG-021 | P2 | open | Several modules form circular imports and rely on a very large mutable global-state module, creating initialization-order and regression hazards. | Dependency rule prevents new cycles and extracted domain modules pass unit tests. |
 | BUG-022 | P3 | open | Code relies in places on the browser-created global `canvas` identifier instead of an explicit element reference. | Static search is clear and tests run with no named-global dependency. |
 | BUG-023 | P3 | open | Menu/title and debug-facing copy contain placeholders or development presentation (`Game`, exposed Debug option) not suitable for release. | Product title/copy approved; debug entry requires explicit development enablement. |
 | BUG-024 | P2 | open | Audio described by the GDD is not implemented, so the current experience lacks feedback, ambience, and scene tone. | Audio settings, interaction cues, ambience, music transitions, and mute persistence are tested. |
+| BUG-029 | P2 | open | Eight legacy navigation hotspots are smaller than the contract's 3-by-3-cell target: both Library Foyer exits, Market Street e3/e4, Research Room e1, Alley e1, and both House exits. The generated hotspot report makes the debt visible without silently changing established walk geometry. | Section 7 expands and browser-tests these targets, then the content validator reports no undersized-hotspot warnings. |
 
 ## Resolved in the current foundation pass
 

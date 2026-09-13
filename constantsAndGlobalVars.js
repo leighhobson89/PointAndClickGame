@@ -19,19 +19,17 @@ export const urlWalkableJSONS = '.\\resources\\screenWalkableJSONS\\masterJSONDa
 export const urlNavigationData = '.\\resources\\screenNavigation.json';
 export const urlObjectsData = '.\\resources\\objectsGame.json';
 export const urlNpcsData = '.\\resources\\npcGame.json';
-export const urlObjectsDataDebug = '.\\resources\\debugJSONs\\objectsDebug.json';
-export const urlNpcsDataDebug = '.\\resources\\debugJSONs\\npcDebug.json';
 export const urlDialogueData = '.\\resources\\dialogue.json';
 export const urlForegroundData = '.\\resources\\screenWalkableJSONS\\masterForegroundData.json';
+export const urlContentContract = '.\\resources\\content-contract.json';
+export const urlMapRoomData = '.\\resources\\mapRoom.json';
 export const urlCustomMouseCursorNormal = './resources/mouse/mouseCrosshair.png';
 export const urlCustomMouseCursorHoverInteresting = './resources/mouse/mouseHoverInteresting.png';
 export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClickInteresting.png';
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const INITIAL_GAME_ID_NORMAL = 'libraryFoyer';
-export const INITIAL_GAME_ID_DEBUG = 'debugRoom';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
 export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/libraryFoyer.png';
-export const INITIAL_GAME_BACKGROUND_URL_DEBUG = './resources/backgrounds/debugRoom.png';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
@@ -203,13 +201,13 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/carpenter.png",
     "./resources/backgrounds/cowPathBrokenFence.png",
     "./resources/backgrounds/cowPathRepairedFence.png",
-    "./resources/backgrounds/debugRoom.png",
     "./resources/backgrounds/den.png",
     "./resources/backgrounds/house.png",
     "./resources/backgrounds/kitchen.png",
     "./resources/backgrounds/largePileOfPoo.png",
     "./resources/backgrounds/libraryFoyer.png",
     "./resources/backgrounds/marketStreet.png",
+    "./resources/backgrounds/map.png",
     "./resources/backgrounds/researchRoom.png",
     "./resources/backgrounds/riverCrossing.png",
     "./resources/backgrounds/riverCrossingBridgeHalfComplete.png",
@@ -391,7 +389,6 @@ export function setElements() {
         resumeGameMenuButton: document.getElementById('resumeFromMenu'),
         loadGameButton: document.getElementById('loadGame'),
         saveGameButton: document.getElementById('saveGame'),
-        debugRoomMenuButton: document.getElementById('debugRoom'),
         saveLoadPopup: document.getElementById('loadSaveGameStringPopup'),
         loadSaveGameStringTextArea: document.getElementById('loadSaveGameStringTextArea'),
         loadStringButton: document.getElementById('loadStringButton'),
@@ -1477,6 +1474,10 @@ export function getForcePlayerLocation() {
 export function setBridgeState(value) {
     bridgeState = value;
     gameStore.dispatch(gameActions.setBridgeState(value));
+}
+
+export function setQuestFact(factId, value = true) {
+    gameStore.dispatch(gameActions.setQuestFact(factId, value));
 }
 
 export function getBridgeState() {

@@ -1,5 +1,16 @@
 # Living documentation changelog
 
+## 2026-09-13 — Authoritative Chapter 1 content contract
+
+- Added the versioned chapter1-world-v1 contract for 18 rooms, five locales, reciprocal topology, four gate facts, grid variants/transforms, hotspot policy, puzzle reachability, and legacy runtime actions.
+- Chose five Market Street exits, labelled superseded map/brief/backups, intentionally removed the broken production Debug Room, and resolved BUG-001, BUG-019, and BUG-020.
+- Added the Map overlook background, deterministic polygon walk grid, repaired-bridge transition/return geometry, stable payoff object, localised response, and chapter1.mapReached fact; resolved BUG-002.
+- Added browser-safe schemas/combined validation plus standalone validate:content, report:hotspots, and check commands; startup now rejects an invalid combined content bundle atomically through the visible fatal alert.
+- Corrected stale entity/action references, invalid grid codes, the stray e6, and reversed repaired-river exit IDs; extended the Map exit clear of the decorative border.
+- Added four content/schema unit tests, CI validation/navigation jobs, a generated hotspot report, browser asset decoding for every room, normal canvas entry/return across every connection, and locked-state coverage for all four gates. Recorded the eight undersized legacy exit targets as BUG-029 for Section 7.
+
+Test evidence: `npm.cmd run check` passed content validation and all 11 unit tests. `node tests navigation startup` passed all 10 targeted browser tests in 18.253 seconds; log: `e2e/logs/2026-09-13T07-33-17-837Z-navigation+startup.log`.
+
 ## 2026-09-13 — Deterministic state and startup lifecycle
 
 - Audited every maintained document against the master checklist, expanded missing work, put it in dependency order, and added a source-coverage map.

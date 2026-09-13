@@ -6,7 +6,11 @@
         "start": "node server.js",
         "test": "node tests all",
         "test:e2e": "node tests all",
-        "test:unit": "node --test test/unit/*.test.mjs"
+        "test:unit": "node --test test/unit/*.test.mjs",
+        "validate:content": "node scripts/validate-content.mjs",
+        "report:hotspots": "node scripts/validate-content.mjs --report-hotspots",
+        "check": "npm run validate:content && npm run test:unit",
+        "pretest": "npm run validate:content"
     },
     "dependencies": {
         "electron": "^33.0.2",

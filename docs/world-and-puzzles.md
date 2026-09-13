@@ -2,7 +2,7 @@
 
 ## Sources and authority
 
-This model reconciles the supplied world-map diagram, Chapter 1 and full puzzle-dependency diagrams, Puzzle Design Document, pulley rigging flow, and current navigation/event data. The diagrams describe intent; the runtime data describes what exists today. Differences are recorded rather than silently resolved.
+This model reconciles the supplied world-map diagram, Chapter 1 and full puzzle-dependency diagrams, Puzzle Design Document, pulley rigging flow, and current navigation/event data. The implemented chapter1-world-v1 contract in resources/content-contract.json is authoritative. The earlier diagrams remain historical intent where they differ; see content-contract.md for the decisions and validation boundary.
 
 ## Current runtime room graph
 
@@ -24,14 +24,14 @@ flowchart LR
     RD --> RC[River Crossing]
     RD --> SD[Stinking Dump]
     SD --> PP[Large Pile of Poo]
-    RC -. locked / missing assets .-> MP[Map]
+    RC -. locked until wolf resolved .-> MP[Map overlook]
 ```
 
-Arrows are simplified; most implemented connections have a return exit. `debugRoom` is excluded because its content/exit target is broken.
+Arrows are simplified; every canonical connection has a validated return exit. Debug Room is intentionally absent from shipped content, and the Map room now has background art, a generated walk grid, payoff interaction, and a return path.
 
 ## Design-map reconciliation
 
-The supplied map also names Embassy, Farm Track, Large Tree, Inside Barn, and Inside House. Runtime naming/topology uses Cow Path, Dead Tree, Barn, House, Sewer, and Kitchen, and has no Embassy. Decide which diagram/data version is canonical, then version the other as historical reference. Market Street's brief specifies four exits whereas runtime data contains five.
+The supplied map also names Embassy, Farm Track, Large Tree, Inside Barn, and Inside House. Those names and the four-exit Market Street brief are superseded historical references. The canonical contract uses Cow Path, Dead Tree, Barn, House, Sewer, Kitchen, no Embassy, and five Market Street exits.
 
 ## Chapter 1 critical path
 

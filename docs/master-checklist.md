@@ -33,19 +33,19 @@ This is the complete dependency-ordered delivery checklist. It consolidates ever
 
 Acceptance: each New Game has a fresh canonical state, one loop/listener set, an awaited readiness boundary, and a visible fail-fast path.
 
-## 2. Make the content contract authoritative
+## 2. Make the content contract authoritative — implemented
 
-- [ ] Choose and version the canonical world topology; archive or label superseded diagrams/data.
-- [ ] Decide whether Market Street has four or five exits and align navigation, art, and hotspot geometry.
-- [ ] Restore or intentionally remove Debug Room; repair its grid, object/NPC data, destination, and return path if retained.
-- [ ] Supply and integrate the Map background, grid, navigation, interaction/payoff content, and return/chapter transition.
-- [ ] Define runtime or JSON schemas for room navigation, grids/codes, objects, NPCs, dialogue, localisation, puzzle facts/actions, scenarios, and saves.
-- [ ] Validate unique/stable IDs, files/assets, all references, grid dimensions/codes, and entity room membership.
-- [ ] Validate reciprocal exits or declared one-way exceptions, gate facts, in-bounds walkable spawns, interaction anchors, and hotspot bounds/overlaps.
-- [ ] Validate dialogue links/choice reachability, item/event references, locale completeness/fallback, puzzle reachability, and orphan mandatory facts.
-- [ ] Add a standalone content-validation command to normal checks and CI; fail startup clearly on invalid shipped content.
-- [ ] Add a hotspot authoring/inspection report covering rectangles/polygons, accessible labels, anchors, overlaps, and minimum target size.
-- [ ] E2E-test entering and returning from every intended room in every relevant gate state.
+- [x] Choose and version the canonical world topology; archive or label superseded diagrams/data.
+- [x] Decide whether Market Street has four or five exits and align navigation, art, and hotspot geometry.
+- [x] Restore or intentionally remove Debug Room; repair its grid, object/NPC data, destination, and return path if retained.
+- [x] Supply and integrate the Map background, grid, navigation, interaction/payoff content, and return/chapter transition.
+- [x] Define runtime or JSON schemas for room navigation, grids/codes, objects, NPCs, dialogue, localisation, puzzle facts/actions, scenarios, and saves.
+- [x] Validate unique/stable IDs, files/assets, all references, grid dimensions/codes, and entity room membership.
+- [x] Validate reciprocal exits or declared one-way exceptions, gate facts, in-bounds walkable spawns, interaction anchors, and hotspot bounds/overlaps.
+- [x] Validate dialogue links/choice reachability, item/event references, locale completeness/fallback, puzzle reachability, and orphan mandatory facts.
+- [x] Add a standalone content-validation command to normal checks and CI; fail startup clearly on invalid shipped content.
+- [x] Add a hotspot authoring/inspection report covering rectangles/polygons, accessible labels, anchors, overlaps, and minimum target size.
+- [x] E2E-test entering and returning from every intended room in every relevant gate state.
 
 Acceptance: one command validates all shipped content, the maintained map and runtime agree, and no intended room is broken or orphaned.
 

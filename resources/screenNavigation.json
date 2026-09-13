@@ -1,26 +1,4 @@
 {
-    "debugRoom": {
-        "en": "DEBUG",
-        "es": "DEBUG",
-        "de": "DEBUG",
-        "it": "DEBUG",
-        "fr": "DEBUG",
-        "bgUrl": "./resources/backgrounds/debugRoom.png",
-        "alreadyVisited": false,
-        "screenTilesWidebgImg": 1,
-        "scalingPlayerSpeed": 1, 
-        "scalingPlayerSize": 1,
-        "exits": {
-            "e1": {
-                "connectsTo": "libraryFoyerDebug",
-                "status": "locked",
-                "startPosition": { "x": 33, "y": 51 },
-                "finalPosition": { "x": 33, "y": 51 },
-                "xPosCameraEnterHere": 0,
-                "yPosCameraEnterHere": 0
-            }
-        }
-    },
     "libraryFoyer": {
         "en": "Library Foyer",
         "es": "Vestíbulo de la Biblioteca",
@@ -494,8 +472,8 @@
             "e2": {
                 "connectsTo": "map",
                 "status": "locked",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 8, "y": 45 },
+                "finalPosition": { "x": 14, "y": 45 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }
@@ -516,8 +494,8 @@
             "e1": {
                 "connectsTo": "riverCrossing",
                 "status": "open",
-                "startPosition": { "x": 0, "y": 0 },
-                "finalPosition": { "x": 0, "y": 0 },
+                "startPosition": { "x": 68, "y": 35 },
+                "finalPosition": { "x": 74, "y": 35 },
                 "xPosCameraEnterHere": 0,
                 "yPosCameraEnterHere": 0
             }

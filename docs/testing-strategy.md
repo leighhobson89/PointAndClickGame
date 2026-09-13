@@ -21,6 +21,8 @@ The implemented `startup/new-game.spec.cjs` opens the served app in Chromium, se
 
 The deterministic-state pass adds seven Node unit tests for the state factory/store, live player identity, coordinate handling, transitions, and load failures. Browser coverage now also proves a visible fatal-load path, delayed-image readiness, reduced-motion intro sequencing, real click-to-walk movement, and stable listener counts/session generations across five New Game cycles.
 
+The content-contract pass adds four Node tests covering valid shipped content, Map-grid generation, reference/grid/locale/overlap/orphan failures, and minimal scenario/save schemas. Navigation browser coverage validates and decodes all 18 rooms, performs normal canvas entry and return clicks across every canonical connection with content-only starting-state arrangement, and proves all four gates refuse entry while locked.
+
 ## Test pyramid
 
 ### Unit tests

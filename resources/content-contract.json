@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "chapter1-world-v1",
+  "locales": ["en", "es", "de", "it", "fr"],
+  "world": {
+    "initialRoomId": "libraryFoyer",
+    "chapterEndRoomId": "map",
+    "debugRoomPolicy": "removed-from-shipped-content",
+    "marketStreetExitCount": 5,
+    "rooms": [
+      "libraryFoyer",
+      "marketStreet",
+      "researchRoom",
+      "alley",
+      "carpenter",
+      "den",
+      "house",
+      "sewer",
+      "kitchen",
+      "barn",
+      "deadTree",
+      "cowPath",
+      "roadIntoTown",
+      "stinkingDump",
+      "largePileOfPoo",
+      "riverCrossing",
+      "map",
+      "stables"
+    ],
+    "gridVariants": {
+      "riverCrossing": [
+        "riverCrossing",
+        "riverCrossingBridgeHalfComplete",
+        "riverCrossingBridgeComplete"
+      ]
+    },
+    "gridTransforms": {
+      "riverCrossingBridgeComplete": {
+        "swapExitIds": ["e1", "e2"],
+        "fills": [
+          { "value": "e2", "rectangle": { "x": 70, "y": 32, "width": 8, "height": 8 } }
+        ]
+      }
+    },
+    "connections": [
+      { "from": "libraryFoyer", "exit": "e1", "to": "researchRoom", "returnExit": "e1", "gateFact": "library.researchRoomUnlocked" },
+      { "from": "libraryFoyer", "exit": "e2", "to": "marketStreet", "returnExit": "e4" },
+      { "from": "marketStreet", "exit": "e1", "to": "roadIntoTown", "returnExit": "e4" },
+      { "from": "marketStreet", "exit": "e2", "to": "alley", "returnExit": "e2" },
+      { "from": "marketStreet", "exit": "e3", "to": "carpenter", "returnExit": "e1" },
+      { "from": "marketStreet", "exit": "e5", "to": "cowPath", "returnExit": "e3" },
+      { "from": "alley", "exit": "e1", "to": "den", "returnExit": "e1", "gateFact": "den.unlocked" },
+      { "from": "cowPath", "exit": "e1", "to": "house", "returnExit": "e2" },
+      { "from": "cowPath", "exit": "e2", "to": "stables", "returnExit": "e3" },
+      { "from": "house", "exit": "e1", "to": "sewer", "returnExit": "e1" },
+      { "from": "sewer", "exit": "e2", "to": "kitchen", "returnExit": "e1" },
+      { "from": "stables", "exit": "e1", "to": "barn", "returnExit": "e1", "gateFact": "barn.unblocked" },
+      { "from": "stables", "exit": "e2", "to": "deadTree", "returnExit": "e1" },
+      { "from": "deadTree", "exit": "e2", "to": "roadIntoTown", "returnExit": "e3" },
+      { "from": "roadIntoTown", "exit": "e1", "to": "riverCrossing", "returnExit": "e1" },
+      { "from": "roadIntoTown", "exit": "e2", "to": "stinkingDump", "returnExit": "e2" },
+      { "from": "stinkingDump", "exit": "e1", "to": "largePileOfPoo", "returnExit": "e1" },
+      { "from": "riverCrossing", "exit": "e2", "to": "map", "returnExit": "e1", "gateFact": "river.wolfResolved" }
+    ],
+    "oneWayExits": []
+  },
+  "grid": {
+    "width": 80,
+    "height": 60,
+    "allowedCellPatterns": ["n", "w100..w255", "e1..e9"]
+  },
+  "hotspots": {
+    "minimumWidthCells": 3,
+    "minimumHeightCells": 3,
+    "allowedOverlaps": [
+      ["objectGlove", "objectCarrot"],
+      ["objectGlove", "objectLargePileOfPoo"],
+      ["objectCarrot", "objectLargePileOfPoo"],
+      ["objectParrakeet", "objectParrotMirror"]
+    ]
+  },
+  "puzzle": {
+    "initialFacts": ["chapter1.started"],
+    "mandatoryFacts": [
+      "library.riddleKnown",
+      "library.researchKeyFound",
+      "library.researchRoomUnlocked",
+      "research.mapClueFound",
+      "den.unlocked",
+      "barn.unblocked",
+      "rigging.assembled",
+      "bridge.repairMaterialsReady",
+      "bridge.repaired",
+      "river.wolfResolved",
+      "chapter1.mapReached"
+    ],
+    "actions": [
+      { "id": "library.learnRiddle", "requires": ["chapter1.started"], "effects": ["library.riddleKnown"] },
+      { "id": "library.findResearchKey", "requires": ["library.riddleKnown"], "effects": ["library.researchKeyFound"] },
+      { "id": "library.unlockResearchRoom", "requires": ["library.researchKeyFound"], "effects": ["library.researchRoomUnlocked"] },
+      { "id": "research.collectMapClue", "requires": ["library.researchRoomUnlocked"], "effects": ["research.mapClueFound"] },
+      { "id": "den.unlock", "requires": ["research.mapClueFound"], "effects": ["den.unlocked"] },
+      { "id": "barn.unblock", "requires": ["chapter1.started"], "effects": ["barn.unblocked"] },
+      { "id": "rigging.assemble", "requires": ["den.unlocked", "barn.unblocked"], "effects": ["rigging.assembled"] },
+      { "id": "bridge.prepareMaterials", "requires": ["rigging.assembled"], "effects": ["bridge.repairMaterialsReady"] },
+      { "id": "bridge.repair", "requires": ["bridge.repairMaterialsReady"], "effects": ["bridge.repaired"] },
+      { "id": "river.resolveWolf", "requires": ["bridge.repaired"], "effects": ["river.wolfResolved"] },
+      { "id": "chapter1.claimMap", "requires": ["river.wolfResolved"], "effects": ["chapter1.mapReached"] }
+    ]
+  },
+  "runtimeActionIds": [
+    "addSplinterToPulley",
+    "allowInteractionPileOfBooks",
+    "buildBridgeSection",
+    "carpenterStopPlayerPickingUpItemsEarly",
+    "changeCanvasBgTemp",
+    "combineMilkAndBowl",
+    "combinePulleyAndSturdyAnchor",
+    "combineRopeAndHook",
+    "combineRopeAndHookWithStackOfWood",
+    "completeChapterOne",
+    "connectRopeAndHookWithWoodToPulley",
+    "donkeyMoveRopeAvailable",
+    "genericFunctionToJustSayCanUseTextAndDoNothingElse",
+    "giveBoneToWolf",
+    "giveCarrotToDonkey",
+    "giveDogBowlOfMilk",
+    "giveKeyToLibrarian",
+    "giveWomanMirror",
+    "hoistWoodOverHoleInBridgeAndBlockAllActionsExceptUse",
+    "makeCowNotTalkableAndPliersUseable",
+    "makeFarmerNotTalkableAndSetCarpenterQuestPhaseAfterInitialDialogue",
+    "makeMirrorGiveableToWoman",
+    "moveBooksToGetResearchRoomKey",
+    "openBarrelBarn",
+    "openCloseGenericUnlockedDoor",
+    "placeParrotFlyerOnHook",
+    "removeSplinterFromCowsHoof",
+    "resetHookBackToTreePosition",
+    "revealCarrotAndGlove",
+    "setCarpenterSpokenToTrue",
+    "showDialogueDisgustedToPickUpPoo",
+    "showDialogueStuckFast",
+    "showDialogueStuckInFence",
+    "tieRopeToSuspiciousFencePost",
+    "unlockDenDoor",
+    "unlockResearchRoomDoor",
+    "useCrowBarOnManholeCover",
+    "useGloveToAddMalletToInventory"
+  ]
+}

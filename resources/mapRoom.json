@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "roomId": "map",
+  "width": 80,
+  "height": 60,
+  "defaultCell": "n",
+  "walkablePolygon": [
+    { "x": 4, "y": 30 },
+    { "x": 26, "y": 25 },
+    { "x": 60, "y": 27 },
+    { "x": 76, "y": 36 },
+    { "x": 76, "y": 57 },
+    { "x": 7, "y": 57 }
+  ],
+  "walkableCell": "w210",
+  "exits": [
+    { "exitId": "e1", "rectangle": { "x": 0, "y": 35, "width": 9, "height": 19 } }
+  ]
+}

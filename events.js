@@ -1,12 +1,16 @@
-import { getBeginGameStatus, getBridgeState, setBridgeState, getCurrentlyMovingToAction, setVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
+import { getBeginGameStatus, getBridgeState, setBridgeState, setQuestFact, getCurrentlyMovingToAction, setVerbsBlockedExcept, setPendingEvents, getCurrentScreenId, getCutSceneState, setPreAnimationGridState, getGridData, getColorTextPlayer, getDialogueData, getGameVisibleActive, getLanguage, getNavigationData, getNpcData, setCurrentSpeaker, getObjectData, setAnimationInProgress, setCustomMouseCursor, getCustomMouseCursor, getCanvasCellWidth, getCanvasCellHeight, getAllGridData, setNavigationData, getPendingEvents, getAnimationFinished, setForcePlayerLocation, getPlayerInventory, setTransitioningNow, getInitialStartGridReference, setCurrentScreenId, setNextScreenId, getInitialScreenId, setBeginGameStatus, setClickPoint } from "./constantsAndGlobalVars.js";
 import { setScreenJSONData, setDialogueData, removeNpcFromEnvironment, removeObjectFromEnvironment, handleInventoryAdjustment, addItemToInventory, setObjectData, setNpcData } from "./handleCommands.js";
 import { changeCanvasBg, animateTransitionAndChangeBackground, drawInventory, showText } from "./ui.js";
-import { gridValueSwapper, moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
+import { moveGridData, updateGrid, waitForAnimationToFinish, populatePathForEntityMovement, addEntityPath, setEntityPaths, getEntityPaths, addEntityToEnvironment, changeSpriteAndHoverableStatus, setGameState } from "./game.js";
 import { dialogueEngine, getTextColor, getTextPosition, getOrderOfDialogue } from "./dialogue.js";
 
 //OBJECTS DON'T NEED TO BE REMOVED FROM INVENTORY THIS IS HANDLED ELSEWHERE WHETHER THEY NEED TO BE REMOVED OR NOT
 //REMEMBER TO CALL setOriginalGridData(gridData) AFTER MOVING OBJECTS AROUND ESPECIALLY IF ONE IS WHERE ANOTHER ONE WAS BEFORE
 //EVENTS ADVANCING DIALOGUE QUEST OR SETTING TO NOT ABLE TO TALK SHOULD BE HANDLED IN THE EVENT NOT THE DIALOGUE ENGINE
+
+function changeCanvasBgTemp(url) {
+    changeCanvasBg(url);
+}
 
 export async function playCutsceneGameIntro() {
     setAnimationInProgress(true);
@@ -406,7 +410,6 @@ async function buildBridgeSection(blank, dialogueString, blank2, blank3) {
             
             //change grid to allow player to walk across bridge
             moveGridData('riverCrossingBridgeComplete', 'riverCrossing');
-            gridValueSwapper('riverCrossing', 'e1', 'e2'); //this function may or not be needed after grid rebuilds depending on the random way the utility script allocates the e1 e2 numbers to the exits which can vary seemingly randomly
             
             addEntityToEnvironment(
                 'objectRopeAndHookWithStackOfWoodOnPulleyAndWoodHoisted', 
@@ -483,6 +486,10 @@ async function giveBoneToWolf(npcAndSlot, blank, realVerbUsed, special) {
     setNavigationData(navigationData);
 
     //set a pending event for wolf to disappear when player has been to world map
+}
+
+function completeChapterOne() {
+    setQuestFact('chapter1.mapReached', true);
 }
 
 async function giveCarrotToDonkey(npcAndSlot, blank, realVerbUsed, special) {

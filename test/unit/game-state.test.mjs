@@ -31,14 +31,16 @@ test('store dispatches actions, notifies once, and can cleanly replace state', (
 
     store.dispatch(gameActions.startSession());
     store.dispatch(gameActions.setLocation('currentRoomId', 'marketStreet'));
+    store.dispatch(gameActions.setQuestFact('chapter1.mapReached'));
     const livePlayer = store.getState().player;
     store.dispatch(gameActions.setPlayer('xPos', 0));
 
     assert.equal(gameSelectors.sessionGeneration(store.getState()), 1);
     assert.equal(gameSelectors.currentRoomId(store.getState()), 'marketStreet');
+    assert.equal(store.getState().quests.facts['chapter1.mapReached'], true);
     assert.equal(store.getState().player.xPos, 0);
     assert.equal(store.getState().player, livePlayer);
-    assert.deepEqual(actions, ['session/start', 'location/set', 'player/set']);
+    assert.deepEqual(actions, ['session/start', 'location/set', 'quests/set-fact', 'player/set']);
 
     unsubscribe();
     store.dispatch(gameActions.replace(createInitialGameState({ generation: 1 })));

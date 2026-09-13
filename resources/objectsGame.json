@@ -1330,15 +1330,15 @@
         "objectUse": "",
         "actionUse1": "",
         "actionUse2": "",
-        "objectUseWith1": "objectDoorLibraryFoyerResearchRoom",
+        "objectUseWith1": "",
         "objectUseWith2": "",
         "npcUseWith1": "",
-        "actionUseWith11": "unlockResearchRoomDoor",
+        "actionUseWith11": "",
         "actionUseWith12": "",
-        "actionUseWith21": "",    
-        "useTogetherLocation": "debugRoom",
-        "npcGiveTo": "npcLibrarian1",
-        "actionGive1": "giveKeyToLibrarian",
+        "actionUseWith21": "",
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
         "actionGive2": "",
         "actionPickUp": "",
         "actionCanPickUpButNotYet": ""
@@ -1423,7 +1423,7 @@
         "actionUseWith12": "",
         "actionUseWith21": "",    
         "useTogetherLocation": "libraryFoyer",
-        "npcGiveTo": "npcLibrarian1",
+        "npcGiveTo": "npcLibrarian",
         "actionGive1": "giveKeyToLibrarian",
         "actionGive2": "",
         "actionPickUp": "",
@@ -1591,10 +1591,10 @@
         "objectUseWith1": "objectNails",
         "objectUseWith2": "",
         "npcUseWith1": "",
-        "actionUseWith11": "addPlankToBridge",
-        "actionUseWith12": "checkIfEnoughPlanksOnBridge",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
         "actionUseWith21": "",    
-        "useTogetherLocation": "debugRoom",
+        "useTogetherLocation": "",
         "npcGiveTo": "",
         "actionGive1": "",
         "actionGive2": "",
@@ -1718,7 +1718,7 @@
       "openCloseScaleFactorX": 1,
       "openCloseScaleFactorY": 1,
       "dimensions": {
-        "originalWidth": 1.8,
+        "originalWidth": 2,
         "originalHeight": 3,
         "width": 0,
         "height": 0
@@ -1765,7 +1765,7 @@
         "actionUseWith11": "",
         "actionUseWith12": "",
         "actionUseWith21": "",    
-        "useTogetherLocation": "debugRoom",
+        "useTogetherLocation": "",
         "npcGiveTo": "npcTownDog",
         "actionGive1": "giveDogBowlOfMilk",
         "actionGive2": "",
@@ -3182,7 +3182,7 @@
       "openCloseScaleFactorX": 1,
       "openCloseScaleFactorY": 1,
       "dimensions": {
-        "originalWidth": 1.8,
+        "originalWidth": 2,
         "originalHeight": 4,
         "width": 0,
         "height": 0
@@ -3499,7 +3499,7 @@
       "activeSpriteUrl": "s1",
       "spriteUrl": {
         "s1": "./resources/objects/images/stackOfWoodOnBridgeWorld.png",
-        "s2": "."
+        "s2": "./resources/objects/images/stackOfWoodOnBridgeWorld.png"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -3533,6 +3533,76 @@
         "height": 0
       },
       "comment": "Stack of Wood to use hook and rope on."
+    },
+    "objectChapterOneMap": {
+      "name": {
+        "en": "World Map",
+        "es": "Mapa del mundo",
+        "de": "Weltkarte",
+        "it": "Mappa del mondo",
+        "fr": "Carte du monde"
+      },
+      "canMove": false,
+      "measureMovementYOffset": 0,
+      "activeMoveSequence": 0,
+      "waypoints": {},
+      "interactable": {
+        "specialNpcObjectStandIn": false,
+        "canHover": true,
+        "canPush": false,
+        "canPull": false,
+        "canOpen": false,
+        "doorToOpenCloseOnOtherSide": "",
+        "canPickUp": true,
+        "canPickUpNow": true,
+        "canUse": false,
+        "canUseWith": false,
+        "canGive": false,
+        "stackable": false,
+        "quantity": 1,
+        "decrementQuantityOnUse": false,
+        "activeStatus": true,
+        "alreadyUsed": false
+      },
+      "usedOn": {
+        "objectUse": "",
+        "actionUse1": "",
+        "actionUse2": "",
+        "objectUseWith1": "",
+        "objectUseWith2": "",
+        "npcUseWith1": "",
+        "actionUseWith11": "",
+        "actionUseWith12": "",
+        "actionUseWith21": "",
+        "useTogetherLocation": "",
+        "npcGiveTo": "",
+        "actionGive1": "",
+        "actionGive2": "",
+        "actionPickUp": "completeChapterOne",
+        "actionCanPickUpButNotYet": ""
+      },
+      "objectPlacementLocation": "map",
+      "activeSpriteUrl": "s1",
+      "spriteUrl": {
+        "s1": "./resources/objects/images/blank.png"
+      },
+      "visualAnimatedStateOffsets": {
+        "s1": { "x": 0, "y": 0 },
+        "s2": { "x": 0, "y": 0 }
+      },
+      "inventoryUrl": "./resources/objects/images/IllegibleMapInv.png",
+      "gridPosition": { "x": 55, "y": 25 },
+      "offset": { "x": 0, "y": 0 },
+      "visualPosition": { "x": 0, "y": 0 },
+      "openCloseScaleFactorX": 1,
+      "openCloseScaleFactorY": 1,
+      "dimensions": {
+        "originalWidth": 17,
+        "originalHeight": 15,
+        "width": 0,
+        "height": 0
+      },
+      "comment": "Chapter 1 payoff map on the cartographer's stone plinth."
     }
   }
 }

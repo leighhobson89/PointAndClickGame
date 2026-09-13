@@ -13,6 +13,8 @@ This folder is the maintained source of truth for the current game, its intended
 | [product vision](product-vision.md) | What the game is and aspires to become |
 | [code and content audit](code-audit.md) | Full technical, runtime, content, and data assessment |
 | [world and puzzle model](world-and-puzzles.md) | World topology and intended Chapter 1 dependency chain |
+| [content contract](content-contract.md) | Versioned world authority, schemas, validation, and topology decisions |
+| [hotspot report](hotspot-report.md) | Generated room/entity hotspot geometry and authoring warnings |
 | [bugs](bugs.md) | Confirmed defects and material risks, with status and verification |
 | [refactor plan](refactor-plan.md) | Staged architecture improvement without a rewrite |
 | [feature roadmap](feature-roadmap.md) | Missing features and implementation order |

@@ -10,9 +10,9 @@ import {
     getDrawGrid,
     setDrawGrid,
     urlForegroundData,
+    urlContentContract,
+    urlMapRoomData,
     setInitialScreenId,
-    urlNpcsDataDebug,
-    urlObjectsDataDebug,
     setScrollingActive,
     getScrollingActive,
     setScrollDirection,
@@ -105,10 +105,8 @@ import {
     urlObjectsData,
     urlWalkableJSONS,
     INITIAL_GAME_ID_NORMAL,
-    INITIAL_GAME_ID_DEBUG,
     PRE_INITIAL_GAME_BACKGROUND,
     INITIAL_GAME_BACKGROUND_URL_NORMAL,
-    INITIAL_GAME_BACKGROUND_URL_DEBUG,
     getOriginalGridState,
     getPreAnimationGridState,
     getOriginalValueInCellWhereObjectPlaced,
@@ -162,6 +160,7 @@ import {
     validatePropertyRoot,
     waitForTransition,
 } from './src/application/readiness.mjs';
+import { assertValidContentBundle } from './src/content/validate-content.mjs';
 
 let textTimer;
 let assetsReadyPromise = Promise.resolve();
@@ -243,56 +242,6 @@ export function bootApplication() {
         } else {
             setBeginGameStatus(false);
         }
-    });
-
-    getElements().debugRoomMenuButton.addEventListener("click", async (event) => {
-        clearFatalLoadError();
-        setNewGameLoading(true);
-        try {
-            await Promise.all([
-                loadGameData(
-                    urlWalkableJSONS,
-                    urlNavigationData,
-                    urlObjectsDataDebug,
-                    urlDialogueData,
-                    urlNpcsDataDebug,
-                    urlForegroundData
-                ),
-                assetsReadyPromise,
-                localizationReadyPromise,
-            ]);
-        } catch (error) {
-            showFatalLoadError(error);
-            return;
-        } finally {
-            setNewGameLoading(false);
-        }
-        setInitialScreenId(INITIAL_GAME_ID_DEBUG);
-        setCurrentScreenId(getInitialScreenId());
-        changeCanvasBg(INITIAL_GAME_BACKGROUND_URL_DEBUG);
-
-        getElements().customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
-        resetAllVariables(); //TODO RESET ALL VARIABLES WHEN USER STARTS NEW GAME
-        setBeginGameStatus(true);
-        updateInteractionInfo(
-            localize("interactionWalkTo", getLanguage(), "verbsActionsInteraction"),
-            false,
-        );
-        disableActivateButton(
-            getElements().resumeGameMenuButton,
-            "active",
-            "btn-primary",
-        );
-        disableActivateButton(
-            getElements().saveGameButton,
-            "active",
-            "btn-primary",
-        );
-        setGameState(getGameVisibleActive());
-        await startGame();
-
-        setPlayerObject('speed', getWalkSpeedPlayer() * getNavigationData()[getCurrentScreenId()].scalingPlayerSpeed);
-        setPlayerObject('baselineSpeedForRoom', getPlayerObject().speed);
     });
 
     getElements().resumeGameMenuButton.addEventListener("click", (event) => {
@@ -1598,24 +1547,39 @@ export async function loadGameData(
     npcUrl,
     gridForegroundsUrl // New URL for the foreground grid data
 ) {
-    const [gridData, navData, objectsData, dialogueData, npcData, foregroundData] = await Promise.all([
+    const [gridData, navData, objectsData, dialogueData, npcData, foregroundData, contract, mapRoom, localizationData] = await Promise.all([
         loadJsonResource(fetch, gridUrl, 'Walk-grid data', validateGridData),
         loadJsonResource(fetch, screenNavUrl, 'Navigation data', validateNavigationData),
         loadJsonResource(fetch, objectsUrl, 'Object data', validatePropertyRoot('objects')),
         loadJsonResource(fetch, dialogueUrl, 'Dialogue data', validatePropertyRoot('dialogue')),
         loadJsonResource(fetch, npcUrl, 'NPC data', validatePropertyRoot('npcs')),
         loadJsonResource(fetch, gridForegroundsUrl, 'Foreground-grid data', validateObjectRoot),
+        loadJsonResource(fetch, urlContentContract, 'Content contract', validateObjectRoot),
+        loadJsonResource(fetch, urlMapRoomData, 'Map room data', validateObjectRoot),
+        loadJsonResource(fetch, 'localization.json', 'Localisation data', validateObjectRoot),
     ]);
 
+    const validated = assertValidContentBundle({
+        contract,
+        grids: gridData,
+        navigation: navData,
+        objects: objectsData,
+        dialogue: dialogueData,
+        npcs: npcData,
+        foregrounds: foregroundData,
+        localization: localizationData,
+        mapRoom,
+    });
+
     // Commit only after every resource has loaded and passed its startup contract.
-    setGridData(gridData);
+    setGridData(validated.grids);
     setNavigationData(navData);
     setObjectsData(objectsData);
     setDialoguesData(dialogueData);
     setNpcsData(npcData);
     setForegroundsData(foregroundData);
 
-    return { gridData, navData, objectsData, dialogueData, npcData, foregroundData };
+    return { gridData: validated.grids, navData, objectsData, dialogueData, npcData, foregroundData, contract, mapRoom };
 }
 
 export function resetSecondItemState() {

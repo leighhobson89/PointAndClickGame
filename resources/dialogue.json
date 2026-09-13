@@ -1103,15 +1103,6 @@
             "fr": "Un bol de lait rafraîchissant, miam !"
           }
         },
-        "objectBoneJammedInPulley": {
-          "0": {
-            "en": "That is not going anywhere, it's totally locked!",
-            "es": "Eso no va a ninguna parte, ¡está totalmente bloqueado!",
-            "de": "Das geht nirgendwohin, es ist völlig verriegelt!",
-            "it": "Non va da nessuna parte, è completamente bloccato!",
-            "fr": "Ça ne va nulle part, c'est totalement verrouillé !"
-          }
-        },
         "objectRopeAndHook": {
           "0": {
             "en": "A big hook, and a very strong looking rope, connected by one of my questionable knots!",
@@ -1259,31 +1250,13 @@
             "fr": "Une petite clé en laiton avec un motif orné."
           }
         },
-        "objectBatteryDEBUG": {
+        "objectChapterOneMap": {
           "0": {
-            "en": "A small battery, still charged and ready to use.",
-            "es": "Una pequeña batería, aún cargada y lista para usar.",
-            "de": "Eine kleine Batterie, die noch geladen und einsatzbereit ist.",
-            "it": "Una piccola batteria, ancora carica e pronta all'uso.",
-            "fr": "Une petite batterie, encore chargée et prête à l'emploi."
-          }
-        },
-        "objectMachineDEBUG": {
-          "0": {
-            "en": "The machine looks old and complex. It has a slot for a battery.",
-            "es": "La máquina parece vieja y compleja. Tiene una ranura para una batería.",
-            "de": "Die Maschine sieht alt und komplex aus. Sie hat einen Schlitz für eine Batterie.",
-            "it": "La macchina sembra vecchia e complessa. Ha una fessura per una batteria.",
-            "fr": "La machine semble vieille et complexe. Elle a une fente pour une batterie."
-          }
-        },
-        "objectBananaDEBUG": {
-          "0": {
-            "en": "A perfectly ripe banana. Ready to eat.",
-            "es": "Un plátano perfectamente maduro. Listo para comer.",
-            "de": "Eine perfekt gereifte Banane. Bereit zum Essen.",
-            "it": "Una banana perfettamente matura. Pronta da mangiare.",
-            "fr": "Une banane parfaitement mûre. Prête à être mangée."
+            "en": "A glorious, mostly dry world map. The cartographer even put north at the top.",
+            "es": "Un glorioso mapa del mundo, casi seco. El cartógrafo incluso puso el norte arriba.",
+            "de": "Eine herrliche, größtenteils trockene Weltkarte. Der Kartograf hat sogar Norden nach oben gesetzt.",
+            "it": "Una gloriosa mappa del mondo, quasi asciutta. Il cartografo ha persino messo il nord in alto.",
+            "fr": "Une magnifique carte du monde, presque sèche. Le cartographe a même placé le nord en haut."
           }
         },
         "objectDoorToDen": {
@@ -1427,19 +1400,12 @@
           "it": "È una chiave di ottone. La prenderò, sono sempre utili!",
           "fr": "C'est une clé en laiton. Je vais la prendre, elles sont toujours utiles !"
         },
-        "objectBatteryDEBUG": {
-          "en": "If this just has a bit of power, I'm sure it'll be useful.",
-          "es": "Si esto solo tiene un poco de energía, estoy seguro de que será útil.",
-          "de": "Wenn das nur ein bisschen Energie hat, bin ich mir sicher, dass es nützlich sein wird.",
-          "it": "Se questo ha solo un po' di energia, sono sicuro che sarà utile.",
-          "fr": "Si cela a juste un peu de puissance, je suis sûr qu'il sera utile."
-        },
-        "objectBananaDEBUG": {
-          "en": "It's firm but ripe, just the way I like it!",
-          "es": "Está firme pero maduro, justo como me gusta.",
-          "de": "Es fest, aber reif, genau wie ich es mag!",
-          "it": "È sodo ma maturo, proprio come piace a me!",
-          "fr": "Il est ferme mais mûr, juste comme j'aime !"
+        "objectChapterOneMap": {
+          "en": "At last, a proper map! It is less encrypted and considerably less damp than the last one.",
+          "es": "¡Por fin, un mapa de verdad! Está menos cifrado y bastante menos húmedo que el anterior.",
+          "de": "Endlich eine richtige Karte! Sie ist weniger verschlüsselt und deutlich weniger feucht als die letzte.",
+          "it": "Finalmente, una vera mappa! È meno criptata e decisamente meno umida dell'altra.",
+          "fr": "Enfin, une vraie carte ! Elle est moins chiffrée et nettement moins humide que la précédente."
         }
       },
       "verbGive": {
