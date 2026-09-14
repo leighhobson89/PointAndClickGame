@@ -9,7 +9,15 @@ const isId = (value) => typeof value === 'string' && /^[a-z][A-Za-z0-9]*(?:\.[A-
 
 export const contentSchemas = Object.freeze({
     navigationRoom: Object.freeze({
-        required: ['bgUrl', 'alreadyVisited', 'screenTilesWidebgImg', 'scalingPlayerSpeed', 'scalingPlayerSize', 'exits'],
+        // `playerHeightNear`/`playerHeightFar` are the room's authored character
+        // scale in stage pixels, and `entityScaleAtNear` sizes placed objects
+        // and NPCs against the same curve. Together they replace the single
+        // `scalingPlayerSize` multiplier, which had to serve as both the room's
+        // character scale and its depth range and could not do either honestly.
+        required: [
+            'bgUrl', 'alreadyVisited', 'screenTilesWidebgImg', 'scalingPlayerSpeed',
+            'playerHeightNear', 'playerHeightFar', 'entityScaleAtNear', 'exits',
+        ],
     }),
     grid: Object.freeze({ width: 80, height: 60, cellPattern: /^(?:n|w(?:1\d\d|2[0-4]\d|25[0-5])|e[1-9])$/ }),
     entity: Object.freeze({

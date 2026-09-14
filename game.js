@@ -1,4 +1,4 @@
-import { getWalkSpeedPlayer, getTrackingGrid, setTrackingGrid, getForegroundsData, setCurrentPlayerImage, getCurrentPlayerImage, getCurrentScreenHasForegroundItems, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getObjectToBeUsedWithSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getSelectedVerbId, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
+import { getTrackingGrid, setTrackingGrid, getForegroundsData, setCurrentPlayerImage, getCurrentPlayerImage, getCurrentScreenHasForegroundItems, getPlayerMovementStatus, setPlayerMovementStatus, setPlayerDirection, getPlayerDirection, setGridData, getForcePlayerLocation, getVerbsBlockedExcept, getShouldNotBeResizedArray, getPendingEvents, setPendingEvents, getAnimationFinished, setAnimationFinished, setTargetYEntity, getNonPlayerAnimationFunctionalityActive, setTargetXEntity, setCantGoThatWay, getCantGoThatWay, getDrawGrid, getClickPoint, setClickPoint, setDialogueRows, getTransitioningToDialogueState, setBottomContainerHeight, getBottomContainerHeight, getInteractiveDialogueState, setResizedNpcsGridState, getOriginalValueInCellWhereNpcPlacedNew, setOriginalValueInCellWhereNpcPlacedNew, setResizedObjectsGridState, getAnimationInProgress, setAnimationInProgress, getPreAnimationGridState, setPreAnimationGridState, getOriginalGridState, setOriginalGridState, getOriginalValueInCellWhereObjectPlacedNew, setOriginalValueInCellWhereObjectPlacedNew, getCurrentSpeaker, getCurrentYposNpc, getNpcData, getWaitingForSecondItem, getObjectToBeUsedWithSecondItem, getDisplayText, getAllGridData, getBeginGameStatus, getCanvasCellHeight, getCanvasCellWidth, getCurrentScreenId, getCustomMouseCursor, getElements, getExitNumberToTransitionTo, getGameInProgress, getGameVisibleActive, getGridData, getGridSizeX, getGridSizeY, getPristineContent, getGridTargetX, getGridTargetY, getHoverCell, getInitialStartGridReference, getLanguage, getMenuState, getNavigationData, getNextScreenId, getObjectData, getOriginalValueInCellWhereObjectPlaced, getPlayerObject, getPreviousScreenId, getTransitioningNow, getTransitioningToAnotherScreen, getUpcomingAction, getVerbButtonConstructionStatus, getSelectedVerbId, getZPosHover, setCanvasCellHeight, setCanvasCellWidth, setCurrentlyMovingToAction, setCustomMouseCursor, setExitNumberToTransitionTo, setGameStateVariable, setGridTargetX, setGridTargetY, setNextScreenId, setOriginalValueInCellWhereObjectPlaced, getOriginalValueInCellWhereNpcPlaced, setOriginalValueInCellWhereNpcPlaced, setPlayerObject, setTargetXPlayer, setTargetYPlayer, setTransitioningNow, setTransitioningToAnotherScreen, setUpcomingAction, setVerbButtonConstructionStatus, setZPosHover, getHoveringInterestingObjectOrExit, getGameStateVariable, getCurrentXposNpc, getLocalization, setGameInProgress, getColorTextPlayer, getDialogueData, setObjectsData } from './constantsAndGlobalVars.js';
 import { localize } from './localization.js';
 import { aStarPathfinding } from './pathFinding.js';
 import { setNpcData, setObjectData, performCommand, constructCommand, setScreenJSONData } from './handleCommands.js';
@@ -7,6 +7,20 @@ import { executeInteractionEvent } from './events.js';
 import { disposeCanonicalSession, startCanonicalSession } from './constantsAndGlobalVars.js';
 import { contextualVerbForTarget, createCommandIntent } from './src/domain/commands/commands.mjs';
 import { resolveCellTarget } from './src/domain/navigation/navigation.mjs';
+import { buildDepthField, buildRoomScaleProfiles, sampleDepthByte, scaledEntitySize } from './src/domain/navigation/depth-scale.mjs';
+
+// The walk frames are authored on a 200x375 canvas. Drawing them to any other
+// ratio squashes every frame, which the previous 65x140 box did by 14%.
+const PLAYER_SPRITE_ASPECT = 200 / 375;
+
+// The side walk is drawn from nine frames and the front and back walks from
+// three. That asymmetry is an art gap rather than a timing choice, so the
+// cadence is expressed once, as the length of one complete there-and-back
+// cycle, and each direction derives its own frame hold from it.
+const HORIZONTAL_WALK_FRAMES = 9;
+const VERTICAL_WALK_FRAMES = 3;
+const WALK_CYCLE_TICKS = 64;
+const WALK_CONTACT_FRAME_DAMPING = 0.9;
 
 export let entityPaths = {};
 let firstDraw = true;
@@ -182,7 +196,6 @@ async function movePlayerTowardsTarget() {
 
     const gridData = getGridData();
     const player = getPlayerObject();
-    const speed = player.speed;
     const gridSizeX = getCanvasCellWidth();
     const gridSizeY = getCanvasCellHeight();
     const dialogueData = getDialogueData().dialogue;
@@ -194,15 +207,15 @@ async function movePlayerTowardsTarget() {
     const playerOffsetX = Math.floor(playerGridX + ((player.width / 2) / gridSizeX));
     const playerOffsetY = Math.floor(playerGridY + player.height / gridSizeY);
 
-    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX]; 
+    const cellValue = gridData.gridData[playerOffsetY + 1][playerOffsetX];
 
-    //change speed as moves further away
-    if (cellValue.startsWith('w')) {
-        const roughness = parseInt(cellValue.slice(1));
-        const factor = 0.4 + ((roughness - 100) / 155) * 0.4;
-        const adjustedSpeed = getPlayerObject().baselineSpeedForRoom * factor;
-        setPlayerObject('speed', adjustedSpeed);
-    }    
+    // Walk speed follows the same depth curve as the player's size, so a
+    // character drawn half as tall also covers half as many pixels per frame.
+    // Holding pixel speed constant is what made a distant player appear to skim
+    // across the back of a room faster than they cross the front of it.
+    const depthScale = currentPlayerDepthScale();
+    const pacedSpeed = player.baselineSpeedForRoom * (depthScale ?? 1);
+    setPlayerObject('speed', pacedSpeed);
 
     let targetX, targetY;
     let commandToPerform;
@@ -299,32 +312,36 @@ async function movePlayerTowardsTarget() {
     if (movementStatus[0] === 'moving') {
         player.frameCount++;
         setPlayerObject('frameCount', player.frameCount);
-    
-        const isHorizontal = direction === 'right' || direction === 'left';
-        const frameCount = isHorizontal ? 9 : 3;
-        let frameSpeed = isHorizontal ? 4 : 12;
 
+        const isHorizontal = direction === 'right' || direction === 'left';
+        const frameCount = isHorizontal ? HORIZONTAL_WALK_FRAMES : VERTICAL_WALK_FRAMES;
+
+        // One full there-and-back cycle takes the same wall-clock time in every
+        // direction. Deriving the hold from the cycle length keeps the side and
+        // front/back walks in step even though they are drawn from a different
+        // number of frames.
         const totalFrames = (frameCount * 2) - 2;
+        const frameSpeed = Math.max(1, Math.round(WALK_CYCLE_TICKS / totalFrames));
         const animationIndex = Math.floor(player.frameCount / frameSpeed) % totalFrames;
         const isReversed = animationIndex >= frameCount;
         const spriteFrame = isReversed
             ? frameCount - (animationIndex - frameCount + 1)
             : animationIndex + 1;
-    
-        if (spriteFrame === 3 || spriteFrame === 5 || spriteFrame === 7) { // make player movement a bit slower in places to simulate walking movement
-            player.speed = player.speed - 0.3;
-        } else {
-            player.speed = getWalkSpeedPlayer();
-        }
+
+        // A small dip on the contact frames reads as weight shifting onto the
+        // leading foot. It scales the paced speed rather than replacing it, so
+        // the room's speed setting and the depth pacing both survive the gait.
+        const isContactFrame = spriteFrame === 3 || spriteFrame === 5 || spriteFrame === 7;
+        setPlayerObject('speed', pacedSpeed * (isContactFrame ? WALK_CONTACT_FRAME_DAMPING : 1));
 
         if (player.frameCount % frameSpeed === 0) {
             const spriteType = `move${spriteFrame}`;
             player.activeSprite = `${spriteType}_${direction}`;
             setPlayerObject('activeSprite', player.activeSprite);
         }
-    
-        setPlayerObject('speed', player.speed);
-    }    
+    }
+
+    const speed = getPlayerObject().speed;
 
     if (Math.abs(player.xPos - targetX) > speed) {
         player.xPos += (player.xPos < targetX) ? speed : -speed;
@@ -514,128 +531,126 @@ function moveOtherEntitiesOnCurrentScreen() {
     }
 }
 
-export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
-    //console.log("resizing npc: " + !entityObjectTrueNpcFalse);
+// The room scale profiles are derived from the content bundle exactly as it
+// shipped, so a placed object, an opened door, or a swapped bridge grid can
+// never move a room's depth range underneath the player.
+let roomScaleModel = null;
+let roomScaleModelSource = null;
+
+function getRoomScaleModel() {
+    const pristine = getPristineContent();
+    if (!pristine?.grids) return null;
+    if (roomScaleModel && roomScaleModelSource === pristine) return roomScaleModel;
+    roomScaleModel = buildRoomScaleProfiles(pristine.grids, pristine.navigation ?? getNavigationData());
+    roomScaleModelSource = pristine;
+    return roomScaleModel;
+}
+
+// The depth field is read from the live grid, because a room can swap in a
+// different walk grid as the world changes and the player must scale against
+// the geometry that is actually installed. Object and NPC placement stamps
+// overwrite walk cells, and `buildDepthField` fills those from the nearest
+// painted neighbour, so standing on a placed object no longer freezes the size.
+let depthFieldCache = null;
+let depthFieldVersion = 0;
+
+export function invalidateDepthField() {
+    depthFieldVersion += 1;
+}
+
+function currentDepthField() {
+    const { gridData: grid } = getGridData();
+    if (!Array.isArray(grid)) return null;
+    const screenId = getCurrentScreenId();
+    if (depthFieldCache
+        && depthFieldCache.screenId === screenId
+        && depthFieldCache.version === depthFieldVersion) {
+        return depthFieldCache.field;
+    }
+    const field = buildDepthField(grid);
+    depthFieldCache = { screenId, version: depthFieldVersion, field };
+    return field;
+}
+
+/**
+ * The room's depth scale under the player's feet, normalised to 1 at the near
+ * plane. Returns null when the room has no usable depth field, so the caller
+ * can fall back rather than silently pacing at zero.
+ */
+function currentPlayerDepthScale() {
+    const model = getRoomScaleModel();
+    const profile = model?.profiles.get(getCurrentScreenId());
+    const field = currentDepthField();
+    if (!profile || !field) return null;
+
     const player = getPlayerObject();
-    const gridData = getGridData();
+    const depthByte = sampleDepthByte(
+        field,
+        (player.xPos + (player.width / 2)) / getCanvasCellWidth(),
+        (player.yPos + player.height) / getCanvasCellHeight(),
+    );
+    return profile.scaleAt(depthByte);
+}
 
-    let entity;
-    let objectId;
-    let npcId;
+/**
+ * Rescales the player, an NPC, or an object for the depth it is standing at.
+ *
+ * The entity's feet are both the measurement point and the anchor: the depth is
+ * sampled there, and the new size is applied so the feet do not move. That is
+ * what keeps a walking character planted on the floor instead of drifting as it
+ * grows, and it makes the operation idempotent, because re-running it at an
+ * unchanged position samples the same depth and produces the same size.
+ */
+export function resizeEntity(playerTrueNpcFalse, entityId, entityObjectTrueNpcFalse) {
+    const model = getRoomScaleModel();
+    const profile = model?.profiles.get(getCurrentScreenId());
+    const field = currentDepthField();
+    if (!profile || !field) return;
 
-    let entityGridX;
-    let entityGridY;
-    let entityOffsetX;
-    let entityOffsetY;
-
-    if (entityObjectTrueNpcFalse) {
-        entity = getObjectData().objects[entityId];
-        objectId = entityId;
-    } else if (entityObjectTrueNpcFalse !== null) {
-        entity = getNpcData().npcs[entityId];
-        npcId = entityId;
-    }
-
-    // Get the scaling factor for the screen
-    const scalingFactor = getNavigationData()[getCurrentScreenId()].scalingPlayerSize || 1;
+    const cellWidth = getCanvasCellWidth();
+    const cellHeight = getCanvasCellHeight();
 
     if (playerTrueNpcFalse) {
-        entityGridX = Math.floor(player.xPos / getCanvasCellWidth());
-        entityGridY = Math.floor(player.yPos / getCanvasCellHeight());
-        entityOffsetX = Math.floor(entityGridX + ((player.width / 2) / getCanvasCellWidth()));
-        entityOffsetY = Math.floor(entityGridY + player.height / getCanvasCellHeight());
-    } else { //npc or object
-        entityGridX = Math.floor(entity.visualPosition.x / getCanvasCellWidth());
-        entityGridY = Math.floor(entity.visualPosition.y / getCanvasCellHeight());
-        entityOffsetX = Math.floor(entityGridX + ((entity.dimensions.width / 2)));
-        entityOffsetY = Math.floor(entityGridY + entity.dimensions.height);
-    }
+        const player = getPlayerObject();
+        const footX = player.xPos + (player.width / 2);
+        const footY = player.yPos + player.height;
+        const depthByte = sampleDepthByte(field, footX / cellWidth, footY / cellHeight);
 
-    // Get the cell value from the grid
-    if (entityOffsetX > getGridSizeX() - 1 || entityOffsetY > getGridSizeY() -1) {
+        const height = profile.playerHeightAt(depthByte);
+        const width = height * PLAYER_SPRITE_ASPECT;
+
+        setPlayerObject('xPos', footX - (width / 2));
+        setPlayerObject('yPos', footY - height);
+        setPlayerObject('width', width);
+        setPlayerObject('height', height);
         return;
     }
 
-    const cellValue = gridData.gridData[entityOffsetY][entityOffsetX]; //correctly measures from bottom center
-    let zPosStringW;
-    let zPosW;
+    if (entityObjectTrueNpcFalse === null) return;
+    const entity = entityObjectTrueNpcFalse
+        ? getObjectData().objects[entityId]
+        : getNpcData().npcs[entityId];
+    if (!entity) return;
 
-    // Extract the Z position value if the cell starts with 'w' or 'b'
-    if (cellValue.startsWith('w')) {
-        zPosStringW = extractWValue(cellValue);
-        zPosW = parseInt(zPosStringW, 10);
-    } else {
-        return;
-    }
+    // Before an entity's first resize its live dimensions are still zero, so
+    // the authored size stands in. Measuring from a zero-height box would
+    // sample the depth at the entity's head rather than at its feet.
+    const currentWidth = (entity.dimensions.width || entity.dimensions.originalWidth) * cellWidth;
+    const currentHeight = (entity.dimensions.height || entity.dimensions.originalHeight) * cellHeight;
+    const footX = entity.visualPosition.x + (currentWidth / 2);
+    const footY = entity.visualPosition.y + currentHeight;
+    const depthByte = sampleDepthByte(field, footX / cellWidth, footY / cellHeight);
 
-    // Define size limits
-    const furthestZPos = 100;
-    const nearestZPos = 255;
+    const { width, height } = scaledEntitySize(profile, depthByte, {
+        width: entity.dimensions.originalWidth * cellWidth,
+        height: entity.dimensions.originalHeight * cellHeight,
+    });
 
-    let originalPlayerWidth;
-    let originalPlayerHeight;
-    let originalEntityWidth;
-    let originalEntityHeight;
-
-    if (playerTrueNpcFalse) {
-        originalPlayerWidth = player.originalWidth;
-        originalPlayerHeight = player.originalHeight;
-
-        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
-        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
-
-        const newWidthW = originalPlayerWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
-        const newHeightW = originalPlayerHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
-
-        const widthDifference = newWidthW - player.width;
-        const heightDifference = newHeightW - player.height;
-
-        const offsetX = (widthDifference / 2);
-        const offsetY = (heightDifference);
-
-        setPlayerObject('xPos', player.xPos - offsetX);
-        setPlayerObject('yPos', player.yPos - offsetY);
-
-        setPlayerObject('width', newWidthW);
-        setPlayerObject('height', newHeightW);
-    } else { //npc or object
-        originalEntityWidth = entity.dimensions.originalWidth * getCanvasCellWidth();
-        originalEntityHeight = entity.dimensions.originalHeight * getCanvasCellHeight();
-
-        const scaleFactorW = (zPosW - furthestZPos) / (nearestZPos - furthestZPos);
-        const clampedScaleFactorW = Math.min(Math.max(scaleFactorW, 0), 1);
-
-        const newWidthW = originalEntityWidth * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
-        const newHeightW = originalEntityHeight * (0.1 + clampedScaleFactorW * 0.9) * scalingFactor;
-
-        const widthDifference = newWidthW - (entity.dimensions.width * getCanvasCellWidth());
-        const heightDifference = newHeightW - (entity.dimensions.height * getCanvasCellHeight());
-
-        const offsetX = (widthDifference / 2);
-        const offsetY = (heightDifference);
-
-        if (playerTrueNpcFalse) {
-            setPlayerObject('xPos', player.xPos - offsetX);
-            setPlayerObject('yPos', player.yPos - offsetY);
-    
-            setPlayerObject('width', newWidthW);
-            setPlayerObject('height', newHeightW);
-        } else {
-            if (entityObjectTrueNpcFalse) { //object
-                setObjectData(`${objectId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
-                setObjectData(`${objectId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
-
-                setObjectData(`${objectId}`,`dimensions.width`, newWidthW / getCanvasCellWidth());
-                setObjectData(`${objectId}`,`dimensions.height`, newHeightW / getCanvasCellHeight());
-            } else { //npc
-                setNpcData(`${npcId}`,`visualPosition.x`, entity.visualPosition.x - offsetX);
-                setNpcData(`${npcId}`,`visualPosition.y`, entity.visualPosition.y - offsetY);
-
-                setNpcData(`${npcId}`,`dimensions.width`, newWidthW / getCanvasCellWidth());
-                setNpcData(`${npcId}`,`dimensions.height`, newHeightW / getCanvasCellHeight());
-            }
-        }
-    }
+    const setEntityData = entityObjectTrueNpcFalse ? setObjectData : setNpcData;
+    setEntityData(entityId, 'visualPosition.x', footX - (width / 2));
+    setEntityData(entityId, 'visualPosition.y', footY - height);
+    setEntityData(entityId, 'dimensions.width', width / cellWidth);
+    setEntityData(entityId, 'dimensions.height', height / cellHeight);
 }
 
 export function drawDebugGrid(drawGrid) {
@@ -2060,6 +2075,9 @@ export function moveGridData(value1, value2) {
         gridData[value2] = gridData[value1];
         delete gridData[value1];
         setGridData(gridData);
+        // A swapped-in grid paints a different floor, so the cached depth field
+        // for this room no longer describes what the player is standing on.
+        invalidateDepthField();
     } else {
         console.error(`Either ${value1} or ${value2} does not exist in the object`);
     }
@@ -2081,6 +2099,7 @@ export function gridValueSwapper(grid, value1, value2) {
 
     allGridData[grid] = gridData;
     setGridData(allGridData);
+    invalidateDepthField();
 }
 
 function updateTrackingGrid() {

@@ -11,6 +11,9 @@
         "test:unit": "node --test test/unit/*.test.mjs",
         "validate:content": "node scripts/validate-content.mjs",
         "report:hotspots": "node scripts/validate-content.mjs --report-hotspots",
+        "report:assets": "node scripts/asset-manifest.mjs",
+        "check:assets": "node scripts/asset-manifest.mjs --check",
+        "report:art": "node scripts/art-calibration.mjs all",
         "check:dependencies": "node scripts/check-dependencies.mjs",
         "check": "npm run check:dependencies && npm run validate:content && npm run test:unit",
         "pretest": "npm run validate:content"

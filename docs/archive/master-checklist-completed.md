@@ -135,6 +135,19 @@ These items belong to sections that are still open, but they are done and are no
 
 - Video recording for browser runs: `node tests <scope> --video` records a run into its own `test-reports/` folder and lists it in `test-reports/history.html`. Recording stays off by default. (Section 9, test isolation and artefact retention.)
 
+## 8. Art, animation, and audio — the completed items
+
+Delivered 2026-09-14. The remaining Section 8 work stays in the live checklist.
+
+- [x] **Approve an explicit art direction.** Storybook caricature adventure, approved by Leigh. The Game Design Document's "pixel art" wording is superseded; the shipped assets are illustrated and painted and the game is described that way from here on.
+- [x] **Create the art bible.** [art-bible.md](../art-bible.md) covers stage aspect and safe area, camera and perspective and walk plane, character depth and scale, outline and detail, shadow, palette and light, occlusion and alpha, animation naming and anchors and crops and directions, inventory icons, byte and dimension budgets, reuse and aliasing, the AI-assisted asset policy, and the per-room acceptance gate. Each rule is marked as enforced by a command, measured by a report, or decided by review.
+- [x] **Build the asset manifest.** `npm run report:assets` writes `resources/asset-manifest.json` and [asset-report.md](../asset-report.md) with semantic ID, role, source, dimensions, aspect, bytes, SHA-256, authored cell size, owning rooms, references, orphan state, budget breaches, and provenance and licence fields. `npm run check:assets` exits non-zero on a breach.
+- [x] **Generate role-based contact sheets and duplicate reports.** `npm run report:art` renders a contact sheet per role with over-budget assets flagged, and the manifest reports exact-duplicate groups by content hash. Intentional reuse is to be aliased to one semantic ID; the report names the 13 groups to resolve.
+- [x] **Rebuild the character scale mechanism.** `src/domain/navigation/depth-scale.mjs` replaces the global `0.1 + t * 0.9` ramp and the `scalingPlayerSize` multiplier with per-room authored heights in stage pixels, anchored to each room's own painted depth range, sampled from a continuous filled depth field. Covered by `test/unit/depth-scale.test.mjs`.
+- [x] **Calibrate every room against its art.** All 18 rooms carry authored `playerHeightNear`, `playerHeightFar`, and `entityScaleAtNear`, chosen by reviewing the player at real walkable positions over each painting at gameplay scale.
+
+Implementation note: character scale was the reported fault and it was a design fault rather than a tuning one. The replaced ramp mapped the depth byte through a fixed 0.1-to-1.0 curve across a global 100–255 range, then multiplied by a per-room number that was simultaneously being used to correct the room's character size and to correct its depth range. Because each room paints only part of the byte range, the two jobs fought each other: the player was 9.8 px tall at the back of Market Street and 420 px tall at the front of the Den, a 43x spread across the game, with within-room ratios from 1.77x to 10x. Authoring the two heights directly removes the coupling; the ratios are now 1.40x to 3.54x and the 4x ceiling is asserted for every room by a unit test.
+
 ## 7. Modernise input, UI, responsiveness, and accessibility — implemented
 
 - [x] Define a canonical logical stage, scale/letterbox policy, responsive breakpoints, and deterministic pointer mapping.

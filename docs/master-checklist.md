@@ -17,16 +17,19 @@ Acceptance: a new player can progress from the Library Foyer to the Map without 
 
 ## 8. Unify and optimise art, animation, and audio
 
-- [ ] Approve “storybook caricature adventure” or another explicit art direction and reconcile the GDD’s pixel-art wording.
-- [ ] Create an art bible covering aspect/safe area, camera/perspective/walk plane, character depth/scale, outlines/detail, shadows/palette/light, occlusion/alpha, animation naming/anchors/crops/directions, icons, and byte/dimension budgets.
-- [ ] Build an asset manifest with semantic ID, role, source, dimensions, crop/anchor, room scale, hash, licence, and provenance.
-- [ ] Generate role-based contact sheets plus exact/near-duplicate reports; alias intentional reuse.
-- [ ] Select and approve one gold-standard room and player/NPC interaction, then normalise complete rooms without shipping partially mixed styles.
-- [ ] Create a reproducible export/optimisation pipeline and compare at gameplay scale; enforce transfer, decode, memory, and frame-time budgets.
-- [ ] Document AI-assisted composition/cleanup/upscale/style use, reference consistency, human paint-over, provenance, licensing, and in-game acceptance.
+The art direction, the art bible, the asset manifest, the contact sheets, and the character scale mechanism are delivered and recorded in [archive/master-checklist-completed.md](archive/master-checklist-completed.md). What is left is the art production itself, the export pipeline, the audio, and the profiling.
+
+- [ ] Re-export the seven stretched backgrounds at the stage aspect so rooms stop distorting every object in them (BUG-041).
+- [ ] Repaint the Den from the standard eye-height camera and bring its authored heights into the interior band (BUG-042).
+- [ ] Redraw the player's side idle poses on the walk canvas in the walk finish (BUG-039), and author the missing front and back walk frames (BUG-040).
+- [ ] Re-author the three human NPCs drawn at the wrong scale beside the player — carpenter 2.65x, woman-lost-mirror 1.74x, librarian 0.57x (BUG-044).
+- [ ] Give the player and free-standing props a contact shadow, without which correct scaling still reads as floating.
+- [ ] Select and approve one gold-standard room and player/NPC interaction, then normalise complete rooms without shipping partially mixed styles. **Leigh's approval; automation cannot close this.**
+- [ ] Create a reproducible export/optimisation pipeline — painted scenery to WebP, icons cropped for their slot, duplicates aliased to one semantic ID — and bring the shipped set from 38.1 MB inside budget (BUG-017).
+- [ ] Record `provenance` and `licence` for all 167 shipped assets; the manifest carries the fields and they are all still `null`.
 - [ ] Implement settings-aware music, scene ambience, location/milestone transitions, dialogue/character cues, interaction SFX, subtitles/captions, mixer, mute, and persistence (BUG-024).
 - [ ] Profile startup, image decode, steady/scrolling/animated frame time, allocations, and event/log noise; remove the remaining per-frame debug logging from production (BUG-016).
-- [ ] Perform room-by-room in-game visual, animation, audio, readability, and performance acceptance.
+- [ ] Perform room-by-room in-game visual, animation, audio, readability, and performance acceptance against the art bible's acceptance gate.
 
 Acceptance: assets and sound feel intentionally related, meet budgets, preserve authored humour, and degrade safely with accessibility settings.
 
@@ -82,6 +85,8 @@ These are not a section of their own; each is carried by the section that will f
 | `refactor-plan.md` | Section 8, plus the migration debt |
 | `feature-roadmap.md` | Sections 6, 8, and 9, including deferred features |
 | `ui-and-art-direction.md` | Section 8 |
+| `art-bible.md` | The production standard Section 8 is judged against |
+| `asset-report.md` and `player-frame-geometry.md` | Generated evidence for the Section 8 asset and animation items |
 | `testing-strategy.md` | Acceptance lines and the cross-cutting definition of done |
 | `debug-test-controls.md` | The scenario items in Sections 6 and 8 |
 | `save-format.md` | The save compatibility gate in Section 9 |

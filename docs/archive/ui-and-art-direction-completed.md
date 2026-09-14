@@ -1,6 +1,21 @@
-# UI and art direction — completed UI
+# UI and art direction — completed UI and art
 
-The outstanding art direction remains in [ui-and-art-direction.md](../ui-and-art-direction.md). This file records the Section 7 interface direction implemented on 2026-09-14.
+The outstanding art direction remains in [ui-and-art-direction.md](../ui-and-art-direction.md). This file records the Section 7 interface direction and the Section 8 art-direction decisions implemented on 2026-09-14.
+
+## Art direction decided
+
+The approved direction is **storybook caricature adventure**, chosen over retro pixel art. The existing assets are illustrated and painted rather than pixel art, and the hand-drawn irregularity is the game's identity; standardising perspective, character scale, outline weight, lighting, material rendering, and export achieves consistency without sanding that off. The Game Design Document's pixel-art wording is superseded.
+
+The production standard is [art-bible.md](../art-bible.md), which is a live reference rather than a to-do list and so does not live in this archive.
+
+## Visual audit — resolved findings
+
+The audit found several visual languages running at once. Two of its findings are now closed:
+
+- **Character scale was inconsistent and was blamed on tuning.** It was a design fault. Measured across the game the player ranged from 9.8 px to 420 px, with within-room near-to-far ratios from 1.77x to 10x. This is now authored per room in stage pixels, anchored to each room's own painted depth range, and capped at a 4x ratio by an assertion over the shipped content.
+- **Source sizes, crops, edge treatment, contrast, and lighting "vary widely" was an impression rather than a measurement.** It is now measured per asset in [asset-report.md](../asset-report.md) and per animation frame in [player-frame-geometry.md](../player-frame-geometry.md), and the specific defects are recorded as BUG-039 through BUG-042 rather than as a general complaint.
+
+The remaining audit findings — differing treatments between rooms, River Crossing being more polished than its neighbours, and the player art being cruder than some NPCs — are unresolved and stay in the live document.
 
 ## Modern UI concept
 
