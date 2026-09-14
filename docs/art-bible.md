@@ -4,6 +4,19 @@ The production standard for every visual asset in the game. It says what to draw
 
 Approved direction: **storybook caricature adventure**. Hand-drawn irregularity is the point and is preserved. Perspective, character scale, outline weight, lighting, material rendering, and export are standardised around it. The Game Design Document's "pixel art" wording is superseded; the shipped assets are illustrated and painted, and the game is described that way from here on.
 
+## 0. The gold standard
+
+Approved by Leigh. Two shipped rooms are the reference every other room is normalised towards. They are not aspirational targets drawn for the purpose; they are existing art that already satisfies the rules below, so "match the standard" can be checked by putting two rooms side by side.
+
+| Role | Room | Why it holds |
+| --- | --- | --- |
+| Exterior | **River Crossing** | The deepest foreground/middle/background separation in the set, the best foliage and rock rendering, a single clear light direction, and native 832 x 448. |
+| Interior | **Kitchen** | One unambiguous key light from the window, eye-height camera, floor in the lower half, and furniture at believable human scale. Native 832 x 448. |
+
+Neither needs redrawing. River Crossing and Kitchen change only by being re-exported to WebP for weight.
+
+A room is "normalised" when it can be shown beside its role's standard and read as the same game — the same paint weight, the same outline treatment, the same saturation discipline, the same camera. Restyling is done **whole rooms at a time**; a scene containing both restyled and un-restyled elements is not shipped.
+
 Rules below are marked **[enforced]** where a command fails on a breach, **[measured]** where a report states the number but nothing fails yet, and **[review]** where a human decides. Enforced rules are checked by `npm run check:assets` and by `npm run test:unit`; measured and review rules are checked against the reports and sheets from `npm run report:assets` and `npm run report:art`.
 
 ## 1. Stage, aspect, and safe area
@@ -13,6 +26,7 @@ The world renders into one logical stage of **832 x 448 pixels**, aspect **1.857
 - A background or foreground ships at exactly 832 x 448. **[enforced]**
 - A source painted at a larger size is exported down to 832 x 448; it is not shipped at source resolution and rescaled by the browser. **[enforced]**
 - A source whose aspect is not 1.857 is letterboxed or extended to fit, never squeezed. Non-uniform scaling distorts every object in the scene and is the single fastest way to make character scale look wrong. **[enforced]**
+- A room that is off the stage aspect is **re-composed at 832 x 448 as part of its restyle**, not cropped and not stretched. Approved by Leigh. Re-composing costs nothing extra on a room that is being redrawn anyway, and it is the only correction that neither discards painted content nor invents edge art in a style that is itself being replaced. A room under 2% off aspect — currently Dead Tree and Research Room — is close enough that a straight uniform re-export to 832 x 448 is the whole fix.
 - Keep the outer 24 pixels free of anything the player must read. The stage frame and vignette overlay that band.
 - The walkable floor should occupy the lower half of the frame. A floor painted higher pushes the character into the scenery.
 
@@ -46,7 +60,11 @@ Depth interpolates linearly between the two heights. The curve is normalised to 
 
 - **Near height**: exteriors 125–175 px, interiors 145–200 px. **[review]**
 - **Near-to-far ratio at most 4:1.** **[enforced]** — asserted for every shipped room by `test/unit/depth-scale.test.mjs`. A ratio beyond this is a sign that the room is painted too deep for a single walk plane, or that the depth field is painted wrong.
-- An NPC's authored `dimensions.originalWidth`/`originalHeight` are its size **in grid cells at the room's near plane**. A person-sized NPC must measure **between 0.8 and 1.25 of the player's height at the same depth**. **[measured]** — the table is in [asset-report.md](asset-report.md). Animals are expected to sit outside that band; humans are not. Three currently do: see BUG-044.
+- An NPC's authored `dimensions.originalWidth`/`originalHeight` are its size **in grid cells at the room's near plane**. A person-sized NPC must measure **between 0.8 and 1.25 of the player's height at the same depth**. **[measured]** — the table is in [asset-report.md](asset-report.md). Animals are expected to sit outside the band and are exempt. Three humans currently sit outside it; the correction is computed and held in [bugs.md](bugs.md) against BUG-044, to be applied when the characters are repainted so scale is judged once against final art.
+- Inside the band, an NPC's exact height is an **art judgement, not a target of 1.0**. Build is characterisation: the carpenter reads as an adult man at 1.08, the librarian as an elderly woman at 0.92, the farmer as a stocky old man at 0.81. Flattening every human to 1.0 would remove that.
+- **The drawn box must keep the sprite's own aspect.** An entity is drawn into `originalWidth` x `originalHeight` cells, so a box whose aspect differs from the source image's aspect stretches the subject non-uniformly — the same fault as a mis-aspected background, applied to a character. Authored width therefore follows from authored height and the sprite: `width = height x cellHeight x spriteAspect / cellWidth`. **[measured]** — 48 of the 64 placed sprites are 5% or more off and 35 are 15% or more off, recorded as BUG-044 for the NPCs and BUG-045 for the objects. The tolerance is 5%, and the assertion that enforces it is written and verified but held until the art it measures is final.
+- **One NPC, one canvas.** Every sprite an NPC can be drawn with — each facing, and each state such as the donkey roped and unroped — shares a single canvas size, padded with transparency where a pose is narrower. The engine holds one `dimensions` record per NPC, so sprites on disagreeing canvases cannot all be undistorted at once. This is the same rule the player's frames already follow.
+- Re-proportioning an existing NPC **holds the foot cell and the horizontal centre** and moves `gridPosition` to suit the new size. Changing size without moving the position leaves the character floating or sunk, because `gridPosition` is its top-left corner. `gridPosition` must stay a whole cell, so the fractional part lives in the dimensions.
 - `entityScaleAtNear` exists only to preserve the sizes objects were placed at before the scale profile was introduced. It should converge to 1 as object cell dimensions are re-authored; a room still holding a value far from 1 has objects whose declared size does not mean what it says.
 
 ### Current calibration
@@ -85,27 +103,37 @@ Depth interpolates linearly between the two heights. The curve is normalised to 
 Frames are named `<pose><index>_<direction>.png`, directions `left`, `right`, `up`, `down`, index from 1.
 
 - Frames for one direction share one canvas size. **[enforced]**
-- The foot baseline sits at the same place in every frame of a direction, within 2% of canvas height. **[measured]** — reported per frame in [player-frame-geometry.md](player-frame-geometry.md), not yet failing a command.
+- The foot baseline sits at the same place in every frame of a direction, within 2% of canvas height. **[measured]** — for the wired set, per frame in `resources/redesign/section-02-player/frame-geometry.csv`. [player-frame-geometry.md](player-frame-geometry.md) still measures the unwired legacy set (BUG-052), so it is not evidence for the frames the game draws. Neither yet fails a command.
 - Drawn character height varies by at most 5% across a walk cycle; more than that reads as growing rather than striding. **[measured]**
-- The character is horizontally centred on its own footfall, not on the canvas.
-- One full there-and-back walk cycle takes the same wall-clock time in every direction. The engine derives each direction's frame hold from a single cycle length, so a direction drawn from fewer frames holds each one longer rather than cycling faster.
+- A frame's scale is set by the character's height alone. Fitting a frame to a width ceiling as well makes wide poses shrink, and because a side-on stride is about twice as wide as a front-on one, that lands almost entirely on the side views and reads as the character pumping in size as it walks. The canvas is instead made wide enough to hold the widest pose at full height. **[enforced]** — `scripts/process-player-redesign.ps1` refuses to write a frame that overflows the canvas.
+- Frames are registered horizontally on the character's head-and-torso mass, not on the bounding box. A walk cycle's bounding box is set by whichever limb is thrown furthest out, so centring it slides the body around inside the frame every step.
+- A walk cycle is **a loop, not a palindrome**: the last frame's heel strike is the foot the first frame plants. It is played straight through and round again. Playing it out and back runs the leg motion in reverse for half of every cycle, which is nearly invisible front-on and reads as a moonwalk side-on.
+- The gait is paced by **distance covered, not by time elapsed**. The player's speed is scaled by depth, so a fixed-duration cycle makes the feet skate near the camera and mark time far from it. The engine advances the cycle by how far the character actually moved, against a stride that scales with its own drawn height, so one step covers the same share of the body at every depth.
 
-### Current state of the player animation — not yet compliant
+### The approved player finish
 
-| Direction | Distinct frames | Canvas | Finish |
-| --- | ---: | --- | --- |
-| left / right | 9 | 200 x 375 | flat, line-based |
-| up / down | 2 | 200 x 375 | softer, anti-aliased, 4–6x the byte weight |
-| idle left / right | 1 | **800 x 1500** | painterly, visibly a different character rendering |
-| idle up / down | 1 | 200 x 375 | matches the walk frames |
+The character ships in the **painted finish** — the treatment currently seen only on `still_left` and `still_right`. Approved by Leigh.
 
-Three faults follow from this, all recorded in [bugs.md](bugs.md):
+The reasoning is that the rooms the game is being normalised towards are painted, and the NPCs that already match them — the carpenter, the farmer, the cow, the donkey, the seedy guy — are painted too. A flat, line-drawn player standing in a painted room beside a painted NPC is the largest single style break left in the game, and it is on the most-seen asset in it. Adopting the flat walk finish instead would narrow that break to one asset rather than remove it.
 
-1. The side idle poses are drawn in a different style and at 4x the resolution of everything around them, so the character's appearance changes every time they stop walking.
-2. The front and back walks have two distinct frames against the side walk's nine, because `move2_down` and `move2_up` are byte-identical to their idle poses.
-3. The front and back frames are drawn with a different technique from the side frames.
+This **reverses the earlier direction**, which was to redraw the two side idles down into the flat walk finish. The cost moves from redrawing 2 frames to redrawing roughly 26.
 
-Frame registration is **not** a fault: measured baseline spread is 0.8–1.9% and height spread 0.8–3.7%, inside the rules above.
+### Current state of the player animation
+
+The runtime set is the Section 2 candidate in `resources/redesign/section-02-player/frames/`, authored against a painted model sheet that settles the character's build — height in heads, shoulder and hip width, limb length, hair mass, boot bulk. That sheet is the reference every generated or machine-edited character asset must hold (see section 10). The legacy set in `resources/player/` is retained only as a rollback source and is not wired.
+
+| Direction | Distinct frames | Canvas | Subject height | Finish |
+| --- | ---: | --- | ---: | --- |
+| left / right | 9 | 280 x 375 | 365 px | painted |
+| up / down | 9 | 280 x 375 | 365 px | painted |
+| idles, all four | 1 each | 280 x 375 | 365 px | painted |
+
+Registration is compliant: subject height is 365 px and the foot baseline y=371 in all 40 frames, so height spread is 0% and baseline spread 0%. Two faults remain, recorded in [bugs.md](bugs.md):
+
+1. The front and back walks are close to nine near-identical poses. Measured frame-to-frame silhouette change across the up cycle is 3–12% and leg spread varies by 9%, against 11–55% and 65% laterally, so those directions read as a glide rather than a walk. They need re-authoring with a readable stride.
+2. 37 of the 40 frames exceed the 60 KB player-frame budget.
+
+Paint-over, provenance and licence review, and Leigh's visual approval are also outstanding before the set can be accepted.
 
 ## 7. Inventory icons
 
@@ -156,18 +184,24 @@ A generated asset that does not hold the character model, the room's light direc
 
 ### The hand-drawn rooms
 
-The Library Foyer and Market Street backgrounds are Leigh's hand-drawn originals. They are in scope for restyling and for corrected sizing and aspect like every other room, but the result must stay recognisably the same place: the arrangement and identity of the archways, doorways, buildings, and stalls carry over. Regenerating either scene from a prompt without working from the original composition is not an acceptable change.
+The **Library Foyer**, **Market Street**, and **Back Alley** backgrounds are Leigh's hand-drawn originals. They are the three rooms that sit outside the painted style, and they are the reason the game currently reads as more than one game.
+
+They are in scope for restyling and for corrected sizing and aspect like every other room, but the result must stay recognisably the same place: **the layout carries over and only the style changes.** The arrangement and identity of the archways, doorways, buildings, stalls, and passages are kept; their position in frame, their relationship to each other, and the route the player walks between them are preserved. Someone who knows the room must recognise it immediately after the restyle.
+
+Regenerating any of the three from a prompt without working from the original composition is not an acceptable change, however good the result looks alone.
 
 ## 11. Acceptance
 
 A room is accepted when, at gameplay scale and not at source resolution:
 
 1. Character scale reads correctly against the architecture at the near, middle, and far walk positions.
-2. One horizon, one light direction, one palette family.
-3. Every character and free-standing prop has a contact shadow.
-4. Outline weight and facial detail match the standard at the room's own scale.
-5. Foreground occlusion works without halos.
-6. Every asset in the room is inside budget and carries provenance and licence.
-7. The room is reviewed beside its neighbours, not alone.
+2. Every NPC in the room agrees with the player: a human inside 0.8–1.25, and nobody drawn into a box that disagrees with their sprite's aspect. Both are re-derived and applied when the room's characters are repainted, not before.
+3. The background is exactly 832 x 448 and nothing in the room is non-uniformly scaled.
+4. One horizon, one light direction, one palette family.
+5. Every character and free-standing prop has a contact shadow.
+6. Outline weight and facial detail match the standard at the room's own scale.
+7. Foreground occlusion works without halos.
+8. Every asset in the room is inside budget and carries provenance and licence.
+9. The room is reviewed **beside its role's gold standard** — River Crossing for an exterior, Kitchen for an interior — and beside its own neighbours, never alone.
 
 `npm run report:art` produces the sheets this review is done against: a per-room scale calibration sheet, an all-room montage, and a contact sheet per role.

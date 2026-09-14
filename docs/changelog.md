@@ -1,5 +1,68 @@
 # Living documentation changelog
 
+## 2026-09-14 — The sideways walk: five faults found and fixed
+
+Leigh reported that the redesigned player looked right walking towards and away from the camera but changed size constantly and animated badly walking sideways. The same nine-frame playback code drives all four directions, so the difference had to lie in the frames or in what the code did with them. Both, as it turned out — five separate faults, four of which land almost entirely on the side views.
+
+- **The character changed size every step (BUG-047).** The registration pass scaled each frame by `min(365/height, 196/width)`. The width term only ever bound on the side views, because a side-on stride throws the arms and legs about twice as wide as a front-on one, and whenever it bound it shrank the whole figure. Measured drawn height swung between 302 and 365 px across one cycle while front and back held a steady 365. Scale is now taken from height alone and the art canvas widened from 200 to 280 px so the widest pose fits at full height. All 40 frames now measure 365 px.
+- **Half of every cycle played backwards (BUG-048).** Playback ping-ponged the nine poses — 1 to 9, then 8 back down to 2. Inspecting the frames shows the set is a loop, not a palindrome: frame 9's heel strike is the foot frame 1 plants. The descending half therefore ran the leg motion in reverse. Front-on that is nearly invisible, because those frames barely move the legs; side-on it is a moonwalk. The cycle now plays straight through and round.
+- **The gait was paced by ticks rather than by ground covered (BUG-049).** A fixed 64-tick cycle ran at one rate while the player's speed was scaled by depth, so the feet skated near the camera and marked time far from it. The cycle is now advanced by distance travelled against a stride that scales with the character's own drawn height, so a step covers the same share of the body at every depth. The frame-3/5/7 speed damping went with it: it named the wrong frames for this art — 5 and 6 are the passing poses, not the contacts — and modulating travel speed several times a second is itself visible as judder.
+- **Facing flicked between side and back poses on diagonals (BUG-050).** The rule set a horizontal direction and then let any vertical component overwrite it outright. Facing is now chosen by the dominant axis of travel, biased towards the current facing so a near-45-degree path settles instead of flapping.
+- **Six right-facing frames were registered to debris (BUG-051).** Flecks of stray colour survived keying and lay below the boots, so the bounding box was measured down to a fleck and the figure planted above the baseline, hovering over its own shadow. Anything outside the character's largest connected region is now discarded before measurement.
+
+Two supporting changes came out of the same pass. Frames are registered horizontally on the head-and-torso mass rather than the bounding box, because a bounding box follows whichever limb is thrown furthest out and so slid the body around inside the frame every step; and a global despill removes the green fringe that survived keying, which is safe here only because nothing in the costume has a green channel above both red and blue.
+
+The player's logical box is deliberately unchanged. `PLAYER_SPRITE_ASPECT` still drives depth sampling, edge collision and grid coverage at the 200 x 375 ratio, while the new `PLAYER_ART_ASPECT` draws the wider art about the same centre line, so the art got its room back without moving a gameplay boundary.
+
+Also removed the unused `setActivePlayerSprite`, a dead exported two-frame toggle that contradicted the nine-frame cycle, and the dead `frameCount` bookkeeping it shared.
+
+Regenerating the art reports to match surfaced a separate pre-existing gap, now BUG-052: `docs/player-frame-geometry.md`, the player rows of `docs/asset-report.md`, and the room calibration sheets all still measure and draw `resources/player/`, which has not been the wired set since the candidate was integrated. The art bible's baseline-spread citation now points at `frame-geometry.csv` instead, which does measure what the game draws. The fix is not a one-line widening — the role rule is folder-based, and admitting both sets would claim the same semantic IDs twice — so it is recorded rather than rushed.
+
+Verified: 70 unit tests and content validation pass; `rendering-layout`, `navigation` and `animation-cutscenes` pass except the pre-existing BUG-043 layout overflow. In the running game the sprite keys advance 1→9→1 in order with no runtime errors, and the drawn logical aspect measures 0.536 against the intended 0.533. Not verified: Leigh's visual approval of the gait in motion, which is what BUG-047 to BUG-051 are held at `verify` for.
+
+## 2026-09-14 — Section 2 player candidate wired before polish
+
+- Generated a painted protagonist model sheet, four idle facings, and nine-pose walk sources for each direction, then keyed and registered 40 runtime candidates onto the standard 200 x 375 transparent canvas with a shared y=371 foot baseline and soft contact shadows.
+- Wired the candidate paths from `resources/redesign/section-02-player/frames/` into the player sprite map and preload list. The original `resources/player/` set is untouched, so the art can be rolled back or compared during review.
+- Extended front/back runtime animation from three pose keys to the same nine-pose cycle used laterally. This is deliberately an integration-first pass so animation can be judged in context.
+- Kept BUG-039 and BUG-040 open. Side-pose subject heights still range from 302–365 px, keyed edges need cleanup, 31/40 frames exceed the 60 KB budget, and final visual approval plus provenance/licence review remain.
+
+## 2026-09-14 — Painting-gated redesign plan and Den generation study (Section 8)
+
+- Added `docs/art-redesign-production-plan.md` and linked it from the master checklist and UI/art direction, dividing the painting-gated Section 8 work into nine whole-scene or coherent asset packages: Den camera correction, player model/animation, the three hand-drawn rooms, Sewer, NPCs, props/icons, and final world normalisation.
+- Completed the plan's first generation section with a new Den background candidate. It uses the current Den as the strict composition reference and Kitchen as the interior style/camera reference, correcting the close camera into an eye-height 832 x 448 composition with a clear lower-half walk plane.
+- Kept the candidate non-destructive and outside shipped asset URLs at `resources/redesign/section-01-den/`. The generation source, exact-stage review export, full prompt, references, status, and follow-up door/crowbar brief are retained together.
+- Left BUG-041 and BUG-042 open: Leigh's visual approval, matching state sprites, paint-over and licence decisions, grid/hotspot updates, scale calibration, WebP export, and in-game acceptance remain before the Den can ship.
+
+## 2026-09-14 — Art overhaul decisions, proportion audit, and the export pipeline (Section 8)
+
+Opening the non-archived half of Section 8 as an art overhaul. Three decisions were taken by Leigh, one measurement pass was completed, and one applied change was deliberately reversed.
+
+**Approved by Leigh, recorded in [art-bible.md](art-bible.md):**
+
+- **The gold standard** is River Crossing for exteriors and Kitchen for interiors. Both already satisfy the camera, aspect and scale rules and need no redrawing, so "match the standard" can be checked by putting two rooms side by side rather than against a description.
+- **The player ships in the painted finish** — the treatment currently carried only by `still_left` and `still_right` — because the rooms and the painted NPCs the game is normalising towards are painted. This **reverses BUG-039's original direction** of redrawing the two idles down into the flat walk finish, and moves the work from 2 frames to roughly 26.
+- **Off-aspect rooms are re-composed at 832x448 during their restyle**, not cropped, extended, or stretched. Dead Tree and Research Room are under 2% off and need only a uniform re-export.
+- The **hand-drawn set is three rooms, not two**: Library Foyer, Market Street, and now Back Alley. The rule is unchanged and restated — the layout carries over and only the style changes, and none of the three may be regenerated from a prompt without working from the original composition.
+
+**Measured, with new defects recorded:**
+
+- Audited every placed sprite's drawn box against the aspect of the art inside it. An entity is drawn into its authored cell dimensions, so a box whose aspect differs from the sprite's stretches the subject non-uniformly — the same fault as a mis-aspected background, applied to a character. **48 of 64 placed sprites are 5% or more off and 35 are 15% or more off.** The carpenter is squashed 38% narrower than he was painted, the farmer 34%, the donkey 21%.
+- Recorded **BUG-045** for the object side of that finding, including door-state variants that reuse one cell box for two differently shaped images — `obj.den_Exit_DenOpen` is a 24x209 edge-on door sliver drawn into the box authored for the 127x209 closed door, stretching it 451% wider.
+- Recorded **BUG-046**: an NPC's directional and state sprites sit on disagreeing canvases while the engine holds one `dimensions` record per NPC, so at most one sprite can be undistorted. Added the art bible's "one NPC, one canvas" rule to cover it.
+- Noted two items for the repaint that numbers cannot settle: the town dog is drawn at 0.25 of the player's height, and `npc.librarian` is a 75x125 source carrying 382 KB, too small to read at the size it is drawn.
+
+**Applied, verified, and then reversed at Leigh's instruction:**
+
+- Re-proportioned all nine placed NPCs so each drawn box kept its sprite's aspect and the three out-of-band humans came inside the art bible's 0.8–1.25 band — carpenter 2.65x to 1.08x, woman-lost-mirror 1.74x to 1.00x, librarian 0.57x to 0.92x — holding each NPC's foot cell and horizontal centre so nobody floated or slid. Two assertions were added promoting the rule from measured to enforced, and were verified failing against the unfixed data first.
+- **Reversed in full**, so that character scale is judged once against final art rather than twice. `npcGame.json`, the `events.js` placement literals, and the two assertions are back to their prior state; the asset report again reads 2.65, 1.74, and 0.57. The computed correction is kept in [bugs.md](bugs.md) under BUG-044, with the held values, the method, and the note that widths must be re-derived once a character's sprite aspect changes.
+
+**Added:**
+
+- `scripts/export-assets.mjs`, the reproducible export and optimisation pass for BUG-017. It re-encodes painted scenery to WebP, crops inventory icons to their subject on their own slot, and brings each role inside its dimension ceiling, stepping down a quality ladder only while a file is over budget. It never repaints: it re-encodes, rescales uniformly, and crops transparent margins. Every original moves to `resources/source-art/`, so a later restyle starts from the full-resolution painting. Off-aspect rooms are fitted inside the stage rather than stretched to it, so BUG-041 stays visible instead of being baked in.
+
+Test evidence: `npm run check` passes dependency validation, the 18-room/42-object/10-NPC content contract, and 70 Node tests, before and after the reversal. While the NPC change was applied, `node tests navigation rendering-layout puzzles` passed 18 of 19 in 51.642 s; the single failure was the pre-existing 1440x900 layout overflow already recorded as BUG-043, at the same spec, line, and 3 px. Three targeted areas were run rather than the full suite because the last recorded full run took 189.339 s, at or beyond the 180-second gate.
+
 ## 2026-09-14 — Character scale rebuilt, art direction approved, asset tooling (Section 8)
 
 - **Replaced the character scaling mechanism.** The reported fault — the player being the wrong size against the scene — was a design fault rather than a tuning one. The old `resizeEntity` mapped a cell's depth byte through a fixed `0.1 + t * 0.9` ramp across a global 100–255 range, then multiplied by a per-room `scalingPlayerSize` that was simultaneously being used to correct the room's character size *and* to compensate for the room painting only part of that byte range. The two jobs fought each other: the player was 9.8 px tall at the back of Market Street and 420 px at the front of the Den, a 43x spread across the game, with within-room near-to-far ratios from 1.77x to 10x.

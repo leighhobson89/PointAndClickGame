@@ -4,19 +4,19 @@ Generated 2026-09-14 by `npm run report:assets`. Do not edit by hand.
 
 The stage is 832x448 (aspect 1.8571). Budgets are defined in [art-bible.md](art-bible.md) and enforced by `scripts/asset-manifest.mjs --check`.
 
-**167 shipped images totalling 38.1 MB**, out of 305 images totalling 70.2 MB in `resources/`.
+**167 shipped images totalling 38.1 MB**, out of 408 images totalling 108.2 MB in `resources/`.
 
 ## Weight and budget by role
 
 | Role | Files | Total bytes | Over budget | Orphaned |
 | --- | ---: | ---: | ---: | ---: |
-| Reference / working image (not shipped) | 109 | 31.5 MB | 0 | 0 |
+| Reference / working image (not shipped) | 212 | 69.5 MB | 0 | 0 |
 | Room background | 24 | 28.0 MB | 24 | 0 |
 | NPC sprite | 20 | 3.5 MB | 7 | 0 |
 | Object, world sprite | 59 | 2.9 MB | 18 | 7 |
 | Object, inventory icon | 22 | 1.2 MB | 22 | 0 |
 | Room foreground / occluder | 8 | 0.9 MB | 4 | 0 |
-| Player animation frame | 28 | 0.8 MB | 2 | 0 |
+| Player animation frame | 28 | 0.8 MB | 2 | 28 |
 | UI layout frame | 2 | 0.7 MB | 2 | 2 |
 | Authoring walk-grid overlay | 28 | 0.5 MB | 0 | 0 |
 | Layered source art (not shipped) | 1 | 0.0 MB | 0 | 0 |
@@ -134,19 +134,47 @@ Byte-identical files. Each group should become one asset with the other IDs alia
 
 ## Orphaned shipped assets
 
-9 images sit in a shipped folder but no room, object, NPC, or player frame references them, totalling 1.3 MB.
+37 images sit in a shipped folder but no room, object, NPC, or player frame references them, totalling 2.1 MB.
 
 | Asset | Role | Size | Bytes |
 | --- | --- | --- | ---: |
 | `ui.border_left` | layout | 410x1920 | 358 KB |
 | `ui.border_right` | layout | 410x1920 | 358 KB |
+| `player.still_right` | player | 800x1500 | 249 KB |
+| `player.still_left` | player | 800x1500 | 247 KB |
 | `obj.paperScrawledOnWorld` | objectWorld | 660x567 | 152 KB |
 | `obj.pileOfBooks` | objectWorld | 660x567 | 137 KB |
 | `obj.parrotBranch` | objectWorld | 485x266 | 106 KB |
 | `obj.keyDen` | objectWorld | 660x567 | 104 KB |
 | `obj.barn_Exit_StablesClosed` | objectWorld | 356x136 | 49 KB |
+| `player.move1_down` | player | 200x375 | 45 KB |
+| `player.move3_down` | player | 200x375 | 41 KB |
+| `player.move1_up` | player | 200x375 | 37 KB |
+| `player.move3_up` | player | 200x375 | 33 KB |
 | `obj.milkInBowlWorld` | objectWorld | 200x198 | 21 KB |
+| `player.move2_down` | player | 200x375 | 11 KB |
+| `player.still_down` | player | 200x375 | 11 KB |
+| `player.move7_right` | player | 200x375 | 9 KB |
+| `player.move7_left` | player | 200x375 | 9 KB |
+| `player.move2_up` | player | 200x375 | 8 KB |
+| `player.still_up` | player | 200x375 | 8 KB |
+| `player.move2_right` | player | 200x375 | 8 KB |
+| `player.move8_right` | player | 200x375 | 8 KB |
+| `player.move4_right` | player | 200x375 | 8 KB |
+| `player.move8_left` | player | 200x375 | 8 KB |
+| `player.move4_left` | player | 200x375 | 8 KB |
+| `player.move9_right` | player | 200x375 | 8 KB |
 | `obj.barn_Exit_StablesOpen` | objectWorld | 47x136 | 8 KB |
+| `player.move3_right` | player | 200x375 | 7 KB |
+| `player.move9_left` | player | 200x375 | 7 KB |
+| `player.move1_right` | player | 200x375 | 7 KB |
+| `player.move3_left` | player | 200x375 | 7 KB |
+| `player.move5_right` | player | 200x375 | 7 KB |
+| `player.move1_left` | player | 200x375 | 7 KB |
+| `player.move6_right` | player | 200x375 | 7 KB |
+| `player.move5_left` | player | 200x375 | 7 KB |
+| `player.move6_left` | player | 200x375 | 6 KB |
+| `player.move2_left` | player | 200x375 | 6 KB |
 
 ## Character scale against the player
 

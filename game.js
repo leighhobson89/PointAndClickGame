@@ -9,18 +9,45 @@ import { contextualVerbForTarget, createCommandIntent } from './src/domain/comma
 import { resolveCellTarget } from './src/domain/navigation/navigation.mjs';
 import { buildDepthField, buildRoomScaleProfiles, sampleDepthByte, scaledEntitySize } from './src/domain/navigation/depth-scale.mjs';
 
-// The walk frames are authored on a 200x375 canvas. Drawing them to any other
-// ratio squashes every frame, which the previous 65x140 box did by 14%.
+// The player's logical box: what the character occupies for depth sampling,
+// edge collision and grid coverage. It is deliberately narrower than the art.
 const PLAYER_SPRITE_ASPECT = 200 / 375;
 
-// The side walk is drawn from nine frames and the front and back walks from
-// three. That asymmetry is an art gap rather than a timing choice, so the
-// cadence is expressed once, as the length of one complete there-and-back
-// cycle, and each direction derives its own frame hold from it.
-const HORIZONTAL_WALK_FRAMES = 9;
-const VERTICAL_WALK_FRAMES = 3;
-const WALK_CYCLE_TICKS = 64;
-const WALK_CONTACT_FRAME_DAMPING = 0.9;
+// The walk frames are painted on a 280x375 canvas, which is wider than the
+// logical box because a side-on stride throws the arms and legs roughly twice
+// as wide as a front-on one. The canvas has to hold the widest pose at full
+// height, or the pose has to be shrunk to fit — and shrinking it is exactly
+// what used to make the character pump in size as it walked sideways.
+//
+// Keeping the two apart means the art got its room back without moving a
+// single gameplay boundary. Drawing to any other ratio squashes every frame.
+const PLAYER_ART_ASPECT = 280 / 375;
+
+// Section 2 supplies nine painted movement poses in every direction, and they
+// are one step: frame 1 plants the leading foot, frames 5 and 6 pass the legs,
+// and frame 9 strikes the heel that becomes frame 1's plant again. The set is
+// therefore a loop and is played straight through, 1 to 9 and round.
+//
+// It used to ping-pong — 1 to 9, then 8 back down to 2 — which ran the second
+// half of every cycle backwards. Walking towards or away from the camera that
+// is nearly invisible, because those frames barely move the legs at all. Side
+// on it is a moonwalk, and it was the other half of why the sideways walk
+// looked wrong.
+const WALK_FRAMES = 9;
+
+// How far the character travels in one nine-frame step, as a fraction of its
+// drawn height.
+//
+// The cycle is driven by distance covered, not by ticks elapsed. A fixed tick
+// cadence cannot stay planted, because the player's speed is scaled by depth:
+// the same 64-tick cycle carried a near character a long way and a far one
+// barely anywhere, so the feet skated in one direction and marked time in the
+// other. Pacing the cycle off distance, against a stride that scales with the
+// character's own height, makes a step cover the same share of the character's
+// body at every depth, and the feet stay where they are planted.
+//
+// The value is a normal human step: a little under half of standing height.
+const WALK_STRIDE_PER_HEIGHT = 0.45;
 
 export let entityPaths = {};
 let firstDraw = true;
@@ -230,6 +257,9 @@ async function movePlayerTowardsTarget() {
         setPlayerMovementStatus(['still', `${getPlayerDirection()}`]);
         player.activeSprite = `still_${getPlayerDirection()}`;
         setPlayerObject('activeSprite', player.activeSprite);
+        // Standing still rewinds the cycle, so the next walk starts on the
+        // planted contact pose instead of halfway through a swing.
+        setPlayerObject('walkPhase', 0);
         return false;
     }
 
@@ -296,50 +326,41 @@ async function movePlayerTowardsTarget() {
 
     let collisionEdgeCanvas = checkEdgeCollision(player, targetX);
 
+    // Facing follows whichever axis the character is actually travelling along.
+    //
+    // The rule here used to set a horizontal facing and then let any vertical
+    // component overwrite it outright, so a path with even a slight diagonal
+    // flicked the character between a side pose and a back pose from one tick
+    // to the next. The walk frames were being swapped correctly and the
+    // direction underneath them was not.
+    //
+    // FACING_BIAS makes the current facing harder to leave than to keep, so a
+    // path running near 45 degrees settles on one direction instead of flapping
+    // between two every time the dominant axis changes by a pixel.
+    const FACING_BIAS = 1.3;
+    const dx = targetX - player.xPos;
+    const dy = targetY - player.yPos;
     let direction = '';
 
-    if (Math.abs(player.xPos - targetX) > 0 || Math.abs(player.yPos - targetY) > 0) {
-        if (targetX > player.xPos) direction = 'right';
-        else if (targetX < player.xPos) direction = 'left';
-        if (targetY > player.yPos) direction = 'down';
-        else if (targetY < player.yPos) direction = 'up';
+    if (dx !== 0 || dy !== 0) {
+        const facingIsHorizontal = getPlayerDirection() === 'left' || getPlayerDirection() === 'right';
+        const horizontalWins = facingIsHorizontal
+            ? Math.abs(dx) * FACING_BIAS >= Math.abs(dy)
+            : Math.abs(dx) >= Math.abs(dy) * FACING_BIAS;
+
+        if (dx !== 0 && (horizontalWins || dy === 0)) direction = dx > 0 ? 'right' : 'left';
+        else if (dy !== 0) direction = dy > 0 ? 'down' : 'up';
     }
 
     if (direction !== '') setPlayerDirection(direction);
 
     const movementStatus = getPlayerMovementStatus();
 
-    if (movementStatus[0] === 'moving') {
-        player.frameCount++;
-        setPlayerObject('frameCount', player.frameCount);
-
-        const isHorizontal = direction === 'right' || direction === 'left';
-        const frameCount = isHorizontal ? HORIZONTAL_WALK_FRAMES : VERTICAL_WALK_FRAMES;
-
-        // One full there-and-back cycle takes the same wall-clock time in every
-        // direction. Deriving the hold from the cycle length keeps the side and
-        // front/back walks in step even though they are drawn from a different
-        // number of frames.
-        const totalFrames = (frameCount * 2) - 2;
-        const frameSpeed = Math.max(1, Math.round(WALK_CYCLE_TICKS / totalFrames));
-        const animationIndex = Math.floor(player.frameCount / frameSpeed) % totalFrames;
-        const isReversed = animationIndex >= frameCount;
-        const spriteFrame = isReversed
-            ? frameCount - (animationIndex - frameCount + 1)
-            : animationIndex + 1;
-
-        // A small dip on the contact frames reads as weight shifting onto the
-        // leading foot. It scales the paced speed rather than replacing it, so
-        // the room's speed setting and the depth pacing both survive the gait.
-        const isContactFrame = spriteFrame === 3 || spriteFrame === 5 || spriteFrame === 7;
-        setPlayerObject('speed', pacedSpeed * (isContactFrame ? WALK_CONTACT_FRAME_DAMPING : 1));
-
-        if (player.frameCount % frameSpeed === 0) {
-            const spriteType = `move${spriteFrame}`;
-            player.activeSprite = `${spriteType}_${direction}`;
-            setPlayerObject('activeSprite', player.activeSprite);
-        }
-    }
+    // Where the character stood before this tick moved it. The walk cycle is
+    // advanced from the distance actually covered, so it has to be measured
+    // after the move rather than predicted before it.
+    const steppedFromX = player.xPos;
+    const steppedFromY = player.yPos;
 
     const speed = getPlayerObject().speed;
 
@@ -353,6 +374,22 @@ async function movePlayerTowardsTarget() {
         player.yPos += (player.yPos < targetY) ? speed : -speed;
     } else {
         player.yPos = targetY;
+    }
+
+    if (movementStatus[0] === 'moving' && direction !== '') {
+        const travelled = Math.hypot(player.xPos - steppedFromX, player.yPos - steppedFromY);
+        const strideLength = Math.max(1, player.height * WALK_STRIDE_PER_HEIGHT);
+
+        // Phase is kept as a fraction of one step rather than as a frame index,
+        // so a tick that covers a third of a frame is not rounded away. That is
+        // what stops the gait stuttering when the character is small and slow.
+        let walkPhase = (player.walkPhase ?? 0) + (travelled / strideLength);
+        walkPhase -= Math.floor(walkPhase);
+        setPlayerObject('walkPhase', walkPhase);
+
+        const spriteFrame = Math.min(WALK_FRAMES, Math.floor(walkPhase * WALK_FRAMES) + 1);
+        player.activeSprite = `move${spriteFrame}_${direction}`;
+        setPlayerObject('activeSprite', player.activeSprite);
     }
 
     if (Math.abs(player.xPos - targetX) < speed && Math.abs(player.yPos - targetY) < speed) {
@@ -403,11 +440,6 @@ async function movePlayerTowardsTarget() {
 
     setPlayerObject('xPos', player.xPos);
     setPlayerObject('yPos', player.yPos);
-
-    if (player.frameCount >= 1000) {
-        player.frameCount = 0;
-        setPlayerObject('frameCount', player.frameCount);
-    }
 
     return updatedTrackingGrid;
 }
@@ -738,10 +770,14 @@ const imageCache = {};
 
 function drawPlayer(ctx) {
     const player = getPlayerObject();
-    const playerXStart = player.xPos;
     const playerYStart = player.yPos + player.height;
-    const playerWidth = player.width;
     const playerHeight = player.height;
+
+    // The art canvas is wider than the logical box, so the frame is drawn about
+    // the box's centre line rather than from its left edge. Feet, depth and
+    // collision all stay on the logical box; only the pixels spread wider.
+    const playerWidth = playerHeight * PLAYER_ART_ASPECT;
+    const playerXStart = player.xPos + ((player.width - playerWidth) / 2);
 
     const activeSpriteKey = player.activeSprite;
     const spriteUrl = player.sprites[activeSpriteKey];

@@ -110,11 +110,48 @@ function readJpegSize(buffer) {
     return null;
 }
 
+// A RIFF/WEBP container holds one of three chunk layouts. `VP8 ` is lossy,
+// `VP8L` lossless, and `VP8X` an extended header that states the canvas size
+// directly. Each stores its dimensions in a different place and width-first.
+function readWebpSize(buffer) {
+    if (buffer.length < 30) return null;
+    if (buffer.toString('ascii', 0, 4) !== 'RIFF' || buffer.toString('ascii', 8, 12) !== 'WEBP') return null;
+    const chunk = buffer.toString('ascii', 12, 16);
+
+    if (chunk === 'VP8X') {
+        // Three-byte little-endian values holding size minus one.
+        return {
+            width: buffer.readUIntLE(24, 3) + 1,
+            height: buffer.readUIntLE(27, 3) + 1,
+        };
+    }
+    if (chunk === 'VP8 ') {
+        // The 14-bit dimensions follow the three-byte start code 0x9d 0x01 0x2a.
+        if (buffer[23] !== 0x9d || buffer[24] !== 0x01 || buffer[25] !== 0x2a) return null;
+        return {
+            width: buffer.readUInt16LE(26) & 0x3fff,
+            height: buffer.readUInt16LE(28) & 0x3fff,
+        };
+    }
+    if (chunk === 'VP8L') {
+        if (buffer[20] !== 0x2f) return null;
+        // 14 bits of width then 14 bits of height, packed little-endian, each
+        // stored as size minus one.
+        const bits = buffer.readUInt32LE(21);
+        return {
+            width: (bits & 0x3fff) + 1,
+            height: ((bits >> 14) & 0x3fff) + 1,
+        };
+    }
+    return null;
+}
+
 function readImageSize(buffer, extension) {
     switch (extension) {
         case '.png': return readPngSize(buffer);
         case '.gif': return readGifSize(buffer);
         case '.psd': return readPsdSize(buffer);
+        case '.webp': return readWebpSize(buffer);
         case '.jpg':
         case '.jpeg': return readJpegSize(buffer);
         default: return null;
@@ -130,6 +167,10 @@ function classify(relativePath) {
     const folder = parts[1];
     const name = parts[parts.length - 1];
 
+    // The pre-export originals are kept so a restyle starts from the full
+    // painting, but they are not delivered and must not be budgeted.
+    if (folder === 'source-art') return 'sourceArt';
+
     // The debug room is deliberately excluded from shipped content by the
     // content validator, so it must not be counted against a delivery budget.
     if (folder === 'backgrounds') return /^debugRoom\./.test(name) ? 'reference' : 'background';
@@ -140,7 +181,9 @@ function classify(relativePath) {
     if (folder === 'mouse') return path.extname(name) === '.psd' ? 'sourceArt' : 'cursor';
     if (folder === 'layoutImages') return 'layout';
     if (folder === 'imageDump' || folder === 'briefs') return 'reference';
-    if (folder === 'objects') return /inv\.png$/i.test(name) || /Inv\.png$/.test(name) ? 'objectInventory' : 'objectWorld';
+    // Keyed on the `Inv` suffix rather than on the extension, so an icon stays
+    // an icon once it is re-exported from PNG to WebP.
+    if (folder === 'objects') return /inv\.[^.]+$/i.test(name) ? 'objectInventory' : 'objectWorld';
     return 'reference';
 }
 

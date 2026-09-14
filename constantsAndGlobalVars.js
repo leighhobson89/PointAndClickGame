@@ -55,36 +55,50 @@ export let playerObject = {
     xPos: 0,
     yPos: 0,
     activeSprite: "still_right",
-    frameCount: 0,
+    // How far through the nine-frame walk cycle the character is, as a
+    // fraction of one step. Advanced by distance covered, not by ticks.
+    walkPhase: 0,
     sprites: {
-        "still_up": "./resources/player/still_up.png",
-        "move1_up": "./resources/player/move1_up.png",
-        "move2_up": "./resources/player/move2_up.png",
-        "move3_up": "./resources/player/move3_up.png",
-        "still_down": "./resources/player/still_down.png",
-        "move1_down": "./resources/player/move1_down.png",
-        "move2_down": "./resources/player/move2_down.png",
-        "move3_down": "./resources/player/move3_down.png",
-        "still_left": "./resources/player/still_left.png",
-        "move1_left": "./resources/player/move1_left.png",
-        "move2_left": "./resources/player/move2_left.png",
-        "move3_left": "./resources/player/move3_left.png",
-        "move4_left": "./resources/player/move4_left.png",
-        "move5_left": "./resources/player/move5_left.png",
-        "move6_left": "./resources/player/move6_left.png",
-        "move7_left": "./resources/player/move7_left.png",
-        "move8_left": "./resources/player/move8_left.png",
-        "move9_left": "./resources/player/move9_left.png",
-        "still_right": "./resources/player/still_right.png",
-        "move1_right": "./resources/player/move1_right.png",
-        "move2_right": "./resources/player/move2_right.png",
-        "move3_right": "./resources/player/move3_right.png",
-        "move4_right": "./resources/player/move4_right.png",
-        "move5_right": "./resources/player/move5_right.png",
-        "move6_right": "./resources/player/move6_right.png",
-        "move7_right": "./resources/player/move7_right.png",
-        "move8_right": "./resources/player/move8_right.png",
-        "move9_right": "./resources/player/move9_right.png"
+        "still_up": "./resources/redesign/section-02-player/frames/still_up.png",
+        "move1_up": "./resources/redesign/section-02-player/frames/move1_up.png",
+        "move2_up": "./resources/redesign/section-02-player/frames/move2_up.png",
+        "move3_up": "./resources/redesign/section-02-player/frames/move3_up.png",
+        "move4_up": "./resources/redesign/section-02-player/frames/move4_up.png",
+        "move5_up": "./resources/redesign/section-02-player/frames/move5_up.png",
+        "move6_up": "./resources/redesign/section-02-player/frames/move6_up.png",
+        "move7_up": "./resources/redesign/section-02-player/frames/move7_up.png",
+        "move8_up": "./resources/redesign/section-02-player/frames/move8_up.png",
+        "move9_up": "./resources/redesign/section-02-player/frames/move9_up.png",
+        "still_down": "./resources/redesign/section-02-player/frames/still_down.png",
+        "move1_down": "./resources/redesign/section-02-player/frames/move1_down.png",
+        "move2_down": "./resources/redesign/section-02-player/frames/move2_down.png",
+        "move3_down": "./resources/redesign/section-02-player/frames/move3_down.png",
+        "move4_down": "./resources/redesign/section-02-player/frames/move4_down.png",
+        "move5_down": "./resources/redesign/section-02-player/frames/move5_down.png",
+        "move6_down": "./resources/redesign/section-02-player/frames/move6_down.png",
+        "move7_down": "./resources/redesign/section-02-player/frames/move7_down.png",
+        "move8_down": "./resources/redesign/section-02-player/frames/move8_down.png",
+        "move9_down": "./resources/redesign/section-02-player/frames/move9_down.png",
+        "still_left": "./resources/redesign/section-02-player/frames/still_left.png",
+        "move1_left": "./resources/redesign/section-02-player/frames/move1_left.png",
+        "move2_left": "./resources/redesign/section-02-player/frames/move2_left.png",
+        "move3_left": "./resources/redesign/section-02-player/frames/move3_left.png",
+        "move4_left": "./resources/redesign/section-02-player/frames/move4_left.png",
+        "move5_left": "./resources/redesign/section-02-player/frames/move5_left.png",
+        "move6_left": "./resources/redesign/section-02-player/frames/move6_left.png",
+        "move7_left": "./resources/redesign/section-02-player/frames/move7_left.png",
+        "move8_left": "./resources/redesign/section-02-player/frames/move8_left.png",
+        "move9_left": "./resources/redesign/section-02-player/frames/move9_left.png",
+        "still_right": "./resources/redesign/section-02-player/frames/still_right.png",
+        "move1_right": "./resources/redesign/section-02-player/frames/move1_right.png",
+        "move2_right": "./resources/redesign/section-02-player/frames/move2_right.png",
+        "move3_right": "./resources/redesign/section-02-player/frames/move3_right.png",
+        "move4_right": "./resources/redesign/section-02-player/frames/move4_right.png",
+        "move5_right": "./resources/redesign/section-02-player/frames/move5_right.png",
+        "move6_right": "./resources/redesign/section-02-player/frames/move6_right.png",
+        "move7_right": "./resources/redesign/section-02-player/frames/move7_right.png",
+        "move8_right": "./resources/redesign/section-02-player/frames/move8_right.png",
+        "move9_right": "./resources/redesign/section-02-player/frames/move9_right.png"
     }
 };
 
@@ -322,32 +336,7 @@ export const arrayOfGameImages = [
     "./resources/npcs/womanLostMirrorRight.png",
 
     //PLAYER
-    "./resources/player/still_up.png",
-    "./resources/player/move1_up.png",
-    "./resources/player/move2_up.png",
-    "./resources/player/still_down.png",
-    "./resources/player/move1_down.png",
-    "./resources/player/move2_down.png",
-    "./resources/player/still_left.png",
-    "./resources/player/move1_left.png",
-    "./resources/player/move2_left.png",
-    "./resources/player/move3_left.png",
-    "./resources/player/move4_left.png",
-    "./resources/player/move5_left.png",
-    "./resources/player/move6_left.png",
-    "./resources/player/move7_left.png",
-    "./resources/player/move8_left.png",
-    "./resources/player/move9_left.png",
-    "./resources/player/still_right.png",
-    "./resources/player/move1_right.png",
-    "./resources/player/move2_right.png",
-    "./resources/player/move3_right.png",
-    "./resources/player/move4_right.png",
-    "./resources/player/move5_right.png",
-    "./resources/player/move6_right.png",
-    "./resources/player/move7_right.png",
-    "./resources/player/move8_right.png",
-    "./resources/player/move9_right.png",
+    ...Object.values(playerObject.sprites),
 
     //MOUSEPOINTER
     "./resources/mouse/mouseClickInteresting.png",
@@ -1586,12 +1575,6 @@ export function getPlayerMovementStatus() {
 export function getActivePlayerSprite() {
     const player = getPlayerObject();
     return player.sprites[player.activeSprite];
-}
-
-export function setActivePlayerSprite(direction, isMoving) {
-    const player = getPlayerObject();
-    const movementState = isMoving ? (player.activeSprite === `move1_${direction}` ? 'move2' : 'move1') : 'still';
-    setPlayerObject('activeSprite', `${movementState}_${direction}`);
 }
 
 export function startCanonicalSession() {

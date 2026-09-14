@@ -46,9 +46,11 @@ const GRID_HEIGHT = 60;
 const CELL_WIDTH = STAGE_WIDTH / GRID_WIDTH;
 const CELL_HEIGHT = STAGE_HEIGHT / GRID_HEIGHT;
 
-// The walk frames are authored on a 200x375 canvas. The player's drawn size
-// must keep that ratio or every frame is squashed.
-const SPRITE_ASPECT = 200 / 375;
+// These sheets place the frame images themselves, so they need the art canvas
+// ratio, not the narrower logical box the game uses for collision and depth.
+// The walk frames are painted on a 280x375 canvas; drawing them to any other
+// ratio squashes every frame.
+const SPRITE_ASPECT = 280 / 375;
 
 const readJson = (relative) => JSON.parse(fs.readFileSync(path.join(ROOT, relative), 'utf8'));
 

@@ -19,15 +19,30 @@ Acceptance: a new player can progress from the Library Foyer to the Map without 
 
 The art direction, the art bible, the asset manifest, the contact sheets, and the character scale mechanism are delivered and recorded in [archive/master-checklist-completed.md](archive/master-checklist-completed.md). What is left is the art production itself, the export pipeline, the audio, and the profiling.
 
-- [ ] Re-export the seven stretched backgrounds at the stage aspect so rooms stop distorting every object in them (BUG-041).
-- [ ] Repaint the Den from the standard eye-height camera and bring its authored heights into the interior band (BUG-042).
-- [ ] Redraw the player's side idle poses on the walk canvas in the walk finish (BUG-039), and author the missing front and back walk frames (BUG-040).
-- [ ] Re-author the three human NPCs drawn at the wrong scale beside the player — carpenter 2.65x, woman-lost-mirror 1.74x, librarian 0.57x (BUG-044).
-- [ ] Give the player and free-standing props a contact shadow, without which correct scaling still reads as floating.
-- [ ] Select and approve one gold-standard room and player/NPC interaction, then normalise complete rooms without shipping partially mixed styles. **Leigh's approval; automation cannot close this.**
+**The painting is the gate.** Most of what follows is redrawing, which no automated pass can produce. The proportion work is measured and ready but is deliberately held behind it, so nothing is proportioned against art that is about to change. The order below reflects that: the mechanical items can proceed now, the rest wait on the brush.
+
+- [x] Select and approve the gold standard the rest are normalised towards. **River Crossing** for exteriors and **Kitchen** for interiors, approved by Leigh and recorded in [art-bible.md](art-bible.md).
+- [x] Decide which of the player's three finishes survives. The **painted** finish, approved by Leigh; this reverses BUG-039's original direction.
+- [x] Decide how off-aspect rooms are corrected. **Re-composed at 832x448 during each room's restyle**, approved by Leigh — not cropped, not extended, not stretched.
+
+Mechanical, and not blocked on painting:
+
 - [ ] Create a reproducible export/optimisation pipeline — painted scenery to WebP, icons cropped for their slot, duplicates aliased to one semantic ID — and bring the shipped set from 38.1 MB inside budget (BUG-017).
 - [ ] Record `provenance` and `licence` for all 167 shipped assets; the manifest carries the fields and they are all still `null`.
-- [ ] Implement settings-aware music, scene ambience, location/milestone transitions, dialogue/character cues, interaction SFX, subtitles/captions, mixer, mute, and persistence (BUG-024).
+- [ ] Re-export each NPC's directional and state sprites onto one shared canvas per NPC, so every sprite is undistorted rather than only the active one (BUG-046).
+
+Blocked on painting:
+
+The image-generation and repaint sequence for this block is split into reviewable packages in [art-redesign-production-plan.md](art-redesign-production-plan.md).
+
+- [ ] Re-compose the off-aspect backgrounds at 832x448 as part of each room's restyle (BUG-041). Dead Tree and Research Room are under 2% off and need only a uniform re-export.
+- [ ] Repaint the Den from the standard eye-height camera and bring its authored heights into the interior band (BUG-042).
+- [ ] Draw the player's character model sheet in the painted finish, then author every frame against it (BUG-039) including readable front and back walk cycles (BUG-040). **Candidate in game:** a model sheet and 40 generated frames supply four idles plus nine poses per direction without replacing the legacy files. Registration, key-edge cleanup and playback are measured and done; re-authoring the front and back poses, human paint-over, the byte budget, and provenance/licence review remain before acceptance.
+- [ ] Restyle the three hand-drawn rooms — Library Foyer, Market Street, Back Alley — keeping each layout recognisably the same place, and the Sewer, which is the fourth style outlier.
+- [ ] Re-author NPC proportions against the repainted characters, from the values held in [bugs.md](bugs.md) (BUG-044), then add the two assertions written for that pass.
+- [ ] Re-author every placed object's dimensions so its drawn box keeps its sprite's aspect (BUG-045).
+- [ ] Give the player and free-standing props a contact shadow, without which correct scaling still reads as floating.
+- [ ] Normalise complete rooms against the gold standard without shipping partially mixed styles.
 - [ ] Profile startup, image decode, steady/scrolling/animated frame time, allocations, and event/log noise; remove the remaining per-frame debug logging from production (BUG-016).
 - [ ] Perform room-by-room in-game visual, animation, audio, readability, and performance acceptance against the art bible's acceptance gate.
 

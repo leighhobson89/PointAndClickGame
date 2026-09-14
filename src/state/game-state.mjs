@@ -10,7 +10,9 @@ const DEFAULT_PLAYER = Object.freeze({
     xPos: 0,
     yPos: 0,
     activeSprite: 'still_right',
-    frameCount: 0,
+    // How far through the nine-frame walk cycle the character is, as a
+    // fraction of one step. Advanced by distance covered, not by ticks.
+    walkPhase: 0,
     sprites: {},
 });
 
