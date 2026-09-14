@@ -1,5 +1,29 @@
 # Living documentation changelog
 
+## 2026-09-14 — Ten UI themes and short-screen fit
+
+- Added a persistent UI-theme selector with ten palettes: Mountain, River, Arctic, Midnight, Forest, Sunset, Desert, Royal, Rose, and the original brown Storybook treatment. Mountain is the new default. Themes change presentation tokens only; no room art, story, puzzle, navigation, or dialogue content is involved.
+- Localised the theme selector and all ten names in English, Spanish, German, Italian, and French. Theme selection travels through the same validated preference and canonical save-state paths as the other Section 7 settings.
+- Replaced remaining brown-specific panel, button, stage-edge, inventory, and highlight colours with theme-derived tokens so the selector changes the whole UI rather than just the page background. High-contrast mode remains an independent accessibility override.
+- Reduced the stage calculation by 1.25rem (roughly three percent at 1280×720) and added a vertical-overflow assertion to the supported wide-screen matrix, eliminating the small scrollbar without changing the 832×448 world aspect ratio. The tuning values are named root variables: `--ui-height-reserve`, `--ui-max-width`, `--ui-offset-x`, `--ui-offset-y`, `--ui-shell-padding`, and `--ui-shell-gap`.
+
+Test evidence: `npm.cmd run check` passed dependency/content validation and all 62 Node tests. The rendering/layout area passed 2/2 after checking zero wide-screen overflow at 1280×720, 1366×768, 1440×900, and 1920×1080 plus the existing tablet, zoom, localisation, contrast, motion, and touch cases. The accessibility area passed 3/3 after selecting all ten themes, proving ten distinct token palettes, persisting Midnight through reload, and rechecking all-room semantic targets.
+
+Evidence logs: `e2e/logs/2026-09-14T07-10-09-114Z-rendering-layout.log` (2/2), `e2e/logs/2026-09-14T07-08-26-667Z-accessibility.log` (3/3), and `e2e/logs/2026-09-14T07-10-55-484Z-dialogue.log` (11/11).
+
+## 2026-09-14 — Complete responsive UI and accessible input overhaul (Section 7)
+
+- Rebuilt the menu and in-game HUD as one storybook adventure-console system with explicit colour, typography, spacing, radius, border, shadow, motion, focus, reduced-motion, and high-contrast tokens. Removed the Bootstrap/jQuery/Popper runtime presentation dependencies; the remaining LZString CDN is still tracked by the offline/CSP work.
+- Fixed the renderer to the authored 832×448 logical stage and moved scaling to the responsive stage frame. Pointer input uses the existing deterministic inverse transform, so viewport changes no longer rewrite world coordinates. Stage, canvas, semantic hotspots, transition overlay, and vignette have explicit layers.
+- Added a separate semantic hotspot model and DOM mirror. Exit/object/NPC rectangles have stable IDs, localised names, scene descriptions, focus states, optional subtle/strong reveal, and live announcements. The eight narrow legacy exits receive centred 3×3-cell/44-pixel semantic targets without changing the walk grid or authored exit geometry; the generated report now has zero minimum-size warnings.
+- Added complete input parity: keyboard verb shortcuts and traversal, inventory/dialogue arrows, Escape/back, no-hover touch controls, real input-mode switching, double-click fast walk, skip, and optional gamepad focus/activation. Controls enforce a 44×44-pixel minimum.
+- Added persistent settings for locale, text speed, master/music/effects volume, subtitles, reduced motion, high contrast, hotspot help/intensity, input mode, and classic/contextual verbs. Preferences are validated both in local storage and in canonical save state.
+- Reworked graph-driven dialogue presentation without changing its content. A seven-choice librarian node now shows three ordinary choices plus its persistent exit and scrolls through the remaining authored choices with the existing arrows, closing BUG-038 while retaining every original choice, link, condition, action, and consequence.
+- Added layout/accessibility coverage for 1280×720, 1440×900, 1920×1080, 834×1112 touch, 200% text sizing, all five locales, long strings, high contrast, reduced motion, keyboard-only use, settings focus/persistence, and named semantic controls in all 18 rooms. Pixel scene baselines remain approval-gated until Section 8 standardises the source art.
+- Moved completed Section 7 work and BUG-014, BUG-015, BUG-029, and BUG-038 into their archive documents. No story text, room topology, puzzle data, or dialogue graph content changed.
+
+Test evidence: `npm.cmd run check` passed dependency boundaries (33 modules, no cycles), content validation (18 rooms, 42 objects, 10 NPCs, 105 assets), and all 62 Node tests. `node tests all` passed 69/69 browser journeys in 168.959 seconds; log `e2e/logs/2026-09-14T00-21-20-151Z-all.log`. After tightening edge-clamped 44-pixel hotspot assertions, `node tests accessibility rendering-layout navigation` passed 12/12 in 30.669 seconds; log `e2e/logs/2026-09-14T06-40-52-016Z-accessibility+rendering-layout+navigation.log`. The final hotspot-intensity settings pass then completed 5/5 accessibility/layout tests in 9.879 seconds; log `e2e/logs/2026-09-14T06-45-00-255Z-accessibility+rendering-layout.log`.
+
 ## 2026-09-14 — Documentation split into a done side and a to-do side
 
 - Added `docs/archive/`, the done side of the living documentation. Each live document now has one archive file holding the parts already implemented, so a live document can be read as a to-do list rather than a mixture of history and plan.

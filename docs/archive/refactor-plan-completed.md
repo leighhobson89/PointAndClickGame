@@ -78,3 +78,7 @@ Exit criteria met: `npm run validate:content` covers all shipped content and run
 ## Phase 4 — the debug and test half
 
 Implementation status (2026-09-13): `window.__GAME_TEST__` drives structured verb/target intents, validated teleports, movement and text speed, inventory, dialogue inspection, and puzzle milestones without touching translated copy, and the debug panel is a second presentation of the same controller. The rest of Phase 4 — the logical stage, pointer transforms at multiple viewports, semantic hotspots, rendering layers, and the DOM mirror — remains in the live plan.
+
+## Phase 4 — rendering and input adapters completed
+
+Implementation status (2026-09-14): the stage now has a fixed 832×448 logical coordinate system and deterministic inverse pointer mapping at every CSS size. Runtime grid codes project to independent labelled semantic rectangles and anchors in a DOM layer without mutating walk cells. Stage, hotspot, transition, and vignette layers have explicit ownership; caching remains profiling-gated. Pointer, keyboard, touch, controller, assistive controls, and the debug API all reach the existing stable action path. The full 69-journey browser suite and 62 Node tests pass.

@@ -39,9 +39,9 @@ Scenario-driven tests open the debug server through `openDebugGame(page)` in `e2
 
 ## Where the suite stands
 
-60 Node tests and 61 browser journeys. Latest full proof, run `2026-09-13T22-57-44-719Z-all`, recorded 2026-09-14: `node tests all` passed 61/61 in 154.365 seconds.
+62 Node tests and 69 browser journeys. Latest full proof, run `2026-09-14T00-21-20-151Z-all`: `node tests all` passed 69/69 in 168.959 seconds.
 
-**The margin under the gate is down to 26 seconds, and that is now the constraint on new browser coverage.** A browser test that needs a milestone state should arrange it with a scenario and `setMovementSpeed('instant')` rather than replay a journey another test already covers. The next addition of any size should be paired with trimming an existing journey, or the full suite stops being runnable under the gate and every future run becomes three areas at a time.
+**The margin under the gate is down to 11 seconds, and that is now the constraint on new browser coverage.** A browser test that needs a milestone state should arrange it with a scenario and `setMovementSpeed('instant')` rather than replay a journey another test already covers. The next addition of any size should be paired with trimming an existing journey, or the full suite stops being runnable under the gate and every future run becomes three areas at a time.
 
 Two properties of the current suite are worth preserving as it grows.
 
@@ -57,6 +57,8 @@ Fast Node tests for pure rules:
 
 - Pathfinding, costs, unreachable targets, and nearest interaction anchors.
 - Pointer-to-grid/world transforms at boundaries and scaled viewports.
+- Semantic hotspot projection, minimum targets, stable labels, and no walk-grid mutation.
+- Player preference validation, persistence, clamping, and corrupt-storage recovery.
 - Structured verb intent and two-target command rules.
 - Inventory add/remove/combine/use and idempotency.
 - Puzzle prerequisites/effects and reachability.
@@ -93,15 +95,13 @@ Functional area ownership, and what each still owes:
 | `startup` | Approved product title and menu copy |
 | `navigation` | Anchors and return positions at non-default viewports |
 | `localisation` | Long-text layout, mid-session switching under a strict CSP |
-| `dialogue` | The non-library conversations, once they are graphs (BUG-011); choice scrolling (BUG-038) |
+| `dialogue` | The non-library conversations, once they are graphs (BUG-011) |
 | `inventory` | Combine, remove, and restore through real clicks |
 | `verbs` | Two-target cancel and error feedback for all nine verbs |
 | `puzzles` | Each dependency chain end-to-end with real clicks, rather than at fact level |
 | `save-load` | Covered |
 | `game-state` | Covered |
 | `animation-cutscenes` | Scenarios for the major cutscene branches; skip behaviour |
-| `rendering-layout` | Stage scaling, layers, representative screenshots and locales |
-| `accessibility` | Keyboard, focus, names/roles, announcements, zoom and touch — the whole area |
 
 ## Using scenarios
 
@@ -165,5 +165,3 @@ Use stable `data-testid` only where roles/text/stable domain identifiers are ins
 2. Inventory combine/remove/restore and two-target verb feedback.
 3. The remaining conversations, once they are explicit graphs.
 4. Animation transitions and cutscene skip.
-5. Responsive visuals across the layout matrix.
-6. Accessibility: keyboard, focus, roles, announcements, zoom, touch.

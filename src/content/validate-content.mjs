@@ -134,7 +134,7 @@ function nearestNavigableCell(gridIds, grids, position, radius = 12) {
     });
 }
 
-function exitHotspot(roomId, exitId, gridIds, grids, labels) {
+function exitHotspot(roomId, exitId, gridIds, grids, labels, policy = {}) {
     for (const gridId of gridIds) {
         const cells = [];
         const grid = grids[gridId];
@@ -149,19 +149,28 @@ function exitHotspot(roomId, exitId, gridIds, grids, labels) {
         const maxX = Math.max(...cells.map((cell) => cell.x));
         const minY = Math.min(...cells.map((cell) => cell.y));
         const maxY = Math.max(...cells.map((cell) => cell.y));
-        const width = maxX - minX + 1;
-        const height = maxY - minY + 1;
+        const sourceWidth = maxX - minX + 1;
+        const sourceHeight = maxY - minY + 1;
+        const width = Math.max(sourceWidth, policy.minimumWidthCells ?? sourceWidth);
+        const height = Math.max(sourceHeight, policy.minimumHeightCells ?? sourceHeight);
+        const gridWidth = policy.gridWidth ?? 80;
+        const gridHeight = policy.gridHeight ?? 60;
+        const x = Math.min(Math.max(0, minX - Math.floor((width - sourceWidth) / 2)), gridWidth - width);
+        const y = Math.min(Math.max(0, minY - Math.floor((height - sourceHeight) / 2)), gridHeight - height);
         return {
             id: `${roomId}.${exitId}`,
             kind: 'exit',
             roomId,
-            x: minX,
-            y: minY,
+            x,
+            y,
             width,
             height,
             anchor: cells[Math.floor(cells.length / 2)],
             labels,
-            shape: cells.length === width * height ? 'rectangle' : 'grid polygon',
+            shape: sourceWidth === width && sourceHeight === height
+                ? (cells.length === width * height ? 'rectangle' : 'grid polygon')
+                : 'expanded semantic target',
+            sourceBounds: { x: minX, y: minY, width: sourceWidth, height: sourceHeight },
             variant: gridId,
         };
     }
@@ -359,7 +368,11 @@ export function validateContentBundle(bundle) {
             }
             const exitPresent = gridIds.some((gridId) => grids[gridId]?.some((row) => row.includes(exitId)));
             if (!exitPresent) errors.push(`${roomId}.${exitId} has no hotspot in its room grid or declared grid variants`);
-            const hotspot = exitHotspot(roomId, exitId, gridIds, grids, navigation?.[exit.connectsTo]);
+            const hotspot = exitHotspot(roomId, exitId, gridIds, grids, navigation?.[exit.connectsTo], {
+                ...contract.hotspots,
+                gridWidth: contract.grid.width,
+                gridHeight: contract.grid.height,
+            });
             if (hotspot) {
                 exitHotspots.push(hotspot);
                 if (hotspot.width < contract.hotspots.minimumWidthCells || hotspot.height < contract.hotspots.minimumHeightCells) {
@@ -514,7 +527,7 @@ export function formatHotspotReport(result, contract) {
         '',
         `Contract: \`${contract.contentVersion}\` (schema ${contract.schemaVersion})`,
         '',
-        `Minimum target: ${contract.hotspots.minimumWidthCells} x ${contract.hotspots.minimumHeightCells} grid cells. Rectangle anchors are derived at bottom-centre; authored polygon exits come from room grids/templates.`,
+        `Minimum target: ${contract.hotspots.minimumWidthCells} x ${contract.hotspots.minimumHeightCells} grid cells. Rectangle anchors are derived at bottom-centre; narrow authored exit polygons receive a separate centred semantic target without changing the walk grid.`,
         '',
         '| Room | ID | Shape | Bounds | Anchor | Accessible label (en) |',
         '| --- | --- | --- | --- | --- | --- |',

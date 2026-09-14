@@ -2,11 +2,11 @@
 
 Contract: `chapter1-world-v1` (schema 1)
 
-Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre; authored polygon exits come from room grids/templates.
+Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre; narrow authored exit polygons receive a separate centred semantic target without changing the walk grid.
 
 | Room | ID | Shape | Bounds | Anchor | Accessible label (en) |
 | --- | --- | --- | --- | --- | --- |
-| alley | alley.e1 | grid polygon | 48,30 2x5 | 49,31 | Den |
+| alley | alley.e1 | expanded semantic target | 48,30 3x5 | 49,31 | Den |
 | alley | alley.e2 | grid polygon | 28,51 28x9 | 34,57 | Market Street |
 | alley | npcSeedyLookingGuy | rectangle | 40,34 6x19 | 43,52 | Seedy Looking Guy |
 | alley | objectDoorToDen | rectangle | 47,29 4x7 | 49,35 | Big Solid Oak Door |
@@ -29,8 +29,8 @@ Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre
 | den | den.e1 | rectangle | 33,20 13x30 | 33,35 | Back Alley |
 | den | objectCrowbar | rectangle | 48,43 4x9 | 50,51 | Crowbar |
 | den | objectDoorDenInternal | rectangle | 31,17 16x34 | 39,50 | Den Exit Door |
-| house | house.e1 | rectangle | 70,53 4x1 | 72,53 | Sewer |
-| house | house.e2 | rectangle | 24,59 17x1 | 32,59 | Farm Track |
+| house | house.e1 | expanded semantic target | 70,52 4x3 | 72,53 | Sewer |
+| house | house.e2 | expanded semantic target | 24,57 17x3 | 32,59 | Farm Track |
 | house | objectManholeCover | rectangle | 69,49 5x6 | 71,54 | Manhole Cover |
 | house | objectPitchFork | rectangle | 11,40 4x11 | 13,50 | Pitch Fork |
 | kitchen | kitchen.e1 | grid polygon | 31,46 22x8 | 51,49 | Sewer |
@@ -39,8 +39,8 @@ Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre
 | largePileOfPoo | objectCarrot | rectangle | 33,47 3x9 | 34,55 | Carrot |
 | largePileOfPoo | objectGlove | rectangle | 31,40 4x11 | 33,50 | Old Red Glove |
 | largePileOfPoo | objectLargePileOfPoo | rectangle | 20,30 43x18 | 41,47 | Huge Pile Of Poo |
-| libraryFoyer | libraryFoyer.e1 | grid polygon | 38,33 2x13 | 39,38 | Research Room |
-| libraryFoyer | libraryFoyer.e2 | grid polygon | 50,33 2x26 | 51,45 | Market Street |
+| libraryFoyer | libraryFoyer.e1 | expanded semantic target | 38,33 3x13 | 39,38 | Research Room |
+| libraryFoyer | libraryFoyer.e2 | expanded semantic target | 50,33 3x26 | 51,45 | Market Street |
 | libraryFoyer | npcLibrarian | rectangle | 15,34 5x11 | 17,44 | Librarian |
 | libraryFoyer | objectDoorLibraryFoyerMarketStreet | rectangle | 49,32 5x28 | 51,59 | Library Exit Door |
 | libraryFoyer | objectDoorLibraryFoyerResearchRoom | rectangle | 37,32 4x15 | 39,46 | Wooden Door |
@@ -50,14 +50,14 @@ Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre
 | map | objectChapterOneMap | rectangle | 55,25 18x16 | 64,40 | World Map |
 | marketStreet | marketStreet.e1 | grid polygon | 45,33 4x6 | 47,36 | Road Into Town |
 | marketStreet | marketStreet.e2 | grid polygon | 57,34 8x7 | 58,39 | Back Alley |
-| marketStreet | marketStreet.e3 | rectangle | 38,36 2x4 | 38,38 | Carpenter Workshop |
-| marketStreet | marketStreet.e4 | grid polygon | 20,41 2x9 | 21,45 | Library Foyer |
+| marketStreet | marketStreet.e3 | expanded semantic target | 38,36 3x4 | 38,38 | Carpenter Workshop |
+| marketStreet | marketStreet.e4 | expanded semantic target | 20,41 3x9 | 21,45 | Library Foyer |
 | marketStreet | marketStreet.e5 | rectangle | 77,44 3x5 | 78,46 | Farm Track |
 | marketStreet | npcTownDog | rectangle | 40,50 5x8 | 42,57 | Dog |
 | marketStreet | objectDoorMarketStreetCarpenter | rectangle | 38,35 3x6 | 39,40 | Carpenter Workshop Entrance Door |
 | marketStreet | objectDoorMarketStreetLibraryFoyer | rectangle | 19,40 4x11 | 21,50 | Library Entrance Door |
 | researchRoom | objectIllegibleMap | rectangle | 25,16 6x13 | 28,28 | Illegible Map |
-| researchRoom | researchRoom.e1 | grid polygon | 20,58 39x2 | 31,59 | Library Foyer |
+| researchRoom | researchRoom.e1 | expanded semantic target | 20,57 39x3 | 31,59 | Library Foyer |
 | riverCrossing | objectStackOfWood | rectangle | 51,24 8x8 | 55,31 | Stack of Wood |
 | riverCrossing | objectSturdyAnchor | rectangle | 36,15 3x5 | 37,19 | Sturdy Anchor |
 | riverCrossing | objectSuspiciousFencePost | rectangle | 36,25 3x5 | 37,29 | Suspicious Fencepost |
@@ -79,14 +79,7 @@ Minimum target: 3 x 3 grid cells. Rectangle anchors are derived at bottom-centre
 
 ## Findings
 
-- libraryFoyer.e1 is smaller than the 3 x 3 target policy
-- libraryFoyer.e2 is smaller than the 3 x 3 target policy
-- marketStreet.e3 is smaller than the 3 x 3 target policy
-- marketStreet.e4 is smaller than the 3 x 3 target policy
-- researchRoom.e1 is smaller than the 3 x 3 target policy
-- alley.e1 is smaller than the 3 x 3 target policy
-- house.e1 is smaller than the 3 x 3 target policy
-- house.e2 is smaller than the 3 x 3 target policy
+- No target-size or legacy-grid warnings.
 
 All undeclared overlaps and out-of-bounds hotspots are validation errors, not report-only warnings.
 

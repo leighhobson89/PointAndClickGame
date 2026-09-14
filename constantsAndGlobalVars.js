@@ -385,6 +385,9 @@ export function setElements() {
         dialogueUpArrow: document.getElementById('dialogueScrollUp'),
         dialogueDownArrow: document.getElementById('dialogueScrollDown'),
         interactionInfo: document.getElementById('interactionInfo'),
+        announcements: document.getElementById('gameAnnouncements'),
+        sceneDescription: document.getElementById('sceneDescription'),
+        hotspotLayer: document.getElementById('hotspotLayer'),
         customCursor: document.querySelector('.custom-mouse'),
         customCursorImage: document.querySelector('.custom-mouse-image'),
         overlayCanvas: document.querySelector('.overlay-canvas'),
@@ -408,6 +411,11 @@ export function setElements() {
         journalTitle: document.getElementById('journalTitle'),
         journalProgress: document.getElementById('journalProgress'),
         journalBody: document.getElementById('journalBody'),
+        settingsPanel: document.getElementById('settingsPanel'),
+        openSettingsMenuButton: document.getElementById('openSettingsMenu'),
+        openSettingsGameButton: document.getElementById('openSettingsGame'),
+        closeSettingsButton: document.getElementById('closeSettings'),
+        skipSequenceButton: document.getElementById('skipSequence'),
         pauseResumeGameButton: document.getElementById('resumeGame'),
         canvas: document.getElementById('canvas'),
         canvasContainer: document.getElementById('canvasContainer'),
@@ -615,6 +623,7 @@ export function setLanguageChangedFlag(value) {
 export function resetAllVariables() {
     const currentState = gameStore.getState();
     const nextState = createInitialGameState({
+        ...currentState.settings,
         generation: currentState.session.generation,
         roomId: initialScreenId || INITIAL_GAME_ID_NORMAL,
         player: initialPlayerTemplate,
@@ -757,6 +766,7 @@ export function restoreGameStatus(gameState) {
             gameState = restored.presentation.mode;
             bridgeState = restored.quests.bridgeState;
             removedDialogueOptions = restored.dialogue.removedOptions;
+            if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('game-settings-restored', { detail: restored.settings }));
 
             resolve();
         } catch (error) {
@@ -771,6 +781,15 @@ export function setLocalization(value) {
 
 export function getLocalization() {
     return localization;
+}
+
+export function setPlayerSetting(setting, value) {
+    gameStore.dispatch(gameActions.setSetting(setting, value));
+    return value;
+}
+
+export function getPlayerSettings() {
+    return { ...gameStore.getState().settings };
 }
 
 export function setLanguage(value) {

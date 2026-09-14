@@ -1,5 +1,5 @@
 import { setQuestFact, getCurrentScreenId, setPendingEvents, getPendingEvents, getEarlyExitFromDialogue, setEarlyExitFromDialogue, getGameVisibleActive, getPlayerObject, setQuestPhaseNpc, setReadyToAdvanceNpcQuestPhase, setCurrentScrollIndexDialogue, setDialogueScrollCount, setDialogueTextClicked, getDialogueTextClicked, setDialogueOptionClicked, getDialogueOptionClicked, setDialogueOptionsScrollReserve, setCurrentDialogueRowsOptionsIds, getCurrentDialogueRowsOptionsIds, setCanExitDialogueAtThisPoint, setCurrentExitOptionRow, getCurrentExitOptionRow, setCurrentExitOptionText, getCanvasCellHeight, getCanvasCellWidth, setCurrentSpeaker, getInteractiveDialogueState, getCustomMouseCursor, setCustomMouseCursor, getColorTextPlayer, setTransitioningToDialogueState, getQuestPhaseNpc, getDialogueData, getNpcData, getLanguage, setRemovedDialogueOptions, getRemovedDialogueOptions, getElements, getDialogueScrollCount, getResolveDialogueOptionClick, getExitOptionIndex, getCurrentExitOptionText, setResolveDialogueOptionClick, getCurrentScrollIndexDialogue, getDialogueOptionsScrollReserve, getCanExitDialogueAtThisPoint, setExitOptionIndex } from "./constantsAndGlobalVars.js";
-import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow } from "./ui.js";
+import { hideDialogueArrows, showText, updateInteractionInfo, removeDialogueRow, addDialogueRow, showGraphDialogueChoices } from "./ui.js";
 import { localize } from "./localization.js";
 import { setGameState } from "./game.js"
 import { turnNpcForDialogue, executeInteractionEvent } from "./events.js";
@@ -53,13 +53,11 @@ async function runLibraryDialogue(npcId) {
         }
         if (node.type === 'choice') {
             removeDialogueRow(0);
-            const choice = await new Promise((resolve) => {
-                for (const option of node.choices) {
-                    addDialogueRow(resolveLibraryDialogueText(getDialogueData(), option.textKey, getLanguage()), option.id);
-                    const row = getElements().dialogueSection.lastElementChild;
-                    row.onclick = () => resolve(option);
-                }
-            });
+            const choice = await showGraphDialogueChoices(node.choices.map((option) => ({
+                id: option.id,
+                text: resolveLibraryDialogueText(getDialogueData(), option.textKey, getLanguage()),
+                value: option,
+            })));
             removeDialogueRow(0);
             await speakLine('player', resolveLibraryDialogueText(getDialogueData(), choice.textKey, getLanguage()));
             const advanced = advanceDialogue(libraryDialogueGraph, state, { choiceId: choice.id });

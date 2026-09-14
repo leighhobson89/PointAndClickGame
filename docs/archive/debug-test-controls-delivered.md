@@ -19,3 +19,7 @@ What the debug and test controls changed in the runtime when they landed, and th
 | Invalid state is rejected before rendering | Unknown room, unknown scenario, and impossible-fact cases leave room and checksum unchanged |
 | Production confirms `window.__GAME_TEST__` and the panel are absent | `debug-absent-in-production.spec.cjs` against the release server |
 | Scenario IDs and coverage mappings are documented in the relevant functional-area README | `e2e/README.md` and the area READMEs |
+
+## Input-mode controls consumed (2026-09-14)
+
+The viewport, text-scale, contrast, reduced-motion, and input-mode controls now change the real player UI. Pointer, keyboard, touch, and gamepad states alter hotspot availability and navigation instead of only setting document attributes. The responsive and accessibility browser suites cover these states through the ordinary controls.

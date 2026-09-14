@@ -8,6 +8,7 @@ import { advanceDialogue, createDialogueState, getDialogueNode, validateDialogue
 import { addInventoryItem, combineInventoryItems, inventoryQuantity, removeInventoryItem, useInventoryItem } from '../../src/domain/inventory/inventory.mjs';
 import { interpolateNamedTokens, resolveLocalizedValue } from '../../src/domain/localisation/localisation.mjs';
 import { findNearestWalkable, findPath, findPathWithFallback, movementCost, pointerToWorld, resolveCellTarget, resolveHotspot, resolveInteractionAnchor, worldToGrid } from '../../src/domain/navigation/navigation.mjs';
+import { collectSemanticHotspots } from '../../src/domain/navigation/hotspots.mjs';
 import { applyPuzzleAction, whyGateUnavailable, whyUnavailable } from '../../src/domain/puzzles/puzzles.mjs';
 import { finaliseLegacyWorld, migrateSave } from '../../src/domain/save/migrations.mjs';
 import { createSaveEnvelope } from '../../src/domain/save/save-format.mjs';
@@ -151,6 +152,31 @@ test('path rules cover costs, boundaries, fallback, pointer transforms, and sema
     assert.equal(resolveHotspot([{ id: 'book', x: 2, y: 3, width: 4, height: 5 }], { x: 3, y: 4 }).id, 'book');
     assert.deepEqual(resolveInteractionAnchor({ id: 'book' }, { book: { x: 4, y: 5 } }), { x: 4, y: 5 });
     assert.equal(resolveCellTarget('cnpcLibrarian', { roomId: 'library', npcs: { npcLibrarian: { interactable: { canHover: true } } } }).kind, 'npc');
+});
+
+test('canvas hotspots project to labelled semantic targets without changing the walk grid', () => {
+    const grid = [
+        ['w100', 'e1', 'e1', 'n'],
+        ['w100', 'oobjectBook', 'oobjectBook', 'n'],
+        ['w100', 'cnpcReader', 'cnpcReader', 'n'],
+    ];
+    const before = JSON.stringify(grid);
+    const hotspots = collectSemanticHotspots({
+        grid,
+        roomId: 'library',
+        locale: 'en',
+        navigation: {
+            library: { exits: { e1: { connectsTo: 'street' } } },
+            street: { en: 'Market Street' },
+        },
+        objects: { objectBook: { name: { en: 'Book' } } },
+        npcs: { npcReader: { name: { en: 'Reader' } } },
+    });
+    assert.equal(hotspots.length, 3);
+    assert.equal(hotspots.find((hotspot) => hotspot.kind === 'exit').width, 3);
+    assert.equal(hotspots.find((hotspot) => hotspot.kind === 'exit').height, 3);
+    assert.deepEqual(hotspots.map((hotspot) => hotspot.label).sort(), ['Book', 'Market Street', 'Reader']);
+    assert.equal(JSON.stringify(grid), before);
 });
 
 test('save migrations accept current and declared legacy saves only', () => {

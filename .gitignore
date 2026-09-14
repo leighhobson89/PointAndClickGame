@@ -13,6 +13,7 @@ playwright-report/
 test-results/
 test-reports/
 blob-report/
+.playwright-browsers/
 e2e/logs/*.log
 e2e/logs/*.json
 !e2e/logs/.gitkeep

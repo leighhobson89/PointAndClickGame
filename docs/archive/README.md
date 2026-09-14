@@ -14,6 +14,7 @@ Nothing here is deleted history. The wording is preserved as it was written, inc
 | [bugs — resolved register](bugs-resolved.md) | [bugs.md](../bugs.md) |
 | [debug and test controls — delivered](debug-test-controls-delivered.md) | [debug-test-controls.md](../debug-test-controls.md) |
 | [world and puzzles — resolved model](world-and-puzzles-resolved.md) | [world-and-puzzles.md](../world-and-puzzles.md) |
+| [UI and art direction — completed UI](ui-and-art-direction-completed.md) | [ui-and-art-direction.md](../ui-and-art-direction.md) |
 
 ## Rules for this folder
 

@@ -6,29 +6,16 @@ Refactor by creating tested seams around the running game. Do not pause developm
 
 Completed phases are recorded in [archive/refactor-plan-completed.md](archive/refactor-plan-completed.md). What follows is what is left.
 
-## Phase 4 — Rendering and input adapters
-
-Outcome: display and input can change without changing puzzle rules.
-
-- Use a canonical logical stage with deterministic scale/letterboxing.
-- Isolate pointer-to-world conversion and test it at multiple viewports.
-- Separate walk-grid cells from semantic hotspots/anchors, each with its own interaction anchor and accessible label, keeping the grid for walking.
-- Add rendering layers, dirty-region/caching decisions only after profiling.
-- Mirror hotspots into semantic DOM controls for keyboard and assistive access.
-
-Exit criteria: the same domain actions work through pointer, keyboard, touch, and the debug/test API. The debug/test path already does; pointer input is unchanged, and keyboard and touch parity are the work.
-
-## Phase 5 — UI/art/audio modernisation
+## Phase 5 — Art/audio modernisation
 
 Outcome: a cohesive release-quality presentation sits on stable systems.
 
-- Apply the approved UI component/layout tokens.
 - Process assets through the asset manifest/pipeline.
-- Add transitions with reduced-motion alternatives.
-- Add settings, audio mixer, subtitles, and accessibility options.
-- Add responsive and visual-regression coverage.
+- Add the audio mixer and settings-aware ambience, music, and effects.
+- Add captions for meaningful audio as it is authored.
+- Add visual-regression coverage only after the scene art is approved.
 
-Exit criteria: art, UI, performance, accessibility, and offline packaging acceptance matrices pass.
+Exit criteria: art, audio, performance, and offline packaging acceptance matrices pass.
 
 ## Phase 6 — Retire the legacy bridge
 

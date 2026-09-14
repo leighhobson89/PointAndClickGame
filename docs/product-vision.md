@@ -25,11 +25,11 @@ The best version of this project should provide:
 | Story | Chapter 1 content and events are substantially encoded, but the experience is incomplete and fragile | A polished chapter with a clear opening, puzzle escalation, payoff, and bridge to later chapters |
 | World | 18 validated navigation records with reciprocal exits and four declared gates; Debug Room removed and the Map completed | A coherent, validated room graph matching the maintained world design |
 | Puzzles | Large dependency chain exists across data and event code | Explicit quest/puzzle state with hints, diagnostics, and test coverage |
-| Interaction | Classic verb/inventory UI works with mouse | Context-aware but classic-feeling input, full keyboard/touch/a11y support, strong feedback |
+| Interaction | Responsive adventure console with classic/contextual verbs, mouse, keyboard, touch, controller, and semantic assistive paths | Preserve parity and feedback as story systems evolve |
 | Visuals | Memorable assets with major style, scale, and finish variation | One intentional art bible, consistent character scale, lighting, perspective, and export standards |
 | Audio | Described in the GDD but not implemented | Music, ambience, spatial cues, and responsive interaction SFX |
 | Save/load | Versioned envelope, single migration boundary, world stored as a patch, milestone checkpoints, autosave, menu `Continue`, and a restore that changes nothing when a save cannot be trusted | Cloud saves, only once local saves, privacy, identity, and conflict policy are explicit |
-| Quality | 60 Node tests and 61 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
+| Quality | 62 Node tests and 69 real-click Playwright journeys, with deterministic scenarios reaching any Chapter 1 state in under a second | Unit/component tests plus deterministic real-click Playwright journeys across every functional area |
 
 ## Experience principles
 

@@ -7,6 +7,7 @@ import { createAssetLoader } from '../../src/adapters/asset-loader.mjs';
 import { createCanvasRenderer, RENDER_LAYER_ORDER } from '../../src/adapters/canvas-renderer.mjs';
 import { bindSemanticControls } from '../../src/adapters/dom-ui.mjs';
 import { createStorageRepository } from '../../src/adapters/storage.mjs';
+import { DEFAULT_PLAYER_PREFERENCES, loadPlayerPreferences, normalisePlayerPreferences, savePlayerPreferences } from '../../src/adapters/player-preferences.mjs';
 import { loadContentBundle } from '../../src/content/loader.mjs';
 import { createInitialGameState } from '../../src/state/game-state.mjs';
 import { createGameStore, gameActions } from '../../src/state/store.mjs';
@@ -15,6 +16,21 @@ function fakeElement(dataset) {
     const listeners = new Map();
     return { dataset, addEventListener: (type, fn) => listeners.set(type, fn), removeEventListener: (type) => listeners.delete(type), click: () => listeners.get('click')?.() };
 }
+
+test('player preferences are validated, persisted, and recover safely from corrupt storage', () => {
+    const values = new Map();
+    const storage = { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
+    const saved = savePlayerPreferences(storage, { theme: 'river', textSpeed: 'fast', masterVolume: 200, hotspotHelp: true, hotspotIntensity: 'strong', inputMode: 'keyboard' });
+    assert.deepEqual(loadPlayerPreferences(storage), saved);
+    assert.equal(saved.masterVolume, 100);
+    assert.equal(saved.theme, 'river');
+    assert.equal(saved.hotspotHelp, true);
+    assert.equal(saved.hotspotIntensity, 'strong');
+    assert.equal(normalisePlayerPreferences({ textSpeed: 'nonsense' }).textSpeed, DEFAULT_PLAYER_PREFERENCES.textSpeed);
+    assert.equal(normalisePlayerPreferences({ theme: 'nonsense' }).theme, 'mountain');
+    values.set('pointAndClick.preferences.v1', '{broken');
+    assert.deepEqual(loadPlayerPreferences(storage), DEFAULT_PLAYER_PREFERENCES);
+});
 
 test('DOM controls dispatch semantic IDs into the store and dispose their listeners', () => {
     const verb = fakeElement({ verbId: 'lookAt' });

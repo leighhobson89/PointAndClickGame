@@ -1,196 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="mountain" data-input-mode="auto" data-high-contrast="false" data-reduced-motion="false" data-hotspot-help="false" data-hotspot-intensity="subtle" data-classic-verbs="true">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#17120e">
     <title>Game</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>    
+<body>
+    <a class="skip-link" href="#gameStage">Skip to the game</a>
+    <!-- Debug UI is intentionally absent. It is created only by the gated debug build. -->
+    <div class="custom-mouse" aria-hidden="true"><img class="custom-mouse-image" src="./resources/mouse/mouseCrosshair.png" alt=""></div>
 
-    <!--
-        The debug panel is deliberately absent from this document. It is built
-        at runtime by src/adapters/debug-panel.mjs, and only after the served
-        build advertises /debug-capability and the session explicitly requests
-        it. Release builds therefore ship no debug markup, styles, or handlers.
-    -->
+    <main id="appShell">
+        <section id="menu" class="menu-screen d-none" aria-labelledby="menuTitle">
+            <div class="menu-card">
+                <p class="eyebrow" aria-hidden="true">A hand-drawn point &amp; click adventure</p>
+                <h1 id="menuTitle">Game Title Placeholder</h1>
+                <fieldset id="languageContainer" class="language-picker">
+                    <legend data-ui-key="languageLabel">Language</legend>
+                    <button id="btnEnglish" class="btn btn-success" lang="en">English</button>
+                    <button id="btnSpanish" class="btn btn-success" lang="es">Espa&ntilde;ol</button>
+                    <button id="btnGerman" class="btn btn-success" lang="de">Deutsch</button>
+                    <button id="btnItalian" class="btn btn-success" lang="it">Italiano</button>
+                    <button id="btnFrench" class="btn btn-success" lang="fr">Fran&ccedil;ais</button>
+                </fieldset>
+                <nav class="menu-actions" aria-label="Game menu">
+                    <button id="newGame" class="btn btn-primary">New Game Placeholder</button>
+                    <button id="continueGame" class="btn disabled" aria-describedby="continueGameDetail" disabled>Continue Placeholder</button>
+                    <div id="continueGameDetail" class="menu-detail" data-continue-room=""></div>
+                    <button id="resumeFromMenu" class="btn disabled" disabled>Resume Game Placeholder</button>
+                    <button id="loadGame" class="btn btn-secondary">Load Game Placeholder</button>
+                    <button id="saveGame" class="btn disabled" disabled>Save Game Placeholder</button>
+                    <button id="openSettingsMenu" class="btn btn-quiet" data-ui-key="settings" aria-haspopup="dialog" aria-controls="settingsPanel">Settings</button>
+                </nav>
+                <div id="fatalLoadError" class="fatal-load-error d-none" role="alert" aria-live="assertive"></div>
+            </div>
+        </section>
 
-    <div class="custom-mouse">
-        <img class="custom-mouse-image" src="./resources/mouse/mouseCrosshair.png" alt="">
+        <section id="canvasContainer" class="game-shell d-none" aria-label="Adventure game">
+            <header id="buttonRow" class="game-toolbar d-none">
+                <div class="toolbar-brand" aria-hidden="true">Adventure Console</div>
+                <div class="toolbar-actions">
+                    <button id="openSettingsGame" class="btn btn-quiet" data-ui-key="settings" aria-haspopup="dialog" aria-controls="settingsPanel">Settings</button>
+                    <button id="openJournal" class="btn btn-secondary" aria-haspopup="dialog" aria-expanded="false" aria-controls="journalPanel">Journal</button>
+                    <button id="skipSequence" class="btn btn-quiet" data-ui-key="skip" title="Skip the current spoken line">Skip</button>
+                    <button id="returnToMenu" class="btn btn-secondary">Return to Menu</button>
+                </div>
+            </header>
+
+            <div class="stage-column">
+                <p id="sceneDescription" class="sr-only" aria-live="polite">The game scene.</p>
+                <div id="gameStage" class="stage-frame" role="group" aria-describedby="sceneDescription" tabindex="-1">
+                    <canvas id="canvas" width="832" height="448" aria-label="Game world. Use Tab to browse scene hotspots."></canvas>
+                    <div id="hotspotLayer" class="hotspot-layer" aria-label="Scene hotspots"></div>
+                    <div id="overlayCanvas" class="overlay-canvas" aria-hidden="true"></div>
+                    <div class="stage-vignette" aria-hidden="true"></div>
+                </div>
+
+                <section id="bottomContainer" class="adventure-console" aria-label="Adventure controls">
+                    <div id="commandRow" class="command-bar"><span class="command-label" data-ui-key="actionLabel">Action</span><div id="interactionInfo" role="status" aria-live="polite" aria-atomic="true"></div></div>
+                    <div id="dialogueContainer" class="dialogue-panel d-none" aria-label="Dialogue choices">
+                        <div id="dialogueSection" class="dialogue-choices" role="listbox" aria-label="Choose a response"></div>
+                        <div id="scrollSection" class="dialogue-scroll-controls">
+                            <button id="dialogueScrollUp" class="arrowNavigate arrowNavigateUp" aria-label="Previous dialogue choices">&#9650;</button>
+                            <button id="dialogueScrollDown" class="arrowNavigate arrowNavigateDown" aria-label="More dialogue choices">&#9660;</button>
+                        </div>
+                    </div>
+
+                    <div id="verbsInventoryContainer" class="control-deck d-flex">
+                        <section class="verb-panel" aria-labelledby="verbsHeading">
+                            <h2 id="verbsHeading" class="panel-heading"><span data-ui-key="actionsHeading">Actions</span> <span class="panel-hint">Keys 1&ndash;9</span></h2>
+                            <div class="verbs" role="toolbar" aria-label="Choose an action">
+                                <button id="btnLookAt" data-verb-id="lookAt" class="verbBtn btn btn-primary">PH_LookAt</button>
+                                <button id="btnPickUp" data-verb-id="pickUp" class="verbBtn btn btn-primary">PH_PickUp</button>
+                                <button id="btnUse" data-verb-id="use" class="verbBtn btn btn-primary">PH_Use</button>
+                                <button id="btnOpen" data-verb-id="open" class="verbBtn btn btn-primary">PH_Open</button>
+                                <button id="btnClose" data-verb-id="close" class="verbBtn btn btn-primary">PH_Close</button>
+                                <button id="btnPush" data-verb-id="push" class="verbBtn btn btn-primary">PH_Push</button>
+                                <button id="btnPull" data-verb-id="pull" class="verbBtn btn btn-primary">PH_Pull</button>
+                                <button id="btnTalkTo" data-verb-id="talkTo" class="verbBtn btn btn-primary">PH_TalkTo</button>
+                                <button id="btnGive" data-verb-id="give" class="verbBtn btn btn-primary">PH_Give</button>
+                            </div>
+                        </section>
+
+                        <section class="inventory-panel" aria-labelledby="inventoryHeading">
+                            <h2 id="inventoryHeading" class="panel-heading"><span data-ui-key="inventoryHeading">Inventory</span> <span class="panel-hint">Arrow keys</span></h2>
+                            <div class="inventory">
+                                <button id="inventoryScrollUp" class="arrowNavigate arrowNavigateUp" aria-label="Previous inventory items">&#9664;</button>
+                                <div class="inventory-grid" role="list" aria-label="Carried items">
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number1"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number2"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number3"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number4"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number5"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number6"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number7"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number8"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number9"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                    <button class="inventory-item" role="listitem"><span class="inventory-number" id="triangle-number10"></span><img src="./resources/objects/images/blank.png" alt="empty" class="inventory-img"></button>
+                                </div>
+                                <button id="inventoryScrollDown" class="arrowNavigate arrowNavigateDown" aria-label="More inventory items">&#9654;</button>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div id="journalPanel" class="journal-panel d-none" role="dialog" aria-modal="true" aria-labelledby="journalTitle" tabindex="-1">
+        <div class="journal-header"><div><p class="eyebrow">Field notes</p><h2 id="journalTitle" class="journal-title"></h2></div><div class="dialog-actions"><span id="journalProgress" class="journal-progress" data-milestones-reached="0" data-milestones-total="0"></span><button id="closeJournal" class="btn btn-danger">Close</button></div></div>
+        <div id="journalBody" class="journal-body"></div>
     </div>
-    <!-- Menu Container -->
-    <div id="menu" class="d-flex flex-column align-items-center justify-content-center d-none">
-        <h1 id="menuTitle" class="mb-4">Game Title Placeholder</h1>
-        <div id="languageContainer" class="d-flex justify-content-between my-2">
-            <div class="col">
-                <button id="btnEnglish" class="btn btn-success mx-2">English</button>
-            </div>
-            <div class="col">
-                <button id="btnSpanish" class="btn btn-success mx-2">Español</button>
-            </div>
-            <div class="col">
-                <button id="btnGerman" class="btn btn-success mx-2">Deutsch</button>
-            </div>
-            <div class="col">
-                <button id="btnItalian" class="btn btn-success mx-2">Italiano</button>
-            </div>
-            <div class="col">
-                <button id="btnFrench" class="btn btn-success mx-2">Français</button>
-            </div>
+
+    <div id="settingsPanel" class="settings-panel d-none" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+        <div class="dialog-header"><div><p class="eyebrow">Make it yours</p><h2 id="settingsTitle" data-ui-key="settings">Settings</h2></div><button id="closeSettings" class="btn btn-danger">Close</button></div>
+        <div class="settings-grid">
+            <label><span data-ui-key="themeLabel">UI theme</span><select id="settingTheme"><option value="mountain" data-ui-key="themeMountain">Mountain</option><option value="river" data-ui-key="themeRiver">River</option><option value="arctic" data-ui-key="themeArctic">Arctic</option><option value="midnight" data-ui-key="themeMidnight">Midnight</option><option value="forest" data-ui-key="themeForest">Forest</option><option value="sunset" data-ui-key="themeSunset">Sunset</option><option value="desert" data-ui-key="themeDesert">Desert</option><option value="royal" data-ui-key="themeRoyal">Royal</option><option value="rose" data-ui-key="themeRose">Rose</option><option value="storybook" data-ui-key="themeStorybook">Storybook</option></select></label>
+            <label><span data-ui-key="languageLabel">Language</span><select id="settingLocale"><option value="en">English</option><option value="es">Espa&ntilde;ol</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="fr">Fran&ccedil;ais</option></select></label>
+            <label><span data-ui-key="textSpeed">Text speed</span><select id="settingTextSpeed"><option value="slow">Slow</option><option value="normal">Normal</option><option value="fast">Fast</option><option value="instant">Instant</option></select></label>
+            <label><span data-ui-key="inputMode">Input mode</span><select id="settingInputMode"><option value="auto">Automatic</option><option value="pointer">Mouse / pointer</option><option value="keyboard">Keyboard</option><option value="touch">Touch</option><option value="gamepad">Controller</option></select></label>
+            <label><span><span data-ui-key="masterVolume">Master volume</span> <output id="masterVolumeOutput">100%</output></span><input id="settingMasterVolume" type="range" min="0" max="100" value="100"></label>
+            <label><span><span data-ui-key="musicVolume">Music</span> <output id="musicVolumeOutput">80%</output></span><input id="settingMusicVolume" type="range" min="0" max="100" value="80"></label>
+            <label><span><span data-ui-key="effectsVolume">Effects</span> <output id="effectsVolumeOutput">90%</output></span><input id="settingEffectsVolume" type="range" min="0" max="100" value="90"></label>
+            <label class="toggle-row"><input id="settingSubtitles" type="checkbox" checked> <span data-ui-key="subtitles">Subtitles and captions</span></label>
+            <label class="toggle-row"><input id="settingReducedMotion" type="checkbox"> <span data-ui-key="reducedMotion">Reduce motion</span></label>
+            <label class="toggle-row"><input id="settingHighContrast" type="checkbox"> <span data-ui-key="highContrast">High contrast</span></label>
+            <label class="toggle-row"><input id="settingHotspotHelp" type="checkbox"> <span data-ui-key="hotspotHelp">Show hotspot labels</span></label>
+            <label><span data-ui-key="hotspotIntensity">Hotspot intensity</span><select id="settingHotspotIntensity"><option value="subtle" data-ui-key="hotspotSubtle">Subtle</option><option value="strong" data-ui-key="hotspotStrong">Strong</option></select></label>
+            <label class="toggle-row"><input id="settingClassicVerbs" type="checkbox" checked> <span data-ui-key="classicVerbs">Classic verb panel</span></label>
         </div>
-        <button id="newGame" class="btn btn-primary mb-2">New Game Placeholder</button>
-        <!--
-            Two different ideas, kept as two different controls. "Resume"
-            returns to the session already running; "Continue" reopens the
-            locally stored save and is enabled only when one can be read.
-        -->
-        <button id="continueGame" class="btn disabled mb-2" aria-describedby="continueGameDetail">Continue Placeholder</button>
-        <div id="continueGameDetail" class="menu-detail" data-continue-room=""></div>
-        <button id="resumeFromMenu" class="btn disabled mb-2">Resume Game Placeholder</button>
-        <button id="loadGame" class="btn btn-primary mb-2">Load Game Placeholder</button>
-        <button id="saveGame" class="btn disabled">Save Game Placeholder</button>
-        <div id="fatalLoadError" class="fatal-load-error d-none" role="alert" aria-live="assertive"></div>
+        <p class="settings-note">Hotspots can always be reached with Tab. Press Escape to go back; press Space to skip the current spoken line.</p>
     </div>
 
-    <!-- Unobtrusive save/restore feedback. Successes are polite, failures assertive. -->
+    <div id="loadSaveGameStringPopup" class="save-load-popup-container d-none" role="dialog" aria-modal="true" aria-labelledby="saveLoadTitle">
+        <div class="dialog-header"><h2 id="saveLoadTitle" class="save-load-header">Copy String To A Text File:</h2><div class="dialog-actions"><button id="loadStringButton" class="btn btn-success">Load</button><button id="copyButtonSavePopup" class="btn btn-success">Copy</button><button id="closeButtonSavePopup" class="btn btn-danger">Close</button></div></div>
+        <label id="textAreaLabel" class="sr-only" for="loadSaveGameStringTextArea">Save data</label>
+        <textarea id="loadSaveGameStringTextArea" class="save-load-input-field" aria-label="Save data"></textarea>
+    </div>
+
     <div id="saveStatus" class="save-status d-none" role="status" aria-live="polite"></div>
+    <div id="gameAnnouncements" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div id="overlay" class="d-none overlay" aria-hidden="true"></div>
 
-    <!-- Save Load Game Input Field -->
-    <div id="loadSaveGameStringPopup" class="save-load-popup-container bg-dark p-4 rounded shadow-lg d-none">
-        <div class="save-load-header-container d-flex justify-content-between align-items-center mb-3">
-            <div class="save-load-header">Copy String To A Text File:</div>
-            <div class="save-load-buttons-container">
-                <button id="loadStringButton" class="save-load-buttons btn btn-success btn-sm flex-grow-1 mr-4">Load</button>
-                <button id="copyButtonSavePopup" class="save-load-buttons btn btn-success btn-sm flex-grow-1 mr-4">Copy</button>
-                <button id="closeButtonSavePopup" class="save-load-buttons btn btn-danger btn-sm flex-grow-0">Close</button>
-            </div>
-        </div>
-        <div class="save-load-input-container">
-            <textarea id="loadSaveGameStringTextArea" class="save-load-input-field" aria-label=""></textarea>
-        </div>
-    </div>
-
-    <!-- Canvas Container -->
-    <div id="canvasContainer" class="d-none">
-        <!-- Button Row -->
-        <div id="buttonRow" class="d-flex ml-2">
-            <button id="returnToMenu" class="btn btn-secondary mr-2">Return to Menu</button>
-            <!--
-                The journal is derived entirely from canonical quest facts, so
-                it holds no state of its own and a restored save restores it
-                exactly. Its contents are built at runtime by
-                src/adapters/journal-panel.mjs.
-            -->
-            <button id="openJournal" class="btn btn-secondary mr-2" aria-haspopup="dialog" aria-expanded="false" aria-controls="journalPanel">Journal</button>
-        </div>
-        <div id="journalPanel" class="journal-panel d-none" role="dialog" aria-modal="true" aria-labelledby="journalTitle" tabindex="-1">
-            <div class="journal-header d-flex justify-content-between align-items-center">
-                <h2 id="journalTitle" class="journal-title"></h2>
-                <div class="d-flex align-items-center">
-                    <span id="journalProgress" class="journal-progress mr-3" data-milestones-reached="0" data-milestones-total="0"></span>
-                    <button id="closeJournal" class="btn btn-danger btn-sm">Close</button>
-                </div>
-            </div>
-            <div id="journalBody" class="journal-body"></div>
-        </div>
-        <div class="canvas-wrapper">
-            <div id="overlayCanvas" class="overlay-canvas"></div>
-            <div class = "game-borders-left"><img src="./resources/layoutImages/border_left.png"></div>
-            <canvas id="canvas"></canvas>
-            <div class = "game-borders-right"><img src="./resources/layoutImages/border_right.png"></div>
-        </div>
-        <div id="bottomContainer" class="d-flex flex-column">
-            <div id="commandRow" class="d-flex">
-                <div id="interactionInfo"></div>
-            </div>
-                  <!-- Dialogue Container -->
-            <div id="dialogueContainer" class="d-none flex-grow-1 d-flex">
-                <div id="dialogueSection" class="col-11 d-flex flex-column">
-                </div>               
-                
-                <div id="scrollSection" class="col-1 d-flex flex-column">
-                    <div class="d-flex" style="height: 50%;">
-                        <div id="dialogueScrollUp" class="arrowNavigate arrowNavigateUp"></div>
-                    </div>
-                    
-                    <div class="d-flex" style="height: 50%;">
-                        <div id="dialogueScrollDown" class="arrowNavigate arrowNavigateDown"></div>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div id="verbsInventoryContainer" class="d-flex flex-grow-1">
-                <div class="col-6 p-2">
-                    <div class="verbs">
-                        <div class="row ">
-                            <div class="col-3 ">
-                                <button id="btnLookAt" data-verb-id="lookAt" class="verbBtn btn btn-primary w-100">PH_LookAt</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnPickUp" data-verb-id="pickUp" class="verbBtn btn btn-primary w-100">PH_PickUp</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnUse" data-verb-id="use" class="verbBtn btn btn-primary w-100">PH_Use</button>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-3 ">
-                                <button id="btnOpen" data-verb-id="open" class="verbBtn btn btn-primary w-100">PH_Open</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnClose" data-verb-id="close" class="verbBtn btn btn-primary w-100">PH_Close</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnPush" data-verb-id="push" class="verbBtn btn btn-primary w-100">PH_Push</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3 ">
-                                <button id="btnPull" data-verb-id="pull" class="verbBtn btn btn-primary w-100">PH_Pull</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnTalkTo" data-verb-id="talkTo" class="verbBtn btn btn-primary w-100">PH_TalkTo</button>
-                            </div>
-                            <div class="col-3 ">
-                                <button id="btnGive" data-verb-id="give" class="verbBtn btn btn-primary w-100">PH_Give</button>
-                            </div>
-                        </div>                    
-                    </div>
-                </div>
-                <div class="col-6 p-2">
-                    <div class="inventory">
-                        <div class="row ">
-                            <div class="col-2"><div id="inventoryScrollUp" class="arrowNavigate arrowNavigateUp"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number1"></span><img src="./resources/objects/images/blank.png" alt = "empty" class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number2"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number3"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number4"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number5"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-2"><div id="inventoryScrollDown" class="arrowNavigate arrowNavigateDown"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number6"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number7"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number8"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number9"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                            <div class="col-2"><div class="inventory-item"><span class="inventory-number" id="triangle-number10"></span><img src="./resources/objects/images/blank.png" alt = "empty"  class = "inventory-img"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>        
-    </div>
-
-    <!-- Overlay -->
-    <div id="overlay" class="d-none overlay"></div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
-
     <script type="module" src="game.js"></script>
     <script type="module" src="localization.js"></script>
     <script type="module" src="constantsAndGlobalVars.js"></script>

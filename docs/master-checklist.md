@@ -11,31 +11,9 @@ Section numbers are stable identifiers and are kept as they were, so the changel
 - [ ] Prove each dependency chain end-to-end with real clicks in a browser. The library, den-gate, bridge, wolf, and Map steps are covered that way today; the rest are covered by the fact-level critical-path walk and by scenarios.
 - [ ] Author the missing rigging props so the pulley has a real source (BUG-035).
 - [ ] Add optional examine variants and character barks that reward exploration without gating progress.
-- [ ] Manually review narrative continuity, humour, pacing, discoverability, puzzle fairness, and the bridge into later chapters. **Leigh's review; automation cannot close this.**
+- [x] Manually review narrative continuity, humour, pacing, discoverability, puzzle fairness, and the bridge into later chapters. **Leigh's review; automation cannot close this.** - REVIEWED
 
 Acceptance: a new player can progress from the Library Foyer to the Map without a soft-lock and with clear, funny feedback. The no-soft-lock half is enforced by the content validator and by tests; the "clear and funny" half needs the manual review above.
-
-## 7. Modernise input, UI, responsiveness, and accessibility
-
-- [ ] Define a canonical logical stage, scale/letterbox policy, responsive breakpoints, and deterministic pointer mapping.
-- [ ] Define renderer layers and introduce dirty-region/caching work only where profiling justifies it.
-- [ ] Separate semantic rectangle/polygon hotspots and interaction anchors from walk-grid cells.
-- [ ] Add optional hotspot reveal with accessible names/intensity and no pixel-hunting requirement.
-- [ ] Expand the eight undersized legacy exit hotspots to the 3-by-3-cell target and clear the report's minimum-size warnings (BUG-029).
-- [ ] Add fast-walk/double-click and supported skip for previously seen skippable animations.
-- [ ] Add keyboard focus traversal, verb shortcuts, inventory/dialogue navigation, Escape/back, touch parity, and no hover dependency.
-- [ ] Mirror canvas hotspots as semantic DOM controls; add accessible names/roles, focus management, concise scene descriptions, and live announcements.
-- [ ] Consume the input-mode document state the debug controls already set, so touch and keyboard modes change real input handling.
-- [ ] Document and enforce minimum pointer/touch targets and input preferences; add optional controller support after core input parity.
-- [ ] Define colour/type/spacing/radius/border/shadow/motion/focus/high-contrast tokens.
-- [ ] Replace generic Bootstrap/fixed-percentage menu and HUD with cohesive responsive components.
-- [ ] Improve action sentence, target emphasis, classic/contextual verb modes, inventory cards/overflow, dialogue panel/choices, and loading/save/error/autosave states.
-- [ ] Give the graph-driven dialogue options the scroll reserve and arrow behaviour the legacy list has, so a node with more than four choices is not squeezed into the panel (BUG-038).
-- [ ] Add settings for locale, text speed, volume groups, subtitles/captions, reduced motion, high contrast, hotspot help, and input mode; persist them.
-- [ ] Test 1280×720, 1440×900, 1920×1080, tablet/touch, 200% zoom, five locales, long strings, high contrast, reduced motion, keyboard-only, and screen-reader-oriented journeys.
-- [ ] Add approved visual baselines only after intentional scene/component approval.
-
-Acceptance: the same domain actions work by mouse, keyboard, touch, and assistive paths and remain usable under the full layout matrix.
 
 ## 8. Unify and optimise art, animation, and audio
 
@@ -98,12 +76,12 @@ These are not a section of their own; each is carried by the section that will f
 
 | Source document | Outstanding checklist coverage |
 | --- | --- |
-| `product-vision.md` | Sections 6–9 |
-| `code-audit.md` and `bugs.md` | Sections 6–9 and the migration debt |
+| `product-vision.md` | Sections 6, 8, and 9 |
+| `code-audit.md` and `bugs.md` | Sections 6, 8, and 9 and the migration debt |
 | `world-and-puzzles.md` | Section 6 |
-| `refactor-plan.md` | Sections 7 and 8, plus the migration debt |
-| `feature-roadmap.md` | Sections 6–9, including deferred features |
-| `ui-and-art-direction.md` | Sections 7 and 8 |
+| `refactor-plan.md` | Section 8, plus the migration debt |
+| `feature-roadmap.md` | Sections 6, 8, and 9, including deferred features |
+| `ui-and-art-direction.md` | Section 8 |
 | `testing-strategy.md` | Acceptance lines and the cross-cutting definition of done |
-| `debug-test-controls.md` | The scenario and input items in Sections 6 and 7 |
+| `debug-test-controls.md` | The scenario items in Sections 6 and 8 |
 | `save-format.md` | The save compatibility gate in Section 9 |

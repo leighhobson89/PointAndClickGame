@@ -50,7 +50,7 @@ The validator checks:
 Commands:
 
 - npm run validate:content fails on an invalid shipped contract or missing file.
-- npm run report:hotspots regenerates docs/hotspot-report.md and lists non-blocking minimum-size debt.
+- npm run report:hotspots regenerates docs/hotspot-report.md and records authored bounds plus the effective semantic target used by the UI.
 - npm run check runs content validation and Node unit tests.
 - npm test runs content validation before the policy-controlled full browser suite.
 
@@ -58,6 +58,5 @@ Startup fetches the contract and Map definition with the other required data, va
 
 ## Outstanding against this contract
 
-- The hotspot report records eight legacy exit shapes below the 3 x 3 authoring target. They remain usable wide strips or door-aligned shapes and are visible as input to the input/UI work (BUG-029); missing labels, out-of-bounds geometry, and undeclared overlaps are blocking errors already.
 - `objectPulleyWheel` is declared without an authored source, so `rigging.assemble` cannot yet state its real prerequisite (BUG-035).
 - The dialogue half of the contract validates links and reachability for the authored JSON, but only one conversation is declared as an explicit graph. The rest cannot be checked for choice reachability until they are migrated (BUG-011).

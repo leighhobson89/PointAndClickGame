@@ -191,5 +191,4 @@ Sections and controls:
 - Major animation and cutscene branches do not yet have their own scenarios; `animation-cutscenes` still starts from a normal New Game.
 - `resetConversation(npcId)` restores the NPC record but cannot rewind a legacy conversation's internal phase, because the non-library conversations are still on the legacy representation (BUG-011).
 - Simulated asset failure records the declared URL for assertion; it does not yet intercept the network request.
-- Controller support for touch and keyboard input modes sets the document state only; it does not yet change input handling. The input work in Section 7 of the checklist consumes it.
 - The dialogue inspector always describes the graph from its declared start node, so it cannot yet describe a conversation from the phase an NPC is actually in.

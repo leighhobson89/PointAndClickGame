@@ -6,13 +6,13 @@ This is the open half of the audit: what is still true about the code and conten
 
 The project is a genuine playable prototype with unusually substantial authored content. Its biggest asset is not the current implementation; it is the combination of humour, locations, character art, puzzle thinking, and a working interaction loop. Its biggest remaining constraint is that several legacy subsystems still share mutable global state, so small changes can create distant regressions.
 
-The strategy remains incremental extraction around the existing game, not a rewrite. The lifecycle, content contract, domain rules, debug reachability, save format, and puzzle graph are done; what is left is presentation, input, accessibility, delivery, and retiring the legacy bridge.
+The strategy remains incremental extraction around the existing game, not a rewrite. The lifecycle, content contract, domain rules, debug reachability, save format, puzzle graph, responsive UI, and accessible input are done; what is left is art/audio consistency, delivery, and retiring the legacy bridge.
 
 ## Repository snapshot
 
-- Runtime: browser ES modules, HTML canvas, CSS, Bootstrap/jQuery/Popper and LZString from CDNs.
+- Runtime: browser ES modules, HTML canvas, CSS, and LZString from a CDN.
 - Server: local Express static server through `npm start`, plus a debug server for the test harness.
-- Automated testing: 60 Node tests and 61 Playwright browser journeys by functional area.
+- Automated testing: 62 Node tests and 69 Playwright browser journeys by functional area.
 - Content: 18 navigation records, 42 objects, 10 NPCs, and 7 foreground room layers, as validated by `npm run validate:content`.
 - Locales: English, Spanish, German, Italian, and French key sets are present and complete.
 
@@ -54,22 +54,13 @@ Objects and NPCs overlay rectangular footprints onto the room grid from their da
 
 Strengths: a fixed logical grid decouples authored walkability from image pixels; footprints keep interactions data-driven; the fallback keeps interactions from failing when the hotspot itself is blocked.
 
-Weaknesses that remain:
-
-- Rectangle-only zones are imprecise for irregular art and promote accidental overlaps.
-- Resizing and CSS scaling must remain perfectly consistent with canvas coordinate mapping.
-- The player can still be asked to infer invisible boundaries. An optional in-game hotspot reveal is Section 7 work, and is distinct from the developer overlay.
-- Eight legacy exits are below the 3-by-3-cell authoring target (BUG-029).
-
-Remaining evolution: retain the grid for walking and introduce named polygon/rectangle hotspots in room data, each with its own interaction anchor and accessible label.
+Remaining evolution: the semantic mirror currently projects rectangles from composed runtime cells. Irregular authored polygons can be introduced later where the art needs more precision; the walk grid remains independent.
 
 ## Dialogue and narrative state
 
 The librarian tutorial runs on an explicit graph: stable nodes, choices, links, consequence IDs, and a recorded quest phase, content-validated and traversed in all five locales in the browser.
 
 Every other conversation is still on the legacy representation, where control flow is encoded in punctuation and spacing — a trailing single space advances the quest phase, two spaces push an event, `!!!` exits early — and the speaker order is a compact digit string. That is BUG-011, and it is the root of two further limits: a conversation cannot be rewound for testing (BUG-031), and a save taken mid-conversation deliberately resumes in the room rather than in the conversation.
-
-The migrated path has its own gap: it renders every available choice as a row at once instead of scrolling three plus the exit, so a node with more than four choices is squeezed (BUG-038).
 
 ## Content and data integrity
 
@@ -83,7 +74,7 @@ The contract is in [save-format.md](save-format.md). Two limits are recorded rat
 
 ## Localisation
 
-Five locales are a strong foundation, and translated wording no longer selects behaviour. Layout under text expansion, mid-dialogue locale switching, and a strict CSP remain later presentation and security coverage.
+Five locales are a strong foundation, and translated wording no longer selects behaviour. Long-text layout is covered across all five locales; mid-dialogue switching under a strict CSP remains later security coverage.
 
 ## Rendering, performance, and assets
 
@@ -99,12 +90,6 @@ Examples from visual and metadata inspection:
 
 Create a manifest and build-time pipeline that enforces canonical scene dimensions, character world scale, alpha/crop rules, optimised outputs, maximum decoded size, and intentional duplicate aliases (BUG-017).
 
-## UI, responsiveness, and accessibility
-
-The layout communicates the classic genre immediately, but it is heavily fixed-positioned and hard-coded (BUG-015). Most interaction exists only inside canvas pixels or clickable `div`/`span` elements. Keyboard navigation, screen-reader semantics, focus management, live dialogue announcements, touch sizing, reflow, reduced motion, and high-contrast treatment are absent or incomplete (BUG-014).
-
-Modernisation should not simply add gloss. It should establish a scalable stage, semantic interaction mirror, consistent panels, contextual feedback, responsive layout modes, and accessible alternatives while preserving the verb-table character.
-
 ## Dependencies and delivery
 
 - Remote CDN dependencies create offline, CSP, version-drift, and desktop-packaging risks and have no visible integrity strategy (BUG-013).
@@ -114,9 +99,8 @@ Modernisation should not simply add gloss. It should establish a scalable stage,
 
 ## Maintainability priorities
 
-1. Put rendering and DOM behind adapters.
-2. Modernise UI and accessibility on verified behaviour.
-3. Establish asset/art standards and optimise delivery.
-4. Retire the legacy global bridge and the last encoded-string subsystem.
+1. Put the remaining rendering and DOM paths behind adapters.
+2. Establish asset/art standards and optimise delivery.
+3. Retire the legacy global bridge and the last encoded-string subsystem.
 
 Detailed execution appears in the refactor, feature, testing, debug-control, and master-checklist documents.

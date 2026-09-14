@@ -92,3 +92,29 @@ test('text speed and line skipping are deterministic debug controls', async ({ p
     expect((await waitForIdle(page, { timeoutMs: 15_000 })).idle).toBe(true);
     expect(await page.evaluate(() => window.__GAME_TEST__.inspectSummary().activeDialogue.displayingText)).toBe(false);
 });
+
+test('a seven-choice dialogue keeps four readable rows and scrolls to every authored option', async ({ page }) => {
+    await openDebugGame(page);
+    await loadScenario(page, 'chapter1.library-riddle');
+    await page.evaluate(() => {
+        window.__GAME_TEST__.setMovementSpeed('instant');
+        window.__GAME_TEST__.setTextSpeed('instant');
+    });
+    await page.locator('[data-verb-id="talkTo"]').click();
+    await clickGridCell(page, 'cnpcLibrarian');
+
+    const rows = page.locator('.dialogueRow');
+    await expect(rows).toHaveCount(4, { timeout: 20_000 });
+    await expect(page.locator('[data-choice-id="library.librarian.q0.exit"]')).toBeVisible();
+    await expect(page.locator('[data-choice-id="library.librarian.q0.aside5"]')).toHaveCount(0);
+
+    await page.locator('#dialogueScrollDown').click();
+    await page.locator('#dialogueScrollDown').click();
+    await page.locator('#dialogueScrollDown').click();
+    await expect(rows).toHaveCount(4);
+    await expect(page.locator('[data-choice-id="library.librarian.q0.aside5"]')).toBeVisible();
+    await expect(page.locator('[data-choice-id="library.librarian.q0.exit"]')).toBeVisible();
+
+    await page.locator('[data-choice-id="library.librarian.q0.exit"]').click();
+    await expect.poll(async () => (await summary(page)).presentationMode, { timeout: 20_000 }).toBe('gameVisibleActive');
+});

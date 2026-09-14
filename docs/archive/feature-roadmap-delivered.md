@@ -29,3 +29,6 @@ A feature appears here only when its player behaviour, failure states, localisat
 ## Interaction
 
 - Clear two-item action state: first target, expected second target, cancel, and invalid combination response — delivered in Section 3 as pure command-state rules over stable verb and target IDs.
+- **Responsive adventure console** — delivered 2026-09-14 in Section 7. The menu, command sentence, classic/contextual verbs, inventory, dialogue, save feedback, and settings share one tokenised responsive visual system around the fixed logical stage.
+- **Accessible multi-input interaction** — delivered 2026-09-14. Named semantic room hotspots, optional reveal, keyboard shortcuts and traversal, dialogue/inventory navigation, touch-sized targets, Escape/back, live announcements, scene descriptions, double-click fast walk, skip, and controller focus/activation all dispatch the existing domain actions.
+- **Persistent player settings** — delivered 2026-09-14. Ten UI themes, locale, text speed, volume groups, subtitles, reduced motion, high contrast, hotspot help/intensity, input mode, and classic verbs are validated, saved locally, and carried in canonical save state.

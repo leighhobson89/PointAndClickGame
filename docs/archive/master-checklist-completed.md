@@ -134,3 +134,29 @@ Objectives stay hidden until the player has met the puzzle. That is what makes t
 These items belong to sections that are still open, but they are done and are not repeated in the live checklist.
 
 - Video recording for browser runs: `node tests <scope> --video` records a run into its own `test-reports/` folder and lists it in `test-reports/history.html`. Recording stays off by default. (Section 9, test isolation and artefact retention.)
+
+## 7. Modernise input, UI, responsiveness, and accessibility — implemented
+
+- [x] Define a canonical logical stage, scale/letterbox policy, responsive breakpoints, and deterministic pointer mapping.
+- [x] Define renderer layers and introduce dirty-region/caching work only where profiling justifies it. The stage, semantic hotspot mirror, transition overlay, and vignette are explicit layers; no speculative cache was added without profiling evidence.
+- [x] Separate semantic rectangle hotspots and interaction anchors from walk-grid cells.
+- [x] Add optional hotspot reveal with accessible names, subtle/strong intensity, and no pixel-hunting requirement.
+- [x] Expand the eight undersized legacy exit targets to the 3-by-3-cell policy and clear the report's minimum-size warnings without changing authored walk geometry (BUG-029).
+- [x] Add double-click fast walk and a supported skip control. Current authored content exposes spoken lines as skippable; no cutscene animation is yet declared safe to skip.
+- [x] Add keyboard focus traversal, verb shortcuts, inventory/dialogue navigation, Escape/back, touch parity, and no hover dependency.
+- [x] Mirror canvas hotspots as semantic DOM controls; add accessible names/roles, focus management, concise scene descriptions, and live announcements.
+- [x] Consume input-mode state so touch, keyboard, pointer, and gamepad modes change real input handling.
+- [x] Enforce 44-pixel minimum pointer/touch targets, persist input preferences, and add optional controller navigation.
+- [x] Define colour/type/spacing/radius/border/shadow/motion/focus/high-contrast tokens.
+- [x] Replace generic Bootstrap/fixed-percentage menu and HUD with cohesive responsive components.
+- [x] Improve the action sentence, target emphasis, classic/contextual verb modes, inventory cards/overflow, dialogue panel/choices, and loading/save/error/autosave states.
+- [x] Give graph-driven dialogue the legacy list's three-choice-plus-exit reserve and arrow behaviour (BUG-038).
+- [x] Add and persist settings for ten UI themes, locale, text speed, volume groups, subtitles/captions, reduced motion, high contrast, hotspot help/intensity, input mode, and classic verbs.
+- [x] Test 1280×720, 1440×900, 1920×1080, tablet/touch, 200% zoom, five locales, long strings, high contrast, reduced motion, keyboard-only, and screen-reader-oriented journeys.
+- [x] Keep pixel baselines approval-gated. The approved component behaviour is protected by structural layout assertions; scene-art pixel baselines remain deliberately deferred until the Section 8 art direction is approved.
+
+Acceptance: the same domain actions work by mouse, keyboard, touch, controller, and assistive paths and remain usable under the full layout matrix. **The UI is completely overhauled but the story isnt changed.** Room topology, puzzle data, and dialogue graph content are unchanged too.
+
+Implementation note (2026-09-14): the canvas always renders the authored 832×448 logical world and CSS scales it without mutating world coordinates. Semantic hotspot rectangles are projected from the composed runtime grid into a separate DOM layer; narrow exits receive a centred minimum target only in that layer, so navigation geometry and story content stay untouched. Player preferences live in the canonical settings snapshot and local storage. The seven-choice librarian node still contains the same options and consequences, but presents them four at a time with the exit always available.
+
+Evidence: `npm.cmd run check` passed dependency validation, the 18-room/42-object/10-NPC content contract, and 62 Node tests. `node tests all` passed 69/69 browser journeys in 168.959 seconds; log `e2e/logs/2026-09-14T00-21-20-151Z-all.log`. A final `node tests accessibility rendering-layout navigation` passed 12/12 in 30.669 seconds after checking edge-clamped targets. The accessibility suite exercises keyboard verbs, semantic room targets, focus restoration, and all-room names. The responsive suite covers the full layout matrix, 44-pixel targets, long localisation, high contrast, reduced motion, and real touch input. The dialogue suite proves the original seven authored choices remain reachable.

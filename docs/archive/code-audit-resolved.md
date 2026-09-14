@@ -69,3 +69,12 @@ Section 3 removed localisation `eval`: lookup has explicit locale/English fallba
 ## Rendering and performance
 
 Unawaited preloading was fixed in Section 1. The worst per-frame debug work was fixed in Section 4: `updateDebugValues()` no longer serialises the whole grid every frame unless the legacy debug window is open, and frame sampling and overlays only run in a development build.
+
+## UI, responsiveness, hotspots, and accessibility — resolved 2026-09-14
+
+- The world renders at one 832×448 logical size and scales through a responsive stage without rewriting authored coordinates. Pointer inversion is deterministic across the viewport matrix.
+- Walk cells and player interaction targets are separate. Runtime grid codes project into labelled semantic rectangles with independent anchors; eight narrow exits receive minimum semantic targets without changing their authored geometry.
+- The fixed Bootstrap-style HUD was replaced by a cohesive tokenised menu, toolbar, action sentence, classic/contextual verb panel, inventory cards, dialogue panel, settings, and status presentation.
+- All room targets have semantic buttons and names. Keyboard verbs, inventory/dialogue navigation, focus management, Escape/back, live announcements, scene descriptions, touch parity, reduced motion, high contrast, hotspot assistance, and controller navigation are implemented.
+- The graph-driven dialogue paginator displays three ordinary choices plus its persistent exit and reaches the remaining authored options with the existing arrows.
+- The responsive/accessibility browser matrix and the full 69-journey suite pass; BUG-014, BUG-015, BUG-029, and BUG-038 are closed.

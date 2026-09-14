@@ -40,6 +40,7 @@ import {
     getExitNumberToTransitionTo,
     getGameStateVariable,
     getGameVisibleActive,
+    getInteractiveDialogueState,
     getGridData,
     getGridSizeX,
     getGridSizeY,
@@ -63,6 +64,8 @@ import {
     getSecondItemAlreadyHovered,
     getSlotsPerRowInInventory,
     getTextDisplayDuration,
+    setTextDisplayScale,
+    setAudioMuted,
     getTextQueue,
     getTransitioningToAnotherScreen,
     getTransitioningToDialogueState,
@@ -121,7 +124,8 @@ import {
     setCurrentForegroundImage,
     getContentContract,
     getQuestFacts,
-    subscribeToGameState
+    subscribeToGameState,
+    setPlayerSetting,
 } from "./constantsAndGlobalVars.js";
 import {
     reattachDialogueOptionListeners,
@@ -173,15 +177,28 @@ import { assertValidContentBundle } from './src/content/validate-content.mjs';
 import { createJournalPanel } from './src/adapters/journal-panel.mjs';
 import { createCommandIntent, toLocalisationKey } from './src/domain/commands/commands.mjs';
 import { pointerToWorld, resolveCellTarget, worldToGrid } from './src/domain/navigation/navigation.mjs';
+import { collectSemanticHotspots, hotspotSignature } from './src/domain/navigation/hotspots.mjs';
+import {
+    applyPlayerPreferences,
+    loadPlayerPreferences,
+    savePlayerPreferences,
+} from './src/adapters/player-preferences.mjs';
 
 let textTimer;
 let activeTextResolve = null;
 let assetsReadyPromise = Promise.resolve();
 let localizationReadyPromise = Promise.resolve();
 let debugToolsSession = null;
+let playerPreferences;
+let lastHotspotSignature = '';
+let hotspotRefreshTimer = null;
+let settingsReturnFocus = null;
+let graphChoiceState = null;
+let previousGamepadButtons = [];
 
 export function bootApplication() {
     setElements();
+    initialiseModernInterface();
 
     initialiseSaveSystem();
     refreshContinueAvailability();
@@ -574,6 +591,276 @@ export function bootApplication() {
     installDebugTools().catch((error) => console.warn('Debug tools unavailable:', error.message));
 }
 
+const TEXT_SPEED_SCALES = Object.freeze({ slow: 1.6, normal: 1, fast: 0.45, instant: 0 });
+
+function announce(message) {
+    const region = getElements().announcements;
+    if (!region || !message) return;
+    region.textContent = '';
+    requestAnimationFrame(() => { region.textContent = message; });
+}
+
+function syncPreferenceControls() {
+    const bindings = {
+        settingTheme: playerPreferences.theme,
+        settingTextSpeed: playerPreferences.textSpeed,
+        settingInputMode: playerPreferences.inputMode,
+        settingMasterVolume: playerPreferences.masterVolume,
+        settingMusicVolume: playerPreferences.musicVolume,
+        settingEffectsVolume: playerPreferences.effectsVolume,
+        settingSubtitles: playerPreferences.subtitles,
+        settingReducedMotion: playerPreferences.reducedMotion,
+        settingHighContrast: playerPreferences.highContrast,
+        settingHotspotHelp: playerPreferences.hotspotHelp,
+        settingHotspotIntensity: playerPreferences.hotspotIntensity,
+        settingClassicVerbs: playerPreferences.classicVerbs,
+    };
+    for (const [id, value] of Object.entries(bindings)) {
+        const control = document.getElementById(id);
+        if (!control) continue;
+        if (control.type === 'checkbox') control.checked = value;
+        else control.value = String(value);
+    }
+    const locale = document.getElementById('settingLocale');
+    if (locale) locale.value = getLanguage();
+    for (const [id, value] of [['masterVolumeOutput', playerPreferences.masterVolume], ['musicVolumeOutput', playerPreferences.musicVolume], ['effectsVolumeOutput', playerPreferences.effectsVolume]]) {
+        const output = document.getElementById(id);
+        if (output) output.textContent = `${value}%`;
+    }
+}
+
+function commitPlayerPreferences(next, { persist = true } = {}) {
+    playerPreferences = persist
+        ? savePlayerPreferences(window.localStorage, { ...playerPreferences, ...next })
+        : applyPlayerPreferences(document.documentElement, { ...playerPreferences, ...next });
+    applyPlayerPreferences(document.documentElement, playerPreferences);
+    for (const [setting, value] of Object.entries(playerPreferences)) setPlayerSetting(setting, value);
+    setTextDisplayScale(TEXT_SPEED_SCALES[playerPreferences.textSpeed]);
+    setAudioMuted(playerPreferences.masterVolume === 0);
+    syncPreferenceControls();
+    refreshSemanticHotspots(true);
+    return playerPreferences;
+}
+
+function setSettingsOpen(open, trigger = null) {
+    const panel = getElements().settingsPanel;
+    const overlay = getElements().overlay;
+    if (!panel) return;
+    if (open) {
+        settingsReturnFocus = trigger ?? document.activeElement;
+        panel.classList.remove('d-none');
+        overlay?.classList.remove('d-none');
+        syncPreferenceControls();
+        panel.focus();
+    } else {
+        panel.classList.add('d-none');
+        overlay?.classList.add('d-none');
+        settingsReturnFocus?.focus?.();
+        settingsReturnFocus = null;
+    }
+}
+
+function bindPreferenceControl(id, key, eventName = 'change') {
+    const control = document.getElementById(id);
+    control?.addEventListener(eventName, () => {
+        const value = control.type === 'checkbox' ? control.checked
+            : control.type === 'range' ? Number(control.value) : control.value;
+        commitPlayerPreferences({ [key]: value });
+        announce(`${control.closest('label')?.firstChild?.textContent?.trim() ?? key} updated.`);
+    });
+}
+
+function focusableWithin(root) {
+    return [...root.querySelectorAll('button:not(:disabled), select:not(:disabled), input:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+        .filter((element) => !element.closest('.d-none'));
+}
+
+function handleGlobalKeyboard(event) {
+    const tag = event.target?.tagName;
+    const editing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    const settingsOpen = !getElements().settingsPanel?.classList.contains('d-none');
+    if (event.key === 'Escape') {
+        if (settingsOpen) setSettingsOpen(false);
+        else if (!getElements().journalPanel?.classList.contains('d-none')) getElements().closeJournalButton?.click();
+        else if (getGameStateVariable() === getInteractiveDialogueState()) {
+            const exit = document.querySelector('.dialogueRow[data-choice-id$=".exit"]') ?? getElements().dialogueSection?.lastElementChild;
+            exit?.click();
+        } else if (getGameStateVariable() === getGameVisibleActive()) getElements().returnToMenuButton?.click();
+        event.preventDefault();
+        return;
+    }
+    if (editing || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === ' ' && getGameStateVariable() !== getMenuState()) {
+        const result = skipCurrentText();
+        if (result.skipped) announce('Spoken line skipped.');
+        event.preventDefault();
+        return;
+    }
+    if (/^[1-9]$/.test(event.key) && getGameStateVariable() === getGameVisibleActive()) {
+        document.querySelectorAll('[data-verb-id]')[Number(event.key) - 1]?.click();
+        event.preventDefault();
+        return;
+    }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        const focusedInventory = document.activeElement?.closest?.('.inventory-item');
+        if (focusedInventory) {
+            const items = [...document.querySelectorAll('.inventory-item:not(:disabled)')];
+            const index = items.indexOf(focusedInventory);
+            items[(index + (event.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length]?.focus();
+            event.preventDefault();
+        }
+    }
+}
+
+function consumeDebugPresentationState() {
+    const data = document.documentElement.dataset;
+    const next = {};
+    if (['pointer', 'keyboard', 'touch'].includes(data.debugInputMode)) next.inputMode = data.debugInputMode;
+    if (data.debugHighContrast !== undefined) next.highContrast = data.debugHighContrast === 'true';
+    if (data.debugReducedMotion !== undefined) next.reducedMotion = data.debugReducedMotion === 'true';
+    if (Object.keys(next).length) commitPlayerPreferences(next, { persist: false });
+}
+
+function pollGamepad() {
+    const gamepad = [...(navigator.getGamepads?.() ?? [])].find(Boolean);
+    if (!gamepad) { previousGamepadButtons = []; return; }
+    const pressed = gamepad.buttons.map((button) => button.pressed);
+    const justPressed = (index) => pressed[index] && !previousGamepadButtons[index];
+    const focusable = [...document.querySelectorAll('.semantic-hotspot, .verbBtn, .inventory-item:not(:disabled), .dialogueRow')]
+        .filter((element) => element.offsetParent !== null);
+    const activeIndex = focusable.indexOf(document.activeElement);
+    const moveFocus = (direction) => {
+        if (!focusable.length) return;
+        focusable[(activeIndex + direction + focusable.length) % focusable.length]?.focus();
+        document.documentElement.dataset.inputMode = 'gamepad';
+    };
+    if (justPressed(14) || gamepad.axes[0] < -.75) moveFocus(-1);
+    else if (justPressed(15) || gamepad.axes[0] > .75) moveFocus(1);
+    if (justPressed(0)) (document.activeElement?.matches?.('button') ? document.activeElement : focusable[0])?.click();
+    if (justPressed(1)) document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    previousGamepadButtons = pressed;
+}
+
+export function refreshSemanticHotspots(force = false) {
+    const layer = getElements().hotspotLayer;
+    const roomId = getCurrentScreenId();
+    if (!getAllGridData() || !roomId) return [];
+    const grid = getGridData()?.gridData;
+    if (!layer || !Array.isArray(grid) || !roomId || !getNavigationData() || !getObjectData() || !getNpcData()) return [];
+    const hotspots = collectSemanticHotspots({
+        grid,
+        roomId,
+        navigation: getNavigationData(),
+        objects: getObjectData().objects,
+        npcs: getNpcData().npcs,
+        locale: getLanguage(),
+    });
+    const signature = `${getLanguage()}|${hotspotSignature(roomId, hotspots)}`;
+    if (!force && signature === lastHotspotSignature) return hotspots;
+    lastHotspotSignature = signature;
+    layer.replaceChildren();
+    const columns = getGridSizeX();
+    const rows = getGridSizeY();
+    for (const hotspot of hotspots) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'semantic-hotspot';
+        button.dataset.hotspotId = hotspot.id;
+        button.dataset.targetId = hotspot.targetId;
+        button.dataset.hotspotKind = hotspot.kind;
+        button.setAttribute('aria-label', hotspot.label);
+        button.style.setProperty('--hotspot-left', `${hotspot.x / columns * 100}%`);
+        button.style.setProperty('--hotspot-top', `${hotspot.y / rows * 100}%`);
+        button.style.setProperty('--hotspot-width', `${hotspot.width / columns * 100}%`);
+        button.style.setProperty('--hotspot-height', `${hotspot.height / rows * 100}%`);
+        const label = document.createElement('span');
+        label.className = 'semantic-hotspot-label';
+        label.textContent = hotspot.label;
+        button.appendChild(label);
+        button.addEventListener('focus', () => updateInteractionInfo(hotspot.label, false));
+        button.addEventListener('click', () => {
+            const point = {
+                x: (hotspot.anchor.x + 0.5) * getCanvasCellWidth(),
+                y: (hotspot.anchor.y + 0.5) * getCanvasCellHeight(),
+            };
+            setHoverCell(hotspot.anchor.x, hotspot.anchor.y);
+            if (playerPreferences?.classicVerbs === false) processRightClickPoint(point, true);
+            else processLeftClickPoint(point, true);
+        });
+        layer.appendChild(button);
+    }
+    const roomName = getNavigationData()[roomId]?.[getLanguage()] ?? roomId;
+    const description = localize('sceneDescription', getLanguage(), 'ui', { room: roomName, count: hotspots.length });
+    if (getElements().sceneDescription) getElements().sceneDescription.textContent = description;
+    announce(description);
+    return hotspots;
+}
+
+function initialiseModernInterface() {
+    playerPreferences = loadPlayerPreferences(window.localStorage);
+    commitPlayerPreferences(playerPreferences, { persist: false });
+    getElements().openSettingsMenuButton?.addEventListener('click', (event) => setSettingsOpen(true, event.currentTarget));
+    getElements().openSettingsGameButton?.addEventListener('click', (event) => setSettingsOpen(true, event.currentTarget));
+    getElements().closeSettingsButton?.addEventListener('click', () => setSettingsOpen(false));
+    getElements().skipSequenceButton?.addEventListener('click', () => {
+        const result = skipCurrentText();
+        announce(result.skipped ? 'Spoken line skipped.' : 'Nothing skippable is playing.');
+    });
+    document.getElementById('settingLocale')?.addEventListener('change', async (event) => {
+        await handleLanguageChange(event.target.value);
+        announce(document.querySelector('#settingLocale option:checked')?.textContent ?? event.target.value);
+    });
+    for (const [id, key, eventName] of [
+        ['settingTheme', 'theme'], ['settingTextSpeed', 'textSpeed'], ['settingInputMode', 'inputMode'],
+        ['settingMasterVolume', 'masterVolume', 'input'], ['settingMusicVolume', 'musicVolume', 'input'], ['settingEffectsVolume', 'effectsVolume', 'input'],
+        ['settingSubtitles', 'subtitles'], ['settingReducedMotion', 'reducedMotion'], ['settingHighContrast', 'highContrast'],
+        ['settingHotspotHelp', 'hotspotHelp'], ['settingHotspotIntensity', 'hotspotIntensity'], ['settingClassicVerbs', 'classicVerbs'],
+    ]) bindPreferenceControl(id, key, eventName);
+    document.addEventListener('keydown', handleGlobalKeyboard);
+    document.addEventListener('click', (event) => {
+        const verb = event.target.closest?.('[data-verb-id]');
+        if (!verb) return;
+        document.querySelectorAll('[data-verb-id]').forEach((button) => button.setAttribute('aria-pressed', String(button === verb)));
+    });
+    document.addEventListener('focusin', (event) => {
+        const item = event.target.closest?.('.inventory-item');
+        const objectId = item?.dataset.targetId;
+        if (!objectId) return;
+        const name = getObjectData()?.objects?.[objectId]?.name?.[getLanguage()] ?? objectId;
+        updateInteractionInfo(name, false);
+    });
+    document.addEventListener('keydown', (event) => {
+        const panel = getElements().settingsPanel;
+        if (event.key !== 'Tab' || panel?.classList.contains('d-none')) return;
+        const focusable = focusableWithin(panel);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { last.focus(); event.preventDefault(); }
+        else if (!event.shiftKey && document.activeElement === last) { first.focus(); event.preventDefault(); }
+    });
+    document.addEventListener('pointerdown', (event) => {
+        if (playerPreferences.inputMode !== 'auto') return;
+        document.documentElement.dataset.inputMode = event.pointerType === 'touch' ? 'touch' : 'pointer';
+    }, { passive: true });
+    document.addEventListener('keydown', () => {
+        if (playerPreferences.inputMode === 'auto') document.documentElement.dataset.inputMode = 'keyboard';
+    });
+    window.addEventListener('gamepadconnected', () => announce('Controller connected. Use the directional controls to move focus, A to choose, and B to go back.'));
+    new MutationObserver(consumeDebugPresentationState).observe(document.documentElement, { attributes: true, attributeFilter: ['data-debug-input-mode', 'data-debug-high-contrast', 'data-debug-reduced-motion'] });
+    window.addEventListener('game-stage-resized', () => refreshSemanticHotspots(true));
+    window.addEventListener('game-settings-restored', (event) => commitPlayerPreferences(event.detail ?? {}, { persist: true }));
+    window.addEventListener('game-state-changed', (event) => {
+        requestAnimationFrame(() => {
+            if (event.detail?.mode === getMenuState()) getElements().newGameMenuButton?.focus();
+            else if (event.detail?.mode === getGameVisibleActive()) refreshSemanticHotspots(true);
+            else if (event.detail?.mode === getInteractiveDialogueState()) announce('Choose a response.');
+        });
+    });
+    hotspotRefreshTimer = window.setInterval(() => refreshSemanticHotspots(), 500);
+    window.setInterval(pollGamepad, 120);
+}
+
 /**
  * Enablement has two independent gates, both required:
  *  1. the served build advertises `/debug-capability` (a development server or
@@ -777,8 +1064,19 @@ function handleCanvasLeftClick(event) {
             x: clickX,
             y: clickY
         };
-
-        processLeftClickPoint(clickPoint, true);
+        if (event.detail >= 2) {
+            const baseline = getPlayerObject().baselineSpeedForRoom || getWalkSpeedPlayer();
+            setPlayerObject('baselineSpeedForRoom', baseline * 2.25);
+            window.setTimeout(() => {
+                if (getPlayerObject().baselineSpeedForRoom > baseline) setPlayerObject('baselineSpeedForRoom', baseline);
+            }, 3500);
+            announce('Fast walk.');
+        }
+        if (playerPreferences?.classicVerbs === false || document.documentElement.dataset.inputMode === 'touch') {
+            processRightClickPoint(clickPoint, true);
+        } else {
+            processLeftClickPoint(clickPoint, true);
+        }
     }
 }
 
@@ -813,6 +1111,10 @@ async function setElementsLanguageText() {
     getElements().saveGameButton.innerHTML = `${localize("saveGame", getLanguage(), "ui")}`;
     getElements().loadStringButton.innerHTML = `${localize("loadButton", getLanguage(), "ui")}`;
     getElements().openJournalButton.innerHTML = `${localize("openButton", getLanguage(), "journal")}`;
+    getElements().closeSettingsButton.textContent = localize('closeButton', getLanguage(), 'ui');
+    document.querySelectorAll('[data-ui-key]').forEach((element) => {
+        element.textContent = localize(element.dataset.uiKey, getLanguage(), 'ui');
+    });
     getJournalPanel()?.refreshIfOpen();
     refreshContinueAvailability();
 }
@@ -885,6 +1187,8 @@ export async function handleLanguageChange(languageCode) {
     setLanguageSelected(languageCode);
     await setupLanguageAndLocalization();
     setElementsLanguageText();
+    document.documentElement.lang = languageCode;
+    refreshSemanticHotspots(true);
 }
 
 async function setupLanguageAndLocalization() {
@@ -897,10 +1201,14 @@ export function disableActivateButton(button, action, activeClass) {
         case "active":
             button.classList.remove("disabled");
             button.classList.add(activeClass);
+            button.disabled = false;
+            button.removeAttribute('aria-disabled');
             break;
         case "disable":
             button.classList.remove(activeClass);
             button.classList.add("disabled");
+            button.disabled = true;
+            button.setAttribute('aria-disabled', 'true');
             break;
     }
 }
@@ -1030,6 +1338,8 @@ export function drawInventory(startIndex) {
 
             div.innerHTML = imgTag;
             div.dataset.targetId = objectId;
+            div.disabled = false;
+            div.setAttribute('aria-label', objectData.name?.[getLanguage()] ?? objectId);
 
             const number = inventorySlot.quantity || null;
             let numberSpan;
@@ -1049,6 +1359,8 @@ export function drawInventory(startIndex) {
             div.innerHTML = `<img src="./resources/objects/images/blank.png" alt="empty" style="width: 50%; height: 50%;" class="inventory-img" />`;
             delete div.dataset.targetId;
             div.classList.remove("show-triangle");
+            div.disabled = true;
+            div.setAttribute('aria-label', 'Empty inventory slot');
         }
     });
 
@@ -1408,16 +1720,56 @@ function adjustColor(color, reduction) {
 export function addDialogueRow(dialogueOptionText, choiceId = null) {
     const dialogueSection = getElements().dialogueSection;
 
-    const newRow = document.createElement("div");
-    newRow.classList.add("row", "dialogueRow");
+    const newRow = document.createElement("button");
+    newRow.type = 'button';
+    newRow.classList.add("dialogueRow");
+    newRow.setAttribute('role', 'option');
     if (choiceId) newRow.dataset.choiceId = choiceId;
-
-    const newCol = document.createElement("div");
-    newCol.classList.add("col-12");
-
-    newCol.textContent = dialogueOptionText;
-    newRow.appendChild(newCol);
+    newRow.textContent = dialogueOptionText;
+    newRow.addEventListener('focus', () => newRow.setAttribute('aria-selected', 'true'));
+    newRow.addEventListener('blur', () => newRow.setAttribute('aria-selected', 'false'));
+    newRow.addEventListener('keydown', (event) => {
+        if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return;
+        const rows = [...dialogueSection.querySelectorAll('.dialogueRow')];
+        const index = rows.indexOf(newRow);
+        rows[(index + (event.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length]?.focus();
+        event.preventDefault();
+    });
     dialogueSection.appendChild(newRow);
+}
+
+function renderGraphDialogueChoices() {
+    if (!graphChoiceState) return;
+    const { choices, resolve } = graphChoiceState;
+    const exitChoice = choices.find((choice) => choice.id.endsWith('.exit')) ?? null;
+    const ordinaryChoices = exitChoice ? choices.filter((choice) => choice !== exitChoice) : choices;
+    const pageSize = exitChoice ? 3 : 4;
+    const visible = ordinaryChoices.slice(graphChoiceState.index, graphChoiceState.index + pageSize);
+    removeDialogueRow(0);
+    for (const choice of [...visible, ...(exitChoice ? [exitChoice] : [])]) {
+        addDialogueRow(choice.text, choice.id);
+        getElements().dialogueSection.lastElementChild.onclick = () => {
+            graphChoiceState = null;
+            hideDialogueArrows();
+            resolve(choice.value);
+        };
+    }
+    const up = getElements().dialogueUpArrow;
+    const down = getElements().dialogueDownArrow;
+    up.classList.toggle('arrow-disabled', graphChoiceState.index === 0);
+    up.disabled = graphChoiceState.index === 0;
+    const atEnd = graphChoiceState.index + pageSize >= ordinaryChoices.length;
+    down.classList.toggle('arrow-disabled', atEnd);
+    down.disabled = atEnd;
+    getElements().dialogueSection.firstElementChild?.focus();
+}
+
+/** Four stable, focusable rows at a time: three choices plus the authored exit. */
+export function showGraphDialogueChoices(choices) {
+    return new Promise((resolve) => {
+        graphChoiceState = { choices, resolve, index: 0 };
+        renderGraphDialogueChoices();
+    });
 }
 
 export function removeDialogueRow(rowNumber) {
@@ -1463,6 +1815,14 @@ export function hideDialogueArrows() {
 }
 
 async function scrollDown() {
+    if (graphChoiceState) {
+        const hasExit = graphChoiceState.choices.some((choice) => choice.id.endsWith('.exit'));
+        const ordinaryCount = graphChoiceState.choices.filter((choice) => !choice.id.endsWith('.exit')).length;
+        const pageSize = hasExit ? 3 : 4;
+        if (graphChoiceState.index + pageSize < ordinaryCount) graphChoiceState.index += 1;
+        renderGraphDialogueChoices();
+        return;
+    }
     const currentScrollIndex = getCurrentScrollIndexDialogue();
     const scrollReserve = getDialogueOptionsScrollReserve();
     const canExit = getCanExitDialogueAtThisPoint();
@@ -1484,6 +1844,11 @@ async function scrollDown() {
 }
 
 async function scrollUp() {
+    if (graphChoiceState) {
+        graphChoiceState.index = Math.max(0, graphChoiceState.index - 1);
+        renderGraphDialogueChoices();
+        return;
+    }
     const currentScrollIndex = getCurrentScrollIndexDialogue();
     if (currentScrollIndex > 0) {
         setCurrentScrollIndexDialogue(currentScrollIndex - 1);

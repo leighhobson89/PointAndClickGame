@@ -8,8 +8,7 @@ This document lists the features that are still missing, in implementation order
 
 ## Foundation features
 
-1. **Settings** — locale, text speed, volume groups, subtitles, reduced motion, hotspot assistance, and input preferences, persisted across sessions.
-2. **Offline delivery** — bundle or remove the CDN scripts so the game boots under a strict CSP with no runtime network dependency.
+1. **Offline delivery** — bundle or remove the remaining CDN script so the game boots under a strict CSP with no runtime network dependency.
 
 ## Chapter 1 completion
 
@@ -17,14 +16,6 @@ This document lists the features that are still missing, in implementation order
 - Author the missing rigging props so the pulley has a real source (BUG-035).
 - Add optional examine variants and character barks that reward exploration without gating progress.
 - Manual review of narrative continuity, humour, pacing, discoverability, and puzzle fairness. This is Leigh's pass.
-
-## Interaction improvements
-
-- Contextual default click, with the full verb panel retained as an optional/classic interaction mode.
-- Hotspot highlight/reveal with accessible names and adjustable intensity.
-- Double-click or explicit fast-walk, plus skip for previously seen skippable animations.
-- Keyboard focus traversal, verb shortcuts, inventory navigation, dialogue selection, and Escape/back behaviour.
-- Touch layout with large targets and no hover dependency.
 
 ## Narrative and replayability
 
@@ -39,12 +30,11 @@ This document lists the features that are still missing, in implementation order
 - Character/dialogue cues that do not conflict with text readability.
 - Music transitions tied to locations and milestones.
 - Subtitle/caption support for all meaningful audio.
-- Art pipeline and UI upgrade described in [ui-and-art-direction.md](ui-and-art-direction.md).
+- Art pipeline described in [ui-and-art-direction.md](ui-and-art-direction.md).
 
 ## Later releases
 
 - Additional chapters built from the validated room/puzzle/dialogue schemas.
-- Optional controller support.
 - Cloud save only after local versioned saves are reliable and privacy/identity choices are explicit.
 - Distribution packaging only after browser-offline mode, dependency security, signing/update strategy, and target platforms are defined.
 

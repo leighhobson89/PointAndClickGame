@@ -76,6 +76,6 @@ The fixtures themselves live in `src/content/scenario-registry.mjs` and are vali
 
 ## Implementation status
 
-Startup, game-state, navigation, dialogue, animation-cutscenes, puzzles, and save-load contain implemented tests. The remaining folders are deliberate coverage boundaries, not claims of finished coverage.
+Startup, game-state, navigation, dialogue, animation-cutscenes, puzzles, save-load, rendering-layout, and accessibility contain implemented tests. The remaining folders are deliberate coverage boundaries, not claims of finished coverage.
 
-The full suite now takes about 136 seconds against a 180-second gate, so the margin matters. Arrange a milestone state with a scenario and `setMovementSpeed('instant')` rather than replaying a journey another test already covers.
+The latest full suite passed 69 journeys in 168.959 seconds against a 180-second gate, so the margin matters. Arrange a milestone state with a scenario and `setMovementSpeed('instant')` rather than replaying a journey another test already covers.

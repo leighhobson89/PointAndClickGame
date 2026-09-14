@@ -20,7 +20,7 @@ The set is split in two. **The live documents below hold what is still outstandi
 | [bugs](bugs.md) | Open defects and material risks, with status and required verification |
 | [refactor plan](refactor-plan.md) | The remaining staged architecture work |
 | [feature roadmap](feature-roadmap.md) | Missing features and implementation order |
-| [UI and art direction](ui-and-art-direction.md) | Modern interaction, accessibility, and coherent visual direction |
+| [UI and art direction](ui-and-art-direction.md) | Outstanding art direction and asset-production standards; completed UI work is archived |
 | [testing strategy](testing-strategy.md) | Current coverage, the timing gate, and the coverage still owed |
 | [debug and test controls](debug-test-controls.md) | The shipped scenario, panel, and `__GAME_TEST__` surface |
 | [master checklist](master-checklist.md) | The ordered, outstanding execution and acceptance checklist |

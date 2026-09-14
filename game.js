@@ -79,10 +79,6 @@ export function gameLoop() {
     //debug
     updateDebugValues();
 
-    const bottomContainer = getElements().bottomContainer;
-
-    bottomContainer.style.height = `${getBottomContainerHeight()}px`;
-    bottomContainer.offsetHeight;
     const ctx = getElements().canvas.getContext('2d');
 
     ctx.clearRect(0, 0, getElements().canvas.width, getElements().canvas.height);
@@ -912,62 +908,25 @@ export function initializeCanvas() {
 
     const canvas = getElements().canvas;
     const ctx = canvas.getContext('2d');
-    const container = getElements().canvasContainer;
-
-    // Utility function to adjust sizes and positions of child elements inside bottomContainer
-    function updateBottomContainerElements() {
-        const bottomContainer = getElements().bottomContainer;
-        const dialogueContainer = getElements().dialogueContainer;
-        const verbsInventoryContainer = getElements().verbsInventoryContainer;
-        
-        // Adjust dialogue container's height to match bottom container
-        dialogueContainer.style.height = `${bottomContainer.offsetHeight * 0.4}px`;
-
-        // Adjust verbs and inventory container
-        verbsInventoryContainer.style.height = `${bottomContainer.offsetHeight * 0.6}px`;
-
-        // Dynamically adjust button sizes or other content
-        const buttons = bottomContainer.querySelectorAll('.btn');
-        buttons.forEach(button => {
-            button.style.height = `${bottomContainer.offsetHeight * 0.15}px`;
-            button.style.fontSize = `${bottomContainer.offsetHeight * 0.05}px`;
-        });
-
-        // Adjust inventory items size to fit the container dynamically
-        const inventoryItems = bottomContainer.querySelectorAll('.inventory-item img');
-        inventoryItems.forEach(item => {
-            item.style.width = `${bottomContainer.offsetHeight * 0.1}px`;
-            item.style.height = `${bottomContainer.offsetHeight * 0.1}px`;
-        });
-    }
 
     function updateCanvasSize() {
-        const viewportHeight = window.innerHeight;
-        const bottomContainerHeight = getElements().bottomContainer.offsetHeight;
+        // The world always renders into one logical coordinate space. CSS may
+        // scale and letterbox that bitmap, while pointerToWorld performs the
+        // exact inverse mapping. A viewport resize therefore never changes a
+        // save position, authored hotspot, or dialogue coordinate.
+        const canvasWidth = 832;
+        const canvasHeight = 448;
+        setBottomContainerHeight(getElements().bottomContainer.offsetHeight);
 
-        setBottomContainerHeight(bottomContainerHeight - 10);
-
-        const canvasHeight = viewportHeight - bottomContainerHeight;
-        const canvasWidth = container.clientWidth * 0.8;
-
-        container.style.width = '100%';
-        container.style.height = `${canvasHeight}px`;
-
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        canvas.style.backgroundSize = `${canvasWidth}px ${canvasHeight}px`;
-
-        // Updating cell sizes based on canvas resizing
         const oldCellWidth = getCanvasCellWidth();
         const oldCellHeight = getCanvasCellHeight();
-
         const newCellWidth = canvasWidth / getGridSizeX();
         const newCellHeight = canvasHeight / getGridSizeY();
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
         setCanvasCellWidth(newCellWidth);
         setCanvasCellHeight(newCellHeight);
 
-        // Update player position based on new cell size
         const player = getPlayerObject();
         player.xPos = Number.isFinite(oldCellWidth) && oldCellWidth > 0
             ? (player.xPos / oldCellWidth) * newCellWidth
@@ -980,8 +939,7 @@ export function initializeCanvas() {
         setPlayerObject('yPos', player.yPos);
 
         drawDebugGrid(getDrawGrid());
-
-        updateBottomContainerElements();
+        window.dispatchEvent(new CustomEvent('game-stage-resized'));
     }
 
     window.addEventListener('resize', updateCanvasSize);
@@ -2426,4 +2384,5 @@ export function setGameState(newState) {
             console.log("Unknown game state");
             break;
     }
+    window.dispatchEvent(new CustomEvent('game-state-changed', { detail: { mode: newState } }));
 }
