@@ -1,6 +1,6 @@
 # Point-and-Click Game living documentation
 
-Last audited: 2026-09-14  
+Last audited: 2026-09-19  
 Owner: Leigh
 
 This folder is the maintained source of truth for the current game, its intended direction, known faults, and delivery sequence.
@@ -18,10 +18,8 @@ The set is split in two. **The live documents below hold what is still outstandi
 | [save format](save-format.md) | Versioned save contract, migration boundary, slots, restore rules, and known limits |
 | [hotspot report](hotspot-report.md) | Generated room/entity hotspot geometry and authoring warnings |
 | [bugs](bugs.md) | Open defects and material risks, with status and required verification |
-| [refactor plan](refactor-plan.md) | The remaining staged architecture work |
-| [feature roadmap](feature-roadmap.md) | Missing features and implementation order |
-| [UI and art direction](ui-and-art-direction.md) | Outstanding art and asset work; completed UI and art-direction decisions are archived |
 | [art bible](art-bible.md) | The approved production standard for every visual asset: scale, perspective, animation, budgets, and acceptance |
+| [art redesign production plan](art-redesign-production-plan.md) | Remaining room/NPC/prop production packages and shared restyle rules |
 | [asset report](asset-report.md) | Generated manifest report: roles, dimensions, budget breaches, duplicates, orphans |
 | [player frame geometry](player-frame-geometry.md) | Generated measurement of every player animation frame's anchor and drawn size |
 | [testing strategy](testing-strategy.md) | Current coverage, the timing gate, and the coverage still owed |
@@ -31,7 +29,7 @@ The set is split in two. **The live documents below hold what is still outstandi
 
 ## The archive — what is already done
 
-[archive/](archive/README.md) holds the completed side of each document above: finished checklist sections, delivered phases and features, resolved audit findings, the resolved bug register, the accumulated test-proof history, and the acceptance evidence. Nothing is deleted there, including the implementation notes explaining why a decision was taken.
+[archive/](archive/README.md) holds completed sections and retired documents: finished checklist work, delivered phases and features, resolved audit findings, the resolved bug register, accumulated test-proof history, and acceptance evidence. Nothing is deleted there, including the implementation notes explaining why a decision was taken.
 
 `changelog.md`, `hotspot-report.md`, `asset-report.md`, and `player-frame-geometry.md` stay in the live set. The changelog is the running dated ledger; the other three are regenerated from current state by `npm run report:hotspots`, `npm run report:assets`, and `npm run report:art`, and always describe what is true now. `art-bible.md` also stays live: it is the standard the work is judged against rather than a record of work done.
 

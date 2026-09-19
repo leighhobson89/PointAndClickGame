@@ -2,7 +2,7 @@
 
 ## Status
 
-Wired gameplay candidate, not final approved art. Leigh asked to integrate this set before perfecting it so the character and gait could be reviewed in the actual rooms. That review happened, and the registration and playback faults it exposed are fixed. The legacy files in `resources/player/` have not been changed and remain the rollback source.
+Mechanically complete gameplay candidate awaiting Leigh's final visual acceptance and the project's human paint-over decision. The wired art now contains a real lateral passing/crossover pose, readable front/back foot changes, a distance-driven nine-frame loop in every direction, and delivery-size PNGs. The legacy files in `resources/player/` remain the rollback and pose-reference source.
 
 ## Runtime package
 
@@ -10,10 +10,11 @@ Wired gameplay candidate, not final approved art. Leigh asked to integrate this 
 - `frames/`: 40 runtime PNGs on **280 x 375** transparent canvases — one idle and nine movement poses for each of up, down, left, and right.
 - `frame-geometry.csv`: source bounds, registration scale, output subject dimensions, stance width, discarded debris, baseline, and byte size for every runtime frame.
 - `source-sheets/`: unmodified generated sheets, including the bright-green chroma sources used for extraction.
+- `source-poses/`: retained transparent replacement poses, currently the true lateral passing/crossover pose used for frame 5 in both mirrored side cycles.
 - `processed-sheets/`: keyed sheets kept for visual diagnosis; these are not runtime assets and are written before the extraction aids below, so they show the true key result.
 - `pose-references/`: existing-game gait references used to preserve direction and broad step order.
 
-Run `scripts/process-player-redesign.ps1` from the repository root to rebuild the frames from the chroma sheets. Pass `-Measure` to report the registration every frame would get, and whether the widest pose still fits the canvas, without writing anything.
+Run `scripts/process-player-redesign.ps1` from the repository root to rebuild the frames from the chroma sheets and retained pose. Pass `-Measure` to report the registration every frame would get, and whether the widest pose still fits the canvas, without writing anything. Run `npm run audit:player-walk` after a rebuild to validate the runtime pixels and render the four-direction contact sheet under `test-reports/art/`.
 
 ## Why the canvas is 280 px wide and the player's box is not
 
@@ -32,9 +33,11 @@ The player's **logical** box is a separate thing and is unchanged: `PLAYER_SPRIT
 5. **Register**: scale on height to a 365 px subject, place the head-and-torso median on the canvas centre, and sit the feet on y=371. The anchor is the torso rather than the bounding box because a bounding box follows whichever limb is thrown furthest out, so pinning it slid the body around inside the frame every step.
 6. **Contact shadow** sized from the stance — the spread of the boots — rather than from the frame width, so a thrown-out arm no longer swells the shadow out of step with the feet.
 
+7. **PNG channel quantisation** in four-value colour buckets and eight-value alpha buckets. Maximum RGB error is two channel values, which is visually lossless at gameplay scale, while removing generator and bicubic noise that previously put 37 frames over budget.
+
 ## Measured result
 
-Subject height is 365 px and the foot baseline y=371 in all 40 frames: height spread 0%, baseline spread 0%, against an under-5% and under-2% target. Subject widths range 75–237 px.
+Subject height is 365 px and the foot baseline y=371 in all 40 frames: height spread 0%, baseline spread 0%, against an under-5% and under-2% target. The pixel audit measures lateral stance widths of `210, 173, 168, 144, 88, 133, 182, 194, 215` in both mirrored directions: a monotonic close into frame 5's single-support crossover and a monotonic open into the opposite contact. Its passing/contact ratio is 0.409, and separated ground contacts change `2 → 1 → 2` from contact through crossover to opposite contact. Every frame is below the 60 KB player-frame budget; the largest is 44,984 bytes.
 
 ## Art and generation brief
 
@@ -45,11 +48,10 @@ Subject height is 365 px and the foot baseline y=371 in all 40 frames: height sp
 - Animation request: nine distinct readable walk poses per direction, consistent identity/proportions/costume, orthographic game-sprite view, no camera change, no props, no text, no cropping or overlap.
 - Extraction request: solid chroma-green background, isolated full-body poses, then key to true alpha and register feet to the common baseline with a soft neutral contact shadow.
 - Source references: the existing directional gait frames under `resources/player/`, the approved painted side-idle finish, `docs/art-bible.md`, and `docs/ui-and-art-direction.md`.
-- Human paint-over: none yet.
-- Provenance/licence review: required before shipping; no conclusion is recorded here.
+- Human paint-over: none recorded yet; Leigh's latest art direction explicitly rejected the earlier wide-only lateral gait, leading to the retained crossover replacement.
+- Provenance/licence review: recorded in `resources/asset-provenance.json`; final third-party-similarity and visual acceptance remain with the project owner.
 
 ## Still to do before this section closes
 
-- The front and back walks need re-authoring. Frame-to-frame silhouette change across the up cycle measures 3–12% and leg spread varies by 9%, against 11–55% and 65% laterally, so those two directions are close to nine near-identical poses and read as a glide rather than a walk.
-- Optimise every accepted frame below the 60 KB player-frame budget; 37 of the 40 exceed it.
-- Complete human paint-over, gameplay-scale comparison, provenance/licence recording, and final acceptance before closing BUG-039/040.
+- Leigh's visual acceptance of the revised gait in motion.
+- Record the final human paint-over decision. No mechanical, ordering, registration, reporting, provenance, or player-frame budget work remains.

@@ -76,7 +76,8 @@
       ["objectGlove", "objectCarrot"],
       ["objectGlove", "objectLargePileOfPoo"],
       ["objectCarrot", "objectLargePileOfPoo"],
-      ["objectParrakeet", "objectParrotMirror"]
+      ["objectParrakeet", "objectParrotMirror"],
+      ["objectKeyResearchRoom", "objectPileOfBooksLibraryFoyer"]
     ]
   },
   "puzzle": {

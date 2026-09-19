@@ -1,0 +1,32 @@
+{
+  "_prefixes": {
+    "./resources/redesign/section-02-player/frames/": {
+      "provenance": "OpenAI image generation candidate created 2026-09-14 from Leigh's legacy player gait, approved painted side-idle finish, and the Section 2 model sheet; the missing lateral crossover pose was regenerated on 2026-09-19 from the finished side art and Leigh's legacy passing-pose reference. Chroma keying, despill, pose ordering, documented mirroring, registration, contact shadows, and visually lossless PNG channel quantisation are reproducible through scripts/process-player-redesign.ps1. Leigh directed the redesign, rejected the earlier wide-gait pass, and gave final visual acceptance on 2026-09-19 with no further paint-over required.",
+      "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section: as between the user and OpenAI and to the extent permitted by law, the user owns Output; Leigh retains rights in project inputs. Similarity and third-party-rights review remains the project owner's responsibility."
+    }
+  },
+  "./resources/backgrounds/libraryFoyer.webp": {
+    "provenance": "OpenAI image generation, approved by Leigh on 2026-09-19. Restyled from Leigh's original Library Foyer with Research Room and Kitchen as project-owned style references. Exact 832x448 delivery crop and WebP export are reproducible through scripts/process-library-foyer.mjs.",
+    "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section: as between the user and OpenAI and to the extent permitted by law, the user owns Output; Leigh retains rights in project inputs. Similarity and third-party-rights review remains the project owner's responsibility."
+  },
+  "./resources/foregrounds/libraryFoyer.webp": {
+    "provenance": "Derived on 2026-09-19 from the approved Library Foyer background and Leigh's original occluder alpha; reproducible through scripts/process-library-foyer.mjs.",
+    "licence": "Same project ownership and OpenAI-output review as the approved Library Foyer background."
+  },
+  "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.webp": {
+    "provenance": "OpenAI image generation approved by Leigh as part of the 2026-09-19 Library Foyer package; generated from Leigh's original closed-door silhouette and the approved room repaint, then fitted reproducibly by scripts/process-library-foyer.mjs.",
+    "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section; third-party-rights review remains the project owner's responsibility."
+  },
+  "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.webp": {
+    "provenance": "OpenAI image generation approved by Leigh as part of the 2026-09-19 Library Foyer package; generated as the matching open state and fitted reproducibly by scripts/process-library-foyer.mjs.",
+    "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section; third-party-rights review remains the project owner's responsibility."
+  },
+  "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.webp": {
+    "provenance": "OpenAI image generation approved by Leigh as part of the 2026-09-19 Library Foyer package; generated from Leigh's original locked-door silhouette and the approved room repaint, then fitted reproducibly by scripts/process-library-foyer.mjs.",
+    "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section; third-party-rights review remains the project owner's responsibility."
+  },
+  "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.webp": {
+    "provenance": "OpenAI image generation approved by Leigh as part of the 2026-09-19 Library Foyer package; generated as the matching open state and fitted reproducibly by scripts/process-library-foyer.mjs.",
+    "licence": "Reviewed 2026-09-19 against OpenAI Terms of Use, Content section; third-party-rights review remains the project owner's responsibility."
+  }
+}

@@ -103,8 +103,8 @@ Depth interpolates linearly between the two heights. The curve is normalised to 
 Frames are named `<pose><index>_<direction>.png`, directions `left`, `right`, `up`, `down`, index from 1.
 
 - Frames for one direction share one canvas size. **[enforced]**
-- The foot baseline sits at the same place in every frame of a direction, within 2% of canvas height. **[measured]** — for the wired set, per frame in `resources/redesign/section-02-player/frame-geometry.csv`. [player-frame-geometry.md](player-frame-geometry.md) still measures the unwired legacy set (BUG-052), so it is not evidence for the frames the game draws. Neither yet fails a command.
-- Drawn character height varies by at most 5% across a walk cycle; more than that reads as growing rather than striding. **[measured]**
+- The foot baseline sits at the same place in every frame of a direction, within 2% of canvas height. **[enforced]** — `scripts/player-gait-audit.mjs` measures the wired runtime pixels; [player-frame-geometry.md](player-frame-geometry.md) and `frame-geometry.csv` retain the full evidence.
+- Drawn character height varies by at most 5% across a walk cycle; more than that reads as growing rather than striding. **[enforced]** by the same pixel audit.
 - A frame's scale is set by the character's height alone. Fitting a frame to a width ceiling as well makes wide poses shrink, and because a side-on stride is about twice as wide as a front-on one, that lands almost entirely on the side views and reads as the character pumping in size as it walks. The canvas is instead made wide enough to hold the widest pose at full height. **[enforced]** — `scripts/process-player-redesign.ps1` refuses to write a frame that overflows the canvas.
 - Frames are registered horizontally on the character's head-and-torso mass, not on the bounding box. A walk cycle's bounding box is set by whichever limb is thrown furthest out, so centring it slides the body around inside the frame every step.
 - A walk cycle is **a loop, not a palindrome**: the last frame's heel strike is the foot the first frame plants. It is played straight through and round again. Playing it out and back runs the leg motion in reverse for half of every cycle, which is nearly invisible front-on and reads as a moonwalk side-on.
@@ -112,11 +112,11 @@ Frames are named `<pose><index>_<direction>.png`, directions `left`, `right`, `u
 
 ### The approved player finish
 
-The character ships in the **painted finish** — the treatment currently seen only on `still_left` and `still_right`. Approved by Leigh.
+The character ships in the **painted finish**, now used by the wired model, idles and movement frames. Leigh approved the finish and revised motion on 2026-09-19 and accepted the generated package without a further human paint-over.
 
 The reasoning is that the rooms the game is being normalised towards are painted, and the NPCs that already match them — the carpenter, the farmer, the cow, the donkey, the seedy guy — are painted too. A flat, line-drawn player standing in a painted room beside a painted NPC is the largest single style break left in the game, and it is on the most-seen asset in it. Adopting the flat walk finish instead would narrow that break to one asset rather than remove it.
 
-This **reverses the earlier direction**, which was to redraw the two side idles down into the flat walk finish. The cost moves from redrawing 2 frames to redrawing roughly 26.
+This **reverses the earlier direction**, which was to redraw the two side idles down into the flat walk finish.
 
 ### Current state of the player animation
 
@@ -128,12 +128,9 @@ The runtime set is the Section 2 candidate in `resources/redesign/section-02-pla
 | up / down | 9 | 280 x 375 | 365 px | painted |
 | idles, all four | 1 each | 280 x 375 | 365 px | painted |
 
-Registration is compliant: subject height is 365 px and the foot baseline y=371 in all 40 frames, so height spread is 0% and baseline spread 0%. Two faults remain, recorded in [bugs.md](bugs.md):
+Registration is compliant: subject height is 365 px and the foot baseline y=371 in all 40 frames, so height spread and baseline spread are both 0. Front/back source poses are reordered and mirrored into readable alternating steps. The lateral stance closes monotonically through `210, 173, 168, 144, 88` px into frame 5's true single-support crossover, then opens through `133, 182, 194, 215` px into the opposite contact; right mirrors left exactly in timing and silhouette. All 40 PNGs are below 60 KB, with a 44,984-byte maximum. Provenance/licence is recorded.
 
-1. The front and back walks are close to nine near-identical poses. Measured frame-to-frame silhouette change across the up cycle is 3–12% and leg spread varies by 9%, against 11–55% and 65% laterally, so those directions read as a glide rather than a walk. They need re-authoring with a readable stride.
-2. 37 of the 40 frames exceed the 60 KB player-frame budget.
-
-Paint-over, provenance and licence review, and Leigh's visual approval are also outstanding before the set can be accepted.
+The set is accepted shipping art. Further changes are ordinary art revisions, not an outstanding acceptance gate.
 
 ## 7. Inventory icons
 
@@ -149,14 +146,14 @@ Per-file ceilings, enforced by `npm run check:assets`.
 | --- | --- | ---: |
 | Room background | 832 x 448 exactly | 400 KB |
 | Room foreground | 832 x 448 exactly | 250 KB |
-| Player frame | 220 x 420 | 60 KB |
+| Player frame | 280 x 375 | 60 KB |
 | NPC sprite | 400 x 700 | 120 KB |
 | Object world sprite | 512 x 512 | 80 KB |
 | Inventory icon | 128 x 128 | 24 KB |
 | Cursor | 64 x 64 | 8 KB |
 | UI layout frame | — | 64 KB |
 
-Current standing against these budgets is in [asset-report.md](asset-report.md). At the time of writing 83 of 167 shipped images breach a budget and the shipped set totals 38.1 MB, against a target of roughly 6 MB.
+Current standing against these budgets is in [asset-report.md](asset-report.md). At the time of writing 81 of 179 shipped images breach a budget and the shipped set totals 38.8 MB, against a target of roughly 6 MB. None of the breaches is a player frame.
 
 PNG is the wrong container for painted scenery. A full-stage painted background encodes to well under the 400 KB budget as WebP at quality 85, and to several megabytes as PNG. PNG stays correct for flat, hard-edged sprites and icons.
 
@@ -184,7 +181,7 @@ A generated asset that does not hold the character model, the room's light direc
 
 ### The hand-drawn rooms
 
-The **Library Foyer**, **Market Street**, and **Back Alley** backgrounds are Leigh's hand-drawn originals. They are the three rooms that sit outside the painted style, and they are the reason the game currently reads as more than one game.
+The **Library Foyer**, **Market Street**, and **Back Alley** backgrounds began as Leigh's hand-drawn originals. The Library Foyer now has an accepted painted room package; Market Street and Back Alley remain to be restyled.
 
 They are in scope for restyling and for corrected sizing and aspect like every other room, but the result must stay recognisably the same place: **the layout carries over and only the style changes.** The arrangement and identity of the archways, doorways, buildings, stalls, and passages are kept; their position in frame, their relationship to each other, and the route the player walks between them are preserved. Someone who knows the room must recognise it immediately after the restyle.
 
@@ -201,6 +198,8 @@ A room is accepted when, at gameplay scale and not at source resolution:
 5. Every character and free-standing prop has a contact shadow.
 6. Outline weight and facial detail match the standard at the room's own scale.
 7. Foreground occlusion works without halos.
+8. A new walkable-area overlay and room-local 80 x 60 grid fragment have been generated from the accepted background and reviewed.
+9. Every exit, object state, NPC, hidden-in-plain-sight hotspot, and foreground occluder is fitted to its exact painted location in both normal and resized views. A state-specific cut-out or eye-tuned offset is authored geometry and must not be replaced by a generic rectangle.
 8. Every asset in the room is inside budget and carries provenance and licence.
 9. The room is reviewed **beside its role's gold standard** — River Crossing for an exterior, Kitchen for an interior — and beside its own neighbours, never alone.
 

@@ -919,8 +919,8 @@
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
-        "s2": "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png"
+        "s1": "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.webp",
+        "s2": "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.webp"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -928,7 +928,7 @@
           "y": 0
         },
         "s2": {
-          "x": 70,
+          "x": 60,
           "y": 0
         }
       },
@@ -938,8 +938,8 @@
         "y": 32
       },
       "offset": {
-        "x": -0.35,
-        "y": 0.25
+        "x": 0.05,
+        "y": -2.7
       },
       "visualPosition": {
         "x": 0,
@@ -949,7 +949,7 @@
       "openCloseScaleFactorY": 1,
       "dimensions": {
         "originalWidth": 4,
-        "originalHeight": 27.5,
+        "originalHeight": 23,
         "width": 0,
         "height": 0
       },
@@ -1005,8 +1005,8 @@
       "objectPlacementLocation": "libraryFoyer",
       "activeSpriteUrl": "s1",
       "spriteUrl": {
-        "s1": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
-        "s2": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png"
+        "s1": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.webp",
+        "s2": "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.webp"
       },
       "visualAnimatedStateOffsets": {
         "s1": {
@@ -1024,8 +1024,8 @@
         "y": 32
       },
       "offset": {
-        "x": 0.2,
-        "y": -0.6
+        "x": -0.3,
+        "y": -1.8
       },
       "visualPosition": {
         "x": 0,
@@ -1447,8 +1447,8 @@
       },
       "inventoryUrl": "./resources/objects/images/goldKeyInv.png",
       "gridPosition": {
-        "x": 15,
-        "y": 52
+        "x": 22,
+        "y": 48
       },
       "offset": {
         "x": 0,
@@ -2396,8 +2396,8 @@
       },
       "inventoryUrl": "",
       "gridPosition": {
-        "x": 19,
-        "y": 50
+        "x": 15,
+        "y": 46
       },
       "offset": {
         "x": 0,
@@ -2410,8 +2410,8 @@
       "openCloseScaleFactorX": 1,
       "openCloseScaleFactorY": 1,
       "dimensions": {
-        "originalWidth": 9,
-        "originalHeight": 8,
+        "originalWidth": 12,
+        "originalHeight": 13,
         "width": 0,
         "height": 0
       },

@@ -1,22 +1,22 @@
 # Asset manifest report
 
-Generated 2026-09-14 by `npm run report:assets`. Do not edit by hand.
+Generated 2026-09-19 by `npm run report:assets`. Do not edit by hand.
 
 The stage is 832x448 (aspect 1.8571). Budgets are defined in [art-bible.md](art-bible.md) and enforced by `scripts/asset-manifest.mjs --check`.
 
-**167 shipped images totalling 38.1 MB**, out of 408 images totalling 108.2 MB in `resources/`.
+**179 shipped images totalling 38.8 MB**, out of 409 images totalling 107.5 MB in `resources/`.
 
 ## Weight and budget by role
 
 | Role | Files | Total bytes | Over budget | Orphaned |
 | --- | ---: | ---: | ---: | ---: |
-| Reference / working image (not shipped) | 212 | 69.5 MB | 0 | 0 |
+| Reference / working image (not shipped) | 201 | 68.1 MB | 0 | 0 |
 | Room background | 24 | 28.0 MB | 24 | 0 |
 | NPC sprite | 20 | 3.5 MB | 7 | 0 |
 | Object, world sprite | 59 | 2.9 MB | 18 | 7 |
+| Player animation frame | 40 | 1.5 MB | 0 | 0 |
 | Object, inventory icon | 22 | 1.2 MB | 22 | 0 |
 | Room foreground / occluder | 8 | 0.9 MB | 4 | 0 |
-| Player animation frame | 28 | 0.8 MB | 2 | 28 |
 | UI layout frame | 2 | 0.7 MB | 2 | 2 |
 | Authoring walk-grid overlay | 28 | 0.5 MB | 0 | 0 |
 | Layered source art (not shipped) | 1 | 0.0 MB | 0 | 0 |
@@ -24,7 +24,7 @@ The stage is 832x448 (aspect 1.8571). Budgets are defined in [art-bible.md](art-
 
 ## Budget breaches
 
-83 shipped assets breach their role budget.
+81 shipped assets breach their role budget.
 
 | Asset | Role | Size | Bytes | Breach |
 | --- | --- | --- | ---: | --- |
@@ -59,8 +59,6 @@ The stage is 832x448 (aspect 1.8571). Budgets are defined in [art-bible.md](art-
 | `obj.oldGRedGloveWorld` | objectWorld | 664x664 | 338 KB | 338 KB exceeds the 80 KB objectWorld budget; width 664 exceeds the 512 px objectWorld ceiling; height 664 exceeds the 512 px objectWorld ceiling |
 | `icon.oldGRedGloveInv` | objectInventory | 676x676 | 326 KB | 326 KB exceeds the 24 KB objectInventory budget; width 676 exceeds the 128 px objectInventory ceiling; height 676 exceeds the 128 px objectInventory ceiling |
 | `obj.manholeCover` | objectWorld | 260x257 | 263 KB | 263 KB exceeds the 80 KB objectWorld budget |
-| `player.still_right` | player | 800x1500 | 249 KB | 249 KB exceeds the 60 KB player budget; width 800 exceeds the 220 px player ceiling; height 1500 exceeds the 420 px player ceiling; 800x1500 does not match the 200x375 canvas the other right frames share |
-| `player.still_left` | player | 800x1500 | 247 KB | 247 KB exceeds the 60 KB player budget; width 800 exceeds the 220 px player ceiling; height 1500 exceeds the 420 px player ceiling; 800x1500 does not match the 200x375 canvas the other left frames share |
 | `npc.carpenterNpc` | npc | 640x448 | 187 KB | 187 KB exceeds the 120 KB npc budget; width 640 exceeds the 400 px npc ceiling |
 | `npc.donkeyOnRope` | npc | 538x508 | 153 KB | 153 KB exceeds the 120 KB npc budget; width 538 exceeds the 400 px npc ceiling |
 | `obj.paperScrawledOnWorld` | objectWorld | 660x567 | 152 KB | 152 KB exceeds the 80 KB objectWorld budget; width 660 exceeds the 512 px objectWorld ceiling; height 567 exceeds the 512 px objectWorld ceiling |
@@ -129,52 +127,24 @@ Byte-identical files. Each group should become one asset with the other IDs alia
 | 2 | `icon.nailsInv`, `obj.nailsWorld` |
 | 2 | `icon.pliersInv`, `obj.pliersWorld` |
 | 2 | `icon.ropeHookInv`, `obj.ropeHookWorld` |
-| 2 | `player.move2_down`, `player.still_down` |
-| 2 | `player.move2_up`, `player.still_up` |
+| 2 | `ref.move2_down`, `ref.still_down` |
+| 2 | `ref.move2_up`, `ref.still_up` |
 
 ## Orphaned shipped assets
 
-37 images sit in a shipped folder but no room, object, NPC, or player frame references them, totalling 2.1 MB.
+9 images sit in a shipped folder but no room, object, NPC, or player frame references them, totalling 1.3 MB.
 
 | Asset | Role | Size | Bytes |
 | --- | --- | --- | ---: |
 | `ui.border_left` | layout | 410x1920 | 358 KB |
 | `ui.border_right` | layout | 410x1920 | 358 KB |
-| `player.still_right` | player | 800x1500 | 249 KB |
-| `player.still_left` | player | 800x1500 | 247 KB |
 | `obj.paperScrawledOnWorld` | objectWorld | 660x567 | 152 KB |
 | `obj.pileOfBooks` | objectWorld | 660x567 | 137 KB |
 | `obj.parrotBranch` | objectWorld | 485x266 | 106 KB |
 | `obj.keyDen` | objectWorld | 660x567 | 104 KB |
 | `obj.barn_Exit_StablesClosed` | objectWorld | 356x136 | 49 KB |
-| `player.move1_down` | player | 200x375 | 45 KB |
-| `player.move3_down` | player | 200x375 | 41 KB |
-| `player.move1_up` | player | 200x375 | 37 KB |
-| `player.move3_up` | player | 200x375 | 33 KB |
 | `obj.milkInBowlWorld` | objectWorld | 200x198 | 21 KB |
-| `player.move2_down` | player | 200x375 | 11 KB |
-| `player.still_down` | player | 200x375 | 11 KB |
-| `player.move7_right` | player | 200x375 | 9 KB |
-| `player.move7_left` | player | 200x375 | 9 KB |
-| `player.move2_up` | player | 200x375 | 8 KB |
-| `player.still_up` | player | 200x375 | 8 KB |
-| `player.move2_right` | player | 200x375 | 8 KB |
-| `player.move8_right` | player | 200x375 | 8 KB |
-| `player.move4_right` | player | 200x375 | 8 KB |
-| `player.move8_left` | player | 200x375 | 8 KB |
-| `player.move4_left` | player | 200x375 | 8 KB |
-| `player.move9_right` | player | 200x375 | 8 KB |
 | `obj.barn_Exit_StablesOpen` | objectWorld | 47x136 | 8 KB |
-| `player.move3_right` | player | 200x375 | 7 KB |
-| `player.move9_left` | player | 200x375 | 7 KB |
-| `player.move1_right` | player | 200x375 | 7 KB |
-| `player.move3_left` | player | 200x375 | 7 KB |
-| `player.move5_right` | player | 200x375 | 7 KB |
-| `player.move1_left` | player | 200x375 | 7 KB |
-| `player.move6_right` | player | 200x375 | 7 KB |
-| `player.move5_left` | player | 200x375 | 7 KB |
-| `player.move6_left` | player | 200x375 | 6 KB |
-| `player.move2_left` | player | 200x375 | 6 KB |
 
 ## Character scale against the player
 
@@ -193,5 +163,5 @@ Animals are expected to sit away from 1.0. A flagged *human* NPC is drawn at a d
 
 ## Provenance and licence
 
-0 of 167 shipped assets have a recorded provenance and licence. The manifest leaves both `null` until a human records them, so an unrecorded asset is visible rather than assumed clear.
+40 of 179 shipped assets have a recorded provenance and licence. The manifest leaves both `null` until a human records them, so an unrecorded asset is visible rather than assumed clear.
 

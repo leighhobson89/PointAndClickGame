@@ -5,7 +5,7 @@
         "de": "Bibliotheksfoyer",
         "it": "Foyer della Biblioteca",
         "fr": "Foyer de la Bibliothèque",
-        "bgUrl": "./resources/backgrounds/libraryFoyer.png",
+        "bgUrl": "./resources/backgrounds/libraryFoyer.webp",
         "alreadyVisited": false,
         "screenTilesWidebgImg": 1,
         "scalingPlayerSpeed": 1,

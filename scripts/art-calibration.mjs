@@ -197,7 +197,7 @@ async function renderRooms(browser, { sheets = true } = {}) {
             // the repaired fence — so prefer the file named after the grid and
             // fall back to the room's declared background.
             background: assetHref(variantBackground(gridId) ?? path.join(ROOT, room.bgUrl.replace(/^\.\//, ''))),
-            playerSprite: assetHref(path.join(ROOT, 'resources', 'player', 'still_right.png')),
+            playerSprite: assetHref(path.join(ROOT, 'resources', 'redesign', 'section-02-player', 'frames', 'still_right.png')),
             minByte: field.minByte,
             maxByte: field.maxByte,
             legacyMultiplier,

@@ -1,5 +1,14 @@
 # Living documentation changelog
 
+## 2026-09-19 — True crossover gait and distance-driven player animation
+
+- Replaced the lateral cycle's wide-only middle with a retained painted passing pose: frame 5 visibly crosses the knees and ankles, keeps one boot planted, and lifts the passing boot. Right is mirrored from the same source so the two side cycles have identical construction and timing.
+- Reordered every direction into a forward 1→9→1 step and moved gait calculation into `src/domain/animation/player-gait.mjs`. Phase now advances from actual distance travelled against a 0.45-body-height step, with explicit pose durations, so depth scaling cannot turn the walk into skating.
+- Added a Chromium pixel audit/contact sheet and a real-canvas four-direction browser test. The audit records 0 px baseline and height spread; lateral stance widths close monotonically from 210 px to an 88 px crossover and open to 215 px, with a 0.409 passing/contact ratio and `2 → 1 → 2` grounded boot components. The browser observes all nine poses in forward order for left, right, up and down.
+- Added a visually lossless delivery quantisation step to the reproducible frame processor. All 40 player PNGs now pass the 60 KB budget, with a 44,984-byte maximum, while retaining the 280×375 canvas, 365 px subject and y=371 foot baseline.
+- Corrected the art manifest and reports to classify the wired redesign as `player`, the legacy set as rollback/reference art, and the wired idle as the calibration sprite. Regenerated `asset-report.md` and `player-frame-geometry.md`, and recorded provenance/licence for all 40 runtime frames.
+- Resolved BUG-040, BUG-047, BUG-048, BUG-049, BUG-051 and BUG-052. BUG-039 now contains only the human gate: Leigh's visual acceptance and the final paint-over decision.
+
 ## 2026-09-14 — The sideways walk: five faults found and fixed
 
 Leigh reported that the redesigned player looked right walking towards and away from the camera but changed size constantly and animated badly walking sideways. The same nine-frame playback code drives all four directions, so the difference had to lie in the frames or in what the code did with them. Both, as it turned out — five separate faults, four of which land almost entirely on the side views.

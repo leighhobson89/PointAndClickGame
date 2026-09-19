@@ -82,3 +82,6 @@ Implementation status (2026-09-13): `window.__GAME_TEST__` drives structured ver
 ## Phase 4 — rendering and input adapters completed
 
 Implementation status (2026-09-14): the stage now has a fixed 832×448 logical coordinate system and deterministic inverse pointer mapping at every CSS size. Runtime grid codes project to independent labelled semantic rectangles and anchors in a DOM layer without mutating walk cells. Stage, hotspot, transition, and vignette layers have explicit ownership; caching remains profiling-gated. Pointer, keyboard, touch, controller, assistive controls, and the debug API all reach the existing stable action path. The full 69-journey browser suite and 62 Node tests pass.
+# 2026-09-19 — Live refactor plan retired
+
+The remaining art/audio modernisation, legacy-global removal, performance-budget, and formatting work is now carried once in `docs/master-checklist.md` and the active bug register. `docs/refactor-plan.md` was retired to prevent a second ordering of the same work. This file remains the record of the completed refactor phases and their rationale.

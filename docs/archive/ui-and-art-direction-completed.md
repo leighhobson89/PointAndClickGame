@@ -50,3 +50,6 @@ Manual layout tuning is centralised in the root variables `--ui-height-reserve`,
 `rendering-layout/responsive-interface.spec.cjs` covers 1280×720, 1440×900, 1920×1080, representative tablet/touch, 200% text sizing, all five locales, long localisation, high contrast, and reduced motion. `accessibility/keyboard-and-semantics.spec.cjs` covers keyboard-only actions, focus handling, live semantic controls, and all 18 rooms. The complete browser suite passed 69/69 in 168.959 seconds.
 
 Pixel screenshot baselines remain intentionally approval-gated until the room art is standardised under Section 8. Structural visual assertions protect the approved UI composition without freezing inconsistent source art.
+# 2026-09-19 — Live UI/art direction file retired
+
+The UI is delivered. The remaining art work is now carried by the active `docs/art-redesign-production-plan.md`, judged against `docs/art-bible.md`, and ordered in `docs/master-checklist.md`. `docs/ui-and-art-direction.md` was retired so asset counts, room order, player acceptance, and proportion tasks no longer drift across two live art plans. This archive preserves the approved UI and art-direction decisions.

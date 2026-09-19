@@ -43,7 +43,7 @@ export const SHIPPED_ROLES = Object.freeze([
 export const ROLE_BUDGETS = Object.freeze({
     background: { maxBytes: 400 * 1024, exactStage: true },
     foreground: { maxBytes: 250 * 1024, exactStage: true },
-    player: { maxBytes: 60 * 1024, maxWidth: 220, maxHeight: 420 },
+    player: { maxBytes: 60 * 1024, maxWidth: 280, maxHeight: 375 },
     npc: { maxBytes: 120 * 1024, maxWidth: 400, maxHeight: 700 },
     objectWorld: { maxBytes: 80 * 1024, maxWidth: 512, maxHeight: 512 },
     objectInventory: { maxBytes: 24 * 1024, maxWidth: 128, maxHeight: 128 },
@@ -176,7 +176,11 @@ function classify(relativePath) {
     if (folder === 'backgrounds') return /^debugRoom\./.test(name) ? 'reference' : 'background';
     if (folder === 'foregrounds') return parts[2] === 'grids' ? 'gridOverlay' : 'foreground';
     if (folder === 'grids') return 'gridOverlay';
-    if (folder === 'player') return 'player';
+    // The Section 2 package is the wired player set. The old resources/player
+    // directory is retained as rollback/source material and must not claim the
+    // same semantic IDs or make the generated evidence measure unwired art.
+    if (folder === 'redesign' && parts[2] === 'section-02-player' && parts[3] === 'frames') return 'player';
+    if (folder === 'player') return 'reference';
     if (folder === 'npcs') return 'npc';
     if (folder === 'mouse') return path.extname(name) === '.psd' ? 'sourceArt' : 'cursor';
     if (folder === 'layoutImages') return 'layout';
@@ -279,14 +283,15 @@ function collectBindings() {
 
     const foregrounds = readJson('resources/screenWalkableJSONS/masterForegroundData.json') ?? {};
     for (const roomId of Object.keys(foregrounds)) {
-        add(`./resources/foregrounds/${roomId}.png`, { referencedBy: roomId, kind: 'roomForeground', room: roomId });
+        const extension = fs.existsSync(path.join(RESOURCES, 'foregrounds', `${roomId}.webp`)) ? 'webp' : 'png';
+        add(`./resources/foregrounds/${roomId}.${extension}`, { referencedBy: roomId, kind: 'roomForeground', room: roomId });
     }
 
     // The player sprite table lives in source, not in content data, so it is
     // read from there rather than re-listed here. A frame that the table stops
     // naming should show up as an orphan.
     const playerSource = fs.readFileSync(path.join(ROOT, 'constantsAndGlobalVars.js'), 'utf8');
-    for (const match of playerSource.matchAll(/"([a-z0-9_]+)":\s*"(\.\/resources\/player\/[^"]+)"/gi)) {
+    for (const match of playerSource.matchAll(/"([a-z0-9_]+)":\s*"(\.\/resources\/(?:redesign\/section-02-player\/frames|player)\/[^"]+)"/gi)) {
         add(match[2], { referencedBy: 'player', kind: 'playerFrame', spriteKey: match[1], room: null });
     }
 
@@ -346,6 +351,9 @@ function checkBudget(role, bytes, size) {
 
 export function buildManifest() {
     const bindings = collectBindings();
+    const authoredMetadata = readJson('resources/asset-provenance.json') ?? {};
+    const metadataPrefixes = Object.entries(authoredMetadata._prefixes ?? {})
+        .sort(([left], [right]) => right.length - left.length);
     const files = walk(RESOURCES)
         .filter((file) => IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase()))
         .sort();
@@ -357,12 +365,16 @@ export function buildManifest() {
         const size = readImageSize(buffer, extension);
         const role = classify(relativePath);
         const bound = bindings.get(normaliseUrl(relativePath)) ?? [];
+        const webPath = toWebPath(relativePath);
+        const metadata = authoredMetadata[webPath]
+            ?? metadataPrefixes.find(([prefix]) => webPath.startsWith(prefix))?.[1]
+            ?? {};
 
         return {
             id: semanticId(role, relativePath),
             role,
             roleLabel: ROLE_LABELS[role],
-            source: toWebPath(relativePath),
+            source: webPath,
             shipped: SHIPPED_ROLES.includes(role),
             width: size?.width ?? null,
             height: size?.height ?? null,
@@ -378,11 +390,10 @@ export function buildManifest() {
             referencedBy: [...new Set(bound.map((b) => b.referencedBy))].sort(),
             orphan: bound.length === 0 && SHIPPED_ROLES.includes(role),
             budgetBreaches: checkBudget(role, buffer.length, size),
-            // Provenance and licence are authored, not derived. They stay null
-            // until a human records them, so an unrecorded asset is visible
-            // rather than silently assumed to be clear.
-            provenance: null,
-            licence: null,
+            // Provenance and licence are authored, not inferred. Assets with no
+            // reviewed entry stay null and therefore remain visibly unresolved.
+            provenance: metadata.provenance ?? null,
+            licence: metadata.licence ?? null,
         };
     });
 

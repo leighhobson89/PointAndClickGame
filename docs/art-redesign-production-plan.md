@@ -14,23 +14,9 @@ The work is deliberately divided into complete visual packages. A room is never 
 - Characters and free-standing props receive soft contact shadows consistent with one stated key-light direction.
 - Stateful sprites are designed as a set. All frames for one NPC share one transparent canvas; object variants may use separate authored dimensions when their shapes differ.
 - Inventory icons are separate 128 x 128 crops with a readable silhouette at 48 px, not reused oversized world sprites.
+- Every room restyle generates a fresh walkable-area package from the accepted background: an 80 x 60 runtime-grid fragment, an 832 x 448 walk/exit/no-go overlay, and a placement record for exits, objects, NPCs, hotspots, and foreground occluders.
+- Object placement is part of the painting brief. Visible and hidden-in-plain-sight interactables must retain their exact scene relationships; after generation, their sprites, state variants, dimensions, offsets, and semantic hotspots are refitted and proven in game before the room can ship.
 - No candidate replaces a shipped asset until its whole-room package passes the art-bible acceptance gate.
-
-## Section 2 — Painted player model and animation source set
-
-**Status (2026-09-14):** the generated model sheet and 40-frame candidate set are connected to the runtime from `resources/redesign/section-02-player/frames/`; the legacy `resources/player/` files remain untouched as rollback sources. All four movement directions use nine poses. Registration, green-edge cleanup and playback are done and measured: subject height 365 px and baseline y=371 in all 40 frames, on a 280 x 375 canvas. What is left before this section can close is art approval and packaging, not mechanics.
-
-Settle the protagonist's build in a painted model sheet before producing animation: front, back, left, right, three-quarter construction views, head count, shoulders, hips, limbs, hair mass, hands, and boots. Use the approved painted side idles as finish references, resolving their 38% build disagreement with the front idle.
-
-After model approval, author every idle and walk pose against it on the shared **280 x 375** registration. The canvas is wider than the player's logical box on purpose: a side-on stride is about twice as wide as a front-on one, and a canvas that cannot hold it forces a scale-down that reads as the character changing size mid-walk. Hold the foot baseline spread under 2% and character-height spread under 5%; add a soft contact shadow to every gameplay frame.
-
-Remaining for this section: re-author the front and back walks, whose poses are currently too alike to read as a stride; complete the human paint-over; bring the 37 over-budget frames under 60 KB; and record the provenance/licence decision.
-
-## Section 3 — Library Foyer whole-room restyle
-
-Restyle Leigh's original Library Foyer without changing its layout. Preserve the positions and relationships of both exit doors, the central circulation route, librarian position, key/books puzzle landmarks, and foreground occluders. Recompose to 832 x 448 and match Research Room's library vocabulary plus Kitchen's paint weight, camera, and light discipline.
-
-Generate the background and all visible foreground/door-state elements as one review package. The librarian redraw waits for Section 7, but the room reserves her final 0.8–1.25 player-relative scale.
 
 ## Section 4 — Market Street whole-room restyle
 

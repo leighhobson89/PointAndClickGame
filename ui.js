@@ -183,6 +183,7 @@ import {
     loadPlayerPreferences,
     savePlayerPreferences,
 } from './src/adapters/player-preferences.mjs';
+import { imageFor, preloadImages } from './src/adapters/image-cache.mjs';
 
 let textTimer;
 let activeTextResolve = null;
@@ -1679,6 +1680,16 @@ export async function loadGameData(
         mapRoom,
     });
 
+    // The menu preload covers the declared shipped set. Deriving character
+    // URLs from the validated content as well means state/directional NPC
+    // frames cannot be omitted from that hand-maintained list. This await is
+    // part of startup and restore readiness, so the first walk never races an
+    // image decode.
+    await preloadImages([
+        ...Object.values(getPlayerObject().sprites ?? {}),
+        ...Object.values(npcData.npcs ?? {}).flatMap((npc) => Object.values(npc.spriteUrl ?? {})),
+    ]);
+
     // Keep the bundle exactly as shipped before the running game places
     // entities or a puzzle rewrites anything. Saves are a patch against this.
     setPristineContent({
@@ -1872,6 +1883,11 @@ export function setDynamicBackgroundWithOffset(
     // Data/image readiness is awaited before play; update the selected URL
     // immediately so an older image's late onload cannot overwrite a newer room.
     canvas.style.backgroundImage = `url(${imageUrl})`;
+    // Keep the CSS background in the same logical coordinate system as the
+    // canvas bitmap when the window is resized or maximised. Pixel dimensions
+    // captured at image-load time made the background stay at the old size
+    // while objects and foreground content followed the resized canvas.
+    canvas.style.backgroundSize = `${screenTilesWidebgImg * 100}% 100%`;
 
     // BUG-033: whether a room has foreground items is a property of the room's
     // background file, so it is decided here, synchronously, from the URL being
@@ -1879,23 +1895,6 @@ export function setDynamicBackgroundWithOffset(
     // place for every frame drawn before the new image finished decoding.
     const bgFilename = imageUrl.split('/').pop().split('\\').pop().replace(/['")]/g, "");
     setCurrentScreenHasForegroundItems(getForegroundsList().includes(bgFilename));
-
-    backgroundImage.onload = function() {
-        const imgWidth = backgroundImage.width;
-        const imgHeight = backgroundImage.height;
-
-        const canvasWidth = canvas.clientWidth;
-        const canvasHeight = canvas.clientHeight;
-
-        const scaleRatio = canvasHeight / imgHeight;
-        const scaledHeight = imgHeight * scaleRatio;
-        const scaledWidth = imgWidth * scaleRatio;
-
-        const finalWidth = canvasWidth * screenTilesWidebgImg;
-        const finalHeight = scaledHeight;
-
-        canvas.style.backgroundSize = `${finalWidth}px ${finalHeight}px`;
-    };
 
     backgroundImage.onerror = function() {
         console.error(`Failed to load image: ${imageUrl}`);
@@ -1996,19 +1995,6 @@ export function handleEdgeScroll() {
     }
 }
 
-async function preloadImages(imageUrls) {
-    const promises = imageUrls.map((url) => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = url;
-            img.onload = resolve;
-            img.onerror = () => reject(new Error(`Required image failed to load: ${url}`));
-        });
-    });
-    await Promise.all(promises);
-    console.log("All images preloaded");
-}
-
 function setNewGameLoading(isLoading) {
     const button = getElements().newGameMenuButton;
     button.disabled = isLoading;
@@ -2059,25 +2045,16 @@ function showFatalLoadError(error) {
 // allocated one per frame and could not draw until that copy had decoded, so a
 // newly entered room showed nothing where its foreground belonged. One decoded
 // image per URL is kept instead.
-const foregroundImageCache = new Map();
-
 function foregroundImageFor(url) {
-    let image = foregroundImageCache.get(url);
-    if (!image) {
-        image = new Image();
-        image.onerror = () => console.error("Failed to load foreground image:", url);
-        image.src = url;
-        foregroundImageCache.set(url, image);
-    }
-    return image;
+    return imageFor(url);
 }
 
 export function drawForegroundImageForCurrentScreen() {
     const canvas = getElements().canvas;
     const ctx = canvas.getContext("2d");
-    const screenId = `foregrounds/${getCurrentScreenId()}.png`;
+    const screenId = `foregrounds/${getCurrentScreenId()}.`;
     const imagesArray = getArrayOfGameImages();
-    const foregroundUrl = imagesArray.find((url) => url.includes(screenId));
+    const foregroundUrl = imagesArray.find((url) => url.includes(screenId) && /\.(?:png|webp)$/i.test(url));
 
     if (!foregroundUrl) {
         setCurrentForegroundImage(null);

@@ -6,8 +6,10 @@ import { drawForegroundImageForCurrentScreen, updateDebugValues, handleEdgeScrol
 import { executeInteractionEvent } from './events.js';
 import { disposeCanonicalSession, startCanonicalSession } from './constantsAndGlobalVars.js';
 import { contextualVerbForTarget, createCommandIntent } from './src/domain/commands/commands.mjs';
-import { resolveCellTarget } from './src/domain/navigation/navigation.mjs';
+import { resolveCellTarget, worldToGrid } from './src/domain/navigation/navigation.mjs';
 import { buildDepthField, buildRoomScaleProfiles, sampleDepthByte, scaledEntitySize } from './src/domain/navigation/depth-scale.mjs';
+import { advancePlayerWalk } from './src/domain/animation/player-gait.mjs';
+import { imageFor, isImageReady } from './src/adapters/image-cache.mjs';
 
 // The player's logical box: what the character occupies for depth sampling,
 // edge collision and grid coverage. It is deliberately narrower than the art.
@@ -24,7 +26,7 @@ const PLAYER_SPRITE_ASPECT = 200 / 375;
 const PLAYER_ART_ASPECT = 280 / 375;
 
 // Section 2 supplies nine painted movement poses in every direction, and they
-// are one step: frame 1 plants the leading foot, frames 5 and 6 pass the legs,
+// are one step: frame 1 plants the leading foot, frame 5 crosses the legs,
 // and frame 9 strikes the heel that becomes frame 1's plant again. The set is
 // therefore a loop and is played straight through, 1 to 9 and round.
 //
@@ -33,7 +35,6 @@ const PLAYER_ART_ASPECT = 280 / 375;
 // is nearly invisible, because those frames barely move the legs at all. Side
 // on it is a moonwalk, and it was the other half of why the sideways walk
 // looked wrong.
-const WALK_FRAMES = 9;
 
 // How far the character travels in one nine-frame step, as a fraction of its
 // drawn height.
@@ -47,7 +48,6 @@ const WALK_FRAMES = 9;
 // body at every depth, and the feet stay where they are planted.
 //
 // The value is a normal human step: a little under half of standing height.
-const WALK_STRIDE_PER_HEIGHT = 0.45;
 
 export let entityPaths = {};
 let firstDraw = true;
@@ -377,18 +377,14 @@ async function movePlayerTowardsTarget() {
     }
 
     if (movementStatus[0] === 'moving' && direction !== '') {
-        const travelled = Math.hypot(player.xPos - steppedFromX, player.yPos - steppedFromY);
-        const strideLength = Math.max(1, player.height * WALK_STRIDE_PER_HEIGHT);
-
-        // Phase is kept as a fraction of one step rather than as a frame index,
-        // so a tick that covers a third of a frame is not rounded away. That is
-        // what stops the gait stuttering when the character is small and slow.
-        let walkPhase = (player.walkPhase ?? 0) + (travelled / strideLength);
-        walkPhase -= Math.floor(walkPhase);
-        setPlayerObject('walkPhase', walkPhase);
-
-        const spriteFrame = Math.min(WALK_FRAMES, Math.floor(walkPhase * WALK_FRAMES) + 1);
-        player.activeSprite = `move${spriteFrame}_${direction}`;
+        const gait = advancePlayerWalk({
+            phase: player.walkPhase ?? 0,
+            distance: Math.hypot(player.xPos - steppedFromX, player.yPos - steppedFromY),
+            drawnHeight: player.height,
+            direction,
+        });
+        setPlayerObject('walkPhase', gait.phase);
+        player.activeSprite = gait.sprite;
         setPlayerObject('activeSprite', player.activeSprite);
     }
 
@@ -765,9 +761,6 @@ export function drawDebugGrid(drawGrid) {
     }
 }
 
-// Image cache to store loaded images
-const imageCache = {};
-
 function drawPlayer(ctx) {
     const player = getPlayerObject();
     const playerYStart = player.yPos + player.height;
@@ -787,20 +780,10 @@ function drawPlayer(ctx) {
         return;
     }
 
-    let activeSpriteImage = imageCache[spriteUrl];
+    const activeSpriteImage = imageFor(spriteUrl);
     setCurrentPlayerImage(activeSpriteImage);
 
-    if (!activeSpriteImage) {
-        activeSpriteImage = new Image();
-        activeSpriteImage.src = spriteUrl;
-
-        activeSpriteImage.onload = () => {
-            imageCache[spriteUrl] = activeSpriteImage;
-            ctx.drawImage(activeSpriteImage, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
-        };
-        
-        return;
-    }
+    if (!isImageReady(activeSpriteImage)) return;
 
     ctx.drawImage(activeSpriteImage, playerXStart, playerYStart - playerHeight, playerWidth, playerHeight);
 }
@@ -834,10 +817,8 @@ export function drawObjects(ctx) {
 
                     const scaledWidth = dimensions.width * cellWidth;
                     const scaledHeight = dimensions.height * cellHeight;
-                    const img = new Image();
-                    img.src = spriteUrl[activeSpriteUrl];
-
-                    ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
+                    const img = imageFor(spriteUrl[activeSpriteUrl]);
+                    if (isImageReady(img)) ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
                     drawnObjects.add(objectId);
 
                     const startX = Math.floor(drawX / cellWidth);
@@ -880,10 +861,8 @@ export function drawNpcs(ctx) {
 
                     const scaledWidth = dimensions.width * cellWidth;
                     const scaledHeight = dimensions.height * cellHeight;
-                    const img = new Image();
-                    img.src = spriteUrl[activeSpriteUrl];
-
-                    ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
+                    const img = imageFor(spriteUrl[activeSpriteUrl]);
+                    if (isImageReady(img)) ctx.drawImage(img, drawX, drawY, scaledWidth, scaledHeight);
                     drawnNpcs.add(npcId);
 
                     const startX = Math.floor(drawX / cellWidth);
@@ -1119,13 +1098,16 @@ export async function processLeftClickPoint(event, mouseClick) {
         const dialogueData = getDialogueData().dialogue;
         const language = getLanguage();
 
-        const gridX = getHoverCell().x;
-        const gridY = getHoverCell().y;
-
-        if (mouseClick) {    
-            setGridTargetX(gridX);
-            setGridTargetY(gridY);
-            setClickPoint({x: gridX, y: (gridY)});
+        if (mouseClick) {
+            const point = worldToGrid(event, {
+                cellWidth: getCanvasCellWidth(),
+                cellHeight: getCanvasCellHeight(),
+                width: getGridSizeX(),
+                height: getGridSizeY(),
+            });
+            setGridTargetX(point.x);
+            setGridTargetY(point.y);
+            setClickPoint({ x: point.x, y: point.y });
         } else {
             setGridTargetX(event.x);
             setGridTargetY(event.y);
@@ -1222,6 +1204,8 @@ export async function processLeftClickPoint(event, mouseClick) {
             setTargetXPlayer(nextStep.x * getCanvasCellWidth());
             setTargetYPlayer(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
+            setClickPoint({ x: null, y: null });
+            setCurrentlyMovingToAction(false);
             setCustomMouseCursor(getCustomMouseCursor('error'));
         }
         setVerbButtonConstructionStatus(null);
@@ -1242,13 +1226,16 @@ export async function processRightClickPoint(event, mouseClick) {
         const dialogueData = getDialogueData().dialogue;
         const language = getLanguage();
 
-        const gridX = getHoverCell().x;
-        const gridY = getHoverCell().y;
-
-        if (mouseClick) {    
-            setGridTargetX(gridX);
-            setGridTargetY(gridY);
-            setClickPoint({x: gridX, y: (gridY)});
+        if (mouseClick) {
+            const point = worldToGrid(event, {
+                cellWidth: getCanvasCellWidth(),
+                cellHeight: getCanvasCellHeight(),
+                width: getGridSizeX(),
+                height: getGridSizeY(),
+            });
+            setGridTargetX(point.x);
+            setGridTargetY(point.y);
+            setClickPoint({ x: point.x, y: point.y });
         } else {
             setGridTargetX(event.x);
             setGridTargetY(event.y);
@@ -1257,7 +1244,7 @@ export async function processRightClickPoint(event, mouseClick) {
         const cellValue = getGridData().gridData[getGridTargetY()] && getGridData().gridData[getGridTargetY()][getGridTargetX()];
         let verb = getVerbButtonConstructionStatus();
 
-        if (cellValue.startsWith('o')) {
+        if (typeof cellValue === 'string' && cellValue.startsWith('o')) {
             if (cellValue.includes('objectDoor')) {
                 if (!objectData[cellValue.slice(1)].interactable.activeStatus) {
                     verb = 'interactionOpen';
@@ -1267,7 +1254,7 @@ export async function processRightClickPoint(event, mouseClick) {
             } else {
                 verb = 'interactionLookAt';
             }
-        } else if (cellValue.startsWith('c')) {
+        } else if (typeof cellValue === 'string' && cellValue.startsWith('c')) {
             verb = 'interactionTalkTo';
         }
 
@@ -1344,6 +1331,8 @@ export async function processRightClickPoint(event, mouseClick) {
             setTargetXPlayer(nextStep.x * getCanvasCellWidth());
             setTargetYPlayer(nextStep.y * getCanvasCellHeight() + player.height);
         } else {
+            setClickPoint({ x: null, y: null });
+            setCurrentlyMovingToAction(false);
             setCustomMouseCursor(getCustomMouseCursor('error'));
         }
         setVerbButtonConstructionStatus(null);
@@ -1581,8 +1570,16 @@ export function setUpObjectsAndNpcs() {
 
         const widthInCells = Math.floor(object.dimensions.originalWidth) + 1;
         const heightInCells = Math.floor(object.dimensions.originalHeight) + 1;
-        const startX = object.gridPosition.x;
-        const startY = object.gridPosition.y;
+        // Door state art may be authored at a different eye-fitted position
+        // from the closed state. Runtime open/close already applies these
+        // offsets when it re-adds a door; apply the same rule while rebuilding
+        // derived state after load so an open door cannot jump back into its
+        // closed aperture.
+        const activeStateOffset = objectId.includes('objectDoor')
+            ? (object.visualAnimatedStateOffsets?.[object.activeSpriteUrl] ?? { x: 0, y: 0 })
+            : { x: 0, y: 0 };
+        const startX = object.gridPosition.x + Math.floor((activeStateOffset.x || 0) / cellWidth);
+        const startY = object.gridPosition.y + Math.floor((activeStateOffset.y || 0) / cellHeight);
 
         const offsetX = (object.offset.x || 0) * cellWidth;  
         const offsetY = (object.offset.y || 0) * cellHeight; 

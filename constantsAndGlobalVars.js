@@ -30,7 +30,7 @@ export const urlCustomMouseCursorClickInteresting = './resources/mouse/mouseClic
 export const urlCustomMouseCursorError = './resources/mouse/mouseNoPathFound.png';
 export const INITIAL_GAME_ID_NORMAL = 'libraryFoyer';
 export const PRE_INITIAL_GAME_BACKGROUND = './resources/backgrounds/preStartBackgroundImage.png'; //pre intro
-export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/libraryFoyer.png';
+export const INITIAL_GAME_BACKGROUND_URL_NORMAL = './resources/backgrounds/libraryFoyer.webp';
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const CUT_SCENE = 'cutSceneState';
@@ -224,7 +224,7 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/house.png",
     "./resources/backgrounds/kitchen.png",
     "./resources/backgrounds/largePileOfPoo.png",
-    "./resources/backgrounds/libraryFoyer.png",
+    "./resources/backgrounds/libraryFoyer.webp",
     "./resources/backgrounds/marketStreet.png",
     "./resources/backgrounds/map.png",
     "./resources/backgrounds/researchRoom.png",
@@ -240,7 +240,7 @@ export const arrayOfGameImages = [
     "./resources/backgrounds/testWide.png",
 
     //FOREGROUNDS
-    "./resources/foregrounds/libraryFoyer.png",
+    "./resources/foregrounds/libraryFoyer.webp",
     "./resources/foregrounds/marketStreet.png",
     "./resources/foregrounds/riverCrossing.png",
     "./resources/foregrounds/riverCrossingBridgeHalfComplete.png",
@@ -275,12 +275,12 @@ export const arrayOfGameImages = [
     "./resources/objects/images/IllegibleMapInv.png",
     "./resources/objects/images/IllegibleMapWorld.png",
     "./resources/objects/images/keyDenInv.png",
-    "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.png",
-    "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.png",
+    "./resources/objects/images/libraryFoyer_Exit_MarketStreetClosed.webp",
+    "./resources/objects/images/libraryFoyer_Exit_MarketStreetOpen.webp",
     "./resources/objects/images/marketStreet_Exit_LibraryFoyerClosed.png",
     "./resources/objects/images/marketStreet_Exit_LibraryFoyerOpen.png",
-    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.png",
-    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.png",
+    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomClosed.webp",
+    "./resources/objects/images/libraryFoyer_Exit_ResearchRoomOpen.webp",
     "./resources/objects/images/machine.png",
     "./resources/objects/images/malletInv.png",
     "./resources/objects/images/malletWorld.png",
@@ -346,7 +346,7 @@ export const arrayOfGameImages = [
 ];
 
 const foregroundsList = [
-    "libraryFoyer.png",
+    "libraryFoyer.webp",
     "marketStreet.png",
     "riverCrossing.png",
     "riverCrossingBridgeHalfComplete.png",

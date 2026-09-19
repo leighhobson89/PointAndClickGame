@@ -243,6 +243,32 @@ public static class PlayerFrameOps
         }
     }
 
+    // Reduces invisible/high-frequency channel noise before PNG encoding.
+    // Generated paint and bicubic sampling can produce thousands of colours
+    // that differ by only one or two channel values; PNG then spends bytes on
+    // differences the eye cannot resolve at gameplay scale. Four-value colour
+    // buckets have a maximum per-channel error of two, while eight-value alpha
+    // buckets leave solid paint solid and keep the soft shadow gradient.
+    public static void QuantiseForPng(byte[] p)
+    {
+        for (int i = 0; i < p.Length; i += 4)
+        {
+            int alpha = p[i + 3];
+            if (alpha == 0)
+            {
+                p[i] = p[i + 1] = p[i + 2] = 0;
+                continue;
+            }
+
+            for (int channel = 0; channel < 3; channel++)
+            {
+                int value = p[i + channel];
+                p[i + channel] = (byte)Math.Min(255, ((value + 2) / 4) * 4);
+            }
+            p[i + 3] = alpha >= 252 ? (byte)255 : (byte)Math.Min(248, ((alpha + 4) / 8) * 8);
+        }
+    }
+
     // minX, minY, maxX, maxY. Returns nulls as -1 when the frame is empty.
     public static int[] Bounds(byte[] p, int width, int height)
     {
@@ -392,18 +418,59 @@ function Add-ContactShadow {
 }
 
 $sourceRoot = Join-Path $ProjectRoot 'resources\redesign\section-02-player\source-sheets'
+$poseRoot = Join-Path $ProjectRoot 'resources\redesign\section-02-player\source-poses'
 $frameRoot = Join-Path $ProjectRoot 'resources\redesign\section-02-player\frames'
 $sheetRoot = Join-Path $ProjectRoot 'resources\redesign\section-02-player\processed-sheets'
 if (-not $Measure) {
     New-Item -ItemType Directory -Force -Path $frameRoot, $sheetRoot | Out-Null
 }
 
+function New-FrameMap {
+    param([string[]]$Names, [int[]]$SourceIndices, [bool[]]$FlipX)
+
+    $frames = @()
+    for ($i = 0; $i -lt $Names.Count; $i++) {
+        $frames += @{
+            Name = $Names[$i]
+            SourceIndex = if ($SourceIndices.Count -gt $i) { $SourceIndices[$i] } else { $i }
+            FlipX = if ($FlipX.Count -gt $i) { $FlipX[$i] } else { $false }
+        }
+    }
+    return $frames
+}
+
+$walkNames = 1..9 | ForEach-Object { "move$($_)" }
+
+# The generated source sheets contain useful poses, but their row-major order
+# is not consistently chronological. In particular, the front and back sheets
+# swap which boot leads from one cell to the next, which reads as skating even
+# when the runtime advances the file names in perfect numerical order.
+#
+# Rebuild those views around one coherent half-step: contact -> recoil ->
+# passing -> high point -> narrow stance, then mirror the first four poses for
+# the opposite leg. The source indices below were selected from the measured
+# boot separation in the current sheets; the order makes that separation close
+# smoothly towards the passing pose and open again. The result is deterministic
+# and reproducible from the retained source art.
+$downIndices = @(3, 6, 0, 5, 4, 5, 0, 6, 3)
+$upIndices = @(3, 5, 2, 1, 4, 1, 2, 5, 3)
+$sideIndices = @(0, 1, 2, 4, 4, 5, 6, 7, 8)
+$secondHalfMirrored = @($false, $false, $false, $false, $false, $true, $true, $true, $true)
+
 $jobs = @(
-    @{ Sheet = 'walk-down-chroma.png'; Columns = 3; Rows = 3; Names = 1..9 | ForEach-Object { "move$($_)_down" } },
-    @{ Sheet = 'walk-left-chroma.png'; Columns = 3; Rows = 3; Names = 1..9 | ForEach-Object { "move$($_)_left" } },
-    @{ Sheet = 'walk-up-chroma.png'; Columns = 3; Rows = 3; Names = 1..9 | ForEach-Object { "move$($_)_up" } },
-    @{ Sheet = 'walk-right-chroma.png'; Columns = 3; Rows = 3; Names = 1..9 | ForEach-Object { "move$($_)_right" } },
-    @{ Sheet = 'idle-chroma.png'; Columns = 2; Rows = 2; Names = @('still_down', 'still_left', 'still_up', 'still_right') }
+    @{ Sheet = 'walk-down-chroma.png'; Columns = 3; Rows = 3; Frames = New-FrameMap ($walkNames | ForEach-Object { "${_}_down" }) $downIndices $secondHalfMirrored },
+    @{ Sheet = 'walk-left-chroma.png'; Columns = 3; Rows = 3; Frames = New-FrameMap ($walkNames | ForEach-Object { "${_}_left" }) $sideIndices $noFlips },
+    @{ Sheet = 'walk-up-chroma.png'; Columns = 3; Rows = 3; Frames = New-FrameMap ($walkNames | ForEach-Object { "${_}_up" }) $upIndices $secondHalfMirrored },
+    # The independently generated right sheet repeats the same planted leg in
+    # eight of its nine cells. Mirroring the approved left cycle gives both
+    # lateral directions identical timing, stride and character construction.
+    @{ Sheet = 'walk-left-chroma.png'; Columns = 3; Rows = 3; Frames = New-FrameMap ($walkNames | ForEach-Object { "${_}_right" }) $sideIndices (1..9 | ForEach-Object { $true }) },
+    @{ Sheet = 'idle-chroma.png'; Columns = 2; Rows = 2; Frames = New-FrameMap @('still_down', 'still_left', 'still_up', 'still_right') (0..3) @($false, $false, $false, $false) },
+    # The lateral sheet never contained a genuine passing pose: even its
+    # narrowest cell left a wide V between the legs. This retained transparent
+    # pose supplies the missing crossover at the middle of both side cycles.
+    # Right is derived from the same art so timing and silhouette stay exact.
+    @{ Root = $poseRoot; Sheet = 'walk-left-passing-transparent.png'; SkipProcessed = $true; Columns = 1; Rows = 1; Frames = New-FrameMap @('move5_left', 'move5_right') @(0, 0) @($false, $true) }
 )
 
 # The band of the figure the anchor is measured across, as a fraction of its
@@ -417,7 +484,8 @@ $canvasCentre = [int]($CanvasWidth / 2)
 $diagnostics = @()
 
 foreach ($job in $jobs) {
-    $sourcePath = Join-Path $sourceRoot $job.Sheet
+    $jobRoot = if ($job.Root) { $job.Root } else { $sourceRoot }
+    $sourcePath = Join-Path $jobRoot $job.Sheet
     $source = [System.Drawing.Bitmap]::FromFile($sourcePath)
     $sheetWidth = $source.Width
     $sheetHeight = $source.Height
@@ -428,7 +496,7 @@ foreach ($job in $jobs) {
     [PlayerFrameOps]::ChromaKey($pixels)
     [PlayerFrameOps]::Despill($pixels)
 
-    if (-not $Measure) {
+    if (-not $Measure -and -not $job.SkipProcessed) {
         # The diagnostic sheet is written before the edge bleed so it still
         # shows the true keyed result. The bleed is an extraction aid, and
         # smeared colour in the margin would only make the sheet harder to read.
@@ -439,10 +507,12 @@ foreach ($job in $jobs) {
 
     $keyedSheet = New-BitmapFromPixels -Pixels $pixels -Width $sheetWidth -Height $sheetHeight
 
-    for ($index = 0; $index -lt $job.Names.Count; $index++) {
-        $name = $job.Names[$index]
-        $column = $index % $job.Columns
-        $row = [Math]::Floor($index / $job.Columns)
+    for ($index = 0; $index -lt $job.Frames.Count; $index++) {
+        $frameSpec = $job.Frames[$index]
+        $name = $frameSpec.Name
+        $sourceIndex = $frameSpec.SourceIndex
+        $column = $sourceIndex % $job.Columns
+        $row = [Math]::Floor($sourceIndex / $job.Columns)
         $x0 = [int][Math]::Round($column * $sheetWidth / $job.Columns)
         $x1 = [int][Math]::Round(($column + 1) * $sheetWidth / $job.Columns)
         $y0 = [int][Math]::Round($row * $sheetHeight / $job.Rows)
@@ -460,6 +530,10 @@ foreach ($job in $jobs) {
             [System.Drawing.GraphicsUnit]::Pixel
         )
         $cellGraphics.Dispose()
+
+        if ($frameSpec.FlipX) {
+            $cell.RotateFlip([System.Drawing.RotateFlipType]::RotateNoneFlipX)
+        }
 
         $cellPixels = Get-Pixels -Bitmap $cell
         $cell.Dispose()
@@ -533,6 +607,11 @@ foreach ($job in $jobs) {
             )
             $graphics.Dispose()
 
+            $framePixels = Get-Pixels -Bitmap $frame
+            [PlayerFrameOps]::QuantiseForPng($framePixels)
+            $frame.Dispose()
+            $frame = New-BitmapFromPixels -Pixels $framePixels -Width $CanvasWidth -Height $CanvasHeight
+
             $framePath = Join-Path $frameRoot "$name.png"
             $frame.Save($framePath, [System.Drawing.Imaging.ImageFormat]::Png)
             $frame.Dispose()
@@ -541,6 +620,9 @@ foreach ($job in $jobs) {
 
         $cell.Dispose()
 
+        # A retained single-pose source may intentionally replace a sheet cell
+        # with the same runtime name. Keep only the final registration record.
+        $diagnostics = @($diagnostics | Where-Object { $_.Frame -ne $name })
         $diagnostics += [pscustomobject]@{
             Frame = $name
             SourceWidth = $boundsWidth

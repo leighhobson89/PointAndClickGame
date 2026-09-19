@@ -14,6 +14,8 @@
         "report:assets": "node scripts/asset-manifest.mjs",
         "check:assets": "node scripts/asset-manifest.mjs --check",
         "report:art": "node scripts/art-calibration.mjs all",
+        "audit:player-walk": "node scripts/player-gait-audit.mjs",
+        "process:library-foyer": "node scripts/process-library-foyer.mjs",
         "check:dependencies": "node scripts/check-dependencies.mjs",
         "check": "npm run check:dependencies && npm run validate:content && npm run test:unit",
         "pretest": "npm run validate:content"

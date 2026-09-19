@@ -9,3 +9,5 @@ Scenario to use: `system.asset-failure` declares one background that fails predi
 `responsive-interface.spec.cjs` now covers the 832×448 logical stage, aspect preservation, horizontal overflow, 44-pixel targets, 1280×720, 1440×900, 1920×1080, 834×1112 touch, 200% text sizing, five locales, long strings, high contrast, reduced motion, and a real touch activation.
 
 Pixel scene baselines remain deliberately deferred until Section 8 approves and standardises the room art. Structural visual assertions protect the settled Section 7 component design without freezing known art inconsistencies.
+
+`library-foyer-restyle.spec.cjs` protects the approved Section 3 room package: exact stage dimensions, decoded/cached WebP delivery assets, both door-state canvases, door-to-aperture placement, the full book-pile hotspot, the key hidden inside it, and the librarian's retained lectern position.

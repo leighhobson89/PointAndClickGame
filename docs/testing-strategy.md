@@ -39,7 +39,7 @@ Scenario-driven tests open the debug server through `openDebugGame(page)` in `e2
 
 ## Where the suite stands
 
-62 Node tests and 69 browser journeys. Latest full proof, run `2026-09-14T00-21-20-151Z-all`: `node tests all` passed 69/69 in 168.959 seconds.
+75 Node tests and 70 browser journeys. The latest full record, `2026-09-14T09-35-19-163Z-all`, passed 68/69 and failed only the registered BUG-043 layout overflow, taking 189.339 seconds. Because that exceeds the 180-second gate, the Section 2 change was verified with the permitted targeted `animation-cutscenes` area rather than rerunning the full suite.
 
 **The margin under the gate is down to 11 seconds, and that is now the constraint on new browser coverage.** A browser test that needs a milestone state should arrange it with a scenario and `setMovementSpeed('instant')` rather than replay a journey another test already covers. The next addition of any size should be paired with trimming an existing journey, or the full suite stops being runnable under the gate and every future run becomes three areas at a time.
 
@@ -57,6 +57,7 @@ Fast Node tests for pure rules:
 
 - Pathfinding, costs, unreachable targets, and nearest interaction anchors.
 - Pointer-to-grid/world transforms at boundaries and scaled viewports.
+- Distance-driven player gait phase, non-uniform frame boundaries, four-direction sprite keys, body-relative cadence at multiple depths, and sub-frame accumulation.
 - Semantic hotspot projection, minimum targets, stable labels, and no walk-grid mutation.
 - Player preference validation, persistence, clamping, and corrupt-storage recovery.
 - Structured verb intent and two-target command rules.
@@ -101,7 +102,7 @@ Functional area ownership, and what each still owes:
 | `puzzles` | Each dependency chain end-to-end with real clicks, rather than at fact level |
 | `save-load` | Covered |
 | `game-state` | Covered |
-| `animation-cutscenes` | Scenarios for the major cutscene branches; skip behaviour |
+| `animation-cutscenes` | Four-direction nine-pose player walks are covered; major cutscene branches and skip behaviour remain |
 
 ## Using scenarios
 
